@@ -43,6 +43,11 @@
   },
   "songs": [
     {
+      "title": "treat me this way (remix)",
+      "artist": "Otis McDonald",
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1777594789237_f228324448.mp3"
+    },
+    {
       "title": "Barcelona (demo)",
       "artist": "Ever Alejandro",
       "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1777546771959_f41578504.mp3"
@@ -128,7 +133,7 @@
       "src": "sounds/Otis McDonald - O.Sky.mp3"
     }
   ],
-  "lastUpdated": "2026-05-01T00:18:02.330Z",
+  "lastUpdated": "2026-05-01T00:20:16.593Z",
   "heroBadge_en": "yaire you are my sun",
   "heroBadge_pt": "yaire você é meu sol",
   "heroBadge_fr": "Yaire tu es mon soleil",
