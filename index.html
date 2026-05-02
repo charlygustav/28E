@@ -3813,7 +3813,20 @@
             </div>
         </section>
 
-        <!-- Section: Our Story & Time -->
+        
+    <!-- Section: Frase del Dia -->
+    <section id="frase-del-dia" class="py-16 px-6 text-center border-b border-zinc-200 dark:border-zinc-800 reveal">
+        <div class="max-w-2xl mx-auto" id="frase-container" style="opacity:0;transition:opacity 1.2s ease;">
+            <div class="inline-flex items-center gap-3 text-brand-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-8">
+                <span class="w-8 h-px bg-brand-500/40 inline-block"></span>
+                <span>Frase del Dia</span>
+                <span class="w-8 h-px bg-brand-500/40 inline-block"></span>
+            </div>
+            <blockquote id="frase-del-dia-text" class="text-2xl md:text-3xl font-serif italic font-light text-zinc-800 dark:text-zinc-100 leading-relaxed mb-6 tracking-wide"></blockquote>
+            <p id="frase-del-dia-autor" class="text-sm text-brand-500 font-semibold tracking-widest uppercase"></p>
+        </div>
+    </section>
+<!-- Section: Our Story & Time -->
         <section id="historia"
             class="cv-section cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal-left scroll-mt-20">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -16112,6 +16125,24 @@
                 console.error("Admin Panel Error:", e);
             }
         })();
+    </script>
+
+    <script>
+    // Frase del Dia - cargada desde Firebase Admin
+    (async function loadFraseDelDia() {
+        try {
+            const r = await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config/frase.json');
+            const d = await r.json();
+            if (d && d.texto && d.texto.trim()) {
+                const textEl  = document.getElementById('frase-del-dia-text');
+                const autorEl = document.getElementById('frase-del-dia-autor');
+                const cont    = document.getElementById('frase-container');
+                if (textEl)  textEl.textContent  = '\u275d ' + d.texto.trim() + ' \u275e';
+                if (autorEl && d.autor) autorEl.textContent = '\u2014 ' + d.autor.trim();
+                if (cont)    setTimeout(() => cont.style.opacity = '1', 150);
+            }
+        } catch(e) {}
+    })();
     </script>
 </body>
 
