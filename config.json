@@ -1,6 +1,6 @@
 {
-  "mantenimiento": false,
-  "maintType": "scheduled",
+  "mantenimiento": true,
+  "maintType": "indefinite",
   "maintDate": "2026-05-02T15:56",
   "gal1": "https://i.ibb.co/yByRfq5y/IMG-20260125-WA0097.jpg",
   "gal2": "https://i.ibb.co/DDHBsJy2/IMG-20260127-WA0067.jpg",
@@ -133,7 +133,7 @@
       "src": "sounds/Otis McDonald - O.Sky.mp3"
     }
   ],
-  "lastUpdated": "2026-05-02T01:29:17.820Z",
+  "lastUpdated": "2026-05-02T09:40:53.685Z",
   "heroBadge_en": "yaire you are my sun",
   "heroBadge_pt": "yaire você é meu sol",
   "heroBadge_fr": "Yaire tu es mon soleil",
