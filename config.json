@@ -1,62 +1,47 @@
 {
-  "mantenimiento": false,
+  "mantenimiento": true,
   "maintType": "indefinite",
-  "maintDate": "2026-05-02T15:56",
+  "maintDate": "",
   "gal1": "https://i.ibb.co/yByRfq5y/IMG-20260125-WA0097.jpg",
   "gal2": "https://i.ibb.co/DDHBsJy2/IMG-20260127-WA0067.jpg",
   "gal3": "https://i.ibb.co/SDfLGvby/IMG-20260301-WA0027.jpg",
   "vaultHint": "Pista: La identidad que usaste cuando nuestra historia continuó entre píxeles.",
-  "heroBadge": "te amo yairesita",
+  "heroBadge": "¡Felices 3 Meses!",
   "spotlightTips": {
     "es": [
       "Buscar curiosidades de la página...",
       "Explora el 'Jardín de Tulipanes'...",
       "Sugerencias: 'te amo' o 'manzanita'...",
       "Busca 'El Pacto' para ver nuestra promesa...",
-      "Prueba a escribir 'yaire' y dale Enter...",
-      "Yaire Alvarado la mejor de todas, tomen nota..."
+      "¿Sabías que hay magia el 28 de Abril?",
+      "Prueba a escribir 'yaire' y dale Enter..."
     ],
     "en": [
       "Search curiosities of the page...",
       "Explore the 'Tulip Garden'...",
       "Suggestions: 'I love you' or 'manzanita'...",
       "Search 'The Covenant' to see our promise...",
-      "Try typing 'yaire' and hit Enter...",
-      "Yaire Alvarado the best of all, take note..."
+      "Did you know that there is magic on April 28?",
+      "Try typing 'yaire' and hit Enter..."
     ],
     "pt": [
       "Pesquise curiosidades da página...",
       "Explore o 'Jardim das Tulipas'...",
       "Sugestões: 'eu te amo' ou 'manzanita'...",
       "Pesquise 'The Covenant' para ver nossa promessa...",
-      "Tente digitar 'yaire' e pressione Enter...",
-      "Yaire Alvarado o melhor de tudo, tome nota..."
+      "Você sabia que existe magia no dia 28 de abril?",
+      "Tente digitar 'yaire' e pressione Enter..."
     ],
     "fr": [
       "Rechercher les curiosités de la page...",
       "Explorez le « jardin des tulipes »...",
       "Suggestions : 'Je t'aime' ou 'manzanita'...",
       "Recherchez « The Covenant » pour voir notre promesse...",
-      "Essayez de taper « yaire » et appuyez sur Entrée...",
-      "Yaire Alvarado le meilleur de tous, prends note..."
+      "Saviez-vous qu'il y a de la magie le 28 avril ?",
+      "Essayez de taper « yaire » et appuyez sur Entrée..."
     ]
   },
   "songs": [
-    {
-      "title": "De la Noche a la Mañana (Remix)",
-      "artist": "Quevedo, Myke Towers, Eladio Carrión",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1777546839033_f47486720.mp3"
-    },
-    {
-      "title": "Barcelona (demo)",
-      "artist": "Ever Alejandro",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1777546771959_f41578504.mp3"
-    },
-    {
-      "title": "treat me this way (remix)",
-      "artist": "Otis McDonald",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1777594789237_f228324448.mp3"
-    },
     {
       "title": "Bing Bong",
       "artist": "Yailin la Mas Viral",
@@ -133,66 +118,8 @@
       "src": "sounds/Otis McDonald - O.Sky.mp3"
     }
   ],
-  "lastUpdated": "2026-05-05T06:49:40.455Z",
-  "heroBadge_en": "yaire you are my sun",
-  "heroBadge_pt": "yaire você é meu sol",
-  "heroBadge_fr": "Yaire tu es mon soleil",
-  "w1Word": "Amor",
-  "w1Badge": "#1440 veces",
-  "w1Desc": "1440 mensajes (12% de su chat). Con un tono cariñoso, lleno de afecto. Ej: \"Claro, no digo lo contrario amor\"",
-  "w1Desc_en": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 14 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "w1Desc_pt": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 14 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "w1Desc_fr": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 14 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "p1Text": "\"Mi amor\"",
-  "p1Desc": "283 mensajes (2%). Su vocativo favorito para dirigirse a ti. Por ejemplo: \"Te amoooo mi amor\"",
-  "p1Desc_en": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 14 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "p1Desc_pt": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 13 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "p1Desc_fr": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 13 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "w2Word": "Qué",
-  "w2Badge": "#505 veces",
-  "w2Desc": "505 mensajes (4% de su chat). Con un tono cariñoso, lleno de afecto. Ej: \"No, por qué bonito?\"",
-  "w2Desc_en": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 13 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "w2Desc_pt": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 13 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "w2Desc_fr": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 13 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "p2Text": "\"Sin embargo\"",
-  "p2Desc": "116 mensajes (1%). Su conector reflexivo. Lo usa para razonar con madurez. Por ejemplo: \"Sin embargo la usan para irse a otros país ilegal\"",
-  "p2Desc_en": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 13 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "p2Desc_pt": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 12 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "p2Desc_fr": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 12 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "w3Word": "Usted",
-  "w3Badge": "#303 veces",
-  "w3Desc": "303 mensajes (3% de su chat). Con un tono cariñoso, lleno de afecto. Ej: \"No querías que yo estuviera feliz? Y que este feliz siemp…\"",
-  "w3Desc_en": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 12 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "w3Desc_pt": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 12 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "w3Desc_fr": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 12 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "p3Text": "\"Este mensaje\"",
-  "p3Desc": "79 mensajes (1%). Aparece seguido, siempre con intención. Por ejemplo: \"Se eliminó este mensaje.\"",
-  "p3Desc_en": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 12 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "p3Desc_pt": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 11 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "p3Desc_fr": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 11 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "w4Word": "Así",
-  "w4Badge": "#288 veces",
-  "w4Desc": "288 mensajes (2% de su chat). Con un tono cariñoso, lleno de afecto. Ej: \"Cómo así\"",
-  "w4Desc_en": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 11 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "w4Desc_pt": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 11 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "w4Desc_fr": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 11 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "p4Text": "\"No amor\"",
-  "p4Desc": "76 mensajes (1%). Aparece seguido, siempre con intención. Por ejemplo: \"No amor\"",
-  "p4Desc_en": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 11 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "p4Desc_pt": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 11 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "p4Desc_fr": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 10 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "w5Word": "Quiero",
-  "w5Badge": "#238 veces",
-  "w5Desc": "238 mensajes (2% de su chat). Con un tono cariñoso, lleno de afecto. Ej: \"No quiero irme aún estoy dejando el último mensaje\"",
-  "w5Desc_en": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 10 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "w5Desc_pt": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 10 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "w5Desc_fr": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 10 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "p5Text": "\"Me siento\"",
-  "p5Desc": "74 mensajes (1%). Aparece seguido, siempre con intención. Por ejemplo: \"Si me siento bien así\"",
-  "p5Desc_en": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 10 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "p5Desc_pt": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 10 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "p5Desc_fr": "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  04 HOURS 20 MINUTES 09 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE",
-  "emojiTop": "💗",
-  "emojiTopCount": "206",
-  "vaultHash": "10c2f3ab8d6d9af72e5a63c161b2f079098e5511272e184262b579148202fcda"
+  "lastUpdated": "2026-05-07T13:29:53.323Z",
+  "heroBadge_en": "Happy 3 Months!",
+  "heroBadge_pt": "Feliz 3 meses!",
+  "heroBadge_fr": "Joyeux 3 mois !"
 }
