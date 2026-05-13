@@ -163,6 +163,9 @@
 
       document.body.appendChild(this.fab);
       document.body.appendChild(this.panel);
+
+      // Bind initial events (login form)
+      this._bindPanelEvents();
     }
 
     _toggle() {
