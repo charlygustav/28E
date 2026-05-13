@@ -438,12 +438,11 @@
         });
 
         this.socket.on('user_joined', ({ userId, displayName }) => {
-          this._toast(`🟢 ${displayName} se unió`, 'join');
+          this._playNotif('join');
         });
 
         this.socket.on('user_left', ({ userId }) => {
-          const u = this.users.find(x => x.id === userId);
-          if (u) this._toast(`🔴 ${u.displayName} salió`, 'leave');
+          this._playNotif('leave');
           this._closePeer(userId);
         });
 
