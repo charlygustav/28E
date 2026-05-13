@@ -12345,8 +12345,8 @@
                 if (butterflyActive) cancelAnimationFrame(bFrameId);
                 if (game3Active) clearInterval(game3Timer);
 
-                // Mute audio internally if playing long ambient tracks
-                document.querySelectorAll('audio, video').forEach(media => {
+                // Mute audio internally if playing long ambient tracks (skip voice channel peers)
+                document.querySelectorAll('audio:not([data-vc-peer]), video').forEach(media => {
                     if (!media.paused) {
                         media.dataset.wasPlaying = "true";
                         media.pause();
@@ -12375,7 +12375,7 @@
                     }, 1000);
                 }
 
-                document.querySelectorAll('audio, video').forEach(media => {
+                document.querySelectorAll('audio:not([data-vc-peer]), video').forEach(media => {
                     if (media.dataset.wasPlaying === "true") {
                         media.play().catch(e => console.log(e));
                         media.dataset.wasPlaying = "false";

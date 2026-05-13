@@ -707,6 +707,7 @@
         if (!audio) {
           audio = document.createElement('audio');
           audio.autoplay = true;
+          audio.dataset.vcPeer = 'true';
           document.body.appendChild(audio);
           this.audios.set(peerId, audio);
         }
