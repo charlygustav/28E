@@ -476,12 +476,21 @@
           container.appendChild(node);
         }
         
-        node.querySelectorAll('.vc-mico, .vc-dico').forEach(el => el.remove());
-        if (isDnd) {
-          node.insertAdjacentHTML('beforeend', `<span class="vc-dico" title="No molestar">${ICONS.dnd}</span>`);
+        const existingDnd = node.querySelector('.vc-dico');
+        if (isDnd && !existingDnd) {
+          // If inserting both, DND usually comes before Mute visually, but we just insert
+          const mico = node.querySelector('.vc-mico');
+          if (mico) mico.insertAdjacentHTML('beforebegin', `<span class="vc-dico" title="No molestar">${ICONS.dnd}</span>`);
+          else node.insertAdjacentHTML('beforeend', `<span class="vc-dico" title="No molestar">${ICONS.dnd}</span>`);
+        } else if (!isDnd && existingDnd) {
+          existingDnd.remove();
         }
-        if (isMuted) {
+        
+        const existingMic = node.querySelector('.vc-mico');
+        if (isMuted && !existingMic) {
           node.insertAdjacentHTML('beforeend', `<span class="vc-mico">${ICONS.micOff}</span>`);
+        } else if (!isMuted && existingMic) {
+          existingMic.remove();
         }
       });
     }
