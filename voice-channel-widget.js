@@ -655,13 +655,13 @@
         this.socket.on('user_mute_state', ({ userId, muted }) => {
           const u = this.users.find(x => x.id === userId);
           if (u) u.muted = muted;
-          if (this.connected) this._render(this._tplConnected());
+          if (this.connected) this._updateUsersDOM();
         });
 
         this.socket.on('user_dnd_state', ({ userId, dnd }) => {
           const u = this.users.find(x => x.id === userId);
           if (u) u.dnd = dnd;
-          if (this.connected) this._render(this._tplConnected());
+          if (this.connected) this._updateUsersDOM();
         });
 
         // Only clean up UI on intentional/permanent disconnects
