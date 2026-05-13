@@ -12253,6 +12253,9 @@
                 if (dict[k]) el.setAttribute('aria-label', dict[k]);
             });
 
+            // Dispatch a custom event so standalone components can update themselves
+            window.dispatchEvent(new CustomEvent('languagechange', { detail: lang }));
+
             if (chartInstance) { chartInstance.data.labels = dict.chart_labels; chartInstance.data.datasets[0].label = dict.chart_dataset; chartInstance.update(); }
 
             const il = document.getElementById('recipe-ing-list');

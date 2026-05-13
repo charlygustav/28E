@@ -116,7 +116,10 @@
   };
 
   const _t = (key) => {
-    const lang = window.currentLang || 'es';
+    let lang = 'es';
+    if (typeof currentLang !== 'undefined') lang = currentLang;
+    else if (window.currentLang) lang = window.currentLang;
+    else if (localStorage.getItem('yaire_lang')) lang = localStorage.getItem('yaire_lang');
     return (VC_I18N[lang] && VC_I18N[lang][key]) ? VC_I18N[lang][key] : VC_I18N['es'][key];
   };
 
@@ -416,6 +419,22 @@
           this.panel.classList.remove('open');
           if (this.connected) this._bar.classList.add('show');
           this._playSfx('flyout', 0.4, false, 'fly');
+        }
+      });
+
+      window.addEventListener('languagechange', () => {
+        if (this.fab) this.fab.title = _t('vc_title');
+        
+        if (this.connected) {
+          if (!document.getElementById('vc-leave')) {
+             this._render(this._tplConnected());
+          } else {
+             this._render(this._tplConnected());
+          }
+        } else {
+          if (document.getElementById('vc-reconnect')) this._render(this._tplDisconnected());
+          else if (document.querySelector('.vc-loader')) this._render(this._tplLoading());
+          else this._render(this._tplLogin());
         }
       });
 
