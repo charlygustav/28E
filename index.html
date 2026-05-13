@@ -3184,7 +3184,9 @@
             .ld-body { position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;gap:28px;opacity:0; will-change:opacity;animation:ldIn 0.9s cubic-bezier(0.16,1,0.3,1) 0.25s forwards; }
             .ld-logo { font-family:'Inter',system-ui,sans-serif;font-size:clamp(56px,10vw,120px);font-weight:900;color:#fff;letter-spacing:-0.04em;line-height:1;user-select:none; }
             .ld-track { width:clamp(140px,28vw,240px);height:2px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden; }
-            #loader-progress { display:block !important;height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,rgba(245,158,11,.9),rgba(236,72,153,.7)); }
+            @keyframes ldBarFill { 0%{width:0%} 70%{width:68%} 90%{width:78%} 100%{width:80%} }
+            @keyframes ldPctCount {}
+            #loader-progress { display:block !important;height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,rgba(245,158,11,.9),rgba(236,72,153,.7));animation:ldBarFill 5.5s cubic-bezier(.4,0,.2,1) forwards; }
                         .ld-corner-l { position:absolute;bottom:clamp(20px,4vw,32px);left:clamp(20px,5vw,40px);font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.28);opacity:0;animation:ldPctIn .5s ease-out .9s forwards; }
             .ld-pct { position:absolute;bottom:clamp(20px,4vw,32px);right:clamp(20px,5vw,40px);font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;color:rgba(255,255,255,.28);font-variant-numeric:tabular-nums;opacity:0;animation:ldPctIn .5s ease-out .9s forwards; }
             .hero-enter-ready .hero-anim { opacity:0;transform:translateY(30px); }
@@ -11804,6 +11806,17 @@
             const loaderMsg = document.getElementById('loader-message');
             const loaderEl = document.getElementById('loader');
 
+            // Fake counter 0→80 over 5.5s so progress feels alive
+            let _ldFakeVal = 0;
+            const _ldFakeInterval = setInterval(() => {
+                if (_ldFakeVal < 80) {
+                    _ldFakeVal = Math.min(80, _ldFakeVal + 0.73);
+                    if (percentText && !loaderEscondido) percentText.textContent = Math.floor(_ldFakeVal) + '%';
+                } else {
+                    clearInterval(_ldFakeInterval);
+                }
+            }, 50);
+
             // ── Messages ──
             const _ld = (typeof dictionary !== 'undefined' && dictionary[typeof currentLang !== 'undefined' ? currentLang : 'es'])
                 ? dictionary[typeof currentLang !== 'undefined' ? currentLang : 'es'] : {};
@@ -12002,7 +12015,7 @@
 
             // Kick off — wait for all tracked resources
             // Minimum 2.5s so the loader animation always plays fully
-            const _loaderMinTime = new Promise(r => setTimeout(r, 4000));
+            const _loaderMinTime = new Promise(r => setTimeout(r, 6000));
             Promise.all([...resources, _loaderMinTime]).then(() => setProgress(100));
 
             // 2. Inicialización Básica
