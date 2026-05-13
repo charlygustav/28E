@@ -175,21 +175,7 @@
       this._vizRaf     = null;
       this._bar        = null;
 
-      this.sfx = {
-        flyin: new Audio('sounds/flyin.wav'),
-        flyout: new Audio('sounds/flyout.wav'),
-        typing: new Audio('sounds/typing.wav'),
-        progress: new Audio('SND01_sine/progress_loop.wav'),
-        toggleOn: new Audio('SND01_sine/toggle_on.wav'),
-        toggleOff: new Audio('SND01_sine/toggle_off.wav')
-      };
-      this.sfx.flyin.volume = 0.4;
-      this.sfx.flyout.volume = 0.4;
-      this.sfx.typing.volume = 0.2;
-      this.sfx.progress.volume = 0.3;
-      this.sfx.progress.loop = true;
-      this.sfx.toggleOn.volume = 0.4;
-      this.sfx.toggleOff.volume = 0.4;
+      this._initAudio();
 
       this.ice = {
         iceServers: [
@@ -210,6 +196,54 @@
       s.id = 'vc-styles';
       s.textContent = CSS;
       document.head.appendChild(s);
+    }
+
+    _initAudio() {
+      try {
+        this.actx = new (window.AudioContext || window.webkitAudioContext)();
+        this.sfxBuf = {};
+        this.sfxNodes = {};
+        const load = async (k, u) => {
+          try {
+            const r = await fetch(u);
+            this.sfxBuf[k] = await this.actx.decodeAudioData(await r.arrayBuffer());
+          } catch(e){}
+        };
+        load('flyin', 'sounds/flyin.wav');
+        load('flyout', 'sounds/flyout.wav');
+        load('typing', 'sounds/typing.wav');
+        load('progress', 'SND01_sine/progress_loop.wav');
+        load('toggleOn', 'SND01_sine/toggle_on.wav');
+        load('toggleOff', 'SND01_sine/toggle_off.wav');
+      } catch(e) {}
+    }
+
+    _playSfx(k, vol=0.4, loop=false, excl=null) {
+      if (!this.actx || !this.sfxBuf[k]) return null;
+      if (this.actx.state === 'suspended') this.actx.resume();
+      if (excl && this.sfxNodes[excl]) this._stopSfx(this.sfxNodes[excl]);
+      
+      try {
+        const src = this.actx.createBufferSource();
+        src.buffer = this.sfxBuf[k];
+        src.loop = loop;
+        const gain = this.actx.createGain();
+        gain.gain.value = vol;
+        src.connect(gain);
+        gain.connect(this.actx.destination);
+        src.start(0);
+        const node = { src, gain };
+        if (excl) this.sfxNodes[excl] = node;
+        return node;
+      } catch(e) { return null; }
+    }
+
+    _stopSfx(node) {
+      if (!node || !this.actx) return;
+      try {
+        node.gain.gain.linearRampToValueAtTime(0, this.actx.currentTime + 0.03);
+        node.src.stop(this.actx.currentTime + 0.03);
+      } catch(e){}
     }
 
     // ── BUILD UI ───────────────────────────────────────────────────────────
@@ -243,9 +277,7 @@
             !this.fab.contains(e.target)) {
           this.panel.classList.remove('open');
           if (this.connected) this._bar.classList.add('show');
-          this.sfx.flyin.pause();
-          this.sfx.flyout.currentTime = 0;
-          this.sfx.flyout.play().catch(()=>{});
+          this._playSfx('flyout', 0.4, false, 'fly');
         }
       });
 
@@ -258,13 +290,9 @@
       if (this.connected && willOpen) this._bar.classList.remove('show');
       
       if (willOpen) {
-        this.sfx.flyout.pause();
-        this.sfx.flyin.currentTime = 0;
-        this.sfx.flyin.play().catch(()=>{});
+        this._playSfx('flyin', 0.4, false, 'fly');
       } else {
-        this.sfx.flyin.pause();
-        this.sfx.flyout.currentTime = 0;
-        this.sfx.flyout.play().catch(()=>{});
+        this._playSfx('flyout', 0.4, false, 'fly');
       }
     }
 
@@ -391,8 +419,7 @@
       const passInput = document.getElementById('vc-pass');
 
       const playTyping = () => {
-        this.sfx.typing.currentTime = 0;
-        this.sfx.typing.play().catch(()=>{});
+        this._playSfx('typing', 0.2);
       };
 
       if (joinBtn) {
@@ -406,8 +433,7 @@
       if (reconnectBtn) reconnectBtn.addEventListener('click', () => {
         if (this._savedName && this._savedPass) {
           this._render(this._tplLoading());
-          this.sfx.progress.currentTime = 0;
-          this.sfx.progress.play().catch(()=>{});
+          this.progNode = this._playSfx('progress', 0.3, true);
           this._connectSocket(this._savedName, this._savedPass);
         } else {
           this._render(this._tplLogin());
@@ -434,13 +460,12 @@
       this._savedName = name;
       this._savedPass = pass;
       this._render(this._tplLoading());
-      this.sfx.progress.currentTime = 0;
-      this.sfx.progress.play().catch(()=>{});
+      this.progNode = this._playSfx('progress', 0.3, true);
 
       try {
         this.stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
       } catch {
-        this.sfx.progress.pause();
+        this._stopSfx(this.progNode); this.progNode = null;
         this._render(this._tplLogin('❌ No se pudo acceder al micrófono.'));
         return;
       }
@@ -476,13 +501,13 @@
         });
 
         this.socket.on('join_error', ({ message }) => {
-          this.sfx.progress.pause();
+          this._stopSfx(this.progNode); this.progNode = null;
           this._cleanup();
           this._render(this._tplLogin(message));
         });
 
         this.socket.on('joined', async ({ userId, existingUsers }) => {
-          this.sfx.progress.pause();
+          this._stopSfx(this.progNode); this.progNode = null;
           this.myId = userId;
           this.connected = true;
           this._reconnects = 0;
@@ -632,9 +657,7 @@
       this.stream.getAudioTracks().forEach(t => { t.enabled = !this.muted; });
       this.socket && this.socket.emit('mute_state', { muted: this.muted });
       this._render(this._tplConnected());
-      const s = this.muted ? this.sfx.toggleOff : this.sfx.toggleOn;
-      s.currentTime = 0;
-      s.play().catch(()=>{});
+      this._playSfx(this.muted ? 'toggleOff' : 'toggleOn', 0.4);
     }
 
     _toggleDND() {
@@ -642,9 +665,7 @@
       this.audios.forEach(a => { a.volume = this.dnd ? 0 : 1; });
       this.socket && this.socket.emit('dnd_state', { dnd: this.dnd });
       this._render(this._tplConnected());
-      const s = this.dnd ? this.sfx.toggleOff : this.sfx.toggleOn;
-      s.currentTime = 0;
-      s.play().catch(()=>{});
+      this._playSfx(this.dnd ? 'toggleOff' : 'toggleOn', 0.4);
     }
 
     // ── LEAVE ─────────────────────────────────────────────────────────────
@@ -656,7 +677,7 @@
     }
 
     _cleanup() {
-      this.sfx.progress.pause();
+      this._stopSfx(this.progNode); this.progNode = null;
       this._stopTimer();
       this._stopSpeaking();
       cancelAnimationFrame(this._vizRaf);
