@@ -11797,6 +11797,7 @@
 
         // ══════════ INICIO PRINCIPAL ══════════
         let loaderEscondido = false;
+        let _loaderMinElapsed = false; // Blocks exit until min time passes
 
         // ── Real Resource Loader ──────────────────────────────────────────
         document.addEventListener('DOMContentLoaded', () => {
@@ -11934,7 +11935,7 @@
                     if (progressBar) progressBar.style.width = pct + '%';
                 }
 
-                if (pct >= 100 && !loaderEscondido) {
+                if (pct >= 100 && !loaderEscondido && _loaderMinElapsed) {
                     clearTimeout(fallback);
                     if (loaderMsgInterval) clearInterval(loaderMsgInterval);
                     loaderEscondido = true;
@@ -12014,9 +12015,13 @@
             }
 
             // Kick off — wait for all tracked resources
-            // Minimum 2.5s so the loader animation always plays fully
-            const _loaderMinTime = new Promise(r => setTimeout(r, 6000));
-            Promise.all([...resources, _loaderMinTime]).then(() => setProgress(100));
+            // Min 6s - blocks exit until elapsed, then triggers final setProgress(100)
+            setTimeout(() => {
+                _loaderMinElapsed = true;
+                setProgress(100); // now allowed to exit
+            }, 6000);
+            // Resources still update the bar visually (but can't exit before 6s)
+            Promise.all(resources).catch(() => {});
 
             // 2. Inicialización Básica
             initTheme();
