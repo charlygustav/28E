@@ -5,7 +5,7 @@
   'use strict';
 
   // ── CONFIG (cambia SIGNALING_URL tras el deploy en Railway) ──────────────
-  const SIGNALING_URL = 'https://28e-signals.up.railway.app';
+  const SIGNALING_URL = 'https://28e-production.up.railway.app';
 
   // ── CSS ──────────────────────────────────────────────────────────────────
   const CSS = `
