@@ -213,6 +213,10 @@
       document.body.appendChild(this.panel);
       document.body.appendChild(this._bar);
 
+      // Prevent clicks inside the panel from bubbling to the outside-click handler
+      // (re-renders remove elements from DOM, making panel.contains() return false)
+      this.panel.addEventListener('click', (e) => e.stopPropagation());
+
       // Close panel when clicking outside of it
       document.addEventListener('click', (e) => {
         if (this.panel.classList.contains('open') &&
