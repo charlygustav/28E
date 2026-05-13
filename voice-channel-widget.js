@@ -179,13 +179,17 @@
         flyin: new Audio('sounds/flyin.wav'),
         flyout: new Audio('sounds/flyout.wav'),
         typing: new Audio('sounds/typing.wav'),
-        progress: new Audio('SND01_sine/progress_loop.wav')
+        progress: new Audio('SND01_sine/progress_loop.wav'),
+        toggleOn: new Audio('SND01_sine/toggle_on.wav'),
+        toggleOff: new Audio('SND01_sine/toggle_off.wav')
       };
       this.sfx.flyin.volume = 0.4;
       this.sfx.flyout.volume = 0.4;
       this.sfx.typing.volume = 0.2;
       this.sfx.progress.volume = 0.3;
       this.sfx.progress.loop = true;
+      this.sfx.toggleOn.volume = 0.4;
+      this.sfx.toggleOff.volume = 0.4;
 
       this.ice = {
         iceServers: [
@@ -625,6 +629,9 @@
       this.stream.getAudioTracks().forEach(t => { t.enabled = !this.muted; });
       this.socket && this.socket.emit('mute_state', { muted: this.muted });
       this._render(this._tplConnected());
+      const s = this.muted ? this.sfx.toggleOff : this.sfx.toggleOn;
+      s.currentTime = 0;
+      s.play().catch(()=>{});
     }
 
     _toggleDND() {
@@ -632,6 +639,9 @@
       this.audios.forEach(a => { a.volume = this.dnd ? 0 : 1; });
       this.socket && this.socket.emit('dnd_state', { dnd: this.dnd });
       this._render(this._tplConnected());
+      const s = this.dnd ? this.sfx.toggleOff : this.sfx.toggleOn;
+      s.currentTime = 0;
+      s.play().catch(()=>{});
     }
 
     // ── LEAVE ─────────────────────────────────────────────────────────────
