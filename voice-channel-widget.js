@@ -362,7 +362,13 @@
 
     // ── SOCKET ─────────────────────────────────────────────────────────────
     _connectSocket(name, pass) {
-      // Load socket.io client dynamically if not already present
+      // Destroy previous socket cleanly before creating a new one
+      if (this.socket) {
+        this.socket.removeAllListeners();
+        this.socket.disconnect();
+        this.socket = null;
+      }
+
       const doConnect = () => {
         this.socket = io(SIGNALING_URL, { transports: ['websocket'] });
 

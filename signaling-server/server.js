@@ -52,6 +52,17 @@ io.on('connection', (socket) => {
       return socket.emit('join_error', { message: 'Escribe tu nombre.' });
     }
 
+    // Evict any ghost session with the same display name
+    for (const [oldId, oldUser] of users.entries()) {
+      if (oldUser.displayName === displayName.trim() && oldId !== socket.id) {
+        users.delete(oldId);
+        io.to(oldId).emit('join_error', { message: 'Nueva sesión iniciada en otro lugar.' });
+        io.sockets.sockets.get(oldId)?.disconnect(true);
+        io.to(CHANNEL).emit('user_left', { userId: oldId });
+      }
+    }
+
+    // Add user
     users.set(socket.id, { displayName: displayName.trim(), muted: false });
     socket.join(CHANNEL);
 
