@@ -103,13 +103,14 @@
   }
   .vc-cb:hover { background:#1a1a1a; color:#fff; transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,.4); }
   .vc-cb:active { transform:scale(0.92); box-shadow:none; }
-  .vc-cb svg { width:14px; height:14px; }
+  .vc-cb svg { width:14px; height:14px; transition:transform .2s cubic-bezier(.34,1.56,.64,1); }
   .vc-cb.muted { background:rgba(239,68,68,.1); border-color:rgba(239,68,68,.3); color:#ef4444; }
   .vc-cb.leave { background:rgba(239,68,68,.07); border-color:rgba(239,68,68,.2); color:rgba(239,68,68,.8); }
   .vc-cb.leave:hover { background:rgba(239,68,68,.18); color:#ef4444; }
   .vc-cb.dnd { background:rgba(124,58,237,.1); border-color:rgba(124,58,237,.3); color:#a78bfa; }
-  .vc-mico svg { width:14px; height:14px; color:rgba(239,68,68,.75); }
-  .vc-dico svg { width:14px; height:14px; color:rgba(167,139,250,.85); }
+  @keyframes vc-pop { from { transform:scale(0); opacity:0; } to { transform:scale(1); opacity:1; } }
+  .vc-mico svg { width:14px; height:14px; color:rgba(239,68,68,.75); animation:vc-pop .25s cubic-bezier(.34,1.56,.64,1); }
+  .vc-dico svg { width:14px; height:14px; color:rgba(167,139,250,.85); animation:vc-pop .25s cubic-bezier(.34,1.56,.64,1); }
   .vc-sbar { padding:7px 16px; background:rgba(34,197,94,.06); border-top:1px solid rgba(34,197,94,.1); display:flex; align-items:center; gap:6px; font-size:11px; color:rgba(34,197,94,.85); }
   .vc-dot { width:6px; height:6px; border-radius:50%; background:#22c55e; animation:vc-blink 2s infinite; }
   @keyframes vc-blink { 0%,100%{opacity:1} 50%{opacity:.35} }
@@ -428,7 +429,63 @@
         <div class="vc-sbar"><div class="vc-dot"></div>Conectado · #principal</div>`;
     }
 
-    // ── RENDER ─────────────────────────────────────────────────────────────
+    _updateUsersDOM() {
+      if (!this.connected) return;
+      const sub = document.querySelector('.vc-sub');
+      if (sub && sub.textContent.includes('/4')) {
+        const timerTxt = document.getElementById('vc-timer')?.textContent || '00:00';
+        sub.innerHTML = `${this.users.length}/4 · <span class="vc-timer" id="vc-timer">${timerTxt}</span>`;
+      }
+      
+      const container = document.querySelector('.vc-sect');
+      if (!container) return;
+      
+      const currentIds = this.users.map(u => u.id);
+      
+      // Remove stale nodes
+      container.querySelectorAll('.vc-user').forEach(node => {
+        const id = node.id.replace('vc-u-', '');
+        if (!currentIds.includes(id)) node.remove();
+      });
+      
+      if (this.users.length === 0) {
+        if (!container.querySelector('.vc-empty')) {
+          const lbl = container.querySelector('.vc-sect-lbl');
+          if (lbl) lbl.insertAdjacentHTML('afterend', '<div class="vc-empty">Solo tú por ahora…</div>');
+        }
+        return;
+      }
+      
+      const empty = container.querySelector('.vc-empty');
+      if (empty) empty.remove();
+      
+      this.users.forEach(u => {
+        const isMe = u.id === this.myId;
+        const isMuted = isMe ? this.muted : u.muted;
+        const isDnd   = isMe ? this.dnd   : u.dnd;
+        
+        let node = document.getElementById(`vc-u-${u.id}`);
+        if (!node) {
+          node = document.createElement('div');
+          node.className = 'vc-user';
+          node.id = `vc-u-${u.id}`;
+          node.innerHTML = `
+            <div class="vc-av${isMe ? ' me' : ''}" id="vc-av-${u.id}">${u.displayName.slice(0, 2).toUpperCase()}</div>
+            <div class="vc-uname">${u.displayName}${isMe ? '<span class="tag">(tú)</span>' : ''}</div>
+          `;
+          container.appendChild(node);
+        }
+        
+        node.querySelectorAll('.vc-mico, .vc-dico').forEach(el => el.remove());
+        if (isDnd) {
+          node.insertAdjacentHTML('beforeend', `<span class="vc-dico" title="No molestar">${ICONS.dnd}</span>`);
+        }
+        if (isMuted) {
+          node.insertAdjacentHTML('beforeend', `<span class="vc-mico">${ICONS.micOff}</span>`);
+        }
+      });
+    }
+
     _render(tpl) {
       this.panel.innerHTML = tpl;
       this._bindPanelEvents();
@@ -544,7 +601,13 @@
 
         this.socket.on('channel_users', ({ users }) => {
           this.users = users;
-          if (this.connected) this._render(this._tplConnected());
+          if (this.connected) {
+            if (!document.getElementById('vc-leave')) {
+              this._render(this._tplConnected());
+            } else {
+              this._updateUsersDOM();
+            }
+          }
         });
 
         this.socket.on('user_joined', ({ userId, displayName }) => {
@@ -681,7 +744,18 @@
       this.muted = !this.muted;
       this.stream.getAudioTracks().forEach(t => { t.enabled = !this.muted; });
       this.socket && this.socket.emit('mute_state', { muted: this.muted });
-      this._render(this._tplConnected());
+      
+      const btn = document.getElementById('vc-mute');
+      if (btn) {
+        btn.className = 'vc-cb' + (this.muted ? ' muted' : '');
+        btn.innerHTML = `${this.muted ? ICONS.micOff : ICONS.mic} ${this.muted ? 'Silenciado' : 'Mic'}`;
+        const svg = btn.querySelector('svg');
+        if (svg) {
+          svg.style.transform = 'scale(1.3)';
+          setTimeout(() => { if (svg) svg.style.transform = ''; }, 150);
+        }
+      }
+      this._updateUsersDOM();
       this._playSfx(this.muted ? 'toggleOff' : 'toggleOn', 0.4);
     }
 
@@ -689,7 +763,18 @@
       this.dnd = !this.dnd;
       this.audios.forEach(a => { a.volume = this.dnd ? 0 : 1; });
       this.socket && this.socket.emit('dnd_state', { dnd: this.dnd });
-      this._render(this._tplConnected());
+      
+      const btn = document.getElementById('vc-dnd');
+      if (btn) {
+        btn.className = 'vc-cb' + (this.dnd ? ' dnd' : '');
+        btn.innerHTML = `${ICONS.bell} ${this.dnd ? 'DND' : 'DND'}`;
+        const svg = btn.querySelector('svg');
+        if (svg) {
+          svg.style.transform = 'scale(1.2) rotate(-15deg)';
+          setTimeout(() => { if (svg) svg.style.transform = ''; }, 150);
+        }
+      }
+      this._updateUsersDOM();
       this._playSfx(this.dnd ? 'toggleOff' : 'toggleOn', 0.4);
     }
 
