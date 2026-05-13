@@ -3166,18 +3166,18 @@
         <p id="loader-message" style="display:none;" aria-hidden="true"></p>
 
         <style>
-            @keyframes ldIn { from{opacity:0;transform:scale(1.05)} to{opacity:1;transform:scale(1)} }
+            @keyframes ldIn { from{opacity:0} to{opacity:1} }
             @keyframes ldPctIn { to{opacity:1} }
             @keyframes ldCircIn { from{opacity:0} to{opacity:1} }
             @keyframes ldC1kf { 0%{transform:translate(0,0);width:30vw;height:30vw} 100%{transform:translate(0,-35vh);width:80vw;height:80vw} }
             @keyframes ldC2kf { 0%{transform:translate(0,0);width:20vw;height:20vw} 100%{transform:translate(-45vw,-40vh);width:80vw;height:80vw} }
             @keyframes ldC3kf { 0%{transform:translate(0,0);width:20vw;height:20vw} 100%{transform:translate(-55vw,-80vh);width:120vw;height:120vw} }
-            .ld-c { position:absolute; border-radius:50%; animation-direction:alternate; animation-timing-function:ease-in-out; }
+            .ld-c { position:absolute; border-radius:50%; animation-direction:alternate; animation-timing-function:ease-in-out; will-change:transform,width,height; }
             .ld-c1 { left:30vw;top:25vh;width:30vw;height:30vw; background:radial-gradient(50% 50% at 50% 50%,rgba(236,72,153,.28) 15%,transparent 100%); animation:ldC1kf 12s infinite alternate,ldCircIn 1.3s ease-out; }
             .ld-c2 { left:45vw;top:30vh;width:20vw;height:20vw; background:radial-gradient(50% 50% at 50% 50%,rgba(245,158,11,.22) 15%,transparent 100%); animation:ldC2kf 11.5s infinite alternate,ldCircIn 1.3s ease-out; }
             .ld-c3 { left:35vw;top:30vh;width:20vw;height:20vw; background:radial-gradient(50% 50% at 50% 50%,rgba(219,39,119,.4) 15%,transparent 100%); animation:ldC3kf 15s infinite alternate,ldCircIn 1.3s ease-out; }
-            .ld-body { position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;gap:28px;opacity:0; animation:ldIn 0.9s cubic-bezier(0.16,1,0.3,1) 0.25s forwards; }
-            .ld-logo { font-family:'Inter',system-ui,sans-serif;font-size:clamp(72px,18vw,210px);font-weight:900;color:#fff;letter-spacing:-0.04em;line-height:1;user-select:none; }
+            .ld-body { position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;gap:28px;opacity:0; will-change:opacity;animation:ldIn 0.9s cubic-bezier(0.16,1,0.3,1) 0.25s forwards; }
+            .ld-logo { font-family:'Inter',system-ui,sans-serif;font-size:clamp(56px,10vw,120px);font-weight:900;color:#fff;letter-spacing:-0.04em;line-height:1;user-select:none; }
             .ld-track { width:clamp(140px,28vw,240px);height:2px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden; }
             #loader-progress { display:block !important;height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,rgba(245,158,11,.9),rgba(236,72,153,.7)); }
             .ld-pct { position:absolute;bottom:clamp(20px,4vw,32px);right:clamp(20px,5vw,40px);font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;color:rgba(255,255,255,.28);font-variant-numeric:tabular-nums;opacity:0;animation:ldPctIn .5s ease-out .9s forwards; }
