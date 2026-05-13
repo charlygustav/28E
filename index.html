@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" class="scroll-smooth dark">
 
 <head>
@@ -3144,135 +3144,50 @@
         class="fixed inset-0 z-[200] flex flex-col items-center justify-center overflow-hidden"
         style="position:fixed;inset:0;z-index:200;background:#09090b;display:flex;align-items:center;justify-content:center;overflow:hidden;">
 
-        <!-- Ambient Circles (original) -->
-        <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-            <div class="loader-circle loader-circle-1"></div>
-            <div class="loader-circle loader-circle-2"></div>
-            <div class="loader-circle loader-circle-3"></div>
+        <!-- Ambient Circles -->
+        <div style="position:absolute;inset:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+            <div class="ld-c ld-c1"></div>
+            <div class="ld-c ld-c2"></div>
+            <div class="ld-c ld-c3"></div>
         </div>
 
-        <!-- Top progress line -->
-        <div class="loader-top-line" aria-hidden="true"></div>
-        <!-- Progress (hidden, driven by JS) -->
-        <div id="loader-progress" style="display:none;" aria-hidden="true"></div>
-
-        <!-- Osmo-style logo -->
-        <div style="position:relative;z-index:10;">
-            <div class="loader-clip">
-                <span class="loader-logo-text" id="loader-logo">28E</span>
+        <!-- Center: logo + bar -->
+        <div class="ld-body">
+            <div class="ld-logo">28E</div>
+            <div class="ld-track">
+                <div id="loader-progress" class="ld-fill"></div>
             </div>
         </div>
 
-        <!-- Corner labels -->
-        <div class="loader-corner-left">28E ©</div>
-        <div class="loader-corner-right">
-            <span id="loader-percent" style="font-variant-numeric:tabular-nums;">0%</span>
-        </div>
+        <!-- Percent bottom-right -->
+        <div class="ld-pct"><span id="loader-percent">0%</span></div>
 
-        <!-- Hidden for JS compat -->
+        <!-- JS compat -->
         <p id="loader-message" style="display:none;" aria-hidden="true"></p>
 
         <style>
-            /* ── Osmo-style logo ── */
-            @keyframes loaderWordUp {
-                to { transform: translateY(0); }
-            }
-            @keyframes loaderLineGrow {
-                to { transform: scaleX(1); }
-            }
-            @keyframes loaderCornerIn {
-                to { opacity: 1; }
-            }
-
-            .loader-clip {
-                overflow: hidden;
-                padding-bottom: 0.05em;
-            }
-            .loader-logo-text {
-                display: block;
-                font-size: clamp(72px, 20vw, 200px);
-                font-weight: 900;
-                color: #fff;
-                letter-spacing: -0.04em;
-                line-height: 1;
-                font-family: 'Inter', system-ui, sans-serif;
-                transform: translateY(110%);
-                animation: loaderWordUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
-            }
-            .loader-top-line {
-                position: absolute;
-                top: 0; left: 0; right: 0;
-                height: 2px;
-                background: linear-gradient(90deg, rgba(245,158,11,.9), rgba(236,72,153,.6));
-                transform: scaleX(0);
-                transform-origin: left;
-                animation: loaderLineGrow 2s cubic-bezier(.4,0,.2,1) 0.1s forwards;
-            }
-            .loader-corner-left,
-            .loader-corner-right {
-                position: absolute;
-                bottom: clamp(20px, 4vw, 32px);
-                font-size: 11px;
-                font-weight: 500;
-                letter-spacing: .18em;
-                text-transform: uppercase;
-                color: rgba(255,255,255,.28);
-                font-family: 'Inter', system-ui, sans-serif;
-                opacity: 0;
-                animation: loaderCornerIn .5s ease-out 1s forwards;
-            }
-            .loader-corner-left  { left:  clamp(20px, 5vw, 40px); }
-            .loader-corner-right { right: clamp(20px, 5vw, 40px); }
-
-            /* Hero entrance */
-            .hero-enter-ready .hero-anim { opacity:0; transform:translateY(30px); }
-            .hero-enter-active .hero-anim { opacity:1; transform:translateY(0); transition: opacity .8s cubic-bezier(0.16,1,0.3,1), transform .8s cubic-bezier(0.16,1,0.3,1); }
+            @keyframes ldIn { from{opacity:0;transform:scale(1.05)} to{opacity:1;transform:scale(1)} }
+            @keyframes ldPctIn { to{opacity:1} }
+            @keyframes ldCircIn { from{opacity:0} to{opacity:1} }
+            @keyframes ldC1kf { 0%{transform:translate(0,0);width:30vw;height:30vw} 100%{transform:translate(0,-35vh);width:80vw;height:80vw} }
+            @keyframes ldC2kf { 0%{transform:translate(0,0);width:20vw;height:20vw} 100%{transform:translate(-45vw,-40vh);width:80vw;height:80vw} }
+            @keyframes ldC3kf { 0%{transform:translate(0,0);width:20vw;height:20vw} 100%{transform:translate(-55vw,-80vh);width:120vw;height:120vw} }
+            .ld-c { position:absolute; border-radius:50%; animation-direction:alternate; animation-timing-function:ease-in-out; }
+            .ld-c1 { left:30vw;top:25vh;width:30vw;height:30vw; background:radial-gradient(50% 50% at 50% 50%,rgba(236,72,153,.28) 15%,transparent 100%); animation:ldC1kf 12s infinite alternate,ldCircIn 1.3s ease-out; }
+            .ld-c2 { left:45vw;top:30vh;width:20vw;height:20vw; background:radial-gradient(50% 50% at 50% 50%,rgba(245,158,11,.22) 15%,transparent 100%); animation:ldC2kf 11.5s infinite alternate,ldCircIn 1.3s ease-out; }
+            .ld-c3 { left:35vw;top:30vh;width:20vw;height:20vw; background:radial-gradient(50% 50% at 50% 50%,rgba(219,39,119,.4) 15%,transparent 100%); animation:ldC3kf 15s infinite alternate,ldCircIn 1.3s ease-out; }
+            .ld-body { position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;gap:28px;opacity:0; animation:ldIn 0.9s cubic-bezier(0.16,1,0.3,1) 0.25s forwards; }
+            .ld-logo { font-family:'Inter',system-ui,sans-serif;font-size:clamp(72px,18vw,210px);font-weight:900;color:#fff;letter-spacing:-0.04em;line-height:1;user-select:none; }
+            .ld-track { width:clamp(140px,28vw,240px);height:2px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden; }
+            #loader-progress { display:block !important;height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,rgba(245,158,11,.9),rgba(236,72,153,.7)); }
+            .ld-pct { position:absolute;bottom:clamp(20px,4vw,32px);right:clamp(20px,5vw,40px);font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;color:rgba(255,255,255,.28);font-variant-numeric:tabular-nums;opacity:0;animation:ldPctIn .5s ease-out .9s forwards; }
+            .hero-enter-ready .hero-anim { opacity:0;transform:translateY(30px); }
+            .hero-enter-active .hero-anim { opacity:1;transform:translateY(0);transition:opacity .8s cubic-bezier(0.16,1,0.3,1),transform .8s cubic-bezier(0.16,1,0.3,1); }
             .hero-enter-active .hero-anim-1 { transition-delay:0s; }
             .hero-enter-active .hero-anim-2 { transition-delay:.15s; }
             .hero-enter-active .hero-anim-3 { transition-delay:.3s; }
             .hero-enter-active .hero-anim-4 { transition-delay:.5s; }
-
-            /* Loader slide-up hide */
-            .loader-hidden {
-                transform: translateY(-100%) !important;
-                transition: transform 0.9s cubic-bezier(0.76, 0, 0.24, 1) !important;
-            }
-
-            /* ── Ambient circles (original) ── */
-            @keyframes loaderCircle1Path {
-                0%   { transform:translate(0,0);       width:30vw;  height:30vw; }
-                100% { transform:translate(0,-35vh);   width:80vw;  height:80vw; }
-            }
-            @keyframes loaderCircle2Path {
-                0%   { transform:translate(0,0);        width:20vw;  height:20vw; }
-                100% { transform:translate(-45vw,-40vh);width:80vw;  height:80vw; }
-            }
-            @keyframes loaderCircle3Path {
-                0%   { transform:translate(0,0);        width:20vw;  height:20vw; }
-                100% { transform:translate(-55vw,-80vh);width:120vw; height:120vw; }
-            }
-            @keyframes loaderFadeCircleIn { from{opacity:0} to{opacity:1} }
-
-            .loader-circle {
-                position:absolute; border-radius:100vw;
-                animation-direction:alternate;
-                animation-timing-function:ease-in-out;
-            }
-            .loader-circle-1 {
-                left:30vw; top:25vh; width:30vw; height:30vw;
-                background: radial-gradient(50% 50% at 50% 50%, rgba(236,72,153,.28) 15.62%, transparent 100%);
-                animation: loaderCircle1Path 12s infinite alternate, loaderFadeCircleIn 1332ms ease-out;
-            }
-            .loader-circle-2 {
-                left:45vw; top:30vh; width:20vw; height:20vw;
-                background: radial-gradient(50% 50% at 50% 50%, rgba(245,158,11,.22) 15.62%, transparent 100%);
-                animation: loaderCircle2Path 11.5s infinite alternate, loaderFadeCircleIn 1332ms ease-out;
-            }
-            .loader-circle-3 {
-                left:35vw; top:30vh; width:20vw; height:20vw;
-                background: radial-gradient(50% 50% at 50% 50%, rgba(219,39,119,.4) 15.62%, transparent 100%);
-                animation: loaderCircle3Path 15s infinite alternate, loaderFadeCircleIn 1332ms ease-out;
-            }
+            .loader-hidden { opacity:0 !important;pointer-events:none;transition:opacity 0.7s ease !important; }
         </style>
     </div>
 
@@ -12030,8 +11945,8 @@
                             tl.to(tulip, { opacity: 0, scale: 0.9, duration: 0.8, ease: "power2.inOut" }, "start");
                         }
 
-                        // 2. Panel del loader se desliza hacia arriba (Osmo style)
-                        tl.to(loaderEl, { y: "-100%", duration: 0.9, ease: "power3.inOut" }, "start+=0.3")
+                        // 2. Loader fade out
+                        tl.to(loaderEl, { opacity: 0, duration: 0.8, ease: "power2.inOut" }, "start+=0.2")
                             .set(loaderEl, { display: 'none' });
 
                         // 3. La pantalla principal entra con muchísima elegancia mientras el loader termina de irse
