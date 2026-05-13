@@ -77,7 +77,7 @@
 
     <!-- ═══ Blocking font load for loader screen ═══ -->
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Merriweather:ital@0;1&display=swap">
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Merriweather:ital@0;1&display=swap">
     <meta name="theme-color" content="#09090b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -12074,7 +12074,9 @@
             }
 
             // Kick off — wait for all tracked resources
-            Promise.all(resources).then(() => setProgress(100));
+            // Minimum 2.5s so the loader animation always plays fully
+            const _loaderMinTime = new Promise(r => setTimeout(r, 2500));
+            Promise.all([...resources, _loaderMinTime]).then(() => setProgress(100));
 
             // 2. Inicialización Básica
             initTheme();
