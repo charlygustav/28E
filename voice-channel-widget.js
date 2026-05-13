@@ -266,7 +266,7 @@
         const m = Math.floor(s.duration/60), sec = s.duration%60;
         return `<div class="vc-hist-row"><span>${s.name}</span><span>${label} · ${m}m${sec}s</span></div>`;
       }).join('');
-      return `<div class="vc-hist"><div class="vc-sect-lbl" style="margin-bottom:6px">${ICONS.clock} Últimas sesiones</div>${rows}</div>`;
+      return `<div class="vc-hist"><div class="vc-sect-lbl" style="margin-bottom:6px">Últimas sesiones</div>${rows}</div>`;
     }
 
     _tplConnected() {
