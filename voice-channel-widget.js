@@ -161,8 +161,8 @@
       this.dnd         = false;
       this.connected   = false;
       this.users       = [];
-      this._creds      = null;
-      this._reconnects = 0;
+      this._savedName  = null;
+      this._savedPass  = null;
       this._callStart  = null;
       this._timerInt   = null;
       this._analyser   = null;
@@ -265,6 +265,23 @@
         <div class="vc-loader"><div class="vc-spin"></div>Estableciendo conexión…</div>`;
     }
 
+    _tplDisconnected() {
+      return `
+        <div class="vc-hdr">
+          <div class="vc-hdr-l">
+            <div class="vc-icon">${ICONS.sound}</div>
+            <div><div class="vc-title">#principal</div><div class="vc-sub" style="color:#ef4444">Desconectado</div></div>
+          </div>
+          <button class="vc-x" id="vc-close">✕</button>
+        </div>
+        <div class="vc-body">
+          <p style="color:rgba(255,255,255,.4);font-size:13px;text-align:center;margin:0 0 14px">
+            Se perdió la conexión con el servidor.
+          </p>
+          <button class="vc-btn" id="vc-reconnect">Reconectar</button>
+        </div>`;
+    }
+
     _tplHistory() {
       const h = JSON.parse(localStorage.getItem('28e_vc_history') || '[]');
       if (!h.length) return '';
@@ -332,6 +349,16 @@
         document.getElementById('vc-pass').addEventListener('keydown', e => e.key === 'Enter' && this._doJoin());
       }
 
+      const reconnectBtn = document.getElementById('vc-reconnect');
+      if (reconnectBtn) reconnectBtn.addEventListener('click', () => {
+        if (this._savedName && this._savedPass) {
+          this._render(this._tplLoading());
+          this._connectSocket(this._savedName, this._savedPass);
+        } else {
+          this._render(this._tplLogin());
+        }
+      });
+
       const muteBtn  = document.getElementById('vc-mute');
       const dndBtn   = document.getElementById('vc-dnd');
       const leaveBtn = document.getElementById('vc-leave');
@@ -349,8 +376,8 @@
 
       this.myName = name;
       localStorage.setItem('28e_vc_name', name);
-      this._creds = { name, pass };
-      this._reconnects = 0;
+      this._savedName = name;
+      this._savedPass = pass;
       this._render(this._tplLoading());
 
       try {
@@ -445,14 +472,8 @@
         });
 
         this.socket.on('disconnect', () => {
-          if (this._reconnects < 3 && this._creds) {
-            this._reconnects++;
-            this._toast(`Reconectando... (${this._reconnects}/3)`, 'info');
-            setTimeout(() => this._connectSocket(this._creds.name, this._creds.pass), this._reconnects * 2000);
-          } else {
-            this._cleanup();
-            this._render(this._tplLogin('Desconectado del servidor.'));
-          }
+          this._cleanup();
+          this._render(this._tplDisconnected());
         });
       };
 
@@ -539,7 +560,6 @@
 
     // ── LEAVE ─────────────────────────────────────────────────────────────
     _leave() {
-      this._creds = null; // prevents auto-reconnect on intentional leave
       if (this.socket) { this.socket.emit('leave_channel'); this.socket.disconnect(); this.socket = null; }
       this._cleanup();
       this.panel.classList.remove('open');
