@@ -284,15 +284,18 @@
             background: #475569;
         }
 
-        /* Loader Animation */
+        /* Loader — no opacity transition, uses transform slide-up */
         #loader {
-            transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+            /* Critical: ensure loader is always covering everything */
+            position: fixed !important;
+            inset: 0 !important;
+            background: #09090b !important;
+            z-index: 200 !important;
         }
 
         .loader-hidden {
-            opacity: 0 !important;
-            visibility: hidden;
-            transition: opacity 0.7s ease, visibility 0.7s ease;
+            transform: translateY(-100%) !important;
+            transition: transform 0.9s cubic-bezier(0.76, 0, 0.24, 1) !important;
         }
 
         @keyframes gradientShift {
@@ -3138,7 +3141,8 @@
 
     <!-- Loader Screen — Balanced Modern Elegance -->
     <div id="loader"
-        class="fixed inset-0 z-[200] flex flex-col items-center justify-center transition-opacity duration-700 bg-[#0c0a09] overflow-hidden">
+        class="fixed inset-0 z-[200] flex flex-col items-center justify-center overflow-hidden"
+        style="position:fixed;inset:0;z-index:200;background:#09090b;display:flex;align-items:center;justify-content:center;overflow:hidden;">
 
         <!-- Ambient Circles (original) -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
