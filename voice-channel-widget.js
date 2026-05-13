@@ -175,6 +175,15 @@
       this._vizRaf     = null;
       this._bar        = null;
 
+      this.sfx = {
+        flyin: new Audio('sounds/flyin.wav'),
+        flyout: new Audio('sounds/flyout.wav'),
+        typing: new Audio('sounds/typing.wav')
+      };
+      this.sfx.flyin.volume = 0.4;
+      this.sfx.flyout.volume = 0.4;
+      this.sfx.typing.volume = 0.2;
+
       this.ice = {
         iceServers: [
           { urls: 'stun:stun.l.google.com:19302' },
@@ -227,6 +236,8 @@
             !this.fab.contains(e.target)) {
           this.panel.classList.remove('open');
           if (this.connected) this._bar.classList.add('show');
+          this.sfx.flyout.currentTime = 0;
+          this.sfx.flyout.play().catch(()=>{});
         }
       });
 
@@ -237,6 +248,14 @@
       const willOpen = !this.panel.classList.contains('open');
       this.panel.classList.toggle('open');
       if (this.connected && willOpen) this._bar.classList.remove('show');
+      
+      if (willOpen) {
+        this.sfx.flyin.currentTime = 0;
+        this.sfx.flyin.play().catch(()=>{});
+      } else {
+        this.sfx.flyout.currentTime = 0;
+        this.sfx.flyout.play().catch(()=>{});
+      }
     }
 
     // ── TEMPLATES ──────────────────────────────────────────────────────────
@@ -358,9 +377,19 @@
       if (xBtn) xBtn.addEventListener('click', () => this._toggle());
 
       const joinBtn = document.getElementById('vc-join');
+      const nameInput = document.getElementById('vc-name');
+      const passInput = document.getElementById('vc-pass');
+
+      const playTyping = () => {
+        this.sfx.typing.currentTime = 0;
+        this.sfx.typing.play().catch(()=>{});
+      };
+
       if (joinBtn) {
         joinBtn.addEventListener('click', () => this._doJoin());
-        document.getElementById('vc-pass').addEventListener('keydown', e => e.key === 'Enter' && this._doJoin());
+        if (passInput) passInput.addEventListener('keydown', e => e.key === 'Enter' && this._doJoin());
+        if (nameInput) nameInput.addEventListener('input', playTyping);
+        if (passInput) passInput.addEventListener('input', playTyping);
       }
 
       const reconnectBtn = document.getElementById('vc-reconnect');
