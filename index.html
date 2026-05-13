@@ -298,6 +298,10 @@
             transition: transform 0.9s cubic-bezier(0.76, 0, 0.24, 1) !important;
         }
 
+
+        /* Voice widget hidden until loader completes */
+        #vc-fab { transition: opacity 0.5s ease; }
+        body:not(.page-ready) #vc-fab { opacity:0 !important; pointer-events:none !important; }
         @keyframes gradientShift {
 
             0%,
@@ -11950,6 +11954,7 @@
                         // 2. Loader fade out
                         tl.to(loaderEl, { opacity: 0, duration: 0.8, ease: "power2.inOut" }, "start+=0.2")
                             .set(loaderEl, { display: 'none' });
+                        tl.call(() => { document.body.classList.add('page-ready'); });
 
                         // 3. La pantalla principal entra con muchísima elegancia mientras el loader termina de irse
                         if (heroSection) {
@@ -11976,6 +11981,7 @@
                             if (loaderEl) {
                                 loaderEl.classList.add('loader-hidden');
                                 setTimeout(() => { loaderEl.style.display = 'none'; }, 800);
+                                setTimeout(() => { document.body.classList.add('page-ready'); }, 850);
                             }
                             if (heroSection) {
                                 heroSection.classList.remove('hero-enter-ready');
@@ -11996,7 +12002,7 @@
 
             // Kick off — wait for all tracked resources
             // Minimum 2.5s so the loader animation always plays fully
-            const _loaderMinTime = new Promise(r => setTimeout(r, 2500));
+            const _loaderMinTime = new Promise(r => setTimeout(r, 4000));
             Promise.all([...resources, _loaderMinTime]).then(() => setProgress(100));
 
             // 2. Inicialización Básica
