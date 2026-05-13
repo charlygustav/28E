@@ -121,7 +121,32 @@ app.get('/api/status', (_, res) => {
     timestamp: new Date().toISOString()
   });
 });
+const ADMIN_KEY = process.env.ADMIN_KEY || 'admin-secret-2025';
 
+app.options('/api/kick', (_, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.sendStatus(204);
+});
+
+app.post('/api/kick', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const { userId, adminKey } = req.body;
+  if (adminKey !== ADMIN_KEY) return res.status(403).json({ error: 'No autorizado.' });
+  const user = users.get(userId);
+  if (!user) return res.status(404).json({ error: 'Usuario no encontrado.' });
+  const targetSocket = io.sockets.sockets.get(userId);
+  users.delete(userId);
+  if (targetSocket) {
+    targetSocket.emit('join_error', { message: '\u26d4 Has sido expulsado por el administrador.' });
+    targetSocket.disconnect(true);
+  }
+  io.to(CHANNEL).emit('user_left', { userId });
+  broadcastUsers();
+  console.log(`[KICK] ${user.displayName} was kicked by admin`);
+  res.json({ success: true, kicked: user.displayName });
+});
 
 const PORT = process.env.PORT || 3001;
-server.listen(PORT, () => console.log(`✅ Signaling server on port ${PORT}`));
+server.listen(PORT, () => console.log(`\u2705 Signaling server on port ${PORT}`));
