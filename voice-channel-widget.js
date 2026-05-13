@@ -440,7 +440,7 @@
       const container = document.querySelector('.vc-sect');
       if (!container) return;
       
-      const currentIds = this.users.map(u => u.id);
+      const currentIds = this.users.map(u => String(u.id));
       
       // Remove stale nodes
       container.querySelectorAll('.vc-user').forEach(node => {
