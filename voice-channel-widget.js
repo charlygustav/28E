@@ -96,7 +96,9 @@
   .vc-cb.muted { background:rgba(239,68,68,.1); border-color:rgba(239,68,68,.3); color:#ef4444; }
   .vc-cb.leave { background:rgba(239,68,68,.07); border-color:rgba(239,68,68,.2); color:rgba(239,68,68,.8); }
   .vc-cb.leave:hover { background:rgba(239,68,68,.18); color:#ef4444; }
-
+  .vc-cb.dnd { background:rgba(124,58,237,.1); border-color:rgba(124,58,237,.3); color:#a78bfa; }
+  .vc-mico svg { width:14px; height:14px; color:rgba(239,68,68,.75); }
+  .vc-dico svg { width:14px; height:14px; color:rgba(167,139,250,.85); }
   .vc-sbar { padding:7px 16px; background:rgba(34,197,94,.06); border-top:1px solid rgba(34,197,94,.1); display:flex; align-items:center; gap:6px; font-size:11px; color:rgba(34,197,94,.85); }
   .vc-dot { width:6px; height:6px; border-radius:50%; background:#22c55e; animation:vc-blink 2s infinite; }
   @keyframes vc-blink { 0%,100%{opacity:1} 50%{opacity:.35} }
@@ -144,6 +146,7 @@
     sound: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>`,
     bell: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`,
     clock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+    dnd:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>`,
   };
 
   // ── MAIN CLASS ────────────────────────────────────────────────────────────
@@ -308,12 +311,14 @@
         const isMe = u.id === this.myId;
         const initials = u.displayName.slice(0, 2).toUpperCase();
         const isMuted = isMe ? this.muted : u.muted;
+        const isDnd   = isMe ? this.dnd   : u.dnd;
         const muteIcon = isMuted ? `<span class="vc-mico">${ICONS.micOff}</span>` : '';
+        const dndIcon  = isDnd   ? `<span class="vc-dico" title="No molestar">${ICONS.dnd}</span>`  : '';
         return `
           <div class="vc-user" id="vc-u-${u.id}">
             <div class="vc-av${isMe ? ' me' : ''}" id="vc-av-${u.id}">${initials}</div>
             <div class="vc-uname">${u.displayName}${isMe ? '<span class="tag">(tú)</span>' : ''}</div>
-            ${muteIcon}
+            ${dndIcon}${muteIcon}
           </div>`;
       }).join('');
 
@@ -485,6 +490,12 @@
           if (this.connected) this._render(this._tplConnected());
         });
 
+        this.socket.on('user_dnd_state', ({ userId, dnd }) => {
+          const u = this.users.find(x => x.id === userId);
+          if (u) u.dnd = dnd;
+          if (this.connected) this._render(this._tplConnected());
+        });
+
         // Only clean up UI on intentional/permanent disconnects
         this.socket.on('disconnect', (reason) => {
           if (reason === 'io client disconnect' || reason === 'io server disconnect') {
@@ -580,6 +591,7 @@
     _toggleDND() {
       this.dnd = !this.dnd;
       this.audios.forEach(a => { a.volume = this.dnd ? 0 : 1; });
+      this.socket && this.socket.emit('dnd_state', { dnd: this.dnd });
       this._render(this._tplConnected());
     }
 

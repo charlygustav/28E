@@ -18,14 +18,15 @@ const CHANNEL_PASSWORD = process.env.CHANNEL_PASSWORD || 'changeme123';
 const MAX_USERS = 4;
 const CHANNEL = 'principal';
 
-// socketId -> { displayName, muted }
+// socketId -> { displayName, muted, dnd }
 const users = new Map();
 
 function broadcastUsers() {
   const list = Array.from(users.entries()).map(([id, u]) => ({
     id,
     displayName: u.displayName,
-    muted: u.muted
+    muted: u.muted,
+    dnd: u.dnd
   }));
   io.to(CHANNEL).emit('channel_users', { users: list });
 }
@@ -65,12 +66,12 @@ io.on('connection', (socket) => {
     }
 
     // Add user
-    users.set(socket.id, { displayName: displayName.trim(), muted: false });
+    users.set(socket.id, { displayName: displayName.trim(), muted: false, dnd: false });
     socket.join(CHANNEL);
 
     const existingUsers = Array.from(users.entries())
       .filter(([id]) => id !== socket.id)
-      .map(([id, u]) => ({ id, displayName: u.displayName, muted: u.muted }));
+      .map(([id, u]) => ({ id, displayName: u.displayName, muted: u.muted, dnd: u.dnd }));
 
     // Tell the joiner who's already here
     socket.emit('joined', { userId: socket.id, existingUsers });
@@ -95,6 +96,14 @@ io.on('connection', (socket) => {
     if (users.has(socket.id)) {
       users.get(socket.id).muted = muted;
       socket.to(CHANNEL).emit('user_mute_state', { userId: socket.id, muted });
+    }
+  });
+
+  // ── DND STATE ─────────────────────────────────────────────────────────────
+  socket.on('dnd_state', ({ dnd }) => {
+    if (users.has(socket.id)) {
+      users.get(socket.id).dnd = dnd;
+      socket.to(CHANNEL).emit('user_dnd_state', { userId: socket.id, dnd });
     }
   });
 
