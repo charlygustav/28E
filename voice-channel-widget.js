@@ -524,6 +524,7 @@
 
     // ── LEAVE ─────────────────────────────────────────────────────────────
     _leave() {
+      this._creds = null; // prevents auto-reconnect on intentional leave
       if (this.socket) { this.socket.emit('leave_channel'); this.socket.disconnect(); this.socket = null; }
       this._cleanup();
       this.panel.classList.remove('open');
