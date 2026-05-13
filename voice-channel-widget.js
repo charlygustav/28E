@@ -405,7 +405,13 @@
       }
 
       const doConnect = () => {
-        this.socket = io(SIGNALING_URL, { transports: ['websocket'] });
+        this.socket = io(SIGNALING_URL, {
+          transports: ['websocket'],
+          reconnection: true,
+          reconnectionAttempts: 10,
+          reconnectionDelay: 1500,
+          timeout: 20000
+        });
 
         this.socket.on('connect', () => {
           this.socket.emit('join_channel', { password: pass, displayName: name });
@@ -471,9 +477,20 @@
           if (this.connected) this._render(this._tplConnected());
         });
 
-        this.socket.on('disconnect', () => {
-          this._cleanup();
-          this._render(this._tplDisconnected());
+        // Only clean up UI on intentional/permanent disconnects
+        this.socket.on('disconnect', (reason) => {
+          if (reason === 'io client disconnect' || reason === 'io server disconnect') {
+            this._cleanup();
+            this._render(this._tplLogin());
+          }
+          // For transport drops, socket.io reconnects silently in background
+        });
+
+        // Re-join channel silently after background reconnect
+        this.socket.io.on('reconnect', () => {
+          if (this._savedName && this._savedPass) {
+            this.socket.emit('join_channel', { password: this._savedPass, displayName: this._savedName });
+          }
         });
       };
 
