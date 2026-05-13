@@ -85,6 +85,11 @@ io.on('connection', (socket) => {
     }
   });
 
+  // ── SPEAKING STATE ────────────────────────────────────────────────────────
+  socket.on('speaking_state', ({ speaking }) => {
+    socket.to(CHANNEL).emit('speaking_state', { from: socket.id, speaking });
+  });
+
   // ── LEAVE / DISCONNECT ────────────────────────────────────────────────────
   socket.on('leave_channel', () => handleLeave(socket));
   socket.on('disconnect',    () => handleLeave(socket));
@@ -92,6 +97,18 @@ io.on('connection', (socket) => {
 
 // Health check
 app.get('/health', (_, res) => res.json({ status: 'ok', users: users.size, max: MAX_USERS }));
+
+// Status API for Admin Panel
+app.get('/api/status', (_, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.json({
+    channel: CHANNEL,
+    users: Array.from(users.entries()).map(([id, u]) => ({ id, displayName: u.displayName, muted: u.muted })),
+    max: MAX_USERS,
+    timestamp: new Date().toISOString()
+  });
+});
+
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => console.log(`✅ Signaling server on port ${PORT}`));

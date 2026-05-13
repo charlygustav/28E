@@ -102,6 +102,32 @@
   @keyframes vc-blink { 0%,100%{opacity:1} 50%{opacity:.35} }
 
   .vc-empty { padding:16px; text-align:center; color:rgba(255,255,255,.2); font-size:12px; }
+  .vc-timer { font-size:11px; color:rgba(255,255,255,.4); font-variant-numeric:tabular-nums; }
+  .vc-cb.dnd { background:rgba(124,58,237,.1); border-color:rgba(124,58,237,.3); color:#a78bfa; }
+  .vc-vol { width:60px; height:3px; accent-color:#f59e0b; cursor:pointer; }
+  .vc-viz { width:100%; height:28px; display:block; opacity:.7; }
+  .vc-hist { padding:8px 16px 14px; border-top:1px solid rgba(255,255,255,.05); }
+  .vc-hist-row { display:flex; justify-content:space-between; font-size:11px; color:rgba(255,255,255,.3); padding:3px 0; }
+  .vc-hist-row span:first-child { color:rgba(255,255,255,.5); }
+  #vc-bar {
+    position:fixed; bottom:0; left:0; right:0; z-index:9997;
+    background:#0d0d0d; border-top:1px solid rgba(255,255,255,.07);
+    display:none; align-items:center; gap:10px; padding:8px 20px;
+    font-size:12px; color:rgba(255,255,255,.6); font-family:'Inter',-apple-system,sans-serif;
+  }
+  #vc-bar.show { display:flex; }
+  #vc-bar-open { background:rgba(245,158,11,.12); border:1px solid rgba(245,158,11,.3); color:#f59e0b; border-radius:6px; padding:3px 10px; font-size:11px; cursor:pointer; margin-left:auto; }
+  .vc-toast {
+    position:fixed; bottom:72px; right:24px; z-index:10000;
+    background:#1a1a1a; border:1px solid rgba(255,255,255,.09); border-radius:10px;
+    padding:10px 14px; font-size:12.5px; color:#fff; font-family:'Inter',-apple-system,sans-serif;
+    box-shadow:0 8px 32px rgba(0,0,0,.7); transform:translateY(8px); opacity:0;
+    transition:all .3s cubic-bezier(.34,1.56,.64,1); pointer-events:none; max-width:240px;
+  }
+  .vc-toast.show { transform:translateY(0); opacity:1; }
+  .vc-toast.join { border-left:3px solid #22c55e; }
+  .vc-toast.leave { border-left:3px solid #ef4444; }
+  .vc-toast.info { border-left:3px solid #f59e0b; }
   `;
 
   // ── ICONS ─────────────────────────────────────────────────────────────────
@@ -110,6 +136,8 @@
     micOff: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/><path d="M17 16.95A7 7 0 0 1 5 12v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`,
     phone: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.42 19.42 0 0 1 4.26 9.6a2 2 0 0 1 1-2.2 12.84 12.84 0 0 0 .7-2.81 2 2 0 0 1 2-1.72h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"/></svg>`,
     sound: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>`,
+    bell: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`,
+    clock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
   };
 
   // ── MAIN CLASS ────────────────────────────────────────────────────────────
@@ -117,14 +145,26 @@
     constructor() {
       this.socket      = null;
       this.stream      = null;
-      this.peers       = new Map();   // peerId -> RTCPeerConnection
-      this.audios      = new Map();   // peerId -> <audio>
-      this.pendingIce  = new Map();   // peerId -> ICECandidate[]
+      this.peers       = new Map();
+      this.audios      = new Map();
+      this.gains       = new Map();
+      this.pendingIce  = new Map();
       this.myId        = null;
       this.myName      = '';
       this.muted       = false;
+      this.dnd         = false;
       this.connected   = false;
-      this.users       = [];          // [{id, displayName, muted}]
+      this.users       = [];
+      this._creds      = null;
+      this._reconnects = 0;
+      this._callStart  = null;
+      this._timerInt   = null;
+      this._analyser   = null;
+      this._analyserData = null;
+      this._speakRaf   = null;
+      this._isSpeaking = false;
+      this._vizRaf     = null;
+      this._bar        = null;
 
       this.ice = {
         iceServers: [
@@ -149,31 +189,41 @@
 
     // ── BUILD UI ───────────────────────────────────────────────────────────
     _buildUI() {
-      // FAB
       this.fab = document.createElement('div');
       this.fab.id = 'vc-fab';
       this.fab.title = 'Canal de Voz';
       this.fab.innerHTML = ICONS.mic;
       this.fab.addEventListener('click', () => this._toggle());
 
-      // Panel
       this.panel = document.createElement('div');
       this.panel.id = 'vc-panel';
       this.panel.innerHTML = this._tplLogin();
 
+      this._bar = document.createElement('div');
+      this._bar.id = 'vc-bar';
+      this._bar.innerHTML = `<div class="vc-dot"></div><span>#principal · <span id="vc-bar-timer">00:00</span></span><button id="vc-bar-open">Abrir</button>`;
+
       document.body.appendChild(this.fab);
       document.body.appendChild(this.panel);
+      document.body.appendChild(this._bar);
 
-      // Bind initial events (login form)
+      this._bar.querySelector('#vc-bar-open').addEventListener('click', () => {
+        this.panel.classList.add('open');
+        this._bar.classList.remove('show');
+      });
+
       this._bindPanelEvents();
     }
 
     _toggle() {
+      const willOpen = !this.panel.classList.contains('open');
       this.panel.classList.toggle('open');
+      if (this.connected && willOpen) this._bar.classList.remove('show');
     }
 
     // ── TEMPLATES ──────────────────────────────────────────────────────────
     _tplLogin(err = '') {
+      const savedName = localStorage.getItem('28e_vc_name') || '';
       return `
         <div class="vc-hdr">
           <div class="vc-hdr-l">
@@ -185,7 +235,7 @@
         <div class="vc-body">
           <div class="vc-field">
             <label class="vc-label">Tu nombre</label>
-            <input class="vc-input" id="vc-name" type="text" placeholder="Ej: Charles" maxlength="20" autocomplete="off"/>
+            <input class="vc-input" id="vc-name" type="text" placeholder="Ej: Charles" maxlength="20" autocomplete="off" value="${savedName}"/>
           </div>
           <div class="vc-field">
             <label class="vc-label">Contraseña del canal</label>
@@ -193,7 +243,8 @@
           </div>
           <button class="vc-btn" id="vc-join">🎙️ Unirse al canal</button>
           <div class="vc-err" id="vc-err">${err}</div>
-        </div>`;
+        </div>
+        ${this._tplHistory()}`;
     }
 
     _tplLoading() {
@@ -208,16 +259,29 @@
         <div class="vc-loader"><div class="vc-spin"></div>Estableciendo conexión…</div>`;
     }
 
+    _tplHistory() {
+      const h = JSON.parse(localStorage.getItem('28e_vc_history') || '[]');
+      if (!h.length) return '';
+      const rows = h.slice(0,3).map(s => {
+        const d = new Date(s.date);
+        const label = d.toLocaleDateString('es',{month:'short',day:'numeric'}) + ' ' + d.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+        const m = Math.floor(s.duration/60), sec = s.duration%60;
+        return `<div class="vc-hist-row"><span>${s.name}</span><span>${label} · ${m}m${sec}s</span></div>`;
+      }).join('');
+      return `<div class="vc-hist"><div class="vc-sect-lbl" style="margin-bottom:6px">${ICONS.clock} Últimas sesiones</div>${rows}</div>`;
+    }
+
     _tplConnected() {
       const userRows = this.users.map(u => {
         const isMe = u.id === this.myId;
         const initials = u.displayName.slice(0, 2).toUpperCase();
         const muteIcon = u.muted ? `<span class="vc-mico">${ICONS.micOff}</span>` : '';
+        const volSlider = !isMe ? `<input class="vc-vol" type="range" min="0" max="100" value="100" data-peer="${u.id}">` : '';
         return `
           <div class="vc-user" id="vc-u-${u.id}">
             <div class="vc-av${isMe ? ' me' : ''}" id="vc-av-${u.id}">${initials}</div>
             <div class="vc-uname">${u.displayName}${isMe ? '<span class="tag">(tú)</span>' : ''}</div>
-            ${muteIcon}
+            ${muteIcon}${volSlider}
           </div>`;
       }).join('');
 
@@ -225,10 +289,11 @@
         <div class="vc-hdr">
           <div class="vc-hdr-l">
             <div class="vc-icon">${ICONS.sound}</div>
-            <div><div class="vc-title">#principal</div><div class="vc-sub">${this.users.length}/4 usuarios</div></div>
+            <div><div class="vc-title">#principal</div><div class="vc-sub">${this.users.length}/4 · <span class="vc-timer" id="vc-timer">00:00</span></div></div>
           </div>
           <button class="vc-x" id="vc-close">✕</button>
         </div>
+        <canvas class="vc-viz" id="vc-viz" height="28"></canvas>
         <div class="vc-sect">
           <div class="vc-sect-lbl">En el canal</div>
           ${userRows || '<div class="vc-empty">Solo tú por ahora…</div>'}
@@ -236,7 +301,10 @@
         <div class="vc-ctrls">
           <button class="vc-cb${this.muted ? ' muted' : ''}" id="vc-mute">
             ${this.muted ? ICONS.micOff : ICONS.mic}
-            ${this.muted ? 'Silenciado' : 'Silenciar'}
+            ${this.muted ? 'Silenciado' : 'Mic'}
+          </button>
+          <button class="vc-cb${this.dnd ? ' dnd' : ''}" id="vc-dnd">
+            ${ICONS.bell} ${this.dnd ? 'DND' : 'DND'}
           </button>
           <button class="vc-cb leave" id="vc-leave">${ICONS.phone} Salir</button>
         </div>
@@ -250,23 +318,28 @@
     }
 
     _bindPanelEvents() {
-      // Close btn always present
       const xBtn = document.getElementById('vc-close');
       if (xBtn) xBtn.addEventListener('click', () => this._toggle());
 
-      // Login view
       const joinBtn = document.getElementById('vc-join');
       if (joinBtn) {
         joinBtn.addEventListener('click', () => this._doJoin());
-        document.getElementById('vc-pass')
-          .addEventListener('keydown', e => e.key === 'Enter' && this._doJoin());
+        document.getElementById('vc-pass').addEventListener('keydown', e => e.key === 'Enter' && this._doJoin());
       }
 
-      // Connected view
       const muteBtn  = document.getElementById('vc-mute');
+      const dndBtn   = document.getElementById('vc-dnd');
       const leaveBtn = document.getElementById('vc-leave');
       if (muteBtn)  muteBtn.addEventListener('click',  () => this._toggleMute());
+      if (dndBtn)   dndBtn.addEventListener('click',   () => this._toggleDND());
       if (leaveBtn) leaveBtn.addEventListener('click', () => this._leave());
+
+      document.querySelectorAll('.vc-vol').forEach(sl => {
+        sl.addEventListener('input', e => this._setVolume(e.target.dataset.peer, e.target.value / 100));
+      });
+
+      // Restart visualizer on each render
+      setTimeout(() => this._startVisualizer(), 50);
     }
 
     // ── JOIN ───────────────────────────────────────────────────────────────
@@ -277,6 +350,9 @@
       if (!pass) return this._setErr('Escribe la contraseña.');
 
       this.myName = name;
+      localStorage.setItem('28e_vc_name', name);
+      this._creds = { name, pass };
+      this._reconnects = 0;
       this._render(this._tplLoading());
 
       try {
@@ -312,11 +388,11 @@
         this.socket.on('joined', async ({ userId, existingUsers }) => {
           this.myId = userId;
           this.connected = true;
+          this._reconnects = 0;
           this.fab.classList.add('connected');
-          // Initiate offers to everyone already in the channel
-          for (const u of existingUsers) {
-            await this._createOffer(u.id);
-          }
+          this._startTimer();
+          this._setupSpeaking();
+          for (const u of existingUsers) await this._createOffer(u.id);
         });
 
         this.socket.on('channel_users', ({ users }) => {
@@ -324,12 +400,18 @@
           if (this.connected) this._render(this._tplConnected());
         });
 
-        this.socket.on('user_joined', async ({ userId }) => {
-          // They will send us an offer; nothing to do here
+        this.socket.on('user_joined', ({ userId, displayName }) => {
+          this._toast(`🟢 ${displayName} se unió`, 'join');
         });
 
         this.socket.on('user_left', ({ userId }) => {
+          const u = this.users.find(x => x.id === userId);
+          if (u) this._toast(`🔴 ${u.displayName} salió`, 'leave');
           this._closePeer(userId);
+        });
+
+        this.socket.on('speaking_state', ({ from, speaking }) => {
+          this._updateAvatar(from, speaking);
         });
 
         this.socket.on('webrtc_offer', async ({ from, sdp }) => {
@@ -359,8 +441,14 @@
         });
 
         this.socket.on('disconnect', () => {
-          this._cleanup();
-          this._render(this._tplLogin('Desconectado del servidor.'));
+          if (this._reconnects < 3 && this._creds) {
+            this._reconnects++;
+            this._toast(`Reconectando... (${this._reconnects}/3)`, 'info');
+            setTimeout(() => this._connectSocket(this._creds.name, this._creds.pass), this._reconnects * 2000);
+          } else {
+            this._cleanup();
+            this._render(this._tplLogin('Desconectado del servidor.'));
+          }
         });
       };
 
@@ -381,19 +469,26 @@
       this.peers.set(peerId, pc);
 
       pc.onicecandidate = ({ candidate }) => {
-        if (candidate && this.socket)
-          this.socket.emit('ice_candidate', { to: peerId, candidate });
+        if (candidate && this.socket) this.socket.emit('ice_candidate', { to: peerId, candidate });
       };
 
       pc.ontrack = ({ streams }) => {
         if (!streams[0]) return;
-        let audio = this.audios.get(peerId);
-        if (!audio) {
-          audio = new Audio();
+        try {
+          const actx = new (window.AudioContext || window.webkitAudioContext)();
+          const src  = actx.createMediaStreamSource(streams[0]);
+          const gain = actx.createGain();
+          if (this.dnd) gain.gain.setValueAtTime(0, actx.currentTime);
+          src.connect(gain);
+          gain.connect(actx.destination);
+          this.gains.set(peerId, { ctx: actx, gain });
+        } catch {
+          const audio = new Audio();
           audio.autoplay = true;
+          audio.srcObject = streams[0];
+          audio.volume = this.dnd ? 0 : 1;
           this.audios.set(peerId, audio);
         }
-        audio.srcObject = streams[0];
       };
 
       return pc;
@@ -427,6 +522,8 @@
       if (pc) { pc.close(); this.peers.delete(peerId); }
       const audio = this.audios.get(peerId);
       if (audio) { audio.srcObject = null; this.audios.delete(peerId); }
+      const g = this.gains.get(peerId);
+      if (g) { try { g.ctx.close(); } catch{} this.gains.delete(peerId); }
     }
 
     // ── MUTE ──────────────────────────────────────────────────────────────
@@ -437,27 +534,161 @@
       this._render(this._tplConnected());
     }
 
+    _toggleDND() {
+      this.dnd = !this.dnd;
+      this.audios.forEach(a => { a.volume = this.dnd ? 0 : 1; });
+      this.gains.forEach(g => g.gain.gain.setValueAtTime(this.dnd ? 0 : 1, g.ctx.currentTime));
+      this._render(this._tplConnected());
+    }
+
+    _setVolume(peerId, vol) {
+      const g = this.gains.get(peerId);
+      if (g) g.gain.gain.setValueAtTime(vol, g.ctx.currentTime);
+      const a = this.audios.get(peerId);
+      if (a) a.volume = vol;
+    }
+
     // ── LEAVE ─────────────────────────────────────────────────────────────
     _leave() {
-      if (this.socket) {
-        this.socket.emit('leave_channel');
-        this.socket.disconnect();
-        this.socket = null;
-      }
+      if (this.socket) { this.socket.emit('leave_channel'); this.socket.disconnect(); this.socket = null; }
       this._cleanup();
       this.panel.classList.remove('open');
+      this._bar.classList.remove('show');
       this._render(this._tplLogin());
     }
 
     _cleanup() {
+      this._stopTimer();
+      this._stopSpeaking();
+      cancelAnimationFrame(this._vizRaf);
+      this._vizRaf = null;
       this.peers.forEach((_, id) => this._closePeer(id));
       this.peers.clear();
+      this.gains.forEach(g => { try { g.ctx.close(); } catch{} });
+      this.gains.clear();
       if (this.stream) { this.stream.getTracks().forEach(t => t.stop()); this.stream = null; }
       this.connected = false;
       this.myId = null;
       this.users = [];
       this.muted = false;
+      this.dnd = false;
       this.fab.classList.remove('connected');
+    }
+
+    // ── SPEAKING DETECTION ────────────────────────────────────────────────
+    _setupSpeaking() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const src = ctx.createMediaStreamSource(this.stream);
+        const an  = ctx.createAnalyser();
+        an.fftSize = 256;
+        src.connect(an);
+        this._analyser = an;
+        this._analyserData = new Uint8Array(an.frequencyBinCount);
+        this._checkSpeaking();
+      } catch(e) {}
+    }
+
+    _checkSpeaking() {
+      if (!this._analyser) return;
+      this._analyser.getByteFrequencyData(this._analyserData);
+      const vol = this._analyserData.reduce((a,b) => a+b, 0) / this._analyserData.length;
+      const speaking = vol > 12;
+      if (speaking !== this._isSpeaking) {
+        this._isSpeaking = speaking;
+        this.socket && this.socket.emit('speaking_state', { speaking });
+        this._updateAvatar(this.myId, speaking);
+      }
+      this._speakRaf = requestAnimationFrame(() => this._checkSpeaking());
+    }
+
+    _stopSpeaking() {
+      cancelAnimationFrame(this._speakRaf);
+      this._speakRaf = null;
+      this._analyser = null;
+    }
+
+    _updateAvatar(userId, speaking) {
+      const el = document.getElementById(`vc-av-${userId}`);
+      if (el) el.classList.toggle('speaking', speaking);
+    }
+
+    // ── VISUALIZER ────────────────────────────────────────────────────────
+    _startVisualizer() {
+      const canvas = document.getElementById('vc-viz');
+      if (!canvas || !this._analyser) return;
+      canvas.width = canvas.offsetWidth || 298;
+      const ctx = canvas.getContext('2d');
+      const draw = () => {
+        if (!this._analyser || !document.getElementById('vc-viz')) { return; }
+        this._analyser.getByteFrequencyData(this._analyserData);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const step = Math.floor(this._analyserData.length / 40);
+        const barW = canvas.width / 40 - 1;
+        for (let i = 0; i < 40; i++) {
+          const v = this._analyserData[i * step] / 255;
+          const h = v * canvas.height;
+          ctx.fillStyle = `rgba(245,158,11,${0.2 + v * 0.8})`;
+          ctx.fillRect(i * (barW + 1), canvas.height - h, barW, h);
+        }
+        this._vizRaf = requestAnimationFrame(draw);
+      };
+      draw();
+    }
+
+    // ── TOAST + SOUND ─────────────────────────────────────────────────────
+    _toast(msg, type = 'info') {
+      const t = document.createElement('div');
+      t.className = `vc-toast ${type}`;
+      t.textContent = msg;
+      document.body.appendChild(t);
+      requestAnimationFrame(() => t.classList.add('show'));
+      setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, 3000);
+      this._playNotif(type);
+    }
+
+    _playNotif(type) {
+      try {
+        const ctx  = new (window.AudioContext || window.webkitAudioContext)();
+        const osc  = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.frequency.setValueAtTime(type === 'join' ? 880 : 440, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(type === 'join' ? 1320 : 220, ctx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+        osc.start(); osc.stop(ctx.currentTime + 0.3);
+      } catch(e) {}
+    }
+
+    // ── TIMER ────────────────────────────────────────────────────────────
+    _startTimer() {
+      this._callStart = Date.now();
+      this._timerInt = setInterval(() => {
+        const s = Math.floor((Date.now() - this._callStart) / 1000);
+        const str = `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+        const el = document.getElementById('vc-timer');
+        const barEl = document.getElementById('vc-bar-timer');
+        if (el) el.textContent = str;
+        if (barEl) barEl.textContent = str;
+        if (!this.panel.classList.contains('open') && this.connected) {
+          this._bar.classList.add('show');
+        }
+      }, 1000);
+    }
+
+    _stopTimer() {
+      clearInterval(this._timerInt);
+      this._timerInt = null;
+      if (this._callStart) {
+        const dur = Math.floor((Date.now() - this._callStart) / 1000);
+        const h = JSON.parse(localStorage.getItem('28e_vc_history') || '[]');
+        h.unshift({ date: new Date().toISOString(), duration: dur, name: this.myName });
+        h.splice(10);
+        localStorage.setItem('28e_vc_history', JSON.stringify(h));
+        this._callStart = null;
+      }
+      this.fab.title = 'Canal de Voz';
     }
   }
 
