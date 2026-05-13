@@ -7,6 +7,119 @@
   // ── CONFIG (cambia SIGNALING_URL tras el deploy en Railway) ──────────────
   const SIGNALING_URL = 'https://28e-production.up.railway.app';
 
+  // ── INTERNATIONALIZATION ──────────────────────────────────────────────────
+  const VC_I18N = {
+    es: {
+      vc_title: "Canal de Voz",
+      vc_sub: "Canal de voz privado",
+      lbl_name: "Tu nombre",
+      ph_name: "Ej: Charles",
+      lbl_pass: "Contraseña del canal",
+      btn_join: "Unirse al canal",
+      hist_title: "Últimas sesiones",
+      st_conn: "Conectando…",
+      st_estab: "Estableciendo conexión…",
+      st_disc: "Desconectado",
+      msg_disc: "Se perdió la conexión con el servidor.",
+      btn_reconn: "Reconectar",
+      sect_in: "En el canal",
+      empty_chan: "Solo tú por ahora…",
+      tag_you: "(tú)",
+      btn_mic: "Mic",
+      btn_muted: "Silenciado",
+      btn_leave: "Salir",
+      bar_conn: "Conectado · #principal",
+      err_name: "Escribe tu nombre.",
+      err_pass: "Escribe la contraseña.",
+      err_mic: "❌ No se pudo acceder al micrófono.",
+      toast_join: "se unió",
+      toast_left: "se fue"
+    },
+    en: {
+      vc_title: "Voice Channel",
+      vc_sub: "Private voice channel",
+      lbl_name: "Your name",
+      ph_name: "Ex: Charles",
+      lbl_pass: "Channel password",
+      btn_join: "Join channel",
+      hist_title: "Latest sessions",
+      st_conn: "Connecting…",
+      st_estab: "Establishing connection…",
+      st_disc: "Disconnected",
+      msg_disc: "Connection to the server was lost.",
+      btn_reconn: "Reconnect",
+      sect_in: "In channel",
+      empty_chan: "Just you for now…",
+      tag_you: "(you)",
+      btn_mic: "Mic",
+      btn_muted: "Muted",
+      btn_leave: "Leave",
+      bar_conn: "Connected · #main",
+      err_name: "Enter your name.",
+      err_pass: "Enter the password.",
+      err_mic: "❌ Could not access microphone.",
+      toast_join: "joined",
+      toast_left: "left"
+    },
+    pt: {
+      vc_title: "Canal de Voz",
+      vc_sub: "Canal de voz privado",
+      lbl_name: "Seu nome",
+      ph_name: "Ex: Charles",
+      lbl_pass: "Senha do canal",
+      btn_join: "Entrar no canal",
+      hist_title: "Últimas sessões",
+      st_conn: "Conectando…",
+      st_estab: "Estabelecendo conexão…",
+      st_disc: "Desconectado",
+      msg_disc: "A conexão com o servidor foi perdida.",
+      btn_reconn: "Reconectar",
+      sect_in: "No canal",
+      empty_chan: "Só você por enquanto…",
+      tag_you: "(você)",
+      btn_mic: "Mic",
+      btn_muted: "Silenciado",
+      btn_leave: "Sair",
+      bar_conn: "Conectado · #principal",
+      err_name: "Digite seu nome.",
+      err_pass: "Digite a senha.",
+      err_mic: "❌ Não foi possível acessar o microfone.",
+      toast_join: "entrou",
+      toast_left: "saiu"
+    },
+    fr: {
+      vc_title: "Canal Vocal",
+      vc_sub: "Canal vocal privé",
+      lbl_name: "Ton nom",
+      ph_name: "Ex: Charles",
+      lbl_pass: "Mot de passe",
+      btn_join: "Rejoindre le canal",
+      hist_title: "Dernières sessions",
+      st_conn: "Connexion…",
+      st_estab: "Établissement de la connexion…",
+      st_disc: "Déconnecté",
+      msg_disc: "La connexion au serveur a été perdue.",
+      btn_reconn: "Reconnecter",
+      sect_in: "Dans le canal",
+      empty_chan: "Juste toi pour l'instant…",
+      tag_you: "(toi)",
+      btn_mic: "Mic",
+      btn_muted: "Sourdine",
+      btn_leave: "Quitter",
+      bar_conn: "Connecté · #principal",
+      err_name: "Entre ton nom.",
+      err_pass: "Entre le mot de passe.",
+      err_mic: "❌ Impossible d'accéder au micro.",
+      toast_join: "a rejoint",
+      toast_left: "est parti"
+    }
+  };
+
+  const _t = (key) => {
+    const lang = window.currentLang || 'es';
+    return (VC_I18N[lang] && VC_I18N[lang][key]) ? VC_I18N[lang][key] : VC_I18N['es'][key];
+  };
+
   // ── CSS ──────────────────────────────────────────────────────────────────
   const CSS = `
   #vc-fab {
@@ -273,10 +386,13 @@
 
     // ── BUILD UI ───────────────────────────────────────────────────────────
     _buildUI() {
+      const w = document.createElement('div');
+      w.id = 'vc-wrapper';
+
       this.fab = document.createElement('div');
       this.fab.id = 'vc-fab';
-      this.fab.title = 'Canal de Voz';
-      this.fab.innerHTML = ICONS.mic;
+      this.fab.title = _t('vc_title');
+      this.fab.innerHTML = ICONS.sound;
       this.fab.addEventListener('click', () => this._toggle());
 
       this.panel = document.createElement('div');
@@ -291,11 +407,8 @@
       document.body.appendChild(this.panel);
       document.body.appendChild(this._bar);
 
-      // Prevent clicks inside the panel from bubbling to the outside-click handler
-      // (re-renders remove elements from DOM, making panel.contains() return false)
       this.panel.addEventListener('click', (e) => e.stopPropagation());
 
-      // Close panel when clicking outside of it
       document.addEventListener('click', (e) => {
         if (this.panel.classList.contains('open') &&
             !this.panel.contains(e.target) &&
@@ -328,20 +441,20 @@
         <div class="vc-hdr">
           <div class="vc-hdr-l">
             <div class="vc-icon">${ICONS.sound}</div>
-            <div><div class="vc-title">#principal</div><div class="vc-sub">Canal de voz privado</div></div>
+            <div><div class="vc-title">#principal</div><div class="vc-sub">${_t('vc_sub')}</div></div>
           </div>
           <button class="vc-x" id="vc-close">✕</button>
         </div>
         <div class="vc-body">
           <div class="vc-field">
-            <label class="vc-label">Tu nombre</label>
-            <input class="vc-input" id="vc-name" type="text" placeholder="Ej: Charles" maxlength="20" autocomplete="off" value="${savedName}"/>
+            <label class="vc-label">${_t('lbl_name')}</label>
+            <input class="vc-input" id="vc-name" type="text" placeholder="${_t('ph_name')}" maxlength="20" autocomplete="off" value="${savedName}"/>
           </div>
           <div class="vc-field">
-            <label class="vc-label">Contraseña del canal</label>
-            <input class="vc-input" id="vc-pass" type="password" placeholder="••••••••" autocomplete="off"/>
+            <label class="vc-label">${_t('lbl_pass')}</label>
+            <input class="vc-input" id="vc-pass" type="password" placeholder="${_t('ph_pass')}" autocomplete="off"/>
           </div>
-          <button class="vc-btn" id="vc-join">Unirse al canal</button>
+          <button class="vc-btn" id="vc-join">${_t('btn_join')}</button>
           <div class="vc-err" id="vc-err">${err}</div>
         </div>
         ${this._tplHistory()}`;
@@ -352,11 +465,11 @@
         <div class="vc-hdr">
           <div class="vc-hdr-l">
             <div class="vc-icon">${ICONS.sound}</div>
-            <div><div class="vc-title">#principal</div><div class="vc-sub">Conectando…</div></div>
+            <div><div class="vc-title">#principal</div><div class="vc-sub">${_t('st_conn')}</div></div>
           </div>
           <button class="vc-x" id="vc-close">✕</button>
         </div>
-        <div class="vc-loader"><div class="vc-spin"></div>Estableciendo conexión…</div>`;
+        <div class="vc-loader"><div class="vc-spin"></div>${_t('st_estab')}</div>`;
     }
 
     _tplDisconnected() {
@@ -364,15 +477,15 @@
         <div class="vc-hdr">
           <div class="vc-hdr-l">
             <div class="vc-icon">${ICONS.sound}</div>
-            <div><div class="vc-title">#principal</div><div class="vc-sub" style="color:#ef4444">Desconectado</div></div>
+            <div><div class="vc-title">#principal</div><div class="vc-sub" style="color:#ef4444">${_t('st_disc')}</div></div>
           </div>
           <button class="vc-x" id="vc-close">✕</button>
         </div>
         <div class="vc-body">
           <p style="color:rgba(255,255,255,.4);font-size:13px;text-align:center;margin:0 0 14px">
-            Se perdió la conexión con el servidor.
+            ${_t('msg_disc')}
           </p>
-          <button class="vc-btn" id="vc-reconnect">Reconectar</button>
+          <button class="vc-btn" id="vc-reconnect">${_t('btn_reconn')}</button>
         </div>`;
     }
 
@@ -385,7 +498,7 @@
         const m = Math.floor(s.duration/60), sec = s.duration%60;
         return `<div class="vc-hist-row"><span>${s.name}</span><span>${label} · ${m}m${sec}s</span></div>`;
       }).join('');
-      return `<div class="vc-hist"><div class="vc-sect-lbl" style="margin-bottom:6px">Últimas sesiones</div>${rows}</div>`;
+      return `<div class="vc-hist"><div class="vc-sect-lbl" style="margin-bottom:6px">${_t('hist_title')}</div>${rows}</div>`;
     }
 
     _tplConnected() {
@@ -395,11 +508,11 @@
         const isMuted = isMe ? this.muted : u.muted;
         const isDnd   = isMe ? this.dnd   : u.dnd;
         const muteIcon = isMuted ? `<span class="vc-mico">${ICONS.micOff}</span>` : '';
-        const dndIcon  = isDnd   ? `<span class="vc-dico" title="No molestar">${ICONS.dnd}</span>`  : '';
+        const dndIcon  = isDnd   ? `<span class="vc-dico" title="${_t('btn_dnd')}">${ICONS.dnd}</span>`  : '';
         return `
           <div class="vc-user" id="vc-u-${u.id}">
             <div class="vc-av${isMe ? ' me' : ''}" id="vc-av-${u.id}">${initials}</div>
-            <div class="vc-uname">${u.displayName}${isMe ? '<span class="tag">(tú)</span>' : ''}</div>
+            <div class="vc-uname">${u.displayName}${isMe ? `<span class="tag">${_t('tag_you')}</span>` : ''}</div>
             ${dndIcon}${muteIcon}
           </div>`;
       }).join('');
@@ -413,20 +526,20 @@
           <button class="vc-x" id="vc-close">✕</button>
         </div>
         <div class="vc-sect">
-          <div class="vc-sect-lbl">En el canal</div>
-          ${userRows || '<div class="vc-empty">Solo tú por ahora…</div>'}
+          <div class="vc-sect-lbl">${_t('sect_in')}</div>
+          ${userRows || `<div class="vc-empty">${_t('empty_chan')}</div>`}
         </div>
         <div class="vc-ctrls">
           <button class="vc-cb${this.muted ? ' muted' : ''}" id="vc-mute">
             ${this.muted ? ICONS.micOff : ICONS.mic}
-            ${this.muted ? 'Silenciado' : 'Mic'}
+            ${this.muted ? _t('btn_muted') : _t('btn_mic')}
           </button>
           <button class="vc-cb${this.dnd ? ' dnd' : ''}" id="vc-dnd">
-            ${ICONS.bell} ${this.dnd ? 'DND' : 'DND'}
+            ${ICONS.bell} DND
           </button>
-          <button class="vc-cb leave" id="vc-leave">${ICONS.phone} Salir</button>
+          <button class="vc-cb leave" id="vc-leave">${ICONS.phone} ${_t('btn_leave')}</button>
         </div>
-        <div class="vc-sbar"><div class="vc-dot"></div>Conectado · #principal</div>`;
+        <div class="vc-sbar"><div class="vc-dot"></div>${_t('bar_conn')}</div>`;
     }
 
     _updateUsersDOM() {
@@ -451,7 +564,7 @@
       if (this.users.length === 0) {
         if (!container.querySelector('.vc-empty')) {
           const lbl = container.querySelector('.vc-sect-lbl');
-          if (lbl) lbl.insertAdjacentHTML('afterend', '<div class="vc-empty">Solo tú por ahora…</div>');
+          if (lbl) lbl.insertAdjacentHTML('afterend', `<div class="vc-empty">${_t('empty_chan')}</div>`);
         }
         return;
       }
@@ -471,17 +584,16 @@
           node.id = `vc-u-${u.id}`;
           node.innerHTML = `
             <div class="vc-av${isMe ? ' me' : ''}" id="vc-av-${u.id}">${u.displayName.slice(0, 2).toUpperCase()}</div>
-            <div class="vc-uname">${u.displayName}${isMe ? '<span class="tag">(tú)</span>' : ''}</div>
+            <div class="vc-uname">${u.displayName}${isMe ? `<span class="tag">${_t('tag_you')}</span>` : ''}</div>
           `;
           container.appendChild(node);
         }
         
         const existingDnd = node.querySelector('.vc-dico');
         if (isDnd && !existingDnd) {
-          // If inserting both, DND usually comes before Mute visually, but we just insert
           const mico = node.querySelector('.vc-mico');
-          if (mico) mico.insertAdjacentHTML('beforebegin', `<span class="vc-dico" title="No molestar">${ICONS.dnd}</span>`);
-          else node.insertAdjacentHTML('beforeend', `<span class="vc-dico" title="No molestar">${ICONS.dnd}</span>`);
+          if (mico) mico.insertAdjacentHTML('beforebegin', `<span class="vc-dico" title="${_t('btn_dnd')}">${ICONS.dnd}</span>`);
+          else node.insertAdjacentHTML('beforeend', `<span class="vc-dico" title="${_t('btn_dnd')}">${ICONS.dnd}</span>`);
         } else if (!isDnd && existingDnd) {
           existingDnd.remove();
         }
@@ -513,8 +625,18 @@
       };
 
       if (joinBtn) {
-        joinBtn.addEventListener('click', () => this._doJoin());
-        if (passInput) passInput.addEventListener('keydown', e => e.key === 'Enter' && this._doJoin());
+        joinBtn.addEventListener('click', () => {
+           const name = document.getElementById('vc-name').value.trim();
+           const pass = document.getElementById('vc-pass').value;
+           this._doJoin(name, pass);
+        });
+        if (passInput) passInput.addEventListener('keydown', e => {
+           if (e.key === 'Enter') {
+             const name = document.getElementById('vc-name').value.trim();
+             const pass = document.getElementById('vc-pass').value;
+             this._doJoin(name, pass);
+           }
+        });
         if (nameInput) nameInput.addEventListener('input', playTyping);
         if (passInput) passInput.addEventListener('input', playTyping);
       }
@@ -539,11 +661,9 @@
     }
 
     // ── JOIN ───────────────────────────────────────────────────────────────
-    async _doJoin() {
-      const name = document.getElementById('vc-name').value.trim();
-      const pass = document.getElementById('vc-pass').value;
-      if (!name) return this._setErr('Escribe tu nombre.');
-      if (!pass) return this._setErr('Escribe la contraseña.');
+    async _doJoin(name, pass) {
+      if (!name) return this._setErr(_t('err_name'));
+      if (!pass) return this._setErr(_t('err_pass'));
 
       this.myName = name;
       localStorage.setItem('28e_vc_name', name);
@@ -556,7 +676,7 @@
         this.stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
       } catch {
         this._stopSfx(this.progNode); this.progNode = null;
-        this._render(this._tplLogin('❌ No se pudo acceder al micrófono.'));
+        this._render(this._tplLogin(_t('err_mic')));
         return;
       }
 
@@ -621,10 +741,17 @@
 
         this.socket.on('user_joined', ({ userId, displayName }) => {
           this._playSfx('act_join', 0.5);
+          if (typeof window.showToast === 'function') {
+            window.showToast(`${displayName} ${_t('toast_join')}`, "var(--accent-green)", ICONS.sound);
+          }
         });
 
         this.socket.on('user_left', ({ userId }) => {
           this._playSfx('act_left', 0.5);
+          const u = this.users.find(x => x.id === userId);
+          if (u && typeof window.showToast === 'function') {
+            window.showToast(`${u.displayName} ${_t('toast_left')}`, "var(--accent-red)", ICONS.phone);
+          }
           this._closePeer(userId);
         });
 
@@ -758,7 +885,7 @@
       const btn = document.getElementById('vc-mute');
       if (btn) {
         btn.className = 'vc-cb' + (this.muted ? ' muted' : '');
-        btn.innerHTML = `${this.muted ? ICONS.micOff : ICONS.mic} ${this.muted ? 'Silenciado' : 'Mic'}`;
+        btn.innerHTML = `${this.muted ? ICONS.micOff : ICONS.mic} ${this.muted ? _t('btn_muted') : _t('btn_mic')}`;
         const svg = btn.querySelector('svg');
         if (svg) {
           svg.style.transform = 'scale(1.3)';
