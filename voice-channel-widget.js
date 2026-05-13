@@ -273,7 +273,8 @@
       const userRows = this.users.map(u => {
         const isMe = u.id === this.myId;
         const initials = u.displayName.slice(0, 2).toUpperCase();
-        const muteIcon = u.muted ? `<span class="vc-mico">${ICONS.micOff}</span>` : '';
+        const isMuted = isMe ? this.muted : u.muted;
+        const muteIcon = isMuted ? `<span class="vc-mico">${ICONS.micOff}</span>` : '';
         return `
           <div class="vc-user" id="vc-u-${u.id}">
             <div class="vc-av${isMe ? ' me' : ''}" id="vc-av-${u.id}">${initials}</div>
