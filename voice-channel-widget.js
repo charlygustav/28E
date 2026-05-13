@@ -215,6 +215,10 @@
         load('progress', 'SND01_sine/progress_loop.wav');
         load('toggleOn', 'SND01_sine/toggle_on.wav');
         load('toggleOff', 'SND01_sine/toggle_off.wav');
+        load('act_launch', 'sounds/activity_launch.mp3');
+        load('act_end', 'sounds/activity_end.mp3');
+        load('act_join', 'sounds/activity_user_join.mp3');
+        load('act_left', 'sounds/activity_user_left.mp3');
       } catch(e) {}
     }
 
@@ -516,6 +520,7 @@
 
         this.socket.on('joined', async ({ userId, existingUsers }) => {
           this._stopSfx(this.progNode); this.progNode = null;
+          this._playSfx('act_launch', 0.5);
           this.myId = userId;
           this.connected = true;
           this._reconnects = 0;
@@ -531,11 +536,11 @@
         });
 
         this.socket.on('user_joined', ({ userId, displayName }) => {
-          this._playNotif('join');
+          this._playSfx('act_join', 0.5);
         });
 
         this.socket.on('user_left', ({ userId }) => {
-          this._playNotif('leave');
+          this._playSfx('act_left', 0.5);
           this._closePeer(userId);
         });
 
@@ -678,6 +683,7 @@
 
     // ── LEAVE ─────────────────────────────────────────────────────────────
     _leave() {
+      this._playSfx('act_end', 0.5);
       if (this.socket) { this.socket.emit('leave_channel'); this.socket.disconnect(); this.socket = null; }
       this._cleanup();
       this._bar.classList.remove('show');
