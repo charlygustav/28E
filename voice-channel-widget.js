@@ -213,9 +213,14 @@
       document.body.appendChild(this.panel);
       document.body.appendChild(this._bar);
 
-      this._bar.querySelector('#vc-bar-open').addEventListener('click', () => {
-        this.panel.classList.add('open');
-        this._bar.classList.remove('show');
+      // Close panel when clicking outside of it
+      document.addEventListener('click', (e) => {
+        if (this.panel.classList.contains('open') &&
+            !this.panel.contains(e.target) &&
+            !this.fab.contains(e.target)) {
+          this.panel.classList.remove('open');
+          if (this.connected) this._bar.classList.add('show');
+        }
       });
 
       this._bindPanelEvents();
