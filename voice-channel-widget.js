@@ -228,7 +228,12 @@
         src.buffer = this.sfxBuf[k];
         src.loop = loop;
         const gain = this.actx.createGain();
-        gain.gain.value = vol;
+        
+        // Anti-pop fade in
+        const t = this.actx.currentTime;
+        gain.gain.setValueAtTime(0, t);
+        gain.gain.linearRampToValueAtTime(vol, t + 0.02);
+        
         src.connect(gain);
         gain.connect(this.actx.destination);
         src.start(0);
@@ -241,8 +246,11 @@
     _stopSfx(node) {
       if (!node || !this.actx) return;
       try {
-        node.gain.gain.linearRampToValueAtTime(0, this.actx.currentTime + 0.03);
-        node.src.stop(this.actx.currentTime + 0.03);
+        const t = this.actx.currentTime;
+        node.gain.gain.cancelScheduledValues(t);
+        node.gain.gain.setValueAtTime(node.gain.gain.value, t);
+        node.gain.gain.linearRampToValueAtTime(0, t + 0.04);
+        node.src.stop(t + 0.04);
       } catch(e){}
     }
 
