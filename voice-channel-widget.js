@@ -239,7 +239,7 @@
             <label class="vc-label">Contraseña del canal</label>
             <input class="vc-input" id="vc-pass" type="password" placeholder="••••••••" autocomplete="off"/>
           </div>
-          <button class="vc-btn" id="vc-join">🎙️ Unirse al canal</button>
+          <button class="vc-btn" id="vc-join">Unirse al canal</button>
           <div class="vc-err" id="vc-err">${err}</div>
         </div>
         ${this._tplHistory()}`;
