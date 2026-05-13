@@ -178,11 +178,14 @@
       this.sfx = {
         flyin: new Audio('sounds/flyin.wav'),
         flyout: new Audio('sounds/flyout.wav'),
-        typing: new Audio('sounds/typing.wav')
+        typing: new Audio('sounds/typing.wav'),
+        progress: new Audio('SND01_sine/progress_loop.wav')
       };
       this.sfx.flyin.volume = 0.4;
       this.sfx.flyout.volume = 0.4;
       this.sfx.typing.volume = 0.2;
+      this.sfx.progress.volume = 0.3;
+      this.sfx.progress.loop = true;
 
       this.ice = {
         iceServers: [
@@ -396,6 +399,8 @@
       if (reconnectBtn) reconnectBtn.addEventListener('click', () => {
         if (this._savedName && this._savedPass) {
           this._render(this._tplLoading());
+          this.sfx.progress.currentTime = 0;
+          this.sfx.progress.play().catch(()=>{});
           this._connectSocket(this._savedName, this._savedPass);
         } else {
           this._render(this._tplLogin());
@@ -422,10 +427,13 @@
       this._savedName = name;
       this._savedPass = pass;
       this._render(this._tplLoading());
+      this.sfx.progress.currentTime = 0;
+      this.sfx.progress.play().catch(()=>{});
 
       try {
         this.stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
       } catch {
+        this.sfx.progress.pause();
         this._render(this._tplLogin('❌ No se pudo acceder al micrófono.'));
         return;
       }
@@ -461,11 +469,13 @@
         });
 
         this.socket.on('join_error', ({ message }) => {
+          this.sfx.progress.pause();
           this._cleanup();
           this._render(this._tplLogin(message));
         });
 
         this.socket.on('joined', async ({ userId, existingUsers }) => {
+          this.sfx.progress.pause();
           this.myId = userId;
           this.connected = true;
           this._reconnects = 0;
@@ -633,6 +643,7 @@
     }
 
     _cleanup() {
+      this.sfx.progress.pause();
       this._stopTimer();
       this._stopSpeaking();
       cancelAnimationFrame(this._vizRaf);
