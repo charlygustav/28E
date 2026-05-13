@@ -108,13 +108,21 @@
   .vc-hist-row { display:flex; justify-content:space-between; font-size:11px; color:rgba(255,255,255,.3); padding:3px 0; }
   .vc-hist-row span:first-child { color:rgba(255,255,255,.5); }
   #vc-bar {
-    position:fixed; bottom:0; left:0; right:0; z-index:9997;
-    background:#0d0d0d; border-top:1px solid rgba(255,255,255,.07);
-    display:none; align-items:center; gap:10px; padding:8px 20px;
-    font-size:12px; color:rgba(255,255,255,.6); font-family:'Inter',-apple-system,sans-serif;
+    position:fixed; bottom:90px; right:28px; z-index:9997;
+    background:#0d0d0d; border:1px solid rgba(245,158,11,.25);
+    border-radius:20px; display:none; align-items:center; gap:8px;
+    padding:6px 10px 6px 12px;
+    font-size:11.5px; color:rgba(255,255,255,.7); font-family:'Inter',-apple-system,sans-serif;
+    box-shadow:0 4px 20px rgba(0,0,0,.6); white-space:nowrap;
   }
   #vc-bar.show { display:flex; }
-  #vc-bar-open { background:rgba(245,158,11,.12); border:1px solid rgba(245,158,11,.3); color:#f59e0b; border-radius:6px; padding:3px 10px; font-size:11px; cursor:pointer; margin-left:auto; }
+  #vc-bar-open {
+    background:rgba(245,158,11,.15); border:1px solid rgba(245,158,11,.35);
+    color:#f59e0b; border-radius:12px; padding:3px 9px;
+    font-size:11px; font-weight:600; cursor:pointer;
+    transition:background .15s;
+  }
+  #vc-bar-open:hover { background:rgba(245,158,11,.25); }
   .vc-toast {
     position:fixed; bottom:72px; right:24px; z-index:10000;
     background:#1a1a1a; border:1px solid rgba(255,255,255,.09); border-radius:10px;
@@ -199,7 +207,7 @@
 
       this._bar = document.createElement('div');
       this._bar.id = 'vc-bar';
-      this._bar.innerHTML = `<div class="vc-dot"></div><span>#principal · <span id="vc-bar-timer">00:00</span></span><button id="vc-bar-open">Abrir</button>`;
+      this._bar.innerHTML = `<div class="vc-dot"></div><span>#principal &nbsp;<span id="vc-bar-timer" style="font-variant-numeric:tabular-nums;color:rgba(255,255,255,.45)">00:00</span></span><button id="vc-bar-open">Abrir</button>`;
 
       document.body.appendChild(this.fab);
       document.body.appendChild(this.panel);
