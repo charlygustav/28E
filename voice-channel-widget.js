@@ -207,7 +207,7 @@
 
       this._bar = document.createElement('div');
       this._bar.id = 'vc-bar';
-      this._bar.innerHTML = `<div class="vc-dot"></div><span>#principal &nbsp;<span id="vc-bar-timer" style="font-variant-numeric:tabular-nums;color:rgba(255,255,255,.45)">00:00</span></span><button id="vc-bar-open">Abrir</button>`;
+      this._bar.innerHTML = `<div class="vc-dot"></div><span>#principal &nbsp;<span id="vc-bar-timer" style="font-variant-numeric:tabular-nums;color:rgba(255,255,255,.45)">00:00</span></span>`;
 
       document.body.appendChild(this.fab);
       document.body.appendChild(this.panel);
