@@ -243,6 +243,7 @@
             !this.fab.contains(e.target)) {
           this.panel.classList.remove('open');
           if (this.connected) this._bar.classList.add('show');
+          this.sfx.flyin.pause();
           this.sfx.flyout.currentTime = 0;
           this.sfx.flyout.play().catch(()=>{});
         }
@@ -257,9 +258,11 @@
       if (this.connected && willOpen) this._bar.classList.remove('show');
       
       if (willOpen) {
+        this.sfx.flyout.pause();
         this.sfx.flyin.currentTime = 0;
         this.sfx.flyin.play().catch(()=>{});
       } else {
+        this.sfx.flyin.pause();
         this.sfx.flyout.currentTime = 0;
         this.sfx.flyout.play().catch(()=>{});
       }
