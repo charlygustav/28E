@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" class="scroll-smooth dark">
 
 <head>
@@ -11807,11 +11807,11 @@
             const loaderMsg = document.getElementById('loader-message');
             const loaderEl = document.getElementById('loader');
 
-            // Fake counter 0→80 over 5.5s so progress feels alive
+            // Fake counter 0→80 over ~3.2s so progress feels alive
             let _ldFakeVal = 0;
             const _ldFakeInterval = setInterval(() => {
                 if (_ldFakeVal < 80) {
-                    _ldFakeVal = Math.min(80, _ldFakeVal + 0.73);
+                    _ldFakeVal = Math.min(80, _ldFakeVal + 1.25);
                     if (percentText && !loaderEscondido) percentText.textContent = Math.floor(_ldFakeVal) + '%';
                 } else {
                     clearInterval(_ldFakeInterval);
@@ -11843,15 +11843,15 @@
                 setTimeout(() => {
                     loaderMsgInterval = setInterval(() => {
                         msgIndex = (msgIndex + 1) % loaderMessages.length;
-                        loaderMsg.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                        loaderMsg.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
                         loaderMsg.style.opacity = '0';
                         loaderMsg.style.transform = 'translateY(6px)';
                         setTimeout(() => {
                             loaderMsg.textContent = loaderMessages[msgIndex];
                             loaderMsg.style.opacity = '1';
                             loaderMsg.style.transform = 'translateY(0)';
-                        }, 300);
-                    }, 1500);
+                        }, 200);
+                    }, 1000);
                 }, 1200);
             }
 
@@ -11912,13 +11912,13 @@
                 'https://i.ibb.co/SDfLGvby/IMG-20260301-WA0027.jpg'
             ].forEach(url => addResource(loadImage(url), 1));
 
-            // 5. Absolute safety net — 8 seconds max
+            // 5. Absolute safety net — 5.5 seconds max
             const fallback = setTimeout(() => {
                 if (!loaderEscondido) {
                     console.warn('Loader: tiempo límite alcanzado. Forzando entrada.');
                     setProgress(100);
                 }
-            }, 8000);
+            }, 5500);
 
             // ── Progress setter ──
             function setProgress(pct) {
@@ -12015,12 +12015,12 @@
             }
 
             // Kick off — wait for all tracked resources
-            // Min 6s - blocks exit until elapsed, then triggers final setProgress(100)
+            // Min 3.5s - blocks exit until elapsed, then triggers final setProgress(100)
             setTimeout(() => {
                 _loaderMinElapsed = true;
                 setProgress(100); // now allowed to exit
-            }, 6000);
-            // Resources still update the bar visually (but can't exit before 6s)
+            }, 3500);
+            // Resources still update the bar visually (but can't exit before 3.5s)
             Promise.all(resources).catch(() => {});
 
             // 2. Inicialización Básica
