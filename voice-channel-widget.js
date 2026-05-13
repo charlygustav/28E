@@ -392,7 +392,7 @@
       this.fab = document.createElement('div');
       this.fab.id = 'vc-fab';
       this.fab.title = _t('vc_title');
-      this.fab.innerHTML = ICONS.sound;
+      this.fab.innerHTML = ICONS.mic;
       this.fab.addEventListener('click', () => this._toggle());
 
       this.panel = document.createElement('div');
