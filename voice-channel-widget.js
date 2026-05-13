@@ -104,8 +104,6 @@
   .vc-empty { padding:16px; text-align:center; color:rgba(255,255,255,.2); font-size:12px; }
   .vc-timer { font-size:11px; color:rgba(255,255,255,.4); font-variant-numeric:tabular-nums; }
   .vc-cb.dnd { background:rgba(124,58,237,.1); border-color:rgba(124,58,237,.3); color:#a78bfa; }
-  .vc-vol { width:60px; height:3px; accent-color:#f59e0b; cursor:pointer; }
-  .vc-viz { width:100%; height:28px; display:block; opacity:.7; }
   .vc-hist { padding:8px 16px 14px; border-top:1px solid rgba(255,255,255,.05); }
   .vc-hist-row { display:flex; justify-content:space-between; font-size:11px; color:rgba(255,255,255,.3); padding:3px 0; }
   .vc-hist-row span:first-child { color:rgba(255,255,255,.5); }
@@ -276,12 +274,11 @@
         const isMe = u.id === this.myId;
         const initials = u.displayName.slice(0, 2).toUpperCase();
         const muteIcon = u.muted ? `<span class="vc-mico">${ICONS.micOff}</span>` : '';
-        const volSlider = !isMe ? `<input class="vc-vol" type="range" min="0" max="100" value="100" data-peer="${u.id}">` : '';
         return `
           <div class="vc-user" id="vc-u-${u.id}">
             <div class="vc-av${isMe ? ' me' : ''}" id="vc-av-${u.id}">${initials}</div>
             <div class="vc-uname">${u.displayName}${isMe ? '<span class="tag">(tú)</span>' : ''}</div>
-            ${muteIcon}${volSlider}
+            ${muteIcon}
           </div>`;
       }).join('');
 
@@ -293,7 +290,6 @@
           </div>
           <button class="vc-x" id="vc-close">✕</button>
         </div>
-        <canvas class="vc-viz" id="vc-viz" height="28"></canvas>
         <div class="vc-sect">
           <div class="vc-sect-lbl">En el canal</div>
           ${userRows || '<div class="vc-empty">Solo tú por ahora…</div>'}
@@ -333,13 +329,6 @@
       if (muteBtn)  muteBtn.addEventListener('click',  () => this._toggleMute());
       if (dndBtn)   dndBtn.addEventListener('click',   () => this._toggleDND());
       if (leaveBtn) leaveBtn.addEventListener('click', () => this._leave());
-
-      document.querySelectorAll('.vc-vol').forEach(sl => {
-        sl.addEventListener('input', e => this._setVolume(e.target.dataset.peer, e.target.value / 100));
-      });
-
-      // Restart visualizer on each render
-      setTimeout(() => this._startVisualizer(), 50);
     }
 
     // ── JOIN ───────────────────────────────────────────────────────────────
@@ -472,23 +461,18 @@
         if (candidate && this.socket) this.socket.emit('ice_candidate', { to: peerId, candidate });
       };
 
-      pc.ontrack = ({ streams }) => {
-        if (!streams[0]) return;
-        try {
-          const actx = new (window.AudioContext || window.webkitAudioContext)();
-          const src  = actx.createMediaStreamSource(streams[0]);
-          const gain = actx.createGain();
-          if (this.dnd) gain.gain.setValueAtTime(0, actx.currentTime);
-          src.connect(gain);
-          gain.connect(actx.destination);
-          this.gains.set(peerId, { ctx: actx, gain });
-        } catch {
-          const audio = new Audio();
+      pc.ontrack = (event) => {
+        const stream = event.streams[0] || new MediaStream([event.track]);
+        let audio = this.audios.get(peerId);
+        if (!audio) {
+          audio = document.createElement('audio');
           audio.autoplay = true;
-          audio.srcObject = streams[0];
-          audio.volume = this.dnd ? 0 : 1;
+          document.body.appendChild(audio);
           this.audios.set(peerId, audio);
         }
+        audio.srcObject = stream;
+        audio.volume = this.dnd ? 0 : 1;
+        audio.play().catch(() => {});
       };
 
       return pc;
@@ -521,9 +505,7 @@
       const pc = this.peers.get(peerId);
       if (pc) { pc.close(); this.peers.delete(peerId); }
       const audio = this.audios.get(peerId);
-      if (audio) { audio.srcObject = null; this.audios.delete(peerId); }
-      const g = this.gains.get(peerId);
-      if (g) { try { g.ctx.close(); } catch{} this.gains.delete(peerId); }
+      if (audio) { audio.srcObject = null; audio.remove(); this.audios.delete(peerId); }
     }
 
     // ── MUTE ──────────────────────────────────────────────────────────────
@@ -537,15 +519,7 @@
     _toggleDND() {
       this.dnd = !this.dnd;
       this.audios.forEach(a => { a.volume = this.dnd ? 0 : 1; });
-      this.gains.forEach(g => g.gain.gain.setValueAtTime(this.dnd ? 0 : 1, g.ctx.currentTime));
       this._render(this._tplConnected());
-    }
-
-    _setVolume(peerId, vol) {
-      const g = this.gains.get(peerId);
-      if (g) g.gain.gain.setValueAtTime(vol, g.ctx.currentTime);
-      const a = this.audios.get(peerId);
-      if (a) a.volume = vol;
     }
 
     // ── LEAVE ─────────────────────────────────────────────────────────────
@@ -564,7 +538,8 @@
       this._vizRaf = null;
       this.peers.forEach((_, id) => this._closePeer(id));
       this.peers.clear();
-      this.gains.forEach(g => { try { g.ctx.close(); } catch{} });
+      this.audios.forEach(a => { try { a.srcObject = null; a.remove(); } catch{} });
+      this.audios.clear();
       this.gains.clear();
       if (this.stream) { this.stream.getTracks().forEach(t => t.stop()); this.stream = null; }
       this.connected = false;
