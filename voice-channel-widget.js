@@ -866,23 +866,51 @@
       this.stream.getTracks().forEach(t => pc.addTrack(t, this.stream));
       this.peers.set(peerId, pc);
 
+      // Log ICE connection state changes for debugging
+      pc.oniceconnectionstatechange = () => {
+        console.log(`[VC] ICE state for ${peerId}: ${pc.iceConnectionState}`);
+        if (pc.iceConnectionState === 'failed') {
+          console.warn('[VC] ICE failed — attempting restart');
+          pc.restartIce();
+        }
+      };
+
+      pc.onconnectionstatechange = () => {
+        console.log(`[VC] Connection state for ${peerId}: ${pc.connectionState}`);
+      };
+
+      pc.onicegatheringstatechange = () => {
+        console.log(`[VC] ICE gathering for ${peerId}: ${pc.iceGatheringState}`);
+      };
+
       pc.onicecandidate = ({ candidate }) => {
-        if (candidate && this.socket) this.socket.emit('ice_candidate', { to: peerId, candidate });
+        if (candidate && this.socket) {
+          console.log(`[VC] Sending ICE candidate to ${peerId}: ${candidate.type || 'unknown'} ${candidate.protocol || ''}`);
+          this.socket.emit('ice_candidate', { to: peerId, candidate });
+        }
       };
 
       pc.ontrack = (event) => {
+        console.log(`[VC] Received remote track from ${peerId}:`, event.track.kind, event.track.readyState);
         const stream = event.streams[0] || new MediaStream([event.track]);
         let audio = this.audios.get(peerId);
         if (!audio) {
           audio = document.createElement('audio');
           audio.autoplay = true;
+          audio.playsInline = true;
+          audio.setAttribute('playsinline', '');
+          audio.setAttribute('webkit-playsinline', '');
           audio.dataset.vcPeer = 'true';
           document.body.appendChild(audio);
           this.audios.set(peerId, audio);
         }
         audio.srcObject = stream;
         audio.volume = this.dnd ? 0 : 1;
-        audio.play().catch(() => {});
+        audio.play().then(() => {
+          console.log(`[VC] Audio playing for peer ${peerId}`);
+        }).catch((e) => {
+          console.warn(`[VC] Audio play failed for ${peerId}:`, e.message);
+        });
       };
 
       return pc;
@@ -892,6 +920,7 @@
       const pc = this._makePeer(peerId);
       const offer = await pc.createOffer();
       await pc.setLocalDescription(offer);
+      console.log(`[VC] Sending offer to ${peerId}`);
       this.socket.emit('webrtc_offer', { to: peerId, sdp: pc.localDescription });
     }
 
