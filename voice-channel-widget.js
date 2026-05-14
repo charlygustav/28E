@@ -766,6 +766,7 @@
           this.fab.classList.add('connected');
           this._startTimer();
           this._setupSpeaking();
+          this._startKeepAlive();
           for (const u of existingUsers) await this._createOffer(u.id);
         });
 
@@ -969,6 +970,7 @@
       this._stopSfx(this.progNode); this.progNode = null;
       this._stopTimer();
       this._stopSpeaking();
+      this._stopKeepAlive();
       cancelAnimationFrame(this._vizRaf);
       this._vizRaf = null;
       this.peers.forEach((_, id) => this._closePeer(id));
@@ -983,6 +985,59 @@
       this.muted = false;
       this.dnd = false;
       this.fab.classList.remove('connected');
+    }
+
+    // ── BACKGROUND KEEP-ALIVE (mobile) ─────────────────────────────────────
+    _startKeepAlive() {
+      // 1. Wake Lock API – prevents screen from turning off
+      this._acquireWakeLock();
+      document.addEventListener('visibilitychange', this._onVisChange = () => {
+        if (document.visibilityState === 'visible' && this.connected) this._acquireWakeLock();
+      });
+
+      // 2. Silent audio loop – tricks mobile browsers into keeping the tab alive
+      try {
+        const silentCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = silentCtx.createOscillator();
+        const gain = silentCtx.createGain();
+        gain.gain.value = 0.001; // essentially silent
+        osc.connect(gain);
+        gain.connect(silentCtx.destination);
+        osc.start();
+        this._silentCtx = silentCtx;
+        this._silentOsc = osc;
+      } catch(e) {}
+
+      // 3. Web Locks API – prevents tab from being discarded by the browser
+      if (navigator.locks) {
+        this._lockAbort = new AbortController();
+        navigator.locks.request('vc-keep-alive', { signal: this._lockAbort.signal }, () => {
+          return new Promise(() => {}); // hold lock forever until aborted
+        }).catch(() => {});
+      }
+    }
+
+    async _acquireWakeLock() {
+      try {
+        if (this._wakeLock) return;
+        if ('wakeLock' in navigator) {
+          this._wakeLock = await navigator.wakeLock.request('screen');
+          this._wakeLock.addEventListener('release', () => { this._wakeLock = null; });
+        }
+      } catch(e) {}
+    }
+
+    _stopKeepAlive() {
+      // Release wake lock
+      if (this._wakeLock) { this._wakeLock.release().catch(() => {}); this._wakeLock = null; }
+      if (this._onVisChange) document.removeEventListener('visibilitychange', this._onVisChange);
+
+      // Stop silent audio
+      if (this._silentOsc) { try { this._silentOsc.stop(); } catch(e) {} this._silentOsc = null; }
+      if (this._silentCtx) { try { this._silentCtx.close(); } catch(e) {} this._silentCtx = null; }
+
+      // Release web lock
+      if (this._lockAbort) { this._lockAbort.abort(); this._lockAbort = null; }
     }
 
     // ── SPEAKING DETECTION ────────────────────────────────────────────────
