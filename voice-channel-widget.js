@@ -312,23 +312,28 @@
 
       this.ice = {
         iceServers: [
-          // STUN – used first, free, works on simple NATs
-          { urls: 'stun:stun.l.google.com:19302' },
-          { urls: 'stun:stun1.l.google.com:19302' },
-          // TURN – relay fallback for symmetric NAT / mobile carriers / cross-country
-          // Free tier from Open Relay (Metered) – 10GB/month
+          { urls: 'stun:stun.relay.metered.ca:80' },
           {
-            urls: [
-              'turn:a.relay.metered.ca:80',
-              'turn:a.relay.metered.ca:80?transport=tcp',
-              'turn:a.relay.metered.ca:443',
-              'turns:a.relay.metered.ca:443?transport=tcp'
-            ],
-            username: 'openrelayproject',
-            credential: 'openrelayproject'
+            urls: 'turn:global.relay.metered.ca:80',
+            username: '5187d4c4c5314e021d568c2d',
+            credential: 'Bb9ysI8BgTjn/dET'
+          },
+          {
+            urls: 'turn:global.relay.metered.ca:80?transport=tcp',
+            username: '5187d4c4c5314e021d568c2d',
+            credential: 'Bb9ysI8BgTjn/dET'
+          },
+          {
+            urls: 'turn:global.relay.metered.ca:443',
+            username: '5187d4c4c5314e021d568c2d',
+            credential: 'Bb9ysI8BgTjn/dET'
+          },
+          {
+            urls: 'turns:global.relay.metered.ca:443?transport=tcp',
+            username: '5187d4c4c5314e021d568c2d',
+            credential: 'Bb9ysI8BgTjn/dET'
           }
-        ],
-        iceTransportPolicy: 'all'
+        ]
       };
 
       this._injectCSS();
