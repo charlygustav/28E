@@ -1,7 +1,7 @@
 {
   "mantenimiento": false,
-  "maintType": "indefinite",
-  "maintDate": "",
+  "maintType": "scheduled",
+  "maintDate": "2026-05-13T09:48",
   "gal1": "https://i.ibb.co/yByRfq5y/IMG-20260125-WA0097.jpg",
   "gal2": "https://i.ibb.co/DDHBsJy2/IMG-20260127-WA0067.jpg",
   "gal3": "https://i.ibb.co/SDfLGvby/IMG-20260301-WA0027.jpg",
@@ -118,7 +118,7 @@
       "src": "sounds/Otis McDonald - O.Sky.mp3"
     }
   ],
-  "lastUpdated": "2026-05-09T08:21:20.106Z",
+  "lastUpdated": "2026-05-13T13:48:16.302Z",
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_pt": "Feliz 3 meses!",
   "heroBadge_fr": "Joyeux 3 mois !"
