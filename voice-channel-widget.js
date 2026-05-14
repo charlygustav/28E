@@ -312,10 +312,23 @@
 
       this.ice = {
         iceServers: [
+          // STUN – used first, free, works on simple NATs
           { urls: 'stun:stun.l.google.com:19302' },
           { urls: 'stun:stun1.l.google.com:19302' },
-          { urls: 'stun:stun2.l.google.com:19302' },
-        ]
+          // TURN – relay fallback for symmetric NAT / mobile carriers / cross-country
+          // Free tier from Open Relay (Metered) – 10GB/month
+          {
+            urls: [
+              'turn:a.relay.metered.ca:80',
+              'turn:a.relay.metered.ca:80?transport=tcp',
+              'turn:a.relay.metered.ca:443',
+              'turns:a.relay.metered.ca:443?transport=tcp'
+            ],
+            username: 'openrelayproject',
+            credential: 'openrelayproject'
+          }
+        ],
+        iceTransportPolicy: 'all'
       };
 
       this._injectCSS();
