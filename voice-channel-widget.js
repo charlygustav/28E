@@ -1024,17 +1024,13 @@
         if (document.visibilityState === 'visible' && this.connected) this._acquireWakeLock();
       });
 
-      // 2. Silent audio loop – tricks mobile browsers into keeping the tab alive
+      // 2. Silent audio loop (AudioContext)
       try {
         const silentCtx = new (window.AudioContext || window.webkitAudioContext)();
         const osc = silentCtx.createOscillator();
         const gain = silentCtx.createGain();
-        
-        // Use an inaudible 1Hz sub-bass frequency and extremely low gain 
-        // to prevent any audible hum in headphones while tricking the OS.
         osc.frequency.value = 1;
         gain.gain.value = 0.0001; 
-        
         osc.connect(gain);
         gain.connect(silentCtx.destination);
         osc.start();
@@ -1042,7 +1038,20 @@
         this._silentOsc = osc;
       } catch(e) {}
 
-      // 3. Web Locks API – prevents tab from being discarded by the browser
+      // 3. Silent HTML Audio Loop (Crucial for iOS background/locked screen)
+      if (!this._silentAudio) {
+        this._silentAudio = document.createElement('audio');
+        // Minimal 44-byte silent WAV
+        this._silentAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+        this._silentAudio.loop = true;
+        this._silentAudio.playsInline = true;
+        this._silentAudio.setAttribute('playsinline', '');
+        this._silentAudio.setAttribute('webkit-playsinline', '');
+        document.body.appendChild(this._silentAudio);
+      }
+      this._silentAudio.play().catch(() => {});
+
+      // 4. Web Locks API – prevents tab from being discarded by the browser
       if (navigator.locks) {
         this._lockAbort = new AbortController();
         navigator.locks.request('vc-keep-alive', { signal: this._lockAbort.signal }, () => {
@@ -1069,6 +1078,7 @@
       // Stop silent audio
       if (this._silentOsc) { try { this._silentOsc.stop(); } catch(e) {} this._silentOsc = null; }
       if (this._silentCtx) { try { this._silentCtx.close(); } catch(e) {} this._silentCtx = null; }
+      if (this._silentAudio) { this._silentAudio.pause(); this._silentAudio.src = ''; this._silentAudio.remove(); this._silentAudio = null; }
 
       // Release web lock
       if (this._lockAbort) { this._lockAbort.abort(); this._lockAbort = null; }
