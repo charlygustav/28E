@@ -1029,7 +1029,12 @@
         const silentCtx = new (window.AudioContext || window.webkitAudioContext)();
         const osc = silentCtx.createOscillator();
         const gain = silentCtx.createGain();
-        gain.gain.value = 0.001; // essentially silent
+        
+        // Use an inaudible 1Hz sub-bass frequency and extremely low gain 
+        // to prevent any audible hum in headphones while tricking the OS.
+        osc.frequency.value = 1;
+        gain.gain.value = 0.0001; 
+        
         osc.connect(gain);
         gain.connect(silentCtx.destination);
         osc.start();
