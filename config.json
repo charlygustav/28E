@@ -43,6 +43,16 @@
   },
   "songs": [
     {
+      "title": "fuëgo",
+      "artist": "BNYX®, Bizarrap, Yeat, Peso Pluma",
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942588655_fu_go__feat._Bizarrap__Yeat__Peso_Pluma__-_BNYX___Bizarrap__Yeat__Peso_Pluma.mp3"
+    },
+    {
+      "title": "worry - Slowed",
+      "artist": "LONOWN, riserayss",
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942600398_worry_-_Slowed_-_LONOWN__riserayss.mp3"
+    },
+    {
       "title": "Bing Bong",
       "artist": "Yailin la Mas Viral",
       "src": "radio/Bing Bong - Yailin la Mas Viral - SpotubeDL.com.mp3"
@@ -118,7 +128,7 @@
       "src": "sounds/Otis McDonald - O.Sky.mp3"
     }
   ],
-  "lastUpdated": "2026-05-16T14:38:40.260Z",
+  "lastUpdated": "2026-05-16T14:44:32.114Z",
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_pt": "Feliz 3 meses!",
   "heroBadge_fr": "Joyeux 3 mois !"
