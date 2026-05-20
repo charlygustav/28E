@@ -1176,10 +1176,19 @@
 
             if (distance <= 0) {
               clearInterval(countdownInterval);
-              // Auto-disable maintenance
               cfg.mantenimiento = false;
               localStorage.setItem('yaire_config', JSON.stringify(cfg));
               localStorage.setItem('yaire_reload', Date.now().toString());
+              localStorage.setItem('yaire_restore', '1');
+              // Update Firebase so index.html doesn't loop back
+              const safeCfg = { ...cfg };
+              delete safeCfg.ghToken;
+              delete safeCfg.ghRepo;
+              await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(safeCfg)
+              }).catch(() => {});
               window.location.href = 'index.html';
               return;
             }

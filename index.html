@@ -18,6 +18,11 @@
 
             // Función que lee Firebase y actúa según el estado
             async function checkState() {
+                // If coming back from maintenance expiry, skip Firebase redirect
+                if (localStorage.getItem('yaire_restore') === '1') {
+                    localStorage.removeItem('yaire_restore');
+                    return;
+                }
                 try {
                     const res = await fetch(_FB + '?nocache=' + Date.now());
                     if (res.ok) {
@@ -57,7 +62,11 @@
             await checkState();
 
             // Polling cada 3 segundos para detectar cambios del admin en tiempo real
-            setInterval(checkState, 3000);
+            // Guard: no hacer fetch mientras la pestaña está oculta (ahorra batería y red)
+            let _stateInterval = setInterval(() => { if (!document.hidden) checkState(); }, 3000);
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) checkState(); // Chequeo inmediato al volver
+            });
         })();
     </script>
 
@@ -158,8 +167,8 @@
             })();
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js" crossorigin="anonymous" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
     <style>
         /* Fonts loaded via preload link in <head> for non-blocking rendering */
 
@@ -1843,7 +1852,7 @@
             }
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <!-- GSAP ya cargado en <head> con defer — removido duplicado para evitar doble parse y doble descarga -->
 </head>
 
 <body
@@ -3159,53 +3168,92 @@
         style="position:fixed;inset:0;z-index:200;background:#09090b;display:flex;align-items:center;justify-content:center;overflow:hidden;">
 
         <!-- Ambient Circles -->
-        <div style="position:absolute;inset:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
-            <div class="ld-c ld-c1"></div>
-            <div class="ld-c ld-c2"></div>
-            <div class="ld-c ld-c3"></div>
+        <div id="ld-circles" style="position:absolute;inset:0;pointer-events:none;" aria-hidden="true">
+            <div class="ld-c ld-c1" id="ld-c1"></div>
+            <div class="ld-c ld-c2" id="ld-c2"></div>
+            <div class="ld-c ld-c3" id="ld-c3"></div>
+            <div class="ld-c ld-c4" id="ld-c4"></div>
+            <div class="ld-c ld-c5" id="ld-c5"></div>
         </div>
 
         <!-- Center: logo + bar -->
-        <div class="ld-body">
-            <div class="ld-logo">28E</div>
-            <div class="ld-track">
+        <div class="ld-body" id="ld-body">
+            <div class="ld-logo" id="ld-logo">28E</div>
+            <div class="ld-track" id="ld-track">
                 <div id="loader-progress" class="ld-fill"></div>
             </div>
         </div>
 
         <!-- Percent bottom-right & left label -->
-        <div class="ld-corner-l">28E &copy;</div>
-        <div class="ld-pct"><span id="loader-percent">0%</span></div>
+        <div class="ld-corner-l" id="ld-corner-l">28E &copy;</div>
+        <div class="ld-pct" id="ld-pct"><span id="loader-percent">0%</span></div>
 
         <!-- JS compat -->
         <p id="loader-message" style="display:none;" aria-hidden="true"></p>
 
         <style>
-            @keyframes ldIn { from{opacity:0} to{opacity:1} }
-            @keyframes ldPctIn { to{opacity:1} }
-            @keyframes ldCircIn { from{opacity:0} to{opacity:1} }
-            @keyframes ldC1kf { 0%{transform:translate(0,0);width:30vw;height:30vw} 100%{transform:translate(0,-35vh);width:80vw;height:80vw} }
-            @keyframes ldC2kf { 0%{transform:translate(0,0);width:20vw;height:20vw} 100%{transform:translate(-45vw,-40vh);width:80vw;height:80vw} }
-            @keyframes ldC3kf { 0%{transform:translate(0,0);width:20vw;height:20vw} 100%{transform:translate(-55vw,-80vh);width:120vw;height:120vw} }
-            .ld-c { position:absolute; border-radius:50%; animation-direction:alternate; animation-timing-function:ease-in-out; will-change:transform,width,height; }
-            .ld-c1 { left:30vw;top:25vh;width:30vw;height:30vw; background:radial-gradient(50% 50% at 50% 50%,rgba(236,72,153,.28) 15%,transparent 100%); animation:ldC1kf 12s infinite alternate,ldCircIn 1.3s ease-out; }
-            .ld-c2 { left:45vw;top:30vh;width:20vw;height:20vw; background:radial-gradient(50% 50% at 50% 50%,rgba(245,158,11,.22) 15%,transparent 100%); animation:ldC2kf 11.5s infinite alternate,ldCircIn 1.3s ease-out; }
-            .ld-c3 { left:35vw;top:30vh;width:20vw;height:20vw; background:radial-gradient(50% 50% at 50% 50%,rgba(219,39,119,.4) 15%,transparent 100%); animation:ldC3kf 15s infinite alternate,ldCircIn 1.3s ease-out; }
-            .ld-body { position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;gap:28px;opacity:0; will-change:opacity;animation:ldIn 0.9s cubic-bezier(0.16,1,0.3,1) 0.25s forwards; }
-            .ld-logo { font-family:'Inter',system-ui,sans-serif;font-size:clamp(56px,10vw,120px);font-weight:900;color:#fff;letter-spacing:-0.04em;line-height:1;user-select:none; }
-            .ld-track { width:clamp(140px,28vw,240px);height:2px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden; }
-            @keyframes ldBarFill { 0%{width:0%} 70%{width:68%} 90%{width:78%} 100%{width:80%} }
-            @keyframes ldPctCount {}
-            #loader-progress { display:block !important;height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,rgba(245,158,11,.9),rgba(236,72,153,.7));animation:ldBarFill 5.5s cubic-bezier(.4,0,.2,1) forwards; }
-                        .ld-corner-l { position:absolute;bottom:clamp(20px,4vw,32px);left:clamp(20px,5vw,40px);font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.28);opacity:0;animation:ldPctIn .5s ease-out .9s forwards; }
-            .ld-pct { position:absolute;bottom:clamp(20px,4vw,32px);right:clamp(20px,5vw,40px);font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;color:rgba(255,255,255,.28);font-variant-numeric:tabular-nums;opacity:0;animation:ldPctIn .5s ease-out .9s forwards; }
-            .hero-enter-ready .hero-anim { opacity:0;transform:translateY(30px); }
-            .hero-enter-active .hero-anim { opacity:1;transform:translateY(0);transition:opacity .8s cubic-bezier(0.16,1,0.3,1),transform .8s cubic-bezier(0.16,1,0.3,1); }
-            .hero-enter-active .hero-anim-1 { transition-delay:0s; }
-            .hero-enter-active .hero-anim-2 { transition-delay:.15s; }
-            .hero-enter-active .hero-anim-3 { transition-delay:.3s; }
-            .hero-enter-active .hero-anim-4 { transition-delay:.5s; }
-            .loader-hidden { opacity:0 !important;pointer-events:none;transition:opacity 0.7s ease !important; }
+            /* ── Loader orbs: animación 100% GSAP — sin CSS keyframes, sin handoff, sin cortes ── */
+
+            .ld-c { position:absolute; border-radius:50%; will-change:transform,opacity; }
+
+            /* Orbe 1: Rosa — centro-izquierda */
+            .ld-c1 {
+                left:22vw; top:22vh; width:34vw; height:34vw;
+                background:radial-gradient(50% 50% at 50% 50%, rgba(236,72,153,.65) 0%, rgba(236,72,153,.3) 40%, transparent 100%);
+                opacity:0;
+            }
+            /* Orbe 2: Ámbar — derecha */
+            .ld-c2 {
+                left:58vw; top:28vh; width:26vw; height:26vw;
+                background:radial-gradient(50% 50% at 50% 50%, rgba(251,191,36,.70) 0%, rgba(245,158,11,.35) 40%, transparent 100%);
+                opacity:0;
+            }
+            /* Orbe 3: Magenta — bajo-centro */
+            .ld-c3 {
+                left:38vw; top:48vh; width:28vw; height:28vw;
+                background:radial-gradient(50% 50% at 50% 50%, rgba(219,39,119,.75) 0%, rgba(219,39,119,.35) 40%, transparent 100%);
+                opacity:0;
+            }
+            /* Orbe 4: Violeta — esquina superior derecha */
+            .ld-c4 {
+                left:68vw; top:8vh; width:22vw; height:22vw;
+                background:radial-gradient(50% 50% at 50% 50%, rgba(168,85,247,.65) 0%, rgba(139,92,246,.3) 40%, transparent 100%);
+                opacity:0;
+            }
+            /* Orbe 5: Cyan/Teal — esquina inferior izquierda */
+            .ld-c5 {
+                left:8vw; top:58vh; width:20vw; height:20vw;
+                background:radial-gradient(50% 50% at 50% 50%, rgba(20,184,166,.60) 0%, rgba(6,182,212,.28) 40%, transparent 100%);
+                opacity:0;
+            }
+            /* Body: empieza invisible — GSAP anima */
+            .ld-body { position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;gap:28px;opacity:0;will-change:opacity,transform; }
+            .ld-logo { font-family:'Inter',system-ui,sans-serif;font-size:clamp(56px,10vw,120px);font-weight:900;color:#fff;letter-spacing:-0.04em;line-height:1;user-select:none;will-change:transform,opacity; }
+            .ld-track { width:clamp(140px,28vw,240px);height:3px;background:rgba(255,255,255,.10);border-radius:999px;overflow:hidden;position:relative; }
+            #loader-progress {
+                display:block !important;
+                width:100%;height:100%;
+                border-radius:999px;
+                background:linear-gradient(90deg,rgba(245,158,11,1),rgba(236,72,153,.95),rgba(168,85,247,.9),rgba(245,158,11,1));
+                background-size:300% 100%;
+                will-change:transform;
+                animation:ldBarCycle 2.2s cubic-bezier(0.4,0,0.2,1) infinite, ldShimmer 3s linear infinite;
+            }
+            /* Se llena entrando por la izquierda, se vacía saliéndose por la derecha */
+            @keyframes ldBarCycle {
+                0%   { transform:translateX(-100%); }   /* fuera por la izquierda — vacía */
+                42%  { transform:translateX(0%);    }   /* dentro, llena */
+                58%  { transform:translateX(0%);    }   /* pausa llena */
+                100% { transform:translateX(100%);  }   /* sale por la derecha — vacía */
+            }
+            @keyframes ldShimmer {
+                0%   { background-position:200% center; }
+                100% { background-position:-200% center; }
+            }
+            .ld-corner-l { position:absolute;bottom:clamp(20px,4vw,32px);left:clamp(20px,5vw,40px);font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.28);opacity:0;will-change:opacity; }
+            .ld-pct { position:absolute;bottom:clamp(20px,4vw,32px);right:clamp(20px,5vw,40px);font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;color:rgba(255,255,255,.28);font-variant-numeric:tabular-nums;opacity:0;will-change:opacity; }
+            /* Hero reveal — controlado por GSAP */
+            .loader-hidden { opacity:0 !important;pointer-events:none; }
         </style>
     </div>
 
@@ -3316,7 +3364,6 @@
                 <a href="#quiz-girasol" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
                     <span class="menu-link-icon bg-yellow-50 dark:bg-yellow-900/20">🌻</span>
                     <span data-i18n="menu_quiz">El Misterio</span>
-                    <span class="menu-new-badge menu-new-badge-inline" data-i18n="menu_new_badge">NUEVO</span>
                 </a>
                 <a href="#distancia" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
                     <span class="menu-link-icon bg-sky-50 dark:bg-sky-900/20">✈️</span>
@@ -3342,7 +3389,6 @@
                 <a href="#minijuegos" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400 relative">
                     <span class="menu-link-icon bg-purple-50 dark:bg-purple-900/20">🎮</span>
                     <span data-i18n="menu_games">Minijuegos</span>
-                    <span class="menu-new-badge menu-new-badge-inline" data-i18n="menu_new_badge">NUEVO</span>
                 </a>
                 <a href="#colores-yaire" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
                     <span class="menu-link-icon bg-rose-50 dark:bg-rose-900/20">🎨</span>
@@ -3382,7 +3428,6 @@
                     <span class="menu-link-icon bg-zinc-100 dark:bg-zinc-800" id="menu-song-icon">❓</span>
                     <span id="menu-song-label" data-i18n="menu_song">Tu
                         Canción</span>
-                    <span class="menu-new-badge menu-new-badge-inline" data-i18n="menu_new_badge">NUEVO</span>
                 </a>
 
             </div>
@@ -3394,7 +3439,6 @@
                     <span
                         class="menu-link-icon bg-white dark:bg-zinc-900 shadow-sm transition-transform duration-300 group-hover:scale-110">💌</span>
                     <span data-i18n="menu_secret">Bóveda Secreta</span>
-                    <span class="menu-new-badge" data-i18n="menu_new_badge">NUEVO</span>
                 </a>
             </div>
         </div>
@@ -3575,7 +3619,7 @@
 
         <!-- Section: Hero -->
         <section id="hero"
-            class="relative min-h-[85vh] flex flex-col justify-center items-center text-center reveal pt-10 pb-32 active overflow-hidden hero-enter-ready">
+            class="relative min-h-[85vh] flex flex-col justify-center items-center text-center pt-10 pb-32 overflow-hidden hero-enter-ready">
 
             <div class="relative z-10 flex flex-col items-center">
                 <div
@@ -4963,87 +5007,199 @@
 
         <!-- Minijuegos Hub -->
         <section id="minijuegos"
-            class="cv-section cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal scroll-mt-20">
+            class="cv-section cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal scroll-mt-20" style="overflow: visible;">
+
+            <style>
+                /* ═══ GAMES HUB v2 — Premium Redesign ═══ */
+                .ghub-card {
+                    position: relative;
+                    border-radius: 1.75rem;
+                    overflow: hidden;
+                    cursor: pointer;
+                    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease;
+                    will-change: transform;
+                }
+                .ghub-card:hover { transform: translateY(-8px) scale(1.015); }
+                .ghub-card:active { transform: translateY(-2px) scale(0.98); }
+
+                /* Per-card ambient glow via box-shadow (never clipped) */
+                .ghub-card.ghub-amber:hover {
+                    box-shadow: 0 20px 50px -12px rgba(245,158,11,0.35), 0 0 80px -20px rgba(251,191,36,0.25), 0 -10px 40px -20px rgba(245,158,11,0.15);
+                }
+                .dark .ghub-card.ghub-amber:hover {
+                    box-shadow: 0 20px 50px -12px rgba(245,158,11,0.25), 0 0 80px -20px rgba(251,191,36,0.15), 0 -10px 40px -20px rgba(245,158,11,0.1);
+                }
+                .ghub-card.ghub-pink:hover {
+                    box-shadow: 0 20px 50px -12px rgba(236,72,153,0.35), 0 0 80px -20px rgba(56,189,248,0.2), 0 -10px 40px -20px rgba(236,72,153,0.15);
+                }
+                .dark .ghub-card.ghub-pink:hover {
+                    box-shadow: 0 20px 50px -12px rgba(236,72,153,0.25), 0 0 80px -20px rgba(56,189,248,0.12), 0 -10px 40px -20px rgba(236,72,153,0.1);
+                }
+                .ghub-card.ghub-purple:hover {
+                    box-shadow: 0 20px 50px -12px rgba(168,85,247,0.35), 0 0 80px -20px rgba(139,92,246,0.25), 0 -10px 40px -20px rgba(168,85,247,0.15);
+                }
+                .dark .ghub-card.ghub-purple:hover {
+                    box-shadow: 0 20px 50px -12px rgba(168,85,247,0.25), 0 0 80px -20px rgba(139,92,246,0.15), 0 -10px 40px -20px rgba(168,85,247,0.1);
+                }
+
+                /* Animated gradient bg */
+                .ghub-card-bg {
+                    position: absolute; inset: 0; z-index: 0;
+                    opacity: 0; transition: opacity 0.6s ease;
+                }
+                .ghub-card:hover .ghub-card-bg { opacity: 1; }
+
+                /* Icon container */
+                .ghub-icon-wrap {
+                    position: relative; width: 5.5rem; height: 5.5rem;
+                    border-radius: 1.75rem; display: flex; align-items: center;
+                    justify-content: center; font-size: 2.8rem;
+                    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+                    flex-shrink: 0;
+                }
+                .ghub-card:hover .ghub-icon-wrap {
+                    transform: scale(1.12) rotate(-3deg);
+                    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+                }
+
+                /* Shimmer sweep */
+                .ghub-card::after {
+                    content: ''; position: absolute; inset: 0; z-index: 5;
+                    border-radius: inherit;
+                    background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.08) 45%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.08) 55%, transparent 60%);
+                    transform: translateX(-100%); pointer-events: none;
+                    overflow: hidden;
+                    transition: none;
+                }
+                .ghub-card:hover::after {
+                    animation: ghubShimmer 0.8s ease forwards;
+                }
+                @keyframes ghubShimmer { to { transform: translateX(100%); } }
+
+                /* Difficulty dots */
+                .ghub-diff-dot {
+                    width: 6px; height: 6px; border-radius: 50%;
+                    transition: background 0.3s ease;
+                }
+
+                /* Play CTA */
+                .ghub-play-btn {
+                    display: inline-flex; align-items: center; gap: 0.5rem;
+                    padding: 0.65rem 1.6rem; border-radius: 9999px;
+                    font-size: 0.7rem; font-weight: 800; text-transform: uppercase;
+                    letter-spacing: 0.15em; color: white;
+                    transition: all 0.35s ease; position: relative; overflow: hidden;
+                }
+                .ghub-play-btn::before {
+                    content: ''; position: absolute; inset: 0;
+                    background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+                    opacity: 0; transition: opacity 0.3s ease;
+                }
+                .ghub-card:hover .ghub-play-btn::before { opacity: 1; }
+                .ghub-card:hover .ghub-play-btn { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
+
+                /* Skill tags */
+                .ghub-tag {
+                    display: inline-flex; align-items: center; gap: 0.3rem;
+                    padding: 0.25rem 0.6rem; border-radius: 0.5rem;
+                    font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.08em;
+                }
+
+                /* Responsive: stack layout on mobile */
+                @media (max-width: 767px) {
+                    .ghub-card-inner { flex-direction: column !important; text-align: center; }
+                    .ghub-card-inner .ghub-icon-wrap { margin: 0 auto 1rem; }
+                    .ghub-card-inner .ghub-meta { justify-content: center; }
+                    .ghub-card-inner .ghub-play-btn { margin: 0 auto; }
+                }
+            </style>
+
             <div class="text-center mb-16 px-4">
-                <h2 class="text-sm font-bold tracking-widest uppercase text-brand-500 mb-2" data-i18n="games_label">Zona
-                    Interactiva</h2>
-                <h3 class="text-3xl md:text-5xl font-bold" data-i18n="games_title">Minijuegos para Yaire</h3>
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 mb-5">
+                    <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+                    <span class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-brand-500" data-i18n="games_label">Zona Interactiva</span>
+                </div>
+                <h3 class="text-3xl md:text-5xl font-extrabold tracking-tight" data-i18n="games_title">Minijuegos para Yaire</h3>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm mt-3 max-w-md mx-auto font-medium">Elige tu aventura y compite por la puntuación más alta</p>
             </div>
 
-            <!-- ═══ GAMES HUB ═══ -->
+            <!-- ═══ GAMES HUB v2 ═══ -->
             <div id="games-hub"
-                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 md:px-8 max-w-5xl mx-auto relative z-10 transition-all duration-500 transform">
+                class="flex flex-col gap-5 px-4 md:px-8 max-w-4xl mx-auto relative z-10 transition-all duration-500 transform" style="padding-top: 1rem; padding-bottom: 1rem; overflow: visible;">
 
-                <!-- Hub Card 1: Jardín -->
+                <!-- Card 1: El Jardín de Yaire -->
                 <div onclick="openArcadeGame('game1')"
-                    class="group relative bg-white dark:bg-zinc-900 rounded-3xl p-8 border border-brand-200 dark:border-brand-800/50 shadow-lg cursor-pointer overflow-hidden transform transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:shadow-[0_20px_40px_-15px_rgba(245,158,11,0.3)] dark:hover:border-brand-700">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-brand-500/10 to-tulip-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    </div>
-                    <div
-                        class="absolute -right-10 -top-10 w-40 h-40 bg-brand-500/20 rounded-full blur-3xl pointer-events-none group-hover:bg-brand-500/40 transition-colors duration-500">
-                    </div>
-                    <div class="relative z-10 flex flex-col items-center text-center">
-                        <div
-                            class="w-24 h-24 bg-brand-50 dark:bg-brand-900/30 rounded-[2rem] flex items-center justify-center text-5xl mb-6 shadow-sm border border-brand-100 dark:border-brand-800 group-hover:scale-110 transition-transform duration-300">
-                            🌻</div>
-                        <h4 class="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white mb-3"
-                            data-i18n="game1_title">El Jardín de Yaire</h4>
-                        <p class="text-zinc-600 dark:text-zinc-400 text-sm mb-8 leading-relaxed font-medium"
-                            data-i18n="game1_desc">Cosecha girasoles a contrarreloj.</p>
-                        <span
-                            class="inline-block px-6 py-2.5 bg-brand-500 text-white text-xs font-bold uppercase tracking-widest rounded-full shadow-md group-hover:shadow-brand-500/50 group-hover:bg-brand-400 transition-all"
-                            data-i18n="game_play_btn">Jugar Ahora</span>
+                    class="ghub-card ghub-amber bg-white dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-700/50 shadow-lg dark:shadow-black/30">
+                    <div class="ghub-card-bg" style="background: linear-gradient(135deg, rgba(245,158,11,0.06), rgba(251,191,36,0.04));"></div>
+                    <div class="relative z-10 ghub-card-inner flex flex-row items-center gap-6 p-6 md:p-7">
+                        <div class="ghub-icon-wrap bg-gradient-to-br from-amber-50 to-brand-100 dark:from-brand-900/40 dark:to-amber-900/30 border border-brand-200/60 dark:border-brand-700/40 shadow-sm">🌻</div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 mb-1.5 ghub-meta flex-wrap">
+                                <span class="ghub-tag bg-amber-100/80 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border border-amber-200/50 dark:border-amber-800/40">⏱ 30s</span>
+                                <span class="ghub-tag bg-green-100/80 dark:bg-green-900/30 text-green-700 dark:text-green-300 border border-green-200/50 dark:border-green-800/40">🎯 Reflejos</span>
+                                <div class="flex items-center gap-1 ml-1" title="Dificultad: Fácil">
+                                    <span class="ghub-diff-dot bg-brand-500"></span>
+                                    <span class="ghub-diff-dot bg-zinc-200 dark:bg-zinc-700"></span>
+                                    <span class="ghub-diff-dot bg-zinc-200 dark:bg-zinc-700"></span>
+                                </div>
+                            </div>
+                            <h4 class="text-xl md:text-2xl font-extrabold text-zinc-900 dark:text-white mb-1 tracking-tight" data-i18n="game1_title">El Jardín de Yaire</h4>
+                            <p class="text-zinc-500 dark:text-zinc-400 text-xs md:text-sm leading-relaxed mb-4" data-i18n="game1_desc">Cosecha girasoles a contrarreloj.</p>
+                            <span class="ghub-play-btn shadow-md" style="background: linear-gradient(135deg, #f59e0b, #d97706);" data-i18n="game_play_btn">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.84A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.27l9.344-5.891a1.5 1.5 0 000-2.538L6.3 2.841z"/></svg>
+                                Jugar Ahora</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Hub Card 2: Vuelo -->
+                <!-- Card 2: Vuelo Hacia Ti -->
                 <div onclick="openArcadeGame('game2')"
-                    class="group relative bg-white dark:bg-zinc-900 rounded-3xl p-8 border border-tulip-200 dark:border-tulip-800/50 shadow-lg cursor-pointer overflow-hidden transform transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:shadow-[0_20px_40px_-15px_rgba(236,72,153,0.3)] dark:hover:border-tulip-700">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-tulip-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    </div>
-                    <div
-                        class="absolute -left-10 -bottom-10 w-40 h-40 bg-tulip-500/20 rounded-full blur-3xl pointer-events-none group-hover:bg-tulip-500/40 transition-colors duration-500">
-                    </div>
-                    <div class="relative z-10 flex flex-col items-center text-center">
-                        <div
-                            class="w-24 h-24 bg-blue-50 dark:bg-sky-900/30 rounded-[2rem] flex items-center justify-center text-5xl mb-6 shadow-sm border border-blue-100 dark:border-sky-800 group-hover:scale-110 transition-transform duration-300">
-                            🦋</div>
-                        <h4 class="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white mb-3"
-                            data-i18n="game2_title">Vuelo Hacia Ti</h4>
-                        <p class="text-zinc-600 dark:text-zinc-400 text-sm mb-8 leading-relaxed font-medium"
-                            data-i18n="game2_desc">Esquiva obstáculos y atrapa tulipanes.</p>
-                        <span
-                            class="inline-block px-6 py-2.5 bg-tulip-500 text-white text-xs font-bold uppercase tracking-widest rounded-full shadow-md group-hover:shadow-tulip-500/50 group-hover:bg-tulip-400 transition-all"
-                            data-i18n="game_play_btn">Jugar Ahora</span>
+                    class="ghub-card ghub-pink bg-white dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-700/50 shadow-lg dark:shadow-black/30">
+                    <div class="ghub-card-bg" style="background: linear-gradient(135deg, rgba(56,189,248,0.06), rgba(236,72,153,0.04));"></div>
+                    <div class="relative z-10 ghub-card-inner flex flex-row items-center gap-6 p-6 md:p-7">
+                        <div class="ghub-icon-wrap bg-gradient-to-br from-sky-50 to-blue-100 dark:from-sky-900/40 dark:to-blue-900/30 border border-sky-200/60 dark:border-sky-700/40 shadow-sm">🦋</div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 mb-1.5 ghub-meta flex-wrap">
+                                <span class="ghub-tag bg-sky-100/80 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300 border border-sky-200/50 dark:border-sky-800/40">🕹 Arcade</span>
+                                <span class="ghub-tag bg-pink-100/80 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 border border-pink-200/50 dark:border-pink-800/40">🌷 Recolección</span>
+                                <div class="flex items-center gap-1 ml-1" title="Dificultad: Media">
+                                    <span class="ghub-diff-dot bg-tulip-500"></span>
+                                    <span class="ghub-diff-dot bg-tulip-500"></span>
+                                    <span class="ghub-diff-dot bg-zinc-200 dark:bg-zinc-700"></span>
+                                </div>
+                            </div>
+                            <h4 class="text-xl md:text-2xl font-extrabold text-zinc-900 dark:text-white mb-1 tracking-tight" data-i18n="game2_title">Vuelo Hacia Ti</h4>
+                            <p class="text-zinc-500 dark:text-zinc-400 text-xs md:text-sm leading-relaxed mb-4" data-i18n="game2_desc">Esquiva obstáculos y atrapa tulipanes.</p>
+                            <span class="ghub-play-btn shadow-md" style="background: linear-gradient(135deg, #ec4899, #db2777);" data-i18n="game_play_btn">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.84A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.27l9.344-5.891a1.5 1.5 0 000-2.538L6.3 2.841z"/></svg>
+                                Jugar Ahora</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Hub Card 3: Cartas Ocultas -->
+                <!-- Card 3: Cartas Ocultas -->
                 <div id="game3-arcade-card" onclick="openArcadeGame('game3')"
-                    class="group relative bg-white dark:bg-zinc-900 rounded-3xl p-8 border border-purple-200 dark:border-purple-800/50 shadow-lg cursor-pointer overflow-hidden transform transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:shadow-[0_20px_40px_-15px_rgba(168,85,247,0.3)] dark:hover:border-purple-700">
-
-                    <span
-                        class="absolute top-4 right-4 z-20 bg-purple-100 text-purple-600 dark:bg-purple-900/40 dark:text-purple-300 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-widest animate-pulse border border-purple-200 dark:border-purple-800/50 shadow-md">Nuevo</span>
-
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-brand-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    </div>
-                    <div
-                        class="absolute -right-10 -bottom-10 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl pointer-events-none group-hover:bg-purple-500/40 transition-colors duration-500">
-                    </div>
-                    <div class="relative z-10 flex flex-col items-center text-center">
-                        <div
-                            class="w-24 h-24 bg-purple-50 dark:bg-purple-900/30 rounded-[2rem] flex items-center justify-center text-5xl mb-6 shadow-sm border border-purple-100 dark:border-purple-800">
-                            🃏</div>
-                        <h4 class="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white mb-3"
-                            data-i18n="game3_title">Cartas Ocultas</h4>
-                        <p class="text-zinc-600 dark:text-zinc-400 text-sm mb-8 leading-relaxed font-medium"
-                            data-i18n="game3_desc">Encuentra las parejas ocultas.</p>
-                        <span
-                            class="inline-block px-6 py-2.5 bg-purple-500 text-white text-xs font-bold uppercase tracking-widest rounded-full shadow-md group-hover:shadow-purple-500/50 group-hover:bg-purple-400 transition-all"
-                            data-i18n="game_play_btn">Jugar Ahora</span>
+                    class="ghub-card ghub-purple bg-white dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-700/50 shadow-lg dark:shadow-black/30">
+                    <div class="ghub-card-bg" style="background: linear-gradient(135deg, rgba(168,85,247,0.06), rgba(139,92,246,0.04));"></div>
+                    <div class="relative z-10 ghub-card-inner flex flex-row items-center gap-6 p-6 md:p-7">
+                        <div class="ghub-icon-wrap bg-gradient-to-br from-purple-50 to-violet-100 dark:from-purple-900/40 dark:to-violet-900/30 border border-purple-200/60 dark:border-purple-700/40 shadow-sm">🃏</div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 mb-1.5 ghub-meta flex-wrap">
+                                <span class="ghub-tag bg-purple-100/80 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200/50 dark:border-purple-800/40">🧠 Memoria</span>
+                                <span class="ghub-tag bg-violet-100/80 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 border border-violet-200/50 dark:border-violet-800/40">♠ Parejas</span>
+                                <div class="flex items-center gap-1 ml-1" title="Dificultad: Difícil">
+                                    <span class="ghub-diff-dot bg-purple-500"></span>
+                                    <span class="ghub-diff-dot bg-purple-500"></span>
+                                    <span class="ghub-diff-dot bg-purple-500"></span>
+                                </div>
+                            </div>
+                            <h4 class="text-xl md:text-2xl font-extrabold text-zinc-900 dark:text-white mb-1 tracking-tight" data-i18n="game3_title">Cartas Ocultas</h4>
+                            <p class="text-zinc-500 dark:text-zinc-400 text-xs md:text-sm leading-relaxed mb-4" data-i18n="game3_desc">Encuentra las parejas ocultas.</p>
+                            <span class="ghub-play-btn shadow-md" style="background: linear-gradient(135deg, #a855f7, #7c3aed);" data-i18n="game_play_btn">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.84A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.27l9.344-5.891a1.5 1.5 0 000-2.538L6.3 2.841z"/></svg>
+                                Jugar Ahora</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -7857,11 +8013,16 @@
                         }
                     }
 
+                    let _resizeAttached = false;
                     function initParticles() {
                         resize();
                         particles = [];
                         for (let i = 0; i < 60; i++) particles.push(new Particle());
-                        window.addEventListener('resize', resize);
+                        // Guard: evitar duplicar el listener resize si initParticles se llama más de una vez
+                        if (!_resizeAttached) {
+                            window.addEventListener('resize', resize, { passive: true });
+                            _resizeAttached = true;
+                        }
                     }
 
                     function loop() {
@@ -7878,9 +8039,14 @@
                                 const staggers = card.querySelectorAll('.memorial-staggered');
                                 staggers.forEach(el => el.classList.add('visible'));
 
-                                if (!particles.length) {
-                                    initParticles();
-                                    loop();
+                                if (!particles.length) initParticles();
+                                // Reanudar loop si fue cancelado al salir de pantalla
+                                if (!animFrame) loop();
+                            } else {
+                                // Cancelar rAF cuando la sección sale del viewport — ahorra GPU/CPU
+                                if (animFrame) {
+                                    cancelAnimationFrame(animFrame);
+                                    animFrame = null;
                                 }
                             }
                         });
@@ -8793,23 +8959,25 @@
             <!-- Panel JS -->
             <script>
                 (function () {
-                    // Live clock
+                    // Live clock — cachear referencia fuera de la función (se llama cada 1000ms)
+                    var _clockEl = document.getElementById('panel-live-clock');
                     function updatePanelClock() {
-                        var el = document.getElementById('panel-live-clock');
-                        if (!el) return;
+                        if (!_clockEl) _clockEl = document.getElementById('panel-live-clock');
+                        if (!_clockEl) return;
                         var now = new Date();
-                        el.textContent = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                        _clockEl.textContent = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
                     }
                     panelClockInterval = setInterval(updatePanelClock, 1000);
                     updatePanelClock();
 
-                    // Days counter
+                    // Days counter — cachear ref del elemento
+                    var _daysEl = document.getElementById('days-counter');
                     function updateDaysCounter() {
+                        if (!_daysEl) _daysEl = document.getElementById('days-counter');
                         var startDate = new Date('2026-01-17T00:00:00');
                         var now = new Date();
                         var diff = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
-                        var el = document.getElementById('days-counter');
-                        if (el) el.textContent = diff;
+                        if (_daysEl) _daysEl.textContent = diff;
                     }
                     updateDaysCounter();
 
@@ -11817,6 +11985,102 @@
             const loaderMsg = document.getElementById('loader-message');
             const loaderEl = document.getElementById('loader');
 
+            // ── GSAP ENTRADA: esperamos a que GSAP esté disponible (defer) ──
+            function runLoaderEntrance() {
+                if (typeof gsap === 'undefined') {
+                    requestAnimationFrame(runLoaderEntrance);
+                    return;
+                }
+                const ldLogo   = document.getElementById('ld-logo');
+                const ldTrack  = document.getElementById('ld-track');
+                const ldPct    = document.getElementById('ld-pct');
+                const ldCorner = document.getElementById('ld-corner-l');
+                const ldC1 = document.getElementById('ld-c1');
+                const ldC2 = document.getElementById('ld-c2');
+                const ldC3 = document.getElementById('ld-c3');
+
+                // Estado inicial: liberar contenedor padre y preparar hijos
+                const ldBody = document.getElementById('ld-body');
+                if (ldBody) gsap.set(ldBody, { opacity: 1 }); // padre visible, hijos controlados individualmente
+                const ldC4 = document.getElementById('ld-c4');
+                const ldC5 = document.getElementById('ld-c5');
+                gsap.set([ldC1, ldC2, ldC3, ldC4, ldC5], { opacity: 0, scale: 0.3, force3D: true });
+                gsap.set(ldLogo, { opacity: 0, y: 28, force3D: true });   // sin blur — solo transform+opacity
+                gsap.set(ldTrack, { opacity: 0, scaleX: 0, transformOrigin: 'left center', force3D: true });
+                gsap.set([ldPct, ldCorner], { opacity: 0, y: 8 });
+
+                const entranceTl = gsap.timeline({ defaults: { ease: 'power3.out', force3D: true } });
+
+                // 1. Orbes emergen en cascada gradual y suave — power3.out sin rebote
+                entranceTl.to([ldC1, ldC2, ldC3, ldC4, ldC5], {
+                    opacity: 1, scale: 1,
+                    duration: 1.4,
+                    stagger: 0.15,
+                    ease: 'power3.out'
+                }, 0);
+
+                // 2. Logo entra desde abajo — solo opacity + Y (GPU puro)
+                entranceTl.to(ldLogo, {
+                    opacity: 1, y: 0,
+                    duration: 0.8, ease: 'power3.out'
+                }, 0.2);
+
+                // 3. Barra de progreso aparece expandiéndose
+                entranceTl.to(ldTrack, {
+                    opacity: 1, scaleX: 1,
+                    duration: 0.7, ease: 'power2.out'
+                }, 0.55);
+
+                // 4. Contador y esquina aparecen deslizando
+                entranceTl.to([ldPct, ldCorner], {
+                    opacity: 1, y: 0,
+                    duration: 0.5, stagger: 0.08
+                }, 0.7);
+
+                // 5. Orbes inician loops GSAP — 100% GSAP, sin CSS, sin handoff, sin cortes
+                //    Cada orbe: multi-stop path → vuelve al origen → repeat infinito
+                //    Guardados en window._ldOrbLoops para poder matarlos en el exit
+                entranceTl.call(() => {
+                    const _d = { ease: 'sine.inOut', force3D: true };
+                    window._ldOrbLoops = [
+                        // Orbe 1 — Rosa: orbit ancho sup-izq
+                        gsap.timeline({ repeat: -1, defaults: _d })
+                            .to(ldC1, { x: '8vw',  y: '-10vh', scale: 1.6, opacity: 0.9,  duration: 1.6 })
+                            .to(ldC1, { x: '-5vw', y: '-18vh', scale: 0.9, opacity: 0.7,  duration: 1.7 })
+                            .to(ldC1, { x: '12vw', y: '-5vh',  scale: 2.0, opacity: 0.95, duration: 1.4 })
+                            .to(ldC1, { x: '0',    y: '0',     scale: 1.0, opacity: 0.85, duration: 1.3 }),
+
+                        // Orbe 2 — Ámbar: orbit derecha
+                        gsap.timeline({ repeat: -1, defaults: _d })
+                            .to(ldC2, { x: '-12vw', y: '-5vh', scale: 2.2, opacity: 0.9,  duration: 1.3 })
+                            .to(ldC2, { x: '-4vw',  y:  '8vh', scale: 1.4, opacity: 0.65, duration: 1.4 })
+                            .to(ldC2, { x: '-15vw', y:  '2vh', scale: 2.5, opacity: 0.9,  duration: 1.2 })
+                            .to(ldC2, { x: '0',     y:  '0',   scale: 1.0, opacity: 0.8,  duration: 1.3 }),
+
+                        // Orbe 3 — Magenta: orbit vertical
+                        gsap.timeline({ repeat: -1, defaults: _d })
+                            .to(ldC3, { x: '6vw',  y:  '14vh', scale: 2.8, opacity: 1.0,  duration: 1.6 })
+                            .to(ldC3, { x: '-7vw', y:   '6vh', scale: 1.5, opacity: 0.7,  duration: 1.8 })
+                            .to(ldC3, { x: '2vw',  y:  '17vh', scale: 3.0, opacity: 0.95, duration: 1.5 })
+                            .to(ldC3, { x: '0',    y:   '0',   scale: 1.0, opacity: 0.9,  duration: 1.4 }),
+
+                        // Orbe 4 — Violeta: orbit diagonal
+                        gsap.timeline({ repeat: -1, defaults: _d })
+                            .to(ldC4, { x: '-10vw', y: '-13vh', scale: 2.4, opacity: 1.0,  duration: 1.2 })
+                            .to(ldC4, { x: '-17vw', y:  '-7vh', scale: 1.3, opacity: 0.65, duration: 1.3 })
+                            .to(ldC4, { x: '0',     y:   '0',   scale: 1.0, opacity: 0.8,  duration: 1.2 }),
+
+                        // Orbe 5 — Cyan: orbit inf-izq
+                        gsap.timeline({ repeat: -1, defaults: _d })
+                            .to(ldC5, { x: '13vw', y:  '9vh',  scale: 2.0, opacity: 0.95, duration: 1.4 })
+                            .to(ldC5, { x: '7vw',  y: '17vh',  scale: 1.4, opacity: 0.7,  duration: 1.5 })
+                            .to(ldC5, { x: '0',    y:  '0',    scale: 1.0, opacity: 0.75, duration: 1.3 }),
+                    ];
+                }, null, 1.4);
+            }
+            runLoaderEntrance();
+
+
             // Fake counter 0→80 over ~3.2s so progress feels alive
             let _ldFakeVal = 0;
             const _ldFakeInterval = setInterval(() => {
@@ -11934,15 +12198,11 @@
             function setProgress(pct) {
                 pct = Math.min(100, Math.max(0, pct));
 
+                // La barra es decorativa (pulso CSS) — solo actualizamos el contador textual
                 if (typeof gsap !== 'undefined') {
                     if (percentText) gsap.to(percentText, { innerHTML: pct + "%", snap: { innerHTML: 1 }, duration: 0.4, ease: "power1.out" });
-                    if (progressBar) {
-                        progressBar.style.transition = 'none';
-                        gsap.to(progressBar, { width: pct + '%', duration: 0.4, ease: "power2.out" });
-                    }
                 } else {
                     if (percentText) percentText.innerText = pct + '%';
-                    if (progressBar) progressBar.style.width = pct + '%';
                 }
 
                 if (pct >= 100 && !loaderEscondido && _loaderMinElapsed) {
@@ -11954,41 +12214,97 @@
                     const heroSection = document.getElementById('hero');
 
                     if (typeof gsap !== 'undefined') {
-                        const tl = gsap.timeline();
-                        const typography = document.querySelector("#loader .flex-col.items-center.w-64, #loader .flex-col.items-center.sm\\:w-72") || document.getElementById('loader-percent').parentElement;
-                        const tulip = document.querySelector("#loader svg");
+                        // ── EXIT GSAP: camera push-in ─────────────────────────────────────
+                        const ldPct    = document.getElementById('ld-pct');
+                        const ldCorner = document.getElementById('ld-corner-l');
+                        const ldTrack  = document.getElementById('ld-track');
 
-                        // Preparamos el Hero en el frame 0 para evitar cualquier parpadeo o corte CSS
+                        // Pre-preparar hero
                         if (heroSection) {
-                            gsap.set(".hero-anim", { opacity: 0, y: 30, filter: "blur(10px)" });
-                            heroSection.classList.remove('hero-enter-ready');
+                            gsap.set('.hero-anim', { opacity: 0, y: 35, force3D: true });
                         }
 
-                        // Sincronización absoluta para asegurar fluidez perfecta
-                        tl.addLabel("start");
-
-                        // 1. Elementos del loader se desvanecen suavemente
-                        if (typography) {
-                            tl.to(typography, { opacity: 0, y: -15, duration: 0.8, ease: "power2.inOut" }, "start");
-                        }
-                        if (tulip) {
-                            tl.to(tulip, { opacity: 0, scale: 0.9, duration: 0.8, ease: "power2.inOut" }, "start");
+                        // ⚡ Orbes 100% GSAP — solo matar los loop timelines.
+                        //    GSAP los deja exactamente donde están, el exit arranca desde ahí sin corte.
+                        if (window._ldOrbLoops) {
+                            window._ldOrbLoops.forEach(tl => tl.kill());
+                            window._ldOrbLoops = null;
                         }
 
-                        // 2. Loader fade out
-                        tl.to(loaderEl, { opacity: 0, duration: 0.8, ease: "power2.inOut" }, "start+=0.2")
-                            .set(loaderEl, { display: 'none' });
-                        tl.call(() => { document.body.classList.add('page-ready'); });
+                        const orbIds = ['ld-c1','ld-c2','ld-c3','ld-c4','ld-c5'];
+                        const orbEls = orbIds.map(id => document.getElementById(id)).filter(Boolean);
 
-                        // 3. La pantalla principal entra con muchísima elegancia mientras el loader termina de irse
+                        const progressEl = document.getElementById('loader-progress');
+                        if (progressEl) progressEl.style.animation = 'none';
+
+                        loaderEl.style.willChange = 'opacity';
+
+                        requestAnimationFrame(() => {
+
+                        const exitTl = gsap.timeline({ defaults: { force3D: true } });
+                        exitTl.addLabel('start');
+
+                        // 1. UI periférica se disuelve suavemente
+                        exitTl.to([ldPct, ldCorner, ldTrack].filter(Boolean), {
+                            opacity: 0, duration: 0.4, ease: 'power2.in'
+                        }, 'start');
+
+                        const ldLogo = document.getElementById('ld-logo');
+                        if (ldLogo) {
+                            exitTl.to(ldLogo, {
+                                opacity: 0, duration: 0.4, ease: 'power2.in'
+                            }, 'start');
+                        }
+
+                        // 2. Cada orbe sale disparado fuera de pantalla en su propia dirección
+                        const flyDirs = [
+                            { x: '-130vw', y: '-80vh'  },  // orbe 1 → esquina sup-izq
+                            { x:  '130vw', y: '-60vh'  },  // orbe 2 → esquina sup-der
+                            { x:  '-40vw', y:  '120vh' },  // orbe 3 → abajo-izq
+                            { x:  '140vw', y: '-100vh' },  // orbe 4 → sup-der extremo
+                            { x: '-120vw', y:  '90vh'  },  // orbe 5 → inf-izq
+                        ];
+
+                        orbEls.forEach((el, i) => {
+                            const d = flyDirs[i] || { x: '150vw', y: '0' };
+                            exitTl.to(el, {
+                                x: d.x,
+                                y: d.y,
+                                opacity: 0,
+                                duration: 0.8,
+                                ease: 'power3.in',
+                            }, `start+=${0.05 + i * 0.06}`);
+                        });
+
+                        // 3. Loader completo fade-out suave al final
+                        exitTl.to(loaderEl, {
+                            opacity: 0,
+                            duration: 0.4,
+                            ease: 'power2.inOut',
+                        }, 'start+=0.55')
+                        .set(loaderEl, { display: 'none', clearProps: 'willChange,transform,opacity' })
+                        .call(() => { document.body.classList.add('page-ready'); });
+
+                        // 4. Hero reveal en cascada
                         if (heroSection) {
-                            tl.to(".hero-anim", {
-                                opacity: 1, y: 0, filter: "blur(0px)",
-                                duration: 1.5, stagger: 0.15, ease: "power2.out"
-                            }, "start+=0.8");
+                            document.querySelectorAll('.hero-anim').forEach(el => {
+                                el.style.transition = 'none';
+                                el.style.filter = '';
+                                el.style.willChange = 'transform, opacity';
+                            });
+                            exitTl.to('.hero-anim', {
+                                opacity: 1, y: 0,
+                                duration: 0.9, stagger: 0.1, ease: 'power3.out',
+                                force3D: true,
+                                onComplete: () => {
+                                    document.querySelectorAll('.hero-anim').forEach(el => {
+                                        el.style.willChange = 'auto';
+                                    });
+                                }
+                            }, 'start+=0.65');
                         }
 
-                        setTimeout(() => {
+                        exitTl.call(() => {
                             initScrollSpy();
                             const top5Section = document.getElementById('top5yaire');
                             if (top5Section) {
@@ -11997,15 +12313,17 @@
                                 }, { threshold: 0.3 });
                                 barObs.observe(top5Section);
                             }
-                        }, 1800);
+                        }, null, 'start+=1.1');
+
+                        }); // end rAF
 
                     } else {
-                        if (grads) grads.classList.add('loader-grads-exit');
+                        // Fallback sin GSAP
                         setTimeout(() => {
                             if (loaderEl) {
                                 loaderEl.classList.add('loader-hidden');
-                                setTimeout(() => { loaderEl.style.display = 'none'; }, 800);
-                                setTimeout(() => { document.body.classList.add('page-ready'); }, 850);
+                                setTimeout(() => { loaderEl.style.display = 'none'; }, 700);
+                                setTimeout(() => { document.body.classList.add('page-ready'); }, 750);
                             }
                             if (heroSection) {
                                 heroSection.classList.remove('hero-enter-ready');
@@ -12019,7 +12337,7 @@
                                 }, { threshold: 0.3 });
                                 barObs.observe(top5Section);
                             }
-                        }, 800);
+                        }, 700);
                     }
                 }
             }
@@ -12082,16 +12400,22 @@
         });
 
         // ══════════ NÚCLEO DE LA PÁGINA ══════════
+        // Cache DOM refs una sola vez — evitar 6 getElementById por tick de 1 segundo
+        const _cntEls = {};
+        function _getCntEl(id) {
+            return _cntEls[id] || (_cntEls[id] = document.getElementById(id));
+        }
+
         function updateCounters() {
             const start = new Date('2026-01-28T00:00:00').getTime();
             const now = new Date().getTime();
             const diff = now - start;
-            const elMonths = document.getElementById('count-months');
-            const elDays = document.getElementById('count-days');
-            const elHours = document.getElementById('count-hours');
-            const elMins = document.getElementById('count-mins');
-            const elSecs = document.getElementById('count-secs');
-            const elTotalDays = document.getElementById('total-days-count');
+            const elMonths   = _getCntEl('count-months');
+            const elDays     = _getCntEl('count-days');
+            const elHours    = _getCntEl('count-hours');
+            const elMins     = _getCntEl('count-mins');
+            const elSecs     = _getCntEl('count-secs');
+            const elTotalDays = _getCntEl('total-days-count');
 
             if (diff > 0) {
                 const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -12108,16 +12432,19 @@
                 }
 
                 const msDiff = d.getTime() - tempD.getTime();
-                const days = Math.floor(msDiff / (1000 * 60 * 60 * 24));
+                const days  = Math.floor(msDiff / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((msDiff / (1000 * 60 * 60)) % 24);
-                const mins = Math.floor((msDiff / 1000 / 60) % 60);
-                const secs = Math.floor((msDiff / 1000) % 60);
+                const mins  = Math.floor((msDiff / 1000 / 60) % 60);
+                const secs  = Math.floor((msDiff / 1000) % 60);
+
+                const dict = (typeof dictionary !== 'undefined' && dictionary[currentLang]) ? dictionary[currentLang] : {};
+                const secsSuffix = (dict.time_secs_suffix || '+ {s} segundos latiendo por ti').replace('{s}', secs);
 
                 if (elMonths) elMonths.innerText = months;
                 if (elDays) elDays.innerText = days;
                 if (elHours) elHours.innerText = hours;
                 if (elMins) elMins.innerText = mins;
-                if (elSecs) elSecs.innerText = `+ ${secs} segundos latiendo por ti`;
+                if (elSecs) elSecs.innerText = secsSuffix;
                 if (elTotalDays) elTotalDays.innerText = totalDays;
             }
         }
@@ -12402,13 +12729,15 @@
             muted: localStorage.getItem('yaire-muted') === 'true',
             ctx: null,
             buffers: {},
+            _warmedUp: false,
+            _audioCache: {},
 
             // ── All sounds in the project ──
             _critical: [
                 'typing.wav', 'flyin.wav', 'flyout.wav', 'transicion.wav',
                 'navegacion.wav', 'modos.wav', 'scroll.wav', 'seleccionsi.wav',
                 'seleccionno.wav', 'inicio.wav', 'slideralto.wav', 'sliderbajo.wav',
-                'incorrect.wav', 'correcto.wav', 'secret.wav'
+                'incorrect.wav', 'correcto.wav', 'secret.wav', 'hover.wav'
             ],
             _secondary: [
                 'abrirtusecreto.mp3', 'clickgirasol.wav', 'colors.wav',
@@ -12417,60 +12746,103 @@
                 'perdergirasol.wav', 'revelacion.wav', 'tarjetas.wav'
             ],
 
+            // Crea el AudioContext — se llama al init(), sin esperar gesto
             initContext: function () {
                 if (!this.ctx) {
                     const AC = window.AudioContext || window.webkitAudioContext;
-                    if (AC) this.ctx = new AC();
-                }
-                if (this.ctx && this.ctx.state === 'suspended') {
-                    this.ctx.resume().catch(() => { });
+                    if (AC) {
+                        try {
+                            this.ctx = new AC();
+                            // Arrancar preload de buffers inmediatamente
+                            this._startPreload();
+                        } catch (e) { }
+                    }
                 }
             },
 
-            preload: async function (soundFile) {
-                if (this.buffers[soundFile]) return;
+            // Resume si estaba suspendido (requerido tras política de autoplay)
+            _resume: function () {
+                if (this.ctx && this.ctx.state === 'suspended') {
+                    return this.ctx.resume().catch(() => { });
+                }
+                return Promise.resolve();
+            },
+
+            // Toca un buffer silencioso de 1 muestra — abre el pipeline de hardware.
+            // Sin esto, incluso con buffers precargados el primer sonido tiene latencia.
+            _warmUp: function () {
+                if (this._warmedUp || !this.ctx) return;
+                this._warmedUp = true;
                 try {
-                    this.initContext();
-                    if (!this.ctx) return;
-                    const response = await fetch(`sounds/${soundFile}`);
-                    const arrayBuffer = await response.arrayBuffer();
-                    this.buffers[soundFile] = await this.ctx.decodeAudioData(arrayBuffer);
+                    const buf = this.ctx.createBuffer(1, 1, this.ctx.sampleRate);
+                    const src = this.ctx.createBufferSource();
+                    src.buffer = buf;
+                    src.connect(this.ctx.destination);
+                    src.start(0);
                 } catch (e) { }
             },
 
-            preloadAll: function () {
-                // Wave 1 — critical sounds immediately
-                this._critical.forEach(s => this.preload(s));
-                // Wave 2 — secondary sounds 1s later
+            // Precarga todos los buffers en oleadas
+            _startPreload: function () {
+                // Oleada 1: sonidos críticos de inmediato
+                this._critical.forEach(s => this._loadBuffer(s));
+                // Oleada 2: secundarios 800ms después
                 setTimeout(() => {
-                    this._secondary.forEach(s => this.preload(s));
-                }, 1000);
+                    this._secondary.forEach(s => this._loadBuffer(s));
+                }, 800);
+            },
+
+            // Descarga y decodifica un archivo al buffer (idempotente)
+            _loadBuffer: async function (soundFile) {
+                if (this.buffers[soundFile] || !this.ctx) return;
+                try {
+                    const res = await fetch(`sounds/${soundFile}`);
+                    const ab = await res.arrayBuffer();
+                    // decodeAudioData puede fallar si el ctx está suspendido — no pasa nada,
+                    // el fallback de Audio lo manejará mientras tanto
+                    this.buffers[soundFile] = await this.ctx.decodeAudioData(ab);
+                } catch (e) { }
+            },
+
+            // Reproduce desde buffer WebAudio (latencia ~1ms) o fallback cloneNode
+            _playBuffer: function (soundFile, volume) {
+                if (this.buffers[soundFile] && this.ctx) {
+                    // WebAudio path — latencia de hardware mínima
+                    const source = this.ctx.createBufferSource();
+                    source.buffer = this.buffers[soundFile];
+                    const gain = this.ctx.createGain();
+                    // setValueAtTime en lugar de .value para evitar clicks de audio
+                    gain.gain.setValueAtTime(volume, this.ctx.currentTime);
+                    source.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    // ctx.currentTime = scheduling preciso (no 0)
+                    source.start(this.ctx.currentTime);
+                } else {
+                    // Fallback: Audio cloneNode (buffer HTML5 precargado)
+                    if (!this._audioCache[soundFile]) {
+                        const a = new Audio(`sounds/${soundFile}`);
+                        a.preload = 'auto';
+                        this._audioCache[soundFile] = a;
+                    }
+                    const clone = this._audioCache[soundFile].cloneNode();
+                    clone.volume = volume;
+                    clone.play().catch(() => { });
+                    // Disparar preload WebAudio para la próxima vez
+                    this._loadBuffer(soundFile);
+                }
             },
 
             play: function (soundFile, volume = 0.5) {
                 if (this.muted) return;
                 try {
-                    this.initContext();
-                    if (this.ctx && this.buffers[soundFile]) {
-                        const source = this.ctx.createBufferSource();
-                        source.buffer = this.buffers[soundFile];
-                        const gain = this.ctx.createGain();
-                        gain.gain.value = volume;
-                        source.connect(gain);
-                        gain.connect(this.ctx.destination);
-                        source.start(0);
+                    if (!this.ctx) this.initContext();
+                    if (!this.ctx) { this._playBuffer(soundFile, volume); return; }
+
+                    if (this.ctx.state === 'suspended') {
+                        // Resume primero, luego reproducir — evita el lag de ctx suspendido
+                        this._resume().then(() => this._playBuffer(soundFile, volume));
                     } else {
-                        // Zero-latency fallback using cached Audio nodes
-                        if (!this._audioCache) this._audioCache = {};
-                        if (!this._audioCache[soundFile]) {
-                            this._audioCache[soundFile] = new Audio(`sounds/${soundFile}`);
-                            this._audioCache[soundFile].preload = 'auto';
-                        }
-                        const a = this._audioCache[soundFile].cloneNode();
-                        a.volume = volume;
-                        a.play().catch(() => { });
-                        // Preload into AudioContext for future plays
-                        this.preload(soundFile);
+                        this._playBuffer(soundFile, volume);
                     }
                 } catch (e) { }
             },
@@ -12497,12 +12869,16 @@
                     }
                 });
 
-                // Warm up AudioContext + preload all on first user gesture
+                // ⚡ Crear AudioContext + iniciar preload INMEDIATAMENTE
+                // (no esperamos al primer gesto — así los buffers ya están listos)
+                try { this.initContext(); } catch (e) { }
+
+                // En el primer gesto: resume() + warmUp del pipeline de hardware
+                // Esto elimina la latencia del primer sonido completamente
                 const warmup = () => {
-                    this.initContext();
-                    this.preloadAll();
+                    this._resume().then(() => this._warmUp());
                     ['click', 'touchstart', 'keydown'].forEach(ev =>
-                        document.removeEventListener(ev, warmup, { once: true })
+                        document.removeEventListener(ev, warmup)
                     );
                 };
                 ['click', 'touchstart', 'keydown'].forEach(ev =>
@@ -12510,6 +12886,7 @@
                 );
             }
         };
+
 
         let menuFocusTimeout = null;
         function toggleMenu() {
@@ -12910,9 +13287,18 @@
                 } catch (e) { }
             })();
 
+            let _spotlightTimer = null;
+
             function animateSpotlightPlaceholder() {
                 const input = document.getElementById('menu-search');
-                if (!input) return setTimeout(animateSpotlightPlaceholder, 1000);
+                if (!input) { _spotlightTimer = setTimeout(animateSpotlightPlaceholder, 1000); return; }
+
+                // Pausa si el menú está cerrado o la pestaña oculta — ahorra CPU/DOM
+                const menuPanel = document.getElementById('menu-panel');
+                if (document.hidden || !menuPanel || !menuPanel.classList.contains('open')) {
+                    _spotlightTimer = setTimeout(animateSpotlightPlaceholder, 500);
+                    return;
+                }
 
                 const arr = spotlightTips[typeof currentLang !== 'undefined' ? currentLang : 'es'] || spotlightTips.es;
                 if (spIdx >= arr.length) spIdx = 0;
@@ -12942,10 +13328,10 @@
                     speed = 600;
                 }
 
-                setTimeout(animateSpotlightPlaceholder, speed);
+                _spotlightTimer = setTimeout(animateSpotlightPlaceholder, speed);
             }
 
-            setTimeout(animateSpotlightPlaceholder, 2000);
+            _spotlightTimer = setTimeout(animateSpotlightPlaceholder, 2000);
 
         });
 
@@ -13005,8 +13391,15 @@
             // Scroll spy del menú — usa la sección más centrada en pantalla
             const sectionIds = ['hero', 'historia', 'nombre', 'tulipanes', 'guia-colores-tulipan', 'quiz-girasol', 'distancia', 'comida', 'universo', 'galeria', 'minijuegos', 'promesas', 'sanacion', 'colores-yaire', 'memorial', 'hype', 'estadisticas', 'top5yaire', 'enigma-28', 'tu-cancion', 'secreto'];
 
+            // Cache: elementos del DOM resueltos una sola vez — evitar getElementById en cada tick de scroll
+            const _sectionEls = {};
+            sectionIds.forEach(id => { _sectionEls[id] = document.getElementById(id); });
+
+            // Cache: lista de menu-links — evitar querySelectorAll en cada tick de setActiveLink
+            const _menuLinks = Array.from(document.querySelectorAll('.menu-link'));
+
             function setActiveLink(id) {
-                document.querySelectorAll('.menu-link').forEach(l => {
+                _menuLinks.forEach(l => {
                     const href = l.getAttribute('href');
                     const isTarget = href === '#' + id;
                     if (href === '#secreto') return;
@@ -13036,7 +13429,7 @@
             let ignoreScroll = false;
             let scrollTimeout = null;
 
-            document.querySelectorAll('.menu-link').forEach(l => {
+            _menuLinks.forEach(l => {
                 l.addEventListener('click', function () {
                     const href = this.getAttribute('href');
                     if (href && href.startsWith('#') && href !== '#secreto') {
@@ -13064,7 +13457,7 @@
                     const vh = window.innerHeight;
                     let best = null, bestScore = -Infinity;
                     sectionIds.forEach(function (id) {
-                        const el = document.getElementById(id);
+                        const el = _sectionEls[id]; // usar cache — sin getElementById en cada scroll
                         if (!el) return;
                         const r = el.getBoundingClientRect();
                         // Visibilidad: cuánto del section está dentro de la ventana
