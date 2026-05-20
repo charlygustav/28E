@@ -28,26 +28,14 @@
                     if (res.ok) {
                         const fbCfg = await res.json();
                         if (fbCfg) {
-                            const oldStr = localStorage.getItem('yaire_config');
-                            const newStr = JSON.stringify(fbCfg);
-
-                            // Si la configuración cambió y ya teníamos una previa
-                            if (oldStr && oldStr !== newStr) {
-                                localStorage.setItem('yaire_config', newStr);
-                                if (fbCfg.mantenimiento) {
-                                    window.location.replace('mantenimiento.html');
-                                } else {
-                                    window.location.reload(); // Recargar la página si cambió cualquier otra cosa (ej. Etiqueta, traducciones)
-                                }
-                                return;
-                            } else if (!oldStr) {
-                                localStorage.setItem('yaire_config', newStr);
-                            }
+                            // Firebase siempre manda: guardar y confiar en su valor
+                            localStorage.setItem('yaire_config', JSON.stringify(fbCfg));
 
                             if (fbCfg.mantenimiento) {
                                 window.location.replace('mantenimiento.html');
                                 return;
                             }
+                            // Si NO hay mantenimiento, simplemente continuar cargando la página
                         }
                     }
                 } catch (e) { }

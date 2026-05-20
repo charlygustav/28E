@@ -1144,23 +1144,26 @@
 
     async function checkMaintenanceStatus() {
       try {
-        // 1. Cargar config desde Firebase (instantáneo)
+        // Siempre leer DIRECTO desde Firebase (nunca usar caché local para evitar loops)
         const _FB = 'https://yaire-591ca-default-rtdb.firebaseio.com/config.json';
-        try {
-            const res = await fetch(_FB + '?nocache=' + Date.now());
-            if (res.ok) {
-                const fbCfg = await res.json();
-                if (fbCfg) localStorage.setItem('yaire_config', JSON.stringify(fbCfg));
-            }
-        } catch(e) {}
+        const res = await fetch(_FB + '?nocache=' + Date.now());
+        if (!res.ok) return; // Si no hay red, no hacer nada
+        const cfg = await res.json();
+        if (!cfg) return;
 
-        // 2. Leer estado actualizado
-        const cfg = JSON.parse(localStorage.getItem('yaire_config') || '{}');
+        // Guardar en localStorage para que index.html también vea el estado actualizado
+        const safeCfg = { ...cfg };
+        localStorage.setItem('yaire_config', JSON.stringify(safeCfg));
+
+        // Si mantenimiento está desactivado → redirigir al index
         if (!cfg.mantenimiento) {
+          // Limpiar cualquier caché vieja para que index.html no rebote de vuelta
+          localStorage.removeItem('yaire_config');
           window.location.href = 'index.html';
           return;
         }
 
+        // Mantenimiento activo → decidir qué mostrar
         if (cfg.maintType === 'scheduled' && cfg.maintDate) {
           document.getElementById('visual-center').style.display = 'none';
           document.getElementById('visual-countdown').style.display = 'flex';
@@ -1169,50 +1172,48 @@
 
           if (countdownInterval) clearInterval(countdownInterval);
 
-          // Función de actualización inmediata y repetida
-          const updateTimer = () => {
+          const updateTimer = async () => {
             const now = new Date().getTime();
             const distance = targetDate - now;
 
             if (distance <= 0) {
               clearInterval(countdownInterval);
-              cfg.mantenimiento = false;
-              localStorage.setItem('yaire_config', JSON.stringify(cfg));
-              localStorage.setItem('yaire_reload', Date.now().toString());
-              localStorage.setItem('yaire_restore', '1');
-              // Update Firebase so index.html doesn't loop back
-              const safeCfg = { ...cfg };
-              delete safeCfg.ghToken;
-              delete safeCfg.ghRepo;
+              // Desactivar mantenimiento en Firebase
+              const updatedCfg = { ...cfg, mantenimiento: false };
+              delete updatedCfg.ghToken;
+              delete updatedCfg.ghRepo;
               await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(safeCfg)
+                body: JSON.stringify(updatedCfg)
               }).catch(() => {});
+              localStorage.removeItem('yaire_config');
               window.location.href = 'index.html';
               return;
             }
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const days    = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours   = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+            document.getElementById('cd-days').textContent  = String(days).padStart(2, '0');
             document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
-            document.getElementById('cd-mins').textContent = String(minutes).padStart(2, '0');
-            document.getElementById('cd-secs').textContent = String(seconds).padStart(2, '0');
+            document.getElementById('cd-mins').textContent  = String(minutes).padStart(2, '0');
+            document.getElementById('cd-secs').textContent  = String(seconds).padStart(2, '0');
           };
 
           updateTimer();
           countdownInterval = setInterval(updateTimer, 1000);
+
         } else {
+          // Mantenimiento indefinido → mostrar globo animado
           document.getElementById('visual-center').style.display = 'flex';
           document.getElementById('visual-countdown').style.display = 'none';
           if (countdownInterval) clearInterval(countdownInterval);
         }
 
-      } catch (e) { }
+      } catch (e) { /* sin red, no hacer nada */ }
     }
 
     // Polling de respaldo + Firebase SSE para tiempo real
