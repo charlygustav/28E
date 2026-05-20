@@ -287,6 +287,7 @@
     constructor() {
       this.socket      = null;
       this.stream      = null;
+      this._processedStream = null;
       this.peers       = new Map();
       this.audios      = new Map();
       this.gains       = new Map();
@@ -307,6 +308,17 @@
       this._isSpeaking = false;
       this._vizRaf     = null;
       this._bar        = null;
+      this._noiseCtx   = null;
+      this._gateRaf    = null;
+
+      // Audio constraints for getUserMedia
+      this._audioConstraints = {
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true,
+        sampleRate: 48000,
+        channelCount: 1
+      };
 
       this._initAudio();
 
@@ -736,12 +748,16 @@
       this.progNode = this._playSfx('progress', 0.3, true);
 
       try {
-        this.stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+        this.stream = await navigator.mediaDevices.getUserMedia({ audio: this._audioConstraints, video: false });
       } catch {
         this._stopSfx(this.progNode); this.progNode = null;
         this._render(this._tplLogin(_t('err_mic')));
         return;
       }
+
+      // Create noise-cancelled processed stream
+      this._processedStream = this._createProcessedStream();
+      console.log('[VC] 🔇 Noise cancellation pipeline active');
 
       this._connectSocket(name, pass);
     }
@@ -791,8 +807,9 @@
           // Re-acquire microphone if stream was lost
           if (!this.stream || this.stream.getAudioTracks().every(t => t.readyState === 'ended')) {
             try {
-              this.stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-              console.log('[VC] ✅ Microphone re-acquired');
+              this.stream = await navigator.mediaDevices.getUserMedia({ audio: this._audioConstraints, video: false });
+              this._processedStream = this._createProcessedStream();
+              console.log('[VC] ✅ Microphone re-acquired with noise cancellation');
             } catch(e) {
               console.error('[VC] ❌ Could not re-acquire microphone:', e);
             }
@@ -910,8 +927,10 @@
       }
 
       const pc = new RTCPeerConnection(this.ice);
-      if (this.stream) {
-        this.stream.getTracks().forEach(t => pc.addTrack(t, this.stream));
+      // Use noise-cancelled stream for peers, fallback to raw stream
+      const outStream = this._processedStream || this.stream;
+      if (outStream) {
+        outStream.getTracks().forEach(t => pc.addTrack(t, outStream));
       }
       this.peers.set(peerId, pc);
 
@@ -1042,6 +1061,137 @@
       this._render(this._tplLogin());
     }
 
+    // ── NOISE CANCELLATION PIPELINE ──────────────────────────────────────
+    _createProcessedStream() {
+      if (!this.stream) return null;
+
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
+        this._noiseCtx = ctx;
+
+        const source = ctx.createMediaStreamSource(this.stream);
+
+        // ── 1. High-pass filter — kill rumble/hum below 80Hz ──
+        const highPass1 = ctx.createBiquadFilter();
+        highPass1.type = 'highpass';
+        highPass1.frequency.value = 80;
+        highPass1.Q.value = 0.7;
+
+        // ── 2. Secondary high-pass at 150Hz for extra speech isolation ──
+        const highPass2 = ctx.createBiquadFilter();
+        highPass2.type = 'highpass';
+        highPass2.frequency.value = 150;
+        highPass2.Q.value = 0.5;
+
+        // ── 3. Low-pass filter — remove harsh hiss above 8kHz ──
+        const lowPass = ctx.createBiquadFilter();
+        lowPass.type = 'lowpass';
+        lowPass.frequency.value = 8000;
+        lowPass.Q.value = 0.5;
+
+        // ── 4. Analyser for noise gate control ──
+        const analyser = ctx.createAnalyser();
+        analyser.fftSize = 2048;
+        analyser.smoothingTimeConstant = 0.4;
+        const dataArray = new Float32Array(analyser.fftSize);
+
+        // ── 5. Noise gate via GainNode ──
+        const gateGain = ctx.createGain();
+        gateGain.gain.value = 0; // start closed
+
+        // ── 6. Dynamics compressor — even out volume ──
+        const compressor = ctx.createDynamicsCompressor();
+        compressor.threshold.value = -35;
+        compressor.knee.value = 15;
+        compressor.ratio.value = 6;
+        compressor.attack.value = 0.005;
+        compressor.release.value = 0.15;
+
+        // ── 7. Output gain — final volume ──
+        const outputGain = ctx.createGain();
+        outputGain.gain.value = 1.0;
+
+        // Chain: source → highPass1 → highPass2 → lowPass → analyser → gateGain → compressor → outputGain → dest
+        const dest = ctx.createMediaStreamDestination();
+        source.connect(highPass1);
+        highPass1.connect(highPass2);
+        highPass2.connect(lowPass);
+        lowPass.connect(analyser);
+        analyser.connect(gateGain);
+        gateGain.connect(compressor);
+        compressor.connect(outputGain);
+        outputGain.connect(dest);
+
+        // ── Adaptive noise gate control loop ──
+        let noiseFloor = -55;        // dB — initial estimate
+        let gateOpen = false;
+        const GATE_OPEN_MARGIN = 15; // dB above noise floor to open
+        const GATE_HYSTERESIS = 3;   // dB hysteresis to prevent chatter
+        const ATTACK_TIME = 0.01;    // 10ms — fast open
+        const RELEASE_TIME = 0.15;   // 150ms — smooth close
+        const NOISE_ADAPT_FAST = 0.01;  // fast adaptation for rising noise
+        const NOISE_ADAPT_SLOW = 0.001; // slow adaptation for falling noise
+
+        const controlGate = () => {
+          if (!this._noiseCtx) return;
+          analyser.getFloatTimeDomainData(dataArray);
+
+          // Calculate RMS level in dB
+          let sum = 0;
+          for (let i = 0; i < dataArray.length; i++) {
+            sum += dataArray[i] * dataArray[i];
+          }
+          const rms = Math.sqrt(sum / dataArray.length);
+          const db = 20 * Math.log10(Math.max(rms, 1e-10));
+
+          // Adaptive noise floor tracking
+          if (db < noiseFloor + 5) {
+            // Probably noise — adapt quickly upward, slowly downward
+            const rate = db > noiseFloor ? NOISE_ADAPT_FAST : NOISE_ADAPT_SLOW;
+            noiseFloor = noiseFloor * (1 - rate) + db * rate;
+          }
+
+          const openThreshold = noiseFloor + GATE_OPEN_MARGIN;
+          const closeThreshold = openThreshold - GATE_HYSTERESIS;
+          const t = ctx.currentTime;
+
+          if (!gateOpen && db > openThreshold) {
+            // Open gate — speech detected
+            gateOpen = true;
+            gateGain.gain.cancelScheduledValues(t);
+            gateGain.gain.setValueAtTime(gateGain.gain.value, t);
+            gateGain.gain.linearRampToValueAtTime(1, t + ATTACK_TIME);
+          } else if (gateOpen && db < closeThreshold) {
+            // Close gate — back to noise
+            gateOpen = false;
+            gateGain.gain.cancelScheduledValues(t);
+            gateGain.gain.setValueAtTime(gateGain.gain.value, t);
+            gateGain.gain.linearRampToValueAtTime(0, t + RELEASE_TIME);
+          }
+
+          this._gateRaf = requestAnimationFrame(controlGate);
+        };
+
+        controlGate();
+
+        console.log('[VC] 🎙️ Noise pipeline: HighPass(80+150Hz) → LowPass(8kHz) → NoiseGate(adaptive) → Compressor');
+        return dest.stream;
+
+      } catch(e) {
+        console.error('[VC] ❌ Noise cancellation setup failed, using raw stream:', e);
+        return null;
+      }
+    }
+
+    _destroyNoiseProcessing() {
+      cancelAnimationFrame(this._gateRaf);
+      this._gateRaf = null;
+      if (this._noiseCtx) {
+        try { this._noiseCtx.close(); } catch(e) {}
+        this._noiseCtx = null;
+      }
+    }
+
     _cleanup() {
       this._stopSfx(this.progNode); this.progNode = null;
       this._stopTimer();
@@ -1054,7 +1204,9 @@
       this.audios.forEach(a => { try { a.srcObject = null; a.remove(); } catch{} });
       this.audios.clear();
       this.gains.clear();
+      this._destroyNoiseProcessing();
       if (this.stream) { this.stream.getTracks().forEach(t => t.stop()); this.stream = null; }
+      this._processedStream = null;
       this.connected = false;
       this.myId = null;
       this.users = [];
