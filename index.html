@@ -1,3 +1,4 @@
+r
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth dark">
 
@@ -30,7 +31,7 @@
                         if (fbCfg) {
                             const oldStr = localStorage.getItem('yaire_config');
                             const newStr = JSON.stringify(fbCfg);
-                            
+
                             // Si la configuración cambió y ya teníamos una previa
                             if (oldStr && oldStr !== newStr) {
                                 localStorage.setItem('yaire_config', newStr);
@@ -43,14 +44,14 @@
                             } else if (!oldStr) {
                                 localStorage.setItem('yaire_config', newStr);
                             }
-                            
+
                             if (fbCfg.mantenimiento) {
                                 window.location.replace('mantenimiento.html');
                                 return;
                             }
                         }
                     }
-                } catch(e) {}
+                } catch (e) { }
 
                 // Si no hay mantenimiento, verificar fecha de lanzamiento
                 if (new Date() < unlockDate && urlParams.get('dev') !== '1') {
@@ -309,8 +310,15 @@
 
 
         /* Voice widget hidden until loader completes */
-        #vc-fab { transition: opacity 0.5s ease; }
-        body:not(.page-ready) #vc-fab { opacity:0 !important; pointer-events:none !important; }
+        #vc-fab {
+            transition: opacity 0.5s ease;
+        }
+
+        body:not(.page-ready) #vc-fab {
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+
         @keyframes gradientShift {
 
             0%,
@@ -3163,8 +3171,7 @@
     </div>
 
     <!-- Loader Screen — Balanced Modern Elegance -->
-    <div id="loader"
-        class="fixed inset-0 z-[200] flex flex-col items-center justify-center overflow-hidden"
+    <div id="loader" class="fixed inset-0 z-[200] flex flex-col items-center justify-center overflow-hidden"
         style="position:fixed;inset:0;z-index:200;background:#09090b;display:flex;align-items:center;justify-content:center;overflow:hidden;">
 
         <!-- Ambient Circles -->
@@ -3194,66 +3201,172 @@
         <style>
             /* ── Loader orbs: animación 100% GSAP — sin CSS keyframes, sin handoff, sin cortes ── */
 
-            .ld-c { position:absolute; border-radius:50%; will-change:transform,opacity; }
+            .ld-c {
+                position: absolute;
+                border-radius: 50%;
+                will-change: transform, opacity;
+            }
 
             /* Orbe 1: Rosa — centro-izquierda */
             .ld-c1 {
-                left:22vw; top:22vh; width:34vw; height:34vw;
-                background:radial-gradient(50% 50% at 50% 50%, rgba(236,72,153,.65) 0%, rgba(236,72,153,.3) 40%, transparent 100%);
-                opacity:0;
+                left: 22vw;
+                top: 22vh;
+                width: 34vw;
+                height: 34vw;
+                background: radial-gradient(50% 50% at 50% 50%, rgba(236, 72, 153, .65) 0%, rgba(236, 72, 153, .3) 40%, transparent 100%);
+                opacity: 0;
             }
+
             /* Orbe 2: Ámbar — derecha */
             .ld-c2 {
-                left:58vw; top:28vh; width:26vw; height:26vw;
-                background:radial-gradient(50% 50% at 50% 50%, rgba(251,191,36,.70) 0%, rgba(245,158,11,.35) 40%, transparent 100%);
-                opacity:0;
+                left: 58vw;
+                top: 28vh;
+                width: 26vw;
+                height: 26vw;
+                background: radial-gradient(50% 50% at 50% 50%, rgba(251, 191, 36, .70) 0%, rgba(245, 158, 11, .35) 40%, transparent 100%);
+                opacity: 0;
             }
+
             /* Orbe 3: Magenta — bajo-centro */
             .ld-c3 {
-                left:38vw; top:48vh; width:28vw; height:28vw;
-                background:radial-gradient(50% 50% at 50% 50%, rgba(219,39,119,.75) 0%, rgba(219,39,119,.35) 40%, transparent 100%);
-                opacity:0;
+                left: 38vw;
+                top: 48vh;
+                width: 28vw;
+                height: 28vw;
+                background: radial-gradient(50% 50% at 50% 50%, rgba(219, 39, 119, .75) 0%, rgba(219, 39, 119, .35) 40%, transparent 100%);
+                opacity: 0;
             }
+
             /* Orbe 4: Violeta — esquina superior derecha */
             .ld-c4 {
-                left:68vw; top:8vh; width:22vw; height:22vw;
-                background:radial-gradient(50% 50% at 50% 50%, rgba(168,85,247,.65) 0%, rgba(139,92,246,.3) 40%, transparent 100%);
-                opacity:0;
+                left: 68vw;
+                top: 8vh;
+                width: 22vw;
+                height: 22vw;
+                background: radial-gradient(50% 50% at 50% 50%, rgba(168, 85, 247, .65) 0%, rgba(139, 92, 246, .3) 40%, transparent 100%);
+                opacity: 0;
             }
+
             /* Orbe 5: Cyan/Teal — esquina inferior izquierda */
             .ld-c5 {
-                left:8vw; top:58vh; width:20vw; height:20vw;
-                background:radial-gradient(50% 50% at 50% 50%, rgba(20,184,166,.60) 0%, rgba(6,182,212,.28) 40%, transparent 100%);
-                opacity:0;
+                left: 8vw;
+                top: 58vh;
+                width: 20vw;
+                height: 20vw;
+                background: radial-gradient(50% 50% at 50% 50%, rgba(20, 184, 166, .60) 0%, rgba(6, 182, 212, .28) 40%, transparent 100%);
+                opacity: 0;
             }
+
             /* Body: empieza invisible — GSAP anima */
-            .ld-body { position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;gap:28px;opacity:0;will-change:opacity,transform; }
-            .ld-logo { font-family:'Inter',system-ui,sans-serif;font-size:clamp(56px,10vw,120px);font-weight:900;color:#fff;letter-spacing:-0.04em;line-height:1;user-select:none;will-change:transform,opacity; }
-            .ld-track { width:clamp(140px,28vw,240px);height:3px;background:rgba(255,255,255,.10);border-radius:999px;overflow:hidden;position:relative; }
-            #loader-progress {
-                display:block !important;
-                width:100%;height:100%;
-                border-radius:999px;
-                background:linear-gradient(90deg,rgba(245,158,11,1),rgba(236,72,153,.95),rgba(168,85,247,.9),rgba(245,158,11,1));
-                background-size:300% 100%;
-                will-change:transform;
-                animation:ldBarCycle 2.2s cubic-bezier(0.4,0,0.2,1) infinite, ldShimmer 3s linear infinite;
+            .ld-body {
+                position: relative;
+                z-index: 10;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 28px;
+                opacity: 0;
+                will-change: opacity, transform;
             }
+
+            .ld-logo {
+                font-family: 'Inter', system-ui, sans-serif;
+                font-size: clamp(56px, 10vw, 120px);
+                font-weight: 900;
+                color: #fff;
+                letter-spacing: -0.04em;
+                line-height: 1;
+                user-select: none;
+                will-change: transform, opacity;
+            }
+
+            .ld-track {
+                width: clamp(140px, 28vw, 240px);
+                height: 3px;
+                background: rgba(255, 255, 255, .10);
+                border-radius: 999px;
+                overflow: hidden;
+                position: relative;
+            }
+
+            #loader-progress {
+                display: block !important;
+                width: 100%;
+                height: 100%;
+                border-radius: 999px;
+                background: linear-gradient(90deg, rgba(245, 158, 11, 1), rgba(236, 72, 153, .95), rgba(168, 85, 247, .9), rgba(245, 158, 11, 1));
+                background-size: 300% 100%;
+                will-change: transform;
+                animation: ldBarCycle 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite, ldShimmer 3s linear infinite;
+            }
+
             /* Se llena entrando por la izquierda, se vacía saliéndose por la derecha */
             @keyframes ldBarCycle {
-                0%   { transform:translateX(-100%); }   /* fuera por la izquierda — vacía */
-                42%  { transform:translateX(0%);    }   /* dentro, llena */
-                58%  { transform:translateX(0%);    }   /* pausa llena */
-                100% { transform:translateX(100%);  }   /* sale por la derecha — vacía */
+                0% {
+                    transform: translateX(-100%);
+                }
+
+                /* fuera por la izquierda — vacía */
+                42% {
+                    transform: translateX(0%);
+                }
+
+                /* dentro, llena */
+                58% {
+                    transform: translateX(0%);
+                }
+
+                /* pausa llena */
+                100% {
+                    transform: translateX(100%);
+                }
+
+                /* sale por la derecha — vacía */
             }
+
             @keyframes ldShimmer {
-                0%   { background-position:200% center; }
-                100% { background-position:-200% center; }
+                0% {
+                    background-position: 200% center;
+                }
+
+                100% {
+                    background-position: -200% center;
+                }
             }
-            .ld-corner-l { position:absolute;bottom:clamp(20px,4vw,32px);left:clamp(20px,5vw,40px);font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.28);opacity:0;will-change:opacity; }
-            .ld-pct { position:absolute;bottom:clamp(20px,4vw,32px);right:clamp(20px,5vw,40px);font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;color:rgba(255,255,255,.28);font-variant-numeric:tabular-nums;opacity:0;will-change:opacity; }
+
+            .ld-corner-l {
+                position: absolute;
+                bottom: clamp(20px, 4vw, 32px);
+                left: clamp(20px, 5vw, 40px);
+                font-family: 'Inter', system-ui, sans-serif;
+                font-size: 11px;
+                font-weight: 500;
+                letter-spacing: .18em;
+                text-transform: uppercase;
+                color: rgba(255, 255, 255, .28);
+                opacity: 0;
+                will-change: opacity;
+            }
+
+            .ld-pct {
+                position: absolute;
+                bottom: clamp(20px, 4vw, 32px);
+                right: clamp(20px, 5vw, 40px);
+                font-family: 'Inter', system-ui, sans-serif;
+                font-size: 11px;
+                font-weight: 500;
+                letter-spacing: .12em;
+                color: rgba(255, 255, 255, .28);
+                font-variant-numeric: tabular-nums;
+                opacity: 0;
+                will-change: opacity;
+            }
+
             /* Hero reveal — controlado por GSAP */
-            .loader-hidden { opacity:0 !important;pointer-events:none; }
+            .loader-hidden {
+                opacity: 0 !important;
+                pointer-events: none;
+            }
         </style>
     </div>
 
@@ -3659,20 +3772,23 @@
             </div>
         </section>
 
-        
-    <!-- Section: Frase del Dia -->
-    <section id="frase-del-dia" class="py-16 px-6 text-center border-b border-zinc-200 dark:border-zinc-800 reveal">
-        <div class="max-w-2xl mx-auto" id="frase-container" style="opacity:0;transition:opacity 1.2s ease;">
-            <div class="inline-flex items-center gap-3 text-brand-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-8">
-                <span class="w-8 h-px bg-brand-500/40 inline-block"></span>
-                <span>Frase del Dia</span>
-                <span class="w-8 h-px bg-brand-500/40 inline-block"></span>
+
+        <!-- Section: Frase del Dia -->
+        <section id="frase-del-dia" class="py-16 px-6 text-center border-b border-zinc-200 dark:border-zinc-800 reveal">
+            <div class="max-w-2xl mx-auto" id="frase-container" style="opacity:0;transition:opacity 1.2s ease;">
+                <div
+                    class="inline-flex items-center gap-3 text-brand-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-8">
+                    <span class="w-8 h-px bg-brand-500/40 inline-block"></span>
+                    <span>Frase del Dia</span>
+                    <span class="w-8 h-px bg-brand-500/40 inline-block"></span>
+                </div>
+                <blockquote id="frase-del-dia-text"
+                    class="text-2xl md:text-3xl font-serif italic font-light text-zinc-800 dark:text-zinc-100 leading-relaxed mb-6 tracking-wide">
+                </blockquote>
+                <p id="frase-del-dia-autor" class="text-sm text-brand-500 font-semibold tracking-widest uppercase"></p>
             </div>
-            <blockquote id="frase-del-dia-text" class="text-2xl md:text-3xl font-serif italic font-light text-zinc-800 dark:text-zinc-100 leading-relaxed mb-6 tracking-wide"></blockquote>
-            <p id="frase-del-dia-autor" class="text-sm text-brand-500 font-semibold tracking-widest uppercase"></p>
-        </div>
-    </section>
-<!-- Section: Our Story & Time -->
+        </section>
+        <!-- Section: Our Story & Time -->
         <section id="historia"
             class="cv-section cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal-left scroll-mt-20">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -5007,7 +5123,8 @@
 
         <!-- Minijuegos Hub -->
         <section id="minijuegos"
-            class="cv-section cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal scroll-mt-20" style="overflow: visible;">
+            class="cv-section cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal scroll-mt-20"
+            style="overflow: visible;">
 
             <style>
                 /* ═══ GAMES HUB v2 — Premium Redesign ═══ */
@@ -5019,135 +5136,234 @@
                     transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease;
                     will-change: transform;
                 }
-                .ghub-card:hover { transform: translateY(-8px) scale(1.015); }
-                .ghub-card:active { transform: translateY(-2px) scale(0.98); }
+
+                .ghub-card:hover {
+                    transform: translateY(-8px) scale(1.015);
+                }
+
+                .ghub-card:active {
+                    transform: translateY(-2px) scale(0.98);
+                }
 
                 /* Per-card ambient glow via box-shadow (never clipped) */
                 .ghub-card.ghub-amber:hover {
-                    box-shadow: 0 20px 50px -12px rgba(245,158,11,0.35), 0 0 80px -20px rgba(251,191,36,0.25), 0 -10px 40px -20px rgba(245,158,11,0.15);
+                    box-shadow: 0 20px 50px -12px rgba(245, 158, 11, 0.35), 0 0 80px -20px rgba(251, 191, 36, 0.25), 0 -10px 40px -20px rgba(245, 158, 11, 0.15);
                 }
+
                 .dark .ghub-card.ghub-amber:hover {
-                    box-shadow: 0 20px 50px -12px rgba(245,158,11,0.25), 0 0 80px -20px rgba(251,191,36,0.15), 0 -10px 40px -20px rgba(245,158,11,0.1);
+                    box-shadow: 0 20px 50px -12px rgba(245, 158, 11, 0.25), 0 0 80px -20px rgba(251, 191, 36, 0.15), 0 -10px 40px -20px rgba(245, 158, 11, 0.1);
                 }
+
                 .ghub-card.ghub-pink:hover {
-                    box-shadow: 0 20px 50px -12px rgba(236,72,153,0.35), 0 0 80px -20px rgba(56,189,248,0.2), 0 -10px 40px -20px rgba(236,72,153,0.15);
+                    box-shadow: 0 20px 50px -12px rgba(236, 72, 153, 0.35), 0 0 80px -20px rgba(56, 189, 248, 0.2), 0 -10px 40px -20px rgba(236, 72, 153, 0.15);
                 }
+
                 .dark .ghub-card.ghub-pink:hover {
-                    box-shadow: 0 20px 50px -12px rgba(236,72,153,0.25), 0 0 80px -20px rgba(56,189,248,0.12), 0 -10px 40px -20px rgba(236,72,153,0.1);
+                    box-shadow: 0 20px 50px -12px rgba(236, 72, 153, 0.25), 0 0 80px -20px rgba(56, 189, 248, 0.12), 0 -10px 40px -20px rgba(236, 72, 153, 0.1);
                 }
+
                 .ghub-card.ghub-purple:hover {
-                    box-shadow: 0 20px 50px -12px rgba(168,85,247,0.35), 0 0 80px -20px rgba(139,92,246,0.25), 0 -10px 40px -20px rgba(168,85,247,0.15);
+                    box-shadow: 0 20px 50px -12px rgba(168, 85, 247, 0.35), 0 0 80px -20px rgba(139, 92, 246, 0.25), 0 -10px 40px -20px rgba(168, 85, 247, 0.15);
                 }
+
                 .dark .ghub-card.ghub-purple:hover {
-                    box-shadow: 0 20px 50px -12px rgba(168,85,247,0.25), 0 0 80px -20px rgba(139,92,246,0.15), 0 -10px 40px -20px rgba(168,85,247,0.1);
+                    box-shadow: 0 20px 50px -12px rgba(168, 85, 247, 0.25), 0 0 80px -20px rgba(139, 92, 246, 0.15), 0 -10px 40px -20px rgba(168, 85, 247, 0.1);
+                }
+
+                .ghub-card.ghub-emerald:hover {
+                    box-shadow: 0 20px 50px -12px rgba(16, 185, 129, 0.35), 0 0 80px -20px rgba(52, 211, 153, 0.25), 0 -10px 40px -20px rgba(16, 185, 129, 0.15);
+                }
+
+                .dark .ghub-card.ghub-emerald:hover {
+                    box-shadow: 0 20px 50px -12px rgba(16, 185, 129, 0.25), 0 0 80px -20px rgba(52, 211, 153, 0.15), 0 -10px 40px -20px rgba(16, 185, 129, 0.1);
                 }
 
                 /* Animated gradient bg */
                 .ghub-card-bg {
-                    position: absolute; inset: 0; z-index: 0;
-                    opacity: 0; transition: opacity 0.6s ease;
+                    position: absolute;
+                    inset: 0;
+                    z-index: 0;
+                    opacity: 0;
+                    transition: opacity 0.6s ease;
                 }
-                .ghub-card:hover .ghub-card-bg { opacity: 1; }
+
+                .ghub-card:hover .ghub-card-bg {
+                    opacity: 1;
+                }
 
                 /* Icon container */
                 .ghub-icon-wrap {
-                    position: relative; width: 5.5rem; height: 5.5rem;
-                    border-radius: 1.75rem; display: flex; align-items: center;
-                    justify-content: center; font-size: 2.8rem;
+                    position: relative;
+                    width: 5.5rem;
+                    height: 5.5rem;
+                    border-radius: 1.75rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 2.8rem;
                     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
                     flex-shrink: 0;
                 }
+
                 .ghub-card:hover .ghub-icon-wrap {
                     transform: scale(1.12) rotate(-3deg);
-                    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+                    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
                 }
 
                 /* Shimmer sweep */
                 .ghub-card::after {
-                    content: ''; position: absolute; inset: 0; z-index: 5;
+                    content: '';
+                    position: absolute;
+                    inset: 0;
+                    z-index: 5;
                     border-radius: inherit;
-                    background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.08) 45%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.08) 55%, transparent 60%);
-                    transform: translateX(-100%); pointer-events: none;
+                    background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.08) 45%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.08) 55%, transparent 60%);
+                    transform: translateX(-100%);
+                    pointer-events: none;
                     overflow: hidden;
                     transition: none;
                 }
+
                 .ghub-card:hover::after {
                     animation: ghubShimmer 0.8s ease forwards;
                 }
-                @keyframes ghubShimmer { to { transform: translateX(100%); } }
+
+                @keyframes ghubShimmer {
+                    to {
+                        transform: translateX(100%);
+                    }
+                }
 
                 /* Difficulty dots */
                 .ghub-diff-dot {
-                    width: 6px; height: 6px; border-radius: 50%;
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
                     transition: background 0.3s ease;
                 }
 
                 /* Play CTA */
                 .ghub-play-btn {
-                    display: inline-flex; align-items: center; gap: 0.5rem;
-                    padding: 0.65rem 1.6rem; border-radius: 9999px;
-                    font-size: 0.7rem; font-weight: 800; text-transform: uppercase;
-                    letter-spacing: 0.15em; color: white;
-                    transition: all 0.35s ease; position: relative; overflow: hidden;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    padding: 0.65rem 1.6rem;
+                    border-radius: 9999px;
+                    font-size: 0.7rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 0.15em;
+                    color: white;
+                    transition: all 0.35s ease;
+                    position: relative;
+                    overflow: hidden;
                 }
+
                 .ghub-play-btn::before {
-                    content: ''; position: absolute; inset: 0;
-                    background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
-                    opacity: 0; transition: opacity 0.3s ease;
+                    content: '';
+                    position: absolute;
+                    inset: 0;
+                    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
                 }
-                .ghub-card:hover .ghub-play-btn::before { opacity: 1; }
-                .ghub-card:hover .ghub-play-btn { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
+
+                .ghub-card:hover .ghub-play-btn::before {
+                    opacity: 1;
+                }
+
+                .ghub-card:hover .ghub-play-btn {
+                    transform: translateY(-1px);
+                    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+                }
 
                 /* Skill tags */
                 .ghub-tag {
-                    display: inline-flex; align-items: center; gap: 0.3rem;
-                    padding: 0.25rem 0.6rem; border-radius: 0.5rem;
-                    font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.3rem;
+                    padding: 0.25rem 0.6rem;
+                    border-radius: 0.5rem;
+                    font-size: 0.6rem;
+                    font-weight: 700;
+                    text-transform: uppercase;
                     letter-spacing: 0.08em;
                 }
 
                 /* Responsive: stack layout on mobile */
                 @media (max-width: 767px) {
-                    .ghub-card-inner { flex-direction: column !important; text-align: center; }
-                    .ghub-card-inner .ghub-icon-wrap { margin: 0 auto 1rem; }
-                    .ghub-card-inner .ghub-meta { justify-content: center; }
-                    .ghub-card-inner .ghub-play-btn { margin: 0 auto; }
+                    .ghub-card-inner {
+                        flex-direction: column !important;
+                        text-align: center;
+                    }
+
+                    .ghub-card-inner .ghub-icon-wrap {
+                        margin: 0 auto 1rem;
+                    }
+
+                    .ghub-card-inner .ghub-meta {
+                        justify-content: center;
+                    }
+
+                    .ghub-card-inner .ghub-play-btn {
+                        margin: 0 auto;
+                    }
                 }
             </style>
 
             <div class="text-center mb-16 px-4">
-                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 mb-5">
+                <div
+                    class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 mb-5">
                     <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
-                    <span class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-brand-500" data-i18n="games_label">Zona Interactiva</span>
+                    <span class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-brand-500"
+                        data-i18n="games_label">Zona Interactiva</span>
                 </div>
-                <h3 class="text-3xl md:text-5xl font-extrabold tracking-tight" data-i18n="games_title">Minijuegos para Yaire</h3>
-                <p class="text-zinc-500 dark:text-zinc-400 text-sm mt-3 max-w-md mx-auto font-medium">Elige tu aventura y compite por la puntuación más alta</p>
+                <h3 class="text-3xl md:text-5xl font-extrabold tracking-tight" data-i18n="games_title">Minijuegos para
+                    Yaire</h3>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm mt-3 max-w-md mx-auto font-medium">Elige tu aventura
+                    y compite por la puntuación más alta</p>
             </div>
 
             <!-- ═══ GAMES HUB v2 ═══ -->
             <div id="games-hub"
-                class="flex flex-col gap-5 px-4 md:px-8 max-w-4xl mx-auto relative z-10 transition-all duration-500 transform" style="padding-top: 1rem; padding-bottom: 1rem; overflow: visible;">
+                class="flex flex-col gap-5 px-4 md:px-8 max-w-4xl mx-auto relative z-10 transition-all duration-500 transform"
+                style="padding-top: 1rem; padding-bottom: 1rem; overflow: visible;">
 
                 <!-- Card 1: El Jardín de Yaire -->
                 <div onclick="openArcadeGame('game1')"
                     class="ghub-card ghub-amber bg-white dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-700/50 shadow-lg dark:shadow-black/30">
-                    <div class="ghub-card-bg" style="background: linear-gradient(135deg, rgba(245,158,11,0.06), rgba(251,191,36,0.04));"></div>
+                    <div class="ghub-card-bg"
+                        style="background: linear-gradient(135deg, rgba(245,158,11,0.06), rgba(251,191,36,0.04));">
+                    </div>
                     <div class="relative z-10 ghub-card-inner flex flex-row items-center gap-6 p-6 md:p-7">
-                        <div class="ghub-icon-wrap bg-gradient-to-br from-amber-50 to-brand-100 dark:from-brand-900/40 dark:to-amber-900/30 border border-brand-200/60 dark:border-brand-700/40 shadow-sm">🌻</div>
+                        <div
+                            class="ghub-icon-wrap bg-gradient-to-br from-amber-50 to-brand-100 dark:from-brand-900/40 dark:to-amber-900/30 border border-brand-200/60 dark:border-brand-700/40 shadow-sm">
+                            🌻</div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-2 mb-1.5 ghub-meta flex-wrap">
-                                <span class="ghub-tag bg-amber-100/80 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border border-amber-200/50 dark:border-amber-800/40">⏱ 30s</span>
-                                <span class="ghub-tag bg-green-100/80 dark:bg-green-900/30 text-green-700 dark:text-green-300 border border-green-200/50 dark:border-green-800/40">🎯 Reflejos</span>
+                                <span
+                                    class="ghub-tag bg-amber-100/80 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border border-amber-200/50 dark:border-amber-800/40">⏱
+                                    30s</span>
+                                <span
+                                    class="ghub-tag bg-green-100/80 dark:bg-green-900/30 text-green-700 dark:text-green-300 border border-green-200/50 dark:border-green-800/40">🎯
+                                    Reflejos</span>
                                 <div class="flex items-center gap-1 ml-1" title="Dificultad: Fácil">
                                     <span class="ghub-diff-dot bg-brand-500"></span>
                                     <span class="ghub-diff-dot bg-zinc-200 dark:bg-zinc-700"></span>
                                     <span class="ghub-diff-dot bg-zinc-200 dark:bg-zinc-700"></span>
                                 </div>
                             </div>
-                            <h4 class="text-xl md:text-2xl font-extrabold text-zinc-900 dark:text-white mb-1 tracking-tight" data-i18n="game1_title">El Jardín de Yaire</h4>
-                            <p class="text-zinc-500 dark:text-zinc-400 text-xs md:text-sm leading-relaxed mb-4" data-i18n="game1_desc">Cosecha girasoles a contrarreloj.</p>
-                            <span class="ghub-play-btn shadow-md" style="background: linear-gradient(135deg, #f59e0b, #d97706);" data-i18n="game_play_btn">
-                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.84A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.27l9.344-5.891a1.5 1.5 0 000-2.538L6.3 2.841z"/></svg>
+                            <h4 class="text-xl md:text-2xl font-extrabold text-zinc-900 dark:text-white mb-1 tracking-tight"
+                                data-i18n="game1_title">El Jardín de Yaire</h4>
+                            <p class="text-zinc-500 dark:text-zinc-400 text-xs md:text-sm leading-relaxed mb-4"
+                                data-i18n="game1_desc">Cosecha girasoles a contrarreloj.</p>
+                            <span class="ghub-play-btn shadow-md"
+                                style="background: linear-gradient(135deg, #f59e0b, #d97706);"
+                                data-i18n="game_play_btn">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M6.3 2.84A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.27l9.344-5.891a1.5 1.5 0 000-2.538L6.3 2.841z" />
+                                </svg>
                                 Jugar Ahora</span>
                         </div>
                     </div>
@@ -5156,23 +5372,38 @@
                 <!-- Card 2: Vuelo Hacia Ti -->
                 <div onclick="openArcadeGame('game2')"
                     class="ghub-card ghub-pink bg-white dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-700/50 shadow-lg dark:shadow-black/30">
-                    <div class="ghub-card-bg" style="background: linear-gradient(135deg, rgba(56,189,248,0.06), rgba(236,72,153,0.04));"></div>
+                    <div class="ghub-card-bg"
+                        style="background: linear-gradient(135deg, rgba(56,189,248,0.06), rgba(236,72,153,0.04));">
+                    </div>
                     <div class="relative z-10 ghub-card-inner flex flex-row items-center gap-6 p-6 md:p-7">
-                        <div class="ghub-icon-wrap bg-gradient-to-br from-sky-50 to-blue-100 dark:from-sky-900/40 dark:to-blue-900/30 border border-sky-200/60 dark:border-sky-700/40 shadow-sm">🦋</div>
+                        <div
+                            class="ghub-icon-wrap bg-gradient-to-br from-sky-50 to-blue-100 dark:from-sky-900/40 dark:to-blue-900/30 border border-sky-200/60 dark:border-sky-700/40 shadow-sm">
+                            🦋</div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-2 mb-1.5 ghub-meta flex-wrap">
-                                <span class="ghub-tag bg-sky-100/80 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300 border border-sky-200/50 dark:border-sky-800/40">🕹 Arcade</span>
-                                <span class="ghub-tag bg-pink-100/80 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 border border-pink-200/50 dark:border-pink-800/40">🌷 Recolección</span>
+                                <span
+                                    class="ghub-tag bg-sky-100/80 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300 border border-sky-200/50 dark:border-sky-800/40">🕹
+                                    Arcade</span>
+                                <span
+                                    class="ghub-tag bg-pink-100/80 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 border border-pink-200/50 dark:border-pink-800/40">🌷
+                                    Recolección</span>
                                 <div class="flex items-center gap-1 ml-1" title="Dificultad: Media">
                                     <span class="ghub-diff-dot bg-tulip-500"></span>
                                     <span class="ghub-diff-dot bg-tulip-500"></span>
                                     <span class="ghub-diff-dot bg-zinc-200 dark:bg-zinc-700"></span>
                                 </div>
                             </div>
-                            <h4 class="text-xl md:text-2xl font-extrabold text-zinc-900 dark:text-white mb-1 tracking-tight" data-i18n="game2_title">Vuelo Hacia Ti</h4>
-                            <p class="text-zinc-500 dark:text-zinc-400 text-xs md:text-sm leading-relaxed mb-4" data-i18n="game2_desc">Esquiva obstáculos y atrapa tulipanes.</p>
-                            <span class="ghub-play-btn shadow-md" style="background: linear-gradient(135deg, #ec4899, #db2777);" data-i18n="game_play_btn">
-                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.84A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.27l9.344-5.891a1.5 1.5 0 000-2.538L6.3 2.841z"/></svg>
+                            <h4 class="text-xl md:text-2xl font-extrabold text-zinc-900 dark:text-white mb-1 tracking-tight"
+                                data-i18n="game2_title">Vuelo Hacia Ti</h4>
+                            <p class="text-zinc-500 dark:text-zinc-400 text-xs md:text-sm leading-relaxed mb-4"
+                                data-i18n="game2_desc">Esquiva obstáculos y atrapa tulipanes.</p>
+                            <span class="ghub-play-btn shadow-md"
+                                style="background: linear-gradient(135deg, #ec4899, #db2777);"
+                                data-i18n="game_play_btn">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M6.3 2.84A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.27l9.344-5.891a1.5 1.5 0 000-2.538L6.3 2.841z" />
+                                </svg>
                                 Jugar Ahora</span>
                         </div>
                     </div>
@@ -5181,23 +5412,78 @@
                 <!-- Card 3: Cartas Ocultas -->
                 <div id="game3-arcade-card" onclick="openArcadeGame('game3')"
                     class="ghub-card ghub-purple bg-white dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-700/50 shadow-lg dark:shadow-black/30">
-                    <div class="ghub-card-bg" style="background: linear-gradient(135deg, rgba(168,85,247,0.06), rgba(139,92,246,0.04));"></div>
+                    <div class="ghub-card-bg"
+                        style="background: linear-gradient(135deg, rgba(168,85,247,0.06), rgba(139,92,246,0.04));">
+                    </div>
                     <div class="relative z-10 ghub-card-inner flex flex-row items-center gap-6 p-6 md:p-7">
-                        <div class="ghub-icon-wrap bg-gradient-to-br from-purple-50 to-violet-100 dark:from-purple-900/40 dark:to-violet-900/30 border border-purple-200/60 dark:border-purple-700/40 shadow-sm">🃏</div>
+                        <div
+                            class="ghub-icon-wrap bg-gradient-to-br from-purple-50 to-violet-100 dark:from-purple-900/40 dark:to-violet-900/30 border border-purple-200/60 dark:border-purple-700/40 shadow-sm">
+                            🃏</div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-2 mb-1.5 ghub-meta flex-wrap">
-                                <span class="ghub-tag bg-purple-100/80 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200/50 dark:border-purple-800/40">🧠 Memoria</span>
-                                <span class="ghub-tag bg-violet-100/80 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 border border-violet-200/50 dark:border-violet-800/40">♠ Parejas</span>
+                                <span
+                                    class="ghub-tag bg-purple-100/80 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200/50 dark:border-purple-800/40">🧠
+                                    Memoria</span>
+                                <span
+                                    class="ghub-tag bg-violet-100/80 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 border border-violet-200/50 dark:border-violet-800/40">♠
+                                    Parejas</span>
                                 <div class="flex items-center gap-1 ml-1" title="Dificultad: Difícil">
                                     <span class="ghub-diff-dot bg-purple-500"></span>
                                     <span class="ghub-diff-dot bg-purple-500"></span>
                                     <span class="ghub-diff-dot bg-purple-500"></span>
                                 </div>
                             </div>
-                            <h4 class="text-xl md:text-2xl font-extrabold text-zinc-900 dark:text-white mb-1 tracking-tight" data-i18n="game3_title">Cartas Ocultas</h4>
-                            <p class="text-zinc-500 dark:text-zinc-400 text-xs md:text-sm leading-relaxed mb-4" data-i18n="game3_desc">Encuentra las parejas ocultas.</p>
-                            <span class="ghub-play-btn shadow-md" style="background: linear-gradient(135deg, #a855f7, #7c3aed);" data-i18n="game_play_btn">
-                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.84A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.27l9.344-5.891a1.5 1.5 0 000-2.538L6.3 2.841z"/></svg>
+                            <h4 class="text-xl md:text-2xl font-extrabold text-zinc-900 dark:text-white mb-1 tracking-tight"
+                                data-i18n="game3_title">Cartas Ocultas</h4>
+                            <p class="text-zinc-500 dark:text-zinc-400 text-xs md:text-sm leading-relaxed mb-4"
+                                data-i18n="game3_desc">Encuentra las parejas ocultas.</p>
+                            <span class="ghub-play-btn shadow-md"
+                                style="background: linear-gradient(135deg, #a855f7, #7c3aed);"
+                                data-i18n="game_play_btn">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M6.3 2.84A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.27l9.344-5.891a1.5 1.5 0 000-2.538L6.3 2.841z" />
+                                </svg>
+                                Jugar Ahora</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Adivina la Canción -->
+                <div onclick="openArcadeGame('game4')"
+                    class="ghub-card ghub-emerald bg-white dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-700/50 shadow-lg dark:shadow-black/30">
+                    <div class="ghub-card-bg"
+                        style="background: linear-gradient(135deg, rgba(16,185,129,0.06), rgba(52,211,153,0.04));">
+                    </div>
+                    <div class="relative z-10 ghub-card-inner flex flex-row items-center gap-6 p-6 md:p-7">
+                        <div
+                            class="ghub-icon-wrap bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-900/40 dark:to-green-900/30 border border-emerald-200/60 dark:border-emerald-700/40 shadow-sm">
+                            🎵</div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 mb-1.5 ghub-meta flex-wrap">
+                                <span
+                                    class="ghub-tag bg-emerald-100/80 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200/50 dark:border-emerald-800/40">🎧
+                                    Audio</span>
+                                <span
+                                    class="ghub-tag bg-teal-100/80 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 border border-teal-200/50 dark:border-teal-800/40">🎶
+                                    Musical</span>
+                                <div class="flex items-center gap-1 ml-1" title="Dificultad: Media">
+                                    <span class="ghub-diff-dot bg-emerald-500"></span>
+                                    <span class="ghub-diff-dot bg-emerald-500"></span>
+                                    <span class="ghub-diff-dot bg-zinc-200 dark:bg-zinc-700"></span>
+                                </div>
+                            </div>
+                            <h4 class="text-xl md:text-2xl font-extrabold text-zinc-900 dark:text-white mb-1 tracking-tight"
+                                data-i18n="game4_title">Adivina la Canción</h4>
+                            <p class="text-zinc-500 dark:text-zinc-400 text-xs md:text-sm leading-relaxed mb-4"
+                                data-i18n="game4_desc">Escucha el fragmento y adivina qué canción suena.</p>
+                            <span class="ghub-play-btn shadow-md"
+                                style="background: linear-gradient(135deg, #10b981, #059669);"
+                                data-i18n="game_play_btn">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M6.3 2.84A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.27l9.344-5.891a1.5 1.5 0 000-2.538L6.3 2.841z" />
+                                </svg>
                                 Jugar Ahora</span>
                         </div>
                     </div>
@@ -5356,6 +5642,81 @@
                                 <button id="game3-overlay-btn" onclick="startMemoryGame()"
                                     class="bg-purple-500 text-white font-bold py-2 md:py-2.5 px-6 rounded-xl hover:bg-purple-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(168,85,247,0.5)] active:scale-95 text-sm md:text-base w-full"
                                     data-i18n="game_start2">¡Empezar!</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ GAME 4: ADIVINA LA CANCIÓN ═══ -->
+                <div id="game4-wrapper"
+                    class="bg-white dark:bg-zinc-900 rounded-xl md:rounded-[3rem] p-1.5 md:p-6 relative overflow-hidden border-2 border-emerald-300 dark:border-emerald-700/50 shadow-2xl w-full md:max-w-2xl mx-auto hidden">
+                    <div class="py-2 mb-2 w-full flex items-center justify-center">
+                        <h4 class="text-2xl font-black text-zinc-900 dark:text-white" data-i18n="game4_title">Adivina la Canción</h4>
+                    </div>
+                    <div class="relative bg-zinc-50/80 dark:bg-zinc-800/50 p-4 md:p-6 rounded-2xl shadow-inner border border-zinc-200/50 dark:border-zinc-700/50 overflow-hidden">
+                        <!-- HUD Row -->
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="flex items-center gap-3">
+                                <span class="text-[10px] md:text-xs font-bold text-emerald-500 uppercase tracking-widest" data-i18n="game4_round_label">Ronda</span>
+                                <span class="text-2xl font-black text-zinc-800 dark:text-white" id="g4-round">1/10</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest" data-i18n="game_score_label">Puntos</span>
+                                    <span class="text-xl font-black text-emerald-500" id="g4-score">0</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <svg width="32" height="32" viewBox="0 0 60 60">
+                                        <circle cx="30" cy="30" r="24" fill="none" stroke="rgba(16,185,129,0.15)" stroke-width="4"/>
+                                        <circle id="g4-timer-ring" cx="30" cy="30" r="24" fill="none" stroke="#10b981" stroke-width="4" stroke-dasharray="150.8" stroke-dashoffset="0" stroke-linecap="round" class="svg-timer-ring" transform="rotate(-90 30 30)"/>
+                                    </svg>
+                                    <span class="text-sm font-extrabold text-emerald-500" id="g4-time">15s</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Audio Player Area -->
+                        <div id="g4-player-area" class="mb-5">
+                            <div class="relative bg-zinc-900/80 dark:bg-black/60 rounded-2xl p-6 md:p-8 flex flex-col items-center gap-4 border border-zinc-700/30">
+                                <div id="g4-bars" class="flex items-end gap-[3px] h-16 md:h-20">
+                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/30 rounded-full transition-all duration-150" style="height:20%"></div>
+                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/40 rounded-full transition-all duration-150" style="height:45%"></div>
+                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/50 rounded-full transition-all duration-150" style="height:70%"></div>
+                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/60 rounded-full transition-all duration-150" style="height:90%"></div>
+                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/70 rounded-full transition-all duration-150" style="height:60%"></div>
+                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/80 rounded-full transition-all duration-150" style="height:100%"></div>
+                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/90 rounded-full transition-all duration-150" style="height:75%"></div>
+                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500 rounded-full transition-all duration-150" style="height:55%"></div>
+                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/90 rounded-full transition-all duration-150" style="height:85%"></div>
+                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/80 rounded-full transition-all duration-150" style="height:40%"></div>
+                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/70 rounded-full transition-all duration-150" style="height:65%"></div>
+                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/60 rounded-full transition-all duration-150" style="height:95%"></div>
+                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/50 rounded-full transition-all duration-150" style="height:50%"></div>
+                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/40 rounded-full transition-all duration-150" style="height:30%"></div>
+                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/30 rounded-full transition-all duration-150" style="height:70%"></div>
+                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/40 rounded-full transition-all duration-150" style="height:80%"></div>
+                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/50 rounded-full transition-all duration-150" style="height:45%"></div>
+                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/60 rounded-full transition-all duration-150" style="height:60%"></div>
+                                </div>
+                                <button id="g4-play-btn" onclick="playGuessClip()" class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:scale-110 active:scale-95">
+                                    <svg class="w-6 h-6 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                </button>
+                                <p id="g4-play-hint" class="text-zinc-500 text-xs font-medium" data-i18n="game4_listen_hint">Toca para escuchar</p>
+                            </div>
+                        </div>
+                        <!-- Answer Options -->
+                        <div id="g4-options" class="grid grid-cols-1 gap-2.5 md:gap-3"></div>
+                        <!-- Streak -->
+                        <div id="g4-streak-wrap" class="flex items-center justify-center gap-2 mt-3 opacity-0 transition-opacity duration-300">
+                            <span class="text-xs font-bold text-amber-500">🔥</span>
+                            <span class="text-xs font-black text-amber-500" id="g4-streak">0</span>
+                        </div>
+                        <!-- Game 4 Overlay -->
+                        <div id="game4-overlay" class="game-overlay-new active">
+                            <div class="game-ov-card">
+                                <div class="text-4xl md:text-5xl mb-3 drop-shadow-xl" id="game4-overlay-icon">🎵</div>
+                                <p id="game4-overlay-text" class="bg-gradient-to-r from-emerald-600 to-teal-400 dark:from-emerald-400 dark:to-teal-300 bg-clip-text text-transparent font-black text-2xl md:text-3xl mb-4" data-i18n="game4_start_title">¿Conoces la canción?</p>
+                                <p id="game4-overlay-sub" class="text-zinc-500 text-xs md:text-sm font-medium mb-5 empty:hidden" data-i18n="game4_start_sub">Escucha un fragmento y elige la correcta. 10 rondas.</p>
+                                <button id="game4-overlay-btn" onclick="startGuessGame()" class="bg-emerald-500 text-white font-bold py-2 md:py-2.5 px-6 rounded-xl hover:bg-emerald-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] active:scale-95 text-sm md:text-base w-full" data-i18n="game_start">¡Empezar!</button>
                             </div>
                         </div>
                     </div>
@@ -10644,6 +11005,7 @@
                 game_end: "¡Se acabó el tiempo! Lograste cosechar {score} girasoles de amor.",
                 game_react_low: "Jeje, tienes que darle más rápido la próxima vez. 🐢", game_react_med: "¡Nada mal! Tienes buenos reflejos. 🌻", game_react_high: "¡Increíble! Tus dedos volaron. ⚡❤️",
                 game2_new_record: "¡Nuevo Récord de Vuelo!", game2_gameover: "¡Oh no! Chocaste. Tulipanes recolectados: {score}",
+                game4_title: "Adivina la Canción", game4_desc: "Escucha el fragmento y adivina qué canción suena.", game4_round_label: "Ronda", game4_listen_hint: "Toca para escuchar", game4_start_title: "¿Conoces la canción?", game4_start_sub: "Escucha un fragmento y elige la correcta. 10 rondas.", game4_over_great: "¡Eres DJ oficial!", game4_over_good: "¡Nada mal!", game4_over_bad: "A escuchar más música…", game4_over_sub: "Puntuación: <strong class=\"text-emerald-500\">{score}</strong> puntos",
 
                 prep_title: "Mis Promesas para Ti", prep_subtitle: "No son solo palabras vacías en una página web. Son decretos reales de cómo planeo amarte, respetarte y cuidarte todos los días de mi vida.",
                 promise_click_hint: "Toca cada promesa para ver más ✨",
@@ -10982,6 +11344,7 @@
                 game_end: "Time's up! You managed to harvest {score} love sunflowers.",
                 game_react_low: "Haha, you need to click faster next time. 🐢", game_react_med: "Not bad! You have good reflexes. 🌻", game_react_high: "Incredible! Your fingers flew. ⚡❤️",
                 game2_new_record: "New Flight Record!", game2_gameover: "Oh no! You crashed. Tulips collected: {score}",
+                game4_title: "Guess the Song", game4_desc: "Listen to the clip and guess which song is playing.", game4_round_label: "Round", game4_listen_hint: "Tap to listen", game4_start_title: "Know the song?", game4_start_sub: "Listen to a clip and pick the right answer. 10 rounds.", game4_over_great: "You're the official DJ!", game4_over_good: "Not bad!", game4_over_bad: "Time to listen to more music…", game4_over_sub: "Score: <strong class=\"text-emerald-500\">{score}</strong> points",
                 prep_title: "My Promises to You", prep_subtitle: "These are not just empty words on a web page. They are real commitments about how I plan to love you, respect you, and care for you every single day of my life.",
                 promise_click_hint: "Tap each promise to see more ✨",
                 step1_title: "Be Your Safe Haven", step1_desc: "I promise to be the place where you can always rest. On the days when the world feels heavy, I offer you a judgment-free space with nothing but hugs, warm tea, and ears ready to listen to you complain about everything. I promise to take care of your heart with the same gentleness with which you have healed mine.<br><br>I want to be your refuge when the storm breaks, the one who holds your hand in silence when words aren't enough, and the one who reminds you of your immense human value when you doubt it yourself. Here, you will always be safe.",
@@ -11299,6 +11662,7 @@
                 game2_new_record: "Nouveau Record de Vol !", game2_gameover: "Oh non ! Tu t'es crashé. Tulipes récoltées : {score}",
                 game3_moves_label: "Mouvements", game3_time_label: "Temps", game3_streak_label: "🔥 Série",
                 game3_hud: "Mouvements : {moves} | Temps : {time}s",
+                game4_title: "Devine la Chanson", game4_desc: "Écoute l'extrait et devine quelle chanson joue.", game4_round_label: "Manche", game4_listen_hint: "Touche pour écouter", game4_start_title: "Tu connais la chanson ?", game4_start_sub: "Écoute un extrait et choisis la bonne réponse. 10 manches.", game4_over_great: "Tu es le DJ officiel !", game4_over_good: "Pas mal !", game4_over_bad: "Il faut écouter plus de musique…", game4_over_sub: "Score : <strong class=\"text-emerald-500\">{score}</strong> points",
                 prep_title: "Mes Promesses pour Toi", prep_subtitle: "Ce ne sont pas que des mots vides sur une page web. Ce sont de vrais engagements sur la façon dont je compte t'aimer, te respecter et prendre soin de toi chaque jour de ma vie.",
                 promise_click_hint: "Touche chaque promesse pour en voir plus ✨",
                 step1_title: "Être Ton Refuge Sûr", step1_desc: "Je promets d'être l'endroit où tu pourras toujours te reposer. Les jours où le monde semble lourd, je t'offre un espace sans jugement avec seulement des câlins, du thé chaud et des oreilles prêtes à t'écouter te plaindre de tout. Je promets de prendre soin de ton cœur avec la même douceur avec laquelle tu as guéri le mien.<br><br>Je veux être ton refuge quand la tempête éclate, celui qui te tient la main en silence quand les mots ne suffisent pas, et celui qui te rappelle ton immense valeur humaine quand tu en doutes toi-même. Ici, tu seras toujours en sécurité.",
@@ -11630,6 +11994,7 @@
                 game2_new_record: "Novo Recorde de Voo!", game2_gameover: "Oh não! Você bateu. Tulipas coletadas: {score}",
                 game3_moves_label: "Movimentos", game3_time_label: "Tempo", game3_streak_label: "🔥 Sequência",
                 game3_hud: "Movimentos: {moves} | Tempo: {time}s",
+                game4_title: "Adivinhe a Música", game4_desc: "Ouça o trecho e adivinhe qual música está tocando.", game4_round_label: "Rodada", game4_listen_hint: "Toque para ouvir", game4_start_title: "Conhece a música?", game4_start_sub: "Ouça um trecho e escolha a resposta certa. 10 rodadas.", game4_over_great: "Você é o DJ oficial!", game4_over_good: "Nada mal!", game4_over_bad: "Hora de ouvir mais música…", game4_over_sub: "Pontuação: <strong class=\"text-emerald-500\">{score}</strong> pontos",
                 prep_title: "Minhas Promessas para Você", prep_subtitle: "Estas não são apenas palavras vazias em uma página da web. São compromissos reais sobre como planejo amar, respeitar e cuidar de você todos os dias da minha vida.",
                 promise_click_hint: "Toque em cada promessa para ver mais ✨",
                 step1_title: "Ser Seu Refúgio Seguro", step1_desc: "Prometo ser o lugar onde você sempre poderá descansar. Nos dias em que o mundo parecer pesado, ofereço um espaço livre de julgamentos sem nada além de abraços, chá quente e ouvidos prontos para ouvir você reclamar de tudo. Prometo cuidar do seu coração com a mesma delicadeza com que você curou o meu.<br><br>Quero ser o seu refúgio quando a tempestade chegar, quem segura sua mão em silêncio quando as palavras não bastarem, e quem lembra você do seu imenso valor humano quando você duvidar de si mesma. Aqui, você sempre estará segura.",
@@ -11991,9 +12356,9 @@
                     requestAnimationFrame(runLoaderEntrance);
                     return;
                 }
-                const ldLogo   = document.getElementById('ld-logo');
-                const ldTrack  = document.getElementById('ld-track');
-                const ldPct    = document.getElementById('ld-pct');
+                const ldLogo = document.getElementById('ld-logo');
+                const ldTrack = document.getElementById('ld-track');
+                const ldPct = document.getElementById('ld-pct');
                 const ldCorner = document.getElementById('ld-corner-l');
                 const ldC1 = document.getElementById('ld-c1');
                 const ldC2 = document.getElementById('ld-c2');
@@ -12045,36 +12410,36 @@
                     window._ldOrbLoops = [
                         // Orbe 1 — Rosa: orbit ancho sup-izq
                         gsap.timeline({ repeat: -1, defaults: _d })
-                            .to(ldC1, { x: '8vw',  y: '-10vh', scale: 1.6, opacity: 0.9,  duration: 1.6 })
-                            .to(ldC1, { x: '-5vw', y: '-18vh', scale: 0.9, opacity: 0.7,  duration: 1.7 })
-                            .to(ldC1, { x: '12vw', y: '-5vh',  scale: 2.0, opacity: 0.95, duration: 1.4 })
-                            .to(ldC1, { x: '0',    y: '0',     scale: 1.0, opacity: 0.85, duration: 1.3 }),
+                            .to(ldC1, { x: '8vw', y: '-10vh', scale: 1.6, opacity: 0.9, duration: 1.6 })
+                            .to(ldC1, { x: '-5vw', y: '-18vh', scale: 0.9, opacity: 0.7, duration: 1.7 })
+                            .to(ldC1, { x: '12vw', y: '-5vh', scale: 2.0, opacity: 0.95, duration: 1.4 })
+                            .to(ldC1, { x: '0', y: '0', scale: 1.0, opacity: 0.85, duration: 1.3 }),
 
                         // Orbe 2 — Ámbar: orbit derecha
                         gsap.timeline({ repeat: -1, defaults: _d })
-                            .to(ldC2, { x: '-12vw', y: '-5vh', scale: 2.2, opacity: 0.9,  duration: 1.3 })
-                            .to(ldC2, { x: '-4vw',  y:  '8vh', scale: 1.4, opacity: 0.65, duration: 1.4 })
-                            .to(ldC2, { x: '-15vw', y:  '2vh', scale: 2.5, opacity: 0.9,  duration: 1.2 })
-                            .to(ldC2, { x: '0',     y:  '0',   scale: 1.0, opacity: 0.8,  duration: 1.3 }),
+                            .to(ldC2, { x: '-12vw', y: '-5vh', scale: 2.2, opacity: 0.9, duration: 1.3 })
+                            .to(ldC2, { x: '-4vw', y: '8vh', scale: 1.4, opacity: 0.65, duration: 1.4 })
+                            .to(ldC2, { x: '-15vw', y: '2vh', scale: 2.5, opacity: 0.9, duration: 1.2 })
+                            .to(ldC2, { x: '0', y: '0', scale: 1.0, opacity: 0.8, duration: 1.3 }),
 
                         // Orbe 3 — Magenta: orbit vertical
                         gsap.timeline({ repeat: -1, defaults: _d })
-                            .to(ldC3, { x: '6vw',  y:  '14vh', scale: 2.8, opacity: 1.0,  duration: 1.6 })
-                            .to(ldC3, { x: '-7vw', y:   '6vh', scale: 1.5, opacity: 0.7,  duration: 1.8 })
-                            .to(ldC3, { x: '2vw',  y:  '17vh', scale: 3.0, opacity: 0.95, duration: 1.5 })
-                            .to(ldC3, { x: '0',    y:   '0',   scale: 1.0, opacity: 0.9,  duration: 1.4 }),
+                            .to(ldC3, { x: '6vw', y: '14vh', scale: 2.8, opacity: 1.0, duration: 1.6 })
+                            .to(ldC3, { x: '-7vw', y: '6vh', scale: 1.5, opacity: 0.7, duration: 1.8 })
+                            .to(ldC3, { x: '2vw', y: '17vh', scale: 3.0, opacity: 0.95, duration: 1.5 })
+                            .to(ldC3, { x: '0', y: '0', scale: 1.0, opacity: 0.9, duration: 1.4 }),
 
                         // Orbe 4 — Violeta: orbit diagonal
                         gsap.timeline({ repeat: -1, defaults: _d })
-                            .to(ldC4, { x: '-10vw', y: '-13vh', scale: 2.4, opacity: 1.0,  duration: 1.2 })
-                            .to(ldC4, { x: '-17vw', y:  '-7vh', scale: 1.3, opacity: 0.65, duration: 1.3 })
-                            .to(ldC4, { x: '0',     y:   '0',   scale: 1.0, opacity: 0.8,  duration: 1.2 }),
+                            .to(ldC4, { x: '-10vw', y: '-13vh', scale: 2.4, opacity: 1.0, duration: 1.2 })
+                            .to(ldC4, { x: '-17vw', y: '-7vh', scale: 1.3, opacity: 0.65, duration: 1.3 })
+                            .to(ldC4, { x: '0', y: '0', scale: 1.0, opacity: 0.8, duration: 1.2 }),
 
                         // Orbe 5 — Cyan: orbit inf-izq
                         gsap.timeline({ repeat: -1, defaults: _d })
-                            .to(ldC5, { x: '13vw', y:  '9vh',  scale: 2.0, opacity: 0.95, duration: 1.4 })
-                            .to(ldC5, { x: '7vw',  y: '17vh',  scale: 1.4, opacity: 0.7,  duration: 1.5 })
-                            .to(ldC5, { x: '0',    y:  '0',    scale: 1.0, opacity: 0.75, duration: 1.3 }),
+                            .to(ldC5, { x: '13vw', y: '9vh', scale: 2.0, opacity: 0.95, duration: 1.4 })
+                            .to(ldC5, { x: '7vw', y: '17vh', scale: 1.4, opacity: 0.7, duration: 1.5 })
+                            .to(ldC5, { x: '0', y: '0', scale: 1.0, opacity: 0.75, duration: 1.3 }),
                     ];
                 }, null, 1.4);
             }
@@ -12215,9 +12580,9 @@
 
                     if (typeof gsap !== 'undefined') {
                         // ── EXIT GSAP: camera push-in ─────────────────────────────────────
-                        const ldPct    = document.getElementById('ld-pct');
+                        const ldPct = document.getElementById('ld-pct');
                         const ldCorner = document.getElementById('ld-corner-l');
-                        const ldTrack  = document.getElementById('ld-track');
+                        const ldTrack = document.getElementById('ld-track');
 
                         // Pre-preparar hero
                         if (heroSection) {
@@ -12231,7 +12596,7 @@
                             window._ldOrbLoops = null;
                         }
 
-                        const orbIds = ['ld-c1','ld-c2','ld-c3','ld-c4','ld-c5'];
+                        const orbIds = ['ld-c1', 'ld-c2', 'ld-c3', 'ld-c4', 'ld-c5'];
                         const orbEls = orbIds.map(id => document.getElementById(id)).filter(Boolean);
 
                         const progressEl = document.getElementById('loader-progress');
@@ -12241,79 +12606,79 @@
 
                         requestAnimationFrame(() => {
 
-                        const exitTl = gsap.timeline({ defaults: { force3D: true } });
-                        exitTl.addLabel('start');
+                            const exitTl = gsap.timeline({ defaults: { force3D: true } });
+                            exitTl.addLabel('start');
 
-                        // 1. UI periférica se disuelve suavemente
-                        exitTl.to([ldPct, ldCorner, ldTrack].filter(Boolean), {
-                            opacity: 0, duration: 0.4, ease: 'power2.in'
-                        }, 'start');
-
-                        const ldLogo = document.getElementById('ld-logo');
-                        if (ldLogo) {
-                            exitTl.to(ldLogo, {
+                            // 1. UI periférica se disuelve suavemente
+                            exitTl.to([ldPct, ldCorner, ldTrack].filter(Boolean), {
                                 opacity: 0, duration: 0.4, ease: 'power2.in'
                             }, 'start');
-                        }
 
-                        // 2. Cada orbe sale disparado fuera de pantalla en su propia dirección
-                        const flyDirs = [
-                            { x: '-130vw', y: '-80vh'  },  // orbe 1 → esquina sup-izq
-                            { x:  '130vw', y: '-60vh'  },  // orbe 2 → esquina sup-der
-                            { x:  '-40vw', y:  '120vh' },  // orbe 3 → abajo-izq
-                            { x:  '140vw', y: '-100vh' },  // orbe 4 → sup-der extremo
-                            { x: '-120vw', y:  '90vh'  },  // orbe 5 → inf-izq
-                        ];
-
-                        orbEls.forEach((el, i) => {
-                            const d = flyDirs[i] || { x: '150vw', y: '0' };
-                            exitTl.to(el, {
-                                x: d.x,
-                                y: d.y,
-                                opacity: 0,
-                                duration: 0.8,
-                                ease: 'power3.in',
-                            }, `start+=${0.05 + i * 0.06}`);
-                        });
-
-                        // 3. Loader completo fade-out suave al final
-                        exitTl.to(loaderEl, {
-                            opacity: 0,
-                            duration: 0.4,
-                            ease: 'power2.inOut',
-                        }, 'start+=0.55')
-                        .set(loaderEl, { display: 'none', clearProps: 'willChange,transform,opacity' })
-                        .call(() => { document.body.classList.add('page-ready'); });
-
-                        // 4. Hero reveal en cascada
-                        if (heroSection) {
-                            document.querySelectorAll('.hero-anim').forEach(el => {
-                                el.style.transition = 'none';
-                                el.style.filter = '';
-                                el.style.willChange = 'transform, opacity';
-                            });
-                            exitTl.to('.hero-anim', {
-                                opacity: 1, y: 0,
-                                duration: 0.9, stagger: 0.1, ease: 'power3.out',
-                                force3D: true,
-                                onComplete: () => {
-                                    document.querySelectorAll('.hero-anim').forEach(el => {
-                                        el.style.willChange = 'auto';
-                                    });
-                                }
-                            }, 'start+=0.65');
-                        }
-
-                        exitTl.call(() => {
-                            initScrollSpy();
-                            const top5Section = document.getElementById('top5yaire');
-                            if (top5Section) {
-                                const barObs = new IntersectionObserver((entries) => {
-                                    entries.forEach(e => { if (e.isIntersecting) { animateWordBars(); barObs.disconnect(); } });
-                                }, { threshold: 0.3 });
-                                barObs.observe(top5Section);
+                            const ldLogo = document.getElementById('ld-logo');
+                            if (ldLogo) {
+                                exitTl.to(ldLogo, {
+                                    opacity: 0, duration: 0.4, ease: 'power2.in'
+                                }, 'start');
                             }
-                        }, null, 'start+=1.1');
+
+                            // 2. Cada orbe sale disparado fuera de pantalla en su propia dirección
+                            const flyDirs = [
+                                { x: '-130vw', y: '-80vh' },  // orbe 1 → esquina sup-izq
+                                { x: '130vw', y: '-60vh' },  // orbe 2 → esquina sup-der
+                                { x: '-40vw', y: '120vh' },  // orbe 3 → abajo-izq
+                                { x: '140vw', y: '-100vh' },  // orbe 4 → sup-der extremo
+                                { x: '-120vw', y: '90vh' },  // orbe 5 → inf-izq
+                            ];
+
+                            orbEls.forEach((el, i) => {
+                                const d = flyDirs[i] || { x: '150vw', y: '0' };
+                                exitTl.to(el, {
+                                    x: d.x,
+                                    y: d.y,
+                                    opacity: 0,
+                                    duration: 0.8,
+                                    ease: 'power3.in',
+                                }, `start+=${0.05 + i * 0.06}`);
+                            });
+
+                            // 3. Loader completo fade-out suave al final
+                            exitTl.to(loaderEl, {
+                                opacity: 0,
+                                duration: 0.4,
+                                ease: 'power2.inOut',
+                            }, 'start+=0.55')
+                                .set(loaderEl, { display: 'none', clearProps: 'willChange,transform,opacity' })
+                                .call(() => { document.body.classList.add('page-ready'); });
+
+                            // 4. Hero reveal en cascada
+                            if (heroSection) {
+                                document.querySelectorAll('.hero-anim').forEach(el => {
+                                    el.style.transition = 'none';
+                                    el.style.filter = '';
+                                    el.style.willChange = 'transform, opacity';
+                                });
+                                exitTl.to('.hero-anim', {
+                                    opacity: 1, y: 0,
+                                    duration: 0.9, stagger: 0.1, ease: 'power3.out',
+                                    force3D: true,
+                                    onComplete: () => {
+                                        document.querySelectorAll('.hero-anim').forEach(el => {
+                                            el.style.willChange = 'auto';
+                                        });
+                                    }
+                                }, 'start+=0.65');
+                            }
+
+                            exitTl.call(() => {
+                                initScrollSpy();
+                                const top5Section = document.getElementById('top5yaire');
+                                if (top5Section) {
+                                    const barObs = new IntersectionObserver((entries) => {
+                                        entries.forEach(e => { if (e.isIntersecting) { animateWordBars(); barObs.disconnect(); } });
+                                    }, { threshold: 0.3 });
+                                    barObs.observe(top5Section);
+                                }
+                            }, null, 'start+=1.1');
 
                         }); // end rAF
 
@@ -12349,7 +12714,7 @@
                 setProgress(100); // now allowed to exit
             }, 3500);
             // Resources still update the bar visually (but can't exit before 3.5s)
-            Promise.all(resources).catch(() => {});
+            Promise.all(resources).catch(() => { });
 
             // 2. Inicialización Básica
             initTheme();
@@ -12410,11 +12775,11 @@
             const start = new Date('2026-01-28T00:00:00').getTime();
             const now = new Date().getTime();
             const diff = now - start;
-            const elMonths   = _getCntEl('count-months');
-            const elDays     = _getCntEl('count-days');
-            const elHours    = _getCntEl('count-hours');
-            const elMins     = _getCntEl('count-mins');
-            const elSecs     = _getCntEl('count-secs');
+            const elMonths = _getCntEl('count-months');
+            const elDays = _getCntEl('count-days');
+            const elHours = _getCntEl('count-hours');
+            const elMins = _getCntEl('count-mins');
+            const elSecs = _getCntEl('count-secs');
             const elTotalDays = _getCntEl('total-days-count');
 
             if (diff > 0) {
@@ -12432,10 +12797,10 @@
                 }
 
                 const msDiff = d.getTime() - tempD.getTime();
-                const days  = Math.floor(msDiff / (1000 * 60 * 60 * 24));
+                const days = Math.floor(msDiff / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((msDiff / (1000 * 60 * 60)) % 24);
-                const mins  = Math.floor((msDiff / 1000 / 60) % 60);
-                const secs  = Math.floor((msDiff / 1000) % 60);
+                const mins = Math.floor((msDiff / 1000 / 60) % 60);
+                const secs = Math.floor((msDiff / 1000) % 60);
 
                 const dict = (typeof dictionary !== 'undefined' && dictionary[currentLang]) ? dictionary[currentLang] : {};
                 const secsSuffix = (dict.time_secs_suffix || '+ {s} segundos latiendo por ti').replace('{s}', secs);
@@ -12740,7 +13105,7 @@
                 'incorrect.wav', 'correcto.wav', 'secret.wav', 'hover.wav'
             ],
             _secondary: [
-                'abrirtusecreto.mp3', 'clickgirasol.wav', 'colors.wav',
+                'abrirtusecreto.mp3', 'celebration.wav', 'clickgirasol.wav', 'colors.wav',
                 'dedicatoriacarta.mp3', 'entrarcarta.mp3', 'entry.wav',
                 'gameopen.wav', 'juego.wav', 'language.wav', 'navegarcarta.mp3',
                 'perdergirasol.wav', 'revelacion.wav', 'tarjetas.wav'
@@ -12961,6 +13326,7 @@
                 ];
                 if (isUnlocked) {
                     searchItems.push({ id: 'game3', type: 'game', keys: ['cartas', 'ocultas', 'memoria', 'juego', 'juegos', 'minijuego', 'minijuegos', 'cards', 'hidden', 'memory', 'game', 'games', 'cartes', 'cachées', 'mémoire', 'jeux', 'memória', 'jogo', 'jogos'], emoji: '🃏', title: t.game3_title || 'Cartas Ocultas' });
+                    searchItems.push({ id: 'game4', type: 'game', keys: ['adivina', 'cancion', 'canción', 'musica', 'música', 'audio', 'song', 'guess', 'music', 'chanson', 'devine', 'musique', 'adivinhe', 'juego', 'juegos', 'minijuego', 'minijuegos', 'game', 'games', 'jeux', 'jogo', 'jogos'], emoji: '🎵', title: t.game4_title || 'Adivina la Canción' });
                 }
 
                 let addedCategories = {};
@@ -14898,16 +15264,17 @@
         function openArcadeGame(gameId) {
             AudioManager.play('gameopen.wav', 0.8);
             const h = document.getElementById('games-hub'), a = document.getElementById('game-active-area');
-            const g1 = document.getElementById('game1-wrapper'), g2 = document.getElementById('game2-wrapper'), g3 = document.getElementById('game3-wrapper');
+            const g1 = document.getElementById('game1-wrapper'), g2 = document.getElementById('game2-wrapper'), g3 = document.getElementById('game3-wrapper'), g4 = document.getElementById('game4-wrapper');
             h.classList.add('opacity-0', 'scale-95');
             const m = document.getElementById('minijuegos');
             if (m) m.style.minHeight = m.offsetHeight + 'px';
             setTimeout(() => {
                 h.classList.add('hidden');
-                g1.classList.add('hidden'); g2.classList.add('hidden'); g3.classList.add('hidden');
+                g1.classList.add('hidden'); g2.classList.add('hidden'); g3.classList.add('hidden'); g4.classList.add('hidden');
                 if (gameId === 'game1') { g1.classList.remove('hidden'); showGameOverlay('g1-overlay'); if (!g1Canvas) initGame1(); else drawG1(); }
                 else if (gameId === 'game2') { g2.classList.remove('hidden'); showGameOverlay('game2-overlay'); }
                 else if (gameId === 'game3') { g3.classList.remove('hidden'); showGameOverlay('game3-overlay'); initMemoryBoard(); }
+                else if (gameId === 'game4') { g4.classList.remove('hidden'); showGameOverlay('game4-overlay'); }
                 a.classList.remove('hidden');
                 a.classList.add('scale-95', 'opacity-0');
                 void a.offsetWidth;
@@ -14922,6 +15289,7 @@
             if (game1Active) { clearInterval(timer1Interval); timer1Interval = null; cancelAnimationFrame(g1FrameId); g1FrameId = null; game1Active = false; showGameOverlay('g1-overlay'); }
             if (butterflyActive) { butterflyActive = false; cancelAnimationFrame(bFrameId); bFrameId = null; }
             if (game3Active) { clearInterval(game3Timer); game3Timer = null; game3Active = false; showGameOverlay('game3-overlay'); }
+            if (game4Active) { cleanupGuessGame(); showGameOverlay('game4-overlay'); }
             // Clean up canvas particle arrays to free memory
             g1Particles = []; g1Sunflowers = []; obstacles = []; bTrail = [];
             const m = document.getElementById('minijuegos');
@@ -15471,6 +15839,357 @@
             if (su) { const _gd = (typeof dictionary !== 'undefined' && dictionary[currentLang]) ? dictionary[currentLang] : {}; su.innerHTML = (_gd.game3_hud || 'Movimientos: {moves} | Tiempo: {time}s').replace('{moves}', '<strong class="text-purple-500">' + game3Moves + '</strong>').replace('{time}', '<strong class="text-purple-500">' + game3TimeLeft + '</strong>'); }
             if (btn) btn.textContent = dictionary[currentLang].game_restart || "Jugar de nuevo";
             showGameOverlay('game3-overlay');
+        }
+        // ════════════════════════════════════════════════════
+        //  GAME 4 — ADIVINA LA CANCIÓN (Guess the Song)
+        // ════════════════════════════════════════════════════
+        let game4Active = false, g4Audio = null, g4Timer = null, g4BarRaf = null;
+        let g4Rounds = [], g4CurrentRound = 0, g4Score = 0, g4Streak = 0, g4TimeLeft = 15;
+        let g4Answered = false, g4ClipTimeout = null, g4RoundStartTime = 0;
+        const G4_TOTAL_ROUNDS = 10;
+        const G4_CLIP_DURATION = 8; // seconds
+        const G4_ROUND_TIME = 15; // seconds per round
+
+        function getG4Tracks() {
+            // Use spotlightTracks from the Spotlight Radio player
+            if (typeof spotlightTracks !== 'undefined' && spotlightTracks.length > 0) return spotlightTracks;
+            return [];
+        }
+
+        function shuffleArray(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+            return a;
+        }
+
+        function setupGuessRounds() {
+            const tracks = getG4Tracks();
+            if (tracks.length < 4) return [];
+            const shuffled = shuffleArray(tracks);
+            const selected = shuffled.slice(0, Math.min(G4_TOTAL_ROUNDS, tracks.length));
+            return selected.map(correct => {
+                // Pick 3 wrong answers (not the correct one)
+                const others = tracks.filter(t => t.title !== correct.title);
+                const wrongOnes = shuffleArray(others).slice(0, 3);
+                const options = shuffleArray([correct, ...wrongOnes]);
+                return { correct, options };
+            });
+        }
+
+        function startGuessGame() {
+            AudioManager.play('juego.wav', 0.8);
+            hideGameOverlay('game4-overlay');
+            g4Rounds = setupGuessRounds();
+            if (g4Rounds.length === 0) return;
+            g4CurrentRound = 0;
+            g4Score = 0;
+            g4Streak = 0;
+            game4Active = true;
+            document.getElementById('g4-score').textContent = '0';
+            document.getElementById('g4-streak').textContent = '0';
+            document.getElementById('g4-streak-wrap').style.opacity = '0';
+            loadGuessRound();
+        }
+
+        function loadGuessRound() {
+            if (g4CurrentRound >= g4Rounds.length) { endGuessGame(); return; }
+            if (g4CurrentRound > 0) AudioManager.play('transicion.wav', 0.4);
+            g4Answered = false;
+            g4TimeLeft = G4_ROUND_TIME;
+            g4RoundStartTime = Date.now();
+
+            const round = g4Rounds[g4CurrentRound];
+            document.getElementById('g4-round').textContent = `${g4CurrentRound + 1}/${g4Rounds.length}`;
+            document.getElementById('g4-time').textContent = g4TimeLeft + 's';
+
+            // Reset timer ring
+            const ring = document.getElementById('g4-timer-ring');
+            if (ring) { ring.style.transition = 'none'; ring.setAttribute('stroke-dashoffset', '0'); ring.style.stroke = '#10b981'; }
+
+            // Reset play button
+            const playBtn = document.getElementById('g4-play-btn');
+            if (playBtn) {
+                playBtn.innerHTML = '<svg class="w-6 h-6 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+                playBtn.disabled = false;
+                playBtn.classList.remove('opacity-50');
+            }
+            document.getElementById('g4-play-hint').textContent = (typeof dictionary !== 'undefined' && dictionary[currentLang]?.game4_listen_hint) || 'Toca para escuchar';
+
+            // Build option buttons
+            const optionsEl = document.getElementById('g4-options');
+            optionsEl.innerHTML = '';
+            round.options.forEach((track, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'g4-opt w-full text-left px-4 py-3 md:py-3.5 rounded-xl border border-zinc-200/80 dark:border-zinc-700/50 bg-white dark:bg-zinc-900/80 text-zinc-800 dark:text-zinc-200 font-semibold text-sm md:text-base transition-all duration-300 hover:border-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:scale-[1.02] active:scale-[0.98] flex items-center gap-3';
+                btn.innerHTML = `<span class="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs font-black text-zinc-400 shrink-0">${String.fromCharCode(65 + i)}</span><span class="truncate"><strong>${track.title}</strong> <span class="text-zinc-400 dark:text-zinc-500 text-xs ml-1">— ${track.artist}</span></span>`;
+                btn.onclick = () => guessAnswer(i);
+                btn.id = `g4-opt-${i}`;
+                optionsEl.appendChild(btn);
+            });
+
+            // Stop previous audio
+            if (g4Audio) { g4Audio.pause(); g4Audio.currentTime = 0; }
+            clearTimeout(g4ClipTimeout);
+
+            // Preload audio
+            g4Audio = new Audio(round.correct.src);
+            g4Audio.volume = 0.7;
+
+            // Start round timer
+            startG4Timer();
+
+            // Reset bar animation to idle
+            resetG4Bars();
+        }
+
+        function playGuessClip() {
+            if (!game4Active || !g4Audio || g4Answered) return;
+            AudioManager.play('seleccionsi.wav', 0.4);
+            const round = g4Rounds[g4CurrentRound];
+            if (!round) return;
+
+            // Random start position (at least CLIP_DURATION before end)
+            g4Audio.addEventListener('loadedmetadata', function onMeta() {
+                g4Audio.removeEventListener('loadedmetadata', onMeta);
+                const maxStart = Math.max(0, g4Audio.duration - G4_CLIP_DURATION - 1);
+                const startPos = Math.random() * maxStart;
+                g4Audio.currentTime = startPos;
+                g4Audio.play().catch(() => {});
+
+                // Stop after clip duration
+                clearTimeout(g4ClipTimeout);
+                g4ClipTimeout = setTimeout(() => {
+                    if (g4Audio && !g4Audio.paused) {
+                        g4Audio.pause();
+                    }
+                    stopG4Bars();
+                }, G4_CLIP_DURATION * 1000);
+
+                // Animate bars
+                animateG4Bars();
+
+                // Update button
+                const playBtn = document.getElementById('g4-play-btn');
+                if (playBtn) playBtn.innerHTML = '<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14V8l6 4-6 4z"/></svg>';
+            }, { once: true });
+
+            // If already loaded
+            if (g4Audio.readyState >= 2) {
+                const maxStart = Math.max(0, g4Audio.duration - G4_CLIP_DURATION - 1);
+                const startPos = Math.random() * maxStart;
+                g4Audio.currentTime = startPos;
+                g4Audio.play().catch(() => {});
+                clearTimeout(g4ClipTimeout);
+                g4ClipTimeout = setTimeout(() => {
+                    if (g4Audio && !g4Audio.paused) g4Audio.pause();
+                    stopG4Bars();
+                }, G4_CLIP_DURATION * 1000);
+                animateG4Bars();
+            } else {
+                g4Audio.load();
+            }
+        }
+
+        function guessAnswer(idx) {
+            if (!game4Active || g4Answered) return;
+            g4Answered = true;
+            clearInterval(g4Timer);
+            clearTimeout(g4ClipTimeout);
+            if (g4Audio) g4Audio.pause();
+            stopG4Bars();
+
+            const round = g4Rounds[g4CurrentRound];
+            const chosen = round.options[idx];
+            const isCorrect = chosen.title === round.correct.title;
+            const correctIdx = round.options.findIndex(o => o.title === round.correct.title);
+
+            // Calculate speed bonus
+            const elapsed = (Date.now() - g4RoundStartTime) / 1000;
+            let points = 0;
+
+            if (isCorrect) {
+                points = 100;
+                const speedBonus = Math.max(0, Math.round(50 * (1 - elapsed / G4_ROUND_TIME)));
+                points += speedBonus;
+                g4Score += points;
+                g4Streak++;
+
+                AudioManager.play('celebration.wav', 0.7);
+
+                // Highlight correct
+                const btn = document.getElementById(`g4-opt-${idx}`);
+                if (btn) {
+                    btn.classList.add('border-emerald-500', 'bg-emerald-50', 'dark:bg-emerald-900/30', 'ring-2', 'ring-emerald-500/50');
+                    btn.querySelector('span:first-child').classList.add('bg-emerald-500', 'text-white');
+                    btn.querySelector('span:first-child').classList.remove('bg-zinc-100', 'dark:bg-zinc-800', 'text-zinc-400');
+                    // Show points
+                    const ptSpan = document.createElement('span');
+                    ptSpan.className = 'ml-auto text-emerald-500 font-black text-sm animate-pulse';
+                    ptSpan.textContent = `+${points}`;
+                    btn.appendChild(ptSpan);
+                }
+
+                // Update streak
+                if (g4Streak >= 2) {
+                    document.getElementById('g4-streak-wrap').style.opacity = '1';
+                    document.getElementById('g4-streak').textContent = g4Streak;
+                    if (g4Streak >= 3) AudioManager.play('clickgirasol.wav', 0.5);
+                }
+            } else {
+                g4Streak = 0;
+                AudioManager.play('incorrect.wav', 0.6);
+                document.getElementById('g4-streak-wrap').style.opacity = '0';
+
+                // Highlight wrong
+                const wrongBtn = document.getElementById(`g4-opt-${idx}`);
+                if (wrongBtn) {
+                    wrongBtn.classList.add('border-red-500', 'bg-red-50', 'dark:bg-red-900/20', 'text-red-500');
+                    wrongBtn.querySelector('span:first-child').classList.add('bg-red-500', 'text-white');
+                    wrongBtn.querySelector('span:first-child').classList.remove('bg-zinc-100', 'dark:bg-zinc-800', 'text-zinc-400');
+                }
+                // Show correct answer
+                const correctBtn = document.getElementById(`g4-opt-${correctIdx}`);
+                if (correctBtn) {
+                    correctBtn.classList.add('border-emerald-500', 'bg-emerald-50', 'dark:bg-emerald-900/30');
+                    correctBtn.querySelector('span:first-child').classList.add('bg-emerald-500', 'text-white');
+                    correctBtn.querySelector('span:first-child').classList.remove('bg-zinc-100', 'dark:bg-zinc-800', 'text-zinc-400');
+                }
+            }
+
+            // Disable all buttons
+            document.querySelectorAll('.g4-opt').forEach(b => { b.disabled = true; b.classList.add('pointer-events-none'); });
+
+            // Update score
+            document.getElementById('g4-score').textContent = g4Score;
+
+            // Next round after delay
+            g4CurrentRound++;
+            setTimeout(() => {
+                if (game4Active) loadGuessRound();
+            }, 1800);
+        }
+
+        function startG4Timer() {
+            clearInterval(g4Timer);
+            const ring = document.getElementById('g4-timer-ring');
+            const CIRCUMFERENCE = 150.8;
+
+            g4Timer = setInterval(() => {
+                g4TimeLeft--;
+                document.getElementById('g4-time').textContent = g4TimeLeft + 's';
+
+                // Animate ring
+                if (ring) {
+                    const progress = 1 - (g4TimeLeft / G4_ROUND_TIME);
+                    ring.style.transition = 'stroke-dashoffset 0.9s linear, stroke 0.3s';
+                    ring.setAttribute('stroke-dashoffset', String(CIRCUMFERENCE * progress));
+                    if (g4TimeLeft <= 5) { ring.style.stroke = '#ef4444'; AudioManager.play('sliderbajo.wav', 0.25); }
+                    else if (g4TimeLeft <= 8) ring.style.stroke = '#f59e0b';
+                }
+
+                if (g4TimeLeft <= 0) {
+                    // Time's up — treat as wrong answer
+                    g4Answered = true;
+                    clearInterval(g4Timer);
+                    clearTimeout(g4ClipTimeout);
+                    if (g4Audio) g4Audio.pause();
+                    stopG4Bars();
+                    g4Streak = 0;
+                    document.getElementById('g4-streak-wrap').style.opacity = '0';
+
+                    AudioManager.play('perdergirasol.wav', 0.5);
+
+                    // Show correct answer
+                    const round = g4Rounds[g4CurrentRound];
+                    const correctIdx = round.options.findIndex(o => o.title === round.correct.title);
+                    const correctBtn = document.getElementById(`g4-opt-${correctIdx}`);
+                    if (correctBtn) {
+                        correctBtn.classList.add('border-emerald-500', 'bg-emerald-50', 'dark:bg-emerald-900/30', 'animate-pulse');
+                        correctBtn.querySelector('span:first-child').classList.add('bg-emerald-500', 'text-white');
+                        correctBtn.querySelector('span:first-child').classList.remove('bg-zinc-100', 'dark:bg-zinc-800', 'text-zinc-400');
+                    }
+                    document.querySelectorAll('.g4-opt').forEach(b => { b.disabled = true; b.classList.add('pointer-events-none'); });
+
+                    g4CurrentRound++;
+                    setTimeout(() => { if (game4Active) loadGuessRound(); }, 1800);
+                }
+            }, 1000);
+        }
+
+        function animateG4Bars() {
+            const bars = document.querySelectorAll('.g4-bar');
+            function animate() {
+                bars.forEach(bar => {
+                    bar.style.height = (20 + Math.random() * 80) + '%';
+                    bar.style.opacity = (0.4 + Math.random() * 0.6);
+                });
+                g4BarRaf = requestAnimationFrame(() => setTimeout(() => animate(), 100));
+            }
+            animate();
+        }
+
+        function stopG4Bars() {
+            cancelAnimationFrame(g4BarRaf);
+            g4BarRaf = null;
+            document.querySelectorAll('.g4-bar').forEach(bar => {
+                bar.style.height = (15 + Math.random() * 25) + '%';
+                bar.style.opacity = '0.3';
+            });
+        }
+
+        function resetG4Bars() {
+            cancelAnimationFrame(g4BarRaf);
+            g4BarRaf = null;
+            const heights = [20, 45, 70, 90, 60, 100, 75, 55, 85, 40, 65, 95, 50, 30, 70, 80, 45, 60];
+            document.querySelectorAll('.g4-bar').forEach((bar, i) => {
+                bar.style.height = (heights[i] || 40) + '%';
+                bar.style.opacity = '';
+            });
+        }
+
+        function endGuessGame() {
+            game4Active = false;
+            clearInterval(g4Timer);
+            clearTimeout(g4ClipTimeout);
+            if (g4Audio) { g4Audio.pause(); g4Audio = null; }
+            stopG4Bars();
+
+            const total = g4Rounds.length * 150; // max possible score
+            const pct = Math.round((g4Score / total) * 100);
+            const _gd = (typeof dictionary !== 'undefined' && dictionary[currentLang]) ? dictionary[currentLang] : {};
+
+            const ic = document.getElementById('game4-overlay-icon');
+            const tx = document.getElementById('game4-overlay-text');
+            const su = document.getElementById('game4-overlay-sub');
+            const btn = document.getElementById('game4-overlay-btn');
+
+            if (pct >= 70) {
+                if (ic) ic.textContent = '🏆';
+                if (tx) tx.textContent = _gd.game4_over_great || '¡Eres DJ oficial!';
+                AudioManager.play('revelacion.wav', 0.7);
+            } else if (pct >= 40) {
+                if (ic) ic.textContent = '🎶';
+                if (tx) tx.textContent = _gd.game4_over_good || '¡Nada mal!';
+                AudioManager.play('secret.wav', 0.6);
+            } else {
+                if (ic) ic.textContent = '🎧';
+                if (tx) tx.textContent = _gd.game4_over_bad || 'A escuchar más música…';
+                AudioManager.play('perdergirasol.wav', 0.5);
+            }
+
+            if (su) su.innerHTML = (_gd.game4_over_sub || 'Puntuación: <strong class="text-emerald-500">{score}</strong> puntos').replace('{score}', g4Score);
+            if (btn) btn.textContent = _gd.game_restart || '¡Jugar de nuevo!';
+
+            showGameOverlay('game4-overlay');
+        }
+
+        function cleanupGuessGame() {
+            game4Active = false;
+            clearInterval(g4Timer); g4Timer = null;
+            clearTimeout(g4ClipTimeout);
+            if (g4Audio) { g4Audio.pause(); g4Audio = null; }
+            stopG4Bars();
+            g4CurrentRound = 0; g4Score = 0; g4Streak = 0;
         }
 
         function initChart() {
@@ -16236,7 +16955,7 @@
                         if (dictionary['en']) dictionary['en'].hero_badge = enTxt;
                         if (dictionary['pt']) dictionary['pt'].hero_badge = ptTxt;
                         if (dictionary['fr']) dictionary['fr'].hero_badge = frTxt;
-                        
+
                         // Aplicar los cambios de inmediato si la función existe
                         if (typeof setLanguage === 'function' && typeof currentLang !== 'undefined') {
                             setLanguage(currentLang, false);
@@ -16251,9 +16970,9 @@
                                 const res = await fetch(url);
                                 const data = await res.json();
                                 return data[0].map(item => item[0]).join('');
-                            } catch(e) { return text; }
+                            } catch (e) { return text; }
                         };
-                        
+
                         translateApi(cfg.heroBadge, 'en').then(t => {
                             if (typeof dictionary !== 'undefined' && dictionary['en']) {
                                 dictionary['en'].hero_badge = t;
@@ -16291,9 +17010,9 @@
                                 const res = await fetch(url);
                                 const data = await res.json();
                                 return data[0].map(item => item[0]).join('');
-                            } catch(e) { return text; }
+                            } catch (e) { return text; }
                         };
-                        
+
                         // Si EN no existe o es igual a ES (sin traducir)
                         if (!cfg.spotlightTips.en || (cfg.spotlightTips.en[0] === tipsEs[0] && tipsEs[0])) {
                             Promise.all(tipsEs.map(t => translateApi(t, 'en'))).then(arr => spotlightTips.en = arr);
@@ -16317,7 +17036,7 @@
                         fetch('https://api.counterapi.dev/v1/charlygustav_yaire/visits/up')
                             .then(r => r.json())
                             .then(data => console.log("Visita global #" + data.count))
-                            .catch(e => {});
+                            .catch(e => { });
 
                         // Registrar IP real en Firebase para el Panel
                         fetch('https://api.ipify.org?format=json')
@@ -16346,23 +17065,23 @@
     </script>
 
     <script>
-    // Frase del Dia - cargada desde Firebase Admin
-    (async function loadFraseDelDia() {
-        try {
-            const r = await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config/frase.json');
-            const d = await r.json();
-            if (d && d.texto && d.texto.trim()) {
-                const textEl  = document.getElementById('frase-del-dia-text');
-                const autorEl = document.getElementById('frase-del-dia-autor');
-                const cont    = document.getElementById('frase-container');
-                if (textEl)  textEl.textContent  = '\u275d ' + d.texto.trim() + ' \u275e';
-                if (autorEl && d.autor) autorEl.textContent = '\u2014 ' + d.autor.trim();
-                if (cont)    setTimeout(() => cont.style.opacity = '1', 150);
-            }
-        } catch(e) {}
-    })();
+        // Frase del Dia - cargada desde Firebase Admin
+        (async function loadFraseDelDia() {
+            try {
+                const r = await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config/frase.json');
+                const d = await r.json();
+                if (d && d.texto && d.texto.trim()) {
+                    const textEl = document.getElementById('frase-del-dia-text');
+                    const autorEl = document.getElementById('frase-del-dia-autor');
+                    const cont = document.getElementById('frase-container');
+                    if (textEl) textEl.textContent = '\u275d ' + d.texto.trim() + ' \u275e';
+                    if (autorEl && d.autor) autorEl.textContent = '\u2014 ' + d.autor.trim();
+                    if (cont) setTimeout(() => cont.style.opacity = '1', 150);
+                }
+            } catch (e) { }
+        })();
     </script>
-<script src="voice-channel-widget.js?v=2"></script>
+    <script src="voice-channel-widget.js?v=2"></script>
 </body>
 
 </html>
