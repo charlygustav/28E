@@ -434,14 +434,36 @@
 
       this.panel.addEventListener('click', (e) => e.stopPropagation());
 
-      document.addEventListener('click', (e) => {
-        if (this.panel.classList.contains('open') &&
-            !this.panel.contains(e.target) &&
-            !this.fab.contains(e.target)) {
+      // ── ESC para cerrar el panel ──────────────────────────────────────────
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && this.panel.classList.contains('open')) {
           this.panel.classList.remove('open');
           if (this.connected) this._bar.classList.add('show');
           this._playSfx('flyout', 0.4, false, 'fly');
         }
+      });
+
+      // ── Click fuera cierra — pero NO si el drag empezó dentro del panel ──
+      // Bug: al arrastrar para seleccionar texto, el mouseup puede caer fuera
+      // del panel y disparar este listener, cerrando la ventana incorrectamente.
+      let _panelMousedown = false;
+      this.panel.addEventListener('mousedown', () => { _panelMousedown = true; });
+      document.addEventListener('mouseup', () => {
+        // Resetear después del ciclo actual para que el click handler lo vea
+        requestAnimationFrame(() => { _panelMousedown = false; });
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!this.panel.classList.contains('open')) return;
+        if (this.panel.contains(e.target) || this.fab.contains(e.target)) return;
+        // No cerrar si el mousedown empezó dentro del panel (drag de selección)
+        if (_panelMousedown) return;
+        // No cerrar si hay texto seleccionado (usuario acaba de seleccionar)
+        if (window.getSelection && window.getSelection().toString()) return;
+
+        this.panel.classList.remove('open');
+        if (this.connected) this._bar.classList.add('show');
+        this._playSfx('flyout', 0.4, false, 'fly');
       });
 
       window.addEventListener('languagechange', () => {
@@ -760,13 +782,32 @@
         this.socket.on('joined', async ({ userId, existingUsers }) => {
           this._stopSfx(this.progNode); this.progNode = null;
           this._playSfx('act_launch', 0.5);
+
+          // Clean up old peers from previous session (reconnect scenario)
+          this.peers.forEach((_, id) => this._closePeer(id));
+          this.peers.clear();
+          this.pendingIce.clear();
+
+          // Re-acquire microphone if stream was lost
+          if (!this.stream || this.stream.getAudioTracks().every(t => t.readyState === 'ended')) {
+            try {
+              this.stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+              console.log('[VC] ✅ Microphone re-acquired');
+            } catch(e) {
+              console.error('[VC] ❌ Could not re-acquire microphone:', e);
+            }
+          }
+
           this.myId = userId;
           this.connected = true;
           this._reconnects = 0;
           this.fab.classList.add('connected');
-          this._startTimer();
-          this._setupSpeaking();
-          this._startKeepAlive();
+
+          // Prevent duplicate timers/speakers
+          if (!this._timerInt) this._startTimer();
+          if (!this._analyser) this._setupSpeaking();
+          if (!this._wakeLock && !this._silentAudio) this._startKeepAlive();
+
           for (const u of existingUsers) await this._createOffer(u.id);
         });
 
@@ -862,8 +903,16 @@
 
     // ── WebRTC ─────────────────────────────────────────────────────────────
     _makePeer(peerId) {
+      // Close any existing peer connection for this peer first (prevents ghost connections)
+      if (this.peers.has(peerId)) {
+        console.log(`[VC] Closing existing peer ${peerId} before creating new one`);
+        this._closePeer(peerId);
+      }
+
       const pc = new RTCPeerConnection(this.ice);
-      this.stream.getTracks().forEach(t => pc.addTrack(t, this.stream));
+      if (this.stream) {
+        this.stream.getTracks().forEach(t => pc.addTrack(t, this.stream));
+      }
       this.peers.set(peerId, pc);
 
       // Log ICE connection state changes for debugging
@@ -901,16 +950,14 @@
           audio.setAttribute('playsinline', '');
           audio.setAttribute('webkit-playsinline', '');
           audio.dataset.vcPeer = 'true';
+          // iOS Safari needs the audio element in the DOM
           document.body.appendChild(audio);
           this.audios.set(peerId, audio);
         }
         audio.srcObject = stream;
         audio.volume = this.dnd ? 0 : 1;
-        audio.play().then(() => {
-          console.log(`[VC] Audio playing for peer ${peerId}`);
-        }).catch((e) => {
-          console.warn(`[VC] Audio play failed for ${peerId}:`, e.message);
-        });
+        // Robust play with retry — crucial for mobile browsers
+        this._robustPlay(audio, peerId);
       };
 
       return pc;
@@ -1016,12 +1063,58 @@
       this.fab.classList.remove('connected');
     }
 
+    // ── ROBUST AUDIO PLAY (handles mobile autoplay restrictions) ──────────
+    _robustPlay(audio, peerId, attempt = 0) {
+      const maxAttempts = 5;
+      audio.play().then(() => {
+        console.log(`[VC] ✅ Audio playing for peer ${peerId} (attempt ${attempt + 1})`);
+      }).catch((e) => {
+        console.warn(`[VC] ⚠️ Audio play failed for ${peerId} (attempt ${attempt + 1}):`, e.message);
+        if (attempt < maxAttempts) {
+          // Retry with increasing delay
+          setTimeout(() => this._robustPlay(audio, peerId, attempt + 1), 500 * (attempt + 1));
+        } else {
+          // Last resort: wait for user gesture to unlock audio
+          console.warn(`[VC] 🔇 Waiting for user gesture to unlock audio for ${peerId}`);
+          const unlock = () => {
+            audio.play().then(() => {
+              console.log(`[VC] ✅ Audio unlocked via gesture for ${peerId}`);
+            }).catch(() => {});
+            document.removeEventListener('click', unlock);
+            document.removeEventListener('touchstart', unlock);
+          };
+          document.addEventListener('click', unlock, { once: true });
+          document.addEventListener('touchstart', unlock, { once: true });
+        }
+      });
+    }
+
+    // ── RESUME ALL PEER AUDIO (after visibility change / iOS background) ──
+    _resumeAllAudio() {
+      // Resume AudioContext if suspended
+      if (this.actx && this.actx.state === 'suspended') {
+        this.actx.resume().catch(() => {});
+      }
+      // Re-play all peer audio elements
+      this.audios.forEach((audio, peerId) => {
+        if (audio.paused && audio.srcObject) {
+          audio.play().then(() => {
+            console.log(`[VC] ✅ Resumed audio for peer ${peerId}`);
+          }).catch(() => {});
+        }
+      });
+    }
+
     // ── BACKGROUND KEEP-ALIVE (mobile) ─────────────────────────────────────
     _startKeepAlive() {
       // 1. Wake Lock API – prevents screen from turning off
       this._acquireWakeLock();
       document.addEventListener('visibilitychange', this._onVisChange = () => {
-        if (document.visibilityState === 'visible' && this.connected) this._acquireWakeLock();
+        if (document.visibilityState === 'visible' && this.connected) {
+          this._acquireWakeLock();
+          // Re-play all audio that iOS may have paused in background
+          setTimeout(() => this._resumeAllAudio(), 300);
+        }
       });
 
       // 2. Silent audio loop (AudioContext)
