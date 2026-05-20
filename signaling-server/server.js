@@ -112,6 +112,28 @@ io.on('connection', (socket) => {
     socket.to(CHANNEL).emit('speaking_state', { from: socket.id, speaking });
   });
 
+  // ── CHAT MESSAGE ─────────────────────────────────────────────────────────
+  socket.on('chat_message', ({ text }) => {
+    const user = users.get(socket.id);
+    if (!user || !text?.trim()) return;
+    io.to(CHANNEL).emit('chat_message', {
+      from: socket.id,
+      name: user.displayName,
+      text: text.trim().slice(0, 500),
+      ts: Date.now()
+    });
+  });
+
+  // ── RING CHANNEL (notify others of incoming call) ────────────────────────
+  socket.on('ring_channel', () => {
+    const user = users.get(socket.id);
+    if (!user) return;
+    socket.to(CHANNEL).emit('incoming_ring', {
+      from: socket.id,
+      name: user.displayName
+    });
+  });
+
   // ── LEAVE / DISCONNECT ────────────────────────────────────────────────────
   socket.on('leave_channel', () => handleLeave(socket));
   socket.on('disconnect',    () => handleLeave(socket));

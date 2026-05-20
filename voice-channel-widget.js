@@ -34,7 +34,18 @@
       err_pass: "Escribe la contraseña.",
       err_mic: "❌ No se pudo acceder al micrófono.",
       toast_join: "se unió",
-      toast_left: "se fue"
+      toast_left: "se fue",
+      vc_chat: "Chat",
+      vc_chat_ph: "Escribe un mensaje…",
+      vc_chat_send: "Enviar",
+      vc_chat_empty: "Sin mensajes aún",
+      vc_invite: "Copiar link de invitación",
+      vc_invite_copied: "¡Link copiado! ✓",
+      vc_invite_banner: "te invitó a la llamada 💛",
+      vc_ring_title: "Llamada entrante",
+      vc_ring_msg: "quiere hablar contigo 💛",
+      vc_ring_join: "Unirse",
+      vc_ring_ignore: "Ignorar"
     },
     en: {
       vc_title: "Voice Channel",
@@ -61,7 +72,18 @@
       err_pass: "Enter the password.",
       err_mic: "❌ Could not access microphone.",
       toast_join: "joined",
-      toast_left: "left"
+      toast_left: "left",
+      vc_chat: "Chat",
+      vc_chat_ph: "Type a message…",
+      vc_chat_send: "Send",
+      vc_chat_empty: "No messages yet",
+      vc_invite: "Copy invite link",
+      vc_invite_copied: "Link copied! ✓",
+      vc_invite_banner: "invited you to a call 💛",
+      vc_ring_title: "Incoming call",
+      vc_ring_msg: "wants to talk to you 💛",
+      vc_ring_join: "Join",
+      vc_ring_ignore: "Ignore"
     },
     pt: {
       vc_title: "Canal de Voz",
@@ -88,7 +110,18 @@
       err_pass: "Digite a senha.",
       err_mic: "❌ Não foi possível acessar o microfone.",
       toast_join: "entrou",
-      toast_left: "saiu"
+      toast_left: "saiu",
+      vc_chat: "Chat",
+      vc_chat_ph: "Digite uma mensagem…",
+      vc_chat_send: "Enviar",
+      vc_chat_empty: "Sem mensagens ainda",
+      vc_invite: "Copiar link de convite",
+      vc_invite_copied: "Link copiado! ✓",
+      vc_invite_banner: "te convidou para uma chamada 💛",
+      vc_ring_title: "Chamada recebida",
+      vc_ring_msg: "quer falar com você 💛",
+      vc_ring_join: "Entrar",
+      vc_ring_ignore: "Ignorar"
     },
     fr: {
       vc_title: "Canal Vocal",
@@ -115,7 +148,18 @@
       err_pass: "Entre le mot de passe.",
       err_mic: "❌ Impossible d'accéder au micro.",
       toast_join: "a rejoint",
-      toast_left: "est parti"
+      toast_left: "est parti",
+      vc_chat: "Chat",
+      vc_chat_ph: "Écris un message…",
+      vc_chat_send: "Envoyer",
+      vc_chat_empty: "Pas encore de messages",
+      vc_invite: "Copier le lien d'invitation",
+      vc_invite_copied: "Lien copié ! ✓",
+      vc_invite_banner: "t'a invité à un appel 💛",
+      vc_ring_title: "Appel entrant",
+      vc_ring_msg: "veut te parler 💛",
+      vc_ring_join: "Rejoindre",
+      vc_ring_ignore: "Ignorer"
     }
   };
 
@@ -269,6 +313,119 @@
   .vc-toast.join { border-left:3px solid #22c55e; }
   .vc-toast.leave { border-left:3px solid #ef4444; }
   .vc-toast.info { border-left:3px solid #f59e0b; }
+
+  /* ── Chat ── */
+  .vc-chat-wrap { border-top:1px solid rgba(255,255,255,.05); }
+  .vc-chat-toggle {
+    width:100%; padding:8px 16px; background:none; border:none;
+    color:rgba(255,255,255,.4); font-size:10.5px; font-weight:700;
+    text-transform:uppercase; letter-spacing:.6px; cursor:pointer;
+    display:flex; align-items:center; justify-content:space-between;
+    transition:color .15s;
+  }
+  .vc-chat-toggle:hover { color:rgba(255,255,255,.6); }
+  .vc-chat-toggle .vc-chat-badge {
+    background:#f59e0b; color:#000; font-size:9px; font-weight:800;
+    min-width:16px; height:16px; border-radius:8px; display:flex;
+    align-items:center; justify-content:center; padding:0 4px;
+    animation:vc-pop .25s cubic-bezier(.34,1.56,.64,1);
+  }
+  .vc-chat-body { display:none; }
+  .vc-chat-body.open { display:block; }
+  .vc-msgs {
+    max-height:140px; overflow-y:auto; padding:6px 16px 8px;
+    scrollbar-width:thin; scrollbar-color:rgba(255,255,255,.08) transparent;
+  }
+  .vc-msgs::-webkit-scrollbar { width:4px; }
+  .vc-msgs::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
+  .vc-msg {
+    margin-bottom:8px; animation:vc-slideIn .25s cubic-bezier(.16,1,.3,1) backwards;
+  }
+  .vc-msg-head { display:flex; align-items:baseline; gap:6px; margin-bottom:2px; }
+  .vc-msg-name { color:#f59e0b; font-size:11px; font-weight:700; }
+  .vc-msg-name.me { color:rgba(245,158,11,.6); }
+  .vc-msg-time { color:rgba(255,255,255,.2); font-size:9.5px; }
+  .vc-msg-text { color:rgba(255,255,255,.75); font-size:12.5px; line-height:1.4; word-break:break-word; }
+  .vc-chat-input-row {
+    display:flex; gap:6px; padding:8px 12px 10px; border-top:1px solid rgba(255,255,255,.04);
+  }
+  .vc-chat-in {
+    flex:1; background:#131313; border:1px solid rgba(255,255,255,.07);
+    border-radius:8px; padding:7px 10px; color:#fff; font-size:12px;
+    font-family:inherit; outline:none; transition:border-color .15s;
+  }
+  .vc-chat-in:focus { border-color:rgba(245,158,11,.4); }
+  .vc-chat-in::placeholder { color:rgba(255,255,255,.18); }
+  .vc-chat-send {
+    background:rgba(245,158,11,.85); border:none; border-radius:8px;
+    padding:7px 10px; color:#000; cursor:pointer; display:flex;
+    align-items:center; justify-content:center; transition:all .15s;
+  }
+  .vc-chat-send:hover { background:#f59e0b; transform:scale(1.05); }
+  .vc-chat-send:active { transform:scale(0.92); }
+  .vc-chat-send svg { width:14px; height:14px; }
+  .vc-chat-empty { text-align:center; padding:12px 0; color:rgba(255,255,255,.15); font-size:11px; }
+
+  /* ── Invite ── */
+  .vc-invite-btn {
+    width:100%; padding:8px; margin:0; border:1px solid rgba(255,255,255,.06);
+    border-radius:8px; background:rgba(255,255,255,.03); color:rgba(255,255,255,.5);
+    font-size:11px; font-weight:600; cursor:pointer; display:flex;
+    align-items:center; justify-content:center; gap:6px; transition:all .2s;
+  }
+  .vc-invite-btn:hover { background:rgba(245,158,11,.08); color:#f59e0b; border-color:rgba(245,158,11,.2); }
+  .vc-invite-btn:active { transform:scale(0.96); }
+  .vc-invite-btn.copied { background:rgba(34,197,94,.1); border-color:rgba(34,197,94,.3); color:#22c55e; }
+  .vc-invite-btn svg { width:13px; height:13px; }
+  .vc-invite-wrap { padding:0 16px 10px; }
+  .vc-invite-banner {
+    background:rgba(245,158,11,.06); border:1px solid rgba(245,158,11,.15);
+    border-radius:10px; padding:10px 14px; margin-bottom:12px;
+    text-align:center; animation:vc-slideIn .4s cubic-bezier(.16,1,.3,1);
+  }
+  .vc-invite-banner-name { color:#f59e0b; font-weight:700; font-size:13px; }
+  .vc-invite-banner-sub { color:rgba(255,255,255,.45); font-size:11.5px; margin-top:2px; }
+
+  /* ── Ringtone Overlay ── */
+  #vc-ring-overlay {
+    position:fixed; inset:0; z-index:10001;
+    background:rgba(0,0,0,.85); backdrop-filter:blur(12px);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:16px; font-family:'Inter',-apple-system,sans-serif;
+    animation:vc-ring-in .4s cubic-bezier(.16,1,.3,1);
+  }
+  @keyframes vc-ring-in { from { opacity:0; } to { opacity:1; } }
+  .vc-ring-avatar {
+    width:72px; height:72px; border-radius:50%;
+    background:rgba(245,158,11,.12); border:2px solid rgba(245,158,11,.4);
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px; font-weight:800; color:#f59e0b;
+    animation:vc-ring-pulse 1.5s infinite;
+  }
+  @keyframes vc-ring-pulse {
+    0%,100% { box-shadow:0 0 0 0 rgba(245,158,11,.3); }
+    50% { box-shadow:0 0 0 18px rgba(245,158,11,0); }
+  }
+  .vc-ring-label { color:rgba(255,255,255,.35); font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.8px; }
+  .vc-ring-name { color:#fff; font-size:20px; font-weight:700; }
+  .vc-ring-sub { color:rgba(255,255,255,.4); font-size:13px; }
+  .vc-ring-btns { display:flex; gap:16px; margin-top:8px; }
+  .vc-ring-btn {
+    padding:12px 28px; border:none; border-radius:12px;
+    font-size:13px; font-weight:700; cursor:pointer;
+    transition:all .2s cubic-bezier(.34,1.56,.64,1);
+  }
+  .vc-ring-btn:active { transform:scale(0.92); }
+  .vc-ring-btn.join {
+    background:#f59e0b; color:#000;
+    box-shadow:0 4px 20px rgba(245,158,11,.35);
+  }
+  .vc-ring-btn.join:hover { background:#fbbf24; transform:translateY(-2px); }
+  .vc-ring-btn.ignore {
+    background:rgba(255,255,255,.06); color:rgba(255,255,255,.5);
+    border:1px solid rgba(255,255,255,.1);
+  }
+  .vc-ring-btn.ignore:hover { background:rgba(255,255,255,.1); color:#fff; }
   `;
 
   // ── ICONS ─────────────────────────────────────────────────────────────────
@@ -280,6 +437,10 @@
     bell: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/></svg>`,
     clock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
     dnd: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/><line x1="2" y1="2" x2="22" y2="22"/></svg>`,
+    chat: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`,
+    send: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>`,
+    copy: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,
+    link: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`,
   };
 
   // ── MAIN CLASS ────────────────────────────────────────────────────────────
@@ -310,6 +471,20 @@
       this._bar        = null;
       this._noiseCtx   = null;
       this._gateRaf    = null;
+
+      // Chat state
+      this._chatMsgs   = [];
+      this._chatOpen   = false;
+      this._chatUnread = 0;
+
+      // Ring state
+      this._ringOsc    = null;
+      this._ringGain   = null;
+      this._ringCtx    = null;
+      this._ringTimeout = null;
+
+      // Invite state
+      this._inviterName = null;
 
       // Audio constraints for getUserMedia
       this._audioConstraints = {
@@ -350,6 +525,7 @@
 
       this._injectCSS();
       this._buildUI();
+      this._checkInviteLink();
     }
 
     // ── CSS ────────────────────────────────────────────────────────────────
@@ -520,6 +696,7 @@
           </div>
           <button class="vc-x" id="vc-close">✕</button>
         </div>
+        ${this._inviterName ? `<div class="vc-invite-banner"><div class="vc-invite-banner-name">${this._inviterName}</div><div class="vc-invite-banner-sub">${_t('vc_invite_banner')}</div></div>` : ''}
         <div class="vc-body">
           <div class="vc-field">
             <label class="vc-label">${_t('lbl_name')}</label>
@@ -613,6 +790,22 @@
             ${ICONS.bell} DND
           </button>
           <button class="vc-cb leave" id="vc-leave">${ICONS.phone} ${_t('btn_leave')}</button>
+        </div>
+        <div class="vc-invite-wrap">
+          <button class="vc-invite-btn" id="vc-copy-invite">${ICONS.link} ${_t('vc_invite')}</button>
+        </div>
+        <div class="vc-chat-wrap">
+          <button class="vc-chat-toggle" id="vc-chat-toggle">
+            <span>${ICONS.chat} &nbsp;${_t('vc_chat')}</span>
+            ${this._chatUnread > 0 ? `<span class="vc-chat-badge">${this._chatUnread}</span>` : ''}
+          </button>
+          <div class="vc-chat-body${this._chatOpen ? ' open' : ''}" id="vc-chat-body">
+            <div class="vc-msgs" id="vc-msgs">${this._renderChatMsgs()}</div>
+            <div class="vc-chat-input-row">
+              <input class="vc-chat-in" id="vc-chat-in" type="text" placeholder="${_t('vc_chat_ph')}" maxlength="500" autocomplete="off"/>
+              <button class="vc-chat-send" id="vc-chat-send">${ICONS.send}</button>
+            </div>
+          </div>
         </div>
         <div class="vc-sbar"><div class="vc-dot"></div>${_t('bar_conn')}</div>`;
     }
@@ -733,6 +926,23 @@
       if (muteBtn)  muteBtn.addEventListener('click',  () => this._toggleMute());
       if (dndBtn)   dndBtn.addEventListener('click',   () => this._toggleDND());
       if (leaveBtn) leaveBtn.addEventListener('click', () => this._leave());
+
+      // Invite link
+      const inviteBtn = document.getElementById('vc-copy-invite');
+      if (inviteBtn) inviteBtn.addEventListener('click', () => this._copyInviteLink());
+
+      // Chat toggle
+      const chatToggle = document.getElementById('vc-chat-toggle');
+      if (chatToggle) chatToggle.addEventListener('click', () => this._toggleChat());
+
+      // Chat send
+      const chatSend = document.getElementById('vc-chat-send');
+      const chatIn = document.getElementById('vc-chat-in');
+      if (chatSend) chatSend.addEventListener('click', () => this._sendChat());
+      if (chatIn) {
+        chatIn.addEventListener('keydown', e => { if (e.key === 'Enter') this._sendChat(); });
+        chatIn.addEventListener('input', () => this._playSfx('typing', 0.15));
+      }
     }
 
     // ── JOIN ───────────────────────────────────────────────────────────────
@@ -826,6 +1036,12 @@
           if (!this._wakeLock && !this._silentAudio) this._startKeepAlive();
 
           for (const u of existingUsers) await this._createOffer(u.id);
+
+          // Ring other users and clear invite state
+          this.socket.emit('ring_channel');
+          this._inviterName = null;
+          this._chatMsgs = [];
+          this._chatUnread = 0;
         });
 
         this.socket.on('channel_users', ({ users }) => {
@@ -857,6 +1073,48 @@
 
         this.socket.on('speaking_state', ({ from, speaking }) => {
           this._updateAvatar(from, speaking);
+        });
+
+        // ── CHAT MESSAGE ──────────────────────────────────────────────────
+        this.socket.on('chat_message', ({ from, name, text, ts }) => {
+          this._chatMsgs.push({ from, name, text, ts });
+          if (this._chatMsgs.length > 50) this._chatMsgs.shift();
+          // If chat is closed, increment unread
+          if (!this._chatOpen) {
+            this._chatUnread++;
+            const badge = document.querySelector('.vc-chat-badge');
+            const toggle = document.getElementById('vc-chat-toggle');
+            if (toggle) {
+              const badgeEl = toggle.querySelector('.vc-chat-badge');
+              if (badgeEl) { badgeEl.textContent = this._chatUnread; }
+              else { toggle.insertAdjacentHTML('beforeend', `<span class="vc-chat-badge">${this._chatUnread}</span>`); }
+            }
+          }
+          // Append message to DOM
+          const msgsEl = document.getElementById('vc-msgs');
+          if (msgsEl) {
+            const emptyEl = msgsEl.querySelector('.vc-chat-empty');
+            if (emptyEl) emptyEl.remove();
+            const isMe = from === this.myId;
+            const time = new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            msgsEl.insertAdjacentHTML('beforeend', `
+              <div class="vc-msg">
+                <div class="vc-msg-head">
+                  <span class="vc-msg-name${isMe ? ' me' : ''}">${name}</span>
+                  <span class="vc-msg-time">${time}</span>
+                </div>
+                <div class="vc-msg-text">${this._escHtml(text)}</div>
+              </div>`);
+            msgsEl.scrollTop = msgsEl.scrollHeight;
+          }
+          // Play notification sound if not from me
+          if (from !== this.myId) this._playSfx('typing', 0.25);
+        });
+
+        // ── INCOMING RING ─────────────────────────────────────────────────
+        this.socket.on('incoming_ring', ({ from, name }) => {
+          if (this.connected) return; // already in channel
+          this._showRingOverlay(name);
         });
 
         this.socket.on('webrtc_offer', async ({ from, sdp }) => {
@@ -1059,6 +1317,208 @@
       this._cleanup();
       this._bar.classList.remove('show');
       this._render(this._tplLogin());
+    }
+
+    // ── CHAT METHODS ────────────────────────────────────────────────────
+    _renderChatMsgs() {
+      if (this._chatMsgs.length === 0) return `<div class="vc-chat-empty">${_t('vc_chat_empty')}</div>`;
+      return this._chatMsgs.map(m => {
+        const isMe = m.from === this.myId;
+        const time = new Date(m.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return `<div class="vc-msg"><div class="vc-msg-head"><span class="vc-msg-name${isMe ? ' me' : ''}">${m.name}</span><span class="vc-msg-time">${time}</span></div><div class="vc-msg-text">${this._escHtml(m.text)}</div></div>`;
+      }).join('');
+    }
+
+    _toggleChat() {
+      this._chatOpen = !this._chatOpen;
+      const body = document.getElementById('vc-chat-body');
+      if (body) body.classList.toggle('open', this._chatOpen);
+      if (this._chatOpen) {
+        this._chatUnread = 0;
+        const badge = document.querySelector('.vc-chat-badge');
+        if (badge) badge.remove();
+        const msgsEl = document.getElementById('vc-msgs');
+        if (msgsEl) msgsEl.scrollTop = msgsEl.scrollHeight;
+        const input = document.getElementById('vc-chat-in');
+        if (input) setTimeout(() => input.focus(), 100);
+      }
+      this._playSfx(this._chatOpen ? 'toggleOn' : 'toggleOff', 0.3);
+    }
+
+    _sendChat() {
+      const input = document.getElementById('vc-chat-in');
+      if (!input) return;
+      const text = input.value.trim();
+      if (!text || !this.socket) return;
+      this.socket.emit('chat_message', { text });
+      input.value = '';
+      input.focus();
+    }
+
+    _escHtml(str) {
+      const d = document.createElement('div');
+      d.textContent = str;
+      return d.innerHTML;
+    }
+
+    // ── INVITE LINK METHODS ─────────────────────────────────────────────
+    _copyInviteLink() {
+      const url = new URL(window.location.href);
+      url.searchParams.set('vc', '1');
+      url.searchParams.set('from', this.myName);
+      // Clean hash (avoid duplication)
+      const link = url.toString();
+
+      navigator.clipboard.writeText(link).then(() => {
+        const btn = document.getElementById('vc-copy-invite');
+        if (btn) {
+          btn.classList.add('copied');
+          btn.innerHTML = `${ICONS.copy} ${_t('vc_invite_copied')}`;
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.innerHTML = `${ICONS.link} ${_t('vc_invite')}`;
+          }, 2500);
+        }
+        this._playSfx('toggleOn', 0.4);
+      }).catch(() => {
+        // Fallback for non-secure contexts
+        const ta = document.createElement('textarea');
+        ta.value = link;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        this._playSfx('toggleOn', 0.4);
+      });
+    }
+
+    _checkInviteLink() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('vc') === '1') {
+        const from = params.get('from');
+        if (from) this._inviterName = decodeURIComponent(from);
+
+        // Clean URL params
+        const url = new URL(window.location.href);
+        url.searchParams.delete('vc');
+        url.searchParams.delete('from');
+        window.history.replaceState({}, '', url.pathname + url.hash);
+
+        // Auto-open the panel after a short delay
+        setTimeout(() => {
+          this._render(this._tplLogin());
+          this.panel.classList.add('open');
+          this._playSfx('flyin', 0.4, false, 'fly');
+        }, 800);
+      }
+    }
+
+    // ── RINGTONE OVERLAY ────────────────────────────────────────────────
+    _showRingOverlay(callerName) {
+      // Don't show if already showing
+      if (document.getElementById('vc-ring-overlay')) return;
+
+      this._playRingtone();
+
+      const initials = callerName.slice(0, 2).toUpperCase();
+      const overlay = document.createElement('div');
+      overlay.id = 'vc-ring-overlay';
+      overlay.innerHTML = `
+        <div class="vc-ring-label">${_t('vc_ring_title')}</div>
+        <div class="vc-ring-avatar">${initials}</div>
+        <div class="vc-ring-name">${callerName}</div>
+        <div class="vc-ring-sub">${_t('vc_ring_msg')}</div>
+        <div class="vc-ring-btns">
+          <button class="vc-ring-btn join" id="vc-ring-join">${_t('vc_ring_join')}</button>
+          <button class="vc-ring-btn ignore" id="vc-ring-ignore">${_t('vc_ring_ignore')}</button>
+        </div>`;
+      document.body.appendChild(overlay);
+
+      // Auto-dismiss after 20 seconds
+      this._ringTimeout = setTimeout(() => this._dismissRing(), 20000);
+
+      document.getElementById('vc-ring-join').addEventListener('click', () => {
+        this._dismissRing();
+        // Open the panel for the user to join
+        this.panel.classList.add('open');
+        this._playSfx('flyin', 0.4, false, 'fly');
+        // Focus on the password field
+        setTimeout(() => {
+          const passEl = document.getElementById('vc-pass');
+          if (passEl) passEl.focus();
+        }, 200);
+      });
+
+      document.getElementById('vc-ring-ignore').addEventListener('click', () => {
+        this._dismissRing();
+      });
+    }
+
+    _dismissRing() {
+      clearTimeout(this._ringTimeout);
+      this._stopRingtone();
+      const overlay = document.getElementById('vc-ring-overlay');
+      if (overlay) {
+        overlay.style.opacity = '0';
+        overlay.style.transition = 'opacity 0.3s';
+        setTimeout(() => overlay.remove(), 300);
+      }
+    }
+
+    _playRingtone() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        this._ringCtx = ctx;
+        const gain = ctx.createGain();
+        gain.gain.value = 0.15;
+        gain.connect(ctx.destination);
+        this._ringGain = gain;
+
+        // Musical ringtone pattern (ascending notes)
+        const notes = [523.25, 659.25, 783.99, 880]; // C5, E5, G5, A5
+        let noteIndex = 0;
+
+        const playNote = () => {
+          if (!this._ringCtx) return;
+          const osc = ctx.createOscillator();
+          osc.type = 'sine';
+          osc.frequency.value = notes[noteIndex % notes.length];
+
+          const noteGain = ctx.createGain();
+          const t = ctx.currentTime;
+          noteGain.gain.setValueAtTime(0, t);
+          noteGain.gain.linearRampToValueAtTime(0.3, t + 0.05);
+          noteGain.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+
+          osc.connect(noteGain);
+          noteGain.connect(gain);
+          osc.start(t);
+          osc.stop(t + 0.4);
+          noteIndex++;
+        };
+
+        // Play pattern: 4 notes, pause, repeat
+        const playPattern = () => {
+          if (!this._ringCtx) return;
+          noteIndex = 0;
+          for (let i = 0; i < 4; i++) {
+            setTimeout(() => playNote(), i * 200);
+          }
+        };
+
+        playPattern();
+        this._ringInt = setInterval(playPattern, 2000);
+      } catch(e) {}
+    }
+
+    _stopRingtone() {
+      clearInterval(this._ringInt);
+      if (this._ringCtx) {
+        try { this._ringCtx.close(); } catch(e) {}
+        this._ringCtx = null;
+      }
     }
 
     // ── NOISE CANCELLATION PIPELINE ──────────────────────────────────────
