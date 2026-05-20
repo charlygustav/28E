@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
+const https = require('https');
 
 const app = express();
 app.use(cors());
@@ -14,7 +15,27 @@ const io = new Server(server, {
   pingInterval: 25000
 });
 
-const CHANNEL_PASSWORD = process.env.CHANNEL_PASSWORD || 'changeme123';
+let cachedPassword = process.env.CHANNEL_PASSWORD || 'changeme123';
+
+function getFirebasePassword() {
+  return new Promise((resolve) => {
+    https.get('https://yaire-591ca-default-rtdb.firebaseio.com/config/voicePassword.json', (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        try {
+          const pass = JSON.parse(data);
+          if (typeof pass === 'string' && pass.trim().length > 0) {
+            cachedPassword = pass;
+          }
+          resolve(cachedPassword);
+        } catch {
+          resolve(cachedPassword);
+        }
+      });
+    }).on('error', () => resolve(cachedPassword));
+  });
+}
 const MAX_USERS = 4;
 const CHANNEL = 'principal';
 
@@ -44,8 +65,9 @@ io.on('connection', (socket) => {
   console.log(`[~] New socket: ${socket.id}`);
 
   // ── JOIN ──────────────────────────────────────────────────────────────────
-  socket.on('join_channel', ({ password, displayName }) => {
-    if (password !== CHANNEL_PASSWORD) {
+  socket.on('join_channel', async ({ password, displayName }) => {
+    const currentPass = await getFirebasePassword();
+    if (password !== currentPass) {
       return socket.emit('join_error', { message: 'Contraseña incorrecta.' });
     }
     if (users.size >= MAX_USERS) {
