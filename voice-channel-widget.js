@@ -316,19 +316,13 @@
 
   /* ── Chat ── */
   .vc-chat-wrap { border-top:1px solid rgba(255,255,255,.05); }
-  .vc-chat-toggle {
-    width:100%; padding:8px 16px; background:none; border:none;
-    color:rgba(255,255,255,.4); font-size:10.5px; font-weight:700;
-    text-transform:uppercase; letter-spacing:.6px; cursor:pointer;
-    display:flex; align-items:center; justify-content:space-between;
-    transition:color .15s;
-  }
-  .vc-chat-toggle:hover { color:rgba(255,255,255,.6); }
-  .vc-chat-toggle .vc-chat-badge {
-    background:#f59e0b; color:#000; font-size:9px; font-weight:800;
+  .vc-chat-badge-sm {
+    position:absolute; top:-4px; right:-4px;
+    background:#ef4444; color:#fff; font-size:9px; font-weight:800;
     min-width:16px; height:16px; border-radius:8px; display:flex;
-    align-items:center; justify-content:center; padding:0 4px;
+    align-items:center; justify-content:center; padding:0 3px;
     animation:vc-pop .25s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:0 2px 4px rgba(0,0,0,.5);
   }
   .vc-chat-body { display:none; }
   .vc-chat-body.open { display:block; }
@@ -789,16 +783,16 @@
           <button class="vc-cb${this.dnd ? ' dnd' : ''}" id="vc-dnd">
             ${ICONS.bell} DND
           </button>
-          <button class="vc-cb leave" id="vc-leave">${ICONS.phone} ${_t('btn_leave')}</button>
+          <button class="vc-cb" id="vc-chat-toggle" style="position:relative;" title="${_t('vc_chat')}">
+            ${ICONS.chat}
+            ${this._chatUnread > 0 ? `<span class="vc-chat-badge-sm">${this._chatUnread}</span>` : ''}
+          </button>
+          <button class="vc-cb leave" id="vc-leave">${ICONS.phone}</button>
         </div>
         <div class="vc-invite-wrap">
           <button class="vc-invite-btn" id="vc-copy-invite">${ICONS.link} ${_t('vc_invite')}</button>
         </div>
         <div class="vc-chat-wrap">
-          <button class="vc-chat-toggle" id="vc-chat-toggle">
-            <span>${ICONS.chat} &nbsp;${_t('vc_chat')}</span>
-            ${this._chatUnread > 0 ? `<span class="vc-chat-badge">${this._chatUnread}</span>` : ''}
-          </button>
           <div class="vc-chat-body${this._chatOpen ? ' open' : ''}" id="vc-chat-body">
             <div class="vc-msgs" id="vc-msgs">${this._renderChatMsgs()}</div>
             <div class="vc-chat-input-row">
@@ -1077,38 +1071,8 @@
 
         // ── CHAT MESSAGE ──────────────────────────────────────────────────
         this.socket.on('chat_message', ({ from, name, text, ts }) => {
-          this._chatMsgs.push({ from, name, text, ts });
-          if (this._chatMsgs.length > 50) this._chatMsgs.shift();
-          // If chat is closed, increment unread
-          if (!this._chatOpen) {
-            this._chatUnread++;
-            const badge = document.querySelector('.vc-chat-badge');
-            const toggle = document.getElementById('vc-chat-toggle');
-            if (toggle) {
-              const badgeEl = toggle.querySelector('.vc-chat-badge');
-              if (badgeEl) { badgeEl.textContent = this._chatUnread; }
-              else { toggle.insertAdjacentHTML('beforeend', `<span class="vc-chat-badge">${this._chatUnread}</span>`); }
-            }
-          }
-          // Append message to DOM
-          const msgsEl = document.getElementById('vc-msgs');
-          if (msgsEl) {
-            const emptyEl = msgsEl.querySelector('.vc-chat-empty');
-            if (emptyEl) emptyEl.remove();
-            const isMe = from === this.myId;
-            const time = new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            msgsEl.insertAdjacentHTML('beforeend', `
-              <div class="vc-msg">
-                <div class="vc-msg-head">
-                  <span class="vc-msg-name${isMe ? ' me' : ''}">${name}</span>
-                  <span class="vc-msg-time">${time}</span>
-                </div>
-                <div class="vc-msg-text">${this._escHtml(text)}</div>
-              </div>`);
-            msgsEl.scrollTop = msgsEl.scrollHeight;
-          }
-          // Play notification sound if not from me
-          if (from !== this.myId) this._playSfx('typing', 0.25);
+          if (from === this.myId) return; // Ignore self (handled by local echo)
+          this._appendChatMsg(from, name, text, ts);
         });
 
         // ── INCOMING RING ─────────────────────────────────────────────────
@@ -1335,7 +1299,7 @@
       if (body) body.classList.toggle('open', this._chatOpen);
       if (this._chatOpen) {
         this._chatUnread = 0;
-        const badge = document.querySelector('.vc-chat-badge');
+        const badge = document.querySelector('.vc-chat-badge-sm');
         if (badge) badge.remove();
         const msgsEl = document.getElementById('vc-msgs');
         if (msgsEl) msgsEl.scrollTop = msgsEl.scrollHeight;
@@ -1349,10 +1313,51 @@
       const input = document.getElementById('vc-chat-in');
       if (!input) return;
       const text = input.value.trim();
-      if (!text || !this.socket) return;
-      this.socket.emit('chat_message', { text });
+      if (!text) return;
+      if (this.socket) this.socket.emit('chat_message', { text });
+      
+      // Local echo (makes it feel instant, and works even if server doesn't bounce it back yet)
+      this._appendChatMsg(this.myId, this.myName, text, Date.now());
+      
       input.value = '';
       input.focus();
+    }
+
+    _appendChatMsg(from, name, text, ts) {
+      this._chatMsgs.push({ from, name, text, ts });
+      if (this._chatMsgs.length > 50) this._chatMsgs.shift();
+
+      const isMe = from === this.myId;
+
+      // Unread badge logic
+      if (!this._chatOpen && !isMe) {
+        this._chatUnread++;
+        const toggle = document.getElementById('vc-chat-toggle');
+        if (toggle) {
+          const badgeEl = toggle.querySelector('.vc-chat-badge-sm');
+          if (badgeEl) { badgeEl.textContent = this._chatUnread; }
+          else { toggle.insertAdjacentHTML('beforeend', `<span class="vc-chat-badge-sm">${this._chatUnread}</span>`); }
+        }
+      }
+
+      // Append to DOM
+      const msgsEl = document.getElementById('vc-msgs');
+      if (msgsEl) {
+        const emptyEl = msgsEl.querySelector('.vc-chat-empty');
+        if (emptyEl) emptyEl.remove();
+        const time = new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        msgsEl.insertAdjacentHTML('beforeend', `
+          <div class="vc-msg">
+            <div class="vc-msg-head">
+              <span class="vc-msg-name${isMe ? ' me' : ''}">${name}</span>
+              <span class="vc-msg-time">${time}</span>
+            </div>
+            <div class="vc-msg-text">${this._escHtml(text)}</div>
+          </div>`);
+        msgsEl.scrollTop = msgsEl.scrollHeight;
+      }
+
+      if (!isMe) this._playSfx('typing', 0.25);
     }
 
     _escHtml(str) {
