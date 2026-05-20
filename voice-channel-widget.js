@@ -354,7 +354,7 @@
 
   /* ── Typing Indicator ── */
   .vc-chat-typing {
-    padding:4px 16px 8px; color:rgba(245,158,11,.8); font-size:10px; font-style:italic;
+    padding:4px 16px 8px; color:rgba(245,158,11,.8); font-size:10px; font-style:normal;
     animation:vc-slideIn .25s backwards; display:none;
   }
   .vc-chat-typing.show { display:block; }
