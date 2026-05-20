@@ -124,6 +124,16 @@ io.on('connection', (socket) => {
     });
   });
 
+  // ── CHAT TYPING ──────────────────────────────────────────────────────────
+  socket.on('chat_typing', ({ isTyping }) => {
+    const user = users.get(socket.id);
+    if (!user) return;
+    socket.to(CHANNEL).emit('chat_typing', {
+      from: socket.id,
+      name: user.displayName,
+      isTyping
+    });
+  });
   // ── RING CHANNEL (notify others of incoming call) ────────────────────────
   socket.on('ring_channel', () => {
     const user = users.get(socket.id);

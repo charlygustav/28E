@@ -39,9 +39,7 @@
       vc_chat_ph: "Escribe un mensaje…",
       vc_chat_send: "Enviar",
       vc_chat_empty: "Sin mensajes aún",
-      vc_invite: "Copiar link de invitación",
-      vc_invite_copied: "¡Link copiado! ✓",
-      vc_invite_banner: "te invitó a la llamada 💛",
+      vc_typing: "está escribiendo...",
       vc_ring_title: "Llamada entrante",
       vc_ring_msg: "quiere hablar contigo 💛",
       vc_ring_join: "Unirse",
@@ -77,9 +75,7 @@
       vc_chat_ph: "Type a message…",
       vc_chat_send: "Send",
       vc_chat_empty: "No messages yet",
-      vc_invite: "Copy invite link",
-      vc_invite_copied: "Link copied! ✓",
-      vc_invite_banner: "invited you to a call 💛",
+      vc_typing: "is typing...",
       vc_ring_title: "Incoming call",
       vc_ring_msg: "wants to talk to you 💛",
       vc_ring_join: "Join",
@@ -115,9 +111,7 @@
       vc_chat_ph: "Digite uma mensagem…",
       vc_chat_send: "Enviar",
       vc_chat_empty: "Sem mensagens ainda",
-      vc_invite: "Copiar link de convite",
-      vc_invite_copied: "Link copiado! ✓",
-      vc_invite_banner: "te convidou para uma chamada 💛",
+      vc_typing: "está digitando...",
       vc_ring_title: "Chamada recebida",
       vc_ring_msg: "quer falar com você 💛",
       vc_ring_join: "Entrar",
@@ -153,9 +147,7 @@
       vc_chat_ph: "Écris un message…",
       vc_chat_send: "Envoyer",
       vc_chat_empty: "Pas encore de messages",
-      vc_invite: "Copier le lien d'invitation",
-      vc_invite_copied: "Lien copié ! ✓",
-      vc_invite_banner: "t'a invité à un appel 💛",
+      vc_typing: "est en train d'écrire...",
       vc_ring_title: "Appel entrant",
       vc_ring_msg: "veut te parler 💛",
       vc_ring_join: "Rejoindre",
@@ -360,25 +352,12 @@
   .vc-chat-send svg { width:14px; height:14px; }
   .vc-chat-empty { text-align:center; padding:12px 0; color:rgba(255,255,255,.15); font-size:11px; }
 
-  /* ── Invite ── */
-  .vc-invite-btn {
-    width:100%; padding:8px; margin:0; border:1px solid rgba(255,255,255,.06);
-    border-radius:8px; background:rgba(255,255,255,.03); color:rgba(255,255,255,.5);
-    font-size:11px; font-weight:600; cursor:pointer; display:flex;
-    align-items:center; justify-content:center; gap:6px; transition:all .2s;
+  /* ── Typing Indicator ── */
+  .vc-chat-typing {
+    padding:4px 16px 8px; color:rgba(245,158,11,.8); font-size:10px; font-style:italic;
+    animation:vc-slideIn .25s backwards; display:none;
   }
-  .vc-invite-btn:hover { background:rgba(245,158,11,.08); color:#f59e0b; border-color:rgba(245,158,11,.2); }
-  .vc-invite-btn:active { transform:scale(0.96); }
-  .vc-invite-btn.copied { background:rgba(34,197,94,.1); border-color:rgba(34,197,94,.3); color:#22c55e; }
-  .vc-invite-btn svg { width:13px; height:13px; }
-  .vc-invite-wrap { padding:0 16px 10px; }
-  .vc-invite-banner {
-    background:rgba(245,158,11,.06); border:1px solid rgba(245,158,11,.15);
-    border-radius:10px; padding:10px 14px; margin-bottom:12px;
-    text-align:center; animation:vc-slideIn .4s cubic-bezier(.16,1,.3,1);
-  }
-  .vc-invite-banner-name { color:#f59e0b; font-weight:700; font-size:13px; }
-  .vc-invite-banner-sub { color:rgba(255,255,255,.45); font-size:11.5px; margin-top:2px; }
+  .vc-chat-typing.show { display:block; }
 
   /* ── Ringtone Overlay ── */
   #vc-ring-overlay {
@@ -477,8 +456,8 @@
       this._ringCtx    = null;
       this._ringTimeout = null;
 
-      // Invite state
-      this._inviterName = null;
+      // Typing state
+      this._isTyping = false;
 
       // Audio constraints for getUserMedia
       this._audioConstraints = {
@@ -518,8 +497,8 @@
       };
 
       this._injectCSS();
+      this._injectCSS();
       this._buildUI();
-      this._checkInviteLink();
     }
 
     // ── CSS ────────────────────────────────────────────────────────────────
@@ -690,7 +669,6 @@
           </div>
           <button class="vc-x" id="vc-close">✕</button>
         </div>
-        ${this._inviterName ? `<div class="vc-invite-banner"><div class="vc-invite-banner-name">${this._inviterName}</div><div class="vc-invite-banner-sub">${_t('vc_invite_banner')}</div></div>` : ''}
         <div class="vc-body">
           <div class="vc-field">
             <label class="vc-label">${_t('lbl_name')}</label>
@@ -789,12 +767,10 @@
           </button>
           <button class="vc-cb leave" id="vc-leave">${ICONS.phone}</button>
         </div>
-        <div class="vc-invite-wrap">
-          <button class="vc-invite-btn" id="vc-copy-invite">${ICONS.link} ${_t('vc_invite')}</button>
-        </div>
         <div class="vc-chat-wrap">
           <div class="vc-chat-body${this._chatOpen ? ' open' : ''}" id="vc-chat-body">
             <div class="vc-msgs" id="vc-msgs">${this._renderChatMsgs()}</div>
+            <div class="vc-chat-typing" id="vc-chat-typing"></div>
             <div class="vc-chat-input-row">
               <input class="vc-chat-in" id="vc-chat-in" type="text" placeholder="${_t('vc_chat_ph')}" maxlength="500" autocomplete="off"/>
               <button class="vc-chat-send" id="vc-chat-send">${ICONS.send}</button>
@@ -921,21 +897,36 @@
       if (dndBtn)   dndBtn.addEventListener('click',   () => this._toggleDND());
       if (leaveBtn) leaveBtn.addEventListener('click', () => this._leave());
 
-      // Invite link
-      const inviteBtn = document.getElementById('vc-copy-invite');
-      if (inviteBtn) inviteBtn.addEventListener('click', () => this._copyInviteLink());
-
       // Chat toggle
       const chatToggle = document.getElementById('vc-chat-toggle');
       if (chatToggle) chatToggle.addEventListener('click', () => this._toggleChat());
 
-      // Chat send
+      // Chat send & typing
       const chatSend = document.getElementById('vc-chat-send');
       const chatIn = document.getElementById('vc-chat-in');
       if (chatSend) chatSend.addEventListener('click', () => this._sendChat());
       if (chatIn) {
-        chatIn.addEventListener('keydown', e => { if (e.key === 'Enter') this._sendChat(); });
-        chatIn.addEventListener('input', () => this._playSfx('typing', 0.15));
+        let typingTimer;
+        chatIn.addEventListener('input', () => {
+          this._playSfx('typing', 0.15);
+          if (this.socket && !this._isTyping) {
+            this._isTyping = true;
+            this.socket.emit('chat_typing', { isTyping: true });
+          }
+          clearTimeout(typingTimer);
+          typingTimer = setTimeout(() => {
+            this._isTyping = false;
+            if (this.socket) this.socket.emit('chat_typing', { isTyping: false });
+          }, 1500);
+        });
+        chatIn.addEventListener('keydown', e => { 
+          if (e.key === 'Enter') {
+            this._sendChat();
+            clearTimeout(typingTimer);
+            this._isTyping = false;
+            if (this.socket) this.socket.emit('chat_typing', { isTyping: false });
+          }
+        });
       }
     }
 
@@ -1073,6 +1064,23 @@
         this.socket.on('chat_message', ({ from, name, text, ts }) => {
           if (from === this.myId) return; // Ignore self (handled by local echo)
           this._appendChatMsg(from, name, text, ts);
+        });
+
+        // ── CHAT TYPING ───────────────────────────────────────────────────
+        this.socket.on('chat_typing', ({ from, name, isTyping }) => {
+          if (from === this.myId) return;
+          const typingEl = document.getElementById('vc-chat-typing');
+          if (typingEl) {
+            if (isTyping) {
+              typingEl.textContent = `${name} ${_t('vc_typing')}`;
+              typingEl.classList.add('show');
+              // Auto-scroll to show typing indicator if at bottom
+              const msgsEl = document.getElementById('vc-msgs');
+              if (msgsEl) msgsEl.scrollTop = msgsEl.scrollHeight;
+            } else {
+              typingEl.classList.remove('show');
+            }
+          }
         });
 
         // ── INCOMING RING ─────────────────────────────────────────────────
@@ -1364,60 +1372,6 @@
       const d = document.createElement('div');
       d.textContent = str;
       return d.innerHTML;
-    }
-
-    // ── INVITE LINK METHODS ─────────────────────────────────────────────
-    _copyInviteLink() {
-      const url = new URL(window.location.href);
-      url.searchParams.set('vc', '1');
-      url.searchParams.set('from', this.myName);
-      // Clean hash (avoid duplication)
-      const link = url.toString();
-
-      navigator.clipboard.writeText(link).then(() => {
-        const btn = document.getElementById('vc-copy-invite');
-        if (btn) {
-          btn.classList.add('copied');
-          btn.innerHTML = `${ICONS.copy} ${_t('vc_invite_copied')}`;
-          setTimeout(() => {
-            btn.classList.remove('copied');
-            btn.innerHTML = `${ICONS.link} ${_t('vc_invite')}`;
-          }, 2500);
-        }
-        this._playSfx('toggleOn', 0.4);
-      }).catch(() => {
-        // Fallback for non-secure contexts
-        const ta = document.createElement('textarea');
-        ta.value = link;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        ta.remove();
-        this._playSfx('toggleOn', 0.4);
-      });
-    }
-
-    _checkInviteLink() {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('vc') === '1') {
-        const from = params.get('from');
-        if (from) this._inviterName = decodeURIComponent(from);
-
-        // Clean URL params
-        const url = new URL(window.location.href);
-        url.searchParams.delete('vc');
-        url.searchParams.delete('from');
-        window.history.replaceState({}, '', url.pathname + url.hash);
-
-        // Auto-open the panel after a short delay
-        setTimeout(() => {
-          this._render(this._tplLogin());
-          this.panel.classList.add('open');
-          this._playSfx('flyin', 0.4, false, 'fly');
-        }, 800);
-      }
     }
 
     // ── RINGTONE OVERLAY ────────────────────────────────────────────────
