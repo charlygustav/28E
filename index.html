@@ -157,6 +157,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js" crossorigin="anonymous" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js" defer></script>
     <style>
         /* Fonts loaded via preload link in <head> for non-blocking rendering */
 
@@ -5982,559 +5983,143 @@
             </style>
         </section>
 
+        <!-- Memorial -->
         <!-- ═══════════════════════════════════════════════ -->
-        <!-- SECTION: CENTRO DE SANACIÓN (HEALING CENTER)   -->
+        <!-- SECTION: EL REFUGIO (RESOLUCIÓN DE CONFLICTOS) -->
         <!-- ═══════════════════════════════════════════════ -->
         <style>
-            @keyframes breatheIn {
-                0% {
-                    transform: scale(1);
-                    opacity: .5
-                }
-
-                100% {
-                    transform: scale(1.5);
-                    opacity: 1
-                }
-            }
-
-            @keyframes breatheOut {
-                0% {
-                    transform: scale(1.5);
-                    opacity: 1
-                }
-
-                100% {
-                    transform: scale(1);
-                    opacity: .5
-                }
-            }
-
-            @keyframes kintsugiGlow {
-
-                0%,
-                100% {
-                    filter: drop-shadow(0 0 8px rgba(251, 191, 36, .3))
-                }
-
-                50% {
-                    filter: drop-shadow(0 0 20px rgba(251, 191, 36, .6))
-                }
-            }
-
-            @keyframes healPulse {
-
-                0%,
-                100% {
-                    transform: scale(1)
-                }
-
-                50% {
-                    transform: scale(1.04)
-                }
-            }
-
-            .heal-breathe-circle {
-                width: 180px;
-                height: 180px;
-                border-radius: 50%;
-                border: 3px solid rgba(251, 191, 36, .3);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: all .3s;
-                cursor: pointer;
-                padding: 1rem;
-                text-align: center;
-            }
-
-            @media (max-width: 640px) {
-                .heal-breathe-circle>span {
-                    font-size: 0.85rem !important;
-                    line-height: 1.3;
-                }
-            }
-
-            .heal-breathe-circle.inhale {
-                animation: breatheIn 4s ease-in-out forwards;
-                background: radial-gradient(circle, rgba(251, 191, 36, .15), transparent 70%);
-            }
-
-            .heal-breathe-circle.exhale {
-                animation: breatheOut 4s ease-in-out forwards;
-                background: radial-gradient(circle, rgba(236, 72, 153, .1), transparent 70%);
-            }
-
-            .heal-step {
-                display: none;
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            .heal-step.active {
-                display: block;
-                animation: healStepIn .5s ease forwards;
-            }
-
-            @keyframes healStepIn {
-                to {
-                    opacity: 1;
-                    transform: translateY(0)
-                }
-            }
-
-            .heal-card {
-                background: white;
-                border: 1px solid #e4e4e7;
-                border-radius: 1.25rem;
-                padding: 1.25rem;
-                transition: all .3s ease;
-                cursor: pointer;
-            }
-
-            .dark .heal-card {
-                background: #18181b;
-                border-color: #3f3f46;
-            }
-
-            .heal-card:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 25px rgba(0, 0, 0, .08);
-            }
-
-            .heal-card.checked {
-                border-color: #f59e0b;
-                background: linear-gradient(135deg, rgba(251, 191, 36, .05), rgba(236, 72, 153, .03));
-            }
-
-            .dark .heal-card.checked {
-                border-color: #f59e0b;
-                background: linear-gradient(135deg, rgba(251, 191, 36, .1), rgba(236, 72, 153, .05));
-            }
-
-            .heal-card .heal-check {
-                width: 24px;
-                height: 24px;
-                border-radius: 50%;
-                border: 2px solid #d4d4d8;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: all .3s;
-                flex-shrink: 0;
-            }
-
-            .dark .heal-card .heal-check {
-                border-color: #52525b;
-            }
-
-            .heal-card.checked .heal-check {
-                background: linear-gradient(135deg, #f59e0b, #ec4899);
-                border-color: transparent;
-            }
-
-            .heal-pact-card {
-                background: white;
-                border: 2px dashed #d4d4d8;
-                border-radius: 1.25rem;
-                padding: 1.25rem;
-                transition: all .4s ease;
-                cursor: pointer;
-            }
-
-            .dark .heal-pact-card {
-                background: #18181b;
-                border-color: #3f3f46;
-            }
-
-            .heal-pact-card.signed {
-                border-style: solid;
-                border-color: #10b981;
-                background: linear-gradient(135deg, rgba(16, 185, 129, .05), rgba(5, 150, 105, .03));
-            }
-
-            .dark .heal-pact-card.signed {
-                background: linear-gradient(135deg, rgba(16, 185, 129, .1), rgba(5, 150, 105, .05));
-            }
-
-            .kintsugi-heart {
-                animation: kintsugiGlow 3s ease-in-out infinite, healPulse 2s ease-in-out infinite;
-            }
-
-            .heal-progress-segment {
-                height: 6px;
-                border-radius: 9999px;
-                background: #e4e4e7;
+            #el-refugio {
+                position: relative;
                 overflow: hidden;
-                flex: 1;
             }
-
-            .dark .heal-progress-segment {
-                background: #27272a;
+            .refuge-step {
+                position: absolute;
+                top: 0; left: 0; width: 100%; height: 100%;
+                display: flex; flex-direction: column;
+                align-items: center; justify-content: center;
+                opacity: 0; pointer-events: none;
+                transition: opacity 0.8s ease;
             }
-
-            .heal-progress-segment .fill {
-                height: 100%;
-                border-radius: 9999px;
-                background: linear-gradient(90deg, #f59e0b, #ec4899);
-                width: 0%;
-                transition: width .6s ease;
+            .refuge-step.active {
+                opacity: 1; pointer-events: auto; z-index: 10;
+            }
+            /* Step 1: Fog Canvas */
+            #refuge-fog-canvas {
+                cursor: crosshair;
+                touch-action: none;
+                border-radius: 1rem;
+            }
+            /* Step 2: Breathing Orb */
+            .refuge-orb {
+                width: 150px; height: 150px;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(244,63,94,0.8) 0%, rgba(225,29,72,0) 70%);
+                box-shadow: 0 0 40px rgba(244,63,94,0.4);
+                display: flex; align-items: center; justify-content: center;
+                cursor: pointer;
+                user-select: none;
+                touch-action: none;
+            }
+            /* Step 3: Dial */
+            .refuge-dial-container {
+                position: relative;
+                width: 200px; height: 200px;
+                border-radius: 50%;
+                border: 2px solid rgba(255,255,255,0.1);
+                display: flex; align-items: center; justify-content: center;
+                background: repeating-conic-gradient(from 0deg, transparent 0deg 10deg, rgba(255,255,255,0.05) 10deg 11deg);
+            }
+            .refuge-dial {
+                width: 140px; height: 140px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #27272a, #18181b);
+                box-shadow: inset 0 2px 4px rgba(255,255,255,0.1), 0 10px 20px rgba(0,0,0,0.5);
+                display: flex; align-items: center; justify-content: center;
+                cursor: grab;
+                touch-action: none;
+            }
+            .refuge-dial-indicator {
+                position: absolute; top: 10px; width: 6px; height: 20px;
+                background: #f43f5e; border-radius: 4px;
+                box-shadow: 0 0 10px #f43f5e;
+            }
+            .refuge-static-overlay {
+                position: absolute; inset: 0;
+                background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+                opacity: 0.2;
+                pointer-events: none;
+                mix-blend-mode: overlay;
+                transition: opacity 0.5s ease;
             }
         </style>
+        
+        <section id="el-refugio" class="cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 scroll-mt-20 relative min-h-[600px] flex items-center justify-center bg-[#050505]">
+            <div class="absolute top-10 left-0 w-full text-center z-20">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-50 dark:bg-rose-900/20 border border-rose-200/60 dark:border-rose-800/30 text-xs font-bold uppercase tracking-widest text-rose-600 dark:text-rose-400 mb-2">
+                    <i class="ph-fill ph-heart-break"></i> El Refugio
+                </span>
+                <h3 class="text-3xl font-extrabold text-white" id="refuge-header-title">Despeja el Ruido</h3>
+            </div>
 
-        <section id="sanacion"
-            class="cv-section cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 scroll-mt-20">
-            <div class="max-w-3xl mx-auto px-6">
-
-                <!-- Header -->
-                <div class="text-center mb-12">
-                    <span
-                        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-50 dark:bg-amber-900/20 border border-amber-200/60 dark:border-amber-800/30 text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 mb-4"
-                        data-i18n="heal_badge">💊 Centro de Sanación</span>
-                    <h3 class="text-3xl md:text-5xl font-extrabold mb-4 text-zinc-900 dark:text-white"
-                        data-i18n="heal_title">Reparar con Oro</h3>
-                    <p class="text-zinc-500 dark:text-zinc-400 text-base md:text-lg max-w-xl mx-auto leading-relaxed"
-                        data-i18n="heal_subtitle">En Japón, el Kintsugi repara lo roto con oro, haciéndolo más bello que
-                        antes. Así quiero tratar cada herida entre nosotros.</p>
+            <!-- Step 1: Fog -->
+            <div class="refuge-step active" id="refuge-step-1">
+                <p class="text-zinc-400 mb-6 font-serif italic text-center px-4">Toda discusión empaña la vista. Usa tu dedo para limpiar el cristal.</p>
+                <div class="relative w-[300px] h-[300px] rounded-2xl overflow-hidden shadow-2xl border border-white/10" id="refuge-fog-container">
+                    <!-- The image behind the fog -->
+                    <img src="https://i.ibb.co/yByRfq5y/IMG-20260125-WA0097.jpg" alt="Us" class="absolute inset-0 w-full h-full object-cover">
+                    <canvas id="refuge-fog-canvas" width="300" height="300" class="absolute inset-0 w-full h-full"></canvas>
                 </div>
+                <button id="refuge-btn-1" class="mt-8 px-6 py-3 rounded-full bg-rose-500 hover:bg-rose-600 text-white font-bold transition-all opacity-0 translate-y-4 pointer-events-none" onclick="refugeGoStep(2)">Continuar <i class="ph-bold ph-arrow-right ml-1"></i></button>
+            </div>
 
-                <!-- Kintsugi Heart + Progress -->
-                <div class="flex flex-col items-center mb-10">
-                    <svg id="kintsugi-svg" class="kintsugi-heart w-32 h-32 mb-4" viewBox="0 0 100 100">
-                        <defs>
-                            <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#f43f5e" />
-                                <stop offset="100%" stop-color="#ec4899" />
-                            </linearGradient>
-                            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#fbbf24" />
-                                <stop offset="100%" stop-color="#f59e0b" />
-                            </linearGradient>
-                        </defs>
-                        <path
-                            d="M50 88 C25 65, 5 50, 5 30 C5 15, 18 5, 30 5 C38 5, 45 10, 50 20 C55 10, 62 5, 70 5 C82 5, 95 15, 95 30 C95 50, 75 65, 50 88Z"
-                            fill="url(#heartGrad)" opacity=".85" />
-                        <!-- Cracks that become gold -->
-                        <line id="crack1" x1="35" y1="25" x2="50" y2="55" stroke="#52525b" stroke-width="1.5"
-                            stroke-linecap="round" opacity=".5" />
-                        <line id="crack2" x1="65" y1="25" x2="50" y2="55" stroke="#52525b" stroke-width="1.5"
-                            stroke-linecap="round" opacity=".5" />
-                        <line id="crack3" x1="30" y1="50" x2="50" y2="70" stroke="#52525b" stroke-width="1.5"
-                            stroke-linecap="round" opacity=".5" />
-                        <line id="crack4" x1="70" y1="50" x2="50" y2="70" stroke="#52525b" stroke-width="1.5"
-                            stroke-linecap="round" opacity=".5" />
-                    </svg>
-                    <p class="text-sm font-bold text-zinc-400 mb-3" data-i18n="heal_progress_label">Progreso de sanación
-                    </p>
-                    <div class="flex gap-2 w-full max-w-xs">
-                        <div class="heal-progress-segment">
-                            <div class="fill" id="heal-seg-1"></div>
-                        </div>
-                        <div class="heal-progress-segment">
-                            <div class="fill" id="heal-seg-2"></div>
-                        </div>
-                        <div class="heal-progress-segment">
-                            <div class="fill" id="heal-seg-3"></div>
-                        </div>
-                        <div class="heal-progress-segment">
-                            <div class="fill" id="heal-seg-4"></div>
-                        </div>
-                        <div class="heal-progress-segment">
-                            <div class="fill" id="heal-seg-5"></div>
-                        </div>
+            <!-- Step 2: Breathe -->
+            <div class="refuge-step" id="refuge-step-2">
+                <p class="text-zinc-400 mb-10 font-serif italic text-center px-4 max-w-md">Mantén presionado el centro y respira conmigo sin soltar.</p>
+                <div class="relative">
+                    <div id="refuge-orb-pulse" class="absolute inset-0 rounded-full border border-rose-500/30 opacity-0"></div>
+                    <div class="refuge-orb" id="refuge-orb">
+                        <span id="refuge-orb-text" class="text-white font-bold tracking-widest uppercase text-xs">Presiona</span>
                     </div>
                 </div>
+                <div class="mt-8 text-center">
+                    <p id="refuge-breathe-count" class="text-zinc-500 font-mono text-sm uppercase tracking-widest">0 / 3 Ciclos</p>
+                    <button id="refuge-btn-2" class="mt-4 px-6 py-3 rounded-full bg-rose-500 hover:bg-rose-600 text-white font-bold transition-all opacity-0 translate-y-4 pointer-events-none" onclick="refugeGoStep(3)">Escuchar <i class="ph-bold ph-headphones ml-1"></i></button>
+                </div>
+            </div>
 
-                <!-- ═══ STEP 1: BREATHE ═══ -->
-                <div class="heal-step active" id="heal-step-1">
-                    <div class="text-center mb-8">
-                        <span class="text-xs font-bold uppercase tracking-widest text-amber-500 mb-2 block"
-                            data-i18n="heal_s1_label">Paso 1 de 5</span>
-                        <h4 class="text-2xl font-extrabold text-zinc-900 dark:text-white mb-2"
-                            data-i18n="heal_s1_title">🫁 Respira Conmigo</h4>
-                        <p class="text-sm text-zinc-500 dark:text-zinc-400" data-i18n="heal_s1_sub">Antes de hablar,
-                            calmemos el corazón. Sigue el ritmo.</p>
-                    </div>
-                    <div class="flex flex-col items-center gap-6">
-                        <div class="heal-breathe-circle" id="breathe-circle">
-                            <span class="text-lg font-bold text-amber-500" id="breathe-text"
-                                data-i18n="heal_breathe_ready">Toca para empezar</span>
+            <!-- Step 3: Dial -->
+            <div class="refuge-step" id="refuge-step-3">
+                <div class="refuge-static-overlay" id="refuge-static"></div>
+                <div class="text-center z-10 w-full max-w-md px-6">
+                    <div id="refuge-dial-wrapper" class="flex flex-col items-center mb-8">
+                        <p class="text-zinc-400 mb-8 font-serif italic">Nuestras frecuencias están desajustadas. Gira el dial hasta sintonizarnos.</p>
+                        <div class="refuge-dial-container">
+                            <div class="refuge-dial" id="refuge-dial">
+                                <div class="refuge-dial-indicator"></div>
+                                <i class="ph-fill ph-music-note text-4xl text-zinc-600"></i>
+                            </div>
                         </div>
-                        <p class="text-xs text-zinc-400" id="breathe-counter" data-i18n="heal_breathe_count">0 de 3
-                            ciclos</p>
-                        <button
-                            class="px-6 py-3 rounded-full bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-amber-500/20"
-                            id="breathe-next-btn" disabled onclick="goHealStep(2)" data-i18n="heal_continue">Continuar
-                            →</button>
+                        <p id="refuge-freq-text" class="text-rose-500 font-mono mt-6 text-xl tracking-widest">10.0 MHz</p>
+                    </div>
+
+                    <!-- Final Reward -->
+                    <div id="refuge-reward" class="hidden flex-col items-center bg-zinc-900/90 backdrop-blur-md p-8 rounded-3xl border border-rose-500/30 shadow-[0_0_40px_rgba(244,63,94,0.15)] relative overflow-hidden transform transition-all duration-700 opacity-0 translate-y-10">
+                        <i class="ph-fill ph-quotes text-4xl text-rose-500/20 absolute top-4 left-4"></i>
+                        <h4 id="refuge-reward-title" class="text-2xl font-black text-white mb-4 relative z-10 text-center">...</h4>
+                        <p id="refuge-reward-text" class="text-zinc-300 font-serif italic mb-6 relative z-10 leading-relaxed text-center">...</p>
+                        
+                        <div class="w-full bg-black/50 rounded-2xl p-4 border border-white/5 relative z-10">
+                            <audio id="refuge-audio-player" controls class="w-full h-10 custom-audio-player">
+                                <source src="" type="audio/mpeg" id="refuge-audio-src">
+                                Tu navegador no soporta el audio.
+                            </audio>
+                        </div>
+                        
+                        <button class="mt-6 px-6 py-2 rounded-full border border-zinc-700 hover:bg-zinc-800 text-zinc-400 text-sm transition-colors" onclick="refugeReset()">Volver al inicio</button>
                     </div>
                 </div>
-
-                <!-- ═══ STEP 2: ACKNOWLEDGE ═══ -->
-                <div class="heal-step" id="heal-step-2">
-                    <div class="text-center mb-8">
-                        <span class="text-xs font-bold uppercase tracking-widest text-amber-500 mb-2 block"
-                            data-i18n="heal_s2_label">Paso 2 de 5</span>
-                        <h4 class="text-2xl font-extrabold text-zinc-900 dark:text-white mb-2"
-                            data-i18n="heal_s2_title">🪞 Reconozco que...</h4>
-                        <p class="text-sm text-zinc-500 dark:text-zinc-400" data-i18n="heal_s2_sub">No busco excusas.
-                            Reconozco mis errores con honestidad.</p>
-                    </div>
-                    <div class="space-y-3" id="heal-ack-cards">
-                        <div class="heal-card flex items-start gap-4" onclick="toggleHealCard(this)">
-                            <div class="heal-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                                    stroke="white" stroke-width="3" stroke-linecap="round">
-                                    <polyline points="20 6 9 17 4 12" />
-                                </svg></div>
-                            <div>
-                                <p class="font-bold text-sm text-zinc-900 dark:text-white" data-i18n="heal_ack1_t">A
-                                    veces no escucho como debería</p>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1" data-i18n="heal_ack1_d">Prometo
-                                    poner atención real, no solo oír, sino escucharte con el alma.</p>
-                            </div>
-                        </div>
-                        <div class="heal-card flex items-start gap-4" onclick="toggleHealCard(this)">
-                            <div class="heal-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                                    stroke="white" stroke-width="3" stroke-linecap="round">
-                                    <polyline points="20 6 9 17 4 12" />
-                                </svg></div>
-                            <div>
-                                <p class="font-bold text-sm text-zinc-900 dark:text-white" data-i18n="heal_ack2_t">Mis
-                                    silencios a veces lastiman</p>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1" data-i18n="heal_ack2_d">Cuando
-                                    me callo no es porque no me importe. Es porque a veces no sé cómo expresarlo.</p>
-                            </div>
-                        </div>
-                        <div class="heal-card flex items-start gap-4" onclick="toggleHealCard(this)">
-                            <div class="heal-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                                    stroke="white" stroke-width="3" stroke-linecap="round">
-                                    <polyline points="20 6 9 17 4 12" />
-                                </svg></div>
-                            <div>
-                                <p class="font-bold text-sm text-zinc-900 dark:text-white" data-i18n="heal_ack3_t">Puedo
-                                    ser terco cuando discutimos</p>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1" data-i18n="heal_ack3_d">
-                                    Reconozco que a veces me aferro a tener la razón en vez de buscar la paz.</p>
-                            </div>
-                        </div>
-                        <div class="heal-card flex items-start gap-4" onclick="toggleHealCard(this)">
-                            <div class="heal-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                                    stroke="white" stroke-width="3" stroke-linecap="round">
-                                    <polyline points="20 6 9 17 4 12" />
-                                </svg></div>
-                            <div>
-                                <p class="font-bold text-sm text-zinc-900 dark:text-white" data-i18n="heal_ack4_t">La
-                                    distancia amplifica mis errores</p>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1" data-i18n="heal_ack4_d">Lo que
-                                    en persona se arregla con un abrazo, por pantalla se convierte en días de angustia.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex justify-between mt-6">
-                        <button
-                            class="px-5 py-2.5 rounded-full border border-zinc-200 dark:border-zinc-700 text-sm font-bold text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 transition-all"
-                            onclick="goHealStep(1)" data-i18n="heal_back">← Atrás</button>
-                        <button
-                            class="px-6 py-3 rounded-full bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-amber-500/20"
-                            id="heal-ack-next" disabled onclick="goHealStep(3)" data-i18n="heal_continue">Continuar
-                            →</button>
-                    </div>
-                </div>
-
-                <!-- ═══ STEP 3: LISTEN ═══ -->
-                <div class="heal-step" id="heal-step-3">
-                    <div class="text-center mb-8">
-                        <span class="text-xs font-bold uppercase tracking-widest text-amber-500 mb-2 block"
-                            data-i18n="heal_s3_label">Paso 3 de 5</span>
-                        <h4 class="text-2xl font-extrabold text-zinc-900 dark:text-white mb-2"
-                            data-i18n="heal_s3_title">👂 Te Escucho</h4>
-                        <p class="text-sm text-zinc-500 dark:text-zinc-400" data-i18n="heal_s3_sub">Intento ponerme en
-                            tu lugar y sentir lo que tú sientes.</p>
-                    </div>
-                    <div
-                        class="bg-gradient-to-br from-rose-50 to-amber-50 dark:from-rose-900/10 dark:to-amber-900/10 rounded-2xl p-6 md:p-8 border border-rose-200/40 dark:border-rose-800/30">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div
-                                class="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center text-lg">
-                                💭</div>
-                            <div>
-                                <p class="font-bold text-sm text-rose-700 dark:text-rose-300"
-                                    data-i18n="heal_listen_from">Lo que creo que sientes</p>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-400" data-i18n="heal_listen_pers">Desde
-                                    tu perspectiva</p>
-                            </div>
-                        </div>
-                        <div class="space-y-4">
-                            <p class="text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed font-serif italic"
-                                id="heal-listen-text" data-i18n="heal_listen_1">"Sé que cuando te quedas en silencio yo
-                                siento que no te importo, aunque sé que no es así. Sé que a veces necesito que me digas
-                                las cosas en el momento, no después. Sé que la distancia hace todo más difícil y que
-                                ambos estamos aprendiendo."</p>
-                            <p class="text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed font-serif italic"
-                                data-i18n="heal_listen_2">"Solo quiero sentirme segura. Saber que cuando hablo, me
-                                escuchas de verdad. Que cuando algo me duele, no lo minimizas. Que estoy en el mismo
-                                equipo que tú."</p>
-                        </div>
-                    </div>
-                    <div
-                        class="mt-6 p-4 rounded-xl bg-white dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-700">
-                        <p class="text-xs font-bold uppercase tracking-widest text-amber-500 mb-2"
-                            data-i18n="heal_temp_label">Temperatura emocional</p>
-                        <div class="flex items-center gap-3">
-                            <span class="text-lg">🔥</span>
-                            <div class="flex-1 h-3 rounded-full bg-zinc-200 dark:bg-zinc-700 overflow-hidden">
-                                <div class="h-full rounded-full transition-all duration-1000" id="heal-temp-bar"
-                                    style="width:80%; background:linear-gradient(90deg,#10b981,#f59e0b,#f43f5e);"></div>
-                            </div>
-                            <span class="text-lg">❄️</span>
-                        </div>
-                        <p class="text-center text-xs font-bold text-amber-500 mt-2" id="heal-temp-text"
-                            data-i18n="heal_temp_warm">Tibio — bajando la guardia</p>
-                    </div>
-                    <div class="flex justify-between mt-6">
-                        <button
-                            class="px-5 py-2.5 rounded-full border border-zinc-200 dark:border-zinc-700 text-sm font-bold text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 transition-all"
-                            onclick="goHealStep(2)" data-i18n="heal_back">← Atrás</button>
-                        <button
-                            class="px-6 py-3 rounded-full bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm transition-all shadow-lg shadow-amber-500/20"
-                            onclick="goHealStep(4)" data-i18n="heal_continue">Continuar →</button>
-                    </div>
-                </div>
-
-                <!-- ═══ STEP 4: PACT ═══ -->
-                <div class="heal-step" id="heal-step-4">
-                    <div class="text-center mb-8">
-                        <span class="text-xs font-bold uppercase tracking-widest text-amber-500 mb-2 block"
-                            data-i18n="heal_s4_label">Paso 4 de 5</span>
-                        <h4 class="text-2xl font-extrabold text-zinc-900 dark:text-white mb-2"
-                            data-i18n="heal_s4_title">🤝 Nuestro Pacto</h4>
-                        <p class="text-sm text-zinc-500 dark:text-zinc-400" data-i18n="heal_s4_sub">Compromisos reales.
-                            Firma cada uno para sellar la promesa.</p>
-                    </div>
-                    <div class="space-y-3" id="heal-pact-cards">
-                        <div class="heal-pact-card flex items-start gap-4" onclick="signPact(this)">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-xl flex-shrink-0">
-                                🗣️</div>
-                            <div class="flex-1">
-                                <p class="font-bold text-sm text-zinc-900 dark:text-white" data-i18n="heal_pact1_t">
-                                    Hablar antes de explotar</p>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1" data-i18n="heal_pact1_d">Si
-                                    algo me molesta, lo digo con calma en el momento. No acumulo.</p>
-                            </div>
-                            <span class="text-xs font-bold text-zinc-400 dark:text-zinc-600 pact-status"
-                                data-i18n="heal_pact_pending">Pendiente</span>
-                        </div>
-                        <div class="heal-pact-card flex items-start gap-4" onclick="signPact(this)">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-xl flex-shrink-0">
-                                ⏸️</div>
-                            <div class="flex-1">
-                                <p class="font-bold text-sm text-zinc-900 dark:text-white" data-i18n="heal_pact2_t">
-                                    Pedir pausa, nunca huir</p>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1" data-i18n="heal_pact2_d">Si
-                                    necesito espacio, lo pido. Pero siempre regreso a resolver.</p>
-                            </div>
-                            <span class="text-xs font-bold text-zinc-400 dark:text-zinc-600 pact-status"
-                                data-i18n="heal_pact_pending">Pendiente</span>
-                        </div>
-                        <div class="heal-pact-card flex items-start gap-4" onclick="signPact(this)">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-xl flex-shrink-0">
-                                🫂</div>
-                            <div class="flex-1">
-                                <p class="font-bold text-sm text-zinc-900 dark:text-white" data-i18n="heal_pact3_t">El
-                                    problema vs. nosotros</p>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1" data-i18n="heal_pact3_d">Nunca
-                                    somos tú contra mí. Siempre es nosotros contra el problema.</p>
-                            </div>
-                            <span class="text-xs font-bold text-zinc-400 dark:text-zinc-600 pact-status"
-                                data-i18n="heal_pact_pending">Pendiente</span>
-                        </div>
-                        <div class="heal-pact-card flex items-start gap-4" onclick="signPact(this)">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-xl flex-shrink-0">
-                                💛</div>
-                            <div class="flex-1">
-                                <p class="font-bold text-sm text-zinc-900 dark:text-white" data-i18n="heal_pact4_t">
-                                    Nunca dormir enojados</p>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1" data-i18n="heal_pact4_d">Aunque
-                                    cueste, siempre buscar un "buenas noches" sincero antes de dormir.</p>
-                            </div>
-                            <span class="text-xs font-bold text-zinc-400 dark:text-zinc-600 pact-status"
-                                data-i18n="heal_pact_pending">Pendiente</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-between mt-6">
-                        <button
-                            class="px-5 py-2.5 rounded-full border border-zinc-200 dark:border-zinc-700 text-sm font-bold text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 transition-all"
-                            onclick="goHealStep(3)" data-i18n="heal_back">← Atrás</button>
-                        <button
-                            class="px-6 py-3 rounded-full bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-amber-500/20"
-                            id="heal-pact-next" disabled onclick="goHealStep(5)" data-i18n="heal_continue">Continuar
-                            →</button>
-                    </div>
-                </div>
-
-                <!-- ═══ STEP 5: EMBRACE ═══ -->
-                <div class="heal-step" id="heal-step-5">
-                    <div class="text-center">
-                        <span class="text-xs font-bold uppercase tracking-widest text-emerald-500 mb-2 block"
-                            data-i18n="heal_s5_label">Paso 5 de 5</span>
-                        <h4 class="text-2xl font-extrabold text-zinc-900 dark:text-white mb-2"
-                            data-i18n="heal_s5_title">🫂 El Abrazo</h4>
-                        <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-8" data-i18n="heal_s5_sub">Lo roto ahora
-                            brilla con oro. Somos más fuertes que antes.</p>
-                    </div>
-                    <div class="relative overflow-hidden rounded-3xl p-8 md:p-12 text-center"
-                        style="background:linear-gradient(135deg,#1a0a00,#3d1800,#065f46);">
-                        <div class="absolute -top-10 -right-10 w-48 h-48 rounded-full opacity-20"
-                            style="background:radial-gradient(circle,#fbbf24,transparent 70%);"></div>
-                        <div class="absolute -bottom-10 -left-10 w-40 h-40 rounded-full opacity-15"
-                            style="background:radial-gradient(circle,#10b981,transparent 70%);"></div>
-                        <div class="relative z-10">
-                            <div class="text-6xl mb-4">🫂</div>
-                            <h4 class="text-2xl md:text-3xl font-black text-white mb-3" data-i18n="heal_final_title">
-                                Sanados y Más Fuertes</h4>
-                            <div class="h-px w-24 mx-auto mb-5 opacity-30"
-                                style="background:linear-gradient(90deg,transparent,#fbbf24,transparent)"></div>
-                            <p class="text-amber-100/90 text-base leading-relaxed font-medium mb-6 max-w-md mx-auto"
-                                data-i18n="heal_final_text">Cada grieta reparada es una prueba de que elegimos
-                                quedarnos. De que el amor no es solo sentir bonito, sino también reconstruir juntos. Tú
-                                y yo, siempre.</p>
-                            <p class="text-white/50 text-sm font-serif italic" data-i18n="heal_final_quote">"Lo roto
-                                reparado con oro es más bello que lo que nunca se rompió."</p>
-                        </div>
-                    </div>
-                    <div class="mt-6 grid grid-cols-3 gap-3 text-center">
-                        <div
-                            class="p-4 rounded-2xl bg-white dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-700">
-                            <p class="text-2xl font-black text-amber-500" id="heal-stat-ack">0</p>
-                            <p class="text-xs font-bold text-zinc-400" data-i18n="heal_stat_ack">Reconocidos</p>
-                        </div>
-                        <div
-                            class="p-4 rounded-2xl bg-white dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-700">
-                            <p class="text-2xl font-black text-emerald-500" id="heal-stat-pact">0</p>
-                            <p class="text-xs font-bold text-zinc-400" data-i18n="heal_stat_pact">Pactos</p>
-                        </div>
-                        <div
-                            class="p-4 rounded-2xl bg-white dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-700">
-                            <p class="text-2xl font-black text-rose-500">100%</p>
-                            <p class="text-xs font-bold text-zinc-400" data-i18n="heal_stat_healed">Sanado</p>
-                        </div>
-                    </div>
-                    <div class="text-center mt-6">
-                        <button
-                            class="px-6 py-3 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm transition-all shadow-lg shadow-emerald-500/20"
-                            onclick="resetHealing()" data-i18n="heal_restart">↻ Empezar de nuevo</button>
-                    </div>
-                </div>
-
             </div>
         </section>
-
-
-        <!-- Memorial -->
 
         <!-- SECCIÓN REDISEÑADA: LA PALETA DE YAIRE -->
         <style>
@@ -14810,287 +14395,6 @@
             }, 2000); // 2 segundos para admirar el brillo
         }
 
-        // ══════════ HEALING CENTER ══════════
-        let breatheRunning = false, breatheCycles = 0;
-        function startBreathe() {
-            if (breatheRunning) return;
-            AudioManager.play('slideralto.wav', 0.6);
-            breatheRunning = true;
-            const circle = document.getElementById('breathe-circle');
-            const text = document.getElementById('breathe-text');
-            const counter = document.getElementById('breathe-counter');
-
-            function doCycle() {
-                if (breatheCycles >= 3) {
-                    AudioManager.play('correcto.wav', 0.6);
-                    text.textContent = '✓';
-                    circle.className = 'heal-breathe-circle';
-                    circle.style.borderColor = '#10b981';
-                    document.getElementById('breathe-next-btn').disabled = false;
-                    updateHealProgress(1);
-                    return;
-                }
-
-                breatheCycles++;
-                if (counter) counter.textContent = breatheCycles + ' de 3 ciclos';
-
-                // Inhala
-                if (text) text.textContent = 'Inhala';
-                if (circle) {
-                    circle.className = 'heal-breathe-circle inhale';
-                    circle.style.borderColor = '#f59e0b';
-                }
-
-                setTimeout(() => {
-                    // Exhala
-                    if (text) text.textContent = 'Exhala';
-                    if (circle) circle.className = 'heal-breathe-circle exhale';
-
-                    setTimeout(() => {
-                        doCycle();
-                    }, 3000);
-                }, 3000);
-            }
-            doCycle();
-        }
-        document.addEventListener('DOMContentLoaded', () => {
-            const bc = document.getElementById('breathe-circle');
-            if (bc) bc.addEventListener('click', startBreathe);
-        });
-
-        function toggleHealCard(card) {
-            card.classList.toggle('checked');
-            if (card.classList.contains('checked')) {
-                AudioManager.play('seleccionsi.wav', 0.6);
-            } else {
-                AudioManager.play('seleccionno.wav', 0.6);
-            }
-            const total = document.querySelectorAll('#heal-ack-cards .heal-card').length;
-            const checked = document.querySelectorAll('#heal-ack-cards .heal-card.checked').length;
-            document.getElementById('heal-ack-next').disabled = checked < 2;
-            // Heal cracks
-            if (checked >= 1) healCrack('crack1');
-            if (checked >= 2) healCrack('crack2');
-            if (checked >= 3) healCrack('crack3');
-            if (checked >= 4) healCrack('crack4');
-            if (checked >= 2) updateHealProgress(2);
-        }
-
-        // ══════════ HELIOTROPISMO (GIRASOL INTERACTIVO) ══════════
-        let sunflowerUnlocked = false;
-
-        function updateSunPosition(val) {
-            if (sunflowerUnlocked) return;
-            const sun = document.getElementById('draggable-sun');
-            const head = document.getElementById('sunflower-head');
-            const morning = document.getElementById('sky-morning');
-            const noon = document.getElementById('sky-noon');
-            const evening = document.getElementById('sky-evening');
-            const stars = document.getElementById('sky-stars');
-            const hint = document.getElementById('sunflower-hint');
-
-            const xPos = 10 + (val * 0.8);
-            const normalized = (val - 50) / 50;
-            const yPos = 20 + (normalized * normalized * 40);
-
-            sun.style.left = `${xPos}%`;
-            sun.style.top = `${yPos}%`;
-
-            const angle = (val - 50) * 1.2;
-            head.style.transform = `translateY(-50%) rotate(${angle}deg)`;
-
-            if (val < 50) {
-                const progress = val / 50;
-                morning.style.opacity = 1 - progress;
-                noon.style.opacity = progress;
-                evening.style.opacity = 0;
-                stars.style.opacity = Math.max(0, 1 - progress * 2);
-            } else {
-                const progress = (val - 50) / 50;
-                morning.style.opacity = 0;
-                noon.style.opacity = 1 - progress;
-                evening.style.opacity = progress;
-                stars.style.opacity = Math.max(0, (progress - 0.5) * 2);
-            }
-
-            if (val > 5 && hint) {
-                hint.style.opacity = '0';
-            }
-            if (val >= 98) checkSunflowerComplete();
-        }
-
-        function checkSunflowerComplete() {
-            const slider = document.getElementById('sun-slider');
-            if (slider.value >= 98 && !sunflowerUnlocked) {
-                sunflowerUnlocked = true;
-                slider.disabled = true;
-                slider.style.display = 'none';
-
-                if (typeof AudioManager !== 'undefined') AudioManager.play('dedicatoriacarta.mp3', 0.8);
-
-                createSunflowerParticles();
-
-                const explanation = document.getElementById('quiz-explanation');
-                explanation.style.display = 'block';
-                // Trigger reflow
-                void explanation.offsetWidth;
-                explanation.classList.add('expanded');
-                explanation.style.maxHeight = '2000px';
-                explanation.style.opacity = '1';
-                explanation.style.transform = 'translateY(0)';
-                setTimeout(() => { explanation.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 300);
-
-                const hint = document.getElementById('sunflower-hint');
-                if (hint) {
-                    const _sd = (typeof dictionary !== 'undefined' && dictionary[currentLang]) ? dictionary[currentLang] : {};
-                    const _st = _sd.sunflower_success || '¡Siempre hacia ti! 🌻✨';
-                    hint.innerHTML = '<span class="text-white font-bold text-lg drop-shadow-md bg-black/30 inline-block px-5 py-2 rounded-full backdrop-blur-sm transform-gpu">' + _st + '</span>';
-                    hint.style.opacity = '1';
-                    hint.classList.remove('animate-pulse');
-                    hint.classList.add('animate-bounce');
-                }
-            }
-        }
-
-        function createSunflowerParticles() {
-            const widget = document.getElementById('sunflower-widget');
-            for (let i = 0; i < 25; i++) {
-                const p = document.createElement('div');
-                p.innerText = ['🌻', '✨', '💛', '💖'][Math.floor(Math.random() * 4)];
-                p.className = 'absolute z-30 text-2xl pointer-events-none drop-shadow-lg';
-                p.style.left = `50%`;
-                p.style.bottom = `100px`;
-                p.style.transition = 'all 1s cubic-bezier(0.25, 1, 0.5, 1)';
-                p.style.transform = `translate(-50%, 0) scale(0)`;
-
-                widget.appendChild(p);
-
-                setTimeout(() => {
-                    const angle = Math.random() * Math.PI;
-                    const dist = 60 + Math.random() * 180;
-                    const tx = Math.cos(angle) * dist;
-                    const ty = -Math.sin(angle) * dist;
-                    p.style.transform = `translate(calc(-50% + ${tx}px), ${ty}px) scale(${0.8 + Math.random() * 0.6})`;
-                    p.style.opacity = '0';
-                }, 50);
-
-                setTimeout(() => p.remove(), 1050);
-            }
-        }
-
-        function healCrack(id) {
-            const el = document.getElementById(id);
-            if (el) { el.setAttribute('stroke', 'url(#goldGrad)'); el.setAttribute('stroke-width', '2.5'); el.setAttribute('opacity', '1'); }
-        }
-
-        function signPact(card) {
-            card.classList.toggle('signed');
-            if (card.classList.contains('signed')) {
-                AudioManager.play('seleccionsi.wav', 0.6);
-            } else {
-                AudioManager.play('seleccionno.wav', 0.6);
-            }
-            const status = card.querySelector('.pact-status');
-            const dict = dictionary[currentLang] || dictionary.es;
-            if (card.classList.contains('signed')) {
-                status.textContent = dict.heal_pact_signed || '✓ Firmado';
-                status.style.color = '#10b981';
-            } else {
-                status.textContent = dict.heal_pact_pending || 'Pendiente';
-                status.style.color = '';
-            }
-            const total = document.querySelectorAll('#heal-pact-cards .heal-pact-card').length;
-            const signed = document.querySelectorAll('#heal-pact-cards .heal-pact-card.signed').length;
-            document.getElementById('heal-pact-next').disabled = signed < 2;
-            if (signed >= 2) updateHealProgress(4);
-        }
-
-        let currentHealStep = 1;
-        function goHealStep(step) {
-            AudioManager.play('scroll.wav', 0.6);
-            document.querySelectorAll('.heal-step').forEach(s => s.classList.remove('active'));
-            const target = document.getElementById('heal-step-' + step);
-            if (target) { target.classList.add('active'); }
-            currentHealStep = step;
-            updateHealProgress(step);
-            // Temperature animation on step 3
-            if (step === 3) {
-                setTimeout(() => {
-                    const bar = document.getElementById('heal-temp-bar');
-                    if (bar) bar.style.width = '35%';
-                    const txt = document.getElementById('heal-temp-text');
-                    const dict = dictionary[currentLang] || dictionary.es;
-                    if (txt) txt.textContent = dict.heal_temp_cool || 'En paz — el amor gana';
-                }, 800);
-            }
-            // Final stats
-            if (step === 5) {
-                const acks = document.querySelectorAll('#heal-ack-cards .heal-card.checked').length;
-                const pacts = document.querySelectorAll('#heal-pact-cards .heal-pact-card.signed').length;
-                const statAck = document.getElementById('heal-stat-ack');
-                const statPact = document.getElementById('heal-stat-pact');
-                if (statAck) statAck.textContent = acks;
-                if (statPact) statPact.textContent = pacts;
-                updateHealProgress(5);
-                // All cracks healed
-                ['crack1', 'crack2', 'crack3', 'crack4'].forEach(c => healCrack(c));
-            }
-            // Scroll to section top
-            const healSection = document.getElementById('sanacion');
-            if (healSection) healSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        function updateHealProgress(step) {
-            for (let i = 1; i <= 5; i++) {
-                const seg = document.getElementById('heal-seg-' + i);
-                if (seg) seg.style.width = i <= step ? '100%' : '0%';
-            }
-        }
-
-        function resetHealing() {
-            AudioManager.play('flyout.wav', 0.6);
-            breatheRunning = false; breatheCycles = 0;
-            currentHealStep = 1;
-            // Reset breathing
-            const circle = document.getElementById('breathe-circle');
-            if (circle) { circle.className = 'heal-breathe-circle'; circle.style.borderColor = ''; }
-            const btext = document.getElementById('breathe-text');
-            const dict = dictionary[currentLang] || dictionary.es;
-            if (btext) btext.textContent = dict.heal_breathe_ready || 'Toca para empezar';
-            const breatheCounter = document.getElementById('breathe-counter');
-            const breatheNextBtn = document.getElementById('breathe-next-btn');
-            if (breatheCounter) breatheCounter.textContent = dict.heal_breathe_count || '0 de 3 ciclos';
-            if (breatheNextBtn) breatheNextBtn.disabled = true;
-            // Reset cards
-            document.querySelectorAll('.heal-card').forEach(c => c.classList.remove('checked'));
-            const healAckNext = document.getElementById('heal-ack-next');
-            if (healAckNext) healAckNext.disabled = true;
-            // Reset pacts
-            document.querySelectorAll('.heal-pact-card').forEach(c => {
-                c.classList.remove('signed');
-                const s = c.querySelector('.pact-status');
-                if (s) { s.textContent = dict.heal_pact_pending || 'Pendiente'; s.style.color = ''; }
-            });
-            const healPactNext = document.getElementById('heal-pact-next');
-            if (healPactNext) healPactNext.disabled = true;
-            // Reset cracks
-            ['crack1', 'crack2', 'crack3', 'crack4'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) { el.setAttribute('stroke', '#52525b'); el.setAttribute('stroke-width', '1.5'); el.setAttribute('opacity', '.5'); }
-            });
-            // Reset temp
-            const bar = document.getElementById('heal-temp-bar');
-            if (bar) bar.style.width = '80%';
-            // Reset progress
-            updateHealProgress(0);
-            // Show step 1
-            document.querySelectorAll('.heal-step').forEach(s => s.classList.remove('active'));
-            const healStep1 = document.getElementById('heal-step-1');
-            if (healStep1) healStep1.classList.add('active');
-            const healSection = document.getElementById('sanacion');
-            if (healSection) healSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
         // ══════════ FLIP CARDS - PROMESAS ══════════
         function flipCard(wrap) {
             wrap.classList.toggle('flipped');
@@ -17063,6 +16367,267 @@
                 console.error("Admin Panel Error:", e);
             }
         })();
+        // ═══════════════════════════════════════════════
+        // EL REFUGIO LOGIC
+        // ═══════════════════════════════════════════════
+        let currentRefugeStep = 1;
+        
+        // Step 1: Fog Canvas
+        const fogCanvas = document.getElementById('refuge-fog-canvas');
+        const fogCtx = fogCanvas ? fogCanvas.getContext('2d') : null;
+        let isDrawingFog = false;
+        let fogClearedPixels = 0;
+        let fogTotalPixels = 1;
+        let fogCleared = false;
+        
+        if (fogCanvas && fogCtx) {
+            // Fill with fog
+            fogCtx.fillStyle = 'rgba(200, 200, 200, 0.95)';
+            fogCtx.fillRect(0, 0, fogCanvas.width, fogCanvas.height);
+            fogCtx.filter = 'blur(10px)';
+            
+            // Add some noise to make it look like frosted glass
+            const imgData = fogCtx.getImageData(0, 0, fogCanvas.width, fogCanvas.height);
+            const data = imgData.data;
+            for(let i = 0; i < data.length; i += 4) {
+                const noise = Math.random() * 20 - 10;
+                data[i] = Math.min(255, Math.max(0, data[i] + noise));
+                data[i+1] = Math.min(255, Math.max(0, data[i+1] + noise));
+                data[i+2] = Math.min(255, Math.max(0, data[i+2] + noise));
+            }
+            fogCtx.putImageData(imgData, 0, 0);
+            fogCtx.globalCompositeOperation = 'destination-out';
+            fogCtx.filter = 'none';
+
+            fogTotalPixels = fogCanvas.width * fogCanvas.height;
+            
+            function wipeFog(e) {
+                if (!isDrawingFog || fogCleared) return;
+                
+                const rect = fogCanvas.getBoundingClientRect();
+                const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+                const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+                
+                const scaleX = fogCanvas.width / rect.width;
+                const scaleY = fogCanvas.height / rect.height;
+                
+                fogCtx.beginPath();
+                fogCtx.arc(x * scaleX, y * scaleY, 35, 0, Math.PI * 2);
+                fogCtx.fill();
+                
+                // Play soft sound occasionally
+                if (Math.random() < 0.1 && typeof AudioManager !== 'undefined') {
+                    AudioManager.play('scroll.wav', 0.2);
+                }
+                
+                checkFogClear();
+            }
+            
+            function checkFogClear() {
+                // Rough estimate based on a grid to avoid expensive getImageData on every move
+                let cleared = 0;
+                const checkData = fogCtx.getImageData(0, 0, fogCanvas.width, fogCanvas.height).data;
+                for (let i = 3; i < checkData.length; i += 40) { // Check every 10th pixel alpha
+                    if (checkData[i] < 50) cleared += 10;
+                }
+                
+                if (cleared / fogTotalPixels > 0.6 && !fogCleared) {
+                    fogCleared = true;
+                    // Fade out the rest of the canvas
+                    gsap.to(fogCanvas, {opacity: 0, duration: 1.5});
+                    if (typeof AudioManager !== 'undefined') AudioManager.play('slideralto.wav', 0.5);
+                    gsap.to('#refuge-btn-1', {opacity: 1, y: 0, pointerEvents: 'auto', duration: 0.5});
+                }
+            }
+
+            fogCanvas.addEventListener('mousedown', () => isDrawingFog = true);
+            fogCanvas.addEventListener('touchstart', (e) => { isDrawingFog = true; wipeFog(e); }, {passive: true});
+            window.addEventListener('mouseup', () => isDrawingFog = false);
+            window.addEventListener('touchend', () => isDrawingFog = false);
+            fogCanvas.addEventListener('mousemove', wipeFog);
+            fogCanvas.addEventListener('touchmove', (e) => {
+                if(e.cancelable) e.preventDefault();
+                wipeFog(e);
+            }, {passive: false});
+        }
+        
+        // Step 2: Breathe
+        const refugeOrb = document.getElementById('refuge-orb');
+        const refugeOrbText = document.getElementById('refuge-orb-text');
+        const refugeOrbPulse = document.getElementById('refuge-orb-pulse');
+        let refugeBreatheInterval = null;
+        let refugeBreathePhase = 0; // 0 = inhale, 1 = exhale
+        let refugeCyclesDone = 0;
+        let isBreathing = false;
+        
+        if (refugeOrb) {
+            function startRefugeBreathe() {
+                if (isBreathing) return;
+                isBreathing = true;
+                refugeCyclesDone = 0;
+                document.getElementById('refuge-breathe-count').textContent = `0 / 3 Ciclos`;
+                
+                // Add pulse
+                gsap.to(refugeOrbPulse, {opacity: 1, duration: 0.5});
+                
+                function cycle() {
+                    if (!isBreathing) return;
+                    
+                    if (refugeBreathePhase === 0) {
+                        refugeOrbText.textContent = "Inhala...";
+                        gsap.to(refugeOrb, {scale: 1.5, backgroundColor: 'rgba(16, 185, 129, 0.8)', boxShadow: '0 0 50px rgba(16, 185, 129, 0.6)', duration: 4, ease: "power1.inOut"});
+                        refugeBreathePhase = 1;
+                        refugeBreatheInterval = setTimeout(cycle, 4000);
+                    } else {
+                        refugeOrbText.textContent = "Exhala...";
+                        gsap.to(refugeOrb, {scale: 1, backgroundColor: 'rgba(56, 189, 248, 0.8)', boxShadow: '0 0 30px rgba(56, 189, 248, 0.4)', duration: 4, ease: "power1.inOut"});
+                        refugeBreathePhase = 0;
+                        refugeCyclesDone++;
+                        document.getElementById('refuge-breathe-count').textContent = `${refugeCyclesDone} / 3 Ciclos`;
+                        
+                        if (refugeCyclesDone >= 3) {
+                            // Done!
+                            isBreathing = false;
+                            refugeOrbText.textContent = "Paz";
+                            gsap.to(refugeOrb, {backgroundColor: 'rgba(255, 255, 255, 0.8)', boxShadow: '0 0 60px rgba(255, 255, 255, 0.8)', duration: 1});
+                            gsap.to(refugeOrbPulse, {opacity: 0, duration: 0.5});
+                            gsap.to('#refuge-btn-2', {opacity: 1, y: 0, pointerEvents: 'auto', duration: 0.5});
+                            if (typeof AudioManager !== 'undefined') AudioManager.play('correcto.wav', 0.6);
+                            return;
+                        }
+                        refugeBreatheInterval = setTimeout(cycle, 4000);
+                    }
+                }
+                
+                if (typeof AudioManager !== 'undefined') AudioManager.play('flyout.wav', 0.5);
+                cycle();
+            }
+            
+            function stopRefugeBreathe() {
+                if (!isBreathing || refugeCyclesDone >= 3) return;
+                isBreathing = false;
+                clearTimeout(refugeBreatheInterval);
+                refugeBreathePhase = 0;
+                refugeOrbText.textContent = "Se cortó. Intenta de nuevo.";
+                gsap.to(refugeOrb, {scale: 1, backgroundColor: 'rgba(244, 63, 94, 0.8)', boxShadow: '0 0 40px rgba(244, 63, 94, 0.4)', duration: 0.5});
+                gsap.to(refugeOrbPulse, {opacity: 0, duration: 0.5});
+                if (typeof AudioManager !== 'undefined') AudioManager.play('seleccionno.wav', 0.5);
+            }
+            
+            refugeOrb.addEventListener('mousedown', startRefugeBreathe);
+            refugeOrb.addEventListener('touchstart', (e) => { e.preventDefault(); startRefugeBreathe(); }, {passive: false});
+            
+            window.addEventListener('mouseup', stopRefugeBreathe);
+            window.addEventListener('touchend', stopRefugeBreathe);
+        }
+        
+        // Step 3: Dial
+        const targetRefugeFreq = 88.5;
+        let isRefugeTuned = false;
+        
+        function initRefugeDial() {
+            if (typeof Draggable === 'undefined' || !document.getElementById('refuge-dial')) return;
+            
+            // Generate a random target between 80 and 110
+            const targetFreq = 80 + Math.random() * 30;
+            const targetRotation = (targetFreq - 80) * (360 / 30); // map to 0-360
+            
+            // Set initial random rotation
+            gsap.set('#refuge-dial', {rotation: Math.random() * 360});
+            
+            Draggable.create('#refuge-dial', {
+                type: "rotation",
+                onDrag: function() {
+                    if (isRefugeTuned) return;
+                    
+                    // Normalize rotation to 0-360
+                    let rot = this.rotation % 360;
+                    if (rot < 0) rot += 360;
+                    
+                    // Convert to frequency (80 to 110)
+                    let currentFreq = 80 + (rot / 360) * 30;
+                    document.getElementById('refuge-freq-text').textContent = currentFreq.toFixed(1) + " MHz";
+                    
+                    // Distance to target
+                    let dist = Math.abs(rot - targetRotation);
+                    if (dist > 180) dist = 360 - dist; // shortest distance
+                    
+                    // Update static overlay based on distance
+                    const staticOpacity = Math.min(0.4, dist / 90);
+                    document.getElementById('refuge-static').style.opacity = staticOpacity;
+                    
+                    // Play static noise volume based on distance (if we had a static sound)
+                    
+                    if (dist < 5) {
+                        isRefugeTuned = true;
+                        this.disable();
+                        document.getElementById('refuge-freq-text').textContent = "SINTONIZADO";
+                        document.getElementById('refuge-freq-text').classList.add('text-emerald-500');
+                        document.getElementById('refuge-freq-text').classList.remove('text-rose-500');
+                        document.getElementById('refuge-static').style.opacity = 0;
+                        
+                        if (typeof AudioManager !== 'undefined') AudioManager.play('dedicatoriacarta.mp3', 0.8);
+                        
+                        // Show reward
+                        gsap.to('#refuge-dial-wrapper', {opacity: 0, height: 0, duration: 0.5});
+                        const reward = document.getElementById('refuge-reward');
+                        reward.classList.remove('hidden');
+                        setTimeout(() => {
+                            reward.classList.remove('opacity-0', 'translate-y-10');
+                        }, 50);
+                    }
+                }
+            });
+            
+            // Load config from Firebase
+            const cfg = JSON.parse(localStorage.getItem('yaire_config') || '{}');
+            document.getElementById('refuge-reward-title').textContent = cfg.refugeTitle || 'Te escucho, mi amor';
+            document.getElementById('refuge-reward-text').textContent = cfg.refugeText || 'Nuestra conexión es más fuerte que cualquier malentendido.';
+            if (cfg.refugeAudio) {
+                const src = document.getElementById('refuge-audio-src');
+                const player = document.getElementById('refuge-audio-player');
+                src.src = cfg.refugeAudio;
+                player.load();
+            } else {
+                document.getElementById('refuge-audio-player').style.display = 'none';
+            }
+        }
+        
+        function refugeGoStep(step) {
+            document.querySelectorAll('.refuge-step').forEach(el => el.classList.remove('active'));
+            document.getElementById('refuge-step-' + step).classList.add('active');
+            currentRefugeStep = step;
+            
+            if (step === 3) {
+                initRefugeDial();
+                document.getElementById('refuge-header-title').textContent = "Sintonizándonos";
+            } else if (step === 2) {
+                document.getElementById('refuge-header-title').textContent = "Pausa y Respira";
+            }
+        }
+        
+        function refugeReset() {
+            isRefugeTuned = false;
+            fogCleared = false;
+            
+            if (fogCtx && fogCanvas) {
+                fogCtx.globalCompositeOperation = 'source-over';
+                fogCtx.fillStyle = 'rgba(200, 200, 200, 0.95)';
+                fogCtx.fillRect(0, 0, fogCanvas.width, fogCanvas.height);
+                fogCtx.globalCompositeOperation = 'destination-out';
+                gsap.to(fogCanvas, {opacity: 1, duration: 0});
+            }
+            
+            gsap.to('#refuge-btn-1', {opacity: 0, y: 16, pointerEvents: 'none', duration: 0});
+            gsap.to('#refuge-btn-2', {opacity: 0, y: 16, pointerEvents: 'none', duration: 0});
+            
+            document.getElementById('refuge-reward').classList.add('hidden', 'opacity-0', 'translate-y-10');
+            gsap.to('#refuge-dial-wrapper', {opacity: 1, height: 'auto', duration: 0});
+            
+            document.getElementById('refuge-header-title').textContent = "Despeja el Ruido";
+            
+            refugeGoStep(1);
+        }
     </script>
 
     <script>
