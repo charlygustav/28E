@@ -5673,41 +5673,46 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Audio Player Area -->
-                        <div id="g4-player-area" class="mb-5">
-                            <div class="relative bg-zinc-900/80 dark:bg-black/60 rounded-2xl p-6 md:p-8 flex flex-col items-center gap-4 border border-zinc-700/30">
-                                <div id="g4-bars" class="flex items-end gap-[3px] h-16 md:h-20">
-                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/30 rounded-full transition-all duration-150" style="height:20%"></div>
-                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/40 rounded-full transition-all duration-150" style="height:45%"></div>
-                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/50 rounded-full transition-all duration-150" style="height:70%"></div>
-                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/60 rounded-full transition-all duration-150" style="height:90%"></div>
-                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/70 rounded-full transition-all duration-150" style="height:60%"></div>
-                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/80 rounded-full transition-all duration-150" style="height:100%"></div>
-                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/90 rounded-full transition-all duration-150" style="height:75%"></div>
-                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500 rounded-full transition-all duration-150" style="height:55%"></div>
-                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/90 rounded-full transition-all duration-150" style="height:85%"></div>
-                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/80 rounded-full transition-all duration-150" style="height:40%"></div>
-                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/70 rounded-full transition-all duration-150" style="height:65%"></div>
-                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/60 rounded-full transition-all duration-150" style="height:95%"></div>
-                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/50 rounded-full transition-all duration-150" style="height:50%"></div>
-                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/40 rounded-full transition-all duration-150" style="height:30%"></div>
-                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/30 rounded-full transition-all duration-150" style="height:70%"></div>
-                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/40 rounded-full transition-all duration-150" style="height:80%"></div>
-                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/50 rounded-full transition-all duration-150" style="height:45%"></div>
-                                    <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/60 rounded-full transition-all duration-150" style="height:60%"></div>
+                        <!-- Two-Column Layout: Player (left) + Options (right) -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                            <!-- LEFT: Audio Player Area -->
+                            <div id="g4-player-area" class="flex flex-col">
+                                <div class="relative bg-zinc-900/80 dark:bg-black/60 rounded-2xl p-6 md:p-8 flex flex-col items-center justify-center gap-4 border border-zinc-700/30 h-full min-h-[200px]">
+                                    <div id="g4-bars" class="flex items-end gap-[3px] h-16 md:h-24">
+                                        <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/30 rounded-full transition-all duration-150" style="height:20%"></div>
+                                        <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/40 rounded-full transition-all duration-150" style="height:45%"></div>
+                                        <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/50 rounded-full transition-all duration-150" style="height:70%"></div>
+                                        <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/60 rounded-full transition-all duration-150" style="height:90%"></div>
+                                        <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/70 rounded-full transition-all duration-150" style="height:60%"></div>
+                                        <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/80 rounded-full transition-all duration-150" style="height:100%"></div>
+                                        <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/90 rounded-full transition-all duration-150" style="height:75%"></div>
+                                        <div class="g4-bar w-1.5 md:w-2 bg-emerald-500 rounded-full transition-all duration-150" style="height:55%"></div>
+                                        <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/90 rounded-full transition-all duration-150" style="height:85%"></div>
+                                        <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/80 rounded-full transition-all duration-150" style="height:40%"></div>
+                                        <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/70 rounded-full transition-all duration-150" style="height:65%"></div>
+                                        <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/60 rounded-full transition-all duration-150" style="height:95%"></div>
+                                        <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/50 rounded-full transition-all duration-150" style="height:50%"></div>
+                                        <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/40 rounded-full transition-all duration-150" style="height:30%"></div>
+                                        <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/30 rounded-full transition-all duration-150" style="height:70%"></div>
+                                        <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/40 rounded-full transition-all duration-150" style="height:80%"></div>
+                                        <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/50 rounded-full transition-all duration-150" style="height:45%"></div>
+                                        <div class="g4-bar w-1.5 md:w-2 bg-emerald-500/60 rounded-full transition-all duration-150" style="height:60%"></div>
+                                    </div>
+                                    <button id="g4-play-btn" onclick="playGuessClip()" class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:scale-110 active:scale-95">
+                                        <svg class="w-6 h-6 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    </button>
+                                    <p id="g4-play-hint" class="text-zinc-500 text-xs font-medium" data-i18n="game4_listen_hint">Toca para escuchar</p>
                                 </div>
-                                <button id="g4-play-btn" onclick="playGuessClip()" class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:scale-110 active:scale-95">
-                                    <svg class="w-6 h-6 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                </button>
-                                <p id="g4-play-hint" class="text-zinc-500 text-xs font-medium" data-i18n="game4_listen_hint">Toca para escuchar</p>
                             </div>
-                        </div>
-                        <!-- Answer Options -->
-                        <div id="g4-options" class="grid grid-cols-1 gap-2.5 md:gap-3"></div>
-                        <!-- Streak -->
-                        <div id="g4-streak-wrap" class="flex items-center justify-center gap-2 mt-3 opacity-0 transition-opacity duration-300">
-                            <span class="text-xs font-bold text-amber-500">🔥</span>
-                            <span class="text-xs font-black text-amber-500" id="g4-streak">0</span>
+                            <!-- RIGHT: Answer Options -->
+                            <div class="flex flex-col gap-2.5 md:gap-3 justify-center">
+                                <div id="g4-options" class="grid grid-cols-1 gap-2.5 md:gap-3"></div>
+                                <!-- Streak -->
+                                <div id="g4-streak-wrap" class="flex items-center justify-center gap-2 mt-1 opacity-0 transition-opacity duration-300">
+                                    <span class="text-xs font-bold text-amber-500">🔥</span>
+                                    <span class="text-xs font-black text-amber-500" id="g4-streak">0</span>
+                                </div>
+                            </div>
                         </div>
                         <!-- Game 4 Overlay -->
                         <div id="game4-overlay" class="game-overlay-new active">
