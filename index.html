@@ -3625,16 +3625,52 @@
                 async function fetchSpotlightArtwork(track) {
                     const key = track.title + '|' + track.artist;
                     if (key in spotArtworkCache) return spotArtworkCache[key];
-                    try {
-                        const q = encodeURIComponent(track.title + ' ' + track.artist);
-                        const res = await fetch('https://itunes.apple.com/search?term=' + q + '&entity=song&limit=1');
-                        const data = await res.json();
-                        if (data.results && data.results.length > 0) {
-                            const url = data.results[0].artworkUrl100.replace('100x100bb', '400x400bb');
-                            spotArtworkCache[key] = url;
-                            return url;
-                        }
-                    } catch (e) {}
+
+                    const clean = (str) => {
+                        if (!str) return '';
+                        return str.replace(/\b(remix|remixed|edit|radio edit|feat\.?|ft\.?)\b/gi, '')
+                                  .replace(/[()\-–]/g, ' ')
+                                  .replace(/\s+/g, ' ')
+                                  .trim();
+                    };
+
+                    const searchiTunes = async (query) => {
+                        try {
+                            const res = await fetch('https://itunes.apple.com/search?term=' + query + '&entity=song&limit=1');
+                            const data = await res.json();
+                            if (data.results && data.results.length > 0) {
+                                return data.results[0].artworkUrl100.replace('100x100bb', '400x400bb');
+                            }
+                        } catch (e) {}
+                        return null;
+                    };
+
+                    // Try 1: Clean Title + Clean Artist
+                    const titleClean = clean(track.title);
+                    const artistClean = clean(track.artist);
+                    let q = encodeURIComponent(titleClean + ' ' + artistClean);
+                    let url = await searchiTunes(q);
+                    if (url) {
+                        spotArtworkCache[key] = url;
+                        return url;
+                    }
+
+                    // Try 2: Original Title + Original Artist
+                    q = encodeURIComponent(track.title + ' ' + track.artist);
+                    url = await searchiTunes(q);
+                    if (url) {
+                        spotArtworkCache[key] = url;
+                        return url;
+                    }
+
+                    // Try 3: Just Title
+                    q = encodeURIComponent(titleClean);
+                    url = await searchiTunes(q);
+                    if (url) {
+                        spotArtworkCache[key] = url;
+                        return url;
+                    }
+
                     spotArtworkCache[key] = null;
                     return null;
                 }
