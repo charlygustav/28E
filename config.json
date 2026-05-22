@@ -6,13 +6,18 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-05-22T11:05:20.609Z",
+  "lastUpdated": "2026-05-22T11:06:19.524Z",
   "maintDate": "2026-05-22T03:56",
   "maintType": "indefinite",
   "mantenimiento": true,
   "refugeText": "",
   "refugeTitle": "Te escucho, mi amor",
   "songs": [
+    {
+      "title": "Slow Burn",
+      "artist": "Corbyn Kites",
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779447966195_Slow_Burn_-_Corbyn_Kites.mp3"
+    },
     {
       "artist": "Rodezel, Joi, Ashley Verdugo, Lala, Neomai",
       "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779434759286_LLAMADAS_PERDIDAS_Sesion_Mundial__1_-_Rodezel__Joi__Ashley_Verdugo__Lala__Neomai.flac",
