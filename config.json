@@ -6,7 +6,7 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-05-22T10:52:42.466Z",
+  "lastUpdated": "2026-05-22T10:52:46.630Z",
   "maintDate": "2026-05-22T03:56",
   "maintType": "indefinite",
   "mantenimiento": false,
@@ -160,6 +160,6 @@
     ]
   },
   "vaultHint": "Pista: La identidad que usaste cuando nuestra historia continuó entre píxeles.",
-  "voicePassword": "yairealvarado2",
+  "voicePassword": "yairealvarado",
   "maintMsg": "ahorita volvemos jeje"
 }
