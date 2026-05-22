@@ -6,13 +6,18 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-05-22T07:01:01.002Z",
+  "lastUpdated": "2026-05-22T07:27:14.547Z",
   "maintDate": "2026-05-22T01:44",
   "maintType": "indefinite",
   "mantenimiento": false,
   "refugeText": "",
   "refugeTitle": "Te escucho, mi amor",
   "songs": [
+    {
+      "title": "LLAMADAS_PERDIDAS / Sesion Mundial #1",
+      "artist": "Rodezel, Joi, Ashley Verdugo, Lala, Neomai",
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779434759286_LLAMADAS_PERDIDAS_Sesion_Mundial__1_-_Rodezel__Joi__Ashley_Verdugo__Lala__Neomai.flac"
+    },
     {
       "artist": "Melly Mike",
       "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779426578999_Young_Black___Rich_-_Melly_Mike.flac",
