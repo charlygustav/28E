@@ -103,6 +103,8 @@
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image">
     <script src="https://cdn.tailwindcss.com/"></script>
+    <!-- GSAP for smooth animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -3625,20 +3627,24 @@
                     }
                     const expEl = document.getElementById('spotlight-expanded');
                     if (!expEl) return;
+
+                    // Set correct solid background based on dark mode
+                    const isDark = document.documentElement.classList.contains('dark');
+                    expEl.style.background = isDark ? '#09090b' : '#ffffff';
+
                     if (isSpotlightExpanded) {
+                        // Make sure starting position is correct before animating
+                        gsap.set(expEl, { y: '100%', opacity: 0 });
+                        expEl.classList.remove('pointer-events-none');
+                        expEl.classList.add('pointer-events-auto');
+                        renderSpotlightPlaylist();
+                        spotlightLoadTrack(currentSpotTrack);
                         gsap.to(expEl, {
                             y: '0%',
                             opacity: 1,
                             duration: 0.4,
-                            ease: 'power2.out',
-                            onStart: () => {
-                                expEl.classList.remove('pointer-events-none');
-                                expEl.classList.add('pointer-events-auto');
-                                renderSpotlightPlaylist();
-                            }
+                            ease: 'power2.out'
                         });
-                        // Sync track details on open
-                        spotlightLoadTrack(currentSpotTrack);
                     } else {
                         gsap.to(expEl, {
                             y: '100%',
@@ -3862,7 +3868,8 @@
 
         <!-- Spotlight Expanded Playlist & Player Overlay -->
         <div id="spotlight-expanded"
-            class="absolute inset-0 bg-white/98 dark:bg-zinc-950/98 z-[60] flex flex-col translate-y-full opacity-0 pointer-events-none transition-all duration-300 ease-in-out">
+            class="absolute inset-0 z-[60] flex flex-col pointer-events-none"
+            style="background: #ffffff; transform: translateY(100%); opacity: 0;">
             <!-- Header of expanded player -->
             <div class="px-5 pt-5 pb-3 flex items-center justify-between flex-shrink-0 border-b border-zinc-100 dark:border-zinc-800/80">
                 <button onclick="toggleSpotlightExpand()"
