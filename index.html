@@ -17424,21 +17424,27 @@
             if(activeEntries.length > 0) {
                 let target = activeEntries[0].target;
                 let secId = target.id;
-                const secMap = {
+                                const secMap = {
                     "hero": "Inicio",
+                    "frase-del-dia": "Frase del Día",
                     "historia": "Nuestra Historia",
                     "nombre": "El Misterio del Nombre",
                     "tulipanes": "Sus Flores Favoritas",
-                    "juego1": "Misterio del Girasol",
+                    "quiz-girasol": "Misterio del Girasol",
                     "distancia": "Distancia",
                     "comida": "Gastronomía",
-                    "peliculas": "Película Favorita",
-                    "playlist": "Playlist",
+                    "universo": "Universo",
                     "galeria": "Galería de Arte",
-                    "receta": "Receta Especial",
-                    "juegos": "Zona de Juegos",
+                    "minijuegos": "Zona de Juegos",
                     "promesas": "Mis Promesas",
-                    "guestbook": "Muro de Dedicatorias"
+                    "guestbook": "Muro de Dedicatorias",
+                    "colores-yaire": "Colores de Yaire",
+                    "memorial": "Memorial",
+                    "hype": "Hype",
+                    "estadisticas": "Estadísticas",
+                    "top5yaire": "Top 5",
+                    "enigma-28": "Enigma 28",
+                    "secreto": "Sección Secreta"
                 };
                 currentSection = secMap[secId] || secId || "Navegando";
                 updatePresence();
@@ -17482,7 +17488,7 @@
                     const date = m.timestamp ? new Date(m.timestamp).toLocaleDateString() : 'Reciente';
                     
                     // Escape HTML for safety
-                    const safeName = document.createElement('div'); safeName.innerText = m.name || "An�nimo";
+                    const safeName = document.createElement('div'); safeName.innerText = m.name || "An�nimo";
                     const safeMsg = document.createElement('div'); safeMsg.innerText = m.msg || "";
 
                     card.innerHTML = `
