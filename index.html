@@ -6780,356 +6780,56 @@
             }
         </style>
 
-        <section id="sanacion"
-            class="cv-section cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 scroll-mt-20">
-            <div class="max-w-3xl mx-auto px-6">
 
+        <!-- Muro de Dedicatorias -->
+        <section id="guestbook" class="cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 scroll-mt-20 relative overflow-hidden">
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-50/50 via-white to-white dark:from-zinc-900/50 dark:via-black dark:to-black -z-10"></div>
+            <div class="max-w-5xl mx-auto px-6">
                 <!-- Header -->
                 <div class="text-center mb-12">
-                    <span
-                        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-50 dark:bg-amber-900/20 border border-amber-200/60 dark:border-amber-800/30 text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 mb-4"
-                        data-i18n="heal_badge">💊 Centro de Sanación</span>
-                    <h3 class="text-3xl md:text-5xl font-extrabold mb-4 text-zinc-900 dark:text-white"
-                        data-i18n="heal_title">Reparar con Oro</h3>
-                    <p class="text-zinc-500 dark:text-zinc-400 text-base md:text-lg max-w-xl mx-auto leading-relaxed"
-                        data-i18n="heal_subtitle">En Japón, el Kintsugi repara lo roto con oro, haciéndolo más bello que
-                        antes. Así quiero tratar cada herida entre nosotros.</p>
-                </div>
-
-                <!-- Kintsugi Heart + Progress -->
-                <div class="flex flex-col items-center mb-10">
-                    <svg id="kintsugi-svg" class="kintsugi-heart w-32 h-32 mb-4" viewBox="0 0 100 100">
-                        <defs>
-                            <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#f43f5e" />
-                                <stop offset="100%" stop-color="#ec4899" />
-                            </linearGradient>
-                            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#fbbf24" />
-                                <stop offset="100%" stop-color="#f59e0b" />
-                            </linearGradient>
-                        </defs>
-                        <path
-                            d="M50 88 C25 65, 5 50, 5 30 C5 15, 18 5, 30 5 C38 5, 45 10, 50 20 C55 10, 62 5, 70 5 C82 5, 95 15, 95 30 C95 50, 75 65, 50 88Z"
-                            fill="url(#heartGrad)" opacity=".85" />
-                        <!-- Cracks that become gold -->
-                        <line id="crack1" x1="35" y1="25" x2="50" y2="55" stroke="#52525b" stroke-width="1.5"
-                            stroke-linecap="round" opacity=".5" />
-                        <line id="crack2" x1="65" y1="25" x2="50" y2="55" stroke="#52525b" stroke-width="1.5"
-                            stroke-linecap="round" opacity=".5" />
-                        <line id="crack3" x1="30" y1="50" x2="50" y2="70" stroke="#52525b" stroke-width="1.5"
-                            stroke-linecap="round" opacity=".5" />
-                        <line id="crack4" x1="70" y1="50" x2="50" y2="70" stroke="#52525b" stroke-width="1.5"
-                            stroke-linecap="round" opacity=".5" />
-                    </svg>
-                    <p class="text-sm font-bold text-zinc-400 mb-3" data-i18n="heal_progress_label">Progreso de sanación
+                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-50 dark:bg-amber-900/20 border border-amber-200/60 dark:border-amber-800/30 text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 mb-4">
+                        📝 Muro de Dedicatorias
+                    </span>
+                    <h3 class="text-3xl md:text-5xl font-extrabold mb-4 text-zinc-900 dark:text-white">Dejando Huella</h3>
+                    <p class="text-zinc-500 dark:text-zinc-400 text-base md:text-lg max-w-xl mx-auto leading-relaxed">
+                        Un espacio para dejar mensajes, recuerdos o simplemente un saludo. Todo lo que se escriba aquí quedará guardado para siempre.
                     </p>
-                    <div class="flex gap-2 w-full max-w-xs">
-                        <div class="heal-progress-segment">
-                            <div class="fill" id="heal-seg-1"></div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Formulario -->
+                    <div class="lg:col-span-1">
+                        <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-xl shadow-zinc-200/20 dark:shadow-none sticky top-28">
+                            <h4 class="text-xl font-bold mb-4">Escribe un mensaje</h4>
+                            <form id="guestbook-form" class="flex flex-col gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Tu Nombre</label>
+                                    <input type="text" id="gb-name" required maxlength="30" class="w-full bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none transition-all dark:text-white" placeholder="Ej. Visitante Anónimo">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Mensaje</label>
+                                    <textarea id="gb-msg" required maxlength="250" rows="4" class="w-full bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none transition-all resize-none dark:text-white" placeholder="Escribe algo bonito..."></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-xl transition-colors mt-2 shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2">
+                                    <i class="ph-fill ph-paper-plane-tilt"></i> Publicar Mensaje
+                                </button>
+                            </form>
                         </div>
-                        <div class="heal-progress-segment">
-                            <div class="fill" id="heal-seg-2"></div>
-                        </div>
-                        <div class="heal-progress-segment">
-                            <div class="fill" id="heal-seg-3"></div>
-                        </div>
-                        <div class="heal-progress-segment">
-                            <div class="fill" id="heal-seg-4"></div>
-                        </div>
-                        <div class="heal-progress-segment">
-                            <div class="fill" id="heal-seg-5"></div>
+                    </div>
+
+                    <!-- Muro -->
+                    <div class="lg:col-span-2">
+                        <div id="guestbook-wall" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Los mensajes se inyectarán aquí -->
+                            <div class="col-span-full text-center py-12 text-zinc-500 font-serif italic" id="gb-empty">
+                                Cargando mensajes...
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- ═══ STEP 1: BREATHE ═══ -->
-                <div class="heal-step active" id="heal-step-1">
-                    <div class="text-center mb-8">
-                        <span class="text-xs font-bold uppercase tracking-widest text-amber-500 mb-2 block"
-                            data-i18n="heal_s1_label">Paso 1 de 5</span>
-                        <h4 class="text-2xl font-extrabold text-zinc-900 dark:text-white mb-2"
-                            data-i18n="heal_s1_title">🫁 Respira Conmigo</h4>
-                        <p class="text-sm text-zinc-500 dark:text-zinc-400" data-i18n="heal_s1_sub">Antes de hablar,
-                            calmemos el corazón. Sigue el ritmo.</p>
-                    </div>
-                    <div class="flex flex-col items-center gap-6">
-                        <div class="heal-breathe-circle" id="breathe-circle">
-                            <span class="text-lg font-bold text-amber-500" id="breathe-text"
-                                data-i18n="heal_breathe_ready">Toca para empezar</span>
-                        </div>
-                        <p class="text-xs text-zinc-400" id="breathe-counter" data-i18n="heal_breathe_count">0 de 3
-                            ciclos</p>
-                        <button
-                            class="px-6 py-3 rounded-full bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-amber-500/20"
-                            id="breathe-next-btn" disabled onclick="goHealStep(2)" data-i18n="heal_continue">Continuar
-                            →</button>
-                    </div>
-                </div>
-
-                <!-- ═══ STEP 2: ACKNOWLEDGE ═══ -->
-                <div class="heal-step" id="heal-step-2">
-                    <div class="text-center mb-8">
-                        <span class="text-xs font-bold uppercase tracking-widest text-amber-500 mb-2 block"
-                            data-i18n="heal_s2_label">Paso 2 de 5</span>
-                        <h4 class="text-2xl font-extrabold text-zinc-900 dark:text-white mb-2"
-                            data-i18n="heal_s2_title">🪞 Reconozco que...</h4>
-                        <p class="text-sm text-zinc-500 dark:text-zinc-400" data-i18n="heal_s2_sub">No busco excusas.
-                            Reconozco mis errores con honestidad.</p>
-                    </div>
-                    <div class="space-y-3" id="heal-ack-cards">
-                        <div class="heal-card flex items-start gap-4" onclick="toggleHealCard(this)">
-                            <div class="heal-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                                    stroke="white" stroke-width="3" stroke-linecap="round">
-                                    <polyline points="20 6 9 17 4 12" />
-                                </svg></div>
-                            <div>
-                                <p class="font-bold text-sm text-zinc-900 dark:text-white" data-i18n="heal_ack1_t">A
-                                    veces no escucho como debería</p>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1" data-i18n="heal_ack1_d">Prometo
-                                    poner atención real, no solo oír, sino escucharte con el alma.</p>
-                            </div>
-                        </div>
-                        <div class="heal-card flex items-start gap-4" onclick="toggleHealCard(this)">
-                            <div class="heal-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                                    stroke="white" stroke-width="3" stroke-linecap="round">
-                                    <polyline points="20 6 9 17 4 12" />
-                                </svg></div>
-                            <div>
-                                <p class="font-bold text-sm text-zinc-900 dark:text-white" data-i18n="heal_ack2_t">Mis
-                                    silencios a veces lastiman</p>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1" data-i18n="heal_ack2_d">Cuando
-                                    me callo no es porque no me importe. Es porque a veces no sé cómo expresarlo.</p>
-                            </div>
-                        </div>
-                        <div class="heal-card flex items-start gap-4" onclick="toggleHealCard(this)">
-                            <div class="heal-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                                    stroke="white" stroke-width="3" stroke-linecap="round">
-                                    <polyline points="20 6 9 17 4 12" />
-                                </svg></div>
-                            <div>
-                                <p class="font-bold text-sm text-zinc-900 dark:text-white" data-i18n="heal_ack3_t">Puedo
-                                    ser terco cuando discutimos</p>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1" data-i18n="heal_ack3_d">
-                                    Reconozco que a veces me aferro a tener la razón en vez de buscar la paz.</p>
-                            </div>
-                        </div>
-                        <div class="heal-card flex items-start gap-4" onclick="toggleHealCard(this)">
-                            <div class="heal-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                                    stroke="white" stroke-width="3" stroke-linecap="round">
-                                    <polyline points="20 6 9 17 4 12" />
-                                </svg></div>
-                            <div>
-                                <p class="font-bold text-sm text-zinc-900 dark:text-white" data-i18n="heal_ack4_t">La
-                                    distancia amplifica mis errores</p>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1" data-i18n="heal_ack4_d">Lo que
-                                    en persona se arregla con un abrazo, por pantalla se convierte en días de angustia.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex justify-between mt-6">
-                        <button
-                            class="px-5 py-2.5 rounded-full border border-zinc-200 dark:border-zinc-700 text-sm font-bold text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 transition-all"
-                            onclick="goHealStep(1)" data-i18n="heal_back">← Atrás</button>
-                        <button
-                            class="px-6 py-3 rounded-full bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-amber-500/20"
-                            id="heal-ack-next" disabled onclick="goHealStep(3)" data-i18n="heal_continue">Continuar
-                            →</button>
-                    </div>
-                </div>
-
-                <!-- ═══ STEP 3: LISTEN ═══ -->
-                <div class="heal-step" id="heal-step-3">
-                    <div class="text-center mb-8">
-                        <span class="text-xs font-bold uppercase tracking-widest text-amber-500 mb-2 block"
-                            data-i18n="heal_s3_label">Paso 3 de 5</span>
-                        <h4 class="text-2xl font-extrabold text-zinc-900 dark:text-white mb-2"
-                            data-i18n="heal_s3_title">👂 Te Escucho</h4>
-                        <p class="text-sm text-zinc-500 dark:text-zinc-400" data-i18n="heal_s3_sub">Intento ponerme en
-                            tu lugar y sentir lo que tú sientes.</p>
-                    </div>
-                    <div
-                        class="bg-gradient-to-br from-rose-50 to-amber-50 dark:from-rose-900/10 dark:to-amber-900/10 rounded-2xl p-6 md:p-8 border border-rose-200/40 dark:border-rose-800/30">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div
-                                class="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center text-lg">
-                                💭</div>
-                            <div>
-                                <p class="font-bold text-sm text-rose-700 dark:text-rose-300"
-                                    data-i18n="heal_listen_from">Lo que creo que sientes</p>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-400" data-i18n="heal_listen_pers">Desde
-                                    tu perspectiva</p>
-                            </div>
-                        </div>
-                        <div class="space-y-4">
-                            <p class="text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed font-serif italic"
-                                id="heal-listen-text" data-i18n="heal_listen_1">"Sé que cuando te quedas en silencio yo
-                                siento que no te importo, aunque sé que no es así. Sé que a veces necesito que me digas
-                                las cosas en el momento, no después. Sé que la distancia hace todo más difícil y que
-                                ambos estamos aprendiendo."</p>
-                            <p class="text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed font-serif italic"
-                                data-i18n="heal_listen_2">"Solo quiero sentirme segura. Saber que cuando hablo, me
-                                escuchas de verdad. Que cuando algo me duele, no lo minimizas. Que estoy en el mismo
-                                equipo que tú."</p>
-                        </div>
-                    </div>
-                    <div
-                        class="mt-6 p-4 rounded-xl bg-white dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-700">
-                        <p class="text-xs font-bold uppercase tracking-widest text-amber-500 mb-2"
-                            data-i18n="heal_temp_label">Temperatura emocional</p>
-                        <div class="flex items-center gap-3">
-                            <span class="text-lg">🔥</span>
-                            <div class="flex-1 h-3 rounded-full bg-zinc-200 dark:bg-zinc-700 overflow-hidden">
-                                <div class="h-full rounded-full transition-all duration-1000" id="heal-temp-bar"
-                                    style="width:80%; background:linear-gradient(90deg,#10b981,#f59e0b,#f43f5e);"></div>
-                            </div>
-                            <span class="text-lg">❄️</span>
-                        </div>
-                        <p class="text-center text-xs font-bold text-amber-500 mt-2" id="heal-temp-text"
-                            data-i18n="heal_temp_warm">Tibio — bajando la guardia</p>
-                    </div>
-                    <div class="flex justify-between mt-6">
-                        <button
-                            class="px-5 py-2.5 rounded-full border border-zinc-200 dark:border-zinc-700 text-sm font-bold text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 transition-all"
-                            onclick="goHealStep(2)" data-i18n="heal_back">← Atrás</button>
-                        <button
-                            class="px-6 py-3 rounded-full bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm transition-all shadow-lg shadow-amber-500/20"
-                            onclick="goHealStep(4)" data-i18n="heal_continue">Continuar →</button>
-                    </div>
-                </div>
-
-                <!-- ═══ STEP 4: PACT ═══ -->
-                <div class="heal-step" id="heal-step-4">
-                    <div class="text-center mb-8">
-                        <span class="text-xs font-bold uppercase tracking-widest text-amber-500 mb-2 block"
-                            data-i18n="heal_s4_label">Paso 4 de 5</span>
-                        <h4 class="text-2xl font-extrabold text-zinc-900 dark:text-white mb-2"
-                            data-i18n="heal_s4_title">🤝 Nuestro Pacto</h4>
-                        <p class="text-sm text-zinc-500 dark:text-zinc-400" data-i18n="heal_s4_sub">Compromisos reales.
-                            Firma cada uno para sellar la promesa.</p>
-                    </div>
-                    <div class="space-y-3" id="heal-pact-cards">
-                        <div class="heal-pact-card flex items-start gap-4" onclick="signPact(this)">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-xl flex-shrink-0">
-                                🗣️</div>
-                            <div class="flex-1">
-                                <p class="font-bold text-sm text-zinc-900 dark:text-white" data-i18n="heal_pact1_t">
-                                    Hablar antes de explotar</p>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1" data-i18n="heal_pact1_d">Si
-                                    algo me molesta, lo digo con calma en el momento. No acumulo.</p>
-                            </div>
-                            <span class="text-xs font-bold text-zinc-400 dark:text-zinc-600 pact-status"
-                                data-i18n="heal_pact_pending">Pendiente</span>
-                        </div>
-                        <div class="heal-pact-card flex items-start gap-4" onclick="signPact(this)">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-xl flex-shrink-0">
-                                ⏸️</div>
-                            <div class="flex-1">
-                                <p class="font-bold text-sm text-zinc-900 dark:text-white" data-i18n="heal_pact2_t">
-                                    Pedir pausa, nunca huir</p>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1" data-i18n="heal_pact2_d">Si
-                                    necesito espacio, lo pido. Pero siempre regreso a resolver.</p>
-                            </div>
-                            <span class="text-xs font-bold text-zinc-400 dark:text-zinc-600 pact-status"
-                                data-i18n="heal_pact_pending">Pendiente</span>
-                        </div>
-                        <div class="heal-pact-card flex items-start gap-4" onclick="signPact(this)">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-xl flex-shrink-0">
-                                🫂</div>
-                            <div class="flex-1">
-                                <p class="font-bold text-sm text-zinc-900 dark:text-white" data-i18n="heal_pact3_t">El
-                                    problema vs. nosotros</p>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1" data-i18n="heal_pact3_d">Nunca
-                                    somos tú contra mí. Siempre es nosotros contra el problema.</p>
-                            </div>
-                            <span class="text-xs font-bold text-zinc-400 dark:text-zinc-600 pact-status"
-                                data-i18n="heal_pact_pending">Pendiente</span>
-                        </div>
-                        <div class="heal-pact-card flex items-start gap-4" onclick="signPact(this)">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-xl flex-shrink-0">
-                                💛</div>
-                            <div class="flex-1">
-                                <p class="font-bold text-sm text-zinc-900 dark:text-white" data-i18n="heal_pact4_t">
-                                    Nunca dormir enojados</p>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1" data-i18n="heal_pact4_d">Aunque
-                                    cueste, siempre buscar un "buenas noches" sincero antes de dormir.</p>
-                            </div>
-                            <span class="text-xs font-bold text-zinc-400 dark:text-zinc-600 pact-status"
-                                data-i18n="heal_pact_pending">Pendiente</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-between mt-6">
-                        <button
-                            class="px-5 py-2.5 rounded-full border border-zinc-200 dark:border-zinc-700 text-sm font-bold text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 transition-all"
-                            onclick="goHealStep(3)" data-i18n="heal_back">← Atrás</button>
-                        <button
-                            class="px-6 py-3 rounded-full bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-amber-500/20"
-                            id="heal-pact-next" disabled onclick="goHealStep(5)" data-i18n="heal_continue">Continuar
-                            →</button>
-                    </div>
-                </div>
-
-                <!-- ═══ STEP 5: EMBRACE ═══ -->
-                <div class="heal-step" id="heal-step-5">
-                    <div class="text-center">
-                        <span class="text-xs font-bold uppercase tracking-widest text-emerald-500 mb-2 block"
-                            data-i18n="heal_s5_label">Paso 5 de 5</span>
-                        <h4 class="text-2xl font-extrabold text-zinc-900 dark:text-white mb-2"
-                            data-i18n="heal_s5_title">🫂 El Abrazo</h4>
-                        <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-8" data-i18n="heal_s5_sub">Lo roto ahora
-                            brilla con oro. Somos más fuertes que antes.</p>
-                    </div>
-                    <div class="relative overflow-hidden rounded-3xl p-8 md:p-12 text-center"
-                        style="background:linear-gradient(135deg,#1a0a00,#3d1800,#065f46);">
-                        <div class="absolute -top-10 -right-10 w-48 h-48 rounded-full opacity-20"
-                            style="background:radial-gradient(circle,#fbbf24,transparent 70%);"></div>
-                        <div class="absolute -bottom-10 -left-10 w-40 h-40 rounded-full opacity-15"
-                            style="background:radial-gradient(circle,#10b981,transparent 70%);"></div>
-                        <div class="relative z-10">
-                            <div class="text-6xl mb-4">🫂</div>
-                            <h4 class="text-2xl md:text-3xl font-black text-white mb-3" data-i18n="heal_final_title">
-                                Sanados y Más Fuertes</h4>
-                            <div class="h-px w-24 mx-auto mb-5 opacity-30"
-                                style="background:linear-gradient(90deg,transparent,#fbbf24,transparent)"></div>
-                            <p class="text-amber-100/90 text-base leading-relaxed font-medium mb-6 max-w-md mx-auto"
-                                data-i18n="heal_final_text">Cada grieta reparada es una prueba de que elegimos
-                                quedarnos. De que el amor no es solo sentir bonito, sino también reconstruir juntos. Tú
-                                y yo, siempre.</p>
-                            <p class="text-white/50 text-sm font-serif italic" data-i18n="heal_final_quote">"Lo roto
-                                reparado con oro es más bello que lo que nunca se rompió."</p>
-                        </div>
-                    </div>
-                    <div class="mt-6 grid grid-cols-3 gap-3 text-center">
-                        <div
-                            class="p-4 rounded-2xl bg-white dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-700">
-                            <p class="text-2xl font-black text-amber-500" id="heal-stat-ack">0</p>
-                            <p class="text-xs font-bold text-zinc-400" data-i18n="heal_stat_ack">Reconocidos</p>
-                        </div>
-                        <div
-                            class="p-4 rounded-2xl bg-white dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-700">
-                            <p class="text-2xl font-black text-emerald-500" id="heal-stat-pact">0</p>
-                            <p class="text-xs font-bold text-zinc-400" data-i18n="heal_stat_pact">Pactos</p>
-                        </div>
-                        <div
-                            class="p-4 rounded-2xl bg-white dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-700">
-                            <p class="text-2xl font-black text-rose-500">100%</p>
-                            <p class="text-xs font-bold text-zinc-400" data-i18n="heal_stat_healed">Sanado</p>
-                        </div>
-                    </div>
-                    <div class="text-center mt-6">
-                        <button
-                            class="px-6 py-3 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm transition-all shadow-lg shadow-emerald-500/20"
-                            onclick="resetHealing()" data-i18n="heal_restart">↻ Empezar de nuevo</button>
-                    </div>
-                </div>
-
             </div>
         </section>
+
 
 
         <!-- Memorial -->
@@ -17684,6 +17384,164 @@
         })();
     </script>
     <script src="voice-channel-widget.js?v=2"></script>
+
+    <!-- Firebase SDK for Realtime Features -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
+        import { getDatabase, ref, push, onValue, onDisconnect, set, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDFkuktrXnsV9-jg2bv5dpJQRR-he8PT3g",
+            authDomain: "yaire-591ca.firebaseapp.com",
+            databaseURL: "https://yaire-591ca-default-rtdb.firebaseio.com",
+            projectId: "yaire-591ca",
+            storageBucket: "yaire-591ca.firebasestorage.app",
+            messagingSenderId: "450381430658",
+            appId: "1:450381430658:web:262d1bb7b1732c3990d99b"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // --- PRESENCIA ---
+        const sessionId = 'session_' + Math.random().toString(36).substr(2, 9);
+        const presenceRef = ref(db, 'presence/' + sessionId);
+        
+        onDisconnect(presenceRef).remove();
+
+        let currentSection = "Navegando";
+        const updatePresence = () => {
+            set(presenceRef, {
+                section: currentSection,
+                lastActive: serverTimestamp(),
+                userAgent: navigator.userAgent.includes('Mobile') ? 'Mobile' : 'Desktop'
+            });
+        };
+        updatePresence();
+
+        const observer = new IntersectionObserver((entries) => {
+            let activeEntries = entries.filter(e => e.isIntersecting);
+            if(activeEntries.length > 0) {
+                let target = activeEntries[0].target;
+                let secId = target.id;
+                const secMap = {
+                    "hero": "Inicio",
+                    "historia": "Nuestra Historia",
+                    "nombre": "El Misterio del Nombre",
+                    "tulipanes": "Sus Flores Favoritas",
+                    "juego1": "Misterio del Girasol",
+                    "distancia": "Distancia",
+                    "comida": "Gastronomía",
+                    "peliculas": "Película Favorita",
+                    "playlist": "Playlist",
+                    "galeria": "Galería de Arte",
+                    "receta": "Receta Especial",
+                    "juegos": "Zona de Juegos",
+                    "promesas": "Mis Promesas",
+                    "guestbook": "Muro de Dedicatorias"
+                };
+                currentSection = secMap[secId] || secId || "Navegando";
+                updatePresence();
+            }
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('section').forEach(sec => observer.observe(sec));
+
+        // --- GUESTBOOK ---
+        const gbForm = document.getElementById('guestbook-form');
+        const gbWall = document.getElementById('guestbook-wall');
+        const gbEmpty = document.getElementById('gb-empty');
+
+        if(gbForm) {
+            gbForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('gb-name').value.trim();
+                const msg = document.getElementById('gb-msg').value.trim();
+                if(name && msg) {
+                    push(ref(db, 'guestbook'), {
+                        name: name,
+                        msg: msg,
+                        timestamp: serverTimestamp()
+                    });
+                    gbForm.reset();
+                }
+            });
+        }
+
+        onValue(ref(db, 'guestbook'), (snapshot) => {
+            if(snapshot.exists()) {
+                if(gbEmpty) gbEmpty.style.display = 'none';
+                gbWall.innerHTML = ''; 
+                const data = snapshot.val();
+                const msgs = Object.entries(data).map(([id, val]) => ({id, ...val})).sort((a,b) => (b.timestamp || Date.now()) - (a.timestamp || Date.now()));
+                
+                msgs.forEach(m => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm transform hover:-translate-y-1 transition-all";
+                    
+                    const date = m.timestamp ? new Date(m.timestamp).toLocaleDateString() : 'Reciente';
+                    
+                    // Escape HTML for safety
+                    const safeName = document.createElement('div'); safeName.innerText = m.name;
+                    const safeMsg = document.createElement('div'); safeMsg.innerText = m.msg;
+
+                    card.innerHTML = `
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-amber-600 dark:text-amber-400 font-bold text-sm">
+                                ${m.name.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <h5 class="text-sm font-bold text-zinc-900 dark:text-white leading-none">${safeName.innerHTML}</h5>
+                                <span class="text-[10px] text-zinc-500 uppercase tracking-wider">${date}</span>
+                            </div>
+                        </div>
+                        <p class="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed">${safeMsg.innerHTML}</p>
+                    `;
+                    gbWall.appendChild(card);
+                });
+            } else {
+                gbWall.innerHTML = '<div class="col-span-full text-center py-12 text-zinc-500 font-serif italic" id="gb-empty">Aún no hay mensajes. ¡Sé el primero!</div>';
+            }
+        });
+
+        // --- CONTROL REMOTO (Lluvia de Flores) ---
+        let loadTime = Date.now();
+        onValue(ref(db, 'live_events/flower_rain/timestamp'), (snapshot) => {
+            const val = snapshot.val();
+            // Only trigger if the event is NEW (happened after the page loaded)
+            if(val && val > loadTime) {
+                if(window.triggerFlowerRain) window.triggerFlowerRain();
+            }
+        });
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        window.triggerFlowerRain = function() {
+            var duration = 5 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 20, spread: 360, ticks: 60, zIndex: 10000 };
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 20 * (timeLeft / duration);
+                
+                confetti(Object.assign({}, defaults, { 
+                    particleCount, 
+                    origin: { x: Math.random(), y: Math.random() - 0.2 },
+                    shapes: ['circle'],
+                    scalar: 2.5,
+                    colors: ['#ec4899', '#f43f5e', '#fca5a5', '#fbbf24'] // Pink, red, light pink, yellow (tulip/rose colors)
+                }));
+            }, 250);
+        }
+    </script>
+
 </body>
 
 </html>
