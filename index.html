@@ -3567,6 +3567,7 @@
                 <div class="w-7 h-7 flex-shrink-0 rounded-md bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-brand-500 relative overflow-hidden"
                     id="spotlight-icon-wrap">
                     <span id="spotlight-icon" class="text-xs transition-transform duration-700">🎵</span>
+                    <img id="spotlight-compact-art" src="" alt="" class="absolute inset-0 w-full h-full object-cover rounded-md" style="display:none;" />
                 </div>
 
                 <!-- Info de pista -->
@@ -3619,6 +3620,53 @@
                 let spotAudio = new Audio();
                 let isSpotPlaying = false;
                 let isSpotlightExpanded = false;
+                let spotArtworkCache = {};
+
+                async function fetchSpotlightArtwork(track) {
+                    const key = track.title + '|' + track.artist;
+                    if (key in spotArtworkCache) return spotArtworkCache[key];
+                    try {
+                        const q = encodeURIComponent(track.title + ' ' + track.artist);
+                        const res = await fetch('https://itunes.apple.com/search?term=' + q + '&entity=song&limit=1');
+                        const data = await res.json();
+                        if (data.results && data.results.length > 0) {
+                            const url = data.results[0].artworkUrl100.replace('100x100bb', '400x400bb');
+                            spotArtworkCache[key] = url;
+                            return url;
+                        }
+                    } catch (e) {}
+                    spotArtworkCache[key] = null;
+                    return null;
+                }
+
+                function updateAllArtwork(artUrl) {
+                    // Vinyl (expanded player)
+                    const vinylArt = document.getElementById('spotlight-vinyl-art');
+                    const vinylIcon = document.getElementById('spotlight-expanded-icon');
+                    if (vinylArt) {
+                        if (artUrl) {
+                            vinylArt.src = artUrl;
+                            vinylArt.style.display = 'block';
+                            if (vinylIcon) vinylIcon.style.display = 'none';
+                        } else {
+                            vinylArt.style.display = 'none';
+                            if (vinylIcon) vinylIcon.style.display = '';
+                        }
+                    }
+                    // Compact player thumbnail
+                    const compactArt = document.getElementById('spotlight-compact-art');
+                    const compactIcon = document.getElementById('spotlight-icon');
+                    if (compactArt) {
+                        if (artUrl) {
+                            compactArt.src = artUrl;
+                            compactArt.style.display = 'block';
+                            if (compactIcon) compactIcon.style.display = 'none';
+                        } else {
+                            compactArt.style.display = 'none';
+                            if (compactIcon) compactIcon.style.display = '';
+                        }
+                    }
+                }
 
                 function toggleSpotlightExpand() {
                     isSpotlightExpanded = !isSpotlightExpanded;
@@ -3679,6 +3727,8 @@
                     if (vinylSpin) {
                         vinylSpin.style.animationPlayState = isSpotPlaying ? 'running' : 'paused';
                     }
+                    // Fetch and display artwork
+                    fetchSpotlightArtwork(track).then(artUrl => updateAllArtwork(artUrl));
                 }
 
                 function renderSpotlightPlaylist() {
@@ -3687,21 +3737,36 @@
                     listEl.innerHTML = '';
                     spotlightTracks.forEach((track, index) => {
                         const isCurrent = index === currentSpotTrack;
+                        const key = track.title + '|' + track.artist;
+                        const cachedArt = spotArtworkCache[key];
                         const item = document.createElement('div');
-                        item.className = `flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 select-none ${
-                            isCurrent 
-                                ? 'bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 font-bold border border-brand-500/20 shadow-sm' 
+                        item.className = 'flex items-center gap-3 px-3 py-2 rounded-xl cursor-pointer transition-all duration-200 select-none ' + (
+                            isCurrent
+                                ? 'bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 font-bold border border-brand-500/20 shadow-sm'
                                 : 'text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/50'
-                        }`;
-                        const icon = isCurrent ? '🔊' : '🎵';
-                        item.innerHTML = `
-                            <span class="text-xs flex-shrink-0">${icon}</span>
-                            <span class="text-xs truncate font-medium flex-1">${track.title}</span>
-                        `;
-                        item.onclick = () => {
-                            spotlightPlayTrack(index);
-                        };
+                        );
+                        const thumbHtml = cachedArt
+                            ? `<img src="${cachedArt}" class="w-8 h-8 rounded-lg object-cover flex-shrink-0" />`
+                            : `<span class="w-8 h-8 rounded-lg bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-sm flex-shrink-0">${isCurrent ? '🔊' : '🎵'}</span>`;
+                        item.innerHTML = thumbHtml +
+                            `<span class="text-xs truncate font-medium flex-1">${track.title}</span>` +
+                            (isCurrent ? '<span class="text-[10px] text-brand-500 flex-shrink-0 font-bold">▶</span>' : '');
+                        item.onclick = () => spotlightPlayTrack(index);
                         listEl.appendChild(item);
+                        // Fetch art if not cached yet — update this item when ready
+                        if (!cachedArt && cachedArt !== null) {
+                            fetchSpotlightArtwork(track).then(artUrl => {
+                                if (artUrl) {
+                                    const thumbEl = item.querySelector('span.w-8');
+                                    if (thumbEl) {
+                                        const img = document.createElement('img');
+                                        img.src = artUrl;
+                                        img.className = 'w-8 h-8 rounded-lg object-cover flex-shrink-0';
+                                        item.replaceChild(img, thumbEl);
+                                    }
+                                }
+                            });
+                        }
                     });
                 }
 
@@ -3766,10 +3831,13 @@
                     if (expTitle) expTitle.textContent = track.title;
                     if (expArtist) expArtist.textContent = track.artist;
                     
-                    // Re-render playlist if player is expanded
-                    if (isSpotlightExpanded) {
-                        renderSpotlightPlaylist();
-                    }
+                    // Fetch and update artwork immediately
+                    fetchSpotlightArtwork(track).then(artUrl => {
+                        updateAllArtwork(artUrl);
+                        if (isSpotlightExpanded) {
+                            renderSpotlightPlaylist();
+                        }
+                    });
 
                     // Actualizar título de ventana con la canción actual
                     if (isSpotPlaying) {
@@ -3811,99 +3879,10 @@
                     }
                 }
 
-                let isSpotShuffle = false;
-                let isSpotRepeat = false;
-                let isSpotMuted = false;
-                let spotVolumePrev = 0.5;
-
                 function spotlightNext() {
-                    if (isSpotRepeat) {
-                        // Replay same track from start
-                        spotAudio.currentTime = 0;
-                        spotAudio.play().then(() => {
-                            isSpotPlaying = true;
-                            spotlightUpdateUI();
-                            spotlightUpdateTitle();
-                        }).catch(console.error);
-                        return;
-                    }
-                    let next;
-                    if (isSpotShuffle) {
-                        do { next = Math.floor(Math.random() * spotlightTracks.length); }
-                        while (spotlightTracks.length > 1 && next === currentSpotTrack);
-                    } else {
-                        next = currentSpotTrack + 1;
-                        if (next >= spotlightTracks.length) next = 0;
-                    }
+                    let next = currentSpotTrack + 1;
+                    if (next >= spotlightTracks.length) next = 0;
                     spotlightPlayTrack(next);
-                }
-
-                function spotlightToggleShuffle() {
-                    isSpotShuffle = !isSpotShuffle;
-                    const btn = document.getElementById('spot-shuffle-btn');
-                    if (btn) {
-                        btn.classList.toggle('text-brand-500', isSpotShuffle);
-                        btn.classList.toggle('border-brand-400', isSpotShuffle);
-                        btn.classList.toggle('bg-brand-50', isSpotShuffle);
-                        btn.classList.toggle('dark:bg-brand-900/20', isSpotShuffle);
-                        btn.classList.toggle('text-zinc-400', !isSpotShuffle);
-                        btn.classList.toggle('dark:text-zinc-500', !isSpotShuffle);
-                        btn.classList.toggle('border-zinc-200', !isSpotShuffle);
-                        btn.classList.toggle('dark:border-zinc-700', !isSpotShuffle);
-                    }
-                }
-
-                function spotlightToggleRepeat() {
-                    isSpotRepeat = !isSpotRepeat;
-                    const btn = document.getElementById('spot-repeat-btn');
-                    if (btn) {
-                        btn.classList.toggle('text-brand-500', isSpotRepeat);
-                        btn.classList.toggle('border-brand-400', isSpotRepeat);
-                        btn.classList.toggle('bg-brand-50', isSpotRepeat);
-                        btn.classList.toggle('dark:bg-brand-900/20', isSpotRepeat);
-                        btn.classList.toggle('text-zinc-400', !isSpotRepeat);
-                        btn.classList.toggle('dark:text-zinc-500', !isSpotRepeat);
-                        btn.classList.toggle('border-zinc-200', !isSpotRepeat);
-                        btn.classList.toggle('dark:border-zinc-700', !isSpotRepeat);
-                    }
-                }
-
-                function spotlightSetVolume(val) {
-                    const v = parseInt(val) / 100;
-                    spotAudio.volume = v;
-                    isSpotMuted = v === 0;
-                    spotVolumePrev = v > 0 ? v : spotVolumePrev;
-                    // Update slider gradient
-                    const slider = document.getElementById('spot-volume-slider');
-                    if (slider) slider.style.background = `linear-gradient(to right, #f59e0b ${val}%, #d4d4d8 ${val}%)`;
-                    const pct = document.getElementById('spot-vol-pct');
-                    if (pct) pct.textContent = `${val}%`;
-                    // Update volume icon
-                    const volIcon = document.getElementById('spot-vol-icon');
-                    if (volIcon) {
-                        if (v === 0) {
-                            volIcon.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
-                        } else if (v < 0.5) {
-                            volIcon.innerHTML = '<path d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"/>';
-                        } else {
-                            volIcon.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>';
-                        }
-                    }
-                }
-
-                function spotlightToggleMute() {
-                    const slider = document.getElementById('spot-volume-slider');
-                    if (isSpotMuted) {
-                        // Unmute: restore previous volume
-                        const restoreVal = Math.round(spotVolumePrev * 100) || 50;
-                        if (slider) { slider.value = restoreVal; spotlightSetVolume(restoreVal); }
-                        isSpotMuted = false;
-                    } else {
-                        // Mute
-                        spotVolumePrev = spotAudio.volume || 0.5;
-                        if (slider) { slider.value = 0; spotlightSetVolume(0); }
-                        isSpotMuted = true;
-                    }
                 }
 
                 function spotlightUpdateUI() {
@@ -3997,6 +3976,7 @@
                 <div class="w-24 h-24 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center shadow-lg relative overflow-hidden mb-4 border-4 border-white dark:border-zinc-900" id="spotlight-vinyl-container">
                     <div class="absolute inset-2 rounded-full border-2 border-dashed border-zinc-400 dark:border-zinc-600 opacity-40 animate-spin" id="spotlight-vinyl-spin" style="animation-duration: 8s; animation-play-state: paused;"></div>
                     <span class="text-3xl" id="spotlight-expanded-icon">🎵</span>
+                    <img id="spotlight-vinyl-art" src="" alt="" class="absolute inset-0 w-full h-full object-cover rounded-full" style="display:none;" />
                 </div>
 
                 <!-- Detailed Title & Artist -->
@@ -4006,7 +3986,7 @@
                 </div>
 
                 <!-- Big Player Controls -->
-                <div class="flex items-center gap-6 mb-4">
+                <div class="flex items-center gap-6">
                     <!-- Prev button -->
                     <button class="w-10 h-10 rounded-full flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:text-brand-500 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-all cursor-pointer" onclick="spotlightPrevTrack()">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -4027,46 +4007,6 @@
                             <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
                         </svg>
                     </button>
-                </div>
-
-                <!-- Secondary Controls: Shuffle + Repeat -->
-                <div class="flex items-center gap-5 mb-4">
-                    <!-- Shuffle -->
-                    <button id="spot-shuffle-btn"
-                        onclick="spotlightToggleShuffle()"
-                        class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold transition-all cursor-pointer border border-zinc-200 dark:border-zinc-700 text-zinc-400 dark:text-zinc-500 hover:text-brand-500 hover:border-brand-400">
-                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17zm4.76-.08l1.406 1.406 1.414-1.415-1.407-1.405L15.35 9.09zM18 4l-2.59 2.59L18 9.17V8h1v8h-1v-1.17l-2.59 2.58L16.83 18H18v1h3v-2h-1V7h1V5h-3v-1zM4 8v2h4.17L6.76 8.59 4 8zm0 6h4v2H4zm8.41 2.83L11 18.17V20h2v-1.17l1.41-1.42-1.41-1.41-.59.59z"/>
-                        </svg>
-                        <span id="spot-shuffle-label">Aleatorio</span>
-                    </button>
-
-                    <!-- Repeat -->
-                    <button id="spot-repeat-btn"
-                        onclick="spotlightToggleRepeat()"
-                        class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold transition-all cursor-pointer border border-zinc-200 dark:border-zinc-700 text-zinc-400 dark:text-zinc-500 hover:text-brand-500 hover:border-brand-400">
-                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4zm-4-2V9h-1l-2 1v1h1.5v4H13z"/>
-                        </svg>
-                        <span id="spot-repeat-label">Repetir</span>
-                    </button>
-                </div>
-
-                <!-- Volume Control -->
-                <div class="flex items-center gap-3 w-full max-w-[220px]">
-                    <!-- Mute icon -->
-                    <button onclick="spotlightToggleMute()" class="text-zinc-400 dark:text-zinc-500 hover:text-brand-500 transition-colors cursor-pointer flex-shrink-0" id="spot-vol-icon-btn">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" id="spot-vol-icon">
-                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
-                        </svg>
-                    </button>
-                    <!-- Slider -->
-                    <input type="range" min="0" max="100" value="50" id="spot-volume-slider"
-                        oninput="spotlightSetVolume(this.value)"
-                        class="flex-1 h-1.5 rounded-full appearance-none cursor-pointer accent-amber-500"
-                        style="background: linear-gradient(to right, #f59e0b 50%, #d4d4d8 50%);"
-                    />
-                    <span class="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 w-7 text-right" id="spot-vol-pct">50%</span>
                 </div>
             </div>
 
