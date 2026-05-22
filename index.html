@@ -3637,8 +3637,9 @@
                         gsap.set(expEl, { y: '100%', opacity: 0 });
                         expEl.classList.remove('pointer-events-none');
                         expEl.classList.add('pointer-events-auto');
+                        // Sync UI only — never touch spotAudio.src here (would pause playback)
+                        syncExpandedPlayerUI();
                         renderSpotlightPlaylist();
-                        spotlightLoadTrack(currentSpotTrack);
                         gsap.to(expEl, {
                             y: '0%',
                             opacity: 1,
@@ -3656,6 +3657,27 @@
                                 expEl.classList.add('pointer-events-none');
                             }
                         });
+                    }
+                }
+
+                // Only updates text + icon in the expanded view — never touches spotAudio
+                function syncExpandedPlayerUI() {
+                    const track = spotlightTracks[currentSpotTrack];
+                    if (!track) return;
+                    const expTitle = document.getElementById('spotlight-expanded-title');
+                    const expArtist = document.getElementById('spotlight-expanded-artist');
+                    if (expTitle) expTitle.textContent = track.title;
+                    if (expArtist) expArtist.textContent = track.artist;
+                    // Sync play/pause icon and vinyl spin state
+                    const expPlayIcon = document.getElementById('spotlight-expanded-play-icon');
+                    const vinylSpin = document.getElementById('spotlight-vinyl-spin');
+                    if (expPlayIcon) {
+                        expPlayIcon.innerHTML = isSpotPlaying
+                            ? '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'
+                            : '<path d="M8 5v14l11-7z"/>';
+                    }
+                    if (vinylSpin) {
+                        vinylSpin.style.animationPlayState = isSpotPlaying ? 'running' : 'paused';
                     }
                 }
 
