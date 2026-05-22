@@ -1313,6 +1313,12 @@
         if (msgsEl) msgsEl.scrollTop = msgsEl.scrollHeight;
         const input = document.getElementById('vc-chat-in');
         if (input) setTimeout(() => input.focus(), 100);
+        // ✨ Restaurar título al abrir el chat
+        document.title = '28E';
+        if (this._vcTitleListener) {
+          document.removeEventListener('visibilitychange', this._vcTitleListener);
+          this._vcTitleListener = null;
+        }
       }
       this._playSfx(this._chatOpen ? 'toggleOn' : 'toggleOff', 0.3);
     }
@@ -1345,6 +1351,19 @@
           const badgeEl = toggle.querySelector('.vc-chat-badge-sm');
           if (badgeEl) { badgeEl.textContent = this._chatUnread; }
           else { toggle.insertAdjacentHTML('beforeend', `<span class="vc-chat-badge-sm">${this._chatUnread}</span>`); }
+        }
+
+        // ✨ Notificación en título de ventana
+        const preview = text.length > 30 ? text.slice(0, 30) + '...' : text;
+        document.title = `\uD83D\uDCAC ${name}: ${preview} | 28E`;
+        // Restaurar título automáticamente al volver a la pestaña
+        if (!this._vcTitleListener) {
+          this._vcTitleListener = () => {
+            if (document.visibilityState === 'visible') {
+              document.title = '28E';
+            }
+          };
+          document.addEventListener('visibilitychange', this._vcTitleListener);
         }
       }
 
