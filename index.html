@@ -3558,7 +3558,7 @@
         </div>
 
         <!-- Spotlight Ultra-Compact Player -->
-        <div class="mx-3 mb-3">
+        <div class="mx-3 mb-3 cursor-pointer" onclick="toggleSpotlightExpand()">
             <div
                 class="flex items-center gap-2 p-1.5 rounded-xl bg-zinc-50/50 dark:bg-zinc-900/20 border border-transparent hover:border-zinc-200/50 dark:hover:border-zinc-700/50 transition-all group">
                 <!-- Icono giratorio al reproducir -->
@@ -3579,14 +3579,14 @@
                 <div class="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
                     <button
                         class="w-7 h-7 rounded-full flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:text-brand-500 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
-                        onclick="spotlightTogglePlay()">
+                        onclick="event.stopPropagation(); spotlightTogglePlay()">
                         <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24" id="spotlight-play-icon">
                             <path d="M8 5v14l11-7z" />
                         </svg>
                     </button>
                     <button
                         class="w-7 h-7 rounded-full flex items-center justify-center text-zinc-400 hover:text-brand-500 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
-                        onclick="spotlightNext()">
+                        onclick="event.stopPropagation(); spotlightNext()">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
                         </svg>
@@ -3616,6 +3616,72 @@
                 let currentSpotTrack = 0;
                 let spotAudio = new Audio();
                 let isSpotPlaying = false;
+                let isSpotlightExpanded = false;
+
+                function toggleSpotlightExpand() {
+                    isSpotlightExpanded = !isSpotlightExpanded;
+                    if (typeof AudioManager !== 'undefined') {
+                        AudioManager.play(isSpotlightExpanded ? 'flyin.wav' : 'flyout.wav', 0.6);
+                    }
+                    const expEl = document.getElementById('spotlight-expanded');
+                    if (!expEl) return;
+                    if (isSpotlightExpanded) {
+                        gsap.to(expEl, {
+                            y: '0%',
+                            opacity: 1,
+                            duration: 0.4,
+                            ease: 'power2.out',
+                            onStart: () => {
+                                expEl.classList.remove('pointer-events-none');
+                                expEl.classList.add('pointer-events-auto');
+                                renderSpotlightPlaylist();
+                            }
+                        });
+                        // Sync track details on open
+                        spotlightLoadTrack(currentSpotTrack);
+                    } else {
+                        gsap.to(expEl, {
+                            y: '100%',
+                            opacity: 0,
+                            duration: 0.35,
+                            ease: 'power2.in',
+                            onComplete: () => {
+                                expEl.classList.remove('pointer-events-auto');
+                                expEl.classList.add('pointer-events-none');
+                            }
+                        });
+                    }
+                }
+
+                function renderSpotlightPlaylist() {
+                    const listEl = document.getElementById('spotlight-expanded-list');
+                    if (!listEl) return;
+                    listEl.innerHTML = '';
+                    spotlightTracks.forEach((track, index) => {
+                        const isCurrent = index === currentSpotTrack;
+                        const item = document.createElement('div');
+                        item.className = `flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 select-none ${
+                            isCurrent 
+                                ? 'bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 font-bold border border-brand-500/20 shadow-sm' 
+                                : 'text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/50'
+                        }`;
+                        const icon = isCurrent ? '🔊' : '🎵';
+                        item.innerHTML = `
+                            <span class="text-xs flex-shrink-0">${icon}</span>
+                            <span class="text-xs truncate font-medium flex-1">${track.title}</span>
+                        `;
+                        item.onclick = () => {
+                            spotlightPlayTrack(index);
+                        };
+                        listEl.appendChild(item);
+                    });
+                }
+
+                function spotlightPrevTrack() {
+                    let prev = currentSpotTrack - 1;
+                    if (prev < 0) prev = spotlightTracks.length - 1;
+                    spotlightPlayTrack(prev);
+                }
 
                 function initSpotlight() {
                     // Cargar canciones desde Firebase (vía config del admin panel)
@@ -3665,6 +3731,18 @@
                     spotAudio.src = track.src;
                     document.getElementById('spotlight-title').textContent = track.title;
                     document.getElementById('spotlight-artist').textContent = track.artist;
+                    
+                    // Expanded player elements
+                    const expTitle = document.getElementById('spotlight-expanded-title');
+                    const expArtist = document.getElementById('spotlight-expanded-artist');
+                    if (expTitle) expTitle.textContent = track.title;
+                    if (expArtist) expArtist.textContent = track.artist;
+                    
+                    // Re-render playlist if player is expanded
+                    if (isSpotlightExpanded) {
+                        renderSpotlightPlaylist();
+                    }
+
                     // Actualizar título de ventana con la canción actual
                     if (isSpotPlaying) {
                         document.title = `\uD83C\uDFB5 ${track.title}`;
@@ -3709,21 +3787,34 @@
                     let next = currentSpotTrack + 1;
                     if (next >= spotlightTracks.length) next = 0;
                     spotlightPlayTrack(next);
-                    // Título se actualiza en spotlightPlayTrack → spotlightLoadTrack
                 }
 
                 function spotlightUpdateUI() {
                     const icon = document.getElementById('spotlight-play-icon');
                     const iconWrap = document.getElementById('spotlight-icon-wrap');
+                    const expPlayIcon = document.getElementById('spotlight-expanded-play-icon');
+                    const vinylSpin = document.getElementById('spotlight-vinyl-spin');
 
                     if (isSpotPlaying) {
                         icon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
                         icon.classList.remove('ml-0.5');
                         iconWrap.classList.add('bg-brand-50', 'dark:bg-brand-900/20');
+                        if (expPlayIcon) {
+                            expPlayIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+                            expPlayIcon.classList.remove('ml-0.5');
+                        }
                     } else {
                         icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
                         icon.classList.add('ml-0.5');
                         iconWrap.classList.remove('bg-brand-50', 'dark:bg-brand-900/20');
+                        if (expPlayIcon) {
+                            expPlayIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+                            expPlayIcon.classList.add('ml-0.5');
+                        }
+                    }
+
+                    if (vinylSpin) {
+                        vinylSpin.style.animationPlayState = isSpotPlaying ? 'running' : 'paused';
                     }
                 }
 
@@ -3766,6 +3857,64 @@
                 <button
                     class="lang-btn px-3.5 py-1.5 text-[10px] font-extrabold rounded-full transition-all duration-300"
                     data-lang="pt">PT</button>
+            </div>
+        </div>
+
+        <!-- Spotlight Expanded Playlist & Player Overlay -->
+        <div id="spotlight-expanded"
+            class="absolute inset-0 bg-white/98 dark:bg-zinc-950/98 z-[60] flex flex-col translate-y-full opacity-0 pointer-events-none transition-all duration-300 ease-in-out">
+            <!-- Header of expanded player -->
+            <div class="px-5 pt-5 pb-3 flex items-center justify-between flex-shrink-0 border-b border-zinc-100 dark:border-zinc-800/80">
+                <button onclick="toggleSpotlightExpand()"
+                    class="w-8 h-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-400 hover:text-zinc-700 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all text-sm border border-zinc-200/50 dark:border-zinc-700/50 cursor-pointer">
+                    ✕
+                </button>
+                <span class="font-extrabold text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Spotlight Radio</span>
+                <div class="w-8"></div>
+            </div>
+
+            <!-- Playing Track & Controls -->
+            <div class="p-6 flex flex-col items-center justify-center border-b border-zinc-100 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/30">
+                <!-- Disk / Vinyl Animation -->
+                <div class="w-24 h-24 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center shadow-lg relative overflow-hidden mb-4 border-4 border-white dark:border-zinc-900" id="spotlight-vinyl-container">
+                    <div class="absolute inset-2 rounded-full border-2 border-dashed border-zinc-400 dark:border-zinc-600 opacity-40 animate-spin" id="spotlight-vinyl-spin" style="animation-duration: 8s; animation-play-state: paused;"></div>
+                    <span class="text-3xl" id="spotlight-expanded-icon">🎵</span>
+                </div>
+
+                <!-- Detailed Title & Artist -->
+                <div class="text-center w-full max-w-xs mb-5">
+                    <h3 class="text-base font-extrabold text-zinc-800 dark:text-zinc-100 truncate" id="spotlight-expanded-title">Título de la Canción</h3>
+                    <p class="text-xs text-zinc-400 dark:text-zinc-500 mt-1 truncate" id="spotlight-expanded-artist">Artista</p>
+                </div>
+
+                <!-- Big Player Controls -->
+                <div class="flex items-center gap-6">
+                    <!-- Prev button -->
+                    <button class="w-10 h-10 rounded-full flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:text-brand-500 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-all cursor-pointer" onclick="spotlightPrevTrack()">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+                        </svg>
+                    </button>
+
+                    <!-- Play/Pause big button -->
+                    <button class="w-14 h-14 rounded-full bg-brand-500 hover:bg-brand-600 text-white flex items-center justify-center shadow-lg hover:scale-105 transition-all cursor-pointer" onclick="spotlightTogglePlay()">
+                        <svg class="w-7 h-7 ml-0.5" fill="currentColor" viewBox="0 0 24 24" id="spotlight-expanded-play-icon">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                    </button>
+
+                    <!-- Next button -->
+                    <button class="w-10 h-10 rounded-full flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:text-brand-500 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-all cursor-pointer" onclick="spotlightNext()">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Playlist Song List -->
+            <div class="flex-1 overflow-y-auto px-4 py-3 letter-scroll" id="spotlight-expanded-list">
+                <!-- Dynamic List -->
             </div>
         </div>
     </div>
@@ -13383,6 +13532,9 @@
                 }, 200);
             } else {
                 AudioManager.play('flyout.wav', 0.6);
+                if (typeof isSpotlightExpanded !== 'undefined' && isSpotlightExpanded) {
+                    toggleSpotlightExpand();
+                }
                 if (p) p.classList.remove('open');
                 if (o) { o.classList.add('opacity-0'); setTimeout(() => o.classList.add('hidden'), 300); }
                 // Clear search and ensure focus is killed
