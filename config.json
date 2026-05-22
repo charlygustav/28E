@@ -6,10 +6,12 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-05-21T00:46:16.442Z",
+  "lastUpdated": "2026-05-22T04:25:27.477Z",
   "maintDate": "2026-05-20T04:51",
   "maintType": "indefinite",
   "mantenimiento": false,
+  "refugeText": "",
+  "refugeTitle": "Te escucho, mi amor",
   "songs": [
     {
       "artist": "Quevedo",
@@ -37,7 +39,7 @@
       "title": "Bon Bon"
     },
     {
-      "artist": "Alvaro Diaz. LATIN MAFIA",
+      "artist": "Alvaro Diaz, LATIN MAFIA",
       "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942999880_MALASNOTICIAS_-_Alvaro_Diaz__LATIN_MAFIA.mp3",
       "title": "MALASNOTICIAS."
     },
@@ -118,14 +120,6 @@
     }
   ],
   "spotlightTips": {
-    "en": [
-      "Search curiosities of the page...",
-      "Explore the 'Tulip Garden'...",
-      "Suggestions: 'I love you' or 'manzanita'...",
-      "Search 'The Covenant' to see our promise...",
-      "Did you know that there is magic on April 28?",
-      "Try typing 'yaire' and hit Enter..."
-    ],
     "es": [
       "Buscar curiosidades de la página...",
       "Explora el 'Jardín de Tulipanes'...",
@@ -133,25 +127,28 @@
       "Busca 'El Pacto' para ver nuestra promesa...",
       "Prueba a escribir 'yaire' y dale Enter..."
     ],
-    "fr": [
-      "Rechercher les curiosités de la page...",
-      "Explorez le « jardin des tulipes »...",
-      "Suggestions : 'Je t'aime' ou 'manzanita'...",
-      "Recherchez « The Covenant » pour voir notre promesse...",
-      "Saviez-vous qu'il y a de la magie le 28 avril ?",
-      "Essayez de taper « yaire » et appuyez sur Entrée..."
+    "en": [
+      "Search curiosities of the page...",
+      "Explore the 'Tulip Garden'...",
+      "Suggestions: 'I love you' or 'manzanita'...",
+      "Search 'The Covenant' to see our promise...",
+      "Try typing 'yaire' and hit Enter..."
     ],
     "pt": [
       "Pesquise curiosidades da página...",
       "Explore o 'Jardim das Tulipas'...",
       "Sugestões: 'eu te amo' ou 'manzanita'...",
       "Pesquise 'The Covenant' para ver nossa promessa...",
-      "Você sabia que existe magia no dia 28 de abril?",
       "Tente digitar 'yaire' e pressione Enter..."
+    ],
+    "fr": [
+      "Rechercher les curiosités de la page...",
+      "Explorez le « jardin des tulipes »...",
+      "Suggestions : 'Je t'aime' ou 'manzanita'...",
+      "Recherchez « The Covenant » pour voir notre promesse...",
+      "Essayez de taper « yaire » et appuyez sur Entrée..."
     ]
   },
   "vaultHint": "Pista: La identidad que usaste cuando nuestra historia continuó entre píxeles.",
-  "voicePassword": "yairealvarado",
-  "refugeTitle": "Te escucho, mi amor",
-  "refugeText": ""
+  "voicePassword": "yairealvarado"
 }
