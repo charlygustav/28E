@@ -6782,47 +6782,73 @@
 
 
         <!-- Muro de Dedicatorias -->
+                <!-- SECTION: GUESTBOOK (MURO DE DEDICATORIAS) -->
         <section id="guestbook" class="cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 scroll-mt-20 relative overflow-hidden">
-            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-50/50 via-white to-white dark:from-zinc-900/50 dark:via-black dark:to-black -z-10"></div>
-            <div class="max-w-5xl mx-auto px-6">
+            <!-- Glassmorphism Background -->
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-500/10 via-white to-white dark:from-zinc-900/50 dark:via-black dark:to-black -z-10"></div>
+            
+            <div class="max-w-6xl mx-auto px-6">
                 <!-- Header -->
-                <div class="text-center mb-12">
-                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-50 dark:bg-amber-900/20 border border-amber-200/60 dark:border-amber-800/30 text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 mb-4">
-                        📝 Muro de Dedicatorias
+                <div class="text-center mb-16 relative z-10" id="gb-header-anim">
+                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-50 dark:bg-amber-900/20 border border-amber-200/60 dark:border-amber-800/30 text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 mb-4 shadow-sm">
+                        <i class="ph-fill ph-book-open"></i> <span data-i18n="gb_tag">Muro de Dedicatorias</span>
                     </span>
-                    <h3 class="text-3xl md:text-5xl font-extrabold mb-4 text-zinc-900 dark:text-white">Dejando Huella</h3>
-                    <p class="text-zinc-500 dark:text-zinc-400 text-base md:text-lg max-w-xl mx-auto leading-relaxed">
+                    <h3 class="text-4xl md:text-6xl font-black mb-6 text-zinc-900 dark:text-white tracking-tight drop-shadow-sm" data-i18n="gb_title">Dejando Huella</h3>
+                    <p class="text-zinc-500 dark:text-zinc-400 text-base md:text-xl max-w-2xl mx-auto leading-relaxed" data-i18n="gb_desc">
                         Un espacio para dejar mensajes, recuerdos o simplemente un saludo. Todo lo que se escriba aquí quedará guardado para siempre.
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <!-- Formulario -->
-                    <div class="lg:col-span-1">
-                        <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-xl shadow-zinc-200/20 dark:shadow-none sticky top-28">
-                            <h4 class="text-xl font-bold mb-4">Escribe un mensaje</h4>
-                            <form id="guestbook-form" class="flex flex-col gap-4">
-                                <div>
-                                    <label class="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Tu Nombre</label>
-                                    <input type="text" id="gb-name" required maxlength="30" class="w-full bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none transition-all dark:text-white" placeholder="Ej. Visitante Anónimo">
+                <div class="flex flex-col lg:flex-row gap-10">
+                    <!-- Formulario (Digital Glass Postcard) -->
+                    <div class="lg:w-1/3 z-20" id="gb-form-anim">
+                        <div class="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border border-zinc-200/50 dark:border-zinc-700/50 rounded-[2rem] p-8 shadow-2xl shadow-zinc-200/50 dark:shadow-none sticky top-28 overflow-hidden relative group">
+                            <!-- Glow effect behind form -->
+                            <div class="absolute -top-24 -right-24 w-48 h-48 bg-amber-400/20 rounded-full blur-3xl group-hover:bg-amber-400/30 transition-all duration-500"></div>
+                            
+                            <h4 class="text-2xl font-black mb-6 flex items-center gap-3 text-zinc-900 dark:text-white" data-i18n="gb_form_title">
+                                <i class="ph-fill ph-pen-nib text-amber-500"></i> Escribe un mensaje
+                            </h4>
+                            <form id="guestbook-form" class="flex flex-col gap-5 relative z-10">
+                                <div class="group/input">
+                                    <label class="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2 group-focus-within/input:text-amber-500 transition-colors" data-i18n="gb_label_name">Tu Nombre</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-400">
+                                            <i class="ph-fill ph-user"></i>
+                                        </div>
+                                        <input type="text" id="gb-name" required maxlength="30" class="w-full bg-zinc-100/50 dark:bg-zinc-950/50 border border-zinc-200 dark:border-zinc-800 rounded-2xl pl-11 pr-4 py-3.5 text-sm font-medium focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 outline-none transition-all dark:text-white shadow-inner" placeholder="Ej. Visitante Anónimo" data-i18n-placeholder="gb_ph_name">
+                                    </div>
                                 </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Mensaje</label>
-                                    <textarea id="gb-msg" required maxlength="250" rows="4" class="w-full bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none transition-all resize-none dark:text-white" placeholder="Escribe algo bonito..."></textarea>
+                                <div class="group/input">
+                                    <label class="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2 group-focus-within/input:text-amber-500 transition-colors" data-i18n="gb_label_msg">Mensaje</label>
+                                    <div class="relative">
+                                        <textarea id="gb-msg" required maxlength="250" rows="5" class="w-full bg-zinc-100/50 dark:bg-zinc-950/50 border border-zinc-200 dark:border-zinc-800 rounded-2xl px-4 py-4 text-sm font-medium focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 outline-none transition-all resize-none dark:text-white shadow-inner" placeholder="Escribe algo bonito..." data-i18n-placeholder="gb_ph_msg"></textarea>
+                                        <!-- Character count indicator -->
+                                        <div class="absolute bottom-3 right-4 text-[10px] font-bold text-zinc-400" id="gb-char-count">0/250</div>
+                                    </div>
                                 </div>
-                                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-xl transition-colors mt-2 shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2">
-                                    <i class="ph-fill ph-paper-plane-tilt"></i> Publicar Mensaje
+                                <button type="submit" class="w-full relative overflow-hidden group/btn bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-black py-4 px-6 rounded-2xl transition-all mt-2 shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02]">
+                                    <!-- Button Hover Gradient -->
+                                    <div class="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-500 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+                                    <div class="relative z-10 flex items-center justify-center gap-2">
+                                        <i class="ph-bold ph-paper-plane-right group-hover/btn:translate-x-1 transition-transform"></i> 
+                                        <span data-i18n="gb_btn">Publicar Mensaje</span>
+                                    </div>
                                 </button>
                             </form>
                         </div>
                     </div>
 
-                    <!-- Muro -->
-                    <div class="lg:col-span-2">
-                        <div id="guestbook-wall" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <!-- Los mensajes se inyectarán aquí -->
-                            <div class="col-span-full text-center py-12 text-zinc-500 font-serif italic" id="gb-empty">
-                                Cargando mensajes...
+                    <!-- Muro (Glassmorphism Masonry) -->
+                    <div class="lg:w-2/3" id="gb-wall-container">
+                        <!-- We use columns for masonry layout -->
+                        <div id="guestbook-wall" class="columns-1 md:columns-2 gap-6 space-y-6">
+                            <!-- Loading state -->
+                            <div class="break-inside-avoid w-full text-center py-20" id="gb-empty">
+                                <div class="inline-flex flex-col items-center justify-center">
+                                    <i class="ph-duotone ph-spinner-gap animate-spin text-4xl text-amber-500 mb-4"></i>
+                                    <p class="text-zinc-500 font-serif italic text-lg" data-i18n="gb_loading">Cargando mensajes...</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -11185,6 +11211,7 @@
                 flag: "ES", code: "ES", nav_subtitle: "Para Yaire",
                 menu_nav: "Spotlight", menu_home: "Inicio", menu_story: "Historia & Tiempo", menu_name: "Tu Nombre", menu_tulips: "Tus Flores", menu_quiz: "El Misterio", menu_dist: "La Distancia", menu_food: "El Pacto", menu_universe: "Su Universo", menu_gallery: "Galería de Arte", menu_games: "Minijuegos", menu_promises: "Promesas", menu_memorial: "Para tu Ángel", menu_hype: "El Hype", menu_stats: "Estadísticas", menu_secret: "El Último Secreto", menu_settings: "Ajustes de Sistema", menu_theme: "Tema Visual", menu_lang: "Idioma", menu_new_badge: "Nuevo",
                 menu_colors: "Colores Favoritos", menu_tulip_colors: "Guía de Colores", menu_healing: "Sanación", menu_guestbook: "Muro de Dedicatorias",
+                gb_tag: "Muro de Dedicatorias", gb_title: "Dejando Huella", gb_desc: "Un espacio para dejar mensajes, recuerdos o simplemente un saludo. Todo lo que se escriba aquí quedará guardado para siempre.", gb_form_title: "Escribe un mensaje", gb_label_name: "Tu Nombre", gb_ph_name: "Ej. Visitante Anónimo", gb_label_msg: "Mensaje", gb_ph_msg: "Escribe algo bonito...", gb_btn: "Publicar Mensaje", gb_loading: "Cargando mensajes...", gb_empty: "Aún no hay mensajes. ¡Sé el primero!", gb_recent: "Reciente",
                 menu_cat_essence: "✦ ESENCIA", menu_cat_exp: "✦ EXPERIENCIAS", menu_cat_special: "✦ ESPECIAL", menu_search: "Buscar sección...",
                 search_empty_title: "Sin resultados...", search_empty_sub: "Intenta con otra frase, mi amor.", search_game_tag: "(Minijuego)", search_game_btn: "Abrir Juego", search_recipe_btn: "Ver Receta", search_tool_btn: "Abrir Herramienta", menu_recipe: "Gastronomía", menu_tools: "Herramientas",
                 theme_light: "Claro", theme_dark: "Oscuro", theme_system: "Sistema",
@@ -11536,6 +11563,7 @@
             en: {
                 flag: "EN", code: "EN", nav_subtitle: "For Yaire", menu_nav: "Spotlight", menu_home: "Home", menu_story: "Story & Time", menu_name: "Your Name", menu_tulips: "Your Flowers", menu_quiz: "The Mystery", menu_dist: "The Distance", menu_food: "The Pact", menu_universe: "Her Universe", menu_gallery: "Art Gallery", menu_games: "Minigames", menu_promises: "Promises", menu_memorial: "For Your Angel", menu_hype: "The Hype", menu_stats: "Statistics", menu_secret: "The Last Secret", menu_settings: "System Settings", menu_theme: "Visual Theme", menu_lang: "Language", menu_new_badge: "New",
                 menu_colors: "Favorite Colors", menu_tulip_colors: "Color Guide", menu_healing: "Healing", menu_guestbook: "Guestbook",
+                gb_tag: "Guestbook", gb_title: "Leaving a Mark", gb_desc: "A space to leave messages, memories, or just a greeting. Everything written here will be kept forever.", gb_form_title: "Write a message", gb_label_name: "Your Name", gb_ph_name: "Ex. Anonymous Guest", gb_label_msg: "Message", gb_ph_msg: "Write something nice...", gb_btn: "Post Message", gb_loading: "Loading messages...", gb_empty: "No messages yet. Be the first!", gb_recent: "Recent",
                 menu_cat_essence: "🌸 ESSENCE", menu_cat_exp: "✨ EXPERIENCES", menu_cat_special: "🌟 SPECIAL", menu_search: "Search section...",
                 search_empty_title: "No results...", search_empty_sub: "Try another phrase, my love.", search_game_tag: "(Minigame)", search_game_btn: "Open Game", search_recipe_btn: "View Recipe", search_tool_btn: "Open Tool", menu_recipe: "Gastronomy", menu_tools: "Tools",
                 theme_light: "Light", theme_dark: "Dark", theme_system: "System",
