@@ -4070,6 +4070,68 @@
                         }
                     }
                 });
+
+                // --- PROGRESS BAR LOGIC ---
+                function spotlightFormatTime(seconds) {
+                    if (isNaN(seconds)) return "0:00";
+                    const m = Math.floor(seconds / 60);
+                    const s = Math.floor(seconds % 60);
+                    return m + ':' + (s < 10 ? '0' : '') + s;
+                }
+
+                spotAudio.addEventListener('timeupdate', () => {
+                    const currentTime = spotAudio.currentTime;
+                    const duration = spotAudio.duration || 0;
+                    const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
+                    
+                    const fill = document.getElementById('spotlight-progress-fill');
+                    const thumb = document.getElementById('spotlight-progress-thumb');
+                    const currentTimeEl = document.getElementById('spotlight-current-time');
+                    
+                    if (fill) fill.style.width = progressPercent + '%';
+                    if (thumb) thumb.style.left = progressPercent + '%';
+                    if (currentTimeEl) currentTimeEl.textContent = spotlightFormatTime(currentTime);
+                });
+
+                spotAudio.addEventListener('loadedmetadata', () => {
+                    const totalTimeEl = document.getElementById('spotlight-total-time');
+                    if (totalTimeEl) totalTimeEl.textContent = spotlightFormatTime(spotAudio.duration);
+                });
+
+                function spotlightSeek(e) {
+                    const container = document.getElementById('spotlight-progress-container');
+                    if (!container || !spotAudio.duration) return;
+                    const rect = container.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left;
+                    const percent = Math.max(0, Math.min(1, clickX / rect.width));
+                    spotAudio.currentTime = percent * spotAudio.duration;
+                }
+                
+                // Drag functionality for progress bar
+                let isDraggingProgress = false;
+                function setupProgressDrag() {
+                    const container = document.getElementById('spotlight-progress-container');
+                    if (!container) return;
+                    
+                    container.addEventListener('mousedown', (e) => {
+                        isDraggingProgress = true;
+                        spotlightSeek(e);
+                    });
+                    
+                    document.addEventListener('mousemove', (e) => {
+                        if (isDraggingProgress) spotlightSeek(e);
+                    });
+                    
+                    document.addEventListener('mouseup', () => {
+                        isDraggingProgress = false;
+                    });
+                }
+                
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', setupProgressDrag);
+                } else {
+                    setupProgressDrag();
+                }
             </script>
         </div>
 
@@ -4122,6 +4184,18 @@
                 <div class="text-center w-full max-w-xs mb-5">
                     <h3 class="text-base font-extrabold text-zinc-800 dark:text-zinc-100 truncate" id="spotlight-expanded-title">Título de la Canción</h3>
                     <p class="text-xs text-zinc-400 dark:text-zinc-500 mt-1 truncate" id="spotlight-expanded-artist">Artista</p>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full max-w-xs mb-8 flex flex-col gap-2">
+                    <div class="flex items-center justify-between text-[10px] text-zinc-400 dark:text-zinc-500 font-mono font-medium tracking-wider px-1 select-none">
+                        <span id="spotlight-current-time">0:00</span>
+                        <span id="spotlight-total-time">0:00</span>
+                    </div>
+                    <div class="relative w-full h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-full cursor-pointer group" id="spotlight-progress-container">
+                        <div class="absolute top-0 left-0 h-full bg-brand-500 rounded-full pointer-events-none" id="spotlight-progress-fill" style="width: 0%;"></div>
+                        <div class="absolute top-1/2 -translate-y-1/2 -ml-2 w-4 h-4 bg-white dark:bg-zinc-200 rounded-full shadow border border-zinc-200 dark:border-zinc-700 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" id="spotlight-progress-thumb" style="left: 0%;"></div>
+                    </div>
                 </div>
 
                 <!-- Big Player Controls -->
