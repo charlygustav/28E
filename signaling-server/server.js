@@ -14,12 +14,35 @@ const io = new Server(server, {
   pingInterval: 25000
 });
 
-const CHANNEL_PASSWORD = process.env.CHANNEL_PASSWORD || 'changeme123';
+let CHANNEL_PASSWORD = process.env.CHANNEL_PASSWORD || 'changeme123';
 const MAX_USERS = 4;
 const CHANNEL = 'principal';
 
+const https = require('https');
+function fetchPasswordFromFirebase() {
+  https.get('https://yaire-591ca-default-rtdb.firebaseio.com/config/voicePassword.json', (res) => {
+    let data = '';
+    res.on('data', chunk => data += chunk);
+    res.on('end', () => {
+      try {
+        const pwd = JSON.parse(data);
+        if (pwd && typeof pwd === 'string' && pwd.trim().length > 0) {
+          CHANNEL_PASSWORD = pwd.trim();
+          console.log(`[Firebase] Loaded voice password: ${CHANNEL_PASSWORD}`);
+        }
+      } catch (e) {
+        console.error('[Firebase] Error parsing voice password:', e);
+      }
+    });
+  }).on('error', (err) => {
+    console.error('[Firebase] Error fetching voice password:', err);
+  });
+}
+fetchPasswordFromFirebase();
+
 // socketId -> { displayName, muted, dnd }
 const users = new Map();
+const chatLog = [];
 
 function broadcastUsers() {
   const list = Array.from(users.entries()).map(([id, u]) => ({
@@ -116,12 +139,15 @@ io.on('connection', (socket) => {
   socket.on('chat_message', ({ text }) => {
     const user = users.get(socket.id);
     if (!user || !text?.trim()) return;
-    io.to(CHANNEL).emit('chat_message', {
+    const msg = {
       from: socket.id,
       name: user.displayName,
       text: text.trim().slice(0, 500),
       ts: Date.now()
-    });
+    };
+    chatLog.push(msg);
+    if (chatLog.length > 50) chatLog.shift(); // Keep last 50 messages
+    io.to(CHANNEL).emit('chat_message', msg);
   });
 
   // ── CHAT TYPING ──────────────────────────────────────────────────────────
@@ -157,8 +183,14 @@ app.get('/api/status', (_, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.json({
     channel: CHANNEL,
-    users: Array.from(users.entries()).map(([id, u]) => ({ id, displayName: u.displayName, muted: u.muted })),
+    users: Array.from(users.entries()).map(([id, u]) => ({ 
+      id, 
+      displayName: u.displayName, 
+      muted: u.muted,
+      dnd: u.dnd || false
+    })),
     max: MAX_USERS,
+    chatLog: chatLog,
     timestamp: new Date().toISOString()
   });
 });
@@ -187,6 +219,24 @@ app.post('/api/kick', (req, res) => {
   broadcastUsers();
   console.log(`[KICK] ${user.displayName} was kicked by admin`);
   res.json({ success: true, kicked: user.displayName });
+});
+
+app.options('/api/password', (_, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.sendStatus(204);
+});
+
+app.post('/api/password', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const { password, adminKey } = req.body;
+  if (adminKey !== ADMIN_KEY) return res.status(403).json({ error: 'No autorizado.' });
+  if (!password || password.trim().length < 1) return res.status(400).json({ error: 'Contraseña no válida.' });
+  
+  CHANNEL_PASSWORD = password.trim();
+  console.log(`[API] Voice password updated by admin to: ${CHANNEL_PASSWORD}`);
+  res.json({ success: true });
 });
 
 const PORT = process.env.PORT || 3001;
