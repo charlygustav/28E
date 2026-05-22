@@ -6,17 +6,17 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-05-22T05:42:24.691Z",
+  "lastUpdated": "2026-05-22T05:44:22.988Z",
   "maintDate": "2026-05-22T01:44",
-  "maintType": "scheduled",
+  "maintType": "indefinite",
   "mantenimiento": true,
   "refugeText": "",
   "refugeTitle": "Te escucho, mi amor",
   "songs": [
     {
-      "title": "Young Black & Rich",
       "artist": "Melly Mike",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779426578999_Young_Black___Rich_-_Melly_Mike.flac"
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779426578999_Young_Black___Rich_-_Melly_Mike.flac",
+      "title": "Young Black & Rich"
     },
     {
       "artist": "Quevedo",
