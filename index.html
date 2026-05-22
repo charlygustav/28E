@@ -34,6 +34,7 @@
                             // Si la configuración cambió y ya teníamos una previa
                             if (oldStr && oldStr !== newStr) {
                                 localStorage.setItem('yaire_config', newStr);
+                                window.dispatchEvent(new CustomEvent('yaire_config_updated', { detail: fbCfg }));
                                 if (fbCfg.mantenimiento) {
                                     window.location.replace('mantenimiento.html');
                                 } else {
@@ -42,6 +43,7 @@
                                 return;
                             } else if (!oldStr) {
                                 localStorage.setItem('yaire_config', newStr);
+                                window.dispatchEvent(new CustomEvent('yaire_config_updated', { detail: fbCfg }));
                             }
 
                             if (fbCfg.mantenimiento) {
@@ -3631,16 +3633,29 @@
                         spotAudio.muted = AudioManager.muted;
                     }
 
+                    function updateSpotlightPlaylist(songs) {
+                        if (songs && songs.length > 0) {
+                            spotlightTracks = songs;
+                            if (!isSpotPlaying) {
+                                spotlightLoadTrack(0);
+                            }
+                        }
+                    }
+
                     // Actualizar lista si el admin cambia la config en otra pestaña
                     window.addEventListener('storage', (e) => {
                         if (e.key === 'yaire_config' && e.newValue) {
                             try {
                                 const cfg = JSON.parse(e.newValue);
-                                if (cfg.songs && cfg.songs.length > 0) {
-                                    spotlightTracks = cfg.songs;
-                                }
+                                updateSpotlightPlaylist(cfg.songs);
                             } catch (e) { }
                         }
+                    });
+
+                    // Actualizar lista cuando se carga la config en la pestaña actual
+                    window.addEventListener('yaire_config_updated', (e) => {
+                        const cfg = e.detail;
+                        updateSpotlightPlaylist(cfg ? cfg.songs : null);
                     });
                 }
 

@@ -2,7 +2,6 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
-const https = require('https');
 
 const app = express();
 app.use(cors());
@@ -15,27 +14,7 @@ const io = new Server(server, {
   pingInterval: 25000
 });
 
-let cachedPassword = process.env.CHANNEL_PASSWORD || 'changeme123';
-
-function getFirebasePassword() {
-  return new Promise((resolve) => {
-    https.get('https://yaire-591ca-default-rtdb.firebaseio.com/config/voicePassword.json', (res) => {
-      let data = '';
-      res.on('data', chunk => data += chunk);
-      res.on('end', () => {
-        try {
-          const pass = JSON.parse(data);
-          if (typeof pass === 'string' && pass.trim().length > 0) {
-            cachedPassword = pass;
-          }
-          resolve(cachedPassword);
-        } catch {
-          resolve(cachedPassword);
-        }
-      });
-    }).on('error', () => resolve(cachedPassword));
-  });
-}
+const CHANNEL_PASSWORD = process.env.CHANNEL_PASSWORD || 'changeme123';
 const MAX_USERS = 4;
 const CHANNEL = 'principal';
 
@@ -65,9 +44,8 @@ io.on('connection', (socket) => {
   console.log(`[~] New socket: ${socket.id}`);
 
   // ── JOIN ──────────────────────────────────────────────────────────────────
-  socket.on('join_channel', async ({ password, displayName }) => {
-    const currentPass = await getFirebasePassword();
-    if (password !== currentPass) {
+  socket.on('join_channel', ({ password, displayName }) => {
+    if (password !== CHANNEL_PASSWORD) {
       return socket.emit('join_error', { message: 'Contraseña incorrecta.' });
     }
     if (users.size >= MAX_USERS) {
@@ -109,9 +87,9 @@ io.on('connection', (socket) => {
   });
 
   // ── WebRTC RELAY ──────────────────────────────────────────────────────────
-  socket.on('webrtc_offer',     ({ to, sdp })       => socket.to(to).emit('webrtc_offer',     { from: socket.id, sdp }));
-  socket.on('webrtc_answer',    ({ to, sdp })       => socket.to(to).emit('webrtc_answer',    { from: socket.id, sdp }));
-  socket.on('ice_candidate',    ({ to, candidate }) => socket.to(to).emit('ice_candidate',    { from: socket.id, candidate }));
+  socket.on('webrtc_offer', ({ to, sdp }) => socket.to(to).emit('webrtc_offer', { from: socket.id, sdp }));
+  socket.on('webrtc_answer', ({ to, sdp }) => socket.to(to).emit('webrtc_answer', { from: socket.id, sdp }));
+  socket.on('ice_candidate', ({ to, candidate }) => socket.to(to).emit('ice_candidate', { from: socket.id, candidate }));
 
   // ── MUTE STATE ────────────────────────────────────────────────────────────
   socket.on('mute_state', ({ muted }) => {
@@ -168,7 +146,7 @@ io.on('connection', (socket) => {
 
   // ── LEAVE / DISCONNECT ────────────────────────────────────────────────────
   socket.on('leave_channel', () => handleLeave(socket));
-  socket.on('disconnect',    () => handleLeave(socket));
+  socket.on('disconnect', () => handleLeave(socket));
 });
 
 // Health check
