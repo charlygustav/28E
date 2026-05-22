@@ -854,7 +854,7 @@
       <h1>Volvemos<br>muy pronto</h1>
 
       <!-- Subtítulo -->
-      <p class="subtitle">
+      <p class="subtitle" id="maint-subtitle">
         Estamos puliendo cada detalle para que todo
         luzca perfecto para <em>ti</em>.&nbsp;
         Gracias por tu paciencia. 🌸
@@ -1164,6 +1164,15 @@
         }
 
         // Mantenimiento activo → decidir qué mostrar
+        
+        // Mostrar mensaje personalizado si existe
+        const subtitleEl = document.getElementById('maint-subtitle');
+        if (cfg.maintMsg && cfg.maintMsg.trim() !== '') {
+          subtitleEl.textContent = cfg.maintMsg;
+        } else {
+          subtitleEl.innerHTML = 'Estamos puliendo cada detalle para que todo luzca perfecto para <em>ti</em>.&nbsp; Gracias por tu paciencia. 🌸';
+        }
+
         if (cfg.maintType === 'scheduled' && cfg.maintDate) {
           document.getElementById('visual-center').style.display = 'none';
           document.getElementById('visual-countdown').style.display = 'flex';
