@@ -17521,11 +17521,19 @@
         onDisconnect(presenceRef).remove();
 
         let currentSection = "Navegando";
+        let userLocation = "Buscando...";
+        
+        fetch('https://get.geojs.io/v1/ip/geo.json').then(r => r.json()).then(d => {
+            userLocation = `${d.city || 'Desconocido'}, ${d.country || ''}`;
+            updatePresence();
+        }).catch(() => userLocation = "Desconocida");
+
         const updatePresence = () => {
             set(presenceRef, {
                 section: currentSection,
                 lastActive: serverTimestamp(),
-                userAgent: navigator.userAgent.includes('Mobile') ? 'Mobile' : 'Desktop'
+                userAgent: navigator.userAgent.includes('Mobile') ? 'Mobile' : 'Desktop',
+                location: userLocation
             });
         };
         updatePresence();
