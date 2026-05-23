@@ -242,7 +242,7 @@
     background:rgba(244,114,182,.12); border:1.5px solid rgba(244,114,182,.25); color:#f472b6;
     transition:border-color .2s, box-shadow .2s;
   }
-  .vc-av.me { background:rgba(245,158,11,.12); border-color:rgba(245,158,11,.3); color:#f59e0b; }
+  .vc-av.me { background:rgba(245,158,11,.12); border-color:transparent; color:#f59e0b; }
   @keyframes vc-speak-pulse { 0% { box-shadow:0 0 0 0 rgba(34,197,94,.4); } 70% { box-shadow:0 0 0 6px rgba(34,197,94,0); } 100% { box-shadow:0 0 0 0 rgba(34,197,94,0); } }
   .vc-av.speaking { border-color:#22c55e; animation: vc-speak-pulse 1.2s infinite; }
   .vc-uname { flex:1; color:#fff; font-size:13px; font-weight:500; }
