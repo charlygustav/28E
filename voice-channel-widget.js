@@ -46,7 +46,8 @@
       vc_ring_ignore: "Ignorar",
       vc_restricted: "Acceso Restringido",
       vc_req_login: "Debes iniciar sesión con tu cuenta de Google en el menú superior para poder entrar al Canal de Voz.",
-      vc_session_as: "Sesión iniciada como"
+      vc_session_as: "Sesión iniciada como",
+      vc_login_google: "Continuar con Google"
     },
     en: {
       vc_title: "Voice Channel",
@@ -85,7 +86,8 @@
       vc_ring_ignore: "Ignore",
       vc_restricted: "Restricted Access",
       vc_req_login: "You must log in with your Google account in the top menu to enter the Voice Channel.",
-      vc_session_as: "Logged in as"
+      vc_session_as: "Logged in as",
+      vc_login_google: "Continue with Google"
     },
     pt: {
       vc_title: "Canal de Voz",
@@ -124,7 +126,8 @@
       vc_ring_ignore: "Ignorar",
       vc_restricted: "Acesso Restrito",
       vc_req_login: "Você deve fazer login com sua conta do Google no menu superior para entrar no Canal de Voz.",
-      vc_session_as: "Sessão iniciada como"
+      vc_session_as: "Sessão iniciada como",
+      vc_login_google: "Continuar com o Google"
     },
     fr: {
       vc_title: "Canal Vocal",
@@ -163,7 +166,8 @@
       vc_ring_ignore: "Ignorer",
       vc_restricted: "Accès Restreint",
       vc_req_login: "Vous devez vous connecter avec votre compte Google dans le menu supérieur pour entrer dans le canal vocal.",
-      vc_session_as: "Connecté en tant que"
+      vc_session_as: "Connecté en tant que",
+      vc_login_google: "Continuer avec Google"
     }
   };
 
@@ -701,6 +705,10 @@
             </div>
             <h3 style="color: #fff; font-size: 15px; font-weight: bold; margin-bottom: 8px;">${_t('vc_restricted')}</h3>
             <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin-bottom: 20px; line-height: 1.5;">${_t('vc_req_login')}</p>
+            <button id="vc-google-login-btn" style="background: white; color: black; border-radius: 12px; padding: 10px 16px; font-weight: bold; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0 auto; border: none; cursor: pointer; transition: opacity 0.2s; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width: 18px; height: 18px;" draggable="false" />
+                ${_t('vc_login_google')}
+            </button>
           </div>
           ${this._tplHistory()}`;
       }
@@ -906,6 +914,16 @@
     _bindPanelEvents() {
       const xBtn = document.getElementById('vc-close');
       if (xBtn) xBtn.addEventListener('click', () => this._toggle());
+
+      const vcGoogleBtn = document.getElementById('vc-google-login-btn');
+      if (vcGoogleBtn) {
+        vcGoogleBtn.addEventListener('click', () => {
+          const mainLogin = document.getElementById('auth-btn-login');
+          if (mainLogin) mainLogin.click();
+        });
+        vcGoogleBtn.addEventListener('mouseover', () => vcGoogleBtn.style.opacity = '0.9');
+        vcGoogleBtn.addEventListener('mouseout', () => vcGoogleBtn.style.opacity = '1');
+      }
 
       const joinBtn = document.getElementById('vc-join');
       const nameInput = document.getElementById('vc-name');
