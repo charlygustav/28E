@@ -44,10 +44,9 @@
       vc_ring_msg: "quiere hablar contigo 💛",
       vc_ring_join: "Unirse",
       vc_ring_ignore: "Ignorar",
-      vc_restricted: "Acesso Restrito",
-      vc_req_login: "Você deve fazer login com sua conta do Google no menu superior para entrar no Canal de Voz.",
       vc_restricted: "Acceso Restringido",
-      vc_req_login: "Debes iniciar sesión con tu cuenta de Google en el menú superior para poder entrar al Canal de Voz."
+      vc_req_login: "Debes iniciar sesión con tu cuenta de Google en el menú superior para poder entrar al Canal de Voz.",
+      vc_session_as: "Sesión iniciada como"
     },
     en: {
       vc_title: "Voice Channel",
@@ -85,7 +84,8 @@
       vc_ring_join: "Join",
       vc_ring_ignore: "Ignore",
       vc_restricted: "Restricted Access",
-      vc_req_login: "You must log in with your Google account in the top menu to enter the Voice Channel."
+      vc_req_login: "You must log in with your Google account in the top menu to enter the Voice Channel.",
+      vc_session_as: "Logged in as"
     },
     pt: {
       vc_title: "Canal de Voz",
@@ -121,7 +121,10 @@
       vc_ring_title: "Chamada recebida",
       vc_ring_msg: "quer falar com você 💛",
       vc_ring_join: "Entrar",
-      vc_ring_ignore: "Ignorar"
+      vc_ring_ignore: "Ignorar",
+      vc_restricted: "Acesso Restrito",
+      vc_req_login: "Você deve fazer login com sua conta do Google no menu superior para entrar no Canal de Voz.",
+      vc_session_as: "Sessão iniciada como"
     },
     fr: {
       vc_title: "Canal Vocal",
@@ -159,7 +162,8 @@
       vc_ring_join: "Rejoindre",
       vc_ring_ignore: "Ignorer",
       vc_restricted: "Accès Restreint",
-      vc_req_login: "Vous devez vous connecter avec votre compte Google dans le menu supérieur pour entrer dans le canal vocal."
+      vc_req_login: "Vous devez vous connecter avec votre compte Google dans le menu supérieur pour entrer dans le canal vocal.",
+      vc_session_as: "Connecté en tant que"
     }
   };
 
@@ -713,7 +717,7 @@
           <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
               <img src="${user.photoURL}" draggable="false" style="width: 36px; height: 36px; border-radius: 50%;" />
               <div>
-                  <div style="font-size: 9px; color: #f59e0b; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 2px;">Sesión iniciada como</div>
+                  <div style="font-size: 9px; color: #f59e0b; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 2px;">${_t('vc_session_as')}</div>
                   <div style="font-size: 14px; font-weight: bold; color: #fff;">${user.displayName}</div>
               </div>
           </div>
