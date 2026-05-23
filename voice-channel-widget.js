@@ -703,7 +703,7 @@
         </div>
         <div class="vc-body">
           <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
-              <img src="${user.photoURL}" style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid #f59e0b;" />
+              <img src="${user.photoURL}" style="width: 36px; height: 36px; border-radius: 50%;" />
               <div>
                   <div style="font-size: 13px; font-weight: bold; color: #fff;">${user.displayName}</div>
                   <div style="font-size: 10px; color: #f59e0b; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Acceso Autorizado</div>
