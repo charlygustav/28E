@@ -3496,6 +3496,11 @@
                 </span>
             </div>
             <div class="flex items-center gap-2">
+                <!-- Auth Toggle -->
+                <button id="auth-toggle" class="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors border border-zinc-200/50 dark:border-zinc-700/50 cursor-pointer overflow-hidden relative" title="Iniciar sesión">
+                    <span id="auth-icon" class="text-zinc-500"><i class="ph-bold ph-user"></i></span>
+                    <img id="auth-avatar" src="" class="w-full h-full object-cover hidden" alt="User Avatar" />
+                </button>
                 <!-- Sound toggle -->
                 <button id="sound-toggle"
                     class="w-8 h-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors border border-zinc-200/50 dark:border-zinc-700/50 cursor-pointer"><span
@@ -5948,6 +5953,33 @@
                     Hub</h3>
                 <p class="text-zinc-500 dark:text-zinc-400 text-sm mt-3 max-w-md mx-auto font-medium">Elige tu aventura
                     y compite por la puntuación más alta</p>
+                <div class="mt-4 flex justify-center">
+                    <button onclick="openLeaderboard()" class="flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold text-sm shadow-xl shadow-yellow-500/20 hover:scale-105 transition-transform cursor-pointer border border-yellow-400/50">
+                        <i class="ph-fill ph-trophy"></i> Tabla de Récords
+                    </button>
+                </div>
+            </div>
+
+            <!-- LEADERBOARD MODAL -->
+            <div id="leaderboard-modal" class="fixed inset-0 z-[9999] hidden items-center justify-center p-4">
+                <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeLeaderboard()"></div>
+                <div class="relative w-full max-w-md bg-white dark:bg-[#0a0a0a] rounded-3xl shadow-2xl overflow-hidden border border-zinc-200/50 dark:border-zinc-800/50 transform scale-95 opacity-0 transition-all duration-300" id="leaderboard-content">
+                    <div class="p-6 border-b border-zinc-100 dark:border-zinc-800 flex justify-between items-center bg-zinc-50/50 dark:bg-zinc-900/50">
+                        <h3 class="text-xl font-black text-zinc-800 dark:text-white flex items-center gap-2"><i class="ph-fill ph-trophy text-yellow-500"></i> Mejores Jugadores</h3>
+                        <button onclick="closeLeaderboard()" class="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-500 hover:text-zinc-800 dark:hover:text-white transition-colors cursor-pointer">✕</button>
+                    </div>
+                    <div class="p-4 flex gap-2 overflow-x-auto snap-x no-scrollbar" id="leaderboard-tabs">
+                        <button onclick="loadLeaderboard('g1')" class="px-4 py-2 text-xs font-bold rounded-full bg-brand-500 text-white shrink-0 snap-start transition-colors" id="tab-g1">Atrapa Girasoles</button>
+                        <button onclick="loadLeaderboard('g2')" class="px-4 py-2 text-xs font-bold rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 shrink-0 snap-start transition-colors" id="tab-g2">Vuelo Hacia Ti</button>
+                        <button onclick="loadLeaderboard('g3')" class="px-4 py-2 text-xs font-bold rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 shrink-0 snap-start transition-colors" id="tab-g3">Cartas Ocultas</button>
+                        <button onclick="loadLeaderboard('g4')" class="px-4 py-2 text-xs font-bold rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 shrink-0 snap-start transition-colors" id="tab-g4">Adivina la Canción</button>
+                    </div>
+                    <div class="p-6 h-[300px] overflow-y-auto" id="leaderboard-list">
+                        <div class="flex flex-col items-center justify-center h-full text-zinc-400 dark:text-zinc-500 text-sm">
+                            <i class="ph-bold ph-spinner animate-spin text-2xl mb-2"></i> Cargando...
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- ═══ GAMES HUB v2 ═══ -->
@@ -15922,6 +15954,7 @@
             if (ti) ti.textContent = t.game1_over_title || '¡Se acabó el tiempo!';
             if (su) su.innerHTML = (t.game1_over_sub || 'Lograste cosechar <span class="text-brand-500 font-bold">{score}</span> girasoles.').replace('{score}', score1);
             if (bt) bt.textContent = t.game_restart || 'Jugar de nuevo';
+            if (window.yaireSaveScore) window.yaireSaveScore('g1', score1);
             showGameOverlay('g1-overlay');
         }
 
@@ -16136,6 +16169,7 @@
             if (su) su.textContent = isRecord ? (dictionary[currentLang].game2_over_title_win || '¡Récord histórico!') : (dictionary[currentLang].game2_over_title_lose || 'Vuelve a intentarlo.');
             if (tx) tx.innerHTML = (dictionary[currentLang].game2_gameover || 'Tulipanes: {score}').replace('{score}', score2);
             if (btn) btn.textContent = dictionary[currentLang].game_restart || 'Intentar de nuevo';
+            if (window.yaireSaveScore) window.yaireSaveScore('g2', score2);
             showGameOverlay('game2-overlay');
         }
 
@@ -16251,6 +16285,10 @@
             }
             if (su) { const _gd = (typeof dictionary !== 'undefined' && dictionary[currentLang]) ? dictionary[currentLang] : {}; su.innerHTML = (_gd.game3_hud || 'Movimientos: {moves} | Tiempo: {time}s').replace('{moves}', '<strong class="text-purple-500">' + game3Moves + '</strong>').replace('{time}', '<strong class="text-purple-500">' + game3TimeLeft + '</strong>'); }
             if (btn) btn.textContent = dictionary[currentLang].game_restart || "Jugar de nuevo";
+            if (win && window.yaireSaveScore) {
+                let score3 = Math.max(0, 1000 - (game3Moves * 10) + (game3TimeLeft * 5));
+                window.yaireSaveScore('g3', score3);
+            }
             showGameOverlay('game3-overlay');
         }
         // ════════════════════════════════════════════════════
@@ -16599,6 +16637,7 @@
 
             if (su) su.innerHTML = (_gd.game4_over_sub || 'Puntuación: <strong class="text-emerald-500">{score}</strong> puntos').replace('{score}', g4Score);
             if (btn) btn.textContent = _gd.game_restart || '¡Jugar de nuevo!';
+            if (window.yaireSaveScore) window.yaireSaveScore('g4', g4Score);
 
             showGameOverlay('game4-overlay');
         }
@@ -17506,7 +17545,8 @@
     <!-- Firebase SDK for Realtime Features -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
-        import { getDatabase, ref, push, onValue, onDisconnect, set, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js';
+        import { getDatabase, ref, push, onValue, onDisconnect, set, serverTimestamp, get } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js';
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyDFkuktrXnsV9-jg2bv5dpJQRR-he8PT3g",
@@ -17529,6 +17569,7 @@
 
         let currentSection = "Navegando";
         let userLocation = "Buscando...";
+        let currentUser = null;
         
         fetch('https://get.geojs.io/v1/ip/geo.json').then(r => r.json()).then(d => {
             userLocation = `${d.city || 'Desconocido'}, ${d.country || ''}`;
@@ -17536,16 +17577,155 @@
         }).catch(() => userLocation = "Desconocida");
 
         const updatePresence = () => {
-            set(presenceRef, {
+            const payload = {
                 section: currentSection,
                 lastActive: serverTimestamp(),
                 userAgent: navigator.userAgent.includes('Mobile') ? 'Mobile' : 'Desktop',
                 location: userLocation
-            });
+            };
+            if (currentUser) {
+                payload.user = {
+                    uid: currentUser.uid,
+                    displayName: currentUser.displayName,
+                    photoURL: currentUser.photoURL
+                };
+            }
+            set(presenceRef, payload);
         };
         updatePresence();
         window.yaireUpdatePresence = (sec) => { currentSection = sec; updatePresence(); };
 
+        // --- AUTH ---
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        const authToggle = document.getElementById('auth-toggle');
+        const authIcon = document.getElementById('auth-icon');
+        const authAvatar = document.getElementById('auth-avatar');
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            window.yaireCurrentUser = user; // Expose globally
+            if (user) {
+                authIcon.classList.add('hidden');
+                authAvatar.src = user.photoURL;
+                authAvatar.classList.remove('hidden');
+                authToggle.title = "Cerrar sesión (" + user.displayName + ")";
+            } else {
+                authAvatar.classList.add('hidden');
+                authIcon.classList.remove('hidden');
+                authToggle.title = "Iniciar sesión con Google";
+            }
+            updatePresence();
+        });
+
+        authToggle.addEventListener('click', () => {
+            if (currentUser) {
+                if(confirm("¿Cerrar sesión?")) signOut(auth);
+            } else {
+                signInWithPopup(auth, provider).catch(err => {
+                    console.error("Error logging in:", err);
+                    alert("Error al iniciar sesión: " + err.message);
+                });
+            }
+        });
+
+        window.yaireSaveScore = (gameId, score) => {
+            if (!currentUser) return;
+            const refPath = `leaderboard/${gameId}/${currentUser.uid}`;
+            get(ref(db, refPath)).then(snap => {
+                const data = snap.val();
+                if (!data || score > data.score) {
+                    set(ref(db, refPath), {
+                        uid: currentUser.uid,
+                        displayName: currentUser.displayName,
+                        photoURL: currentUser.photoURL,
+                        score: score,
+                        timestamp: serverTimestamp()
+                    });
+                }
+            }).catch(e => console.error("Error saving score:", e));
+        };
+        // --- LEADERBOARD UI ---
+        window.openLeaderboard = () => {
+            const modal = document.getElementById('leaderboard-modal');
+            const content = document.getElementById('leaderboard-content');
+            if(modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                setTimeout(() => {
+                    content.classList.remove('opacity-0', 'scale-95');
+                    content.classList.add('opacity-100', 'scale-100');
+                }, 10);
+                window.loadLeaderboard('g1'); // Load game 1 by default
+            }
+        };
+        
+        window.closeLeaderboard = () => {
+            const modal = document.getElementById('leaderboard-modal');
+            const content = document.getElementById('leaderboard-content');
+            if(content && modal) {
+                content.classList.remove('opacity-100', 'scale-100');
+                content.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    modal.classList.remove('flex');
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+        };
+
+        window.loadLeaderboard = (gameId) => {
+            // Update UI tabs
+            ['g1', 'g2', 'g3', 'g4'].forEach(id => {
+                const btn = document.getElementById(`tab-${id}`);
+                if(btn) {
+                    if (id === gameId) {
+                        btn.className = "px-4 py-2 text-xs font-bold rounded-full bg-brand-500 text-white shrink-0 snap-start transition-colors";
+                    } else {
+                        btn.className = "px-4 py-2 text-xs font-bold rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 shrink-0 snap-start transition-colors";
+                    }
+                }
+            });
+
+            const listEl = document.getElementById('leaderboard-list');
+            if (!listEl) return;
+            listEl.innerHTML = `<div class="flex flex-col items-center justify-center h-full text-zinc-400 text-sm"><i class="ph-bold ph-spinner animate-spin text-2xl mb-2"></i> Cargando...</div>`;
+
+            get(ref(db, `leaderboard/${gameId}`)).then(snap => {
+                const data = snap.val();
+                if (!data) {
+                    listEl.innerHTML = `<div class="flex flex-col items-center justify-center h-full text-zinc-400 text-sm"><i class="ph-bold ph-ghost text-2xl mb-2"></i> Nadie ha jugado aún</div>`;
+                    return;
+                }
+                
+                // Sort array
+                const arr = Object.values(data).sort((a, b) => b.score - a.score);
+                
+                let html = '<div class="flex flex-col gap-3">';
+                arr.forEach((item, index) => {
+                    let rankClass = "bg-zinc-100 dark:bg-zinc-800 text-zinc-500";
+                    if (index === 0) rankClass = "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-500 border border-yellow-500/30";
+                    else if (index === 1) rankClass = "bg-zinc-200 text-zinc-600 dark:bg-zinc-700/50 dark:text-zinc-300 border border-zinc-400/30";
+                    else if (index === 2) rankClass = "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-500 border border-orange-500/30";
+                    
+                    html += `
+                        <div class="flex items-center gap-3 p-3 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/50 bg-white dark:bg-zinc-900/50 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${rankClass}">
+                                #${index + 1}
+                            </div>
+                            <img src="${item.photoURL || ''}" class="w-10 h-10 rounded-full object-cover shrink-0 bg-zinc-200 dark:bg-zinc-800" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYTJhMmEyIiBzdHJva2Utd2lkdGg9IjIiPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCIvPjxwYXRoIGQ9Ik00IDIxdi0yYTRgNCAwIDAgMSA0LTRoOGE0IDQgMCAwIDEgNCAydjIiLz48L3N2Zz4='"/>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-sm font-bold text-zinc-800 dark:text-zinc-100 truncate">${item.displayName || 'Anónimo'}</div>
+                                <div class="text-xs text-zinc-500 truncate text-emerald-500 font-bold">${item.score} puntos</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                listEl.innerHTML = html;
+            }).catch(e => {
+                listEl.innerHTML = `<div class="text-red-500 text-center py-4">Error cargando puntajes</div>`;
+            });
+        };
         const observer = new IntersectionObserver((entries) => {
             let activeEntries = entries.filter(e => e.isIntersecting);
             if(activeEntries.length > 0) {

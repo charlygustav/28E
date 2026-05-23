@@ -660,7 +660,26 @@
 
     // ── TEMPLATES ──────────────────────────────────────────────────────────
     _tplLogin(err = '') {
-      const savedName = localStorage.getItem('28e_vc_name') || '';
+      const user = window.yaireCurrentUser;
+      if (!user) {
+        return `
+          <div class="vc-hdr">
+            <div class="vc-hdr-l">
+              <div class="vc-icon">${ICONS.sound}</div>
+              <div><div class="vc-title">#principal</div><div class="vc-sub">${_t('vc_sub')}</div></div>
+            </div>
+            <button class="vc-x" id="vc-close">✕</button>
+          </div>
+          <div class="vc-body" style="text-align: center; padding: 30px 20px;">
+            <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(245,158,11,0.15); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                <i class="ph-bold ph-lock-key" style="font-size: 24px; color: #f59e0b;"></i>
+            </div>
+            <h3 style="color: #fff; font-size: 15px; font-weight: bold; margin-bottom: 8px;">Acceso Restringido</h3>
+            <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin-bottom: 20px; line-height: 1.5;">Debes iniciar sesión con tu cuenta de Google en el menú superior para poder entrar al Canal de Voz.</p>
+          </div>
+          ${this._tplHistory()}`;
+      }
+
       return `
         <div class="vc-hdr">
           <div class="vc-hdr-l">
@@ -670,9 +689,15 @@
           <button class="vc-x" id="vc-close">✕</button>
         </div>
         <div class="vc-body">
-          <div class="vc-field">
-            <label class="vc-label">${_t('lbl_name')}</label>
-            <input class="vc-input" id="vc-name" type="text" placeholder="${_t('ph_name')}" maxlength="20" autocomplete="off" value="${savedName}"/>
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+              <img src="${user.photoURL}" style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid #f59e0b;" />
+              <div>
+                  <div style="font-size: 13px; font-weight: bold; color: #fff;">${user.displayName}</div>
+                  <div style="font-size: 10px; color: #f59e0b; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Acceso Autorizado</div>
+              </div>
+          </div>
+          <div class="vc-field" style="display:none;">
+            <input class="vc-input" id="vc-name" type="hidden" value="${user.displayName}"/>
           </div>
           <div class="vc-field">
             <label class="vc-label">${_t('lbl_pass')}</label>
