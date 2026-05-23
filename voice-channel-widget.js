@@ -714,7 +714,7 @@
           </div>
           <div class="vc-field">
             <label class="vc-label">${_t('lbl_pass')}</label>
-            <input class="vc-input" id="vc-pass" type="password" placeholder="${_t('ph_pass')}" autocomplete="off"/>
+            <input class="vc-input" id="vc-pass" type="password" placeholder="${_t('ph_pass')}" autocomplete="new-password"/>
           </div>
           <button class="vc-btn" id="vc-join">${_t('btn_join')}</button>
           <div class="vc-err" id="vc-err">${err}</div>
