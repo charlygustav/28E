@@ -17568,7 +17568,7 @@
                 currentSection = secMap[secId] || secId || "Navegando";
                 updatePresence();
             }
-        }, { threshold: 0.3 });
+        }, { rootMargin: "-30% 0px -30% 0px" });
 
         document.querySelectorAll('section').forEach(sec => observer.observe(sec));
 
