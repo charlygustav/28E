@@ -43,7 +43,11 @@
       vc_ring_title: "Llamada entrante",
       vc_ring_msg: "quiere hablar contigo 💛",
       vc_ring_join: "Unirse",
-      vc_ring_ignore: "Ignorar"
+      vc_ring_ignore: "Ignorar",
+      vc_restricted: "Acesso Restrito",
+      vc_req_login: "Você deve fazer login com sua conta do Google no menu superior para entrar no Canal de Voz.",
+      vc_restricted: "Acceso Restringido",
+      vc_req_login: "Debes iniciar sesión con tu cuenta de Google en el menú superior para poder entrar al Canal de Voz."
     },
     en: {
       vc_title: "Voice Channel",
@@ -79,7 +83,9 @@
       vc_ring_title: "Incoming call",
       vc_ring_msg: "wants to talk to you 💛",
       vc_ring_join: "Join",
-      vc_ring_ignore: "Ignore"
+      vc_ring_ignore: "Ignore",
+      vc_restricted: "Restricted Access",
+      vc_req_login: "You must log in with your Google account in the top menu to enter the Voice Channel."
     },
     pt: {
       vc_title: "Canal de Voz",
@@ -151,7 +157,9 @@
       vc_ring_title: "Appel entrant",
       vc_ring_msg: "veut te parler 💛",
       vc_ring_join: "Rejoindre",
-      vc_ring_ignore: "Ignorer"
+      vc_ring_ignore: "Ignorer",
+      vc_restricted: "Accès Restreint",
+      vc_req_login: "Vous devez vous connecter avec votre compte Google dans le menu supérieur pour entrer dans le canal vocal."
     }
   };
 
@@ -687,8 +695,8 @@
             <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(245,158,11,0.15); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
                 <i class="ph-bold ph-lock-key" style="font-size: 24px; color: #f59e0b;"></i>
             </div>
-            <h3 style="color: #fff; font-size: 15px; font-weight: bold; margin-bottom: 8px;">Acceso Restringido</h3>
-            <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin-bottom: 20px; line-height: 1.5;">Debes iniciar sesión con tu cuenta de Google en el menú superior para poder entrar al Canal de Voz.</p>
+            <h3 style="color: #fff; font-size: 15px; font-weight: bold; margin-bottom: 8px;">${_t('vc_restricted')}</h3>
+            <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin-bottom: 20px; line-height: 1.5;">${_t('vc_req_login')}</p>
           </div>
           ${this._tplHistory()}`;
       }
