@@ -859,7 +859,9 @@
           node.className = 'vc-user';
           node.id = `vc-u-${u.id}`;
           node.innerHTML = `
-            <div class="vc-av${isMe ? ' me' : ''}" id="vc-av-${u.id}">${u.displayName.slice(0, 2).toUpperCase()}</div>
+            <div class="vc-av${isMe ? ' me' : ''}" id="vc-av-${u.id}">
+              ${u.photoURL ? `<img src="${u.photoURL}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />` : u.displayName.slice(0, 2).toUpperCase()}
+            </div>
             <div class="vc-uname">${u.displayName}${isMe ? `<span class="tag">${_t('tag_you')}</span>` : ''}</div>
           `;
           container.appendChild(node);
@@ -1019,7 +1021,7 @@
         });
 
         this.socket.on('connect', () => {
-          this.socket.emit('join_channel', { password: pass, displayName: name });
+          this.socket.emit('join_channel', { password: pass, displayName: name, photoURL: window.yaireCurrentUser?.photoURL || null });
         });
 
         this.socket.on('join_error', ({ message }) => {
@@ -1171,7 +1173,7 @@
         // Re-join channel silently after background reconnect
         this.socket.io.on('reconnect', () => {
           if (this._savedName && this._savedPass) {
-            this.socket.emit('join_channel', { password: this._savedPass, displayName: this._savedName });
+            this.socket.emit('join_channel', { password: this._savedPass, displayName: this._savedName, photoURL: window.yaireCurrentUser?.photoURL || null });
           }
         });
       };

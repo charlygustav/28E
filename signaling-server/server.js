@@ -48,6 +48,7 @@ function broadcastUsers() {
   const list = Array.from(users.entries()).map(([id, u]) => ({
     id,
     displayName: u.displayName,
+    photoURL: u.photoURL,
     muted: u.muted,
     dnd: u.dnd
   }));
@@ -67,7 +68,7 @@ io.on('connection', (socket) => {
   console.log(`[~] New socket: ${socket.id}`);
 
   // ── JOIN ──────────────────────────────────────────────────────────────────
-  socket.on('join_channel', ({ password, displayName }) => {
+  socket.on('join_channel', ({ password, displayName, photoURL }) => {
     if (password !== CHANNEL_PASSWORD) {
       return socket.emit('join_error', { message: 'Contraseña incorrecta.' });
     }
@@ -89,12 +90,12 @@ io.on('connection', (socket) => {
     }
 
     // Add user
-    users.set(socket.id, { displayName: displayName.trim(), muted: false, dnd: false });
+    users.set(socket.id, { displayName: displayName.trim(), photoURL, muted: false, dnd: false });
     socket.join(CHANNEL);
 
     const existingUsers = Array.from(users.entries())
       .filter(([id]) => id !== socket.id)
-      .map(([id, u]) => ({ id, displayName: u.displayName, muted: u.muted, dnd: u.dnd }));
+      .map(([id, u]) => ({ id, displayName: u.displayName, photoURL: u.photoURL, muted: u.muted, dnd: u.dnd }));
 
     // Tell the joiner who's already here
     socket.emit('joined', { userId: socket.id, existingUsers });
@@ -102,7 +103,8 @@ io.on('connection', (socket) => {
     // Tell everyone else a new user arrived
     socket.to(CHANNEL).emit('user_joined', {
       userId: socket.id,
-      displayName: displayName.trim()
+      displayName: displayName.trim(),
+      photoURL
     });
 
     broadcastUsers();
