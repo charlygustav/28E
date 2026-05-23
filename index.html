@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" class="scroll-smooth dark">
 
 <head>
@@ -3738,38 +3738,74 @@
                             .trim();
                     };
 
-                    const searchiTunes = async (query) => {
+                    const searchDeezer = (query, artistFilter) => {
+                        return new Promise((resolve) => {
+                            const cbName = 'dzcb_' + Date.now() + Math.floor(Math.random() * 10000);
+                            window[cbName] = (data) => {
+                                delete window[cbName];
+                                document.head.removeChild(script);
+                                if (data && data.data && data.data.length > 0) {
+                                    if (artistFilter) {
+                                        const lowerArtist = artistFilter.toLowerCase();
+                                        const match = data.data.find(r => r.artist && r.artist.name && r.artist.name.toLowerCase().includes(lowerArtist));
+                                        if (match && match.album && match.album.cover_big) return resolve(match.album.cover_big);
+                                    }
+                                    if (data.data[0].album && data.data[0].album.cover_big) return resolve(data.data[0].album.cover_big);
+                                }
+                                resolve(null);
+                            };
+                            const script = document.createElement('script');
+                            script.src = `https://api.deezer.com/search?q=${query}&output=jsonp&callback=${cbName}`;
+                            script.onerror = () => {
+                                delete window[cbName];
+                                document.head.removeChild(script);
+                                resolve(null);
+                            };
+                            document.head.appendChild(script);
+                        });
+                    };
+
+                    const searchiTunes = async (query, artistFilter) => {
                         try {
-                            const res = await fetch('https://itunes.apple.com/search?term=' + query + '&entity=song&limit=1');
+                            const res = await fetch('https://itunes.apple.com/search?term=' + query + '&entity=song&limit=10');
                             const data = await res.json();
                             if (data.results && data.results.length > 0) {
+                                if (artistFilter) {
+                                    const lowerArtist = artistFilter.toLowerCase();
+                                    const match = data.results.find(r => r.artistName && r.artistName.toLowerCase().includes(lowerArtist));
+                                    if (match) return match.artworkUrl100.replace('100x100bb', '400x400bb');
+                                }
                                 return data.results[0].artworkUrl100.replace('100x100bb', '400x400bb');
                             }
                         } catch (e) { }
                         return null;
                     };
 
-                    // Try 1: Clean Title + Clean Artist
+                    // Try 1: Clean Title + Clean Artist (Deezer -> iTunes)
                     const titleClean = clean(track.title);
                     const artistClean = clean(track.artist);
                     let q = encodeURIComponent(titleClean + ' ' + artistClean);
-                    let url = await searchiTunes(q);
-                    if (url) {
-                        spotArtworkCache[key] = url;
-                        return url;
-                    }
+                    
+                    let url = await searchDeezer(q, artistClean);
+                    if (url) { spotArtworkCache[key] = url; return url; }
+                    
+                    url = await searchiTunes(q, artistClean);
+                    if (url) { spotArtworkCache[key] = url; return url; }
 
                     // Try 2: Original Title + Original Artist
                     q = encodeURIComponent(track.title + ' ' + track.artist);
-                    url = await searchiTunes(q);
-                    if (url) {
-                        spotArtworkCache[key] = url;
-                        return url;
-                    }
+                    url = await searchDeezer(q, track.artist);
+                    if (url) { spotArtworkCache[key] = url; return url; }
+                    
+                    url = await searchiTunes(q, track.artist);
+                    if (url) { spotArtworkCache[key] = url; return url; }
 
                     // Try 3: Just Title
                     q = encodeURIComponent(titleClean);
-                    url = await searchiTunes(q);
+                    url = await searchDeezer(q, artistClean);
+                    if (url) { spotArtworkCache[key] = url; return url; }
+                    
+                    url = await searchiTunes(q, artistClean);
                     if (url) {
                         spotArtworkCache[key] = url;
                         return url;
@@ -3916,6 +3952,8 @@
                     spotlightPlayTrack(prev);
                 }
 
+                let toastShownForCurrentSong = false;
+
                 function initSpotlight() {
                     // Cargar canciones desde Firebase (vía config del admin panel)
                     try {
@@ -3928,6 +3966,50 @@
                     spotAudio.volume = 0.5;
                     spotlightLoadTrack(0);
                     spotAudio.addEventListener('ended', spotlightNext);
+
+                    spotAudio.addEventListener('timeupdate', () => {
+                        if (!spotAudio.duration) return;
+                        const timeLeft = spotAudio.duration - spotAudio.currentTime;
+                        if (timeLeft <= 10 && timeLeft > 0 && !toastShownForCurrentSong) {
+                            toastShownForCurrentSong = true;
+                            let next = currentSpotTrack + 1;
+                            if (next >= spotlightTracks.length) next = 0;
+                            const nextTrack = spotlightTracks[next];
+                            if (nextTrack) {
+                                const toast = document.getElementById('next-song-toast');
+                                const titleEl = document.getElementById('next-song-toast-title');
+                                const artImg = document.getElementById('next-song-toast-art');
+                                const fallbackIcon = document.getElementById('next-song-toast-fallback');
+                                const artContainer = document.getElementById('next-song-toast-art-container');
+
+                                if (toast && titleEl) {
+                                    titleEl.textContent = nextTrack.title;
+                                    
+                                    fetchSpotlightArtwork(nextTrack).then(artUrl => {
+                                        if (artUrl) {
+                                            artImg.src = artUrl;
+                                            artImg.classList.remove('hidden');
+                                            fallbackIcon.classList.add('hidden');
+                                            artContainer.classList.remove('bg-brand-500/20', 'text-brand-400');
+                                        } else {
+                                            artImg.classList.add('hidden');
+                                            fallbackIcon.classList.remove('hidden');
+                                            artContainer.classList.add('bg-brand-500/20', 'text-brand-400');
+                                        }
+
+                                        gsap.fromTo(toast, 
+                                            { y: 20, x: -20, opacity: 0 }, 
+                                            { y: 0, x: 0, opacity: 1, duration: 0.6, ease: "back.out(1.5)" }
+                                        );
+                                        setTimeout(() => {
+                                            gsap.to(toast, { y: 20, opacity: 0, duration: 0.5, ease: "power2.in" });
+                                        }, 8000);
+                                    });
+                                }
+                            }
+                        }
+                    });
+
                     if (typeof AudioManager !== 'undefined') {
                         spotAudio.muted = AudioManager.muted;
                     }
@@ -3959,6 +4041,7 @@
                 }
 
                 function spotlightLoadTrack(i) {
+                    toastShownForCurrentSong = false;
                     currentSpotTrack = i;
                     const track = spotlightTracks[i];
                     spotAudio.src = track.src;
@@ -3981,7 +4064,7 @@
 
                     // Actualizar título de ventana con la canción actual
                     if (isSpotPlaying) {
-                        document.title = `\uD83C\uDFB5 ${track.title}`;
+                        document.title = `${track.title}`;
                     }
                 }
 
@@ -3997,7 +4080,7 @@
                 function spotlightUpdateTitle() {
                     const track = spotlightTracks[currentSpotTrack];
                     if (isSpotPlaying && track) {
-                        document.title = `\uD83C\uDFB5 ${track.title}`;
+                        document.title = `${track.title}`;
                     } else {
                         document.title = '28E';
                     }
@@ -4065,7 +4148,7 @@
                     if (document.visibilityState === 'visible') {
                         if (isSpotPlaying && spotlightTracks[currentSpotTrack]) {
                             const t = spotlightTracks[currentSpotTrack];
-                            document.title = `\uD83C\uDFB5 ${t.title}`;
+                            document.title = `${t.title}`;
                         } else {
                             document.title = '28E';
                         }
@@ -17564,6 +17647,18 @@
         });
     </script>
     
+    <!-- NEXT SONG TOAST -->
+    <div id="next-song-toast" class="fixed bottom-6 left-6 bg-[#18181b]/95 backdrop-blur-md border border-brand-500/30 pr-5 pl-3 py-3 rounded-2xl shadow-[0_10px_40px_rgba(236,72,153,0.2)] flex items-center gap-3 z-[99999] opacity-0 pointer-events-none transform translate-y-[20px]">
+        <div id="next-song-toast-art-container" class="w-11 h-11 rounded-lg bg-brand-500/20 flex items-center justify-center text-brand-400 shrink-0 overflow-hidden">
+            <i id="next-song-toast-fallback" class="ph-bold ph-music-notes text-xl"></i>
+            <img id="next-song-toast-art" src="" class="w-full h-full object-cover hidden" />
+        </div>
+        <div>
+            <p class="text-[10px] font-bold text-brand-500 uppercase tracking-widest mb-0.5">Siguiente canción</p>
+            <p id="next-song-toast-title" class="text-sm font-bold text-white leading-tight truncate max-w-[200px]"></p>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
         window.triggerFlowerRain = function() {
