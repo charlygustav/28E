@@ -860,7 +860,7 @@
           node.id = `vc-u-${u.id}`;
           node.innerHTML = `
             <div class="vc-av${isMe ? ' me' : ''}" id="vc-av-${u.id}">
-              ${u.photoURL ? `<img src="${u.photoURL}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />` : u.displayName.slice(0, 2).toUpperCase()}
+              ${(u.photoURL || (isMe && window.yaireCurrentUser?.photoURL)) ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />` : u.displayName.slice(0, 2).toUpperCase()}
             </div>
             <div class="vc-uname">${u.displayName}${isMe ? `<span class="tag">${_t('tag_you')}</span>` : ''}</div>
           `;
