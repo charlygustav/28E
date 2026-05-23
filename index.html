@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>28E</title>
-    <meta name="description" content="Para Yaire 🌷 — Mi lugar favorito es contigo. Feliz 28E.">
+    <meta name="description" content="Para Yaire 🌷 — Mi lugar favorito es contigo. Feliz 28E. Plataforma interactiva de canales de voz y minijuegos.">
     <link rel="icon" type="image/x-icon" href="tulip.ico?v=3">
 
     <!-- Bloqueo temporal: Redirigir a mantenimiento antes del 28 de Abril -->
@@ -3500,7 +3500,7 @@
                 <div class="relative" id="auth-wrapper">
                     <button id="auth-toggle" class="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors border border-zinc-200/50 dark:border-zinc-700/50 cursor-pointer overflow-hidden relative" title="Cuenta">
                         <span id="auth-icon" class="text-zinc-500"><i class="ph-bold ph-user"></i></span>
-                        <img id="auth-avatar" src="" class="w-full h-full object-cover hidden" alt="User Avatar" />
+                        <img id="auth-avatar" src="" draggable="false" class="w-full h-full object-cover hidden" alt="User Avatar" />
                     </button>
                     <!-- Menú de autenticación -->
                     <div id="auth-menu"
@@ -5983,33 +5983,6 @@
                     Hub</h3>
                 <p class="text-zinc-500 dark:text-zinc-400 text-sm mt-3 max-w-md mx-auto font-medium">Elige tu aventura
                     y compite por la puntuación más alta</p>
-                <div class="mt-4 flex justify-center">
-                    <button onclick="openLeaderboard()" class="flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold text-sm shadow-xl shadow-yellow-500/20 hover:scale-105 transition-transform cursor-pointer border border-yellow-400/50">
-                        <i class="ph-fill ph-trophy"></i> Tabla de Récords
-                    </button>
-                </div>
-            </div>
-
-            <!-- LEADERBOARD MODAL -->
-            <div id="leaderboard-modal" class="fixed inset-0 z-[9999] hidden items-center justify-center p-4">
-                <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeLeaderboard()"></div>
-                <div class="relative w-full max-w-md bg-white dark:bg-[#0a0a0a] rounded-3xl shadow-2xl overflow-hidden border border-zinc-200/50 dark:border-zinc-800/50 transform scale-95 opacity-0 transition-all duration-300" id="leaderboard-content">
-                    <div class="p-6 border-b border-zinc-100 dark:border-zinc-800 flex justify-between items-center bg-zinc-50/50 dark:bg-zinc-900/50">
-                        <h3 class="text-xl font-black text-zinc-800 dark:text-white flex items-center gap-2"><i class="ph-fill ph-trophy text-yellow-500"></i> Mejores Jugadores</h3>
-                        <button onclick="closeLeaderboard()" class="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-500 hover:text-zinc-800 dark:hover:text-white transition-colors cursor-pointer">✕</button>
-                    </div>
-                    <div class="p-4 flex gap-2 overflow-x-auto snap-x no-scrollbar" id="leaderboard-tabs">
-                        <button onclick="loadLeaderboard('g1')" class="px-4 py-2 text-xs font-bold rounded-full bg-brand-500 text-white shrink-0 snap-start transition-colors" id="tab-g1">Atrapa Girasoles</button>
-                        <button onclick="loadLeaderboard('g2')" class="px-4 py-2 text-xs font-bold rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 shrink-0 snap-start transition-colors" id="tab-g2">Vuelo Hacia Ti</button>
-                        <button onclick="loadLeaderboard('g3')" class="px-4 py-2 text-xs font-bold rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 shrink-0 snap-start transition-colors" id="tab-g3">Cartas Ocultas</button>
-                        <button onclick="loadLeaderboard('g4')" class="px-4 py-2 text-xs font-bold rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 shrink-0 snap-start transition-colors" id="tab-g4">Adivina la Canción</button>
-                    </div>
-                    <div class="p-6 h-[300px] overflow-y-auto" id="leaderboard-list">
-                        <div class="flex flex-col items-center justify-center h-full text-zinc-400 dark:text-zinc-500 text-sm">
-                            <i class="ph-bold ph-spinner animate-spin text-2xl mb-2"></i> Cargando...
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- ═══ GAMES HUB v2 ═══ -->
@@ -6221,17 +6194,25 @@
 
                         <!-- Game 1 Overlay -->
                         <div id="g1-overlay" class="game-overlay-new active">
-                            <div class="game-ov-card">
-                                <div class="text-4xl md:text-5xl mb-3 drop-shadow-xl" id="g1-ov-icon">🌻</div>
-                                <p id="g1-ov-title"
-                                    class="bg-gradient-to-r from-brand-600 to-amber-400 dark:from-brand-500 dark:to-yellow-300 bg-clip-text text-transparent font-black text-2xl md:text-3xl mb-4"
-                                    data-i18n="game1_start_title">¡Prepárate!</p>
-                                <p id="g1-ov-sub"
-                                    class="text-zinc-500 text-xs md:text-sm font-medium mb-5 leading-tight empty:hidden">
-                                </p>
-                                <button id="g1-ov-btn" onclick="startGame1()"
-                                    class="bg-brand-500 text-white font-bold py-2 md:py-2.5 px-6 rounded-xl hover:bg-brand-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(245,158,11,0.5)] active:scale-95 text-sm md:text-base w-full"
-                                    data-i18n="game_start">¡Empezar!</button>
+                            <div class="flex flex-row items-center justify-center gap-2 sm:gap-4 w-full px-2 max-w-4xl mx-auto h-full overflow-hidden py-4">
+                                <div class="game-ov-card transition-all duration-500 w-full max-w-[280px] shrink min-w-0" id="main-card-g1">
+                                    <div class="text-4xl md:text-5xl mb-3 drop-shadow-xl" id="g1-ov-icon">🌻</div>
+                                    <p id="g1-ov-title"
+                                        class="bg-gradient-to-r from-brand-600 to-amber-400 dark:from-brand-500 dark:to-yellow-300 bg-clip-text text-transparent font-black text-2xl md:text-3xl mb-4"
+                                        data-i18n="game1_start_title">¡Prepárate!</p>
+                                    <p id="g1-ov-sub"
+                                        class="text-zinc-500 text-sm font-medium mb-5 leading-tight empty:hidden">
+                                    </p>
+                                    <button id="g1-ov-btn" onclick="startGame1()"
+                                        class="bg-brand-500 text-white font-bold py-2 md:py-2.5 px-6 rounded-xl hover:bg-brand-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(245,158,11,0.5)] active:scale-95 text-sm md:text-base w-full"
+                                        data-i18n="game_start">¡Empezar!</button>
+                                </div>
+                                <div class="overflow-hidden hidden shrink w-full max-w-[280px] min-w-0" id="records-wrapper-g1">
+                                    <div class="game-ov-card w-full h-full min-w-0">
+                                        <div id="smart-msg-g1"></div>
+                                        <div id="leaderboard-mini-g1" class="w-full"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -6265,16 +6246,24 @@
 
                         <!-- Game 2 Overlay -->
                         <div id="game2-overlay" class="game-overlay-new active">
-                            <div class="game-ov-card">
-                                <div class="text-3xl mb-3 drop-shadow-xl" id="game2-overlay-icon">🦋</div>
-                                <p id="game2-overlay-text"
-                                    class="bg-gradient-to-r from-tulip-600 to-pink-400 dark:from-tulip-400 dark:to-pink-300 bg-clip-text text-transparent font-black text-2xl md:text-3xl mb-4"
-                                    data-i18n="game2_start_title">¡A volar!</p>
-                                <p id="game2-overlay-sub"
-                                    class="text-zinc-500 text-xs font-medium mb-4 leading-tight empty:hidden"></p>
-                                <button id="game2-overlay-btn" onclick="startButterflyGame()"
-                                    class="bg-tulip-500 text-white font-bold py-2 md:py-2.5 px-6 rounded-xl hover:bg-tulip-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(236,72,153,0.5)] active:scale-95 text-sm md:text-base w-full"
-                                    data-i18n="game_start">Empezar a volar</button>
+                            <div class="flex flex-row items-center justify-center gap-2 sm:gap-4 w-full px-2 max-w-4xl mx-auto h-full overflow-hidden py-4">
+                                <div class="game-ov-card transition-all duration-500 w-full max-w-[280px] shrink min-w-0" id="main-card-g2">
+                                    <div class="text-3xl mb-3 drop-shadow-xl" id="game2-overlay-icon">🦋</div>
+                                    <p id="game2-overlay-text"
+                                        class="bg-gradient-to-r from-tulip-600 to-pink-400 dark:from-tulip-400 dark:to-pink-300 bg-clip-text text-transparent font-black text-2xl md:text-3xl mb-4"
+                                        data-i18n="game2_start_title">¡A volar!</p>
+                                    <p id="game2-overlay-sub"
+                                        class="text-zinc-500 text-sm font-medium mb-4 leading-tight empty:hidden"></p>
+                                    <button id="game2-overlay-btn" onclick="startButterflyGame()"
+                                        class="bg-tulip-500 text-white font-bold py-2 md:py-2.5 px-6 rounded-xl hover:bg-tulip-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(236,72,153,0.5)] active:scale-95 text-sm md:text-base w-full"
+                                        data-i18n="game_start">Empezar a volar</button>
+                                </div>
+                                <div class="overflow-hidden hidden shrink w-full max-w-[280px] min-w-0" id="records-wrapper-g2">
+                                    <div class="game-ov-card w-full h-full min-w-0">
+                                        <div id="smart-msg-g2"></div>
+                                        <div id="leaderboard-mini-g2" class="w-full"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -6324,16 +6313,24 @@
 
                         <!-- Game 3 Overlay -->
                         <div id="game3-overlay" class="game-overlay-new active">
-                            <div class="game-ov-card">
-                                <div class="text-4xl md:text-5xl mb-3 drop-shadow-xl" id="game3-overlay-icon">🃏</div>
-                                <p id="game3-overlay-text"
-                                    class="bg-gradient-to-r from-purple-600 to-indigo-400 dark:from-purple-400 dark:to-indigo-300 bg-clip-text text-transparent font-black text-2xl md:text-3xl mb-4"
-                                    data-i18n="game3_start_title">¡Concéntrate!</p>
-                                <p id="game3-overlay-sub"
-                                    class="text-zinc-500 text-xs md:text-sm font-medium mb-5 empty:hidden"></p>
-                                <button id="game3-overlay-btn" onclick="startMemoryGame()"
-                                    class="bg-purple-500 text-white font-bold py-2 md:py-2.5 px-6 rounded-xl hover:bg-purple-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(168,85,247,0.5)] active:scale-95 text-sm md:text-base w-full"
-                                    data-i18n="game_start2">¡Empezar!</button>
+                            <div class="flex flex-col items-center justify-center gap-4 sm:gap-6 w-full px-4 max-w-sm mx-auto h-full max-h-full overflow-y-auto py-6">
+                                <div class="game-ov-card transition-all duration-500 w-full max-w-[300px] shrink" id="main-card-g3">
+                                    <div class="text-4xl md:text-5xl mb-3 drop-shadow-xl" id="game3-overlay-icon">🃏</div>
+                                    <p id="game3-overlay-text"
+                                        class="bg-gradient-to-r from-purple-600 to-indigo-400 dark:from-purple-400 dark:to-indigo-300 bg-clip-text text-transparent font-black text-2xl md:text-3xl mb-4"
+                                        data-i18n="game3_start_title">¡Concéntrate!</p>
+                                    <p id="game3-overlay-sub"
+                                        class="text-zinc-500 text-sm font-medium mb-5 empty:hidden"></p>
+                                    <button id="game3-overlay-btn" onclick="startMemoryGame()"
+                                        class="bg-purple-500 text-white font-bold py-2 md:py-2.5 px-6 rounded-xl hover:bg-purple-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(168,85,247,0.5)] active:scale-95 text-sm md:text-base w-full"
+                                        data-i18n="game_start2">¡Empezar!</button>
+                                </div>
+                                <div class="overflow-hidden hidden shrink w-full max-w-[300px]" id="records-wrapper-g3">
+                                    <div class="game-ov-card w-full">
+                                        <div id="smart-msg-g3"></div>
+                                        <div id="leaderboard-mini-g3" class="w-full"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -6443,17 +6440,25 @@
                         </div>
                         <!-- Game 4 Overlay -->
                         <div id="game4-overlay" class="game-overlay-new active">
-                            <div class="game-ov-card">
-                                <div class="text-4xl md:text-5xl mb-3 drop-shadow-xl" id="game4-overlay-icon">🎵</div>
-                                <p id="game4-overlay-text"
-                                    class="bg-gradient-to-r from-emerald-600 to-teal-400 dark:from-emerald-400 dark:to-teal-300 bg-clip-text text-transparent font-black text-2xl md:text-3xl mb-4"
-                                    data-i18n="game4_start_title">¿Conoces la canción?</p>
-                                <p id="game4-overlay-sub"
-                                    class="text-zinc-500 text-xs md:text-sm font-medium mb-5 empty:hidden"
-                                    data-i18n="game4_start_sub">Escucha un fragmento y elige la correcta. 10 rondas.</p>
-                                <button id="game4-overlay-btn" onclick="startGuessGame()"
-                                    class="bg-emerald-500 text-white font-bold py-2 md:py-2.5 px-6 rounded-xl hover:bg-emerald-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] active:scale-95 text-sm md:text-base w-full"
-                                    data-i18n="game_start">¡Empezar!</button>
+                            <div class="flex flex-row items-center justify-center gap-2 sm:gap-4 w-full px-2 max-w-4xl mx-auto h-full overflow-hidden py-4">
+                                <div class="game-ov-card transition-all duration-500 w-full max-w-[280px] shrink min-w-0" id="main-card-g4">
+                                    <div class="text-4xl md:text-5xl mb-3 drop-shadow-xl" id="game4-overlay-icon">🎵</div>
+                                    <p id="game4-overlay-text"
+                                        class="bg-gradient-to-r from-emerald-600 to-teal-400 dark:from-emerald-400 dark:to-teal-300 bg-clip-text text-transparent font-black text-2xl md:text-3xl mb-4"
+                                        data-i18n="game4_start_title">¿Conoces la canción?</p>
+                                    <p id="game4-overlay-sub"
+                                        class="text-zinc-500 text-sm font-medium mb-5 empty:hidden"
+                                        data-i18n="game4_start_sub">Escucha un fragmento y elige la correcta. 10 rondas.</p>
+                                    <button id="game4-overlay-btn" onclick="startGuessGame()"
+                                        class="bg-emerald-500 text-white font-bold py-2 md:py-2.5 px-6 rounded-xl hover:bg-emerald-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] active:scale-95 text-sm md:text-base w-full"
+                                        data-i18n="game_start">¡Empezar!</button>
+                                </div>
+                                <div class="overflow-hidden hidden shrink w-full max-w-[280px] min-w-0" id="records-wrapper-g4">
+                                    <div class="game-ov-card w-full h-full min-w-0">
+                                        <div id="smart-msg-g4"></div>
+                                        <div id="leaderboard-mini-g4" class="w-full"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -6954,7 +6959,21 @@
                             <h4 class="text-2xl font-black mb-6 flex items-center gap-3 text-zinc-900 dark:text-white" data-i18n="gb_form_title">
                                 <i class="ph-fill ph-pen-nib text-amber-500"></i> Escribe un mensaje
                             </h4>
-                            <form id="guestbook-form" class="flex flex-col gap-5 relative z-10">
+
+                            <!-- Auth Prompt (Shown initially if not logged in) -->
+                            <div id="gb-auth-prompt" class="flex flex-col gap-4 relative z-10 text-center">
+                                <p class="text-zinc-600 dark:text-zinc-400 text-sm font-medium mb-2">Para firmar el muro, por favor identifícate.</p>
+                                <button type="button" id="gb-login-btn" class="w-full bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white border border-zinc-200 dark:border-zinc-700 font-bold py-3 px-4 rounded-2xl flex flex-row flex-nowrap items-center justify-center gap-3 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-all shadow-sm group whitespace-nowrap text-sm">
+                                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5 flex-none object-contain group-hover:scale-110 transition-transform" alt="Google">
+                                    <span>Continuar con Google</span>
+                                </button>
+                                <button type="button" id="gb-manual-btn" class="text-[11px] text-zinc-400 dark:text-zinc-500 hover:text-amber-500 transition-colors underline decoration-dotted mt-1 mx-auto w-max cursor-pointer">
+                                    Prefiero escribir mi nombre manualmente
+                                </button>
+                            </div>
+
+                            <!-- Formulario (Hidden initially) -->
+                            <form id="guestbook-form" class="hidden flex-col gap-5 relative z-10">
                                 <div class="group/input">
                                     <label class="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2 group-focus-within/input:text-amber-500 transition-colors" data-i18n="gb_label_name">Tu Nombre</label>
                                     <div class="relative">
@@ -15725,7 +15744,21 @@
             const ov = document.getElementById(id);
             if (!ov) return;
             ov.classList.remove('active');
-            setTimeout(() => ov.style.display = 'none', 350);
+            setTimeout(() => {
+                ov.style.display = 'none';
+                const smartMsg = ov.querySelector('[id^="smart-msg-"]');
+                const miniBoard = ov.querySelector('[id^="leaderboard-mini-"]');
+                if (smartMsg) smartMsg.innerHTML = "";
+                if (miniBoard) miniBoard.innerHTML = "";
+                
+                // Hide records wrapper for next time
+                const wrapper = ov.querySelector('[id^="records-wrapper-"]');
+                if (wrapper) {
+                    wrapper.classList.add('hidden');
+                    // Reset GSAP styles if present
+                    if (window.gsap) gsap.set(wrapper, { clearProps: "all" });
+                }
+            }, 350);
         }
 
         // -- Arcade Hub Open/Close --
@@ -17575,7 +17608,7 @@
     <!-- Firebase SDK for Realtime Features -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
-        import { getDatabase, ref, push, onValue, onDisconnect, set, serverTimestamp, get } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js';
+        import { getDatabase, ref, push, onValue, onDisconnect, set, serverTimestamp, get, remove } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js';
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
 
         const firebaseConfig = {
@@ -17596,6 +17629,18 @@
         const presenceRef = ref(db, 'presence/' + sessionId);
         
         onDisconnect(presenceRef).remove();
+        
+        // Heartbeat cada 30 segundos
+        setInterval(() => {
+            if (document.visibilityState === 'visible') {
+                updatePresence();
+            }
+        }, 30000);
+        
+        
+        window.addEventListener('beforeunload', () => {
+            remove(presenceRef);
+        });
 
         let currentSection = "Navegando";
         let userLocation = "Buscando...";
@@ -17617,7 +17662,8 @@
                 payload.user = {
                     uid: currentUser.uid,
                     displayName: currentUser.displayName,
-                    photoURL: currentUser.photoURL
+                    photoURL: currentUser.photoURL,
+                    email: currentUser.email
                 };
             }
             set(presenceRef, payload);
@@ -17647,6 +17693,21 @@
                 authMenuLoggedIn.classList.add('flex');
                 authMenuName.textContent = user.displayName;
                 authMenuEmail.textContent = user.email;
+
+                // Guestbook Auth Logic
+                const gbPrompt = document.getElementById('gb-auth-prompt');
+                const gbFormContainer = document.getElementById('guestbook-form');
+                if(gbPrompt && gbFormContainer) {
+                    gbPrompt.classList.add('hidden');
+                    gbFormContainer.classList.remove('hidden');
+                    gbFormContainer.classList.add('flex');
+                    const gbName = document.getElementById('gb-name');
+                    if(gbName) {
+                        gbName.value = user.displayName;
+                        gbName.readOnly = true;
+                        gbName.classList.add('opacity-70', 'cursor-not-allowed');
+                    }
+                }
             } else {
                 authAvatar.classList.add('hidden');
                 authIcon.classList.remove('hidden');
@@ -17656,6 +17717,21 @@
                 authMenuLoggedIn.classList.remove('flex');
                 authMenuLoggedOut.classList.remove('hidden');
                 authMenuLoggedOut.classList.add('flex');
+
+                // Guestbook Auth Logic Reset
+                const gbPrompt = document.getElementById('gb-auth-prompt');
+                const gbFormContainer = document.getElementById('guestbook-form');
+                if(gbPrompt && gbFormContainer) {
+                    gbPrompt.classList.remove('hidden');
+                    gbFormContainer.classList.add('hidden');
+                    gbFormContainer.classList.remove('flex');
+                    const gbName = document.getElementById('gb-name');
+                    if(gbName) {
+                        gbName.value = '';
+                        gbName.readOnly = false;
+                        gbName.classList.remove('opacity-70', 'cursor-not-allowed');
+                    }
+                }
             }
             updatePresence();
         });
@@ -17717,102 +17793,192 @@
             });
         });
 
-        window.yaireSaveScore = (gameId, score) => {
-            if (!currentUser) return;
-            const refPath = `leaderboard/${gameId}/${currentUser.uid}`;
-            get(ref(db, refPath)).then(snap => {
-                const data = snap.val();
-                if (!data || score > data.score) {
-                    set(ref(db, refPath), {
-                        uid: currentUser.uid,
-                        displayName: currentUser.displayName,
-                        photoURL: currentUser.photoURL,
-                        score: score,
-                        timestamp: serverTimestamp()
-                    });
-                }
-            }).catch(e => console.error("Error saving score:", e));
-        };
-        // --- LEADERBOARD UI ---
-        window.openLeaderboard = () => {
-            const modal = document.getElementById('leaderboard-modal');
-            const content = document.getElementById('leaderboard-content');
-            if(modal) {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-                setTimeout(() => {
-                    content.classList.remove('opacity-0', 'scale-95');
-                    content.classList.add('opacity-100', 'scale-100');
-                }, 10);
-                window.loadLeaderboard('g1'); // Load game 1 by default
-            }
-        };
-        
-        window.closeLeaderboard = () => {
-            const modal = document.getElementById('leaderboard-modal');
-            const content = document.getElementById('leaderboard-content');
-            if(content && modal) {
-                content.classList.remove('opacity-100', 'scale-100');
-                content.classList.add('opacity-0', 'scale-95');
-                setTimeout(() => {
-                    modal.classList.remove('flex');
-                    modal.classList.add('hidden');
-                }, 300);
-            }
-        };
+        const gbLoginBtn = document.getElementById('gb-login-btn');
+        if(gbLoginBtn) {
+            gbLoginBtn.addEventListener('click', () => {
+                signInWithPopup(auth, provider).catch(err => {
+                    console.error("Error logging in from guestbook:", err);
+                    alert("Error al iniciar sesión: " + err.message);
+                });
+            });
+        }
 
-        window.loadLeaderboard = (gameId) => {
-            // Update UI tabs
-            ['g1', 'g2', 'g3', 'g4'].forEach(id => {
-                const btn = document.getElementById(`tab-${id}`);
-                if(btn) {
-                    if (id === gameId) {
-                        btn.className = "px-4 py-2 text-xs font-bold rounded-full bg-brand-500 text-white shrink-0 snap-start transition-colors";
-                    } else {
-                        btn.className = "px-4 py-2 text-xs font-bold rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 shrink-0 snap-start transition-colors";
+        const gbManualBtn = document.getElementById('gb-manual-btn');
+        if(gbManualBtn) {
+            gbManualBtn.addEventListener('click', () => {
+                const gbPrompt = document.getElementById('gb-auth-prompt');
+                const gbFormContainer = document.getElementById('guestbook-form');
+                if(gbPrompt && gbFormContainer) {
+                    gbPrompt.classList.add('hidden');
+                    gbFormContainer.classList.remove('hidden');
+                    gbFormContainer.classList.add('flex');
+                    const gbName = document.getElementById('gb-name');
+                    if(gbName) {
+                        gbName.value = '';
+                        gbName.readOnly = false;
+                        gbName.classList.remove('opacity-70', 'cursor-not-allowed');
+                        gbName.focus();
                     }
                 }
             });
+        }
 
-            const listEl = document.getElementById('leaderboard-list');
-            if (!listEl) return;
-            listEl.innerHTML = `<div class="flex flex-col items-center justify-center h-full text-zinc-400 text-sm"><i class="ph-bold ph-spinner animate-spin text-2xl mb-2"></i> Cargando...</div>`;
+        window.yaireSaveScore = async (gameId, score) => {
+            const refPath = `leaderboard/${gameId}`;
+            
+            try {
+                // Fetch current leaderboard
+                const snap = await get(ref(db, refPath));
+                let data = snap.val() || {};
+                let arr = Object.values(data).sort((a, b) => b.score - a.score);
+                
+                let smartMessage = "";
+                let myCurrentRankIndex = -1;
 
-            get(ref(db, `leaderboard/${gameId}`)).then(snap => {
-                const data = snap.val();
-                if (!data) {
-                    listEl.innerHTML = `<div class="flex flex-col items-center justify-center h-full text-zinc-400 text-sm"><i class="ph-bold ph-ghost text-2xl mb-2"></i> Nadie ha jugado aún</div>`;
-                    return;
+                if (currentUser) {
+                    // Determine previous personal record
+                    const myOldRecord = data[currentUser.uid]?.score || 0;
+                    
+                    // Save new score if better
+                    let isNewPersonalRecord = score > myOldRecord;
+                    if (isNewPersonalRecord) {
+                        data[currentUser.uid] = {
+                            uid: currentUser.uid,
+                            displayName: currentUser.displayName,
+                            photoURL: currentUser.photoURL,
+                            score: score,
+                            timestamp: Date.now() // Use client time for sorting simplicity or serverTimestamp
+                        };
+                        await set(ref(db, `${refPath}/${currentUser.uid}`), data[currentUser.uid]);
+                        // Recalculate array
+                        arr = Object.values(data).sort((a, b) => b.score - a.score);
+                    }
+                    
+                    myCurrentRankIndex = arr.findIndex(u => u.uid === currentUser.uid);
+                    
+                    if (arr.length === 1 && isNewPersonalRecord) {
+                        smartMessage = "¡Primer récord establecido! 🏆";
+                    } else if (isNewPersonalRecord) {
+                        if (myCurrentRankIndex === 0) {
+                            smartMessage = "¡NUEVO RÉCORD MUNDIAL! Eres el #1 👑";
+                        } else if (myCurrentRankIndex > 0) {
+                            // Find who we surpassed
+                            const surpassedUser = arr[myCurrentRankIndex + 1];
+                            if (surpassedUser && surpassedUser.uid !== currentUser.uid) {
+                                smartMessage = `¡Has superado a ${surpassedUser.displayName || 'Anónimo'}! 🔥`;
+                            } else {
+                                smartMessage = "¡Nuevo récord personal! ⭐";
+                            }
+                        }
+                    } else {
+                        smartMessage = `Tu récord se mantiene en ${myOldRecord} pts`;
+                    }
+                } else {
+                    smartMessage = "Inicia sesión para guardar tu récord 🔒";
+                }
+
+                // Render to container
+                const listEl = document.getElementById(`leaderboard-mini-${gameId}`);
+                if (listEl) {
+                    const subtitleEl = document.getElementById(`smart-msg-${gameId}`);
+                    if (subtitleEl) {
+                        subtitleEl.innerHTML = `<div class="mt-1 text-sm font-black text-yellow-400 drop-shadow-md animate-pulse">${smartMessage}</div>`;
+                    }
+
+                    let html = '<div class="flex flex-col gap-2 mt-4 text-left">';
+                    // Only show top 3
+                    arr.slice(0, 3).forEach((item, index) => {
+                        let rankIcon = `<div class="w-6 h-6 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-[10px] font-bold text-zinc-400">#${index + 1}</div>`;
+                        let cardClass = "bg-white/50 dark:bg-zinc-900/30 border-zinc-200/50 dark:border-zinc-800/30";
+                        let nameClass = "text-zinc-700 dark:text-zinc-300 font-bold text-xs";
+                        let scoreClass = "text-zinc-500 text-xs";
+                        
+                        if (index === 0) {
+                            rankIcon = `<i class="ph-fill ph-medal text-2xl text-yellow-400 drop-shadow-[0_2px_10px_rgba(250,204,21,0.4)]"></i>`;
+                            cardClass = "bg-gradient-to-r from-yellow-500/10 to-transparent border-yellow-500/20";
+                            nameClass = "text-yellow-600 dark:text-yellow-400 font-black text-sm";
+                            scoreClass = "text-yellow-600 dark:text-yellow-500 font-black text-xs";
+                        } else if (index === 1) {
+                            rankIcon = `<i class="ph-fill ph-medal text-xl text-zinc-400 drop-shadow-[0_2px_10px_rgba(161,161,170,0.3)]"></i>`;
+                            cardClass = "bg-gradient-to-r from-zinc-500/5 to-transparent border-zinc-500/20";
+                        } else if (index === 2) {
+                            rankIcon = `<i class="ph-fill ph-medal text-xl text-orange-400 drop-shadow-[0_2px_10px_rgba(251,146,60,0.3)]"></i>`;
+                            cardClass = "bg-gradient-to-r from-orange-500/5 to-transparent border-orange-500/20";
+                        }
+                        
+                        let isMe = (currentUser && item.uid === currentUser.uid) ? 'ring-2 ring-brand-500 bg-brand-500/5' : '';
+                        
+                        html += `
+                            <div class="flex items-center gap-3 p-2.5 rounded-xl border backdrop-blur-sm ${cardClass} ${isMe}">
+                                <div class="w-8 flex justify-center shrink-0">
+                                    ${rankIcon}
+                                </div>
+                                <div class="relative">
+                                    <img src="${item.photoURL || ''}" draggable="false" class="w-8 h-8 rounded-full object-cover ring-1 ring-white/10 dark:ring-zinc-800" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYTJhMmEyIiBzdHJva2Utd2lkdGg9IjIiPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCIvPjxwYXRoIGQ9Ik00IDIxdi0yYTRgNCAwIDAgMSA0LTRoOGE0IDQgMCAwIDEgNCAydjIiLz48L3N2Zz4='"/>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="truncate tracking-tight ${nameClass}">${item.displayName || 'Anónimo'} ${isMe ? '<span class="text-[9px] text-brand-500 uppercase tracking-widest ml-1">(Tú)</span>' : ''}</div>
+                                    <div class="tracking-wide ${scoreClass}">${item.score} <span class="opacity-60 text-[9px] uppercase font-bold tracking-widest ml-0.5">pts</span></div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    // Show current user if not in top 3
+                    if (currentUser && myCurrentRankIndex >= 3) {
+                        const myItem = arr[myCurrentRankIndex];
+                        html += `
+                            <div class="flex items-center gap-2 justify-center py-1"><i class="ph-bold ph-dots-three text-zinc-500"></i></div>
+                            <div class="flex items-center gap-3 p-2.5 rounded-xl border border-brand-500/30 bg-brand-500/5 backdrop-blur-sm ring-1 ring-brand-500/50">
+                                <div class="w-8 flex justify-center shrink-0">
+                                    <div class="w-6 h-6 rounded-full bg-brand-500/20 flex items-center justify-center text-[10px] font-bold text-brand-500">#${myCurrentRankIndex + 1}</div>
+                                </div>
+                                <div class="relative">
+                                    <img src="${myItem.photoURL || ''}" draggable="false" class="w-8 h-8 rounded-full object-cover ring-1 ring-brand-500" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYTJhMmEyIiBzdHJva2Utd2lkdGg9IjIiPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCIvPjxwYXRoIGQ9Ik00IDIxdi0yYTRgNCAwIDAgMSA0LTRoOGE0IDQgMCAwIDEgNCAydjIiLz48L3N2Zz4='"/>
+                                </div>
+                                <div class="flex-1 min-w-0 text-left">
+                                    <div class="truncate tracking-tight text-brand-500 font-bold text-xs">${myItem.displayName || 'Anónimo'} <span class="text-[9px] uppercase tracking-widest ml-1">(Tú)</span></div>
+                                    <div class="tracking-wide text-brand-500/80 text-xs font-bold">${myItem.score} <span class="opacity-60 text-[9px] uppercase tracking-widest ml-0.5">pts</span></div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    
+                    html += '</div>';
+                    listEl.innerHTML = html;
+                    
+                    // Reveal and animate the records wrapper with GSAP
+                    const wrapper = document.getElementById(`records-wrapper-${gameId}`);
+                    if (wrapper) {
+                        wrapper.classList.remove('hidden');
+                        if (window.gsap) {
+                            // 1. Animate wrapper width and height for smooth sliding/expanding whether side-by-side or stacked
+                            gsap.fromTo(wrapper, 
+                                { width: 0, height: 0, opacity: 0, scale: 0.8 }, 
+                                { width: 'auto', height: 'auto', opacity: 1, scale: 1, duration: 0.8, ease: "elastic.out(1, 0.85)", clearProps: "all" }
+                            );
+                            
+                            // 2. Stagger animate leaderboard items
+                            const items = listEl.querySelectorAll('.flex.items-center.gap-3');
+                            if (items.length) {
+                                gsap.fromTo(items, 
+                                    { opacity: 0, x: 20 }, 
+                                    { opacity: 1, x: 0, duration: 0.5, stagger: 0.1, ease: "power2.out", delay: 0.15 }
+                                );
+                            }
+                            
+                            // 3. Pop in smart message
+                            const msgEl = document.getElementById(`smart-msg-${gameId}`);
+                            if (msgEl) {
+                                gsap.fromTo(msgEl, { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.5, ease: "back.out(1.5)", delay: 0.1 });
+                            }
+                        }
+                    }
                 }
                 
-                // Sort array
-                const arr = Object.values(data).sort((a, b) => b.score - a.score);
-                
-                let html = '<div class="flex flex-col gap-3">';
-                arr.forEach((item, index) => {
-                    let rankClass = "bg-zinc-100 dark:bg-zinc-800 text-zinc-500";
-                    if (index === 0) rankClass = "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-500 border border-yellow-500/30";
-                    else if (index === 1) rankClass = "bg-zinc-200 text-zinc-600 dark:bg-zinc-700/50 dark:text-zinc-300 border border-zinc-400/30";
-                    else if (index === 2) rankClass = "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-500 border border-orange-500/30";
-                    
-                    html += `
-                        <div class="flex items-center gap-3 p-3 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/50 bg-white dark:bg-zinc-900/50 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
-                            <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${rankClass}">
-                                #${index + 1}
-                            </div>
-                            <img src="${item.photoURL || ''}" class="w-10 h-10 rounded-full object-cover shrink-0 bg-zinc-200 dark:bg-zinc-800" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYTJhMmEyIiBzdHJva2Utd2lkdGg9IjIiPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCIvPjxwYXRoIGQ9Ik00IDIxdi0yYTRgNCAwIDAgMSA0LTRoOGE0IDQgMCAwIDEgNCAydjIiLz48L3N2Zz4='"/>
-                            <div class="flex-1 min-w-0">
-                                <div class="text-sm font-bold text-zinc-800 dark:text-zinc-100 truncate">${item.displayName || 'Anónimo'}</div>
-                                <div class="text-xs text-zinc-500 truncate text-emerald-500 font-bold">${item.score} puntos</div>
-                            </div>
-                        </div>
-                    `;
-                });
-                html += '</div>';
-                listEl.innerHTML = html;
-            }).catch(e => {
-                listEl.innerHTML = `<div class="text-red-500 text-center py-4">Error cargando puntajes</div>`;
-            });
+            } catch (e) {
+                console.error("Error in smart leaderboard:", e);
+            }
         };
         const observer = new IntersectionObserver((entries) => {
             let activeEntries = entries.filter(e => e.isIntersecting);
@@ -17859,12 +18025,21 @@
                 const name = document.getElementById('gb-name').value.trim();
                 const msg = document.getElementById('gb-msg').value.trim();
                 if(name && msg) {
-                    push(ref(db, 'guestbook'), {
+                    const messageData = {
                         name: name,
                         msg: msg,
                         timestamp: serverTimestamp()
-                    });
+                    };
+                    if(window.yaireCurrentUser) {
+                        messageData.uid = window.yaireCurrentUser.uid;
+                        messageData.photoURL = window.yaireCurrentUser.photoURL;
+                    }
+                    push(ref(db, 'guestbook'), messageData);
                     gbForm.reset();
+                    // If user is logged in, restore name after reset
+                    if(window.yaireCurrentUser) {
+                        document.getElementById('gb-name').value = window.yaireCurrentUser.displayName;
+                    }
                 }
             });
         }
@@ -17892,12 +18067,14 @@
                     const colors = ['bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400', 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400', 'bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400', 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400', 'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400'];
                     const colorClass = colors[safeName.innerText.length % colors.length];
 
+                    const avatarHTML = m.photoURL 
+                        ? `<img src="${m.photoURL}" class="w-10 h-10 shrink-0 rounded-full object-cover shadow-inner border border-zinc-200 dark:border-zinc-700" alt="Avatar">`
+                        : `<div class="w-10 h-10 shrink-0 rounded-full flex items-center justify-center font-black text-sm ${colorClass} shadow-inner">${initial}</div>`;
+
                     card.innerHTML = `
                         <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/20 dark:bg-white/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700 pointer-events-none"></div>
                         <div class="flex items-start gap-4 mb-4 relative z-10">
-                            <div class="w-10 h-10 shrink-0 rounded-full flex items-center justify-center font-black text-sm ${colorClass} shadow-inner">
-                                ${initial}
-                            </div>
+                            ${avatarHTML}
                             <div class="flex-1 pt-1">
                                 <h5 class="text-base font-black text-zinc-900 dark:text-white leading-none tracking-tight mb-1">${safeName.innerHTML}</h5>
                                 <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">${dateText}</span>

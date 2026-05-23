@@ -69,9 +69,9 @@ io.on('connection', (socket) => {
 
   // ── JOIN ──────────────────────────────────────────────────────────────────
   socket.on('join_channel', ({ password, displayName, photoURL }) => {
-    if (password !== CHANNEL_PASSWORD) {
-      return socket.emit('join_error', { message: 'Contraseña incorrecta.' });
-    }
+    // if (password !== CHANNEL_PASSWORD) {
+    //   return socket.emit('join_error', { message: 'Contraseña incorrecta.' });
+    // }
     if (users.size >= MAX_USERS) {
       return socket.emit('join_error', { message: 'Canal lleno (máx. 4 usuarios).' });
     }

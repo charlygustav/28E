@@ -703,18 +703,17 @@
         </div>
         <div class="vc-body">
           <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
-              <img src="${user.photoURL}" style="width: 36px; height: 36px; border-radius: 50%;" />
+              <img src="${user.photoURL}" draggable="false" style="width: 36px; height: 36px; border-radius: 50%;" />
               <div>
-                  <div style="font-size: 13px; font-weight: bold; color: #fff;">${user.displayName}</div>
-                  <div style="font-size: 10px; color: #f59e0b; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Acceso Autorizado</div>
+                  <div style="font-size: 9px; color: #f59e0b; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 2px;">Sesión iniciada como</div>
+                  <div style="font-size: 14px; font-weight: bold; color: #fff;">${user.displayName}</div>
               </div>
           </div>
           <div class="vc-field" style="display:none;">
             <input class="vc-input" id="vc-name" type="hidden" value="${user.displayName}"/>
           </div>
-          <div class="vc-field">
-            <label class="vc-label">${_t('lbl_pass')}</label>
-            <input class="vc-input" id="vc-pass" type="password" placeholder="${_t('ph_pass')}" autocomplete="new-password"/>
+          <div class="vc-field" style="display:none;">
+            <input class="vc-input" id="vc-pass" type="hidden" value="nopass"/>
           </div>
           <button class="vc-btn" id="vc-join">${_t('btn_join')}</button>
           <div class="vc-err" id="vc-err">${err}</div>
@@ -774,7 +773,7 @@
         return `
           <div class="vc-user" id="vc-u-${u.id}">
             <div class="vc-av${isMe ? ' me' : ''}" id="vc-av-${u.id}">
-              ${(u.photoURL || (isMe && window.yaireCurrentUser?.photoURL)) ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />` : initials}
+              ${(u.photoURL || (isMe && window.yaireCurrentUser?.photoURL)) ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" draggable="false" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />` : initials}
             </div>
             <div class="vc-uname">${u.displayName}${isMe ? `<span class="tag">${_t('tag_you')}</span>` : ''}</div>
             ${dndIcon}${muteIcon}
@@ -862,7 +861,7 @@
           node.id = `vc-u-${u.id}`;
           node.innerHTML = `
             <div class="vc-av${isMe ? ' me' : ''}" id="vc-av-${u.id}">
-              ${(u.photoURL || (isMe && window.yaireCurrentUser?.photoURL)) ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />` : u.displayName.slice(0, 2).toUpperCase()}
+              ${(u.photoURL || (isMe && window.yaireCurrentUser?.photoURL)) ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" draggable="false" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />` : u.displayName.slice(0, 2).toUpperCase()}
             </div>
             <div class="vc-uname">${u.displayName}${isMe ? `<span class="tag">${_t('tag_you')}</span>` : ''}</div>
           `;
@@ -904,22 +903,14 @@
         this._playSfx('typing', 0.2);
       };
 
-      if (joinBtn) {
-        joinBtn.addEventListener('click', () => {
-           const name = document.getElementById('vc-name').value.trim();
-           const pass = document.getElementById('vc-pass').value;
-           this._doJoin(name, pass);
-        });
-        if (passInput) passInput.addEventListener('keydown', e => {
-           if (e.key === 'Enter') {
+        if (joinBtn) {
+          joinBtn.addEventListener('click', () => {
              const name = document.getElementById('vc-name').value.trim();
-             const pass = document.getElementById('vc-pass').value;
-             this._doJoin(name, pass);
-           }
-        });
-        if (nameInput) nameInput.addEventListener('input', playTyping);
-        if (passInput) passInput.addEventListener('input', playTyping);
-      }
+             joinBtn.disabled = true;
+             joinBtn.innerHTML = '<div class="vc-spin"></div>';
+             this._doJoin(name);
+          });
+        }
 
       const reconnectBtn = document.getElementById('vc-reconnect');
       if (reconnectBtn) reconnectBtn.addEventListener('click', () => {
@@ -972,15 +963,21 @@
       }
     }
 
-    // ── JOIN ───────────────────────────────────────────────────────────────
-    async _doJoin(name, pass) {
+    async _doJoin(name) {
       if (!name) return this._setErr(_t('err_name'));
-      if (!pass) return this._setErr(_t('err_pass'));
 
       this.myName = name;
       localStorage.setItem('28e_vc_name', name);
       this._savedName = name;
-      this._savedPass = pass;
+      
+      try {
+          const res = await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config/voicePassword.json');
+          const pass = await res.json();
+          this._savedPass = pass;
+      } catch (e) {
+          this._savedPass = 'error';
+      }
+
       this._render(this._tplLoading());
       this.progNode = this._playSfx('progress', 0.3, true);
 
@@ -996,7 +993,7 @@
       this._processedStream = this._createProcessedStream();
       console.log('[VC] 🔇 Noise cancellation pipeline active');
 
-      this._connectSocket(name, pass);
+      this._connectSocket(name, this._savedPass);
     }
 
     _setErr(msg) {
