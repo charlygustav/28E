@@ -15686,6 +15686,12 @@
                 void a.offsetWidth;
                 a.classList.remove('scale-95', 'opacity-0');
                 setTimeout(() => { if (m) m.style.minHeight = ''; }, 500);
+                let gameName = "Juego";
+                if (gameId === 'game1') gameName = "Atrapa Girasoles";
+                else if (gameId === 'game2') gameName = "Mariposa de Luz";
+                else if (gameId === 'game3') gameName = "Memoria de Amor";
+                else if (gameId === 'game4') gameName = "¿Qué Canción Es?";
+                if(window.yaireUpdatePresence) window.yaireUpdatePresence("Jugando: " + gameName);
             }, 500);
         }
         function closeArcadeGame() {
@@ -15708,6 +15714,7 @@
                 void h.offsetWidth;
                 h.classList.remove('scale-95', 'opacity-0');
                 setTimeout(() => { if (m) m.style.minHeight = ''; }, 500);
+                if(window.yaireUpdatePresence) window.yaireUpdatePresence("Zona de Juegos");
             }, 500);
         }
 
@@ -17537,6 +17544,7 @@
             });
         };
         updatePresence();
+        window.yaireUpdatePresence = (sec) => { currentSection = sec; updatePresence(); };
 
         const observer = new IntersectionObserver((entries) => {
             let activeEntries = entries.filter(e => e.isIntersecting);
