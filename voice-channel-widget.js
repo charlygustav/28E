@@ -643,6 +643,14 @@
         }
       });
 
+      window.addEventListener('yaireAuthChanged', () => {
+        if (!this.connected) {
+          if (document.getElementById('vc-reconnect')) this._render(this._tplDisconnected());
+          else if (document.querySelector('.vc-loader')) this._render(this._tplLoading());
+          else this._render(this._tplLogin());
+        }
+      });
+
       this._bindPanelEvents();
     }
 
