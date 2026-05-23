@@ -773,7 +773,9 @@
         const dndIcon  = isDnd   ? `<span class="vc-dico" title="${_t('btn_dnd')}">${ICONS.dnd}</span>`  : '';
         return `
           <div class="vc-user" id="vc-u-${u.id}">
-            <div class="vc-av${isMe ? ' me' : ''}" id="vc-av-${u.id}">${initials}</div>
+            <div class="vc-av${isMe ? ' me' : ''}" id="vc-av-${u.id}">
+              ${(u.photoURL || (isMe && window.yaireCurrentUser?.photoURL)) ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />` : initials}
+            </div>
             <div class="vc-uname">${u.displayName}${isMe ? `<span class="tag">${_t('tag_you')}</span>` : ''}</div>
             ${dndIcon}${muteIcon}
           </div>`;
