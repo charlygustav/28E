@@ -3497,10 +3497,40 @@
             </div>
             <div class="flex items-center gap-2">
                 <!-- Auth Toggle -->
-                <button id="auth-toggle" class="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors border border-zinc-200/50 dark:border-zinc-700/50 cursor-pointer overflow-hidden relative" title="Iniciar sesión">
-                    <span id="auth-icon" class="text-zinc-500"><i class="ph-bold ph-user"></i></span>
-                    <img id="auth-avatar" src="" class="w-full h-full object-cover hidden" alt="User Avatar" />
-                </button>
+                <div class="relative" id="auth-wrapper">
+                    <button id="auth-toggle" class="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors border border-zinc-200/50 dark:border-zinc-700/50 cursor-pointer overflow-hidden relative" title="Cuenta">
+                        <span id="auth-icon" class="text-zinc-500"><i class="ph-bold ph-user"></i></span>
+                        <img id="auth-avatar" src="" class="w-full h-full object-cover hidden" alt="User Avatar" />
+                    </button>
+                    <!-- Menú de autenticación -->
+                    <div id="auth-menu"
+                        class="absolute right-0 top-full mt-2 w-56 rounded-xl border border-zinc-200/60 dark:border-zinc-700/60 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md transform-gpu shadow-2xl shadow-black/10 dark:shadow-black/40 py-2 z-[999] opacity-0 scale-95 pointer-events-none transition-all duration-200 origin-top-right"
+                        style="display:none;">
+                        
+                        <!-- Estado desconectado -->
+                        <div id="auth-menu-logged-out" class="px-3 flex flex-col gap-2">
+                            <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400 text-center mb-1">Inicia sesión para entrar al canal de voz y guardar progreso.</p>
+                            <button id="auth-btn-login" class="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-bold text-white bg-brand-500 hover:bg-brand-600 transition-colors rounded-lg">
+                                <i class="ph-bold ph-google-logo"></i>
+                                Iniciar sesión
+                            </button>
+                        </div>
+
+                        <!-- Estado conectado -->
+                        <div id="auth-menu-logged-in" class="hidden flex-col">
+                            <div class="px-4 py-2 border-b border-zinc-200/50 dark:border-zinc-700/50 mb-1">
+                                <p id="auth-menu-name" class="text-sm font-bold text-zinc-800 dark:text-zinc-200 truncate"></p>
+                                <p id="auth-menu-email" class="text-[10px] text-zinc-500 truncate"></p>
+                            </div>
+                            <div class="px-2">
+                                <button id="auth-btn-logout" class="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors rounded-lg">
+                                    <i class="ph-bold ph-sign-out"></i>
+                                    Cerrar sesión
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!-- Sound toggle -->
                 <button id="sound-toggle"
                     class="w-8 h-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors border border-zinc-200/50 dark:border-zinc-700/50 cursor-pointer"><span
@@ -17609,24 +17639,82 @@
                 authIcon.classList.add('hidden');
                 authAvatar.src = user.photoURL;
                 authAvatar.classList.remove('hidden');
-                authToggle.title = "Cerrar sesión (" + user.displayName + ")";
+                authToggle.title = "Cuenta (" + user.displayName + ")";
+                
+                authMenuLoggedOut.classList.add('hidden');
+                authMenuLoggedOut.classList.remove('flex');
+                authMenuLoggedIn.classList.remove('hidden');
+                authMenuLoggedIn.classList.add('flex');
+                authMenuName.textContent = user.displayName;
+                authMenuEmail.textContent = user.email;
             } else {
                 authAvatar.classList.add('hidden');
                 authIcon.classList.remove('hidden');
-                authToggle.title = "Iniciar sesión con Google";
+                authToggle.title = "Iniciar sesión";
+                
+                authMenuLoggedIn.classList.add('hidden');
+                authMenuLoggedIn.classList.remove('flex');
+                authMenuLoggedOut.classList.remove('hidden');
+                authMenuLoggedOut.classList.add('flex');
             }
             updatePresence();
         });
 
-        authToggle.addEventListener('click', () => {
-            if (currentUser) {
-                if(confirm("¿Cerrar sesión?")) signOut(auth);
+        const authMenu = document.getElementById('auth-menu');
+        const authMenuLoggedOut = document.getElementById('auth-menu-logged-out');
+        const authMenuLoggedIn = document.getElementById('auth-menu-logged-in');
+        const authMenuName = document.getElementById('auth-menu-name');
+        const authMenuEmail = document.getElementById('auth-menu-email');
+        const authBtnLogin = document.getElementById('auth-btn-login');
+        const authBtnLogout = document.getElementById('auth-btn-logout');
+
+        let isAuthMenuOpen = false;
+
+        function toggleAuthMenu() {
+            isAuthMenuOpen = !isAuthMenuOpen;
+            if (isAuthMenuOpen) {
+                authMenu.style.display = 'block';
+                void authMenu.offsetWidth;
+                authMenu.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+                authMenu.classList.add('opacity-100', 'scale-100');
             } else {
-                signInWithPopup(auth, provider).catch(err => {
-                    console.error("Error logging in:", err);
-                    alert("Error al iniciar sesión: " + err.message);
-                });
+                authMenu.classList.remove('opacity-100', 'scale-100');
+                authMenu.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+                setTimeout(() => {
+                    if (!isAuthMenuOpen) authMenu.style.display = 'none';
+                }, 200);
             }
+        }
+
+        authToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleAuthMenu();
+            const tm = document.getElementById('theme-menu');
+            if (tm && !tm.classList.contains('opacity-0')) {
+                tm.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+                setTimeout(() => { if(tm.classList.contains('opacity-0')) tm.style.display = 'none'; }, 200);
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (isAuthMenuOpen && !authToggle.contains(e.target) && !authMenu.contains(e.target)) {
+                toggleAuthMenu();
+            }
+        });
+
+        authBtnLogin.addEventListener('click', () => {
+            signInWithPopup(auth, provider).then(() => {
+                toggleAuthMenu();
+            }).catch(err => {
+                console.error("Error logging in:", err);
+                alert("Error al iniciar sesión: " + err.message);
+            });
+        });
+
+        authBtnLogout.addEventListener('click', () => {
+            signOut(auth).then(() => {
+                toggleAuthMenu();
+            });
         });
 
         window.yaireSaveScore = (gameId, score) => {
