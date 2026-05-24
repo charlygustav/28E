@@ -17642,7 +17642,7 @@
     <!-- Firebase SDK for Realtime Features -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
-        import { getDatabase, ref, push, onValue, onDisconnect, set, serverTimestamp, get, remove } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js';
+        import { getDatabase, ref, push, onValue, onDisconnect, set, serverTimestamp, get, remove, update } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js';
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
 
         const firebaseConfig = {
@@ -17917,29 +17917,94 @@
         const gbEmpty = document.getElementById('gb-empty');
 
         if(gbForm) {
+        let gbEditingId = null;
+
+        const resetGbForm = () => {
+            gbEditingId = null;
+            gbForm.reset();
+            const submitBtn = gbForm.querySelector('button[type="submit"] span');
+            if(submitBtn) submitBtn.textContent = dictionary[currentLang]?.gb_btn || 'Publicar Mensaje';
+            const cancelBtn = document.getElementById('gb-cancel-edit-btn');
+            if(cancelBtn) cancelBtn.remove();
+            
+            if(window.yaireCurrentUser) {
+                const gbName = document.getElementById('gb-name');
+                if(gbName) gbName.value = window.yaireCurrentUser.displayName;
+            }
+        };
+
+        if(gbForm) {
             gbForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const name = document.getElementById('gb-name').value.trim();
                 const msg = document.getElementById('gb-msg').value.trim();
                 if(name && msg) {
-                    const messageData = {
-                        name: name,
-                        msg: msg,
-                        timestamp: serverTimestamp()
-                    };
-                    if(window.yaireCurrentUser) {
-                        messageData.uid = window.yaireCurrentUser.uid;
-                        messageData.photoURL = window.yaireCurrentUser.photoURL;
-                    }
-                    push(ref(db, 'guestbook'), messageData);
-                    gbForm.reset();
-                    // If user is logged in, restore name after reset
-                    if(window.yaireCurrentUser) {
-                        document.getElementById('gb-name').value = window.yaireCurrentUser.displayName;
+                    if (gbEditingId) {
+                        // UPDATE EXISTING
+                        update(ref(db, 'guestbook/' + gbEditingId), { 
+                            msg: msg, 
+                            editedAt: serverTimestamp() 
+                        }).then(() => {
+                            if(window.showPremiumAlert) window.showPremiumAlert('Actualizado', 'Tu mensaje ha sido modificado', 'success');
+                            resetGbForm();
+                        });
+                    } else {
+                        // CREATE NEW
+                        const messageData = {
+                            name: name,
+                            msg: msg,
+                            timestamp: serverTimestamp()
+                        };
+                        if(window.yaireCurrentUser) {
+                            messageData.uid = window.yaireCurrentUser.uid;
+                            messageData.photoURL = window.yaireCurrentUser.photoURL;
+                        }
+                        push(ref(db, 'guestbook'), messageData).then(() => {
+                            resetGbForm();
+                        });
                     }
                 }
             });
         }
+
+        window.startEditGbMsg = (id, msgText) => {
+            gbEditingId = id;
+            const gbMsgInput = document.getElementById('gb-msg');
+            const gbFormContainer = document.getElementById('guestbook-form');
+            if(gbMsgInput && gbFormContainer) {
+                gbFormContainer.classList.remove('hidden');
+                gbFormContainer.classList.add('flex');
+                
+                gbMsgInput.value = msgText;
+                gbMsgInput.focus();
+                
+                // Change submit text
+                const submitBtn = gbFormContainer.querySelector('button[type="submit"] span');
+                if(submitBtn) submitBtn.textContent = 'Guardar Cambios';
+                
+                // Add cancel button if not exists
+                if(!document.getElementById('gb-cancel-edit-btn')) {
+                    const cancelBtn = document.createElement('button');
+                    cancelBtn.type = 'button';
+                    cancelBtn.id = 'gb-cancel-edit-btn';
+                    cancelBtn.className = 'w-full text-zinc-500 font-bold hover:text-red-500 transition-colors text-sm py-2 mt-1';
+                    cancelBtn.textContent = 'Cancelar Edición';
+                    cancelBtn.onclick = resetGbForm;
+                    gbFormContainer.appendChild(cancelBtn);
+                }
+                
+                // Scroll to form
+                document.getElementById('gb-form-anim')?.scrollIntoView({behavior: 'smooth', block: 'center'});
+            }
+        };
+
+        window.deleteGbMsg = (id) => {
+            if(confirm("¿Estás seguro de que quieres borrar este mensaje para siempre?")) {
+                remove(ref(db, 'guestbook/' + id)).then(() => {
+                    if(window.showPremiumAlert) window.showPremiumAlert('Borrado', 'El mensaje ha sido eliminado', 'success');
+                });
+            }
+        };
 
         onValue(ref(db, 'guestbook'), (snapshot) => {
             if(snapshot.exists()) {
@@ -17968,17 +18033,33 @@
                         ? `<img src="${m.photoURL}" class="w-10 h-10 shrink-0 rounded-full object-cover shadow-inner border border-zinc-200 dark:border-zinc-700" alt="Avatar">`
                         : `<div class="w-10 h-10 shrink-0 rounded-full flex items-center justify-center font-black text-sm ${colorClass} shadow-inner">${initial}</div>`;
 
+                    let controlsHTML = '';
+                    if(window.yaireCurrentUser && m.uid === window.yaireCurrentUser.uid) {
+                        controlsHTML = `
+                            <div class="absolute top-4 right-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                                <button onclick="window.startEditGbMsg('${m.id}', this.closest('.gb-card-anim').querySelector('.gb-msg-text').innerText)" class="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-500 hover:text-amber-500 hover:bg-white dark:hover:bg-zinc-700 shadow-sm flex items-center justify-center transition-all" title="Editar mensaje">
+                                    <i class="ph-bold ph-pencil-simple"></i>
+                                </button>
+                                <button onclick="window.deleteGbMsg('${m.id}')" class="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-500 hover:text-red-500 hover:bg-white dark:hover:bg-zinc-700 shadow-sm flex items-center justify-center transition-all" title="Borrar mensaje">
+                                    <i class="ph-bold ph-trash"></i>
+                                </button>
+                            </div>
+                        `;
+                    }
+
+                    const editedTag = m.editedAt ? `<span class="ml-2 text-[9px] font-bold text-zinc-400 lowercase italic">(editado)</span>` : '';
+
                     card.innerHTML = `
                         <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/20 dark:bg-white/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700 pointer-events-none"></div>
-                        <div class="flex items-start gap-4 mb-4 relative z-10">
+                        ${controlsHTML}
+                        <div class="flex items-start gap-4 mb-4 relative z-10 pr-16">
                             ${avatarHTML}
                             <div class="flex-1 pt-1">
                                 <h5 class="text-base font-black text-zinc-900 dark:text-white leading-none tracking-tight mb-1">${safeName.innerHTML}</h5>
-                                <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">${dateText}</span>
+                                <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">${dateText}${editedTag}</span>
                             </div>
-                            <i class="ph-duotone ph-quotes text-3xl text-zinc-200 dark:text-zinc-800 absolute right-0 top-0 -z-10 group-hover:text-amber-100 dark:group-hover:text-amber-900/20 transition-colors"></i>
                         </div>
-                        <p class="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed font-medium relative z-10">${safeMsg.innerHTML}</p>
+                        <p class="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed font-medium relative z-10 gb-msg-text">${safeMsg.innerHTML}</p>
                     `;
                     gbWall.appendChild(card);
                     
