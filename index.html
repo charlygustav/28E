@@ -17752,11 +17752,13 @@
         function toggleAuthMenu() {
             isAuthMenuOpen = !isAuthMenuOpen;
             if (isAuthMenuOpen) {
+                if (window.playEffect) window.playEffect('sounds/slideralto.wav'); else new Audio('sounds/slideralto.wav').play().catch(()=>{});
                 authMenu.style.display = 'block';
                 void authMenu.offsetWidth;
                 authMenu.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
                 authMenu.classList.add('opacity-100', 'scale-100');
             } else {
+                if (window.playEffect) window.playEffect('sounds/sliderbajo.wav'); else new Audio('sounds/sliderbajo.wav').play().catch(()=>{});
                 authMenu.classList.remove('opacity-100', 'scale-100');
                 authMenu.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
                 setTimeout(() => {
