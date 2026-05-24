@@ -3283,214 +3283,112 @@
     <!-- Loader Screen — Balanced Modern Elegance -->
     <div id="loader" class="fixed inset-0 z-[200] flex flex-col items-center justify-center overflow-hidden"
         style="position:fixed;inset:0;z-index:200;background:#09090b;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        
+        <div class="loader-wrapper" id="custom-loader-wrapper" style="opacity: 0; will-change: opacity, transform;">
+            <span class="loader-letter">G</span>
+            <span class="loader-letter">e</span>
+            <span class="loader-letter">n</span>
+            <span class="loader-letter">e</span>
+            <span class="loader-letter">r</span>
+            <span class="loader-letter">a</span>
+            <span class="loader-letter">t</span>
+            <span class="loader-letter">i</span>
+            <span class="loader-letter">n</span>
+            <span class="loader-letter">g</span>
 
-        <!-- Ambient Circles (Optimized CSS Rotation) -->
-        <div id="ld-circles" class="ld-spin-container" style="position:absolute;inset:0;pointer-events:none;will-change:transform;" aria-hidden="true">
-            <div class="ld-c ld-c1" id="ld-c1"></div>
-            <div class="ld-c ld-c2" id="ld-c2"></div>
-            <div class="ld-c ld-c3" id="ld-c3"></div>
-            <div class="ld-c ld-c4" id="ld-c4"></div>
-            <div class="ld-c ld-c5" id="ld-c5"></div>
+            <div class="loader-circle-bg"></div>
         </div>
 
-        <!-- Center: Pure Logo Composition -->
-        <div id="ld-logo" class="relative z-10 flex items-center justify-center pointer-events-none"
-            style="will-change: transform, opacity;">
-            <div class="text-[clamp(5rem,15vw,10rem)] leading-none text-white font-black tracking-tight"
-                style="font-family: 'Inter', 'Outfit', sans-serif;">28E</div>
-        </div>
-
-        <!-- Bottom: Full-width Progress Bar & Metadata -->
-        <div class="absolute bottom-0 left-0 right-0 w-full z-10 pointer-events-none flex flex-col justify-end">
-
-            <div class="flex items-end justify-between px-6 md:px-12 pb-6 md:pb-8 w-full">
-                <!-- Message -->
-                <div class="overflow-hidden">
-                    <p id="loader-message" class="text-xs md:text-sm text-zinc-400 font-medium tracking-wide m-0 p-0"
-                        aria-hidden="true" style="transform: translateY(100%);">Iniciando secuencia...</p>
-                </div>
-
-                <!-- Percentage -->
-                <div id="ld-pct" class="text-right">
-                    <span id="loader-percent" class="text-3xl md:text-5xl font-bold text-white tracking-tighter"
-                        style="font-family: 'Inter', sans-serif;">0%</span>
-                </div>
-            </div>
-
-            <!-- Ultra-thin Progress Track -->
-            <div id="ld-track" class="w-full h-[3px] bg-white/5 relative overflow-hidden"
-                style="will-change: transform, opacity;">
-                <div id="loader-progress"
-                    class="absolute top-0 left-0 bottom-0 w-0 bg-gradient-to-r from-brand-500 via-fuchsia-500 to-indigo-500 shadow-[0_0_20px_rgba(236,72,153,0.8)]">
-                </div>
-            </div>
-        </div>
-
-        <div id="ld-corner-l" style="display:none;"></div>
+        <!-- Hidden elements for JS compatibility so we don't break existing scripts -->
+        <div style="display:none;" id="loader-percent">0%</div>
+        <div style="display:none;" id="loader-message"></div>
+        <div style="display:none;" id="loader-progress"></div>
 
         <style>
-            /* ── Loader orbs: Animación ultra-optimizada ── */
-
-            @keyframes ldSpin {
-                0% { transform: scale(2) rotate(0deg); }
-                100% { transform: scale(2) rotate(360deg); }
-            }
-
-            .ld-spin-container {
-                /* Gira todo el contenedor completo, costando 0 cálculos a la GPU */
-                animation: ldSpin 30s linear infinite;
-            }
-
-            .ld-c {
-                position: absolute;
-                border-radius: 50%;
-                /* Opacidad fija, ya no se animan individualmente */
-                opacity: 0.85;
-            }
-
-            /* Orbe 1: Rosa — centro-izquierda */
-            .ld-c1 {
-                left: 15vw;
-                top: 15vh;
-                width: 40vw;
-                height: 40vw;
-                background: radial-gradient(50% 50% at 50% 50%, rgba(236, 72, 153, .65) 0%, rgba(236, 72, 153, .3) 40%, transparent 100%);
-            }
-
-            /* Orbe 2: Ámbar — derecha */
-            .ld-c2 {
-                left: 50vw;
-                top: 20vh;
-                width: 35vw;
-                height: 35vw;
-                background: radial-gradient(50% 50% at 50% 50%, rgba(251, 191, 36, .70) 0%, rgba(245, 158, 11, .35) 40%, transparent 100%);
-            }
-
-            /* Orbe 3: Magenta — bajo-centro */
-            .ld-c3 {
-                left: 30vw;
-                top: 50vh;
-                width: 35vw;
-                height: 35vw;
-                background: radial-gradient(50% 50% at 50% 50%, rgba(219, 39, 119, .75) 0%, rgba(219, 39, 119, .35) 40%, transparent 100%);
-            }
-
-            /* Orbe 4: Violeta — esquina superior derecha */
-            .ld-c4 {
-                left: 60vw;
-                top: 5vh;
-                width: 30vw;
-                height: 30vw;
-                background: radial-gradient(50% 50% at 50% 50%, rgba(168, 85, 247, .65) 0%, rgba(139, 92, 246, .3) 40%, transparent 100%);
-            }
-
-            /* Orbe 5: Cyan/Teal — esquina inferior izquierda */
-            .ld-c5 {
-                left: 5vw;
-                top: 60vh;
-                width: 30vw;
-                height: 30vw;
-                background: radial-gradient(50% 50% at 50% 50%, rgba(20, 184, 166, .60) 0%, rgba(6, 182, 212, .28) 40%, transparent 100%);
-            }
-
-            /* Body: empieza invisible — GSAP anima */
-            .ld-body {
+            .loader-wrapper {
                 position: relative;
-                z-index: 10;
                 display: flex;
-                flex-direction: column;
                 align-items: center;
-                gap: 28px;
-                opacity: 0;
-                will-change: opacity, transform;
-            }
-
-            .ld-logo {
-                font-family: 'Inter', system-ui, sans-serif;
-                font-size: clamp(56px, 10vw, 120px);
-                font-weight: 900;
-                color: #fff;
-                letter-spacing: -0.04em;
-                line-height: 1;
+                justify-content: center;
+                width: 180px;
+                height: 180px;
+                font-family: "Inter", sans-serif;
+                font-size: 1.2em;
+                font-weight: 300;
+                color: white;
+                border-radius: 50%;
+                background-color: transparent;
                 user-select: none;
-                will-change: transform, opacity;
             }
 
-            .ld-track {
-                width: clamp(140px, 28vw, 240px);
-                height: 3px;
-                background: rgba(255, 255, 255, .10);
-                border-radius: 999px;
-                overflow: hidden;
-                position: relative;
-            }
-
-            /* Se llena entrando por la izquierda, se vacía saliéndose por la derecha */
-            @keyframes ldBarCycle {
-                0% {
-                    transform: translateX(-100%);
-                }
-
-                /* fuera por la izquierda — vacía */
-                42% {
-                    transform: translateX(0%);
-                }
-
-                /* dentro, llena */
-                58% {
-                    transform: translateX(0%);
-                }
-
-                /* pausa llena */
-                100% {
-                    transform: translateX(100%);
-                }
-
-                /* sale por la derecha — vacía */
-            }
-
-            @keyframes ldShimmer {
-                0% {
-                    background-position: 200% center;
-                }
-
-                100% {
-                    background-position: -200% center;
-                }
-            }
-
-            .ld-corner-l {
+            .loader-circle-bg {
                 position: absolute;
-                bottom: clamp(20px, 4vw, 32px);
-                left: clamp(20px, 5vw, 40px);
-                font-family: 'Inter', system-ui, sans-serif;
-                font-size: 11px;
-                font-weight: 500;
-                letter-spacing: .18em;
-                text-transform: uppercase;
-                color: rgba(255, 255, 255, .28);
-                opacity: 0;
-                will-change: opacity;
+                top: 0;
+                left: 0;
+                width: 100%;
+                aspect-ratio: 1 / 1;
+                border-radius: 50%;
+                background-color: transparent;
+                animation: loader-rotate 2s linear infinite;
+                z-index: 0;
             }
 
-            .ld-pct {
-                position: absolute;
-                bottom: clamp(20px, 4vw, 32px);
-                right: clamp(20px, 5vw, 40px);
-                font-family: 'Inter', system-ui, sans-serif;
-                font-size: 11px;
-                font-weight: 500;
-                letter-spacing: .12em;
-                color: rgba(255, 255, 255, .28);
-                font-variant-numeric: tabular-nums;
-                opacity: 0;
-                will-change: opacity;
+            @keyframes loader-rotate {
+                0% {
+                    transform: rotate(90deg);
+                    box-shadow:
+                        0 10px 20px 0 #fff inset,
+                        0 20px 30px 0 #ad5fff inset,
+                        0 60px 60px 0 #471eec inset;
+                }
+                50% {
+                    transform: rotate(270deg);
+                    box-shadow:
+                        0 10px 20px 0 #fff inset,
+                        0 20px 10px 0 #d60a47 inset,
+                        0 40px 60px 0 #311e80 inset;
+                }
+                100% {
+                    transform: rotate(450deg);
+                    box-shadow:
+                        0 10px 20px 0 #fff inset,
+                        0 20px 30px 0 #ad5fff inset,
+                        0 60px 60px 0 #471eec inset;
+                }
             }
 
-            /* Hero reveal — controlado por GSAP */
+            .loader-letter {
+                display: inline-block;
+                opacity: 0.4;
+                transform: translateY(0);
+                animation: loader-letter-anim 2s infinite;
+                z-index: 1;
+                border-radius: 50ch;
+                border: none;
+            }
+
+            .loader-letter:nth-child(1) { animation-delay: 0s; }
+            .loader-letter:nth-child(2) { animation-delay: 0.1s; }
+            .loader-letter:nth-child(3) { animation-delay: 0.2s; }
+            .loader-letter:nth-child(4) { animation-delay: 0.3s; }
+            .loader-letter:nth-child(5) { animation-delay: 0.4s; }
+            .loader-letter:nth-child(6) { animation-delay: 0.5s; }
+            .loader-letter:nth-child(7) { animation-delay: 0.6s; }
+            .loader-letter:nth-child(8) { animation-delay: 0.7s; }
+            .loader-letter:nth-child(9) { animation-delay: 0.8s; }
+            .loader-letter:nth-child(10) { animation-delay: 0.9s; }
+
+            @keyframes loader-letter-anim {
+                0%, 100% { opacity: 0.4; transform: translateY(0); }
+                20% { opacity: 1; transform: scale(1.15); }
+                40% { opacity: 0.7; transform: translateY(0); }
+            }
+
+            /* Main loader hide logic */
             .loader-hidden {
                 opacity: 0 !important;
                 pointer-events: none;
+                transition: opacity 0.5s ease;
             }
         </style>
     </div>
@@ -12947,52 +12845,21 @@
                     requestAnimationFrame(runLoaderEntrance);
                     return;
                 }
-                const ldLogo = document.getElementById('ld-logo');
-                const ldTrack = document.getElementById('ld-track');
-                const ldPct = document.getElementById('ld-pct');
-                const ldCorner = document.getElementById('ld-corner-l');
-                const ldC1 = document.getElementById('ld-c1');
-                const ldC2 = document.getElementById('ld-c2');
-                const ldC3 = document.getElementById('ld-c3');
 
-                // Estado inicial: liberar contenedor padre y preparar hijos
-                const ldBody = document.getElementById('ld-body');
-                if (ldBody) gsap.set(ldBody, { opacity: 1 }); // padre visible, hijos controlados individualmente
-                
-                // Setear opacidad 0 al contenedor para animar su entrada
-                gsap.set(document.getElementById('ld-circles'), { opacity: 0 });
-                gsap.set(ldLogo, { opacity: 0, y: 28, force3D: true });   // sin blur — solo transform+opacity
-                gsap.set(ldTrack, { opacity: 0, scaleX: 0, transformOrigin: 'left center', force3D: true });
-                gsap.set([ldPct, ldCorner], { opacity: 0, y: 8 });
-
+                const customLoader = document.getElementById('custom-loader-wrapper');
                 const entranceTl = gsap.timeline({ defaults: { ease: 'power3.out', force3D: true } });
 
-                // 1. Contenedor de orbes (background rotatorio) emerge suavemente
-                entranceTl.to(document.getElementById('ld-circles'), {
+                // Animar entrada del nuevo loader
+                entranceTl.to(customLoader, {
                     opacity: 1,
-                    duration: 1.5,
+                    scale: 1.1,
+                    duration: 1.2,
                     ease: 'power3.out'
-                }, 0);
-
-                // 2. Logo entra desde abajo — solo opacity + Y (GPU puro)
-                entranceTl.to(ldLogo, {
-                    opacity: 1, y: 0,
-                    duration: 0.8, ease: 'power3.out'
-                }, 0.2);
-
-                // 3. Barra de progreso aparece expandiéndose
-                entranceTl.to(ldTrack, {
-                    opacity: 1, scaleX: 1,
-                    duration: 0.7, ease: 'power2.out'
-                }, 0.55);
-
-                // 4. Contador y esquina aparecen deslizando
-                entranceTl.to([ldPct, ldCorner], {
-                    opacity: 1, y: 0,
-                    duration: 0.5, stagger: 0.08
-                }, 0.7);
-
-                // 5. Loops GSAP Eliminados a favor de la animación CSS `ldSpin` ultra-optimizada
+                }, 0).to(customLoader, {
+                    scale: 1,
+                    duration: 0.8,
+                    ease: 'power2.out'
+                }, 1.2);
             }
             runLoaderEntrance();
 
