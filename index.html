@@ -17742,6 +17742,8 @@
                         gbName.readOnly = true;
                         gbName.classList.add('opacity-70', 'cursor-not-allowed');
                     }
+                    const gbBackBtn = document.getElementById('gb-back-btn');
+                    if(gbBackBtn) gbBackBtn.classList.add('hidden');
                 }
             } else {
                 authAvatar.classList.add('hidden');
@@ -17766,6 +17768,8 @@
                         gbName.readOnly = false;
                         gbName.classList.remove('opacity-70', 'cursor-not-allowed');
                     }
+                    const gbBackBtn = document.getElementById('gb-back-btn');
+                    if(gbBackBtn) gbBackBtn.classList.remove('hidden');
                 }
             }
             updatePresence();
