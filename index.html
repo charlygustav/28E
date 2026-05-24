@@ -5,7 +5,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>28E</title>
-    <meta name="description" content="Para Yaire 🌷 — Mi lugar favorito es contigo. Feliz 28E. Plataforma interactiva de canales de voz y minijuegos.">
+    <meta name="description"
+        content="Para Yaire 🌷 — Mi lugar favorito es contigo. Feliz 28E. Plataforma interactiva de canales de voz y minijuegos.">
     <link rel="icon" type="image/x-icon" href="tulip.ico?v=3">
 
     <!-- Bloqueo temporal: Redirigir a mantenimiento antes del 28 de Abril -->
@@ -1969,7 +1970,8 @@
         }
     </style>
     <!-- GSAP ya cargado en <head> con defer — removido duplicado para evitar doble parse y doble descarga -->
-<script src="https://unpkg.com/@phosphor-icons/web"></script></head>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
 
 <body
     class="bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors duration-500 overflow-x-hidden"
@@ -3292,31 +3294,38 @@
         </div>
 
         <!-- Center: Pure Logo Composition -->
-        <div id="ld-logo" class="relative z-10 flex items-center justify-center pointer-events-none" style="will-change: transform, opacity;">
-            <div class="text-[clamp(5rem,15vw,10rem)] leading-none text-white font-black tracking-tight" style="font-family: 'Inter', 'Outfit', sans-serif;">28E</div>
+        <div id="ld-logo" class="relative z-10 flex items-center justify-center pointer-events-none"
+            style="will-change: transform, opacity;">
+            <div class="text-[clamp(5rem,15vw,10rem)] leading-none text-white font-black tracking-tight"
+                style="font-family: 'Inter', 'Outfit', sans-serif;">28E</div>
         </div>
 
         <!-- Bottom: Full-width Progress Bar & Metadata -->
         <div class="absolute bottom-0 left-0 right-0 w-full z-10 pointer-events-none flex flex-col justify-end">
-            
+
             <div class="flex items-end justify-between px-6 md:px-12 pb-6 md:pb-8 w-full">
                 <!-- Message -->
                 <div class="overflow-hidden">
-                    <p id="loader-message" class="text-xs md:text-sm text-zinc-400 font-medium tracking-wide m-0 p-0" aria-hidden="true" style="transform: translateY(100%);">Iniciando secuencia...</p>
+                    <p id="loader-message" class="text-xs md:text-sm text-zinc-400 font-medium tracking-wide m-0 p-0"
+                        aria-hidden="true" style="transform: translateY(100%);">Iniciando secuencia...</p>
                 </div>
-                
+
                 <!-- Percentage -->
                 <div id="ld-pct" class="text-right">
-                    <span id="loader-percent" class="text-3xl md:text-5xl font-bold text-white tracking-tighter" style="font-family: 'Inter', sans-serif;">0%</span>
+                    <span id="loader-percent" class="text-3xl md:text-5xl font-bold text-white tracking-tighter"
+                        style="font-family: 'Inter', sans-serif;">0%</span>
                 </div>
             </div>
 
             <!-- Ultra-thin Progress Track -->
-            <div id="ld-track" class="w-full h-[3px] bg-white/5 relative overflow-hidden" style="will-change: transform, opacity;">
-                <div id="loader-progress" class="absolute top-0 left-0 bottom-0 w-0 bg-gradient-to-r from-brand-500 via-fuchsia-500 to-indigo-500 shadow-[0_0_20px_rgba(236,72,153,0.8)]"></div>
+            <div id="ld-track" class="w-full h-[3px] bg-white/5 relative overflow-hidden"
+                style="will-change: transform, opacity;">
+                <div id="loader-progress"
+                    class="absolute top-0 left-0 bottom-0 w-0 bg-gradient-to-r from-brand-500 via-fuchsia-500 to-indigo-500 shadow-[0_0_20px_rgba(236,72,153,0.8)]">
+                </div>
             </div>
         </div>
-        
+
         <div id="ld-corner-l" style="display:none;"></div>
 
         <style>
@@ -3502,20 +3511,28 @@
             <div class="flex items-center gap-2">
                 <!-- Auth Toggle -->
                 <div class="relative" id="auth-wrapper">
-                    <button id="auth-toggle" class="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors border border-zinc-200/50 dark:border-zinc-700/50 cursor-pointer overflow-hidden relative" title="Cuenta">
+                    <button id="auth-toggle"
+                        class="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors border border-zinc-200/50 dark:border-zinc-700/50 cursor-pointer overflow-hidden relative"
+                        title="Cuenta">
                         <span id="auth-icon" class="text-zinc-500"><i class="ph-bold ph-user"></i></span>
-                        <img id="auth-avatar" src="" draggable="false" class="w-full h-full object-cover hidden" alt="User Avatar" />
+                        <img id="auth-avatar" src="" draggable="false" class="w-full h-full object-cover hidden"
+                            alt="User Avatar" />
                     </button>
                     <!-- Menú de autenticación -->
                     <div id="auth-menu"
                         class="absolute right-0 top-full mt-2 w-56 rounded-xl border border-zinc-200/60 dark:border-zinc-700/60 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md transform-gpu shadow-2xl shadow-black/10 dark:shadow-black/40 py-2 z-[999] opacity-0 scale-95 pointer-events-none transition-all duration-200 origin-top-right"
                         style="display:none;">
-                        
+
                         <!-- Estado desconectado -->
                         <div id="auth-menu-logged-out" class="px-3 flex flex-col gap-2">
-                            <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400 text-center mb-1"><span data-i18n="auth_prompt">Inicia sesión para entrar al canal de voz y guardar progreso.</span></p>
-                            <button id="auth-btn-login" class="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-bold text-zinc-900 dark:text-white bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700 transition-colors rounded-lg shadow-sm group">
-                                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-4 h-4 object-contain group-hover:scale-110 transition-transform" alt="Google">
+                            <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400 text-center mb-1"><span
+                                    data-i18n="auth_prompt">Inicia sesión para entrar al canal de voz y guardar
+                                    progreso.</span></p>
+                            <button id="auth-btn-login"
+                                class="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-bold text-zinc-900 dark:text-white bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700 transition-colors rounded-lg shadow-sm group">
+                                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                                    class="w-4 h-4 object-contain group-hover:scale-110 transition-transform"
+                                    alt="Google">
                                 <span data-i18n="auth_login_btn">Iniciar sesión</span>
                             </button>
                         </div>
@@ -3523,11 +3540,13 @@
                         <!-- Estado conectado -->
                         <div id="auth-menu-logged-in" class="hidden flex-col">
                             <div class="px-4 py-2 border-b border-zinc-200/50 dark:border-zinc-700/50 mb-1">
-                                <p id="auth-menu-name" class="text-sm font-bold text-zinc-800 dark:text-zinc-200 truncate"></p>
+                                <p id="auth-menu-name"
+                                    class="text-sm font-bold text-zinc-800 dark:text-zinc-200 truncate"></p>
                                 <p id="auth-menu-email" class="text-[10px] text-zinc-500 truncate"></p>
                             </div>
                             <div class="px-2">
-                                <button id="auth-btn-logout" class="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors rounded-lg">
+                                <button id="auth-btn-logout"
+                                    class="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors rounded-lg">
                                     <i class="ph-bold ph-sign-out"></i>
                                     <span data-i18n="auth_logout_btn">Cerrar sesión</span>
                                 </button>
@@ -3824,10 +3843,10 @@
                     const titleClean = clean(track.title);
                     const artistClean = clean(track.artist);
                     let q = encodeURIComponent(titleClean + ' ' + artistClean);
-                    
+
                     let url = await searchDeezer(q, artistClean);
                     if (url) { spotArtworkCache[key] = url; return url; }
-                    
+
                     url = await searchiTunes(q, artistClean);
                     if (url) { spotArtworkCache[key] = url; return url; }
 
@@ -3835,7 +3854,7 @@
                     q = encodeURIComponent(track.title + ' ' + track.artist);
                     url = await searchDeezer(q, track.artist);
                     if (url) { spotArtworkCache[key] = url; return url; }
-                    
+
                     url = await searchiTunes(q, track.artist);
                     if (url) { spotArtworkCache[key] = url; return url; }
 
@@ -3843,7 +3862,7 @@
                     q = encodeURIComponent(titleClean);
                     url = await searchDeezer(q, artistClean);
                     if (url) { spotArtworkCache[key] = url; return url; }
-                    
+
                     url = await searchiTunes(q, artistClean);
                     if (url) {
                         spotArtworkCache[key] = url;
@@ -4023,7 +4042,7 @@
 
                                 if (toast && titleEl) {
                                     titleEl.textContent = nextTrack.title;
-                                    
+
                                     fetchSpotlightArtwork(nextTrack).then(artUrl => {
                                         if (artUrl) {
                                             artImg.src = artUrl;
@@ -4036,8 +4055,8 @@
                                             artContainer.classList.add('bg-brand-500/20', 'text-brand-400');
                                         }
 
-                                        gsap.fromTo(toast, 
-                                            { y: 20, x: -20, opacity: 0 }, 
+                                        gsap.fromTo(toast,
+                                            { y: 20, x: -20, opacity: 0 },
                                             { y: 0, x: 0, opacity: 1, duration: 0.6, ease: "back.out(1.5)" }
                                         );
                                         setTimeout(() => {
@@ -5068,7 +5087,7 @@
                         el.style.willChange = 'transform, opacity'; // Hardware acceleration
                         container.appendChild(el);
                         // Limpieza segura:
-                        const cleanUp = () => { if(el.parentNode) el.remove(); };
+                        const cleanUp = () => { if (el.parentNode) el.remove(); };
                         el.addEventListener('animationend', cleanUp);
                         setTimeout(cleanUp, 15000); // Fallback if animationend fails
                     }
@@ -6208,8 +6227,10 @@
 
                         <!-- Game 1 Overlay -->
                         <div id="g1-overlay" class="game-overlay-new active">
-                            <div class="flex flex-row items-center justify-center gap-2 sm:gap-4 w-full px-2 max-w-4xl mx-auto h-full overflow-hidden py-4">
-                                <div class="game-ov-card transition-all duration-500 w-full max-w-[280px] shrink min-w-0" id="main-card-g1">
+                            <div
+                                class="flex flex-row items-center justify-center gap-2 sm:gap-4 w-full px-2 max-w-4xl mx-auto h-full overflow-hidden py-4">
+                                <div class="game-ov-card transition-all duration-500 w-full max-w-[280px] shrink min-w-0"
+                                    id="main-card-g1">
                                     <div class="text-4xl md:text-5xl mb-3 drop-shadow-xl" id="g1-ov-icon">🌻</div>
                                     <p id="g1-ov-title"
                                         class="bg-gradient-to-r from-brand-600 to-amber-400 dark:from-brand-500 dark:to-yellow-300 bg-clip-text text-transparent font-black text-2xl md:text-3xl mb-4"
@@ -6221,7 +6242,7 @@
                                         class="bg-brand-500 text-white font-bold py-2 md:py-2.5 px-6 rounded-xl hover:bg-brand-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(245,158,11,0.5)] active:scale-95 text-sm md:text-base w-full"
                                         data-i18n="game_start">¡Empezar!</button>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -6255,8 +6276,10 @@
 
                         <!-- Game 2 Overlay -->
                         <div id="game2-overlay" class="game-overlay-new active">
-                            <div class="flex flex-row items-center justify-center gap-2 sm:gap-4 w-full px-2 max-w-4xl mx-auto h-full overflow-hidden py-4">
-                                <div class="game-ov-card transition-all duration-500 w-full max-w-[280px] shrink min-w-0" id="main-card-g2">
+                            <div
+                                class="flex flex-row items-center justify-center gap-2 sm:gap-4 w-full px-2 max-w-4xl mx-auto h-full overflow-hidden py-4">
+                                <div class="game-ov-card transition-all duration-500 w-full max-w-[280px] shrink min-w-0"
+                                    id="main-card-g2">
                                     <div class="text-3xl mb-3 drop-shadow-xl" id="game2-overlay-icon">🦋</div>
                                     <p id="game2-overlay-text"
                                         class="bg-gradient-to-r from-tulip-600 to-pink-400 dark:from-tulip-400 dark:to-pink-300 bg-clip-text text-transparent font-black text-2xl md:text-3xl mb-4"
@@ -6267,7 +6290,7 @@
                                         class="bg-tulip-500 text-white font-bold py-2 md:py-2.5 px-6 rounded-xl hover:bg-tulip-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(236,72,153,0.5)] active:scale-95 text-sm md:text-base w-full"
                                         data-i18n="game_start">Empezar a volar</button>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -6317,9 +6340,12 @@
 
                         <!-- Game 3 Overlay -->
                         <div id="game3-overlay" class="game-overlay-new active">
-                            <div class="flex flex-col items-center justify-center gap-4 sm:gap-6 w-full px-4 max-w-sm mx-auto h-full max-h-full overflow-y-auto py-6">
-                                <div class="game-ov-card transition-all duration-500 w-full max-w-[300px] shrink" id="main-card-g3">
-                                    <div class="text-4xl md:text-5xl mb-3 drop-shadow-xl" id="game3-overlay-icon">🃏</div>
+                            <div
+                                class="flex flex-col items-center justify-center gap-4 sm:gap-6 w-full px-4 max-w-sm mx-auto h-full max-h-full overflow-y-auto py-6">
+                                <div class="game-ov-card transition-all duration-500 w-full max-w-[300px] shrink"
+                                    id="main-card-g3">
+                                    <div class="text-4xl md:text-5xl mb-3 drop-shadow-xl" id="game3-overlay-icon">🃏
+                                    </div>
                                     <p id="game3-overlay-text"
                                         class="bg-gradient-to-r from-purple-600 to-indigo-400 dark:from-purple-400 dark:to-indigo-300 bg-clip-text text-transparent font-black text-2xl md:text-3xl mb-4"
                                         data-i18n="game3_start_title">¡Concéntrate!</p>
@@ -6329,7 +6355,7 @@
                                         class="bg-purple-500 text-white font-bold py-2 md:py-2.5 px-6 rounded-xl hover:bg-purple-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(168,85,247,0.5)] active:scale-95 text-sm md:text-base w-full"
                                         data-i18n="game_start2">¡Empezar!</button>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -6439,20 +6465,24 @@
                         </div>
                         <!-- Game 4 Overlay -->
                         <div id="game4-overlay" class="game-overlay-new active">
-                            <div class="flex flex-row items-center justify-center gap-2 sm:gap-4 w-full px-2 max-w-4xl mx-auto h-full overflow-hidden py-4">
-                                <div class="game-ov-card transition-all duration-500 w-full max-w-[280px] shrink min-w-0" id="main-card-g4">
-                                    <div class="text-4xl md:text-5xl mb-3 drop-shadow-xl" id="game4-overlay-icon">🎵</div>
+                            <div
+                                class="flex flex-row items-center justify-center gap-2 sm:gap-4 w-full px-2 max-w-4xl mx-auto h-full overflow-hidden py-4">
+                                <div class="game-ov-card transition-all duration-500 w-full max-w-[280px] shrink min-w-0"
+                                    id="main-card-g4">
+                                    <div class="text-4xl md:text-5xl mb-3 drop-shadow-xl" id="game4-overlay-icon">🎵
+                                    </div>
                                     <p id="game4-overlay-text"
                                         class="bg-gradient-to-r from-emerald-600 to-teal-400 dark:from-emerald-400 dark:to-teal-300 bg-clip-text text-transparent font-black text-2xl md:text-3xl mb-4"
                                         data-i18n="game4_start_title">¿Conoces la canción?</p>
                                     <p id="game4-overlay-sub"
                                         class="text-zinc-500 text-sm font-medium mb-5 empty:hidden"
-                                        data-i18n="game4_start_sub">Escucha un fragmento y elige la correcta. 10 rondas.</p>
+                                        data-i18n="game4_start_sub">Escucha un fragmento y elige la correcta. 10 rondas.
+                                    </p>
                                     <button id="game4-overlay-btn" onclick="startGuessGame()"
                                         class="bg-emerald-500 text-white font-bold py-2 md:py-2.5 px-6 rounded-xl hover:bg-emerald-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] active:scale-95 text-sm md:text-base w-full"
                                         data-i18n="game_start">¡Empezar!</button>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -6926,73 +6956,103 @@
 
 
         <!-- Muro de Dedicatorias -->
-                <!-- SECTION: GUESTBOOK (MURO DE DEDICATORIAS) -->
-        <section id="guestbook" class="cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 scroll-mt-20 relative overflow-hidden">
+        <!-- SECTION: GUESTBOOK (MURO DE DEDICATORIAS) -->
+        <section id="guestbook"
+            class="cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 scroll-mt-20 relative overflow-hidden">
             <!-- Glassmorphism Background -->
-            
-            
+
+
             <div class="max-w-6xl mx-auto px-6">
                 <!-- Header -->
                 <div class="text-center mb-16 relative z-10" id="gb-header-anim">
-                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-50 dark:bg-amber-900/20 border border-amber-200/60 dark:border-amber-800/30 text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 mb-4 shadow-sm">
+                    <span
+                        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-50 dark:bg-amber-900/20 border border-amber-200/60 dark:border-amber-800/30 text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 mb-4 shadow-sm">
                         <i class="ph-fill ph-book-open"></i> <span data-i18n="gb_tag">Muro de Dedicatorias</span>
                     </span>
-                    <h3 class="text-4xl md:text-6xl font-black mb-6 text-zinc-900 dark:text-white tracking-tight drop-shadow-sm" data-i18n="gb_title">Dejando Huella</h3>
-                    <p class="text-zinc-500 dark:text-zinc-400 text-base md:text-xl max-w-2xl mx-auto leading-relaxed" data-i18n="gb_desc">
-                        Un espacio para dejar mensajes, recuerdos o simplemente un saludo. Todo lo que se escriba aquí quedará guardado para siempre.
+                    <h3 class="text-4xl md:text-6xl font-black mb-6 text-zinc-900 dark:text-white tracking-tight drop-shadow-sm"
+                        data-i18n="gb_title">Dejando Huella</h3>
+                    <p class="text-zinc-500 dark:text-zinc-400 text-base md:text-xl max-w-2xl mx-auto leading-relaxed"
+                        data-i18n="gb_desc">
+                        Un espacio para dejar mensajes, recuerdos o simplemente un saludo. Todo lo que se escriba aquí
+                        quedará guardado para siempre.
                     </p>
                 </div>
 
                 <div class="flex flex-col lg:flex-row gap-10">
                     <!-- Formulario (Digital Glass Postcard) -->
                     <div class="lg:w-1/3 z-20" id="gb-form-anim">
-                        <div class="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border border-zinc-200/50 dark:border-zinc-700/50 rounded-[2rem] p-8 shadow-2xl shadow-zinc-200/50 dark:shadow-none sticky top-28 overflow-hidden relative group">
+                        <div
+                            class="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border border-zinc-200/50 dark:border-zinc-700/50 rounded-[2rem] p-8 shadow-2xl shadow-zinc-200/50 dark:shadow-none sticky top-28 overflow-hidden relative group">
                             <!-- Glow effect behind form -->
-                            <div class="absolute -top-24 -right-24 w-48 h-48 bg-amber-400/20 rounded-full blur-3xl group-hover:bg-amber-400/30 transition-all duration-500"></div>
-                            
-                            <h4 class="text-2xl font-black mb-6 flex items-center gap-3 text-zinc-900 dark:text-white" data-i18n="gb_form_title">
+                            <div
+                                class="absolute -top-24 -right-24 w-48 h-48 bg-amber-400/20 rounded-full blur-3xl group-hover:bg-amber-400/30 transition-all duration-500">
+                            </div>
+
+                            <h4 class="text-2xl font-black mb-6 flex items-center gap-3 text-zinc-900 dark:text-white"
+                                data-i18n="gb_form_title">
                                 <i class="ph-fill ph-pen-nib text-amber-500"></i> Escribe un mensaje
                             </h4>
 
                             <!-- Auth Prompt (Shown initially if not logged in) -->
                             <div id="gb-auth-prompt" class="flex flex-col gap-4 relative z-10 text-center">
-                                <p class="text-zinc-600 dark:text-zinc-400 text-sm font-medium mb-2" data-i18n="gb_auth_req">Para firmar el muro, por favor identifícate.</p>
-                                <button type="button" id="gb-login-btn" class="w-full bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white border border-zinc-200 dark:border-zinc-700 font-bold py-3 px-4 rounded-2xl flex flex-row flex-nowrap items-center justify-center gap-3 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-all shadow-sm group whitespace-nowrap text-sm">
-                                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5 flex-none object-contain group-hover:scale-110 transition-transform" alt="Google">
+                                <p class="text-zinc-600 dark:text-zinc-400 text-sm font-medium mb-2"
+                                    data-i18n="gb_auth_req">Para firmar el muro, por favor identifícate.</p>
+                                <button type="button" id="gb-login-btn"
+                                    class="w-full bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white border border-zinc-200 dark:border-zinc-700 font-bold py-3 px-4 rounded-2xl flex flex-row flex-nowrap items-center justify-center gap-3 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-all shadow-sm group whitespace-nowrap text-sm">
+                                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                                        class="w-5 h-5 flex-none object-contain group-hover:scale-110 transition-transform"
+                                        alt="Google">
                                     <span data-i18n="gb_auth_google">Continuar con Google</span>
                                 </button>
-                                <button type="button" id="gb-manual-btn" class="text-[11px] text-zinc-400 dark:text-zinc-500 hover:text-amber-500 transition-colors underline decoration-dotted mt-1 mx-auto w-max cursor-pointer">
+                                <button type="button" id="gb-manual-btn"
+                                    class="text-[11px] text-zinc-400 dark:text-zinc-500 hover:text-amber-500 transition-colors underline decoration-dotted mt-1 mx-auto w-max cursor-pointer">
                                     <span data-i18n="gb_auth_manual">Prefiero escribir mi nombre manualmente</span>
                                 </button>
                             </div>
 
                             <!-- Formulario (Hidden initially) -->
                             <form id="guestbook-form" class="hidden flex-col gap-5 relative z-10">
-                                <button type="button" id="gb-back-btn" class="text-zinc-400 dark:text-zinc-500 hover:text-amber-500 transition-colors w-max text-xs font-bold flex items-center gap-1 -mt-2 -ml-2 py-1 px-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800">
+                                <button type="button" id="gb-back-btn"
+                                    class="text-zinc-400 dark:text-zinc-500 hover:text-amber-500 transition-colors w-max text-xs font-bold flex items-center gap-1 -mt-2 -ml-2 py-1 px-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800">
                                     <i class="ph-bold ph-caret-left"></i> Opciones
                                 </button>
                                 <div class="group/input">
-                                    <label class="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2 group-focus-within/input:text-amber-500 transition-colors" data-i18n="gb_label_name">Tu Nombre</label>
+                                    <label
+                                        class="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2 group-focus-within/input:text-amber-500 transition-colors"
+                                        data-i18n="gb_label_name">Tu Nombre</label>
                                     <div class="relative">
-                                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-400">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-400">
                                             <i class="ph-fill ph-user"></i>
                                         </div>
-                                        <input type="text" id="gb-name" required maxlength="30" class="w-full bg-zinc-100/50 dark:bg-zinc-950/50 border border-zinc-200 dark:border-zinc-800 rounded-2xl pl-11 pr-4 py-3.5 text-sm font-medium focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 outline-none transition-all dark:text-white shadow-inner" placeholder="Ej. Visitante Anónimo" data-i18n-placeholder="gb_ph_name">
+                                        <input type="text" id="gb-name" required maxlength="30"
+                                            class="w-full bg-zinc-100/50 dark:bg-zinc-950/50 border border-zinc-200 dark:border-zinc-800 rounded-2xl pl-11 pr-4 py-3.5 text-sm font-medium focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 outline-none transition-all dark:text-white shadow-inner"
+                                            placeholder="Ej. Visitante Anónimo" data-i18n-placeholder="gb_ph_name">
                                     </div>
                                 </div>
                                 <div class="group/input">
-                                    <label class="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2 group-focus-within/input:text-amber-500 transition-colors" data-i18n="gb_label_msg">Mensaje</label>
+                                    <label
+                                        class="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2 group-focus-within/input:text-amber-500 transition-colors"
+                                        data-i18n="gb_label_msg">Mensaje</label>
                                     <div class="relative">
-                                        <textarea id="gb-msg" required maxlength="250" rows="5" class="w-full bg-zinc-100/50 dark:bg-zinc-950/50 border border-zinc-200 dark:border-zinc-800 rounded-2xl px-4 py-4 text-sm font-medium focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 outline-none transition-all resize-none dark:text-white shadow-inner" placeholder="Escribe algo bonito..." data-i18n-placeholder="gb_ph_msg"></textarea>
+                                        <textarea id="gb-msg" required maxlength="250" rows="5"
+                                            class="w-full bg-zinc-100/50 dark:bg-zinc-950/50 border border-zinc-200 dark:border-zinc-800 rounded-2xl px-4 py-4 text-sm font-medium focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 outline-none transition-all resize-none dark:text-white shadow-inner"
+                                            placeholder="Escribe algo bonito..."
+                                            data-i18n-placeholder="gb_ph_msg"></textarea>
                                         <!-- Character count indicator -->
-                                        <div class="absolute bottom-3 right-4 text-[10px] font-bold text-zinc-400" id="gb-char-count">0/250</div>
+                                        <div class="absolute bottom-3 right-4 text-[10px] font-bold text-zinc-400"
+                                            id="gb-char-count">0/250</div>
                                     </div>
                                 </div>
-                                <button type="submit" class="w-full relative overflow-hidden group/btn bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-black py-4 px-6 rounded-2xl transition-all mt-2 shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02]">
+                                <button type="submit"
+                                    class="w-full relative overflow-hidden group/btn bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-black py-4 px-6 rounded-2xl transition-all mt-2 shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02]">
                                     <!-- Button Hover Gradient -->
-                                    <div class="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-500 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+                                    <div
+                                        class="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-500 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300">
+                                    </div>
                                     <div class="relative z-10 flex items-center justify-center gap-2">
-                                        <i class="ph-bold ph-paper-plane-right group-hover/btn:translate-x-1 transition-transform"></i> 
+                                        <i
+                                            class="ph-bold ph-paper-plane-right group-hover/btn:translate-x-1 transition-transform"></i>
                                         <span data-i18n="gb_btn">Publicar Mensaje</span>
                                     </div>
                                 </button>
@@ -7005,10 +7065,12 @@
                         <!-- We use columns for masonry layout -->
                         <div id="guestbook-wall" class="columns-1 md:columns-2 gap-6">
                             <!-- Loading state -->
-                            <div class="break-inside-avoid inline-block w-full mb-6 w-full text-center py-20" id="gb-empty">
+                            <div class="break-inside-avoid inline-block w-full mb-6 w-full text-center py-20"
+                                id="gb-empty">
                                 <div class="inline-flex flex-col items-center justify-center">
                                     <i class="ph-duotone ph-spinner-gap animate-spin text-4xl text-amber-500 mb-4"></i>
-                                    <p class="text-zinc-500 font-serif italic text-lg" data-i18n="gb_loading">Cargando mensajes...</p>
+                                    <p class="text-zinc-500 font-serif italic text-lg" data-i18n="gb_loading">Cargando
+                                        mensajes...</p>
                                 </div>
                             </div>
                         </div>
@@ -9877,13 +9939,13 @@
                             }
                         });
                     }, { threshold: 0.1 });
-                    
+
                     if (document.getElementById('dashboard')) {
                         panelObs.observe(document.getElementById('dashboard'));
                     } else if (bpmEl) {
                         panelObs.observe(bpmEl);
                     }
-                    
+
                     document.addEventListener('visibilitychange', function () {
                         if (document.hidden) {
                             if (panelClockInterval) { clearInterval(panelClockInterval); panelClockInterval = null; }
@@ -12929,40 +12991,41 @@
                 //    Cada orbe: multi-stop path → vuelve al origen → repeat infinito
                 //    Guardados en window._ldOrbLoops para poder matarlos en el exit
                 entranceTl.call(() => {
+                    if (window.__PERF_LITE__) return; // Prevent heavy lag on mobile/low-end
                     const _d = { ease: 'sine.inOut', force3D: true };
                     window._ldOrbLoops = [
                         // Orbe 1 — Rosa: orbit ancho sup-izq
                         gsap.timeline({ repeat: -1, defaults: _d })
-                            .to(ldC1, { x: '8vw', y: '-10vh', scale: 1.6, opacity: 0.9, duration: 1.6 })
-                            .to(ldC1, { x: '-5vw', y: '-18vh', scale: 0.9, opacity: 0.7, duration: 1.7 })
-                            .to(ldC1, { x: '12vw', y: '-5vh', scale: 2.0, opacity: 0.95, duration: 1.4 })
-                            .to(ldC1, { x: '0', y: '0', scale: 1.0, opacity: 0.85, duration: 1.3 }),
+                            .to(ldC1, { x: '8vw', y: '-10vh', scale: 1.2, opacity: 0.9, duration: 2.6 })
+                            .to(ldC1, { x: '-5vw', y: '-18vh', scale: 0.9, opacity: 0.7, duration: 2.7 })
+                            .to(ldC1, { x: '12vw', y: '-5vh', scale: 1.4, opacity: 0.95, duration: 2.4 })
+                            .to(ldC1, { x: '0', y: '0', scale: 1.0, opacity: 0.85, duration: 2.3 }),
 
                         // Orbe 2 — Ámbar: orbit derecha
                         gsap.timeline({ repeat: -1, defaults: _d })
-                            .to(ldC2, { x: '-12vw', y: '-5vh', scale: 2.2, opacity: 0.9, duration: 1.3 })
-                            .to(ldC2, { x: '-4vw', y: '8vh', scale: 1.4, opacity: 0.65, duration: 1.4 })
-                            .to(ldC2, { x: '-15vw', y: '2vh', scale: 2.5, opacity: 0.9, duration: 1.2 })
-                            .to(ldC2, { x: '0', y: '0', scale: 1.0, opacity: 0.8, duration: 1.3 }),
+                            .to(ldC2, { x: '-12vw', y: '-5vh', scale: 1.3, opacity: 0.9, duration: 2.3 })
+                            .to(ldC2, { x: '-4vw', y: '8vh', scale: 1.1, opacity: 0.65, duration: 2.4 })
+                            .to(ldC2, { x: '-15vw', y: '2vh', scale: 1.5, opacity: 0.9, duration: 2.2 })
+                            .to(ldC2, { x: '0', y: '0', scale: 1.0, opacity: 0.8, duration: 2.3 }),
 
                         // Orbe 3 — Magenta: orbit vertical
                         gsap.timeline({ repeat: -1, defaults: _d })
-                            .to(ldC3, { x: '6vw', y: '14vh', scale: 2.8, opacity: 1.0, duration: 1.6 })
-                            .to(ldC3, { x: '-7vw', y: '6vh', scale: 1.5, opacity: 0.7, duration: 1.8 })
-                            .to(ldC3, { x: '2vw', y: '17vh', scale: 3.0, opacity: 0.95, duration: 1.5 })
-                            .to(ldC3, { x: '0', y: '0', scale: 1.0, opacity: 0.9, duration: 1.4 }),
+                            .to(ldC3, { x: '6vw', y: '14vh', scale: 1.4, opacity: 1.0, duration: 2.6 })
+                            .to(ldC3, { x: '-7vw', y: '6vh', scale: 1.1, opacity: 0.7, duration: 2.8 })
+                            .to(ldC3, { x: '2vw', y: '17vh', scale: 1.5, opacity: 0.95, duration: 2.5 })
+                            .to(ldC3, { x: '0', y: '0', scale: 1.0, opacity: 0.9, duration: 2.4 }),
 
                         // Orbe 4 — Violeta: orbit diagonal
                         gsap.timeline({ repeat: -1, defaults: _d })
-                            .to(ldC4, { x: '-10vw', y: '-13vh', scale: 2.4, opacity: 1.0, duration: 1.2 })
-                            .to(ldC4, { x: '-17vw', y: '-7vh', scale: 1.3, opacity: 0.65, duration: 1.3 })
-                            .to(ldC4, { x: '0', y: '0', scale: 1.0, opacity: 0.8, duration: 1.2 }),
+                            .to(ldC4, { x: '-10vw', y: '-13vh', scale: 1.3, opacity: 1.0, duration: 2.2 })
+                            .to(ldC4, { x: '-17vw', y: '-7vh', scale: 1.1, opacity: 0.65, duration: 2.3 })
+                            .to(ldC4, { x: '0', y: '0', scale: 1.0, opacity: 0.8, duration: 2.2 }),
 
                         // Orbe 5 — Cyan: orbit inf-izq
                         gsap.timeline({ repeat: -1, defaults: _d })
-                            .to(ldC5, { x: '13vw', y: '9vh', scale: 2.0, opacity: 0.95, duration: 1.4 })
-                            .to(ldC5, { x: '7vw', y: '17vh', scale: 1.4, opacity: 0.7, duration: 1.5 })
-                            .to(ldC5, { x: '0', y: '0', scale: 1.0, opacity: 0.75, duration: 1.3 }),
+                            .to(ldC5, { x: '13vw', y: '9vh', scale: 1.2, opacity: 0.95, duration: 2.4 })
+                            .to(ldC5, { x: '7vw', y: '17vh', scale: 1.1, opacity: 0.7, duration: 2.5 })
+                            .to(ldC5, { x: '0', y: '0', scale: 1.0, opacity: 0.75, duration: 2.3 }),
                     ];
                 }, null, 1.4);
             }
@@ -15791,7 +15854,7 @@
                 const miniBoard = ov.querySelector('[id^="leaderboard-mini-"]');
                 if (smartMsg) smartMsg.innerHTML = "";
                 if (miniBoard) miniBoard.innerHTML = "";
-                
+
                 // Hide records wrapper for next time
                 const wrapper = ov.querySelector('[id^="records-wrapper-"]');
                 if (wrapper) {
@@ -15827,7 +15890,7 @@
                 else if (gameId === 'game2') gameName = "Mariposa de Luz";
                 else if (gameId === 'game3') gameName = "Memoria de Amor";
                 else if (gameId === 'game4') gameName = "¿Qué Canción Es?";
-                if(window.yaireUpdatePresence) window.yaireUpdatePresence("Jugando: " + gameName);
+                if (window.yaireUpdatePresence) window.yaireUpdatePresence("Jugando: " + gameName);
             }, 500);
         }
         function closeArcadeGame() {
@@ -15850,7 +15913,7 @@
                 void h.offsetWidth;
                 h.classList.remove('scale-95', 'opacity-0');
                 setTimeout(() => { if (m) m.style.minHeight = ''; }, 500);
-                if(window.yaireUpdatePresence) window.yaireUpdatePresence("Zona de Juegos");
+                if (window.yaireUpdatePresence) window.yaireUpdatePresence("Zona de Juegos");
             }, 500);
         }
 
@@ -16387,7 +16450,7 @@
             }
             if (su) { const _gd = (typeof dictionary !== 'undefined' && dictionary[currentLang]) ? dictionary[currentLang] : {}; su.innerHTML = (_gd.game3_hud || 'Movimientos: {moves} | Tiempo: {time}s').replace('{moves}', '<strong class="text-purple-500">' + game3Moves + '</strong>').replace('{time}', '<strong class="text-purple-500">' + game3TimeLeft + '</strong>'); }
             if (btn) btn.textContent = dictionary[currentLang].game_restart || "Jugar de nuevo";
-            
+
             showGameOverlay('game3-overlay');
         }
         // ════════════════════════════════════════════════════
@@ -17661,17 +17724,17 @@
         // --- PRESENCIA ---
         const sessionId = 'session_' + Math.random().toString(36).substr(2, 9);
         const presenceRef = ref(db, 'presence/' + sessionId);
-        
+
         onDisconnect(presenceRef).remove();
-        
+
         // Heartbeat cada 30 segundos
         setInterval(() => {
             if (document.visibilityState === 'visible') {
                 updatePresence();
             }
         }, 30000);
-        
-        
+
+
         window.addEventListener('beforeunload', () => {
             remove(presenceRef);
         });
@@ -17679,7 +17742,7 @@
         let currentSection = "Navegando";
         let userLocation = "Buscando...";
         let currentUser = null;
-        
+
         fetch('https://get.geojs.io/v1/ip/geo.json').then(r => r.json()).then(d => {
             userLocation = `${d.city || 'Desconocido'}, ${d.country || ''}`;
             updatePresence();
@@ -17721,7 +17784,7 @@
                 authAvatar.src = user.photoURL;
                 authAvatar.classList.remove('hidden');
                 authToggle.title = "Cuenta (" + user.displayName + ")";
-                
+
                 authMenuLoggedOut.classList.add('hidden');
                 authMenuLoggedOut.classList.remove('flex');
                 authMenuLoggedIn.classList.remove('hidden');
@@ -17732,24 +17795,24 @@
                 // Guestbook Auth Logic
                 const gbPrompt = document.getElementById('gb-auth-prompt');
                 const gbFormContainer = document.getElementById('guestbook-form');
-                if(gbPrompt && gbFormContainer) {
+                if (gbPrompt && gbFormContainer) {
                     gbPrompt.classList.add('hidden');
                     gbFormContainer.classList.remove('hidden');
                     gbFormContainer.classList.add('flex');
                     const gbName = document.getElementById('gb-name');
-                    if(gbName) {
+                    if (gbName) {
                         gbName.value = user.displayName;
                         gbName.readOnly = true;
                         gbName.classList.add('opacity-70', 'cursor-not-allowed');
                     }
                     const gbBackBtn = document.getElementById('gb-back-btn');
-                    if(gbBackBtn) gbBackBtn.classList.add('hidden');
+                    if (gbBackBtn) gbBackBtn.classList.add('hidden');
                 }
             } else {
                 authAvatar.classList.add('hidden');
                 authIcon.classList.remove('hidden');
                 authToggle.title = "Iniciar sesión";
-                
+
                 authMenuLoggedIn.classList.add('hidden');
                 authMenuLoggedIn.classList.remove('flex');
                 authMenuLoggedOut.classList.remove('hidden');
@@ -17758,18 +17821,18 @@
                 // Guestbook Auth Logic Reset
                 const gbPrompt = document.getElementById('gb-auth-prompt');
                 const gbFormContainer = document.getElementById('guestbook-form');
-                if(gbPrompt && gbFormContainer) {
+                if (gbPrompt && gbFormContainer) {
                     gbPrompt.classList.remove('hidden');
                     gbFormContainer.classList.add('hidden');
                     gbFormContainer.classList.remove('flex');
                     const gbName = document.getElementById('gb-name');
-                    if(gbName) {
+                    if (gbName) {
                         gbName.value = '';
                         gbName.readOnly = false;
                         gbName.classList.remove('opacity-70', 'cursor-not-allowed');
                     }
                     const gbBackBtn = document.getElementById('gb-back-btn');
-                    if(gbBackBtn) gbBackBtn.classList.remove('hidden');
+                    if (gbBackBtn) gbBackBtn.classList.remove('hidden');
                 }
             }
             updatePresence();
@@ -17788,13 +17851,13 @@
         function toggleAuthMenu() {
             isAuthMenuOpen = !isAuthMenuOpen;
             if (isAuthMenuOpen) {
-                if (window.playEffect) window.playEffect('sounds/slideralto.wav'); else new Audio('sounds/slideralto.wav').play().catch(()=>{});
+                if (window.playEffect) window.playEffect('sounds/slideralto.wav'); else new Audio('sounds/slideralto.wav').play().catch(() => { });
                 authMenu.style.display = 'block';
                 void authMenu.offsetWidth;
                 authMenu.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
                 authMenu.classList.add('opacity-100', 'scale-100');
             } else {
-                if (window.playEffect) window.playEffect('sounds/sliderbajo.wav'); else new Audio('sounds/sliderbajo.wav').play().catch(()=>{});
+                if (window.playEffect) window.playEffect('sounds/sliderbajo.wav'); else new Audio('sounds/sliderbajo.wav').play().catch(() => { });
                 authMenu.classList.remove('opacity-100', 'scale-100');
                 authMenu.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
                 setTimeout(() => {
@@ -17809,7 +17872,7 @@
             const tm = document.getElementById('theme-menu');
             if (tm && !tm.classList.contains('opacity-0')) {
                 tm.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
-                setTimeout(() => { if(tm.classList.contains('opacity-0')) tm.style.display = 'none'; }, 200);
+                setTimeout(() => { if (tm.classList.contains('opacity-0')) tm.style.display = 'none'; }, 200);
             }
         });
 
@@ -17824,7 +17887,7 @@
                 toggleAuthMenu();
             }).catch(err => {
                 console.error("Error logging in:", err);
-                if(window.showPremiumAlert) window.showPremiumAlert("Error de Inicio de Sesión", err.message, "error"); else alert("Error: " + err.message);
+                if (window.showPremiumAlert) window.showPremiumAlert("Error de Inicio de Sesión", err.message, "error"); else alert("Error: " + err.message);
             });
         });
 
@@ -17835,26 +17898,26 @@
         });
 
         const gbLoginBtn = document.getElementById('gb-login-btn');
-        if(gbLoginBtn) {
+        if (gbLoginBtn) {
             gbLoginBtn.addEventListener('click', () => {
                 signInWithPopup(auth, provider).catch(err => {
                     console.error("Error logging in from guestbook:", err);
-                    if(window.showPremiumAlert) window.showPremiumAlert("Error de Inicio de Sesión", err.message, "error"); else alert("Error: " + err.message);
+                    if (window.showPremiumAlert) window.showPremiumAlert("Error de Inicio de Sesión", err.message, "error"); else alert("Error: " + err.message);
                 });
             });
         }
 
         const gbManualBtn = document.getElementById('gb-manual-btn');
-        if(gbManualBtn) {
+        if (gbManualBtn) {
             gbManualBtn.addEventListener('click', () => {
                 const gbPrompt = document.getElementById('gb-auth-prompt');
                 const gbFormContainer = document.getElementById('guestbook-form');
-                if(gbPrompt && gbFormContainer) {
+                if (gbPrompt && gbFormContainer) {
                     gbPrompt.classList.add('hidden');
                     gbFormContainer.classList.remove('hidden');
                     gbFormContainer.classList.add('flex');
                     const gbName = document.getElementById('gb-name');
-                    if(gbName) {
+                    if (gbName) {
                         gbName.value = '';
                         gbName.readOnly = false;
                         gbName.classList.remove('opacity-70', 'cursor-not-allowed');
@@ -17865,11 +17928,11 @@
         }
 
         const gbBackBtn = document.getElementById('gb-back-btn');
-        if(gbBackBtn) {
+        if (gbBackBtn) {
             gbBackBtn.addEventListener('click', () => {
                 const gbPrompt = document.getElementById('gb-auth-prompt');
                 const gbFormContainer = document.getElementById('guestbook-form');
-                if(gbPrompt && gbFormContainer) {
+                if (gbPrompt && gbFormContainer) {
                     gbFormContainer.classList.add('hidden');
                     gbFormContainer.classList.remove('flex');
                     gbPrompt.classList.remove('hidden');
@@ -17879,10 +17942,10 @@
 
         const observer = new IntersectionObserver((entries) => {
             let activeEntries = entries.filter(e => e.isIntersecting);
-            if(activeEntries.length > 0) {
+            if (activeEntries.length > 0) {
                 let target = activeEntries[0].target;
                 let secId = target.id;
-                                const secMap = {
+                const secMap = {
                     "hero": "Inicio",
                     "frase-del-dia": "Frase del Día",
                     "historia": "Nuestra Historia",
@@ -17927,29 +17990,29 @@
             gbEditingId = null;
             gbForm.reset();
             const submitBtn = gbForm.querySelector('button[type="submit"] span');
-            if(submitBtn) submitBtn.textContent = dictionary[currentLang]?.gb_btn || 'Publicar Mensaje';
+            if (submitBtn) submitBtn.textContent = dictionary[currentLang]?.gb_btn || 'Publicar Mensaje';
             const cancelBtn = document.getElementById('gb-cancel-edit-btn');
-            if(cancelBtn) cancelBtn.remove();
-            
-            if(window.yaireCurrentUser) {
+            if (cancelBtn) cancelBtn.remove();
+
+            if (window.yaireCurrentUser) {
                 const gbName = document.getElementById('gb-name');
-                if(gbName) gbName.value = window.yaireCurrentUser.displayName;
+                if (gbName) gbName.value = window.yaireCurrentUser.displayName;
             }
         };
 
-        if(gbForm) {
+        if (gbForm) {
             gbForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const name = document.getElementById('gb-name').value.trim();
                 const msg = document.getElementById('gb-msg').value.trim();
-                if(name && msg) {
+                if (name && msg) {
                     if (gbEditingId) {
                         // UPDATE EXISTING
-                        update(ref(db, 'guestbook/' + gbEditingId), { 
-                            msg: msg, 
-                            editedAt: serverTimestamp() 
+                        update(ref(db, 'guestbook/' + gbEditingId), {
+                            msg: msg,
+                            editedAt: serverTimestamp()
                         }).then(() => {
-                            if(window.showPremiumAlert) window.showPremiumAlert(t('gb_updated_title', 'Actualizado'), t('gb_updated_msg', 'Tu mensaje ha sido modificado'), 'success');
+                            if (window.showPremiumAlert) window.showPremiumAlert(t('gb_updated_title', 'Actualizado'), t('gb_updated_msg', 'Tu mensaje ha sido modificado'), 'success');
                             resetGbForm();
                         });
                     } else {
@@ -17959,7 +18022,7 @@
                             msg: msg,
                             timestamp: serverTimestamp()
                         };
-                        if(window.yaireCurrentUser) {
+                        if (window.yaireCurrentUser) {
                             messageData.uid = window.yaireCurrentUser.uid;
                             messageData.photoURL = window.yaireCurrentUser.photoURL;
                         }
@@ -17975,19 +18038,19 @@
             gbEditingId = id;
             const gbMsgInput = document.getElementById('gb-msg');
             const gbFormContainer = document.getElementById('guestbook-form');
-            if(gbMsgInput && gbFormContainer) {
+            if (gbMsgInput && gbFormContainer) {
                 gbFormContainer.classList.remove('hidden');
                 gbFormContainer.classList.add('flex');
-                
+
                 gbMsgInput.value = msgText;
                 gbMsgInput.focus();
-                
+
                 // Change submit text
                 const submitBtn = gbFormContainer.querySelector('button[type="submit"] span');
-                if(submitBtn) submitBtn.textContent = t('gb_save_changes', 'Guardar Cambios');
-                
+                if (submitBtn) submitBtn.textContent = t('gb_save_changes', 'Guardar Cambios');
+
                 // Add cancel button if not exists
-                if(!document.getElementById('gb-cancel-edit-btn')) {
+                if (!document.getElementById('gb-cancel-edit-btn')) {
                     const cancelBtn = document.createElement('button');
                     cancelBtn.type = 'button';
                     cancelBtn.id = 'gb-cancel-edit-btn';
@@ -17996,49 +18059,49 @@
                     cancelBtn.onclick = resetGbForm;
                     gbFormContainer.appendChild(cancelBtn);
                 }
-                
+
                 // Scroll to form
-                document.getElementById('gb-form-anim')?.scrollIntoView({behavior: 'smooth', block: 'center'});
+                document.getElementById('gb-form-anim')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         };
 
         window.deleteGbMsg = (id) => {
-            if(confirm(t('gb_delete_confirm', '¿Estás seguro de que quieres borrar este mensaje para siempre?'))) {
+            if (confirm(t('gb_delete_confirm', '¿Estás seguro de que quieres borrar este mensaje para siempre?'))) {
                 remove(ref(db, 'guestbook/' + id)).then(() => {
-                    if(window.showPremiumAlert) window.showPremiumAlert(t('gb_deleted_title', 'Borrado'), t('gb_deleted_msg', 'El mensaje ha sido eliminado'), 'success');
+                    if (window.showPremiumAlert) window.showPremiumAlert(t('gb_deleted_title', 'Borrado'), t('gb_deleted_msg', 'El mensaje ha sido eliminado'), 'success');
                 });
             }
         };
 
         onValue(ref(db, 'guestbook'), (snapshot) => {
-            if(snapshot.exists()) {
-                if(gbEmpty) gbEmpty.style.display = 'none';
-                gbWall.innerHTML = ''; 
+            if (snapshot.exists()) {
+                if (gbEmpty) gbEmpty.style.display = 'none';
+                gbWall.innerHTML = '';
                 const data = snapshot.val();
-                const msgs = Object.entries(data).map(([id, val]) => ({id, ...val})).sort((a,b) => (b.timestamp || Date.now()) - (a.timestamp || Date.now()));
-                
+                const msgs = Object.entries(data).map(([id, val]) => ({ id, ...val })).sort((a, b) => (b.timestamp || Date.now()) - (a.timestamp || Date.now()));
+
                 msgs.forEach((m, idx) => {
                     const card = document.createElement('div');
                     // Glassmorphism card styles with masonry break-inside-avoid
                     card.className = "break-inside-avoid inline-block w-full mb-6 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md border border-white/40 dark:border-zinc-700/40 rounded-3xl p-6 shadow-xl shadow-zinc-200/30 dark:shadow-none hover:-translate-y-2 hover:shadow-2xl hover:shadow-amber-500/10 transition-all duration-500 group relative overflow-hidden gb-card-anim";
                     card.style.opacity = '0';
                     card.style.transform = 'translateY(20px)';
-                    
+
                     const dateText = m.timestamp ? new Date(m.timestamp).toLocaleDateString() : t('gb_recent', 'Reciente');
                     const safeName = document.createElement('div'); safeName.innerText = m.name || 'Anónimo';
                     const safeMsg = document.createElement('div'); safeMsg.innerText = m.msg || '';
                     const initial = (safeName.innerText.charAt(0) || '?').toUpperCase();
-                    
+
                     // Generate a seeded color based on name length so it stays consistent
                     const colors = ['bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400', 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400', 'bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400', 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400', 'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400'];
                     const colorClass = colors[safeName.innerText.length % colors.length];
 
-                    const avatarHTML = m.photoURL 
+                    const avatarHTML = m.photoURL
                         ? `<img src="${m.photoURL}" class="w-10 h-10 shrink-0 rounded-full object-cover shadow-inner border border-zinc-200 dark:border-zinc-700" alt="Avatar">`
                         : `<div class="w-10 h-10 shrink-0 rounded-full flex items-center justify-center font-black text-sm ${colorClass} shadow-inner">${initial}</div>`;
 
                     let controlsHTML = '';
-                    if(window.yaireCurrentUser && m.uid === window.yaireCurrentUser.uid) {
+                    if (window.yaireCurrentUser && m.uid === window.yaireCurrentUser.uid) {
                         controlsHTML = `
                             <div class="absolute top-4 right-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
                                 <button onclick="window.startEditGbMsg('${m.id}', this.closest('.gb-card-anim').querySelector('.gb-msg-text').innerText)" class="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-500 hover:text-amber-500 hover:bg-white dark:hover:bg-zinc-700 shadow-sm flex items-center justify-center transition-all" title="${t('gb_edit_title', 'Editar mensaje')}">
@@ -18066,7 +18129,7 @@
                         <p class="text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed font-medium relative z-10 gb-msg-text">${safeMsg.innerHTML}</p>
                     `;
                     gbWall.appendChild(card);
-                    
+
                     // Animate in
                     setTimeout(() => {
                         card.style.transition = 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease';
@@ -18084,20 +18147,23 @@
         onValue(ref(db, 'live_events/flower_rain/timestamp'), (snapshot) => {
             const val = snapshot.val();
             // Only trigger if the event is NEW (happened after the page loaded)
-            if(val && val > loadTime) {
-                if(window.triggerFlowerRain) window.triggerFlowerRain();
+            if (val && val > loadTime) {
+                if (window.triggerFlowerRain) window.triggerFlowerRain();
             }
         });
     </script>
-    
+
     <!-- NEXT SONG TOAST -->
-    <div id="next-song-toast" class="fixed bottom-6 left-6 bg-[#18181b]/95 backdrop-blur-md border border-brand-500/30 pr-5 pl-3 py-3 rounded-2xl shadow-[0_10px_40px_rgba(236,72,153,0.2)] flex items-center gap-3 z-[99999] opacity-0 pointer-events-none transform translate-y-[20px]">
-        <div id="next-song-toast-art-container" class="w-11 h-11 rounded-lg bg-brand-500/20 flex items-center justify-center text-brand-400 shrink-0 overflow-hidden">
+    <div id="next-song-toast"
+        class="fixed bottom-6 left-6 bg-[#18181b]/95 backdrop-blur-md border border-brand-500/30 pr-5 pl-3 py-3 rounded-2xl shadow-[0_10px_40px_rgba(236,72,153,0.2)] flex items-center gap-3 z-[99999] opacity-0 pointer-events-none transform translate-y-[20px]">
+        <div id="next-song-toast-art-container"
+            class="w-11 h-11 rounded-lg bg-brand-500/20 flex items-center justify-center text-brand-400 shrink-0 overflow-hidden">
             <i id="next-song-toast-fallback" class="ph-bold ph-music-notes text-xl"></i>
             <img id="next-song-toast-art" src="" class="w-full h-full object-cover hidden" />
         </div>
         <div>
-            <p class="text-[8px] flex items-center gap-1 font-bold text-zinc-400 uppercase tracking-widest mb-1"><i class="ph-bold ph-vinyl-record"></i> Spotlight Radio</p>
+            <p class="text-[8px] flex items-center gap-1 font-bold text-zinc-400 uppercase tracking-widest mb-1"><i
+                    class="ph-bold ph-vinyl-record"></i> Spotlight Radio</p>
             <p class="text-[10px] font-bold text-brand-500 uppercase tracking-widest mb-0.5">Siguiente canción</p>
             <p id="next-song-toast-title" class="text-sm font-bold text-white leading-tight truncate max-w-[200px]"></p>
         </div>
@@ -18105,12 +18171,12 @@
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
-        window.triggerFlowerRain = function() {
+        window.triggerFlowerRain = function () {
             var duration = 5 * 1000;
             var animationEnd = Date.now() + duration;
             var defaults = { startVelocity: 20, spread: 360, ticks: 60, zIndex: 10000 };
 
-            var interval = setInterval(function() {
+            var interval = setInterval(function () {
                 var timeLeft = animationEnd - Date.now();
 
                 if (timeLeft <= 0) {
@@ -18118,9 +18184,9 @@
                 }
 
                 var particleCount = 20 * (timeLeft / duration);
-                
-                confetti(Object.assign({}, defaults, { 
-                    particleCount, 
+
+                confetti(Object.assign({}, defaults, {
+                    particleCount,
                     origin: { x: Math.random(), y: Math.random() - 0.2 },
                     shapes: ['circle'],
                     scalar: 2.5,
@@ -18131,43 +18197,44 @@
     </script>
 
 
-<!-- Premium Toast Container -->
-<div id="premium-toast-container" class="fixed bottom-6 left-6 z-[100000] flex flex-col gap-3 pointer-events-none"></div>
+    <!-- Premium Toast Container -->
+    <div id="premium-toast-container" class="fixed bottom-6 left-6 z-[100000] flex flex-col gap-3 pointer-events-none">
+    </div>
 
-<script>
-window.showPremiumAlert = function(title, msg, type = 'error') {
-    const container = document.getElementById('premium-toast-container');
-    if (!container) return;
+    <script>
+        window.showPremiumAlert = function (title, msg, type = 'error') {
+            const container = document.getElementById('premium-toast-container');
+            if (!container) return;
 
-    const toast = document.createElement('div');
-    // Using pointer-events-auto so the toast can be clicked/hovered
-    toast.className = "transform transition-all duration-500 translate-y-10 opacity-0 pointer-events-auto flex items-center gap-4 bg-[#18181b]/95 backdrop-blur-md border rounded-2xl p-4 shadow-xl w-80";
-    
-    let iconClass = '';
-    let iconBgClass = '';
-    let borderClass = '';
-    let shadowClass = '';
+            const toast = document.createElement('div');
+            // Using pointer-events-auto so the toast can be clicked/hovered
+            toast.className = "transform transition-all duration-500 translate-y-10 opacity-0 pointer-events-auto flex items-center gap-4 bg-[#18181b]/95 backdrop-blur-md border rounded-2xl p-4 shadow-xl w-80";
 
-    if (type === 'error') {
-        borderClass = 'border-red-500/30';
-        shadowClass = 'shadow-[0_10px_40px_rgba(239,68,68,0.2)]';
-        iconBgClass = 'bg-red-500/20';
-        iconClass = 'ph-fill ph-warning-circle text-red-500';
-    } else if (type === 'success') {
-        borderClass = 'border-emerald-500/30';
-        shadowClass = 'shadow-[0_10px_40px_rgba(16,185,129,0.2)]';
-        iconBgClass = 'bg-emerald-500/20';
-        iconClass = 'ph-fill ph-check-circle text-emerald-500';
-    } else {
-        borderClass = 'border-brand-500/30';
-        shadowClass = 'shadow-[0_10px_40px_rgba(236,72,153,0.2)]';
-        iconBgClass = 'bg-brand-500/20';
-        iconClass = 'ph-fill ph-info text-brand-500';
-    }
+            let iconClass = '';
+            let iconBgClass = '';
+            let borderClass = '';
+            let shadowClass = '';
 
-    toast.classList.add(borderClass, shadowClass);
+            if (type === 'error') {
+                borderClass = 'border-red-500/30';
+                shadowClass = 'shadow-[0_10px_40px_rgba(239,68,68,0.2)]';
+                iconBgClass = 'bg-red-500/20';
+                iconClass = 'ph-fill ph-warning-circle text-red-500';
+            } else if (type === 'success') {
+                borderClass = 'border-emerald-500/30';
+                shadowClass = 'shadow-[0_10px_40px_rgba(16,185,129,0.2)]';
+                iconBgClass = 'bg-emerald-500/20';
+                iconClass = 'ph-fill ph-check-circle text-emerald-500';
+            } else {
+                borderClass = 'border-brand-500/30';
+                shadowClass = 'shadow-[0_10px_40px_rgba(236,72,153,0.2)]';
+                iconBgClass = 'bg-brand-500/20';
+                iconClass = 'ph-fill ph-info text-brand-500';
+            }
 
-    toast.innerHTML = `
+            toast.classList.add(borderClass, shadowClass);
+
+            toast.innerHTML = `
         <div class="w-10 h-10 rounded-full ${iconBgClass} flex items-center justify-center shrink-0">
             <i class="${iconClass} text-xl"></i>
         </div>
@@ -18180,46 +18247,46 @@ window.showPremiumAlert = function(title, msg, type = 'error') {
         </button>
     `;
 
-    const closeBtn = toast.querySelector('button');
-    let isClosing = false;
-    
-    const closeToast = () => {
-        if (isClosing) return;
-        isClosing = true;
-        toast.classList.remove('translate-y-0', 'opacity-100');
-        toast.classList.add('translate-y-10', 'opacity-0');
-        if (window.playEffect) window.playEffect('sounds/sliderbajo.wav'); else new Audio('sounds/sliderbajo.wav').play().catch(()=>{});
-        setTimeout(() => toast.remove(), 500);
-    };
+            const closeBtn = toast.querySelector('button');
+            let isClosing = false;
 
-    closeBtn.onclick = closeToast;
+            const closeToast = () => {
+                if (isClosing) return;
+                isClosing = true;
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-10', 'opacity-0');
+                if (window.playEffect) window.playEffect('sounds/sliderbajo.wav'); else new Audio('sounds/sliderbajo.wav').play().catch(() => { });
+                setTimeout(() => toast.remove(), 500);
+            };
 
-    // Append to container
-    container.appendChild(toast);
+            closeBtn.onclick = closeToast;
 
-    // Trigger animation
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            toast.classList.remove('translate-y-10', 'opacity-0');
-            toast.classList.add('translate-y-0', 'opacity-100');
-            if (window.playEffect) window.playEffect('sounds/slideralto.wav'); else new Audio('sounds/slideralto.wav').play().catch(()=>{});
-        });
-    });
+            // Append to container
+            container.appendChild(toast);
 
-    // Auto dismiss
-    setTimeout(() => {
-        closeToast();
-    }, 4000);
-};
+            // Trigger animation
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    toast.classList.remove('translate-y-10', 'opacity-0');
+                    toast.classList.add('translate-y-0', 'opacity-100');
+                    if (window.playEffect) window.playEffect('sounds/slideralto.wav'); else new Audio('sounds/slideralto.wav').play().catch(() => { });
+                });
+            });
 
-window.hidePremiumAlert = function() {
-    const container = document.getElementById('premium-toast-container');
-    if (container && container.lastChild) {
-        const btn = container.lastChild.querySelector('button');
-        if (btn) btn.click();
-    }
-};
-</script>
+            // Auto dismiss
+            setTimeout(() => {
+                closeToast();
+            }, 4000);
+        };
+
+        window.hidePremiumAlert = function () {
+            const container = document.getElementById('premium-toast-container');
+            if (container && container.lastChild) {
+                const btn = container.lastChild.querySelector('button');
+                if (btn) btn.click();
+            }
+        };
+    </script>
 </body>
 
 </html>
