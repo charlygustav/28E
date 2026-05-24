@@ -13004,78 +13004,30 @@
                     const heroSection = document.getElementById('hero');
 
                     if (typeof gsap !== 'undefined') {
-                        // ── EXIT GSAP: camera push-in ─────────────────────────────────────
-                        const ldPct = document.getElementById('ld-pct');
-                        const ldCorner = document.getElementById('ld-corner-l');
-                        const ldTrack = document.getElementById('ld-track');
-
-                        // Pre-preparar hero
-                        if (heroSection) {
-                            gsap.set('.hero-anim', { opacity: 0, y: 35, force3D: true });
-                        }
-
-                        // ⚡ Orbes 100% GSAP — solo matar los loop timelines.
-                        //    GSAP los deja exactamente donde están, el exit arranca desde ahí sin corte.
-                        if (window._ldOrbLoops) {
-                            window._ldOrbLoops.forEach(tl => tl.kill());
-                            window._ldOrbLoops = null;
-                        }
-
-                        const orbIds = ['ld-c1', 'ld-c2', 'ld-c3', 'ld-c4', 'ld-c5'];
-                        const orbEls = orbIds.map(id => document.getElementById(id)).filter(Boolean);
-
-                        const progressEl = document.getElementById('loader-progress');
-                        if (progressEl) progressEl.style.animation = 'none';
-
+                        // ── EXIT GSAP ─────────────────────────────────────
                         loaderEl.style.willChange = 'opacity';
-
+                        
                         requestAnimationFrame(() => {
-
                             const exitTl = gsap.timeline({ defaults: { force3D: true } });
                             exitTl.addLabel('start');
 
-                            // 1. UI periférica se disuelve suavemente
-                            exitTl.to([ldPct, ldCorner, ldTrack].filter(Boolean), {
-                                opacity: 0, duration: 0.4, ease: 'power2.in'
-                            }, 'start');
-
-                            const ldLogo = document.getElementById('ld-logo');
-                            if (ldLogo) {
-                                exitTl.to(ldLogo, {
-                                    opacity: 0, duration: 0.4, ease: 'power2.in'
+                            const customLoader = document.getElementById('custom-loader-wrapper');
+                            if (customLoader) {
+                                exitTl.to(customLoader, {
+                                    opacity: 0, scale: 0.9, duration: 0.4, ease: 'power2.in'
                                 }, 'start');
                             }
 
-                            // 2. Cada orbe sale disparado fuera de pantalla en su propia dirección
-                            const flyDirs = [
-                                { x: '-130vw', y: '-80vh' },  // orbe 1 → esquina sup-izq
-                                { x: '130vw', y: '-60vh' },  // orbe 2 → esquina sup-der
-                                { x: '-40vw', y: '120vh' },  // orbe 3 → abajo-izq
-                                { x: '140vw', y: '-100vh' },  // orbe 4 → sup-der extremo
-                                { x: '-120vw', y: '90vh' },  // orbe 5 → inf-izq
-                            ];
-
-                            orbEls.forEach((el, i) => {
-                                const d = flyDirs[i] || { x: '150vw', y: '0' };
-                                exitTl.to(el, {
-                                    x: d.x,
-                                    y: d.y,
-                                    opacity: 0,
-                                    duration: 0.8,
-                                    ease: 'power3.in',
-                                }, `start+=${0.05 + i * 0.06}`);
-                            });
-
-                            // 3. Loader completo fade-out suave al final
+                            // Loader completo fade-out suave al final
                             exitTl.to(loaderEl, {
                                 opacity: 0,
                                 duration: 0.4,
                                 ease: 'power2.inOut',
-                            }, 'start+=0.55')
+                            }, 'start+=0.3')
                                 .set(loaderEl, { display: 'none', clearProps: 'willChange,transform,opacity' })
                                 .call(() => { document.body.classList.add('page-ready'); });
 
-                            // 4. Hero reveal en cascada
+                            // Hero reveal en cascada
                             if (heroSection) {
                                 document.querySelectorAll('.hero-anim').forEach(el => {
                                     el.style.transition = 'none';
@@ -13091,7 +13043,7 @@
                                             el.style.willChange = 'auto';
                                         });
                                     }
-                                }, 'start+=0.65');
+                                }, 'start+=0.4');
                             }
 
                             exitTl.call(() => {
@@ -13103,8 +13055,7 @@
                                     }, { threshold: 0.3 });
                                     barObs.observe(top5Section);
                                 }
-                            }, null, 'start+=1.1');
-
+                            }, null, 'start+=0.8');
                         }); // end rAF
 
                     } else {
