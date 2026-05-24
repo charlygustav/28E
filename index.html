@@ -6221,12 +6221,7 @@
                                         class="bg-brand-500 text-white font-bold py-2 md:py-2.5 px-6 rounded-xl hover:bg-brand-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(245,158,11,0.5)] active:scale-95 text-sm md:text-base w-full"
                                         data-i18n="game_start">¡Empezar!</button>
                                 </div>
-                                <div class="overflow-hidden hidden shrink w-full max-w-[280px] min-w-0" id="records-wrapper-g1">
-                                    <div class="game-ov-card w-full h-full min-w-0">
-                                        <div id="smart-msg-g1"></div>
-                                        <div id="leaderboard-mini-g1" class="w-full"></div>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -6272,12 +6267,7 @@
                                         class="bg-tulip-500 text-white font-bold py-2 md:py-2.5 px-6 rounded-xl hover:bg-tulip-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(236,72,153,0.5)] active:scale-95 text-sm md:text-base w-full"
                                         data-i18n="game_start">Empezar a volar</button>
                                 </div>
-                                <div class="overflow-hidden hidden shrink w-full max-w-[280px] min-w-0" id="records-wrapper-g2">
-                                    <div class="game-ov-card w-full h-full min-w-0">
-                                        <div id="smart-msg-g2"></div>
-                                        <div id="leaderboard-mini-g2" class="w-full"></div>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -6339,12 +6329,7 @@
                                         class="bg-purple-500 text-white font-bold py-2 md:py-2.5 px-6 rounded-xl hover:bg-purple-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(168,85,247,0.5)] active:scale-95 text-sm md:text-base w-full"
                                         data-i18n="game_start2">¡Empezar!</button>
                                 </div>
-                                <div class="overflow-hidden hidden shrink w-full max-w-[300px]" id="records-wrapper-g3">
-                                    <div class="game-ov-card w-full">
-                                        <div id="smart-msg-g3"></div>
-                                        <div id="leaderboard-mini-g3" class="w-full"></div>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -6467,12 +6452,7 @@
                                         class="bg-emerald-500 text-white font-bold py-2 md:py-2.5 px-6 rounded-xl hover:bg-emerald-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] active:scale-95 text-sm md:text-base w-full"
                                         data-i18n="game_start">¡Empezar!</button>
                                 </div>
-                                <div class="overflow-hidden hidden shrink w-full max-w-[280px] min-w-0" id="records-wrapper-g4">
-                                    <div class="game-ov-card w-full h-full min-w-0">
-                                        <div id="smart-msg-g4"></div>
-                                        <div id="leaderboard-mini-g4" class="w-full"></div>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -16075,7 +16055,6 @@
             if (ti) ti.textContent = t.game1_over_title || '¡Se acabó el tiempo!';
             if (su) su.innerHTML = (t.game1_over_sub || 'Lograste cosechar <span class="text-brand-500 font-bold">{score}</span> girasoles.').replace('{score}', score1);
             if (bt) bt.textContent = t.game_restart || 'Jugar de nuevo';
-            if (window.yaireSaveScore) window.yaireSaveScore('g1', score1);
             showGameOverlay('g1-overlay');
         }
 
@@ -16290,7 +16269,6 @@
             if (su) su.textContent = isRecord ? (dictionary[currentLang].game2_over_title_win || '¡Récord histórico!') : (dictionary[currentLang].game2_over_title_lose || 'Vuelve a intentarlo.');
             if (tx) tx.innerHTML = (dictionary[currentLang].game2_gameover || 'Tulipanes: {score}').replace('{score}', score2);
             if (btn) btn.textContent = dictionary[currentLang].game_restart || 'Intentar de nuevo';
-            if (window.yaireSaveScore) window.yaireSaveScore('g2', score2);
             showGameOverlay('game2-overlay');
         }
 
@@ -16406,10 +16384,7 @@
             }
             if (su) { const _gd = (typeof dictionary !== 'undefined' && dictionary[currentLang]) ? dictionary[currentLang] : {}; su.innerHTML = (_gd.game3_hud || 'Movimientos: {moves} | Tiempo: {time}s').replace('{moves}', '<strong class="text-purple-500">' + game3Moves + '</strong>').replace('{time}', '<strong class="text-purple-500">' + game3TimeLeft + '</strong>'); }
             if (btn) btn.textContent = dictionary[currentLang].game_restart || "Jugar de nuevo";
-            if (win && window.yaireSaveScore) {
-                let score3 = Math.max(0, 1000 - (game3Moves * 10) + (game3TimeLeft * 5));
-                window.yaireSaveScore('g3', score3);
-            }
+            
             showGameOverlay('game3-overlay');
         }
         // ════════════════════════════════════════════════════
@@ -16758,8 +16733,6 @@
 
             if (su) su.innerHTML = (_gd.game4_over_sub || 'Puntuación: <strong class="text-emerald-500">{score}</strong> puntos').replace('{score}', g4Score);
             if (btn) btn.textContent = _gd.game_restart || '¡Jugar de nuevo!';
-            if (window.yaireSaveScore) window.yaireSaveScore('g4', g4Score);
-
             showGameOverlay('game4-overlay');
         }
 
@@ -17884,163 +17857,6 @@
             });
         }
 
-        window.yaireSaveScore = async (gameId, score) => {
-            const refPath = `leaderboard/${gameId}`;
-            
-            try {
-                // Fetch current leaderboard
-                const snap = await get(ref(db, refPath));
-                let data = snap.val() || {};
-                let arr = Object.values(data).sort((a, b) => b.score - a.score);
-                
-                let smartMessage = "";
-                let myCurrentRankIndex = -1;
-
-                if (currentUser) {
-                    // Determine previous personal record
-                    const myOldRecord = data[currentUser.uid]?.score || 0;
-                    
-                    // Save new score if better
-                    let isNewPersonalRecord = score > myOldRecord;
-                    if (isNewPersonalRecord) {
-                        data[currentUser.uid] = {
-                            uid: currentUser.uid,
-                            displayName: currentUser.displayName,
-                            photoURL: currentUser.photoURL,
-                            score: score,
-                            timestamp: Date.now() // Use client time for sorting simplicity or serverTimestamp
-                        };
-                        await set(ref(db, `${refPath}/${currentUser.uid}`), data[currentUser.uid]);
-                        // Recalculate array
-                        arr = Object.values(data).sort((a, b) => b.score - a.score);
-                    }
-                    
-                    myCurrentRankIndex = arr.findIndex(u => u.uid === currentUser.uid);
-                    
-                    if (arr.length === 1 && isNewPersonalRecord) {
-                        smartMessage = "¡Primer récord establecido! 🏆";
-                    } else if (isNewPersonalRecord) {
-                        if (myCurrentRankIndex === 0) {
-                            smartMessage = "¡NUEVO RÉCORD MUNDIAL! Eres el #1 👑";
-                        } else if (myCurrentRankIndex > 0) {
-                            // Find who we surpassed
-                            const surpassedUser = arr[myCurrentRankIndex + 1];
-                            if (surpassedUser && surpassedUser.uid !== currentUser.uid) {
-                                smartMessage = `¡Has superado a ${surpassedUser.displayName || 'Anónimo'}! 🔥`;
-                            } else {
-                                smartMessage = "¡Nuevo récord personal! ⭐";
-                            }
-                        }
-                    } else {
-                        smartMessage = `Tu récord se mantiene en ${myOldRecord} pts`;
-                    }
-                } else {
-                    smartMessage = "Inicia sesión para guardar tu récord 🔒";
-                }
-
-                // Render to container
-                const listEl = document.getElementById(`leaderboard-mini-${gameId}`);
-                if (listEl) {
-                    const subtitleEl = document.getElementById(`smart-msg-${gameId}`);
-                    if (subtitleEl) {
-                        subtitleEl.innerHTML = `<div class="mt-1 text-sm font-black text-yellow-400 drop-shadow-md animate-pulse">${smartMessage}</div>`;
-                    }
-
-                    let html = '<div class="flex flex-col gap-2 mt-4 text-left">';
-                    // Only show top 3
-                    arr.slice(0, 3).forEach((item, index) => {
-                        let rankIcon = `<div class="w-6 h-6 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-[10px] font-bold text-zinc-400">#${index + 1}</div>`;
-                        let cardClass = "bg-white/50 dark:bg-zinc-900/30 border-zinc-200/50 dark:border-zinc-800/30";
-                        let nameClass = "text-zinc-700 dark:text-zinc-300 font-bold text-xs";
-                        let scoreClass = "text-zinc-500 text-xs";
-                        
-                        if (index === 0) {
-                            rankIcon = `<i class="ph-fill ph-medal text-2xl text-yellow-400 drop-shadow-[0_2px_10px_rgba(250,204,21,0.4)]"></i>`;
-                            cardClass = "bg-gradient-to-r from-yellow-500/10 to-transparent border-yellow-500/20";
-                            nameClass = "text-yellow-600 dark:text-yellow-400 font-black text-sm";
-                            scoreClass = "text-yellow-600 dark:text-yellow-500 font-black text-xs";
-                        } else if (index === 1) {
-                            rankIcon = `<i class="ph-fill ph-medal text-xl text-zinc-400 drop-shadow-[0_2px_10px_rgba(161,161,170,0.3)]"></i>`;
-                            cardClass = "bg-gradient-to-r from-zinc-500/5 to-transparent border-zinc-500/20";
-                        } else if (index === 2) {
-                            rankIcon = `<i class="ph-fill ph-medal text-xl text-orange-400 drop-shadow-[0_2px_10px_rgba(251,146,60,0.3)]"></i>`;
-                            cardClass = "bg-gradient-to-r from-orange-500/5 to-transparent border-orange-500/20";
-                        }
-                        
-                        let isMe = (currentUser && item.uid === currentUser.uid) ? 'ring-2 ring-brand-500 bg-brand-500/5' : '';
-                        
-                        html += `
-                            <div class="flex items-center gap-3 p-2.5 rounded-xl border backdrop-blur-sm ${cardClass} ${isMe}">
-                                <div class="w-8 flex justify-center shrink-0">
-                                    ${rankIcon}
-                                </div>
-                                <div class="relative">
-                                    <img src="${item.photoURL || ''}" draggable="false" class="w-8 h-8 rounded-full object-cover ring-1 ring-white/10 dark:ring-zinc-800" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYTJhMmEyIiBzdHJva2Utd2lkdGg9IjIiPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCIvPjxwYXRoIGQ9Ik00IDIxdi0yYTRgNCAwIDAgMSA0LTRoOGE0IDQgMCAwIDEgNCAydjIiLz48L3N2Zz4='"/>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="truncate tracking-tight ${nameClass}">${item.displayName || 'Anónimo'} ${isMe ? '<span class="text-[9px] text-brand-500 uppercase tracking-widest ml-1">(Tú)</span>' : ''}</div>
-                                    <div class="tracking-wide ${scoreClass}">${item.score} <span class="opacity-60 text-[9px] uppercase font-bold tracking-widest ml-0.5">pts</span></div>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    
-                    // Show current user if not in top 3
-                    if (currentUser && myCurrentRankIndex >= 3) {
-                        const myItem = arr[myCurrentRankIndex];
-                        html += `
-                            <div class="flex items-center gap-2 justify-center py-1"><i class="ph-bold ph-dots-three text-zinc-500"></i></div>
-                            <div class="flex items-center gap-3 p-2.5 rounded-xl border border-brand-500/30 bg-brand-500/5 backdrop-blur-sm ring-1 ring-brand-500/50">
-                                <div class="w-8 flex justify-center shrink-0">
-                                    <div class="w-6 h-6 rounded-full bg-brand-500/20 flex items-center justify-center text-[10px] font-bold text-brand-500">#${myCurrentRankIndex + 1}</div>
-                                </div>
-                                <div class="relative">
-                                    <img src="${myItem.photoURL || ''}" draggable="false" class="w-8 h-8 rounded-full object-cover ring-1 ring-brand-500" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYTJhMmEyIiBzdHJva2Utd2lkdGg9IjIiPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCIvPjxwYXRoIGQ9Ik00IDIxdi0yYTRgNCAwIDAgMSA0LTRoOGE0IDQgMCAwIDEgNCAydjIiLz48L3N2Zz4='"/>
-                                </div>
-                                <div class="flex-1 min-w-0 text-left">
-                                    <div class="truncate tracking-tight text-brand-500 font-bold text-xs">${myItem.displayName || 'Anónimo'} <span class="text-[9px] uppercase tracking-widest ml-1">(Tú)</span></div>
-                                    <div class="tracking-wide text-brand-500/80 text-xs font-bold">${myItem.score} <span class="opacity-60 text-[9px] uppercase tracking-widest ml-0.5">pts</span></div>
-                                </div>
-                            </div>
-                        `;
-                    }
-                    
-                    html += '</div>';
-                    listEl.innerHTML = html;
-                    
-                    // Reveal and animate the records wrapper with GSAP
-                    const wrapper = document.getElementById(`records-wrapper-${gameId}`);
-                    if (wrapper) {
-                        wrapper.classList.remove('hidden');
-                        if (window.gsap) {
-                            // 1. Animate wrapper width and height for smooth sliding/expanding whether side-by-side or stacked
-                            gsap.fromTo(wrapper, 
-                                { width: 0, height: 0, opacity: 0, scale: 0.8 }, 
-                                { width: 'auto', height: 'auto', opacity: 1, scale: 1, duration: 0.8, ease: "elastic.out(1, 0.85)", clearProps: "all" }
-                            );
-                            
-                            // 2. Stagger animate leaderboard items
-                            const items = listEl.querySelectorAll('.flex.items-center.gap-3');
-                            if (items.length) {
-                                gsap.fromTo(items, 
-                                    { opacity: 0, x: 20 }, 
-                                    { opacity: 1, x: 0, duration: 0.5, stagger: 0.1, ease: "power2.out", delay: 0.15 }
-                                );
-                            }
-                            
-                            // 3. Pop in smart message
-                            const msgEl = document.getElementById(`smart-msg-${gameId}`);
-                            if (msgEl) {
-                                gsap.fromTo(msgEl, { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.5, ease: "back.out(1.5)", delay: 0.1 });
-                            }
-                        }
-                    }
-                }
-                
-            } catch (e) {
-                console.error("Error in smart leaderboard:", e);
-            }
-        };
         const observer = new IntersectionObserver((entries) => {
             let activeEntries = entries.filter(e => e.isIntersecting);
             if(activeEntries.length > 0) {
