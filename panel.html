@@ -14,6 +14,260 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Merriweather:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
     
     <script>
+
+        // ── GESTOR DE CAMBIOS NO GUARDADOS (DISCORD STYLE) ──
+        let _initialStateJSON = null;
+        let _hasUnsavedChanges = false;
+
+        function getDOMSongsStr() {
+            const container = document.getElementById('songs-container');
+            if (!container) return JSON.stringify(typeof currentSongs !== 'undefined' ? currentSongs : []);
+            const divs = container.querySelectorAll('[data-index]');
+            if (divs.length === 0 && (typeof currentSongs === 'undefined' || currentSongs.length === 0)) return "[]";
+            if (divs.length === 0) return JSON.stringify(currentSongs);
+            
+            const arr = Array.from(divs).map(div => {
+                const inputs = div.querySelectorAll('input');
+                return {
+                    title: inputs[0] ? inputs[0].value : '',
+                    artist: inputs[1] ? inputs[1].value : '',
+                    src: inputs[2] ? inputs[2].value : ''
+                };
+            });
+            return JSON.stringify(arr);
+        }
+
+        function captureInitialState() {
+            const state = {
+                maintToggle: document.getElementById('maint-toggle')?.checked || false,
+                maintType: document.getElementById('maint-type')?.value || '',
+                maintDate: document.getElementById('maint-date')?.value || '',
+                maintMsg: document.getElementById('maint-msg')?.value || '',
+                ghRepo: document.getElementById('gh-repo')?.value || '',
+                ghToken: document.getElementById('gh-token')?.value || '',
+                gal1: document.getElementById('gal-1')?.value || '',
+                gal2: document.getElementById('gal-2')?.value || '',
+                gal3: document.getElementById('gal-3')?.value || '',
+                vaultHint: document.getElementById('vault-hint')?.value || '',
+                vaultPwd: document.getElementById('vault-pwd')?.value || '',
+                heroBadge: document.getElementById('hero-badge')?.value || '',
+                spotlightTips: document.getElementById('spotlight-tips')?.value || '',
+                songsStr: getDOMSongsStr()
+            };
+            _initialStateJSON = JSON.stringify(state);
+            hideUnsavedBar();
+        }
+
+        function checkDirtyState() {
+            if (!_initialStateJSON) return;
+            const currentState = {
+                maintToggle: document.getElementById('maint-toggle')?.checked || false,
+                maintType: document.getElementById('maint-type')?.value || '',
+                maintDate: document.getElementById('maint-date')?.value || '',
+                maintMsg: document.getElementById('maint-msg')?.value || '',
+                ghRepo: document.getElementById('gh-repo')?.value || '',
+                ghToken: document.getElementById('gh-token')?.value || '',
+                gal1: document.getElementById('gal-1')?.value || '',
+                gal2: document.getElementById('gal-2')?.value || '',
+                gal3: document.getElementById('gal-3')?.value || '',
+                vaultHint: document.getElementById('vault-hint')?.value || '',
+                vaultPwd: document.getElementById('vault-pwd')?.value || '',
+                heroBadge: document.getElementById('hero-badge')?.value || '',
+                spotlightTips: document.getElementById('spotlight-tips')?.value || '',
+                songsStr: getDOMSongsStr()
+            };
+
+            _hasUnsavedChanges = _initialStateJSON !== JSON.stringify(currentState);
+
+            const bar = document.getElementById('unsaved-bar');
+            if (bar) {
+                if (_hasUnsavedChanges) {
+                    bar.classList.remove('translate-y-[150%]');
+                    bar.classList.add('translate-y-0');
+                } else {
+                    hideUnsavedBar();
+                }
+            }
+        }
+
+        function hideUnsavedBar() {
+            _hasUnsavedChanges = false;
+            const bar = document.getElementById('unsaved-bar');
+            if (bar) {
+                bar.classList.remove('translate-y-0');
+                bar.classList.add('translate-y-[150%]');
+            }
+        }
+
+        function resetChanges() {
+            if (!_initialStateJSON) return;
+            const state = JSON.parse(_initialStateJSON);
+
+            if (document.getElementById('maint-toggle')) document.getElementById('maint-toggle').checked = state.maintToggle;
+            if (document.getElementById('maint-type')) document.getElementById('maint-type').value = state.maintType;
+            if (document.getElementById('maint-date')) document.getElementById('maint-date').value = state.maintDate;
+            if (document.getElementById('maint-msg')) document.getElementById('maint-msg').value = state.maintMsg;
+            if (document.getElementById('gh-repo')) document.getElementById('gh-repo').value = state.ghRepo;
+            if (document.getElementById('gh-token')) document.getElementById('gh-token').value = state.ghToken;
+            if (document.getElementById('gal-1')) { document.getElementById('gal-1').value = state.gal1; document.getElementById('preview-gal-1').src = state.gal1; }
+            if (document.getElementById('gal-2')) { document.getElementById('gal-2').value = state.gal2; document.getElementById('preview-gal-2').src = state.gal2; }
+            if (document.getElementById('gal-3')) { document.getElementById('gal-3').value = state.gal3; document.getElementById('preview-gal-3').src = state.gal3; }
+            if (document.getElementById('vault-hint')) document.getElementById('vault-hint').value = state.vaultHint;
+            if (document.getElementById('vault-pwd')) document.getElementById('vault-pwd').value = state.vaultPwd;
+            if (document.getElementById('hero-badge')) document.getElementById('hero-badge').value = state.heroBadge;
+            if (document.getElementById('spotlight-tips')) document.getElementById('spotlight-tips').value = state.spotlightTips;
+
+            if (state.songsStr) {
+                currentSongs = JSON.parse(state.songsStr);
+                renderSongs(); // Render sin disparar guardado automático
+            }
+
+            if (typeof toggleMaintOptions === 'function') toggleMaintOptions();
+
+            hideUnsavedBar();
+        }
+
+        document.addEventListener('input', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+                if (e.target.id && e.target.id.startsWith('wa-')) return;
+                checkDirtyState();
+            }
+        });
+
+        document.addEventListener('change', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+                if (e.target.id && e.target.id.startsWith('wa-')) return;
+                checkDirtyState();
+            }
+        });
+
+
+        // ── GESTOR DE CAMBIOS NO GUARDADOS (DISCORD STYLE) ──
+        let _initialStateJSON = null;
+        let _hasUnsavedChanges = false;
+
+        function getDOMSongsStr() {
+            const container = document.getElementById('songs-container');
+            if (!container) return JSON.stringify(typeof currentSongs !== 'undefined' ? currentSongs : []);
+            const divs = container.querySelectorAll('[data-index]');
+            if (divs.length === 0 && (typeof currentSongs === 'undefined' || currentSongs.length === 0)) return "[]";
+            if (divs.length === 0) return JSON.stringify(currentSongs);
+            
+            const arr = Array.from(divs).map(div => {
+                const inputs = div.querySelectorAll('input');
+                return {
+                    title: inputs[0] ? inputs[0].value : '',
+                    artist: inputs[1] ? inputs[1].value : '',
+                    src: inputs[2] ? inputs[2].value : ''
+                };
+            });
+            return JSON.stringify(arr);
+        }
+
+        function captureInitialState() {
+            const state = {
+                maintToggle: document.getElementById('maint-toggle')?.checked || false,
+                maintType: document.getElementById('maint-type')?.value || '',
+                maintDate: document.getElementById('maint-date')?.value || '',
+                maintMsg: document.getElementById('maint-msg')?.value || '',
+                ghRepo: document.getElementById('gh-repo')?.value || '',
+                ghToken: document.getElementById('gh-token')?.value || '',
+                gal1: document.getElementById('gal-1')?.value || '',
+                gal2: document.getElementById('gal-2')?.value || '',
+                gal3: document.getElementById('gal-3')?.value || '',
+                vaultHint: document.getElementById('vault-hint')?.value || '',
+                vaultPwd: document.getElementById('vault-pwd')?.value || '',
+                heroBadge: document.getElementById('hero-badge')?.value || '',
+                spotlightTips: document.getElementById('spotlight-tips')?.value || '',
+                songsStr: getDOMSongsStr()
+            };
+            _initialStateJSON = JSON.stringify(state);
+            hideUnsavedBar();
+        }
+
+        function checkDirtyState() {
+            if (!_initialStateJSON) return;
+            const currentState = {
+                maintToggle: document.getElementById('maint-toggle')?.checked || false,
+                maintType: document.getElementById('maint-type')?.value || '',
+                maintDate: document.getElementById('maint-date')?.value || '',
+                maintMsg: document.getElementById('maint-msg')?.value || '',
+                ghRepo: document.getElementById('gh-repo')?.value || '',
+                ghToken: document.getElementById('gh-token')?.value || '',
+                gal1: document.getElementById('gal-1')?.value || '',
+                gal2: document.getElementById('gal-2')?.value || '',
+                gal3: document.getElementById('gal-3')?.value || '',
+                vaultHint: document.getElementById('vault-hint')?.value || '',
+                vaultPwd: document.getElementById('vault-pwd')?.value || '',
+                heroBadge: document.getElementById('hero-badge')?.value || '',
+                spotlightTips: document.getElementById('spotlight-tips')?.value || '',
+                songsStr: getDOMSongsStr()
+            };
+
+            _hasUnsavedChanges = _initialStateJSON !== JSON.stringify(currentState);
+
+            const bar = document.getElementById('unsaved-bar');
+            if (bar) {
+                if (_hasUnsavedChanges) {
+                    bar.classList.remove('translate-y-[150%]');
+                    bar.classList.add('translate-y-0');
+                } else {
+                    hideUnsavedBar();
+                }
+            }
+        }
+
+        function hideUnsavedBar() {
+            _hasUnsavedChanges = false;
+            const bar = document.getElementById('unsaved-bar');
+            if (bar) {
+                bar.classList.remove('translate-y-0');
+                bar.classList.add('translate-y-[150%]');
+            }
+        }
+
+        function resetChanges() {
+            if (!_initialStateJSON) return;
+            const state = JSON.parse(_initialStateJSON);
+
+            if (document.getElementById('maint-toggle')) document.getElementById('maint-toggle').checked = state.maintToggle;
+            if (document.getElementById('maint-type')) document.getElementById('maint-type').value = state.maintType;
+            if (document.getElementById('maint-date')) document.getElementById('maint-date').value = state.maintDate;
+            if (document.getElementById('maint-msg')) document.getElementById('maint-msg').value = state.maintMsg;
+            if (document.getElementById('gh-repo')) document.getElementById('gh-repo').value = state.ghRepo;
+            if (document.getElementById('gh-token')) document.getElementById('gh-token').value = state.ghToken;
+            if (document.getElementById('gal-1')) { document.getElementById('gal-1').value = state.gal1; document.getElementById('preview-gal-1').src = state.gal1; }
+            if (document.getElementById('gal-2')) { document.getElementById('gal-2').value = state.gal2; document.getElementById('preview-gal-2').src = state.gal2; }
+            if (document.getElementById('gal-3')) { document.getElementById('gal-3').value = state.gal3; document.getElementById('preview-gal-3').src = state.gal3; }
+            if (document.getElementById('vault-hint')) document.getElementById('vault-hint').value = state.vaultHint;
+            if (document.getElementById('vault-pwd')) document.getElementById('vault-pwd').value = state.vaultPwd;
+            if (document.getElementById('hero-badge')) document.getElementById('hero-badge').value = state.heroBadge;
+            if (document.getElementById('spotlight-tips')) document.getElementById('spotlight-tips').value = state.spotlightTips;
+
+            if (state.songsStr) {
+                currentSongs = JSON.parse(state.songsStr);
+                renderSongs(); // Render sin disparar guardado automático
+            }
+
+            if (typeof toggleMaintOptions === 'function') toggleMaintOptions();
+
+            hideUnsavedBar();
+        }
+
+        document.addEventListener('input', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+                if (e.target.id && e.target.id.startsWith('wa-')) return;
+                checkDirtyState();
+            }
+        });
+
+        document.addEventListener('change', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+                if (e.target.id && e.target.id.startsWith('wa-')) return;
+                checkDirtyState();
+            }
+        });
+
         tailwind.config = {
             darkMode: 'class',
             theme: { 
@@ -37,6 +291,7 @@
             toast.querySelector('p.font-bold').textContent = "📋 Registro de Actividad";
             toast.querySelector('p.text-xs').textContent = "Mostrando últimos eventos. Historial antiguo archivado.";
             gsap.fromTo(toast, { y: 150, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "elastic.out(1, 0.7)" });
+            captureInitialState();
             setTimeout(() => { gsap.to(toast, { y: 150, opacity: 0, duration: 0.5, ease: "power2.in" }); }, 3500);
         }
     </script>
@@ -719,6 +974,31 @@ Prueba a escribir 'yaire' y dale Enter..."></textarea>
         </div>
     </main>
 
+    
+    <!-- UNSAVED CHANGES BAR (DISCORD STYLE) -->
+    <div id="unsaved-bar"
+        class="fixed bottom-0 left-0 right-0 z-50 transform translate-y-[150%] transition-transform duration-500 ease-in-out pointer-events-none">
+        <div class="mx-auto max-w-5xl px-4 pb-6">
+            <div
+                class="bg-[#050505]/90 backdrop-blur-xl border border-white/10 rounded-2xl p-4 flex items-center justify-between shadow-[0_-10px_40px_rgba(0,0,0,0.5)] pointer-events-auto relative overflow-hidden">
+                <div class="absolute inset-0 bg-brand-500/5 animate-pulse"></div>
+                <p class="font-bold text-white ml-2 flex items-center gap-2 relative z-10">
+                    <i class="ph-fill ph-warning-circle text-amber-500 text-xl"></i>
+                    ¡Cuidado! Tienes cambios sin guardar.
+                </p>
+                <div class="flex items-center gap-3 relative z-10">
+                    <button onclick="resetChanges()"
+                        class="px-5 py-2 rounded-xl text-sm font-bold text-zinc-400 hover:text-white hover:bg-white/5 transition-colors">
+                        Restablecer
+                    </button>
+                    <button id="save-btn" onclick="saveConfig()"
+                        class="px-6 py-2 rounded-xl text-sm font-bold bg-white text-black hover:bg-zinc-200 shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-all flex items-center justify-center gap-2">
+                        Guardar Cambios
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- TOAST NOTIFICATION -->
     <div id="toast" class="fixed bottom-10 right-10 bg-[#18181b] border border-brand-500/50 text-white px-6 py-5 rounded-2xl shadow-[0_10px_40px_rgba(236,72,153,0.3)] flex items-center gap-4 z-50 transform translate-y-[200%] opacity-0">
         <div class="w-10 h-10 bg-brand-500/20 text-brand-400 rounded-full flex items-center justify-center">
@@ -1052,6 +1332,7 @@ localStorage.setItem('yaire_admin_mute', isAdminAudioMuted);
 
             renderSongs();
             renderIPs();
+            captureInitialState();
         }
 
         // MUSIC LOGIC
