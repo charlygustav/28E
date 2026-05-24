@@ -142,7 +142,12 @@
                                         window.location.replace('mantenimiento.html');
                                     }
                                 } else {
-                                    window.location.reload(); // Recargar la página si cambió cualquier otra cosa (ej. Etiqueta, traducciones)
+                                    if (!sessionStorage.getItem('yaire_config_reloaded')) {
+                                        sessionStorage.setItem('yaire_config_reloaded', '1');
+                                        window.location.reload(); // Recargar la página si cambió cualquier otra cosa
+                                    } else {
+                                        console.warn("Previniendo bucle de recarga infinito por config de Firebase.");
+                                    }
                                 }
                                 return;
                             } else if (!oldStr) {
