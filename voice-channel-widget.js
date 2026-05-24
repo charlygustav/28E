@@ -1578,16 +1578,16 @@
 
         const source = ctx.createMediaStreamSource(this.stream);
 
-        // ── 1. High-pass filter — kill rumble/hum below 80Hz ──
+        // ── 1. High-pass filter — kill rumble/hum below 90Hz ──
         const highPass1 = ctx.createBiquadFilter();
         highPass1.type = 'highpass';
-        highPass1.frequency.value = 80;
+        highPass1.frequency.value = 90;
         highPass1.Q.value = 0.7;
 
-        // ── 2. Secondary high-pass at 150Hz for extra speech isolation ──
+        // ── 2. Secondary high-pass at 120Hz for extra speech isolation ──
         const highPass2 = ctx.createBiquadFilter();
         highPass2.type = 'highpass';
-        highPass2.frequency.value = 150;
+        highPass2.frequency.value = 120;
         highPass2.Q.value = 0.5;
 
         // ── 3. Low-pass filter — remove harsh hiss above 8kHz ──
@@ -1608,15 +1608,15 @@
 
         // ── 6. Dynamics compressor — even out volume ──
         const compressor = ctx.createDynamicsCompressor();
-        compressor.threshold.value = -35;
-        compressor.knee.value = 15;
-        compressor.ratio.value = 6;
+        compressor.threshold.value = -40;
+        compressor.knee.value = 20;
+        compressor.ratio.value = 8;
         compressor.attack.value = 0.005;
-        compressor.release.value = 0.15;
+        compressor.release.value = 0.25;
 
         // ── 7. Output gain — final volume ──
         const outputGain = ctx.createGain();
-        outputGain.gain.value = 1.0;
+        outputGain.gain.value = 1.3;
 
         // Chain: source → highPass1 → highPass2 → lowPass → analyser → gateGain → compressor → outputGain → dest
         const dest = ctx.createMediaStreamDestination();
@@ -1632,12 +1632,12 @@
         // ── Adaptive noise gate control loop ──
         let noiseFloor = -55;        // dB — initial estimate
         let gateOpen = false;
-        const GATE_OPEN_MARGIN = 15; // dB above noise floor to open
-        const GATE_HYSTERESIS = 3;   // dB hysteresis to prevent chatter
-        const ATTACK_TIME = 0.01;    // 10ms — fast open
-        const RELEASE_TIME = 0.15;   // 150ms — smooth close
-        const NOISE_ADAPT_FAST = 0.01;  // fast adaptation for rising noise
-        const NOISE_ADAPT_SLOW = 0.001; // slow adaptation for falling noise
+        const GATE_OPEN_MARGIN = 17;
+        const GATE_HYSTERESIS = 5;
+        const ATTACK_TIME = 0.01;
+        const RELEASE_TIME = 0.35;
+        const NOISE_ADAPT_FAST = 0.01;
+        const NOISE_ADAPT_SLOW = 0.0005; // slow adaptation for falling noise
 
         const controlGate = () => {
           if (!this._noiseCtx) return;
