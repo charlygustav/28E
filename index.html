@@ -6968,6 +6968,9 @@
 
                             <!-- Formulario (Hidden initially) -->
                             <form id="guestbook-form" class="hidden flex-col gap-5 relative z-10">
+                                <button type="button" id="gb-back-btn" class="text-zinc-400 dark:text-zinc-500 hover:text-amber-500 transition-colors w-max text-xs font-bold flex items-center gap-1 -mt-2 -ml-2 py-1 px-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800">
+                                    <i class="ph-bold ph-caret-left"></i> Opciones
+                                </button>
                                 <div class="group/input">
                                     <label class="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2 group-focus-within/input:text-amber-500 transition-colors" data-i18n="gb_label_name">Tu Nombre</label>
                                     <div class="relative">
@@ -17853,6 +17856,19 @@
                         gbName.classList.remove('opacity-70', 'cursor-not-allowed');
                         gbName.focus();
                     }
+                }
+            });
+        }
+
+        const gbBackBtn = document.getElementById('gb-back-btn');
+        if(gbBackBtn) {
+            gbBackBtn.addEventListener('click', () => {
+                const gbPrompt = document.getElementById('gb-auth-prompt');
+                const gbFormContainer = document.getElementById('guestbook-form');
+                if(gbPrompt && gbFormContainer) {
+                    gbFormContainer.classList.add('hidden');
+                    gbFormContainer.classList.remove('flex');
+                    gbPrompt.classList.remove('hidden');
                 }
             });
         }
