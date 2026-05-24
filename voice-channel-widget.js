@@ -45,7 +45,7 @@
       vc_ring_join: "Unirse",
       vc_ring_ignore: "Ignorar",
       vc_restricted: "Acceso Restringido",
-      vc_req_login: "Debes iniciar sesión con tu cuenta de Google en el menú superior para poder entrar al Canal de Voz.",
+      vc_req_login: "Inicia sesión con tu cuenta de Google para poder entrar al Canal de Voz.",
       vc_session_as: "Sesión iniciada como",
       vc_login_google: "Continuar con Google"
     },
@@ -85,7 +85,7 @@
       vc_ring_join: "Join",
       vc_ring_ignore: "Ignore",
       vc_restricted: "Restricted Access",
-      vc_req_login: "You must log in with your Google account in the top menu to enter the Voice Channel.",
+      vc_req_login: "Log in with your Google account to enter the Voice Channel.",
       vc_session_as: "Logged in as",
       vc_login_google: "Continue with Google"
     },
@@ -125,7 +125,7 @@
       vc_ring_join: "Entrar",
       vc_ring_ignore: "Ignorar",
       vc_restricted: "Acesso Restrito",
-      vc_req_login: "Você deve fazer login com sua conta do Google no menu superior para entrar no Canal de Voz.",
+      vc_req_login: "Faça login com sua conta do Google para entrar no Canal de Voz.",
       vc_session_as: "Sessão iniciada como",
       vc_login_google: "Continuar com o Google"
     },
@@ -165,7 +165,7 @@
       vc_ring_join: "Rejoindre",
       vc_ring_ignore: "Ignorer",
       vc_restricted: "Accès Restreint",
-      vc_req_login: "Vous devez vous connecter avec votre compte Google dans le menu supérieur pour entrer dans le canal vocal.",
+      vc_req_login: "Connectez-vous avec votre compte Google pour entrer dans le canal vocal.",
       vc_session_as: "Connecté en tant que",
       vc_login_google: "Continuer avec Google"
     }
