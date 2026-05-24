@@ -17683,6 +17683,7 @@
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
             window.yaireCurrentUser = user; // Expose globally
+            window.dispatchEvent(new Event('yaireAuthChanged'));
             if (user) {
                 authIcon.classList.add('hidden');
                 authAvatar.src = user.photoURL;
