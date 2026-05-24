@@ -1369,6 +1369,7 @@
             filter: blur(6px);
             animation: steamRise 2.5s ease-out infinite;
             pointer-events: none;
+            will-change: transform, opacity;
         }
 
         @keyframes ingredient-pop {
@@ -1388,6 +1389,7 @@
         .ing-card {
             transition: transform .3s cubic-bezier(.34, 1.56, .64, 1), box-shadow .3s ease, border-color .25s ease, background .25s ease;
             cursor: pointer;
+            will-change: transform, box-shadow;
         }
 
         .ing-card:hover {
@@ -4239,8 +4241,12 @@
                         spotlightSeek(e);
                     });
 
+                    let _docRaf;
                     document.addEventListener('mousemove', (e) => {
-                        if (isDraggingProgress) spotlightSeek(e);
+                        if (isDraggingProgress) {
+                            if (_docRaf) cancelAnimationFrame(_docRaf);
+                            _docRaf = requestAnimationFrame(() => spotlightSeek(e));
+                        }
                     });
 
                     document.addEventListener('mouseup', () => {
@@ -5050,6 +5056,7 @@
                     if (!container) return;
                     const petals = ['🌸', '🌷', '💮', '🏵️', '✿'];
                     function spawnPetal() {
+                        if (container.children.length >= 25) return; // Cap to prevent memory leaks
                         const el = document.createElement('span');
                         el.className = 'tulip-petal';
                         el.textContent = petals[Math.floor(Math.random() * petals.length)];
@@ -5057,8 +5064,12 @@
                         el.style.animationDuration = (6 + Math.random() * 8) + 's';
                         el.style.animationDelay = Math.random() * 2 + 's';
                         el.style.fontSize = (0.8 + Math.random() * 0.8) + 'rem';
+                        el.style.willChange = 'transform, opacity'; // Hardware acceleration
                         container.appendChild(el);
-                        el.addEventListener('animationend', () => el.remove());
+                        // Limpieza segura:
+                        const cleanUp = () => { if(el.parentNode) el.remove(); };
+                        el.addEventListener('animationend', cleanUp);
+                        setTimeout(cleanUp, 15000); // Fallback if animationend fails
                     }
                     // Initial burst
                     const initialPetals = window.__PERF_LITE__ ? 2 : 6;
@@ -8775,16 +8786,20 @@
 
                     // Hover Glow
                     card.addEventListener('mouseenter', updateCardRect);
+                    let _cardRaf;
                     card.addEventListener('mousemove', (e) => {
-                        if (!cardRect) updateCardRect();
-                        const x = e.clientX - cardRect.left;
-                        const y = e.clientY - cardRect.top;
-                        card.style.setProperty('--mouse-x', `${x}px`);
-                        card.style.setProperty('--mouse-y', `${y}px`);
+                        if (_cardRaf) cancelAnimationFrame(_cardRaf);
+                        _cardRaf = requestAnimationFrame(() => {
+                            if (!cardRect) updateCardRect();
+                            const x = e.clientX - cardRect.left;
+                            const y = e.clientY - cardRect.top;
+                            card.style.setProperty('--mouse-x', `${x}px`);
+                            card.style.setProperty('--mouse-y', `${y}px`);
 
-                        // mouse influence for particles (only when hovering inside card)
-                        mousePos.x = x;
-                        mousePos.y = y;
+                            // mouse influence for particles (only when hovering inside card)
+                            mousePos.x = x;
+                            mousePos.y = y;
+                        });
                     });
 
                     card.addEventListener('mouseleave', () => {
@@ -9849,29 +9864,65 @@
                         }, 800);
                     }
 
+                    let _isPanelVisible = true;
+                    const panelObs = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            _isPanelVisible = entry.isIntersecting;
+                            if (!_isPanelVisible || document.hidden) {
+                                if (panelClockInterval) { clearInterval(panelClockInterval); panelClockInterval = null; }
+                                if (bpmInterval) { clearInterval(bpmInterval); bpmInterval = null; }
+                                if (heartsInterval) { clearInterval(heartsInterval); heartsInterval = null; }
+                            } else {
+                                if (!panelClockInterval) panelClockInterval = setInterval(updatePanelClock, 1000);
+                                if (bpmEl && !bpmInterval) {
+                                    bpmInterval = setInterval(function () {
+                                        var bpm = 175 + Math.floor(Math.random() * 15);
+                                        bpmEl.textContent = bpm;
+                                    }, 2000);
+                                }
+                                if (heartsContainer && !heartsInterval) {
+                                    heartsInterval = setInterval(function () {
+                                        if (heartsContainer.children.length >= 12) return;
+                                        var h = document.createElement('span');
+                                        h.textContent = ['❤️', '💖', '💗', '💓'][Math.floor(Math.random() * 4)];
+                                        h.style.cssText = 'position:absolute;bottom:0;font-size:' + (12 + Math.random() * 14) + 'px;left:' + (Math.random() * 100) + '%;opacity:0.6;animation:panel-heart-float ' + (2 + Math.random() * 2) + 's ease-out forwards;pointer-events:none;';
+                                        heartsContainer.appendChild(h);
+                                        setTimeout(function () { if (h.parentNode) h.remove(); }, 4000);
+                                    }, 800);
+                                }
+                            }
+                        });
+                    }, { threshold: 0.1 });
+                    
+                    if (document.getElementById('dashboard')) {
+                        panelObs.observe(document.getElementById('dashboard'));
+                    } else if (bpmEl) {
+                        panelObs.observe(bpmEl);
+                    }
+                    
                     document.addEventListener('visibilitychange', function () {
                         if (document.hidden) {
                             if (panelClockInterval) { clearInterval(panelClockInterval); panelClockInterval = null; }
                             if (bpmInterval) { clearInterval(bpmInterval); bpmInterval = null; }
                             if (heartsInterval) { clearInterval(heartsInterval); heartsInterval = null; }
-                            return;
-                        }
-                        if (!panelClockInterval) panelClockInterval = setInterval(updatePanelClock, 1000);
-                        if (bpmEl && !bpmInterval) {
-                            bpmInterval = setInterval(function () {
-                                var bpm = 175 + Math.floor(Math.random() * 15);
-                                bpmEl.textContent = bpm;
-                            }, 2000);
-                        }
-                        if (heartsContainer && !heartsInterval) {
-                            heartsInterval = setInterval(function () {
-                                if (heartsContainer.children.length >= 12) return;
-                                var h = document.createElement('span');
-                                h.textContent = ['❤️', '💖', '💗', '💓'][Math.floor(Math.random() * 4)];
-                                h.style.cssText = 'position:absolute;bottom:0;font-size:' + (12 + Math.random() * 14) + 'px;left:' + (Math.random() * 100) + '%;opacity:0.6;animation:panel-heart-float ' + (2 + Math.random() * 2) + 's ease-out forwards;pointer-events:none;';
-                                heartsContainer.appendChild(h);
-                                setTimeout(function () { if (h.parentNode) h.remove(); }, 4000);
-                            }, 800);
+                        } else if (_isPanelVisible) {
+                            if (!panelClockInterval) panelClockInterval = setInterval(updatePanelClock, 1000);
+                            if (bpmEl && !bpmInterval) {
+                                bpmInterval = setInterval(function () {
+                                    var bpm = 175 + Math.floor(Math.random() * 15);
+                                    bpmEl.textContent = bpm;
+                                }, 2000);
+                            }
+                            if (heartsContainer && !heartsInterval) {
+                                heartsInterval = setInterval(function () {
+                                    if (heartsContainer.children.length >= 12) return;
+                                    var h = document.createElement('span');
+                                    h.textContent = ['❤️', '💖', '💗', '💓'][Math.floor(Math.random() * 4)];
+                                    h.style.cssText = 'position:absolute;bottom:0;font-size:' + (12 + Math.random() * 14) + 'px;left:' + (Math.random() * 100) + '%;opacity:0.6;animation:panel-heart-float ' + (2 + Math.random() * 2) + 's ease-out forwards;pointer-events:none;';
+                                    heartsContainer.appendChild(h);
+                                    setTimeout(function () { if (h.parentNode) h.remove(); }, 4000);
+                                }, 800);
+                            }
                         }
                     });
 
