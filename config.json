@@ -6,18 +6,13 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-05-24T00:37:17.673Z",
+  "lastUpdated": "2026-05-24T00:38:06.856Z",
   "maintDate": "2026-05-22T18:19",
   "maintType": "indefinite",
   "mantenimiento": false,
   "refugeText": "",
   "refugeTitle": "Te escucho, mi amor",
   "songs": [
-    {
-      "title": "Slow Burn - Corbyn Kites",
-      "artist": "Desconocido",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779583031626_Slow_Burn_-_Corbyn_Kites.mp3"
-    },
     {
       "title": "MAMI 100PRE SABE (INTERLUDE)",
       "artist": "Alvaro Díaz, Nsqk",
@@ -32,11 +27,6 @@
       "title": "Young Black & Rich",
       "artist": "Melly Mike",
       "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779426578999_Young_Black___Rich_-_Melly_Mike.flac"
-    },
-    {
-      "title": "AHORA QUÉ",
-      "artist": "Quevedo",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779268885376_AHORA_QU__-_Quevedo.flac"
     },
     {
       "title": "Ramooned",
