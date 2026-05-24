@@ -13128,11 +13128,11 @@
             }
 
             // Kick off — wait for all tracked resources
-            // Min 3.5s - blocks exit until elapsed, then triggers final setProgress(100)
+            // Min 0.5s - blocks exit until elapsed, then triggers final setProgress(100)
             setTimeout(() => {
                 _loaderMinElapsed = true;
                 setProgress(100); // now allowed to exit
-            }, 3500);
+            }, 500);
             // Resources still update the bar visually (but can't exit before 3.5s)
             Promise.all(resources).catch(() => { });
 
