@@ -17918,6 +17918,11 @@
 
         let gbEditingId = null;
 
+        const t = (key, fallback) => {
+            const lang = typeof currentLang !== 'undefined' ? currentLang : 'es';
+            return (dictionary[lang] && dictionary[lang][key]) || fallback;
+        };
+
         const resetGbForm = () => {
             gbEditingId = null;
             gbForm.reset();
