@@ -740,9 +740,29 @@
 
         function scrollCards(direction) {
             const container = document.getElementById('cards-container');
-            // Ancho de la tarjeta (260px) + gap (24px) = 284px aprox.
-            const scrollAmount = 284 * direction;
-            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            const cards = Array.from(container.querySelectorAll('.share-card-item'));
+            
+            // Encontrar la tarjeta visible actual
+            let closestIndex = 0;
+            let minDiff = Infinity;
+            const containerCenter = container.scrollLeft + (container.clientWidth / 2);
+            
+            cards.forEach((card, index) => {
+                const cardCenter = card.offsetLeft + (card.clientWidth / 2) - container.offsetLeft;
+                const diff = Math.abs(containerCenter - cardCenter);
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    closestIndex = index;
+                }
+            });
+
+            // Calcular índice destino
+            let nextIndex = closestIndex + direction;
+            if (nextIndex < 0) nextIndex = 0;
+            if (nextIndex >= cards.length) nextIndex = cards.length - 1;
+
+            // Scrollear directo a la tarjeta elegida (Evita bugs con snap-mandatory)
+            cards[nextIndex].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         }
 
         function downloadShareCard() {
