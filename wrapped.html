@@ -152,9 +152,6 @@
         <p class="text-zinc-500 font-mono text-sm tracking-widest uppercase">Verificando Credenciales</p>
     </div>
 
-    <!-- Wrapped Audio -->
-    <audio id="wrapped-audio" src="radio/Don Toliver - No Pole.mp3" preload="auto" loop></audio>
-
     <!-- Wrapped Container -->
     <div id="wrapped-app" class="hidden relative w-full h-screen h-[100dvh] overflow-hidden">
         
@@ -284,7 +281,12 @@
         function initWrapped() {
             slides = document.querySelectorAll('.slide');
             const progContainer = document.getElementById('progress-container');
-            audioEl = document.getElementById('wrapped-audio');
+            
+            // Inicializar el audio vía JS puro
+            audioEl = new Audio();
+            audioEl.src = "radio/Don Toliver - No Pole.mp3";
+            audioEl.loop = true;
+            audioEl.load();
             
             // Create progress bars
             slides.forEach((_, i) => {
@@ -305,7 +307,15 @@
             
             // Play Audio directly to maximize compatibility
             audioEl.volume = 1.0;
-            audioEl.play().catch(e => console.log("Audio play failed:", e));
+            audioEl.muted = false;
+            
+            const playPromise = audioEl.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(e => {
+                    console.error("Audio play failed:", e);
+                    alert("Tu navegador bloqueó el audio. Intenta recargar la página.");
+                });
+            }
 
             setTimeout(() => {
                 document.getElementById('start-screen').style.display = 'none';
