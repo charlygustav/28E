@@ -410,12 +410,13 @@
             </div>
 
             <!-- Slide 19: Export/Share -->
-            <div class="slide flex-col items-center justify-center px-0 relative" data-bg1="bg-zinc-900" data-bg2="bg-black" data-bg3="bg-zinc-800">
+            <div class="slide flex-col items-center justify-center px-0 pt-10 pb-4 relative" data-bg1="bg-zinc-900" data-bg2="bg-black" data-bg3="bg-zinc-800">
                 
                 <p class="text-[10px] text-white/50 uppercase tracking-widest mb-3 gsap-reveal z-50 md:hidden">Desliza para elegir tu tarjeta ➔</p>
 
-                <!-- Flechas de navegación (Solo PC) -->
-                <button onclick="event.stopPropagation(); scrollCards(-1)" class="absolute left-8 top-1/2 -translate-y-1/2 z-[70] p-4 bg-black/60 hover:bg-black/80 border border-white/20 rounded-full text-white backdrop-blur-md hidden md:flex transition-colors shadow-2xl">
+                <div class="w-full flex-1 relative flex flex-col items-center justify-center">
+                    <!-- Flechas de navegación (Solo PC) -->
+                    <button onclick="event.stopPropagation(); scrollCards(-1)" class="absolute left-8 top-1/2 -translate-y-1/2 z-[70] p-4 bg-black/60 hover:bg-black/80 border border-white/20 rounded-full text-white backdrop-blur-md hidden md:flex transition-colors shadow-2xl">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 </button>
                 <button onclick="event.stopPropagation(); scrollCards(1)" class="absolute right-8 top-1/2 -translate-y-1/2 z-[70] p-4 bg-black/60 hover:bg-black/80 border border-white/20 rounded-full text-white backdrop-blur-md hidden md:flex transition-colors shadow-2xl">
@@ -584,8 +585,10 @@
                         }
                     }
                 </style>
-                
-                <div class="mt-6 md:mt-0 flex flex-col md:flex-row items-center justify-center gap-4 w-full max-w-xs md:max-w-[600px] z-50 pointer-events-auto relative md:absolute md:bottom-12 md:left-1/2 md:-translate-x-1/2 px-4">
+                    </div>
+                </div>
+
+                <div class="mt-4 md:mt-6 flex flex-col md:flex-row items-center justify-center gap-4 w-full max-w-xs md:max-w-[600px] z-50 pointer-events-auto relative px-4">
                     <button id="btn-download" onclick="downloadShareCard()" class="w-full md:flex-1 py-3.5 bg-rose-600 text-white font-bold rounded-full hover:bg-rose-500 transition-all shadow-lg shadow-rose-600/30 flex items-center justify-center gap-2 uppercase tracking-widest text-sm pointer-events-auto">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
                         Compartir Resumen
