@@ -234,6 +234,7 @@
   @keyframes vc-eq { 0%,100%{height:3px} 50%{height:12px} }
   .vc-scroll::-webkit-scrollbar { width:4px; }
   .vc-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
+  .vc-av.speaking { border-color: #10B981 !important; box-shadow: 0 0 12px rgba(16, 185, 129, 0.4); animation: vc-speak-pulse 1.5s infinite; }
   `;
 
   // ── ICONS ─────────────────────────────────────────────────────────────────
