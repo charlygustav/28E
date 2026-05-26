@@ -376,17 +376,17 @@
                 <h2 class="text-4xl md:text-6xl font-black text-white z-30 relative drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] gsap-text w-full text-left px-8 mb-4">es una obra<br>de arte. ✨</h2>
             </div>
 
-            <!-- Slide 19: Conclusion / Share Card -->
-            <div class="slide flex flex-col items-center justify-center pt-24 pb-4 px-0 relative" data-bg1="bg-zinc-900" data-bg2="bg-black" data-bg3="bg-zinc-800">
+            <!-- Slide 19: Export/Share -->
+            <div class="slide flex-col items-center justify-center pt-24 pb-4 px-0 relative" data-bg1="bg-zinc-900" data-bg2="bg-black" data-bg3="bg-zinc-800">
                 
-                <p class="text-[10px] text-white/50 uppercase tracking-widest mb-3 gsap-reveal z-50">Desliza para elegir tu tarjeta ➔</p>
+                <p class="text-[10px] text-white/50 uppercase tracking-widest mb-3 gsap-reveal z-50 md:hidden">Desliza para elegir tu tarjeta ➔</p>
 
                 <!-- Flechas de navegación (Solo PC) -->
-                <button onclick="event.stopPropagation(); scrollCards(-1)" class="absolute left-6 top-1/2 -translate-y-1/2 z-[60] p-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white backdrop-blur-md hidden md:flex transition-colors shadow-lg">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                <button onclick="event.stopPropagation(); scrollCards(-1)" class="absolute left-8 top-1/2 -translate-y-1/2 z-[70] p-4 bg-black/60 hover:bg-black/80 border border-white/20 rounded-full text-white backdrop-blur-md hidden md:flex transition-colors shadow-2xl">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 </button>
-                <button onclick="event.stopPropagation(); scrollCards(1)" class="absolute right-6 top-1/2 -translate-y-1/2 z-[60] p-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white backdrop-blur-md hidden md:flex transition-colors shadow-lg">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                <button onclick="event.stopPropagation(); scrollCards(1)" class="absolute right-8 top-1/2 -translate-y-1/2 z-[70] p-4 bg-black/60 hover:bg-black/80 border border-white/20 rounded-full text-white backdrop-blur-md hidden md:flex transition-colors shadow-2xl">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </button>
 
                 <div id="cards-container" class="flex overflow-x-auto snap-x snap-mandatory gap-6 w-[100vw] px-[calc(50vw-120px)] pb-2 gsap-reveal relative z-[60] scroll-smooth" style="scrollbar-width: none; -ms-overflow-style: none;">
