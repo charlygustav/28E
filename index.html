@@ -2029,27 +2029,27 @@
 
     <!-- 0. Credits Modal -->
     <!-- 0. Credits Modal -->
+    <!-- 0. Credits Modal -->
     <div id="credits-modal"
         class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-zinc-950/80 backdrop-blur-xl transform-gpu transition-opacity opacity-0"
         onclick="if(event.target === this) closeModal('credits-modal', 'credits-content')">
         
         <!-- Contenedor Principal con Glassmorphism -->
-        <div class="relative w-full max-w-4xl mx-4 max-h-[85vh] flex flex-col bg-zinc-950/40 border border-white/10 rounded-[2.5rem] shadow-2xl shadow-brand-500/10 overflow-hidden transform scale-95 transition-transform duration-300 backdrop-blur-2xl"
+        <div class="relative w-full max-w-4xl mx-4 max-h-[85vh] flex flex-col bg-zinc-950/40 border border-white/10 rounded-2xl shadow-2xl shadow-brand-500/10 overflow-hidden transform scale-95 transition-transform duration-300 backdrop-blur-2xl"
             id="credits-content">
             
-            <!-- Orbes de fondo decorativos -->
+            <!-- Orbes de fondo decorativos (Mantenidos) -->
             <div class="absolute -top-40 -right-40 w-96 h-96 bg-brand-500/20 rounded-full blur-[100px] pointer-events-none"></div>
             <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-tulip-500/20 rounded-full blur-[100px] pointer-events-none"></div>
 
             <!-- Header -->
             <div class="relative flex-shrink-0 pt-8 pb-4 px-8 text-center border-b border-white/5 z-10">
                 <button onclick="closeModal('credits-modal','credits-content')"
-                    class="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all border border-white/5 hover:border-white/20 active:scale-95 group">
+                    class="absolute top-6 right-6 p-2 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all border border-white/5 hover:border-white/20 active:scale-95 group">
                     <svg class="w-5 h-5 transition-transform group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
-                <div id="credits-emoji" class="text-3xl mb-3 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">✨</div>
                 <h3 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-zinc-100 to-zinc-400 uppercase tracking-[0.2em]"
                     data-i18n="credits_title">Créditos Oficiales</h3>
             </div>
@@ -2062,8 +2062,8 @@
                     .credit-card {
                         background: rgba(255, 255, 255, 0.02);
                         border: 1px solid rgba(255, 255, 255, 0.05);
-                        border-radius: 1rem;
-                        padding: 1rem 1.25rem;
+                        border-radius: 0.5rem; /* Más serio, menos redondeado */
+                        padding: 1rem;
                         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                         display: flex;
                         flex-direction: column;
@@ -2083,168 +2083,186 @@
                         background: rgba(255, 255, 255, 0.04);
                         border-color: rgba(255, 255, 255, 0.15);
                         transform: translateY(-2px);
-                        box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
                     }
                     .credit-card:hover::before { opacity: 1; }
                     
-                    /* Específicos para colores en hover */
-                    .card-brand:hover { border-color: rgba(245, 158, 11, 0.4); box-shadow: 0 10px 30px -10px rgba(245, 158, 11, 0.15); }
-                    .card-blue:hover { border-color: rgba(59, 130, 246, 0.4); box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.15); }
-                    .card-purple:hover { border-color: rgba(168, 85, 247, 0.4); box-shadow: 0 10px 30px -10px rgba(168, 85, 247, 0.15); }
-                    .card-teal:hover { border-color: rgba(20, 184, 166, 0.4); box-shadow: 0 10px 30px -10px rgba(20, 184, 166, 0.15); }
+                    /* Específicos para colores en hover (Mantenidos) */
+                    .card-brand:hover { border-color: rgba(245, 158, 11, 0.4); box-shadow: 0 4px 20px -10px rgba(245, 158, 11, 0.15); }
+                    .card-blue:hover { border-color: rgba(59, 130, 246, 0.4); box-shadow: 0 4px 20px -10px rgba(59, 130, 246, 0.15); }
+                    .card-purple:hover { border-color: rgba(168, 85, 247, 0.4); box-shadow: 0 4px 20px -10px rgba(168, 85, 247, 0.15); }
+                    .card-teal:hover { border-color: rgba(20, 184, 166, 0.4); box-shadow: 0 4px 20px -10px rgba(20, 184, 166, 0.15); }
+                    .card-red:hover { border-color: rgba(239, 68, 68, 0.4); box-shadow: 0 4px 20px -10px rgba(239, 68, 68, 0.15); }
                 </style>
 
                 <!-- Sección: Dirección -->
                 <div>
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent to-brand-500/30"></div>
-                        <p class="text-[10px] font-black text-brand-500 uppercase tracking-[0.2em] px-2"
+                    <div class="flex items-center gap-3 mb-4">
+                        <p class="text-[10px] font-bold text-brand-500 uppercase tracking-[0.2em]"
                             data-i18n="credits_sec_dir">Concepto & Diseño</p>
-                        <div class="h-[1px] flex-1 bg-gradient-to-l from-transparent to-brand-500/30"></div>
+                        <div class="h-[1px] flex-1 bg-gradient-to-r from-brand-500/30 to-transparent"></div>
                     </div>
                     
-                    <div class="grid md:grid-cols-2 gap-4 text-sm">
-                        <div class="credit-card card-brand group">
-                            <span class="text-zinc-500 font-bold uppercase text-[9px] tracking-[0.15em] mb-1"
-                                data-i18n="credits_lbl_dir">Dirección Creativa</span>
-                            <span class="font-bold text-zinc-100 font-serif italic text-lg tracking-wide">Charles Gustav</span>
+                    <div class="grid md:grid-cols-4 gap-3 text-sm">
+                        <div class="credit-card card-brand">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1" data-i18n="credits_lbl_dir">Dirección Creativa</span>
+                            <span class="font-medium text-zinc-100 tracking-wide">Charles Gustav</span>
                         </div>
-                        <div class="credit-card card-brand group">
-                            <span class="text-zinc-500 font-bold uppercase text-[9px] tracking-[0.15em] mb-1"
-                                data-i18n="credits_lbl_insp">Inspiración Absoluta</span>
-                            <span class="font-black text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-tulip-400 font-serif italic text-xl tracking-wide drop-shadow-sm">Yaire Alvarado</span>
+                        <div class="credit-card card-brand">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1" data-i18n="credits_lbl_insp">Inspiración Absoluta</span>
+                            <span class="font-medium text-zinc-100 tracking-wide">Yaire Alvarado</span>
                         </div>
-                        <div class="credit-card card-brand group">
-                            <span class="text-zinc-500 font-bold uppercase text-[9px] tracking-[0.15em] mb-1"
-                                data-i18n="credits_lbl_dev">Desarrollo UI/UX & Código</span>
-                            <span class="font-bold text-zinc-200">Antigravity AI <span class="text-zinc-500 font-normal text-xs">(Google DeepMind)</span></span>
+                        <div class="credit-card card-brand">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1" data-i18n="credits_lbl_dev">Desarrollo UI/UX & Código</span>
+                            <span class="font-medium text-zinc-100">Antigravity AI</span>
                         </div>
-                        <div class="credit-card card-brand group">
-                            <span class="text-zinc-500 font-bold uppercase text-[9px] tracking-[0.15em] mb-1"
-                                data-i18n="credits_lbl_thanks">Agradecimiento Especial</span>
-                            <span class="font-black text-zinc-100 flex items-center gap-2">Key <span class="text-brand-500 animate-pulse">🤍</span></span>
+                        <div class="credit-card card-brand">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1" data-i18n="credits_lbl_thanks">Agradecimiento Especial</span>
+                            <span class="font-medium text-zinc-100">Key</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Sección: Tecnologías -->
+                <!-- Sección: Arquitectura Core -->
                 <div>
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent to-blue-500/30"></div>
-                        <p class="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] px-2"
-                            data-i18n="credits_sec_tech">Tecnologías & Core</p>
-                        <div class="h-[1px] flex-1 bg-gradient-to-l from-transparent to-blue-500/30"></div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
-                        <div class="credit-card card-blue items-center text-center">
-                            <span class="text-blue-400/70 font-bold uppercase text-[8px] tracking-[0.15em] mb-1"
-                                data-i18n="credits_lbl_lang">Lenguaje Base</span>
-                            <span class="font-medium text-zinc-200 text-xs">Vanilla JavaScript (ES6+)</span>
-                        </div>
-                        <div class="credit-card card-blue items-center text-center">
-                            <span class="text-blue-400/70 font-bold uppercase text-[8px] tracking-[0.15em] mb-1"
-                                data-i18n="credits_lbl_struct">Estructura & Semántica</span>
-                            <span class="font-medium text-zinc-200 text-xs">HTML5</span>
-                        </div>
-                        <div class="credit-card card-blue items-center text-center">
-                            <span class="text-blue-400/70 font-bold uppercase text-[8px] tracking-[0.15em] mb-1"
-                                data-i18n="credits_lbl_frame">Framework de Estilos</span>
-                            <span class="font-medium text-zinc-200 text-xs">Tailwind CSS (CDN)</span>
-                        </div>
-                        <div class="credit-card card-blue items-center text-center">
-                            <span class="text-blue-400/70 font-bold uppercase text-[8px] tracking-[0.15em] mb-1"
-                                data-i18n="credits_lbl_arch">Arquitectura App</span>
-                            <span class="font-medium text-zinc-200 text-xs">Progressive Web App</span>
-                        </div>
-                        <div class="credit-card card-blue items-center text-center">
-                            <span class="text-blue-400/70 font-bold uppercase text-[8px] tracking-[0.15em] mb-1"
-                                data-i18n="credits_lbl_store">Almacenamiento</span>
-                            <span class="font-medium text-zinc-200 text-xs">Local Storage API</span>
-                        </div>
-                        <div class="credit-card card-blue items-center text-center">
-                            <span class="text-blue-400/70 font-bold uppercase text-[8px] tracking-[0.15em] mb-1"
-                                data-i18n="credits_lbl_pwa">Compatibilidad PWA</span>
-                            <span class="font-medium text-zinc-200 text-xs">Service Workers</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sección: Librerías Visuales -->
-                <div>
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent to-purple-500/30"></div>
-                        <p class="text-[10px] font-black text-purple-400 uppercase tracking-[0.2em] px-2"
-                            data-i18n="credits_sec_lib">Librerías Visuales & Motores</p>
-                        <div class="h-[1px] flex-1 bg-gradient-to-l from-transparent to-purple-500/30"></div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <p class="text-[10px] font-bold text-blue-400 uppercase tracking-[0.2em]" data-i18n="credits_sec_tech">Tecnologías & Core</p>
+                        <div class="h-[1px] flex-1 bg-gradient-to-r from-blue-500/30 to-transparent"></div>
                     </div>
                     
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                        <div class="credit-card card-purple items-center text-center">
-                            <span class="text-purple-400/70 font-bold uppercase text-[8px] tracking-[0.15em] mb-1"
-                                data-i18n="credits_lbl_anim">Animación Avanzada</span>
-                            <span class="font-bold text-green-400 text-xs">GSAP 3</span>
+                        <div class="credit-card card-blue">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Lenguaje Base</span>
+                            <span class="font-medium text-zinc-200 text-xs">Vanilla JS (ES6+)</span>
                         </div>
-                        <div class="credit-card card-purple items-center text-center">
-                            <span class="text-purple-400/70 font-bold uppercase text-[8px] tracking-[0.15em] mb-1"
-                                data-i18n="credits_lbl_scroll">Scroll Triggers</span>
-                            <span class="font-bold text-green-400 text-xs">GSAP ScrollTrigger</span>
+                        <div class="credit-card card-blue">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Estructura</span>
+                            <span class="font-medium text-zinc-200 text-xs">HTML5 Semántico</span>
                         </div>
-                        <div class="credit-card card-purple items-center text-center">
-                            <span class="text-purple-400/70 font-bold uppercase text-[8px] tracking-[0.15em] mb-1"
-                                data-i18n="credits_lbl_data">Visualización de Datos</span>
-                            <span class="font-bold text-rose-400 text-xs">Chart.js</span>
+                        <div class="credit-card card-blue">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Estilos & UI</span>
+                            <span class="font-medium text-zinc-200 text-xs">Tailwind CSS</span>
                         </div>
-                        <div class="credit-card card-purple items-center text-center">
-                            <span class="text-purple-400/70 font-bold uppercase text-[8px] tracking-[0.15em] mb-1"
-                                data-i18n="credits_lbl_fonts">Tipografías</span>
-                            <span class="font-medium text-zinc-200 text-xs">Inter & Merriweather</span>
+                        <div class="credit-card card-blue">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Arquitectura</span>
+                            <span class="font-medium text-zinc-200 text-xs">Progressive Web App</span>
+                        </div>
+                        <div class="credit-card card-blue">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Despliegue & Hosting</span>
+                            <span class="font-medium text-zinc-200 text-xs">Vercel Network</span>
+                        </div>
+                        <div class="credit-card card-blue">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Version Control</span>
+                            <span class="font-medium text-zinc-200 text-xs">GitHub Repository</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Sección: Sistemas Internos -->
+                <!-- Sección: Comunicación & Voz -->
                 <div>
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent to-teal-500/30"></div>
-                        <p class="text-[10px] font-black text-teal-400 uppercase tracking-[0.2em] px-2"
-                            data-i18n="credits_sec_sys">Sistemas Especiales (Custom)</p>
-                        <div class="h-[1px] flex-1 bg-gradient-to-l from-transparent to-teal-500/30"></div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <p class="text-[10px] font-bold text-red-400 uppercase tracking-[0.2em]">Comunicaciones & Voz</p>
+                        <div class="h-[1px] flex-1 bg-gradient-to-r from-red-500/30 to-transparent"></div>
                     </div>
                     
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                        <div class="credit-card card-red">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Motor de Conexión</span>
+                            <span class="font-medium text-zinc-200 text-xs">WebRTC (Peer-to-Peer)</span>
+                        </div>
+                        <div class="credit-card card-red">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Señalización</span>
+                            <span class="font-medium text-zinc-200 text-xs">Socket.IO Server</span>
+                        </div>
+                        <div class="credit-card card-red">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Retransmisión Global</span>
+                            <span class="font-medium text-zinc-200 text-xs">Metered.ca (TURN/STUN)</span>
+                        </div>
+                        <div class="credit-card card-red">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Procesamiento Audio</span>
+                            <span class="font-medium text-zinc-200 text-xs">Web Audio API</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección: Librerías Visuales y Multimedia -->
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <p class="text-[10px] font-bold text-purple-400 uppercase tracking-[0.2em]" data-i18n="credits_sec_lib">Gráficos & Multimedia</p>
+                        <div class="h-[1px] flex-1 bg-gradient-to-r from-purple-500/30 to-transparent"></div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                        <div class="credit-card card-purple">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Motor de Animación</span>
+                            <span class="font-medium text-zinc-200 text-xs">GSAP 3 (GreenSock)</span>
+                        </div>
+                        <div class="credit-card card-purple">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Efectos de Scroll</span>
+                            <span class="font-medium text-zinc-200 text-xs">GSAP ScrollTrigger</span>
+                        </div>
+                        <div class="credit-card card-purple">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Visualización Datos</span>
+                            <span class="font-medium text-zinc-200 text-xs">Chart.js Engine</span>
+                        </div>
+                        <div class="credit-card card-purple">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Renderizado Gráfico</span>
+                            <span class="font-medium text-zinc-200 text-xs">HTML5 Canvas API</span>
+                        </div>
+                        <div class="credit-card card-purple">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">CDN Multimedia</span>
+                            <span class="font-medium text-zinc-200 text-xs">ImgBB & GitHub Raw</span>
+                        </div>
+                        <div class="credit-card card-purple">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Tipografía UI</span>
+                            <span class="font-medium text-zinc-200 text-xs">Google Fonts (Inter)</span>
+                        </div>
+                        <div class="credit-card card-purple">
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Iconografía</span>
+                            <span class="font-medium text-zinc-200 text-xs">Phosphor Icons (SVG)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección: Motores de Datos -->
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <p class="text-[10px] font-bold text-teal-400 uppercase tracking-[0.2em]" data-i18n="credits_sec_sys">Motores de Datos & Seguridad</p>
+                        <div class="h-[1px] flex-1 bg-gradient-to-r from-teal-500/30 to-transparent"></div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
                         <div class="credit-card card-teal">
-                            <p class="font-bold text-zinc-200">AudioContext API</p>
-                            <p class="text-[9px] text-teal-400/70 uppercase mt-1 tracking-wider" data-i18n="credits_lbl_audio">Motor de Sonido 0-Lag</p>
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Base de Datos</span>
+                            <span class="font-medium text-zinc-200 text-xs">Firebase Realtime DB</span>
                         </div>
                         <div class="credit-card card-teal">
-                            <p class="font-bold text-zinc-200">i18n Engine</p>
-                            <p class="text-[9px] text-teal-400/70 uppercase mt-1 tracking-wider" data-i18n="credits_lbl_i18n">Traducción Dinámica</p>
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Autenticación</span>
+                            <span class="font-medium text-zinc-200 text-xs">Firebase Auth (Google)</span>
                         </div>
                         <div class="credit-card card-teal">
-                            <p class="font-bold text-zinc-200">Swipe System</p>
-                            <p class="text-[9px] text-teal-400/70 uppercase mt-1 tracking-wider" data-i18n="credits_lbl_swipe">Gestos Táctiles Móviles</p>
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Almacenamiento Local</span>
+                            <span class="font-medium text-zinc-200 text-xs">Local/Session Storage</span>
                         </div>
                         <div class="credit-card card-teal">
-                            <p class="font-bold text-zinc-200">Canvas API</p>
-                            <p class="text-[9px] text-teal-400/70 uppercase mt-1 tracking-wider" data-i18n="credits_lbl_canvas">Render de Partículas</p>
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Motor de Idiomas</span>
+                            <span class="font-medium text-zinc-200 text-xs">Custom i18n Engine</span>
                         </div>
                         <div class="credit-card card-teal">
-                            <p class="font-bold text-zinc-200">WebRTC + Socket.IO</p>
-                            <p class="text-[9px] text-teal-400/70 uppercase mt-1 tracking-wider">Canal de Voz P2P</p>
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Seguridad P2P</span>
+                            <span class="font-medium text-zinc-200 text-xs">End-to-End Encryption</span>
                         </div>
                         <div class="credit-card card-teal">
-                            <p class="font-bold text-zinc-200">Open Relay TURN</p>
-                            <p class="text-[9px] text-teal-400/70 uppercase mt-1 tracking-wider">Red Global de Voz</p>
+                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Transporte</span>
+                            <span class="font-medium text-zinc-200 text-xs">HTTPS / TLS 1.3</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Footer del Modal -->
-            <div class="flex-shrink-0 pt-4 pb-6 px-8 border-t border-white/5 text-center relative z-10 bg-black/20">
-                <p class="text-[9px] text-zinc-500 font-mono tracking-[0.3em] uppercase font-bold mb-1">Versión 2.0</p>
-                <p class="text-[10px] font-bold text-zinc-600">© 2026 Charles Gustav. Todos los derechos reservados.</p>
+            <div class="flex-shrink-0 pt-4 pb-6 px-8 border-t border-white/5 text-center relative z-10 bg-black/40">
+                <p class="text-[9px] text-zinc-500 font-mono tracking-[0.3em] uppercase mb-1">Build v2.0.1</p>
+                <p class="text-[10px] text-zinc-600">© 2026 Charles Gustav. Todos los derechos reservados.</p>
             </div>
         </div>
     </div>
