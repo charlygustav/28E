@@ -227,7 +227,7 @@
                         </span>
                         <div class="absolute inset-0 bg-gradient-to-r from-pink-300 to-rose-300 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
                     </button>
-                    <button onclick="window.location.href='index.html'" class="px-10 py-4 bg-transparent border border-white/20 text-white font-bold rounded-full hover:bg-white/10 transition-colors uppercase tracking-widest text-sm w-full md:w-auto text-center">
+                    <button onclick="returnToIndex()" class="px-10 py-4 bg-transparent border border-white/20 text-white font-bold rounded-full hover:bg-white/10 transition-colors uppercase tracking-widest text-sm w-full md:w-auto text-center">
                         Volver
                     </button>
                 </div>
@@ -734,7 +734,18 @@
             }, 500);
         }
 
+        window.returnToIndex = function() {
+            const inicioAudio = new Audio('sounds/inicio.wav');
+            inicioAudio.play().catch(e => console.log(e));
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 400);
+        };
+
         window.resetWrapped = function() {
+            const flyoutAudio = new Audio('sounds/flyout.wav');
+            flyoutAudio.play().catch(e => console.log(e));
+            
             clearTimeout(autoAdvanceTimer);
             isPlaying = false;
             if (audioEl) {
@@ -988,6 +999,9 @@
         }
 
         function scrollCards(direction) {
+            const scrollAudio = new Audio('sounds/scroll.wav');
+            scrollAudio.play().catch(e => console.log(e));
+
             const container = document.getElementById('cards-container');
             const cards = Array.from(container.querySelectorAll('.share-card-item'));
             
