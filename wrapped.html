@@ -727,15 +727,30 @@
         }
 
         window.resetWrapped = function() {
+            clearTimeout(autoAdvanceTimeout);
+            isPlaying = false;
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+            gsap.killTweensOf('.gsap-text, .gsap-reveal, .collage-img');
+            
+            document.getElementById('start-screen').style.display = 'flex';
+            document.getElementById('mute-btn').classList.add('hidden');
+            document.getElementById('pause-btn').classList.add('hidden');
+            
             currentSlide = 0;
             const progressBars = document.querySelectorAll('.progress-fill');
             progressBars.forEach(bar => {
                 bar.style.width = '0%';
             });
-            setTimeout(() => {
-                showSlide(0);
-                startAutoAdvance();
-            }, 50);
+            
+            slides.forEach((slide) => {
+                slide.classList.remove('active');
+                slide.style.opacity = '0';
+                slide.style.pointerEvents = 'none';
+                slide.style.zIndex = '10';
+            });
         };
 
         function playSlideAnimations(index) {
@@ -1011,9 +1026,15 @@
                             btn.innerHTML = originalText;
                         }
                     } else {
-                        // Not supported
-                        btn.innerHTML = "No soportado en tu celular";
-                        setTimeout(() => btn.innerHTML = originalText, 2000);
+                        // Descarga directa en PC
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = '28E_Wrapped.png';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(link.href);
+                        btn.innerHTML = originalText;
                     }
                 }, 'image/png');
 
