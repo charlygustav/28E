@@ -34,7 +34,10 @@
         .slide.active {
             opacity: 1;
             z-index: 60;
-            pointer-events: auto;
+            pointer-events: none; /* Deja pasar los clics a las tap-zones en las primeras 18 pantallas */
+        }
+        .slide.active:last-child {
+            pointer-events: auto; /* La última pantalla recupera los toques para el carrusel */
         }
 
         /* Progress Bar */
