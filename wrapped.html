@@ -647,6 +647,37 @@
             }
         }
 
+        function togglePause() {
+            isPaused = !isPaused;
+            const iconPause = document.getElementById('icon-pause');
+            const iconPlay = document.getElementById('icon-play');
+            if (isPaused) {
+                if (iconPause) iconPause.classList.add('hidden');
+                if (iconPlay) iconPlay.classList.remove('hidden');
+                if (audioEl) audioEl.pause();
+                pauseStartTime = performance.now();
+            } else {
+                if (iconPause) iconPause.classList.remove('hidden');
+                if (iconPlay) iconPlay.classList.add('hidden');
+                if (audioEl) audioEl.play().catch(e => console.log(e));
+                pauseTimeOffset += (performance.now() - pauseStartTime);
+            }
+        }
+
+        function toggleMute() {
+            if (!audioEl) return;
+            audioEl.muted = !audioEl.muted;
+            const iconMuted = document.getElementById('icon-muted');
+            const iconUnmuted = document.getElementById('icon-unmuted');
+            if (audioEl.muted) {
+                if (iconMuted) iconMuted.classList.remove('hidden');
+                if (iconUnmuted) iconUnmuted.classList.add('hidden');
+            } else {
+                if (iconMuted) iconMuted.classList.add('hidden');
+                if (iconUnmuted) iconUnmuted.classList.remove('hidden');
+            }
+        }
+
         function showSlide(index) {
             if (index < 0) index = 0;
             if (index >= slides.length) {
