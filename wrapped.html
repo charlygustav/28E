@@ -180,6 +180,11 @@
             </button>
         </div>
 
+        <!-- Mute Button -->
+        <button id="mute-btn" onclick="toggleMute()" class="absolute top-6 right-6 z-[70] w-12 h-12 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 text-white text-xl hover:bg-white/20 transition-all pointer-events-auto">
+            🔊
+        </button>
+
         <!-- Slides -->
         <div id="slides-wrapper">
             
@@ -239,7 +244,21 @@
                 <p class="text-xl text-fuchsia-100 font-medium max-w-sm mt-4 gsap-reveal">Fotos, audios y videos enviados a través del celular. Una galería llena de nuestra historia.</p>
             </div>
 
-            <!-- Slide 6: Universe (Hevvo) -->
+            <!-- Slide 6: Siempre (NEW) -->
+            <div class="slide" data-bg1="bg-sky-500" data-bg2="bg-blue-400" data-bg3="bg-cyan-400">
+                <p class="text-xl text-sky-100 font-bold uppercase tracking-widest mb-4 gsap-reveal">Nuestra Promesa</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">494</h2>
+                <p class="text-xl text-sky-50 font-medium max-w-sm mt-4 gsap-reveal">Veces que escribimos la palabra "Siempre". Prometiéndonos que pase lo que pase, estaremos ahí el uno para el otro.</p>
+            </div>
+
+            <!-- Slide 7: Perdon (NEW) -->
+            <div class="slide" data-bg1="bg-stone-500" data-bg2="bg-neutral-600" data-bg3="bg-zinc-500">
+                <p class="text-xl text-stone-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">La Madurez</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">142</h2>
+                <p class="text-xl text-stone-100 font-medium max-w-sm mt-4 gsap-reveal">Veces que dijimos "Perdón". Demostrando que nuestro orgullo jamás será más grande que nuestras ganas de arreglar las cosas.</p>
+            </div>
+
+            <!-- Slide 8: Universe (Hevvo) -->
             <div class="slide" data-bg1="bg-indigo-900" data-bg2="bg-blue-900" data-bg3="bg-slate-900">
                 <p class="text-xl text-indigo-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Encontramos refugio</p>
                 <h2 class="text-5xl md:text-7xl text-white font-black mb-4 gsap-text tracking-tighter">En los píxeles.</h2>
@@ -247,35 +266,42 @@
                 <div class="absolute bottom-1/4 right-10 text-6xl opacity-30">👾</div>
             </div>
 
-            <!-- Slide 7: Madrugadas -->
+            <!-- Slide 9: Madrugadas -->
             <div class="slide" data-bg1="bg-black" data-bg2="bg-zinc-900" data-bg3="bg-gray-800">
                 <p class="text-xl text-zinc-400 font-bold uppercase tracking-widest mb-4 gsap-reveal">Las noches nunca fueron para dormir</p>
                 <h2 class="text-huge text-white mb-4 gsap-text">3:00<br>AM.</h2>
                 <p class="text-xl text-zinc-300 font-medium max-w-sm mt-4 gsap-reveal">Sobrevivimos a madrugadas eternas, desveladas y chistes de cucarachas... Descubrí que eres mi lugar seguro. 🪳</p>
             </div>
 
-            <!-- Slide 8: Te amo -->
+            <!-- Slide 10: Amor (NEW) -->
+            <div class="slide" data-bg1="bg-pink-400" data-bg2="bg-rose-400" data-bg3="bg-red-400">
+                <p class="text-xl text-pink-100 font-bold uppercase tracking-widest mb-4 gsap-reveal">El apodo perfecto</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">2,564</h2>
+                <p class="text-xl text-pink-50 font-medium max-w-sm mt-4 gsap-reveal">Veces que nos llamamos "Amor". Se volvió nuestra identidad, nuestra marca registrada.</p>
+            </div>
+
+            <!-- Slide 11: Te amo -->
             <div class="slide" data-bg1="bg-rose-600" data-bg2="bg-red-700" data-bg3="bg-pink-600">
                 <p class="text-xl text-rose-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Y nunca faltó la palabra mágica</p>
                 <h2 class="text-huge text-white mb-4 gsap-text">843</h2>
                 <p class="text-xl text-rose-100 font-medium max-w-sm mt-4 gsap-reveal">Veces que nos dijimos "Te amo" (¡casi 7 veces por día!). Nunca me cansaré de escucharlo.</p>
             </div>
 
-            <!-- Slide 9: Superación -->
+            <!-- Slide 12: Superación -->
             <div class="slide" data-bg1="bg-slate-700" data-bg2="bg-zinc-800" data-bg3="bg-gray-600">
                 <p class="text-xl text-slate-300 font-bold uppercase tracking-widest mb-4 gsap-reveal">Hubo momentos de miedo</p>
                 <h2 class="text-4xl md:text-6xl text-white font-black mb-4 gsap-text leading-tight">Y dudas.</h2>
                 <p class="text-xl text-slate-200 font-serif italic max-w-sm mt-4 gsap-reveal">Pero nunca nos rendimos. Pasamos celos, estrés y malos entendidos... y escogimos perdonar, sanar y mejorar. Siempre juntos.</p>
             </div>
 
-            <!-- Slide 10: Reconocimiento -->
+            <!-- Slide 13: Reconocimiento -->
             <div class="slide" data-bg1="bg-violet-600" data-bg2="bg-fuchsia-700" data-bg3="bg-purple-500">
                 <p class="text-xl text-violet-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Y quiero que sepas...</p>
                 <h2 class="text-4xl md:text-6xl text-white font-black mb-4 gsap-text leading-tight">Eres mi niña valiente.</h2>
                 <p class="text-xl text-violet-100 font-medium max-w-sm mt-4 gsap-reveal">Has soportado tanto en la vida, que para mí eres un ejemplo. Eres el amor de mi vida.</p>
             </div>
 
-            <!-- Slide 11: Collage -->
+            <!-- Slide 14: Collage -->
             <div class="slide" data-bg1="bg-pink-500" data-bg2="bg-rose-600" data-bg3="bg-red-500">
                 <p class="text-xl text-pink-200 font-bold uppercase tracking-widest mb-2 gsap-reveal z-30 relative drop-shadow-md">Cada instante...</p>
                 
@@ -287,7 +313,7 @@
                 <h2 class="text-4xl md:text-6xl font-black text-white mt-auto z-30 relative drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] gsap-text">es una obra de arte. ✨</h2>
             </div>
 
-            <!-- Slide 12: Conclusion -->
+            <!-- Slide 15: Conclusion -->
             <div class="slide flex flex-col items-center text-center justify-center" data-bg1="bg-orange-500" data-bg2="bg-amber-600" data-bg3="bg-red-600">
                 <div class="text-7xl mb-6 gsap-reveal">🌷</div>
                 <h2 class="text-5xl md:text-7xl font-black text-white mb-6 leading-tight gsap-text">Felices 4 Meses.</h2>
@@ -418,8 +444,8 @@
                 });
             }
 
-            // Specific Collage Animations (Slide 11)
-            if (index === 11) {
+            // Specific Collage Animations (Slide 14)
+            if (index === 14) {
                 gsap.to('.img-1', { opacity: 1, scale: 1, rotation: -10, duration: 1, ease: "back.out(1.5)", delay: 0.8 });
                 gsap.to('.img-2', { opacity: 1, scale: 1.1, rotation: 15, duration: 1, ease: "back.out(1.5)", delay: 1.5 });
                 gsap.to('.img-3', { opacity: 1, scale: 1, rotation: -5, duration: 1, ease: "back.out(1.5)", delay: 2.2 });
@@ -513,6 +539,17 @@
         function goHome() {
             audioEl.pause();
             window.location.href = 'index.html';
+        }
+
+        function toggleMute() {
+            const btn = document.getElementById('mute-btn');
+            if (audioEl.muted) {
+                audioEl.muted = false;
+                btn.innerText = '🔊';
+            } else {
+                audioEl.muted = true;
+                btn.innerText = '🔇';
+            }
         }
     </script>
 </body>
