@@ -4163,12 +4163,21 @@
                 }
 
                 function spotlightPlayTrack(i) {
-                    if (currentSpotTrack !== i) spotlightLoadTrack(i);
+                    if (currentSpotTrack !== i) {
+                        spotlightLoadTrack(i);
+                        spotAudio.load();
+                    }
+                    
+                    isSpotPlaying = true;
+                    spotlightUpdateUI();
+                    
                     spotAudio.play().then(() => {
-                        isSpotPlaying = true;
-                        spotlightUpdateUI();
                         spotlightUpdateTitle();
-                    }).catch(console.error);
+                    }).catch(err => {
+                        console.error('Music playback failed:', err);
+                        isSpotPlaying = false;
+                        spotlightUpdateUI();
+                    });
                 }
 
                 function spotlightUpdateTitle() {
