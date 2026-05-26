@@ -4163,7 +4163,7 @@
                 }
 
                 function spotlightPlayTrack(i) {
-                    spotAudio.pause(); // Force pause to clear any pending play requests
+                    spotAudio.pause();
                     
                     if (currentSpotTrack !== i) {
                         spotlightLoadTrack(i);
@@ -4172,18 +4172,24 @@
                     isSpotPlaying = true;
                     spotlightUpdateUI();
                     
-                    // Timeout allows browser event loop to process the new .src before playing
-                    setTimeout(() => {
+                    // Wait for the browser to confirm it has loaded enough audio data
+                    const doPlay = () => {
                         spotAudio.play().then(() => {
                             spotlightUpdateTitle();
                         }).catch(err => {
                             console.error('Music playback failed:', err);
-                            if (currentSpotTrack === i) {
-                                isSpotPlaying = false;
-                                spotlightUpdateUI();
-                            }
+                            isSpotPlaying = false;
+                            spotlightUpdateUI();
                         });
-                    }, 50);
+                    };
+                    
+                    if (spotAudio.readyState >= 3) {
+                        // Audio already buffered enough — play immediately
+                        doPlay();
+                    } else {
+                        // Wait for browser to signal it can play
+                        spotAudio.addEventListener('canplay', doPlay, { once: true });
+                    }
                 }
 
                 function spotlightUpdateTitle() {
