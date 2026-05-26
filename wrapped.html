@@ -142,6 +142,19 @@
             opacity: 0;
             transform: translateY(30px);
         }
+
+        /* Start Screen Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-400 { animation-delay: 400ms; }
+        .delay-600 { animation-delay: 600ms; }
     </style>
 </head>
 <body>
@@ -161,10 +174,16 @@
         <div id="orb3" class="orb bg-transparent w-[100vw] h-[100vw] md:w-[50vw] md:h-[50vw] top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 opacity-0"></div>
 
         <!-- Start Screen -->
-        <div id="start-screen" class="absolute inset-0 z-[100] bg-black flex flex-col items-center justify-center p-8 transition-opacity duration-1000">
-            <h1 class="text-4xl md:text-6xl font-black text-white text-center mb-2 tracking-tight">Bienvenida,<br><span id="user-name-display" class="text-pink-400">Yaire</span></h1>
-            <p class="text-zinc-400 text-center mb-10 max-w-sm">Esta es una recopilación estadística y emocional de nuestros 120 días juntos. Los números, las madrugadas y todo lo que nos hace especiales. Asegúrate de tener el volumen encendido.</p>
-            <button onclick="startWrapped()" class="px-8 py-4 bg-white text-black font-black rounded-full hover:scale-105 transition-transform uppercase tracking-widest text-sm shadow-[0_0_40px_rgba(255,255,255,0.3)]">
+        <div id="start-screen" class="absolute inset-0 z-[100] bg-gradient-to-br from-indigo-950 via-purple-900 to-black flex flex-col items-center justify-center p-8 transition-opacity duration-1000">
+            <!-- Decorative Element -->
+            <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+                <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-pink-500/20 rounded-full blur-[100px] animate-pulse"></div>
+                <div class="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-blue-500/20 rounded-full blur-[120px] animate-pulse" style="animation-delay: 2s;"></div>
+            </div>
+
+            <h1 class="text-4xl md:text-6xl font-black text-white text-center mb-2 tracking-tight animate-fade-in-up delay-200 z-10">Bienvenida,<br><span id="user-name-display" class="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-rose-300">Yaire</span></h1>
+            <p class="text-zinc-300 text-center mb-10 max-w-sm animate-fade-in-up delay-400 z-10 leading-relaxed drop-shadow-md">Esta es una recopilación estadística y emocional de nuestros 120 días juntos. Los números, las madrugadas y todo lo que nos hace especiales. <br><br><span class="text-pink-300 font-medium">Asegúrate de tener el volumen encendido.</span></p>
+            <button onclick="startWrapped()" class="relative z-10 px-8 py-4 bg-white/10 backdrop-blur-md border border-white/30 text-white font-black rounded-full hover:bg-white hover:text-black hover:scale-105 transition-all uppercase tracking-widest text-sm shadow-[0_0_40px_rgba(255,255,255,0.1)] animate-fade-in-up delay-600">
                 Reproducir Historia
             </button>
         </div>
