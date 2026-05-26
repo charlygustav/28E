@@ -1076,12 +1076,14 @@
           if (typingEl) {
             if (isTyping) {
               typingEl.textContent = `${name} ${_t('vc_typing')}`;
-              typingEl.classList.add('show');
+              typingEl.classList.remove('hidden');
+              typingEl.classList.add('block');
               // Auto-scroll to show typing indicator if at bottom
               const msgsEl = document.getElementById('vc-msgs');
               if (msgsEl) msgsEl.scrollTop = msgsEl.scrollHeight;
             } else {
-              typingEl.classList.remove('show');
+              typingEl.classList.add('hidden');
+              typingEl.classList.remove('block');
             }
           }
         });
