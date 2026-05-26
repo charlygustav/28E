@@ -608,6 +608,8 @@
 
             setTimeout(() => {
                 document.getElementById('start-screen').style.display = 'none';
+                document.getElementById('mute-btn').classList.remove('hidden');
+                document.getElementById('pause-btn').classList.remove('hidden');
                 isPlaying = true;
                 isPaused = false;
                 pauseTimeOffset = 0;
