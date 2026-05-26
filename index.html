@@ -4210,6 +4210,7 @@
                     const expProgress = document.getElementById('spotlight-progress-container');
                     const expTimeList = expProgress ? expProgress.previousElementSibling : null;
                     const expList = document.getElementById('spotlight-expanded-list');
+                    const radioVis = document.getElementById('spotlight-radio-visualizer');
                     const expTitle = document.getElementById('spotlight-expanded-title');
                     const expArtist = document.getElementById('spotlight-expanded-artist');
                     const compactTitle = document.getElementById('spotlight-title');
@@ -4234,6 +4235,7 @@
                         if (expProgress) expProgress.style.display = '';
                         if (expTimeList) expTimeList.style.display = '';
                         if (expList) expList.style.display = '';
+                        if (radioVis) radioVis.style.display = 'none';
                         
                         // Restore track info
                         const t = spotlightTracks[currentSpotTrack];
@@ -4254,6 +4256,7 @@
                         if (expProgress) expProgress.style.display = 'none';
                         if (expTimeList) expTimeList.style.display = 'none';
                         if (expList) expList.style.display = 'none';
+                        if (radioVis) radioVis.style.display = 'flex';
                         
                         // Set live text
                         if (compactTitle) compactTitle.textContent = 'Spotlight Radio';
@@ -4492,6 +4495,24 @@
             <!-- Playlist Song List -->
             <div class="flex-1 overflow-y-auto px-4 py-3 letter-scroll" id="spotlight-expanded-list">
                 <!-- Dynamic List -->
+            </div>
+
+            <!-- Radio Visualizer / Filler -->
+            <div class="flex-1 flex flex-col items-center justify-center px-4 py-8 hidden" id="spotlight-radio-visualizer">
+                <div class="relative w-32 h-32 mb-6 flex items-center justify-center">
+                    <!-- Glowing rings -->
+                    <div class="absolute inset-0 rounded-full border border-brand-500/20 animate-ping" style="animation-duration: 3s;"></div>
+                    <div class="absolute inset-4 rounded-full border border-brand-500/40 animate-ping" style="animation-duration: 2s;"></div>
+                    <div class="absolute inset-8 rounded-full border border-brand-500/60 animate-ping" style="animation-duration: 1.5s;"></div>
+                    <!-- Icon -->
+                    <div class="w-16 h-16 rounded-full bg-brand-500/10 flex items-center justify-center text-brand-500 shadow-[0_0_15px_rgba(236,72,153,0.3)]">
+                        <i class="ph-duotone ph-broadcast text-3xl"></i>
+                    </div>
+                </div>
+                <h4 class="text-sm font-extrabold text-zinc-800 dark:text-zinc-200 mb-2 tracking-widest uppercase">Señal en Vivo</h4>
+                <p class="text-[11px] text-zinc-500 dark:text-zinc-400 text-center max-w-[220px] leading-relaxed">
+                    Sintonizando la frecuencia exclusiva de 28E. Emisión ininterrumpida de amor y recuerdos.
+                </p>
             </div>
         </div>
     </div>
