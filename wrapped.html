@@ -377,9 +377,9 @@
             </div>
 
             <!-- Slide 19: Conclusion / Share Card -->
-            <div class="slide flex flex-col items-center justify-center p-6 relative" data-bg1="bg-zinc-900" data-bg2="bg-black" data-bg3="bg-zinc-800">
+            <div class="slide flex flex-col items-center justify-center pt-24 pb-4 px-0 relative" data-bg1="bg-zinc-900" data-bg2="bg-black" data-bg3="bg-zinc-800">
                 
-                <p class="text-[10px] text-white/50 uppercase tracking-widest mb-4 gsap-reveal z-50">Desliza para elegir tu tarjeta ➔</p>
+                <p class="text-[10px] text-white/50 uppercase tracking-widest mb-3 gsap-reveal z-50">Desliza para elegir tu tarjeta ➔</p>
 
                 <!-- Flechas de navegación (Solo PC) -->
                 <button onclick="scrollCards(-1)" class="absolute left-6 top-1/2 -translate-y-1/2 z-[60] p-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white backdrop-blur-md hidden md:flex pointer-events-auto transition-colors shadow-lg">
@@ -389,7 +389,7 @@
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </button>
 
-                <div id="cards-container" class="flex overflow-x-auto snap-x snap-mandatory gap-6 w-[100vw] px-[calc(50vw-130px)] pb-6 gsap-reveal relative z-[60] pointer-events-auto scroll-smooth" style="scrollbar-width: none; -ms-overflow-style: none;">
+                <div id="cards-container" class="flex overflow-x-auto snap-x snap-mandatory gap-6 w-[100vw] px-[calc(50vw-130px)] pb-2 gsap-reveal relative z-[60] pointer-events-auto scroll-smooth" style="scrollbar-width: none; -ms-overflow-style: none;">
                     
                     <!-- Card 1: Pink/Rose -->
                     <div class="share-card-item flex-shrink-0 w-[260px] snap-center relative bg-gradient-to-br from-indigo-900 via-pink-900 to-rose-900 rounded-3xl p-6 shadow-2xl border border-white/10">
@@ -466,12 +466,12 @@
                 </style>
                 
                 <!-- Buttons (ABOVE the tap zones) -->
-                <div class="mt-4 z-[60] relative gsap-reveal flex flex-col gap-4 w-full max-w-sm px-6">
-                    <button id="btn-download" onclick="downloadShareCard()" class="w-full py-4 bg-pink-600 text-white font-black rounded-full hover:bg-pink-500 transition-all shadow-[0_0_20px_rgba(236,72,153,0.4)] uppercase tracking-widest text-sm pointer-events-auto flex items-center justify-center gap-2">
+                <div class="mt-2 z-[60] relative gsap-reveal flex flex-col gap-3 w-full max-w-sm px-6">
+                    <button id="btn-download" onclick="downloadShareCard()" class="w-full py-3.5 bg-pink-600 text-white font-black rounded-full hover:bg-pink-500 transition-all shadow-[0_0_20px_rgba(236,72,153,0.4)] uppercase tracking-widest text-sm pointer-events-auto flex items-center justify-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                         Descargar Resumen
                     </button>
-                    <button onclick="goHome()" class="w-full py-4 bg-white/10 backdrop-blur-xl border border-white/30 rounded-full font-black text-white hover:bg-white hover:text-black transition-all uppercase tracking-widest text-sm pointer-events-auto">
+                    <button onclick="window.location.href='index.html'" class="w-full py-3.5 bg-white/10 text-white font-bold rounded-full hover:bg-white/20 transition-all backdrop-blur-sm border border-white/10 uppercase tracking-widest text-sm pointer-events-auto">
                         Volver a Nuestro Mundo
                     </button>
                 </div>
