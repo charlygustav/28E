@@ -197,17 +197,17 @@
         </div>
 
         <!-- Global Controls -->
-        <div class="absolute top-8 right-4 flex items-center gap-2" style="z-index: 9999;">
+        <div id="global-controls" class="absolute top-8 right-4 flex items-center gap-4 pointer-events-auto" style="z-index: 2147483647;">
             <!-- Play/Pause Button -->
-            <button id="pause-btn" onclick="event.stopPropagation(); togglePause();" class="hidden flex items-center justify-center p-2 text-white/60 hover:text-white hover:scale-110 transition-transform focus:outline-none drop-shadow-lg">
-                <svg id="icon-pause" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
-                <svg id="icon-play" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <button id="pause-btn" class="hidden flex items-center justify-center p-4 text-white hover:scale-110 transition-transform drop-shadow-2xl cursor-pointer pointer-events-auto">
+                <svg id="icon-pause" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                <svg id="icon-play" class="hidden" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
             </button>
             
             <!-- Mute Button -->
-            <button id="mute-btn" onclick="event.stopPropagation(); toggleMute();" class="hidden flex items-center justify-center p-2 text-white/60 hover:text-white hover:scale-110 transition-transform focus:outline-none drop-shadow-lg">
-                <svg id="icon-unmuted" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
-                <svg id="icon-muted" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+            <button id="mute-btn" class="hidden flex items-center justify-center p-4 text-white hover:scale-110 transition-transform drop-shadow-2xl cursor-pointer pointer-events-auto">
+                <svg id="icon-unmuted" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+                <svg id="icon-muted" class="hidden" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
             </button>
         </div>
 
@@ -602,14 +602,22 @@
             if (playPromise !== undefined) {
                 playPromise.catch(e => {
                     console.error("Audio play failed:", e);
-                    alert("Tu navegador bloqueó el audio. Intenta recargar la página.");
                 });
             }
 
             setTimeout(() => {
                 document.getElementById('start-screen').style.display = 'none';
-                document.getElementById('mute-btn').classList.remove('hidden');
-                document.getElementById('pause-btn').classList.remove('hidden');
+                
+                const btnMute = document.getElementById('mute-btn');
+                const btnPause = document.getElementById('pause-btn');
+                
+                // Asignación directa y blindada de eventos en JS
+                btnMute.onclick = function(e) { e.stopPropagation(); toggleMute(); };
+                btnPause.onclick = function(e) { e.stopPropagation(); togglePause(); };
+                
+                btnMute.classList.remove('hidden');
+                btnPause.classList.remove('hidden');
+                
                 isPlaying = true;
                 isPaused = false;
                 pauseTimeOffset = 0;
