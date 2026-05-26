@@ -3955,12 +3955,6 @@
 
                 // Only updates text + icon in the expanded view — never touches spotAudio
                 function syncExpandedPlayerUI() {
-                    const track = spotlightTracks[currentSpotTrack];
-                    if (!track) return;
-                    const expTitle = document.getElementById('spotlight-expanded-title');
-                    const expArtist = document.getElementById('spotlight-expanded-artist');
-                    if (expTitle) expTitle.textContent = track.title;
-                    if (expArtist) expArtist.textContent = track.artist;
                     // Sync play/pause icon and vinyl spin state
                     const expPlayIcon = document.getElementById('spotlight-expanded-play-icon');
                     const vinylSpin = document.getElementById('spotlight-vinyl-spin');
@@ -3972,6 +3966,16 @@
                     if (vinylSpin) {
                         vinylSpin.style.animationPlayState = isSpotPlaying ? 'running' : 'paused';
                     }
+
+                    if (spotlightMode === 'radio') return; // Do not overwrite titles/artwork in Radio mode
+
+                    const track = spotlightTracks[currentSpotTrack];
+                    if (!track) return;
+                    const expTitle = document.getElementById('spotlight-expanded-title');
+                    const expArtist = document.getElementById('spotlight-expanded-artist');
+                    if (expTitle) expTitle.textContent = track.title;
+                    if (expArtist) expArtist.textContent = track.artist;
+                    
                     // Fetch and display artwork
                     fetchSpotlightArtwork(track).then(artUrl => updateAllArtwork(artUrl));
                 }
