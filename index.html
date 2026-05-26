@@ -13950,7 +13950,8 @@
                     { id: 'game2', type: 'game', keys: ['vuelo', 'mariposa', 'tulipan', 'tulipán', 'hacia ti', 'flight', 'butterfly', 'tulip', 'vol', 'papillon', 'tulipe', 'voo', 'borboleta', 'juego', 'juegos', 'minijuego', 'minijuegos', 'game', 'games', 'jeux', 'jogo', 'jogos'], emoji: '🦋', title: t.game2_title || 'Vuelo Hacia Ti' },
                     { id: 'mixer', type: 'tool', keys: ['mezcla', 'paleta', 'colores', 'mix', 'palette', 'colors', 'couleurs', 'mistura', 'cores', 'mixer', 'laboratorio', 'laboratoire'], emoji: '🎨', title: t.pal_mix_title || 'Mezcla tu Paleta' },
                     { id: 'color_guide', type: 'tool', keys: ['guia', 'guía', 'color', 'colores', 'tulip', 'tulipan', 'tulipán', 'guide', 'cores', 'couleurs'], emoji: '🌷', title: t.menu_tulip_colors || 'Guía de Colores' },
-                    { id: 'recipe', type: 'recipe', keys: ['pechuga', 'crema', 'receta', 'recipe', 'chicken', 'poulet', 'frango', 'cocinar', 'cocina', 'cocinero', 'chef', 'food', 'comida', 'recette'], emoji: '🍴', title: t.recipe_title || 'Pechuga a la Crema' }
+                    { id: 'recipe', type: 'recipe', keys: ['pechuga', 'crema', 'receta', 'recipe', 'chicken', 'poulet', 'frango', 'cocinar', 'cocina', 'cocinero', 'chef', 'food', 'comida', 'recette'], emoji: '🍴', title: t.recipe_title || 'Pechuga a la Crema' },
+                    { id: 'wrapped', type: 'wrapped', keys: ['wrapped', 'resumen', '120', 'dias', 'estadisticas', 'stats', 'resumo', 'resume', 'estadísticas', 'historia'], emoji: '🎉', title: t.univ_wrapped_title || '28E Wrapped' }
                 ];
                 if (isUnlocked) {
                     searchItems.push({ id: 'game3', type: 'game', keys: ['cartas', 'ocultas', 'memoria', 'juego', 'juegos', 'minijuego', 'minijuegos', 'cards', 'hidden', 'memory', 'game', 'games', 'cartes', 'cachées', 'mémoire', 'jeux', 'memória', 'jogo', 'jogos'], emoji: '🃏', title: t.game3_title || 'Cartas Ocultas' });
@@ -13994,6 +13995,7 @@
                         let btnText = t.search_game_btn;
                         if (g.type === 'recipe') btnText = t.search_recipe_btn || 'Ver Receta';
                         else if (g.type === 'tool') btnText = t.search_tool_btn || 'Abrir Herramienta';
+                        else if (g.type === 'wrapped') btnText = t.univ_wrapped_btn ? t.univ_wrapped_btn.replace(/<svg[^>]*>.*?<\/svg>/g, '').trim() : 'Abrir';
 
                         const gameLink = document.createElement('div');
                         gameLink.tabIndex = 0;
@@ -14021,6 +14023,15 @@
                                     if (typeof openRecipeModal === 'function') openRecipeModal();
                                     const mj = document.getElementById('historia');
                                     if (mj) mj.scrollIntoView({ behavior: 'smooth' });
+                                }, 300);
+                            } else if (g.id === 'wrapped') {
+                                setTimeout(() => {
+                                    if(window.yaireCurrentUser){
+                                        if(window.AudioManager) window.AudioManager.play('slideralto.wav', 0.8);
+                                        window.location.href='wrapped.html';
+                                    } else {
+                                        if(window.showPremiumAlert) window.showPremiumAlert('Acceso Restringido', 'Inicia sesión con tu cuenta de Google primero para ver tu 28E Wrapped.', 'error');
+                                    }
                                 }, 300);
                             } else {
                                 setTimeout(() => {
