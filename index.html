@@ -4135,9 +4135,30 @@
                         }
                     });
 
-                    // Actualizar título de ventana
+                    // Actualizar título de ventana y Media Session del Sistema Operativo
                     if (isSpotPlaying) {
-                        document.title = spotlightMode === 'radio' ? '28E FM (Live)' : `${track.title}`;
+                        if (spotlightMode === 'radio') {
+                            document.title = '28E FM (Live)';
+                            if ('mediaSession' in navigator) {
+                                navigator.mediaSession.metadata = new MediaMetadata({
+                                    title: 'Spotlight Radio',
+                                    artist: 'Live Broadcast',
+                                    album: '28E',
+                                    artwork: [{ src: 'tulip.ico?v=3', sizes: '512x512', type: 'image/x-icon' }]
+                                });
+                            }
+                        } else {
+                            document.title = `${track.title}`;
+                            if ('mediaSession' in navigator) {
+                                const art = currentArtworkSrc || 'tulip.ico?v=3';
+                                navigator.mediaSession.metadata = new MediaMetadata({
+                                    title: track.title,
+                                    artist: track.artist,
+                                    album: '28E Spotlight',
+                                    artwork: [{ src: art, sizes: '512x512', type: 'image/jpeg' }]
+                                });
+                            }
+                        }
                     }
                 }
 
