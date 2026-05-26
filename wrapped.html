@@ -6,6 +6,7 @@
     <title>28E Wrapped - 4 Meses</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Merriweather:ital@0;1&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     
@@ -188,11 +189,20 @@
             </button>
         </div>
 
-        <!-- Mute Button (Hidden initially) -->
-        <button id="mute-btn" onclick="toggleMute()" class="absolute top-8 right-4 z-[70] flex items-center justify-center p-2 text-white/60 hover:text-white hover:scale-110 transition-transform pointer-events-auto focus:outline-none hidden">
-            <svg id="icon-unmuted" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
-            <svg id="icon-muted" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
-        </button>
+        <!-- Controls -->
+        <div class="absolute top-8 right-4 z-[70] flex items-center gap-2 pointer-events-auto">
+            <!-- Play/Pause Button -->
+            <button id="pause-btn" onclick="togglePause()" class="hidden flex items-center justify-center p-2 text-white/60 hover:text-white hover:scale-110 transition-transform focus:outline-none drop-shadow-lg">
+                <svg id="icon-pause" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                <svg id="icon-play" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            </button>
+            
+            <!-- Mute Button -->
+            <button id="mute-btn" onclick="toggleMute()" class="hidden flex items-center justify-center p-2 text-white/60 hover:text-white hover:scale-110 transition-transform focus:outline-none drop-shadow-lg">
+                <svg id="icon-unmuted" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+                <svg id="icon-muted" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+            </button>
+        </div>
 
         <!-- Progress Indicator -->
         <div class="progress-container" id="progress-container">
@@ -262,14 +272,14 @@
                 <p class="text-xl text-fuchsia-100 font-medium max-w-sm mt-4 gsap-reveal">Fotos, audios y videos enviados a través del celular. Una galería llena de nuestra historia.</p>
             </div>
 
-            <!-- Slide 6: Siempre (NEW) -->
+            <!-- Slide 6: Siempre -->
             <div class="slide" data-bg1="bg-sky-500" data-bg2="bg-blue-400" data-bg3="bg-cyan-400">
                 <p class="text-xl text-sky-100 font-bold uppercase tracking-widest mb-4 gsap-reveal">Nuestra Promesa</p>
                 <h2 class="text-huge text-white mb-4 gsap-text">494</h2>
                 <p class="text-xl text-sky-50 font-medium max-w-sm mt-4 gsap-reveal">Veces que escribimos la palabra "Siempre". Prometiéndonos que pase lo que pase, estaremos ahí el uno para el otro.</p>
             </div>
 
-            <!-- Slide 7: Perdon (NEW) -->
+            <!-- Slide 7: Perdon -->
             <div class="slide" data-bg1="bg-stone-500" data-bg2="bg-neutral-600" data-bg3="bg-zinc-500">
                 <p class="text-xl text-stone-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">La Madurez</p>
                 <h2 class="text-huge text-white mb-4 gsap-text">142</h2>
@@ -291,7 +301,7 @@
                 <p class="text-xl text-zinc-300 font-medium max-w-sm mt-4 gsap-reveal">Sobrevivimos a madrugadas eternas, desveladas y chistes de cucarachas... Descubrí que eres mi lugar seguro. 🪳</p>
             </div>
 
-            <!-- Slide 10: Amor (NEW) -->
+            <!-- Slide 10: Amor -->
             <div class="slide" data-bg1="bg-pink-400" data-bg2="bg-rose-400" data-bg3="bg-red-400">
                 <p class="text-xl text-pink-100 font-bold uppercase tracking-widest mb-4 gsap-reveal">El apodo perfecto</p>
                 <h2 class="text-huge text-white mb-4 gsap-text">2,564</h2>
@@ -305,21 +315,49 @@
                 <p class="text-xl text-rose-100 font-medium max-w-sm mt-4 gsap-reveal">Veces que nos dijimos "Te amo" (¡casi 7 veces por día!). Nunca me cansaré de escucharlo.</p>
             </div>
 
-            <!-- Slide 12: Superación -->
+            <!-- Slide 12: Buenos Dias -->
+            <div class="slide" data-bg1="bg-amber-500" data-bg2="bg-orange-400" data-bg3="bg-yellow-300">
+                <p class="text-xl text-amber-100 font-bold uppercase tracking-widest mb-4 gsap-reveal">Nuestro primer pensamiento</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">153</h2>
+                <p class="text-xl text-amber-50 font-medium max-w-sm mt-4 gsap-reveal">Veces que nos dijimos "Buenos días". Sin importar qué pasara, siempre fuimos lo primero en la mente del otro al despertar. ☀️</p>
+            </div>
+
+            <!-- Slide 13: Vida -->
+            <div class="slide" data-bg1="bg-rose-500" data-bg2="bg-red-500" data-bg3="bg-pink-600">
+                <p class="text-xl text-rose-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">El apodo más profundo</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">297</h2>
+                <p class="text-xl text-rose-100 font-medium max-w-sm mt-4 gsap-reveal">Veces que nos llamamos "Vida". Porque, poco a poco, nos convertimos en el mundo entero del otro. ❤️</p>
+            </div>
+
+            <!-- Slide 14: Gracias -->
+            <div class="slide" data-bg1="bg-teal-600" data-bg2="bg-emerald-700" data-bg3="bg-cyan-600">
+                <p class="text-xl text-teal-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Nuestra Gratitud</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">188</h2>
+                <p class="text-xl text-teal-100 font-medium max-w-sm mt-4 gsap-reveal">Veces que nos dijimos "Gracias". Por estar ahí, por no rendirnos, por sanar las heridas del pasado juntos. 🙏</p>
+            </div>
+
+            <!-- Slide 15: Llamadas -->
+            <div class="slide" data-bg1="bg-indigo-600" data-bg2="bg-violet-700" data-bg3="bg-purple-600">
+                <p class="text-xl text-indigo-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Cuando los textos no bastaban</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">91</h2>
+                <p class="text-xl text-indigo-100 font-medium max-w-sm mt-4 gsap-reveal">Llamadas registradas en WhatsApp. Necesitábamos escuchar la voz del otro para sentirnos más cerca. 📞</p>
+            </div>
+
+            <!-- Slide 16: Superación -->
             <div class="slide" data-bg1="bg-slate-700" data-bg2="bg-zinc-800" data-bg3="bg-gray-600">
                 <p class="text-xl text-slate-300 font-bold uppercase tracking-widest mb-4 gsap-reveal">Hubo momentos de miedo</p>
                 <h2 class="text-4xl md:text-6xl text-white font-black mb-4 gsap-text leading-tight">Y dudas.</h2>
                 <p class="text-xl text-slate-200 font-serif italic max-w-sm mt-4 gsap-reveal">Pero nunca nos rendimos. Pasamos celos, estrés y malos entendidos... y escogimos perdonar, sanar y mejorar. Siempre juntos.</p>
             </div>
 
-            <!-- Slide 13: Reconocimiento -->
+            <!-- Slide 17: Reconocimiento -->
             <div class="slide" data-bg1="bg-violet-600" data-bg2="bg-fuchsia-700" data-bg3="bg-purple-500">
                 <p class="text-xl text-violet-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Y quiero que sepas...</p>
                 <h2 class="text-4xl md:text-6xl text-white font-black mb-4 gsap-text leading-tight">Eres mi niña valiente.</h2>
                 <p class="text-xl text-violet-100 font-medium max-w-sm mt-4 gsap-reveal">Has soportado tanto en la vida, que para mí eres un ejemplo. Eres el amor de mi vida.</p>
             </div>
 
-            <!-- Slide 14: Collage -->
+            <!-- Slide 18: Collage -->
             <div class="slide" data-bg1="bg-pink-500" data-bg2="bg-rose-600" data-bg3="bg-red-500">
                 <p class="text-xl text-pink-200 font-bold uppercase tracking-widest mb-2 gsap-reveal z-30 relative drop-shadow-md">Cada instante...</p>
                 
@@ -331,15 +369,46 @@
                 <h2 class="text-4xl md:text-6xl font-black text-white mt-auto z-30 relative drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] gsap-text">es una obra de arte. ✨</h2>
             </div>
 
-            <!-- Slide 15: Conclusion -->
-            <div class="slide flex flex-col items-center text-center justify-center" data-bg1="bg-orange-500" data-bg2="bg-amber-600" data-bg3="bg-red-600">
-                <div class="text-7xl mb-6 gsap-reveal">🌷</div>
-                <h2 class="text-5xl md:text-7xl font-black text-white mb-6 leading-tight gsap-text">Felices 4 Meses.</h2>
-                <p class="text-2xl text-orange-100 font-serif italic mb-12 gsap-reveal">Te amo, Yaire.</p>
+            <!-- Slide 19: Conclusion / Share Card -->
+            <div class="slide flex flex-col items-center justify-center p-6 overflow-y-auto" data-bg1="bg-zinc-900" data-bg2="bg-black" data-bg3="bg-zinc-800">
+                <!-- Exportable Card -->
+                <div id="share-card" class="relative w-full max-w-sm bg-gradient-to-br from-indigo-900 via-pink-900 to-rose-900 rounded-3xl p-8 shadow-2xl border border-white/10 gsap-reveal">
+                    <div class="absolute top-0 right-0 p-4 opacity-20 text-6xl">🌷</div>
+                    <p class="text-pink-300 font-bold uppercase tracking-widest text-xs mb-6">28E Wrapped</p>
+                    <h2 class="text-4xl font-black text-white mb-8 leading-none tracking-tight">Nuestros<br>120 Días</h2>
+                    
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-end border-b border-white/10 pb-2">
+                            <span class="text-zinc-300 font-medium">Mensajes</span>
+                            <span class="text-white font-black text-xl">32,371</span>
+                        </div>
+                        <div class="flex justify-between items-end border-b border-white/10 pb-2">
+                            <span class="text-zinc-300 font-medium">Conexión (Hrs)</span>
+                            <span class="text-white font-black text-xl">2,880</span>
+                        </div>
+                        <div class="flex justify-between items-end border-b border-white/10 pb-2">
+                            <span class="text-zinc-300 font-medium">Veces "Amor"</span>
+                            <span class="text-white font-black text-xl">2,564</span>
+                        </div>
+                        <div class="flex justify-between items-end border-b border-white/10 pb-2">
+                            <span class="text-zinc-300 font-medium">Veces "Te amo"</span>
+                            <span class="text-white font-black text-xl">843</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 pt-4 border-t border-white/20 flex justify-between items-center">
+                        <p class="text-sm font-serif italic text-pink-200">Para mi niña valiente.</p>
+                        <p class="text-xs text-white/50 font-bold uppercase tracking-widest">Charles & Yaire</p>
+                    </div>
+                </div>
                 
-                <!-- This button is ABOVE the tap zones (z-50) -->
-                <div class="mt-8 z-50 relative gsap-reveal">
-                    <button onclick="goHome()" class="px-8 py-4 bg-white/10 backdrop-blur-xl border border-white/30 rounded-full font-black text-white hover:bg-white hover:text-black transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] uppercase tracking-widest text-sm pointer-events-auto relative z-50">
+                <!-- Buttons (ABOVE the tap zones) -->
+                <div class="mt-8 z-50 relative gsap-reveal flex flex-col gap-4 w-full max-w-sm">
+                    <button id="btn-download" onclick="downloadShareCard()" class="w-full py-4 bg-pink-600 text-white font-black rounded-full hover:bg-pink-500 transition-all shadow-[0_0_20px_rgba(236,72,153,0.4)] uppercase tracking-widest text-sm pointer-events-auto flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        Descargar Resumen
+                    </button>
+                    <button onclick="goHome()" class="w-full py-4 bg-white/10 backdrop-blur-xl border border-white/30 rounded-full font-black text-white hover:bg-white hover:text-black transition-all uppercase tracking-widest text-sm pointer-events-auto">
                         Volver a Nuestro Mundo
                     </button>
                 </div>
@@ -401,6 +470,9 @@
         let slideTimer;
         let animationStart;
         let isPlaying = false;
+        let isPaused = false;
+        let pauseTimeOffset = 0;
+        let pauseStartTime = 0;
         let audioEl;
 
         function initWrapped() {
@@ -445,7 +517,10 @@
             setTimeout(() => {
                 document.getElementById('start-screen').style.display = 'none';
                 document.getElementById('mute-btn').classList.remove('hidden');
+                document.getElementById('pause-btn').classList.remove('hidden');
                 isPlaying = true;
+                isPaused = false;
+                pauseTimeOffset = 0;
                 showSlide(0);
             }, 500);
         }
@@ -471,8 +546,8 @@
                 });
             }
 
-            // Specific Collage Animations (Slide 14)
-            if (index === 14) {
+            // Specific Collage Animations (Slide 18)
+            if (index === 18) {
                 gsap.to('.img-1', { opacity: 1, scale: 1, rotation: -10, duration: 1, ease: "back.out(1.5)", delay: 0.8 });
                 gsap.to('.img-2', { opacity: 1, scale: 1.1, rotation: 15, duration: 1, ease: "back.out(1.5)", delay: 1.5 });
                 gsap.to('.img-3', { opacity: 1, scale: 1, rotation: -5, duration: 1, ease: "back.out(1.5)", delay: 2.2 });
@@ -532,14 +607,19 @@
             // Start animation timer
             cancelAnimationFrame(slideTimer);
             animationStart = performance.now();
+            pauseTimeOffset = 0;
             animateProgress();
         }
 
         function animateProgress() {
             if (!isPlaying) return;
+            if (isPaused) {
+                slideTimer = requestAnimationFrame(animateProgress);
+                return;
+            }
             
             const now = performance.now();
-            const elapsed = now - animationStart;
+            const elapsed = now - animationStart - pauseTimeOffset;
             const percentage = Math.min((elapsed / SLIDE_DURATION) * 100, 100);
             
             progressBars[currentSlide].style.width = `${percentage}%`;
@@ -581,6 +661,52 @@
                 iconUnmuted.classList.add('hidden');
                 iconMuted.classList.remove('hidden');
             }
+        }
+
+        function togglePause() {
+            const iconPause = document.getElementById('icon-pause');
+            const iconPlay = document.getElementById('icon-play');
+            
+            if (isPaused) {
+                isPaused = false;
+                audioEl.play();
+                pauseTimeOffset += (performance.now() - pauseStartTime);
+                iconPause.classList.remove('hidden');
+                iconPlay.classList.add('hidden');
+                gsap.globalTimeline.play();
+            } else {
+                isPaused = true;
+                audioEl.pause();
+                pauseStartTime = performance.now();
+                iconPause.classList.add('hidden');
+                iconPlay.classList.remove('hidden');
+                gsap.globalTimeline.pause();
+            }
+        }
+
+        function downloadShareCard() {
+            const card = document.getElementById('share-card');
+            const btn = document.getElementById('btn-download');
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = `<span class="opacity-50">Generando Imagen...</span>`;
+            
+            html2canvas(card, {
+                backgroundColor: null,
+                scale: 3, // Very high quality for mobile export
+                logging: false,
+                useCORS: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = '28E_Wrapped.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                btn.innerHTML = originalText;
+            }).catch(err => {
+                console.error("Export Error:", err);
+                btn.innerHTML = "Error al descargar";
+                setTimeout(() => btn.innerHTML = originalText, 2000);
+            });
         }
     </script>
 </body>
