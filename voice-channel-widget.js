@@ -1278,8 +1278,8 @@
       
       const btn = document.getElementById('vc-mute');
       if (btn) {
-        btn.className = 'vc-cb' + (this.muted ? ' muted' : '');
-        btn.innerHTML = `${this.muted ? ICONS.micOff : ICONS.mic} ${this.muted ? _t('btn_muted') : _t('btn_mic')}`;
+        btn.className = `flex-1 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${this.muted ? 'bg-red-500/10 text-red-500 border border-red-500/30' : 'bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white'}`;
+        btn.innerHTML = `<span class="w-4 h-4 [&>svg]:w-4 [&>svg]:h-4 flex items-center justify-center">${this.muted ? ICONS.micOff : ICONS.mic}</span> ${this.muted ? _t('btn_muted') : _t('btn_mic')}`;
         const svg = btn.querySelector('svg');
         if (svg) {
           svg.style.transform = 'scale(1.3)';
@@ -1297,8 +1297,8 @@
       
       const btn = document.getElementById('vc-dnd');
       if (btn) {
-        btn.className = 'vc-cb' + (this.dnd ? ' dnd' : '');
-        btn.innerHTML = `${ICONS.bell} ${this.dnd ? 'DND' : 'DND'}`;
+        btn.className = `flex-1 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${this.dnd ? 'bg-purple-500/10 text-purple-400 border border-purple-500/30' : 'bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white'}`;
+        btn.innerHTML = `<span class="w-4 h-4 [&>svg]:w-4 [&>svg]:h-4 flex items-center justify-center">${ICONS.bell}</span> DND`;
         const svg = btn.querySelector('svg');
         if (svg) {
           svg.style.transform = 'scale(1.2) rotate(-15deg)';
