@@ -372,55 +372,88 @@
             </div>
 
             <!-- Slide 19: Conclusion / Share Card -->
-            <div class="slide flex flex-col items-center justify-center p-6 overflow-y-auto" data-bg1="bg-zinc-900" data-bg2="bg-black" data-bg3="bg-zinc-800">
+            <div class="slide flex flex-col items-center justify-center p-6" data-bg1="bg-zinc-900" data-bg2="bg-black" data-bg3="bg-zinc-800">
                 
-                <div class="flex items-center justify-center gap-2 w-full max-w-md gsap-reveal z-50 pointer-events-auto">
-                    <!-- Left Arrow -->
-                    <button onclick="prevTheme()" class="text-white/50 hover:text-white p-2">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                    </button>
+                <p class="text-[10px] text-white/50 uppercase tracking-widest mb-4 gsap-reveal z-50">Desliza para elegir tu tarjeta ➔</p>
 
-                    <!-- Exportable Card -->
-                    <div id="share-card" class="relative w-full max-w-[260px] sm:max-w-xs bg-gradient-to-br from-indigo-900 via-pink-900 to-rose-900 rounded-3xl p-6 shadow-2xl border border-white/10 transition-colors duration-500">
+                <div id="cards-container" class="flex overflow-x-auto snap-x snap-mandatory gap-6 w-[100vw] px-[calc(50vw-130px)] pb-6 gsap-reveal z-50 pointer-events-auto" style="scrollbar-width: none; -ms-overflow-style: none;">
+                    
+                    <!-- Card 1: Pink/Rose -->
+                    <div class="share-card-item flex-shrink-0 w-[260px] snap-center relative bg-gradient-to-br from-indigo-900 via-pink-900 to-rose-900 rounded-3xl p-6 shadow-2xl border border-white/10">
                         <div class="absolute top-0 right-0 p-3 opacity-20 text-5xl">🌷</div>
-                        <p id="card-subtitle" class="text-pink-300 font-bold uppercase tracking-widest text-[10px] mb-4">28E Wrapped</p>
-                        <h2 id="card-title" class="text-3xl font-black text-white mb-6 leading-none tracking-tight">Nuestros<br>120 Días</h2>
-                        
+                        <p class="text-pink-300 font-bold uppercase tracking-widest text-[10px] mb-4">28E Wrapped</p>
+                        <h2 class="text-3xl font-black text-white mb-6 leading-none tracking-tight">Nuestros<br>120 Días</h2>
                         <div class="space-y-3">
-                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80">
-                                <span class="val-secondary text-zinc-300 font-medium text-xs">Mensajes</span>
-                                <span class="val-primary text-white font-black text-lg">32,371</span>
-                            </div>
-                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80">
-                                <span class="val-secondary text-zinc-300 font-medium text-xs">Conexión (Hrs)</span>
-                                <span class="val-primary text-white font-black text-lg">2,880</span>
-                            </div>
-                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80">
-                                <span class="val-secondary text-zinc-300 font-medium text-xs">Veces "Amor"</span>
-                                <span class="val-primary text-white font-black text-lg">2,564</span>
-                            </div>
-                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80">
-                                <span class="val-secondary text-zinc-300 font-medium text-xs">Veces "Te amo"</span>
-                                <span class="val-primary text-white font-black text-lg">843</span>
-                            </div>
+                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-300 font-medium text-xs">Mensajes</span><span class="text-white font-black text-lg">32,371</span></div>
+                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-300 font-medium text-xs">Conexión (Hrs)</span><span class="text-white font-black text-lg">2,880</span></div>
+                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-300 font-medium text-xs">Veces "Amor"</span><span class="text-white font-black text-lg">2,564</span></div>
+                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-300 font-medium text-xs">Veces "Te amo"</span><span class="text-white font-black text-lg">843</span></div>
                         </div>
-                        
                         <div class="mt-6 pt-3 flex justify-between items-center opacity-90">
-                            <p class="val-footer text-[10px] font-serif italic text-pink-200">Para mi niña valiente.</p>
-                            <p class="val-primary text-[10px] text-white font-bold uppercase tracking-widest">Charles & Yaire</p>
+                            <p class="text-[10px] font-serif italic text-pink-200">Para mi niña valiente.</p>
+                            <p class="text-[10px] text-white font-bold uppercase tracking-widest">Charles & Yaire</p>
                         </div>
                     </div>
 
-                    <!-- Right Arrow -->
-                    <button onclick="nextTheme()" class="text-white/50 hover:text-white p-2">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                    </button>
+                    <!-- Card 2: Black/Dark -->
+                    <div class="share-card-item flex-shrink-0 w-[260px] snap-center relative bg-gradient-to-br from-zinc-900 via-black to-zinc-900 rounded-3xl p-6 shadow-2xl border border-white/10">
+                        <div class="absolute top-0 right-0 p-3 opacity-10 text-5xl">✨</div>
+                        <p class="text-zinc-200 font-bold uppercase tracking-widest text-[10px] mb-4">28E Wrapped</p>
+                        <h2 class="text-3xl font-black text-white mb-6 leading-none tracking-tight">Nuestros<br>120 Días</h2>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-400 font-medium text-xs">Mensajes</span><span class="text-white font-black text-lg">32,371</span></div>
+                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-400 font-medium text-xs">Conexión (Hrs)</span><span class="text-white font-black text-lg">2,880</span></div>
+                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-400 font-medium text-xs">Veces "Amor"</span><span class="text-white font-black text-lg">2,564</span></div>
+                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-400 font-medium text-xs">Veces "Te amo"</span><span class="text-white font-black text-lg">843</span></div>
+                        </div>
+                        <div class="mt-6 pt-3 flex justify-between items-center opacity-90">
+                            <p class="text-[10px] font-serif italic text-zinc-300">Para mi niña valiente.</p>
+                            <p class="text-[10px] text-white font-bold uppercase tracking-widest">Charles & Yaire</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: White/Light -->
+                    <div class="share-card-item flex-shrink-0 w-[260px] snap-center relative bg-gradient-to-br from-white via-slate-50 to-zinc-200 rounded-3xl p-6 shadow-2xl border border-black/10">
+                        <div class="absolute top-0 right-0 p-3 opacity-20 text-5xl">☁️</div>
+                        <p class="text-rose-600 font-bold uppercase tracking-widest text-[10px] mb-4">28E Wrapped</p>
+                        <h2 class="text-3xl font-black text-black mb-6 leading-none tracking-tight">Nuestros<br>120 Días</h2>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-end border-b border-black/10 pb-1 opacity-80"><span class="text-zinc-600 font-medium text-xs">Mensajes</span><span class="text-black font-black text-lg">32,371</span></div>
+                            <div class="flex justify-between items-end border-b border-black/10 pb-1 opacity-80"><span class="text-zinc-600 font-medium text-xs">Conexión (Hrs)</span><span class="text-black font-black text-lg">2,880</span></div>
+                            <div class="flex justify-between items-end border-b border-black/10 pb-1 opacity-80"><span class="text-zinc-600 font-medium text-xs">Veces "Amor"</span><span class="text-black font-black text-lg">2,564</span></div>
+                            <div class="flex justify-between items-end border-b border-black/10 pb-1 opacity-80"><span class="text-zinc-600 font-medium text-xs">Veces "Te amo"</span><span class="text-black font-black text-lg">843</span></div>
+                        </div>
+                        <div class="mt-6 pt-3 flex justify-between items-center opacity-90">
+                            <p class="text-[10px] font-serif italic text-rose-500">Para mi niña valiente.</p>
+                            <p class="text-[10px] text-black font-bold uppercase tracking-widest">Charles & Yaire</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Green/Red -->
+                    <div class="share-card-item flex-shrink-0 w-[260px] snap-center relative bg-gradient-to-br from-red-900 via-rose-800 to-emerald-900 rounded-3xl p-6 shadow-2xl border border-white/20">
+                        <div class="absolute top-0 right-0 p-3 opacity-20 text-5xl">🍉</div>
+                        <p class="text-green-300 font-bold uppercase tracking-widest text-[10px] mb-4">28E Wrapped</p>
+                        <h2 class="text-3xl font-black text-white mb-6 leading-none tracking-tight">Nuestros<br>120 Días</h2>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-rose-200 font-medium text-xs">Mensajes</span><span class="text-white font-black text-lg">32,371</span></div>
+                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-rose-200 font-medium text-xs">Conexión (Hrs)</span><span class="text-white font-black text-lg">2,880</span></div>
+                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-rose-200 font-medium text-xs">Veces "Amor"</span><span class="text-white font-black text-lg">2,564</span></div>
+                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-rose-200 font-medium text-xs">Veces "Te amo"</span><span class="text-white font-black text-lg">843</span></div>
+                        </div>
+                        <div class="mt-6 pt-3 flex justify-between items-center opacity-90">
+                            <p class="text-[10px] font-serif italic text-green-200">Para mi niña valiente.</p>
+                            <p class="text-[10px] text-white font-bold uppercase tracking-widest">Charles & Yaire</p>
+                        </div>
+                    </div>
                 </div>
-                
-                <p id="theme-indicator" class="text-[10px] text-white/40 tracking-widest uppercase mt-4 gsap-reveal">Diseño 1 de 4</p>
+
+                <!-- Webkit scrollbar hide for cards container -->
+                <style>
+                    #cards-container::-webkit-scrollbar { display: none; }
+                </style>
                 
                 <!-- Buttons (ABOVE the tap zones) -->
-                <div class="mt-8 z-50 relative gsap-reveal flex flex-col gap-4 w-full max-w-sm">
+                <div class="mt-4 z-50 relative gsap-reveal flex flex-col gap-4 w-full max-w-sm px-6">
                     <button id="btn-download" onclick="downloadShareCard()" class="w-full py-4 bg-pink-600 text-white font-black rounded-full hover:bg-pink-500 transition-all shadow-[0_0_20px_rgba(236,72,153,0.4)] uppercase tracking-widest text-sm pointer-events-auto flex items-center justify-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                         Descargar Resumen
@@ -665,121 +698,44 @@
             window.location.href = 'index.html';
         }
 
-        // Themes Logic
-        const themes = [
-            {
-                bg: "from-indigo-900 via-pink-900 to-rose-900",
-                textTitle: "text-white",
-                textPrimary: "text-white",
-                textSecondary: "text-zinc-300",
-                textAccent: "text-pink-300",
-                border: "border-white/10"
-            },
-            { // Black
-                bg: "from-zinc-900 via-black to-zinc-900",
-                textTitle: "text-white",
-                textPrimary: "text-white",
-                textSecondary: "text-zinc-400",
-                textAccent: "text-zinc-200",
-                border: "border-white/10"
-            },
-            { // White
-                bg: "from-white via-slate-50 to-zinc-200",
-                textTitle: "text-black",
-                textPrimary: "text-black",
-                textSecondary: "text-zinc-600",
-                textAccent: "text-rose-600",
-                border: "border-black/10"
-            },
-            { // Green & Red
-                bg: "from-red-900 via-rose-800 to-emerald-900",
-                textTitle: "text-white",
-                textPrimary: "text-white",
-                textSecondary: "text-rose-200",
-                textAccent: "text-green-300",
-                border: "border-white/20"
-            }
-        ];
-        
-        let currentTheme = 0;
-
-        function applyTheme(index) {
-            const card = document.getElementById('share-card');
-            const theme = themes[index];
+        function getVisibleCard() {
+            const container = document.getElementById('cards-container');
+            const cards = container.querySelectorAll('.share-card-item');
+            let closest = cards[0];
+            let minDiff = Infinity;
+            // Centro de la pantalla/contenedor
+            const containerCenter = container.scrollLeft + (container.clientWidth / 2);
             
-            card.className = `relative w-full max-w-[260px] sm:max-w-xs bg-gradient-to-br ${theme.bg} rounded-3xl p-6 shadow-2xl border ${theme.border} transition-colors duration-500`;
-            
-            document.getElementById('card-title').className = `text-3xl font-black ${theme.textTitle} mb-6 leading-none tracking-tight`;
-            document.getElementById('card-subtitle').className = `${theme.textAccent} font-bold uppercase tracking-widest text-[10px] mb-4`;
-            
-            const primaryTexts = card.querySelectorAll('.val-primary');
-            primaryTexts.forEach(el => el.className = `val-primary font-black text-lg ${theme.textPrimary}`);
-            
-            const secondaryTexts = card.querySelectorAll('.val-secondary');
-            secondaryTexts.forEach(el => el.className = `val-secondary font-medium text-xs ${theme.textSecondary}`);
-
-            const footerTexts = card.querySelectorAll('.val-footer');
-            footerTexts.forEach(el => el.className = `val-footer text-[10px] font-serif italic ${theme.textAccent}`);
-
-            document.getElementById('theme-indicator').innerText = `Diseño ${index + 1} de ${themes.length}`;
-        }
-
-        function nextTheme() {
-            currentTheme = (currentTheme + 1) % themes.length;
-            applyTheme(currentTheme);
-        }
-
-        function prevTheme() {
-            currentTheme = (currentTheme - 1 + themes.length) % themes.length;
-            applyTheme(currentTheme);
-        }
-
-        function toggleMute() {
-            const iconUnmuted = document.getElementById('icon-unmuted');
-            const iconMuted = document.getElementById('icon-muted');
-            
-            if (audioEl.muted) {
-                audioEl.muted = false;
-                iconUnmuted.classList.remove('hidden');
-                iconMuted.classList.add('hidden');
-            } else {
-                audioEl.muted = true;
-                iconUnmuted.classList.add('hidden');
-                iconMuted.classList.remove('hidden');
-            }
-        }
-
-        function togglePause() {
-            const iconPause = document.getElementById('icon-pause');
-            const iconPlay = document.getElementById('icon-play');
-            
-            if (isPaused) {
-                isPaused = false;
-                audioEl.play();
-                pauseTimeOffset += (performance.now() - pauseStartTime);
-                iconPause.classList.remove('hidden');
-                iconPlay.classList.add('hidden');
-                gsap.globalTimeline.play();
-            } else {
-                isPaused = true;
-                audioEl.pause();
-                pauseStartTime = performance.now();
-                iconPause.classList.add('hidden');
-                iconPlay.classList.remove('hidden');
-                gsap.globalTimeline.pause();
-            }
+            cards.forEach(card => {
+                const cardCenter = card.offsetLeft + (card.clientWidth / 2) - container.offsetLeft;
+                const diff = Math.abs(containerCenter - cardCenter);
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    closest = card;
+                }
+            });
+            return closest;
         }
 
         function downloadShareCard() {
-            const card = document.getElementById('share-card');
             const btn = document.getElementById('btn-download');
             const originalText = btn.innerHTML;
             
+            const card = getVisibleCard();
+            
+            // Clonamos la tarjeta fuera de pantalla para evitar el bug de html2canvas con overflow-scroll
+            const clone = card.cloneNode(true);
+            clone.style.position = 'fixed';
+            clone.style.top = '-9999px';
+            clone.style.left = '0';
+            clone.style.transform = 'none';
+            document.body.appendChild(clone);
+
             btn.innerHTML = `<span class="opacity-50">Generando Imagen...</span>`;
             
-            html2canvas(card, {
+            html2canvas(clone, {
                 backgroundColor: null,
-                scale: 3, // Very high quality for mobile export
+                scale: 3, 
                 logging: false,
                 useCORS: true
             }).then(canvas => {
@@ -788,9 +744,11 @@
                 link.href = canvas.toDataURL('image/png');
                 link.click();
                 btn.innerHTML = originalText;
+                document.body.removeChild(clone);
             }).catch(err => {
                 console.error("Export Error:", err);
                 btn.innerHTML = "Error al descargar";
+                document.body.removeChild(clone);
                 setTimeout(() => btn.innerHTML = originalText, 2000);
             });
         }
