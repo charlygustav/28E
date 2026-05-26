@@ -44,6 +44,10 @@ fetchPasswordFromFirebase();
 const users = new Map();
 const chatLog = [];
 
+// ── MUSIC STATE ──────────────────────────────────────────────────────────────
+let musicQueue = [];
+let musicState = { currentIndex: -1, isPlaying: false, startedAt: null, pausedAt: null, pausedTime: 0 };
+
 function broadcastUsers() {
   const list = Array.from(users.entries()).map(([id, u]) => ({
     id,
@@ -61,6 +65,10 @@ function handleLeave(socket) {
   users.delete(socket.id);
   socket.to(CHANNEL).emit('user_left', { userId: socket.id });
   broadcastUsers();
+  if (users.size === 0) {
+    musicQueue = [];
+    musicState = { currentIndex: -1, isPlaying: false, startedAt: null, pausedAt: null, pausedTime: 0 };
+  }
   console.log(`[-] ${displayName} left  (total: ${users.size})`);
 }
 
@@ -172,6 +180,100 @@ io.on('connection', (socket) => {
     });
   });
 
+  // ── MUSIC ─────────────────────────────────────────────────────────────────
+  socket.on('music_add', ({ url, title, type }) => {
+    const user = users.get(socket.id);
+    if (!user) return;
+    const track = { id: Date.now().toString(36) + Math.random().toString(36).slice(2,5), url, title: title || url, type, addedBy: socket.id, addedByName: user.displayName };
+    musicQueue.push(track);
+    io.to(CHANNEL).emit('music_queue_update', { queue: musicQueue, state: musicState });
+    if (musicState.currentIndex === -1) {
+      musicState = { currentIndex: 0, isPlaying: true, startedAt: Date.now(), pausedAt: null, pausedTime: 0 };
+      io.to(CHANNEL).emit('music_play', { track: musicQueue[0], state: musicState });
+    }
+  });
+
+  socket.on('music_remove', ({ trackId }) => {
+    const idx = musicQueue.findIndex(t => t.id === trackId);
+    if (idx === -1) return;
+    const wasPlaying = idx === musicState.currentIndex;
+    musicQueue.splice(idx, 1);
+    if (musicQueue.length === 0) {
+      musicState = { currentIndex: -1, isPlaying: false, startedAt: null, pausedAt: null, pausedTime: 0 };
+      io.to(CHANNEL).emit('music_stop', {});
+    } else if (idx < musicState.currentIndex) {
+      musicState.currentIndex--;
+    } else if (wasPlaying) {
+      if (musicState.currentIndex < musicQueue.length) {
+        musicState = { ...musicState, isPlaying: true, startedAt: Date.now(), pausedTime: 0, pausedAt: null };
+        io.to(CHANNEL).emit('music_play', { track: musicQueue[musicState.currentIndex], state: musicState });
+      } else {
+        musicState = { currentIndex: -1, isPlaying: false, startedAt: null, pausedAt: null, pausedTime: 0 };
+        io.to(CHANNEL).emit('music_stop', {});
+      }
+    }
+    io.to(CHANNEL).emit('music_queue_update', { queue: musicQueue, state: musicState });
+  });
+
+  socket.on('music_pause', ({ currentTime }) => {
+    if (!musicState.isPlaying) return;
+    musicState.isPlaying = false;
+    musicState.pausedAt = Date.now();
+    musicState.pausedTime = currentTime || 0;
+    io.to(CHANNEL).emit('music_state_update', { state: musicState });
+  });
+
+  socket.on('music_resume', () => {
+    if (musicState.isPlaying || musicState.currentIndex === -1) return;
+    musicState.isPlaying = true;
+    musicState.startedAt = Date.now() - (musicState.pausedTime * 1000);
+    musicState.pausedAt = null;
+    io.to(CHANNEL).emit('music_state_update', { state: musicState });
+  });
+
+  socket.on('music_skip', () => {
+    if (musicQueue.length === 0) return;
+    const next = musicState.currentIndex + 1;
+    if (next < musicQueue.length) {
+      musicState = { currentIndex: next, isPlaying: true, startedAt: Date.now(), pausedAt: null, pausedTime: 0 };
+      io.to(CHANNEL).emit('music_play', { track: musicQueue[next], state: musicState });
+    } else {
+      musicState = { currentIndex: -1, isPlaying: false, startedAt: null, pausedAt: null, pausedTime: 0 };
+      io.to(CHANNEL).emit('music_stop', {});
+    }
+    io.to(CHANNEL).emit('music_queue_update', { queue: musicQueue, state: musicState });
+  });
+
+  socket.on('music_ended', () => {
+    const next = musicState.currentIndex + 1;
+    if (next < musicQueue.length) {
+      musicState = { currentIndex: next, isPlaying: true, startedAt: Date.now(), pausedAt: null, pausedTime: 0 };
+      io.to(CHANNEL).emit('music_play', { track: musicQueue[next], state: musicState });
+    } else {
+      musicState = { currentIndex: -1, isPlaying: false, startedAt: null, pausedAt: null, pausedTime: 0 };
+      io.to(CHANNEL).emit('music_stop', {});
+    }
+    io.to(CHANNEL).emit('music_queue_update', { queue: musicQueue, state: musicState });
+  });
+
+  socket.on('music_seek', ({ time }) => {
+    if (musicState.currentIndex === -1) return;
+    musicState.startedAt = Date.now() - (time * 1000);
+    musicState.pausedTime = time;
+    socket.to(CHANNEL).emit('music_seek', { time });
+  });
+
+  socket.on('music_sync_request', () => {
+    const track = (musicState.currentIndex >= 0 && musicState.currentIndex < musicQueue.length) ? musicQueue[musicState.currentIndex] : null;
+    let currentTime = 0;
+    if (track && musicState.isPlaying && musicState.startedAt) {
+      currentTime = (Date.now() - musicState.startedAt) / 1000;
+    } else if (track) {
+      currentTime = musicState.pausedTime || 0;
+    }
+    socket.emit('music_sync', { queue: musicQueue, state: musicState, currentTrack: track, currentTime });
+  });
+
   // ── LEAVE / DISCONNECT ────────────────────────────────────────────────────
   socket.on('leave_channel', () => handleLeave(socket));
   socket.on('disconnect', () => handleLeave(socket));
@@ -193,6 +295,8 @@ app.get('/api/status', (_, res) => {
     })),
     max: MAX_USERS,
     chatLog: chatLog,
+    musicQueue: musicQueue,
+    musicState: musicState,
     timestamp: new Date().toISOString()
   });
 });

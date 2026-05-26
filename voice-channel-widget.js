@@ -47,7 +47,17 @@
       vc_restricted: "Acceso Restringido",
       vc_req_login: "Inicia sesión con tu cuenta de Google para poder entrar al Canal de Voz.",
       vc_session_as: "Sesión iniciada como",
-      vc_login_google: "Continuar con Google"
+      vc_login_google: "Continuar con Google",
+      vc_music: "Música",
+      vc_music_ph: "Pega un link de YouTube o Spotify…",
+      vc_music_add: "Añadir",
+      vc_music_now: "Reproduciendo",
+      vc_music_queue: "Cola",
+      vc_music_empty_q: "Sin canciones en cola",
+      vc_music_no_track: "Nada sonando",
+      vc_music_by: "por",
+      vc_music_skip: "Siguiente",
+      vc_music_err_url: "Link no válido. Usa YouTube o Spotify."
     },
     en: {
       vc_title: "Voice Channel",
@@ -87,7 +97,17 @@
       vc_restricted: "Restricted Access",
       vc_req_login: "Log in with your Google account to enter the Voice Channel.",
       vc_session_as: "Logged in as",
-      vc_login_google: "Continue with Google"
+      vc_login_google: "Continue with Google",
+      vc_music: "Music",
+      vc_music_ph: "Paste a YouTube or Spotify link…",
+      vc_music_add: "Add",
+      vc_music_now: "Now Playing",
+      vc_music_queue: "Queue",
+      vc_music_empty_q: "No songs in queue",
+      vc_music_no_track: "Nothing playing",
+      vc_music_by: "by",
+      vc_music_skip: "Skip",
+      vc_music_err_url: "Invalid link. Use YouTube or Spotify."
     },
     pt: {
       vc_title: "Canal de Voz",
@@ -127,7 +147,17 @@
       vc_restricted: "Acesso Restrito",
       vc_req_login: "Faça login com sua conta do Google para entrar no Canal de Voz.",
       vc_session_as: "Sessão iniciada como",
-      vc_login_google: "Continuar com o Google"
+      vc_login_google: "Continuar com o Google",
+      vc_music: "Música",
+      vc_music_ph: "Cole um link do YouTube ou Spotify…",
+      vc_music_add: "Adicionar",
+      vc_music_now: "Tocando agora",
+      vc_music_queue: "Fila",
+      vc_music_empty_q: "Sem músicas na fila",
+      vc_music_no_track: "Nada tocando",
+      vc_music_by: "por",
+      vc_music_skip: "Próxima",
+      vc_music_err_url: "Link inválido. Use YouTube ou Spotify."
     },
     fr: {
       vc_title: "Canal Vocal",
@@ -167,7 +197,17 @@
       vc_restricted: "Accès Restreint",
       vc_req_login: "Connectez-vous avec votre compte Google pour entrer dans le canal vocal.",
       vc_session_as: "Connecté en tant que",
-      vc_login_google: "Continuer avec Google"
+      vc_login_google: "Continuer avec Google",
+      vc_music: "Musique",
+      vc_music_ph: "Colle un lien YouTube ou Spotify…",
+      vc_music_add: "Ajouter",
+      vc_music_now: "En lecture",
+      vc_music_queue: "File d'attente",
+      vc_music_empty_q: "Pas de chansons",
+      vc_music_no_track: "Rien en lecture",
+      vc_music_by: "par",
+      vc_music_skip: "Suivant",
+      vc_music_err_url: "Lien invalide. Utilise YouTube ou Spotify."
     }
   };
 
@@ -415,6 +455,99 @@
     border:1px solid rgba(255,255,255,.1);
   }
   .vc-ring-btn.ignore:hover { background:rgba(255,255,255,.1); color:#fff; }
+
+  /* ── Music ── */
+  .vc-music-wrap { border-top:1px solid rgba(255,255,255,.05); }
+  .vc-music-body { display:none; }
+  .vc-music-body.open { display:block; }
+  .vc-music-now {
+    padding:10px 16px; display:flex; align-items:center; gap:10px;
+    background:rgba(245,158,11,.04); border-bottom:1px solid rgba(255,255,255,.04);
+  }
+  .vc-music-now-icon {
+    width:36px; height:36px; border-radius:8px; flex-shrink:0;
+    background:rgba(245,158,11,.12); display:flex; align-items:center; justify-content:center;
+    color:#f59e0b; position:relative; overflow:hidden;
+  }
+  .vc-music-now-icon svg { width:16px; height:16px; z-index:1; }
+  @keyframes vc-music-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+  .vc-music-now-icon.playing { animation:vc-music-pulse 1.5s infinite; }
+  .vc-music-now-info { flex:1; min-width:0; }
+  .vc-music-now-label { font-size:9px; color:rgba(245,158,11,.7); text-transform:uppercase; font-weight:700; letter-spacing:.5px; }
+  .vc-music-now-title { font-size:12.5px; color:#fff; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .vc-music-now-artist { font-size:10.5px; color:rgba(255,255,255,.35); }
+  .vc-music-progress { height:3px; background:rgba(255,255,255,.06); border-radius:2px; margin:0 16px; cursor:pointer; position:relative; }
+  .vc-music-progress-fill { height:100%; background:linear-gradient(90deg,#f59e0b,#fbbf24); border-radius:2px; width:0; transition:width .3s linear; }
+  .vc-music-time { padding:2px 16px 8px; font-size:9.5px; color:rgba(255,255,255,.3); font-variant-numeric:tabular-nums; display:flex; justify-content:space-between; }
+  .vc-music-ctrls { display:flex; align-items:center; justify-content:center; gap:8px; padding:6px 16px 10px; }
+  .vc-music-ctrl-btn {
+    width:32px; height:32px; border-radius:50%; border:1px solid rgba(255,255,255,.08);
+    background:rgba(255,255,255,.04); color:rgba(255,255,255,.6); display:flex;
+    align-items:center; justify-content:center; cursor:pointer; transition:all .2s;
+  }
+  .vc-music-ctrl-btn:hover { background:rgba(245,158,11,.15); color:#f59e0b; border-color:rgba(245,158,11,.3); transform:scale(1.1); }
+  .vc-music-ctrl-btn:active { transform:scale(0.9); }
+  .vc-music-ctrl-btn svg { width:14px; height:14px; }
+  .vc-music-ctrl-btn.primary { width:36px; height:36px; background:rgba(245,158,11,.15); border-color:rgba(245,158,11,.3); color:#f59e0b; }
+  .vc-music-ctrl-btn.primary:hover { background:rgba(245,158,11,.25); }
+  .vc-music-vol-wrap { display:flex; align-items:center; gap:6px; padding:0 16px 8px; }
+  .vc-music-vol-wrap svg { width:14px; height:14px; color:rgba(255,255,255,.3); flex-shrink:0; }
+  .vc-music-vol-slider {
+    flex:1; -webkit-appearance:none; appearance:none; height:3px; border-radius:2px;
+    background:rgba(255,255,255,.1); outline:none; cursor:pointer;
+  }
+  .vc-music-vol-slider::-webkit-slider-thumb {
+    -webkit-appearance:none; width:12px; height:12px; border-radius:50%;
+    background:#f59e0b; cursor:pointer; border:none;
+  }
+  .vc-music-vol-slider::-moz-range-thumb { width:12px; height:12px; border-radius:50%; background:#f59e0b; cursor:pointer; border:none; }
+  .vc-music-queue-lbl { padding:8px 16px 4px; font-size:10px; color:rgba(255,255,255,.22); font-weight:700; letter-spacing:.8px; text-transform:uppercase; display:flex; justify-content:space-between; align-items:center; }
+  .vc-music-queue-list { max-height:120px; overflow-y:auto; padding:0 16px 8px; scrollbar-width:thin; scrollbar-color:rgba(255,255,255,.08) transparent; }
+  .vc-music-queue-list::-webkit-scrollbar { width:4px; }
+  .vc-music-queue-list::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
+  .vc-music-track {
+    display:flex; align-items:center; gap:8px; padding:5px 0;
+    border-bottom:1px solid rgba(255,255,255,.03); animation:vc-slideIn .25s backwards;
+  }
+  .vc-music-track:last-child { border-bottom:none; }
+  .vc-music-track.current { background:rgba(245,158,11,.06); margin:0 -16px; padding:5px 16px; border-radius:6px; }
+  .vc-music-track-num { font-size:10px; color:rgba(255,255,255,.2); width:16px; text-align:center; flex-shrink:0; }
+  .vc-music-track.current .vc-music-track-num { color:#f59e0b; }
+  .vc-music-track-info { flex:1; min-width:0; }
+  .vc-music-track-title { font-size:11.5px; color:rgba(255,255,255,.7); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .vc-music-track.current .vc-music-track-title { color:#fff; font-weight:600; }
+  .vc-music-track-by { font-size:9.5px; color:rgba(255,255,255,.2); }
+  .vc-music-track-type { font-size:8px; padding:1px 5px; border-radius:3px; font-weight:700; text-transform:uppercase; flex-shrink:0; }
+  .vc-music-track-type.youtube { background:rgba(255,0,0,.12); color:#ff4444; }
+  .vc-music-track-type.spotify { background:rgba(30,215,96,.12); color:#1ed760; }
+  .vc-music-track-rm { background:none; border:none; color:rgba(255,255,255,.15); cursor:pointer; padding:2px; border-radius:4px; transition:all .15s; flex-shrink:0; }
+  .vc-music-track-rm:hover { color:#ef4444; background:rgba(239,68,68,.1); }
+  .vc-music-track-rm svg { width:12px; height:12px; }
+  .vc-music-input-row { display:flex; gap:6px; padding:8px 12px 10px; border-top:1px solid rgba(255,255,255,.04); }
+  .vc-music-in {
+    flex:1; background:#131313; border:1px solid rgba(255,255,255,.07);
+    border-radius:8px; padding:7px 10px; color:#fff; font-size:11.5px;
+    font-family:inherit; outline:none; transition:border-color .15s;
+  }
+  .vc-music-in:focus { border-color:rgba(245,158,11,.4); }
+  .vc-music-in::placeholder { color:rgba(255,255,255,.18); }
+  .vc-music-add-btn {
+    background:rgba(245,158,11,.85); border:none; border-radius:8px;
+    padding:7px 12px; color:#000; cursor:pointer; font-size:11px; font-weight:700;
+    display:flex; align-items:center; gap:4px; transition:all .15s; white-space:nowrap;
+  }
+  .vc-music-add-btn:hover { background:#f59e0b; transform:scale(1.05); }
+  .vc-music-add-btn:active { transform:scale(0.92); }
+  .vc-music-empty { text-align:center; padding:12px 0; color:rgba(255,255,255,.15); font-size:11px; }
+  .vc-music-spotify-embed { padding:8px 12px; }
+  .vc-music-spotify-embed iframe { border-radius:8px; }
+  .vc-music-err { color:#ef4444; font-size:11px; text-align:center; padding:4px 16px; min-height:14px; }
+  @keyframes vc-eq { 0%,100%{height:3px} 50%{height:12px} }
+  .vc-eq-bars { display:flex; align-items:flex-end; gap:2px; height:14px; }
+  .vc-eq-bar { width:3px; background:#f59e0b; border-radius:1px; animation:vc-eq .8s ease-in-out infinite; }
+  .vc-eq-bar:nth-child(2) { animation-delay:.2s; }
+  .vc-eq-bar:nth-child(3) { animation-delay:.4s; }
+  .vc-eq-bar:nth-child(4) { animation-delay:.1s; }
   `;
 
   // ── ICONS ─────────────────────────────────────────────────────────────────
@@ -430,6 +563,12 @@
     send: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>`,
     copy: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,
     link: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`,
+    music: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`,
+    play: `<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>`,
+    pause: `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`,
+    skipFwd: `<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><rect x="17" y="5" width="2" height="14"/></svg>`,
+    volumeUp: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>`,
+    trash: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`,
   };
 
   // ── MAIN CLASS ────────────────────────────────────────────────────────────
@@ -474,6 +613,18 @@
 
       // Typing state
       this._isTyping = false;
+
+      // Music state
+      this._musicOpen = false;
+      this._musicQueue = [];
+      this._musicState = { currentIndex: -1, isPlaying: false };
+      this._musicCurrentTrack = null;
+      this._musicVolume = 50;
+      this._musicPlaying = false;
+      this._musicProgressInt = null;
+      this._ytPlayer = null;
+      this._ytApiLoading = false;
+      this._ytApiCallbacks = [];
 
       // Audio constraints for getUserMedia
       this._audioConstraints = {
@@ -824,6 +975,9 @@
             ${ICONS.chat}
             ${this._chatUnread > 0 ? `<span class="vc-chat-badge-sm">${this._chatUnread}</span>` : ''}
           </button>
+          <button class="vc-cb" id="vc-music-toggle" style="position:relative;" title="${_t('vc_music')}">
+            ${ICONS.music}
+          </button>
           <button class="vc-cb leave" id="vc-leave">${ICONS.phone}</button>
         </div>
         <div class="vc-chat-wrap">
@@ -834,6 +988,11 @@
               <input class="vc-chat-in" id="vc-chat-in" type="text" placeholder="${_t('vc_chat_ph')}" maxlength="500" autocomplete="off"/>
               <button class="vc-chat-send" id="vc-chat-send">${ICONS.send}</button>
             </div>
+          </div>
+        </div>
+        <div class="vc-music-wrap">
+          <div class="vc-music-body${this._musicOpen ? ' open' : ''}" id="vc-music-body">
+            ${this._renderMusicPanel()}
           </div>
         </div>
         <div class="vc-sbar"><div class="vc-dot"></div>${_t('bar_conn')}</div>`;
@@ -991,6 +1150,11 @@
           }
         });
       }
+
+      // Music toggle & events
+      const musicToggle = document.getElementById('vc-music-toggle');
+      if (musicToggle) musicToggle.addEventListener('click', () => this._toggleMusic());
+      this._bindMusicEvents();
     }
 
     async _doJoin(name) {
@@ -1096,6 +1260,7 @@
           this._inviterName = null;
           this._chatMsgs = [];
           this._chatUnread = 0;
+          this.socket.emit('music_sync_request');
         });
 
         this.socket.on('channel_users', ({ users }) => {
@@ -1197,6 +1362,48 @@
             this._render(this._tplLogin());
           }
           // For transport drops, socket.io reconnects silently in background
+        });
+
+        // ── MUSIC EVENTS ────────────────────────────────────────────────────
+        this.socket.on('music_queue_update', ({ queue, state }) => {
+          this._musicQueue = queue;
+          this._musicState = state;
+          this._updateMusicUI();
+        });
+
+        this.socket.on('music_play', async ({ track, state }) => {
+          this._musicState = state;
+          this._playSfx('act_launch', 0.3);
+          const elapsed = state.startedAt ? (Date.now() - state.startedAt) / 1000 : 0;
+          await this._playMusicTrack(track, Math.max(0, elapsed));
+        });
+
+        this.socket.on('music_state_update', ({ state }) => {
+          this._musicState = state;
+          if (state.isPlaying) this._resumeMusic();
+          else this._pauseMusic();
+        });
+
+        this.socket.on('music_stop', () => {
+          this._musicState = { currentIndex: -1, isPlaying: false };
+          this._stopMusic();
+          this._playSfx('act_end', 0.3);
+        });
+
+        this.socket.on('music_seek', ({ time }) => {
+          this._seekMusic(time);
+        });
+
+        this.socket.on('music_sync', async ({ queue, state, currentTrack, currentTime }) => {
+          this._musicQueue = queue;
+          this._musicState = state;
+          if (currentTrack && state.isPlaying) {
+            await this._playMusicTrack(currentTrack, Math.max(0, currentTime || 0));
+          } else if (currentTrack) {
+            this._musicCurrentTrack = currentTrack;
+            this._musicPlaying = false;
+            this._updateMusicUI();
+          }
         });
 
         // Re-join channel silently after background reconnect
@@ -1699,6 +1906,328 @@
       }
     }
 
+    // ── MUSIC METHODS ─────────────────────────────────────────────────────
+    _toggleMusic() {
+      this._musicOpen = !this._musicOpen;
+      const body = document.getElementById('vc-music-body');
+      if (body) body.classList.toggle('open', this._musicOpen);
+      if (this._musicOpen && this._chatOpen) {
+        this._chatOpen = false;
+        const chatBody = document.getElementById('vc-chat-body');
+        if (chatBody) chatBody.classList.remove('open');
+      }
+      this._playSfx(this._musicOpen ? 'toggleOn' : 'toggleOff', 0.3);
+    }
+
+    _renderMusicPanel() {
+      const track = this._musicCurrentTrack;
+      const isPlaying = this._musicPlaying;
+      let nowPlaying = '';
+      if (track) {
+        const eqBars = isPlaying
+          ? `<div class="vc-eq-bars"><div class="vc-eq-bar"></div><div class="vc-eq-bar"></div><div class="vc-eq-bar"></div><div class="vc-eq-bar"></div></div>`
+          : ICONS.music;
+        nowPlaying = `
+          <div class="vc-music-now">
+            <div class="vc-music-now-icon${isPlaying ? ' playing' : ''}">${eqBars}</div>
+            <div class="vc-music-now-info">
+              <div class="vc-music-now-label">${_t('vc_music_now')}</div>
+              <div class="vc-music-now-title">${this._escHtml(track.title)}</div>
+              <div class="vc-music-now-artist">${track.addedByName ? `${_t('vc_music_by')} ${track.addedByName}` : ''}</div>
+            </div>
+            <span class="vc-music-track-type ${track.type}">${track.type === 'youtube' ? 'YT' : 'SP'}</span>
+          </div>
+          ${track.type === 'youtube' ? `
+            <div class="vc-music-progress" id="vc-music-progress"><div class="vc-music-progress-fill" id="vc-music-progress-fill"></div></div>
+            <div class="vc-music-time"><span id="vc-music-time-current">0:00</span><span id="vc-music-time-total">0:00</span></div>
+          ` : ''}
+          ${track.type === 'spotify' ? `<div class="vc-music-spotify-embed" id="vc-spotify-embed"></div>` : ''}
+          <div class="vc-music-ctrls">
+            <button class="vc-music-ctrl-btn primary" id="vc-music-playpause">${isPlaying ? ICONS.pause : ICONS.play}</button>
+            <button class="vc-music-ctrl-btn" id="vc-music-skip">${ICONS.skipFwd}</button>
+          </div>
+          <div class="vc-music-vol-wrap">${ICONS.volumeUp}<input type="range" class="vc-music-vol-slider" id="vc-music-vol" min="0" max="100" value="${this._musicVolume}"></div>`;
+      } else {
+        nowPlaying = `<div class="vc-music-empty" style="padding:16px 0">${_t('vc_music_no_track')}</div>`;
+      }
+      const queueItems = this._musicQueue.length > 0
+        ? this._musicQueue.map((t, i) => {
+            const isCur = i === this._musicState.currentIndex;
+            return `<div class="vc-music-track${isCur ? ' current' : ''}">
+              <span class="vc-music-track-num">${isCur && this._musicPlaying ? '\u266A' : (i + 1)}</span>
+              <div class="vc-music-track-info">
+                <div class="vc-music-track-title">${this._escHtml(t.title)}</div>
+                <div class="vc-music-track-by">${t.addedByName || ''}</div>
+              </div>
+              <span class="vc-music-track-type ${t.type}">${t.type === 'youtube' ? 'YT' : 'SP'}</span>
+              ${!isCur ? `<button class="vc-music-track-rm" data-track-id="${t.id}">${ICONS.trash}</button>` : ''}
+            </div>`;
+          }).join('')
+        : `<div class="vc-music-empty">${_t('vc_music_empty_q')}</div>`;
+      return `${nowPlaying}
+        <div class="vc-music-queue-lbl">${_t('vc_music_queue')} ${this._musicQueue.length > 0 ? `(${this._musicQueue.length})` : ''}</div>
+        <div class="vc-music-queue-list" id="vc-music-queue">${queueItems}</div>
+        <div class="vc-music-err" id="vc-music-err"></div>
+        <div class="vc-music-input-row">
+          <input class="vc-music-in" id="vc-music-url" type="text" placeholder="${_t('vc_music_ph')}" autocomplete="off"/>
+          <button class="vc-music-add-btn" id="vc-music-add">+ ${_t('vc_music_add')}</button>
+        </div>`;
+    }
+
+    _updateMusicUI() {
+      const body = document.getElementById('vc-music-body');
+      if (body) {
+        body.innerHTML = this._renderMusicPanel();
+        this._bindMusicEvents();
+        if (this._musicCurrentTrack?.type === 'spotify') {
+          this._createSpotifyEmbed(this._musicCurrentTrack);
+        }
+        if (this._musicPlaying && this._musicCurrentTrack?.type === 'youtube') {
+          this._startMusicProgress();
+        }
+      }
+    }
+
+    _bindMusicEvents() {
+      const playPause = document.getElementById('vc-music-playpause');
+      if (playPause) playPause.addEventListener('click', () => this._musicTogglePlayPause());
+      const skip = document.getElementById('vc-music-skip');
+      if (skip) skip.addEventListener('click', () => { if (this.socket) this.socket.emit('music_skip'); });
+      const vol = document.getElementById('vc-music-vol');
+      if (vol) vol.addEventListener('input', (e) => {
+        this._musicVolume = parseInt(e.target.value);
+        this._setMusicVolume(this._musicVolume);
+      });
+      const addBtn = document.getElementById('vc-music-add');
+      const urlInput = document.getElementById('vc-music-url');
+      if (addBtn) addBtn.addEventListener('click', () => this._addMusicFromInput());
+      if (urlInput) urlInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') this._addMusicFromInput(); });
+      document.querySelectorAll('.vc-music-track-rm').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const trackId = btn.dataset.trackId;
+          if (trackId && this.socket) this.socket.emit('music_remove', { trackId });
+        });
+      });
+      const progressBar = document.getElementById('vc-music-progress');
+      if (progressBar) {
+        progressBar.addEventListener('click', (e) => {
+          if (this._ytPlayer && typeof this._ytPlayer.getDuration === 'function') {
+            const rect = progressBar.getBoundingClientRect();
+            const pct = (e.clientX - rect.left) / rect.width;
+            const time = pct * this._ytPlayer.getDuration();
+            this._ytPlayer.seekTo(time, true);
+            if (this.socket) this.socket.emit('music_seek', { time });
+          }
+        });
+      }
+    }
+
+    async _addMusicFromInput() {
+      const input = document.getElementById('vc-music-url');
+      if (!input) return;
+      const url = input.value.trim();
+      if (!url) return;
+      const parsed = this._parseMusicUrl(url);
+      if (!parsed) {
+        const err = document.getElementById('vc-music-err');
+        if (err) { err.textContent = _t('vc_music_err_url'); setTimeout(() => { err.textContent = ''; }, 3000); }
+        return;
+      }
+      input.value = '';
+      input.disabled = true;
+      let title = parsed.type === 'youtube' ? 'YouTube Video' : 'Spotify Track';
+      try { title = await this._fetchMusicTitle(parsed.url, parsed.type); } catch(e) {}
+      input.disabled = false;
+      if (this.socket) {
+        this.socket.emit('music_add', { url: parsed.url, title, type: parsed.type });
+        this._playSfx('toggleOn', 0.3);
+      }
+    }
+
+    _parseMusicUrl(url) {
+      const ytRegex = /(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/)|youtu\.be\/|music\.youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/;
+      const ytMatch = url.match(ytRegex);
+      if (ytMatch) return { type: 'youtube', id: ytMatch[1], url: `https://www.youtube.com/watch?v=${ytMatch[1]}` };
+      const spRegex = /open\.spotify\.com\/(track|album|playlist)\/([a-zA-Z0-9]+)/;
+      const spMatch = url.match(spRegex);
+      if (spMatch) return { type: 'spotify', spotifyType: spMatch[1], id: spMatch[2], url: `https://open.spotify.com/${spMatch[1]}/${spMatch[2]}` };
+      return null;
+    }
+
+    async _fetchMusicTitle(url, type) {
+      try {
+        if (type === 'youtube') {
+          const res = await fetch(`https://noembed.com/embed?url=${encodeURIComponent(url)}`);
+          const data = await res.json();
+          return data.title || 'YouTube Video';
+        } else if (type === 'spotify') {
+          const res = await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`);
+          const data = await res.json();
+          return data.title || 'Spotify Track';
+        }
+      } catch(e) { return type === 'youtube' ? 'YouTube Video' : 'Spotify Track'; }
+    }
+
+    _musicTogglePlayPause() {
+      if (!this._musicCurrentTrack || !this.socket) return;
+      if (this._musicPlaying) {
+        let currentTime = 0;
+        if (this._ytPlayer && typeof this._ytPlayer.getCurrentTime === 'function') currentTime = this._ytPlayer.getCurrentTime();
+        this.socket.emit('music_pause', { currentTime });
+      } else {
+        this.socket.emit('music_resume');
+      }
+    }
+
+    async _playMusicTrack(track, seekTime = 0) {
+      this._musicCurrentTrack = track;
+      this._musicPlaying = true;
+      this._destroyMusicPlayer();
+      this._updateMusicUI();
+      if (track.type === 'youtube') {
+        const ytId = this._parseMusicUrl(track.url)?.id;
+        if (ytId) {
+          await this._createYTPlayer(ytId, seekTime);
+          this._startMusicProgress();
+        }
+      }
+    }
+
+    _pauseMusic() {
+      this._musicPlaying = false;
+      if (this._ytPlayer && typeof this._ytPlayer.pauseVideo === 'function') this._ytPlayer.pauseVideo();
+      this._stopMusicProgress();
+      this._updateMusicUI();
+    }
+
+    _resumeMusic() {
+      this._musicPlaying = true;
+      if (this._ytPlayer && typeof this._ytPlayer.playVideo === 'function') this._ytPlayer.playVideo();
+      this._startMusicProgress();
+      this._updateMusicUI();
+    }
+
+    _stopMusic() {
+      this._musicPlaying = false;
+      this._musicCurrentTrack = null;
+      this._destroyMusicPlayer();
+      this._stopMusicProgress();
+      this._updateMusicUI();
+    }
+
+    _seekMusic(time) {
+      if (this._ytPlayer && typeof this._ytPlayer.seekTo === 'function') this._ytPlayer.seekTo(time, true);
+    }
+
+    _setMusicVolume(vol) {
+      this._musicVolume = vol;
+      if (this._ytPlayer && typeof this._ytPlayer.setVolume === 'function') this._ytPlayer.setVolume(vol);
+    }
+
+    _onTrackEnded() {
+      if (this.socket) this.socket.emit('music_ended');
+    }
+
+    _loadYouTubeAPI() {
+      if (window.YT && window.YT.Player) return Promise.resolve();
+      return new Promise((resolve) => {
+        if (this._ytApiLoading) {
+          this._ytApiCallbacks.push(resolve);
+          return;
+        }
+        this._ytApiLoading = true;
+        const existing = document.querySelector('script[src*="youtube.com/iframe_api"]');
+        if (existing) {
+          const check = setInterval(() => {
+            if (window.YT && window.YT.Player) { clearInterval(check); this._ytApiLoading = false; resolve(); }
+          }, 100);
+          return;
+        }
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        const prevCb = window.onYouTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady = () => {
+          if (prevCb) prevCb();
+          this._ytApiLoading = false;
+          resolve();
+          this._ytApiCallbacks.forEach(cb => cb());
+          this._ytApiCallbacks = [];
+        };
+        document.head.appendChild(tag);
+      });
+    }
+
+    async _createYTPlayer(videoId, seekTo = 0) {
+      await this._loadYouTubeAPI();
+      if (this._ytPlayer) { try { this._ytPlayer.destroy(); } catch(e) {} this._ytPlayer = null; }
+      let container = document.getElementById('vc-yt-container');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'vc-yt-container';
+        container.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;overflow:hidden;pointer-events:none;';
+        document.body.appendChild(container);
+      }
+      const playerDiv = document.createElement('div');
+      playerDiv.id = 'vc-yt-player-' + Date.now();
+      container.innerHTML = '';
+      container.appendChild(playerDiv);
+      return new Promise((resolve) => {
+        this._ytPlayer = new YT.Player(playerDiv.id, {
+          height: '1', width: '1', videoId,
+          playerVars: { autoplay: 1, controls: 0, disablekb: 1, fs: 0, modestbranding: 1, rel: 0, start: Math.floor(seekTo) },
+          events: {
+            onReady: (e) => {
+              e.target.setVolume(this._musicVolume);
+              if (seekTo > 0) e.target.seekTo(seekTo, true);
+              e.target.playVideo();
+              this._musicPlaying = true;
+              resolve(e.target);
+            },
+            onStateChange: (e) => { if (e.data === YT.PlayerState.ENDED) this._onTrackEnded(); },
+            onError: () => this._onTrackEnded()
+          }
+        });
+      });
+    }
+
+    _createSpotifyEmbed(track) {
+      const embedContainer = document.getElementById('vc-spotify-embed');
+      if (!embedContainer) return;
+      const spMatch = track.url.match(/open\.spotify\.com\/(track|album|playlist)\/([a-zA-Z0-9]+)/);
+      if (!spMatch) return;
+      const embedUrl = `https://open.spotify.com/embed/${spMatch[1]}/${spMatch[2]}?utm_source=generator&theme=0`;
+      const h = spMatch[1] === 'track' ? '80' : '152';
+      embedContainer.innerHTML = `<iframe src="${embedUrl}" width="100%" height="${h}" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="border-radius:8px;"></iframe>`;
+    }
+
+    _startMusicProgress() {
+      this._stopMusicProgress();
+      this._musicProgressInt = setInterval(() => {
+        if (!this._musicPlaying || !this._ytPlayer) return;
+        if (typeof this._ytPlayer.getCurrentTime !== 'function') return;
+        const current = this._ytPlayer.getCurrentTime();
+        const duration = this._ytPlayer.getDuration();
+        const fill = document.getElementById('vc-music-progress-fill');
+        const timeCurrent = document.getElementById('vc-music-time-current');
+        const timeTotal = document.getElementById('vc-music-time-total');
+        if (fill && duration > 0) fill.style.width = ((current / duration) * 100) + '%';
+        const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+        if (timeCurrent) timeCurrent.textContent = fmt(current);
+        if (timeTotal) timeTotal.textContent = fmt(duration);
+      }, 500);
+    }
+
+    _stopMusicProgress() {
+      if (this._musicProgressInt) { clearInterval(this._musicProgressInt); this._musicProgressInt = null; }
+    }
+
+    _destroyMusicPlayer() {
+      this._stopMusicProgress();
+      if (this._ytPlayer) { try { this._ytPlayer.destroy(); } catch(e) {} this._ytPlayer = null; }
+      const container = document.getElementById('vc-yt-container');
+      if (container) container.innerHTML = '';
+    }
+
     _cleanup() {
       this._stopSfx(this.progNode); this.progNode = null;
       this._stopTimer();
@@ -1712,6 +2241,12 @@
       this.audios.clear();
       this.gains.clear();
       this._destroyNoiseProcessing();
+      this._destroyMusicPlayer();
+      this._musicPlaying = false;
+      this._musicCurrentTrack = null;
+      this._musicQueue = [];
+      this._musicState = { currentIndex: -1, isPlaying: false };
+      this._musicOpen = false;
       if (this.stream) { this.stream.getTracks().forEach(t => t.stop()); this.stream = null; }
       this._processedStream = null;
       this.connected = false;
