@@ -4241,6 +4241,9 @@
                         if (expList) expList.style.display = '';
                         if (radioVis) radioVis.style.display = 'none';
                         
+                        const vinylArt = document.getElementById('spotlight-vinyl-art');
+                        if (vinylArt) vinylArt.classList.remove('scale-[0.8]');
+                        
                         // Restore track info
                         const t = spotlightTracks[currentSpotTrack];
                         if (t) {
@@ -4261,6 +4264,9 @@
                         if (expTimeList) expTimeList.style.display = 'none';
                         if (expList) expList.style.display = 'none';
                         if (radioVis) radioVis.style.display = 'flex';
+                        
+                        const vinylArt = document.getElementById('spotlight-vinyl-art');
+                        if (vinylArt) vinylArt.classList.add('scale-[0.8]', 'transition-transform', 'duration-300');
                         
                         // Set live text
                         if (compactTitle) compactTitle.textContent = 'Spotlight Radio';
