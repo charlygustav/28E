@@ -389,73 +389,105 @@
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </button>
 
-                <div id="cards-container" class="flex overflow-x-auto snap-x snap-mandatory gap-6 w-[100vw] px-[calc(50vw-130px)] pb-2 gsap-reveal relative z-[60] pointer-events-auto scroll-smooth" style="scrollbar-width: none; -ms-overflow-style: none;">
+                <div id="cards-container" class="flex overflow-x-auto snap-x snap-mandatory gap-6 w-[100vw] px-[calc(50vw-120px)] pb-2 gsap-reveal relative z-[60] pointer-events-auto scroll-smooth" style="scrollbar-width: none; -ms-overflow-style: none;">
                     
                     <!-- Card 1: Pink/Rose -->
-                    <div class="share-card-item flex-shrink-0 w-[260px] snap-center relative bg-gradient-to-br from-indigo-900 via-pink-900 to-rose-900 rounded-3xl p-6 shadow-2xl border border-white/10">
-                        <div class="absolute top-0 right-0 p-3 opacity-20 text-5xl">🌷</div>
-                        <p class="text-pink-300 font-bold uppercase tracking-widest text-[10px] mb-4">28E Wrapped</p>
-                        <h2 class="text-3xl font-black text-white mb-6 leading-none tracking-tight">Nuestros<br>120 Días</h2>
-                        <div class="space-y-3">
-                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-300 font-medium text-xs">Mensajes</span><span class="text-white font-black text-lg">32,371</span></div>
-                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-300 font-medium text-xs">Conexión (Hrs)</span><span class="text-white font-black text-lg">2,880</span></div>
-                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-300 font-medium text-xs">Veces "Amor"</span><span class="text-white font-black text-lg">2,564</span></div>
-                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-300 font-medium text-xs">Veces "Te amo"</span><span class="text-white font-black text-lg">843</span></div>
+                    <div class="share-card-item flex-shrink-0 w-[240px] aspect-[9/16] snap-center relative bg-gradient-to-br from-indigo-900 via-pink-900 to-rose-900 rounded-md p-5 shadow-2xl border border-white/10 flex flex-col justify-between">
+                        <div class="absolute top-4 right-4 opacity-20 text-4xl">🌷</div>
+                        
+                        <div class="flex flex-col items-start w-full">
+                            <h1 class="text-5xl font-black italic tracking-tighter leading-none text-white drop-shadow-md">28E</h1>
+                            <p class="text-pink-300 font-bold tracking-[0.3em] uppercase text-[9px] mt-1 ml-1">Wrapped</p>
                         </div>
-                        <div class="mt-6 pt-3 flex justify-between items-center opacity-90">
-                            <p class="text-[10px] font-serif italic text-pink-200">Para mi niña valiente.</p>
-                            <p class="text-[10px] text-white font-bold uppercase tracking-widest">Charles & Yaire</p>
+                        
+                        <div class="mt-auto mb-4 w-full">
+                            <h2 class="text-3xl font-black text-white mb-6 leading-none tracking-tight">Nuestros<br>120 Días</h2>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-300 font-medium text-xs">Mensajes</span><span class="text-white font-black text-lg">32,371</span></div>
+                                <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-300 font-medium text-xs">Conexión (Hrs)</span><span class="text-white font-black text-lg">2,880</span></div>
+                                <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-300 font-medium text-xs">Veces "Amor"</span><span class="text-white font-black text-lg">2,564</span></div>
+                                <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-300 font-medium text-xs">Veces "Te amo"</span><span class="text-white font-black text-lg">843</span></div>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 w-full flex justify-between items-center opacity-90 border-t border-white/20">
+                            <p class="text-[9px] font-serif italic text-pink-200">Para mi niña valiente.</p>
+                            <p class="text-[9px] text-white font-bold uppercase tracking-widest">C & Y</p>
                         </div>
                     </div>
 
                     <!-- Card 2: Black/Dark -->
-                    <div class="share-card-item flex-shrink-0 w-[260px] snap-center relative bg-gradient-to-br from-zinc-900 via-black to-zinc-900 rounded-3xl p-6 shadow-2xl border border-white/10">
-                        <div class="absolute top-0 right-0 p-3 opacity-10 text-5xl">✨</div>
-                        <p class="text-zinc-200 font-bold uppercase tracking-widest text-[10px] mb-4">28E Wrapped</p>
-                        <h2 class="text-3xl font-black text-white mb-6 leading-none tracking-tight">Nuestros<br>120 Días</h2>
-                        <div class="space-y-3">
-                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-400 font-medium text-xs">Mensajes</span><span class="text-white font-black text-lg">32,371</span></div>
-                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-400 font-medium text-xs">Conexión (Hrs)</span><span class="text-white font-black text-lg">2,880</span></div>
-                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-400 font-medium text-xs">Veces "Amor"</span><span class="text-white font-black text-lg">2,564</span></div>
-                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-400 font-medium text-xs">Veces "Te amo"</span><span class="text-white font-black text-lg">843</span></div>
+                    <div class="share-card-item flex-shrink-0 w-[240px] aspect-[9/16] snap-center relative bg-gradient-to-br from-zinc-900 via-black to-zinc-900 rounded-md p-5 shadow-2xl border border-white/10 flex flex-col justify-between">
+                        <div class="absolute top-4 right-4 opacity-10 text-4xl">✨</div>
+                        
+                        <div class="flex flex-col items-start w-full">
+                            <h1 class="text-5xl font-black italic tracking-tighter leading-none text-white drop-shadow-md">28E</h1>
+                            <p class="text-zinc-400 font-bold tracking-[0.3em] uppercase text-[9px] mt-1 ml-1">Wrapped</p>
                         </div>
-                        <div class="mt-6 pt-3 flex justify-between items-center opacity-90">
-                            <p class="text-[10px] font-serif italic text-zinc-300">Para mi niña valiente.</p>
-                            <p class="text-[10px] text-white font-bold uppercase tracking-widest">Charles & Yaire</p>
+                        
+                        <div class="mt-auto mb-4 w-full">
+                            <h2 class="text-3xl font-black text-white mb-6 leading-none tracking-tight">Nuestros<br>120 Días</h2>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-400 font-medium text-xs">Mensajes</span><span class="text-white font-black text-lg">32,371</span></div>
+                                <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-400 font-medium text-xs">Conexión (Hrs)</span><span class="text-white font-black text-lg">2,880</span></div>
+                                <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-400 font-medium text-xs">Veces "Amor"</span><span class="text-white font-black text-lg">2,564</span></div>
+                                <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-zinc-400 font-medium text-xs">Veces "Te amo"</span><span class="text-white font-black text-lg">843</span></div>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 w-full flex justify-between items-center opacity-90 border-t border-white/20">
+                            <p class="text-[9px] font-serif italic text-zinc-300">Para mi niña valiente.</p>
+                            <p class="text-[9px] text-white font-bold uppercase tracking-widest">C & Y</p>
                         </div>
                     </div>
 
                     <!-- Card 3: White/Light -->
-                    <div class="share-card-item flex-shrink-0 w-[260px] snap-center relative bg-gradient-to-br from-white via-slate-50 to-zinc-200 rounded-3xl p-6 shadow-2xl border border-black/10">
-                        <div class="absolute top-0 right-0 p-3 opacity-20 text-5xl">☁️</div>
-                        <p class="text-rose-600 font-bold uppercase tracking-widest text-[10px] mb-4">28E Wrapped</p>
-                        <h2 class="text-3xl font-black text-black mb-6 leading-none tracking-tight">Nuestros<br>120 Días</h2>
-                        <div class="space-y-3">
-                            <div class="flex justify-between items-end border-b border-black/10 pb-1 opacity-80"><span class="text-zinc-600 font-medium text-xs">Mensajes</span><span class="text-black font-black text-lg">32,371</span></div>
-                            <div class="flex justify-between items-end border-b border-black/10 pb-1 opacity-80"><span class="text-zinc-600 font-medium text-xs">Conexión (Hrs)</span><span class="text-black font-black text-lg">2,880</span></div>
-                            <div class="flex justify-between items-end border-b border-black/10 pb-1 opacity-80"><span class="text-zinc-600 font-medium text-xs">Veces "Amor"</span><span class="text-black font-black text-lg">2,564</span></div>
-                            <div class="flex justify-between items-end border-b border-black/10 pb-1 opacity-80"><span class="text-zinc-600 font-medium text-xs">Veces "Te amo"</span><span class="text-black font-black text-lg">843</span></div>
+                    <div class="share-card-item flex-shrink-0 w-[240px] aspect-[9/16] snap-center relative bg-gradient-to-br from-white via-slate-50 to-zinc-200 rounded-md p-5 shadow-2xl border border-black/10 flex flex-col justify-between">
+                        <div class="absolute top-4 right-4 opacity-20 text-4xl">☁️</div>
+                        
+                        <div class="flex flex-col items-start w-full">
+                            <h1 class="text-5xl font-black italic tracking-tighter leading-none text-black drop-shadow-sm">28E</h1>
+                            <p class="text-rose-500 font-bold tracking-[0.3em] uppercase text-[9px] mt-1 ml-1">Wrapped</p>
                         </div>
-                        <div class="mt-6 pt-3 flex justify-between items-center opacity-90">
-                            <p class="text-[10px] font-serif italic text-rose-500">Para mi niña valiente.</p>
-                            <p class="text-[10px] text-black font-bold uppercase tracking-widest">Charles & Yaire</p>
+                        
+                        <div class="mt-auto mb-4 w-full">
+                            <h2 class="text-3xl font-black text-black mb-6 leading-none tracking-tight">Nuestros<br>120 Días</h2>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-end border-b border-black/10 pb-1 opacity-80"><span class="text-zinc-600 font-medium text-xs">Mensajes</span><span class="text-black font-black text-lg">32,371</span></div>
+                                <div class="flex justify-between items-end border-b border-black/10 pb-1 opacity-80"><span class="text-zinc-600 font-medium text-xs">Conexión (Hrs)</span><span class="text-black font-black text-lg">2,880</span></div>
+                                <div class="flex justify-between items-end border-b border-black/10 pb-1 opacity-80"><span class="text-zinc-600 font-medium text-xs">Veces "Amor"</span><span class="text-black font-black text-lg">2,564</span></div>
+                                <div class="flex justify-between items-end border-b border-black/10 pb-1 opacity-80"><span class="text-zinc-600 font-medium text-xs">Veces "Te amo"</span><span class="text-black font-black text-lg">843</span></div>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 w-full flex justify-between items-center opacity-90 border-t border-black/10">
+                            <p class="text-[9px] font-serif italic text-rose-500">Para mi niña valiente.</p>
+                            <p class="text-[9px] text-black font-bold uppercase tracking-widest">C & Y</p>
                         </div>
                     </div>
 
                     <!-- Card 4: Green/Red -->
-                    <div class="share-card-item flex-shrink-0 w-[260px] snap-center relative bg-gradient-to-br from-red-900 via-rose-800 to-emerald-900 rounded-3xl p-6 shadow-2xl border border-white/20">
-                        <div class="absolute top-0 right-0 p-3 opacity-20 text-5xl">🍉</div>
-                        <p class="text-green-300 font-bold uppercase tracking-widest text-[10px] mb-4">28E Wrapped</p>
-                        <h2 class="text-3xl font-black text-white mb-6 leading-none tracking-tight">Nuestros<br>120 Días</h2>
-                        <div class="space-y-3">
-                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-rose-200 font-medium text-xs">Mensajes</span><span class="text-white font-black text-lg">32,371</span></div>
-                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-rose-200 font-medium text-xs">Conexión (Hrs)</span><span class="text-white font-black text-lg">2,880</span></div>
-                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-rose-200 font-medium text-xs">Veces "Amor"</span><span class="text-white font-black text-lg">2,564</span></div>
-                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-rose-200 font-medium text-xs">Veces "Te amo"</span><span class="text-white font-black text-lg">843</span></div>
+                    <div class="share-card-item flex-shrink-0 w-[240px] aspect-[9/16] snap-center relative bg-gradient-to-br from-red-900 via-rose-800 to-emerald-900 rounded-md p-5 shadow-2xl border border-white/20 flex flex-col justify-between">
+                        <div class="absolute top-4 right-4 opacity-20 text-4xl">🍉</div>
+                        
+                        <div class="flex flex-col items-start w-full">
+                            <h1 class="text-5xl font-black italic tracking-tighter leading-none text-white drop-shadow-md">28E</h1>
+                            <p class="text-green-300 font-bold tracking-[0.3em] uppercase text-[9px] mt-1 ml-1">Wrapped</p>
                         </div>
-                        <div class="mt-6 pt-3 flex justify-between items-center opacity-90">
-                            <p class="text-[10px] font-serif italic text-green-200">Para mi niña valiente.</p>
-                            <p class="text-[10px] text-white font-bold uppercase tracking-widest">Charles & Yaire</p>
+                        
+                        <div class="mt-auto mb-4 w-full">
+                            <h2 class="text-3xl font-black text-white mb-6 leading-none tracking-tight">Nuestros<br>120 Días</h2>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-rose-200 font-medium text-xs">Mensajes</span><span class="text-white font-black text-lg">32,371</span></div>
+                                <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-rose-200 font-medium text-xs">Conexión (Hrs)</span><span class="text-white font-black text-lg">2,880</span></div>
+                                <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-rose-200 font-medium text-xs">Veces "Amor"</span><span class="text-white font-black text-lg">2,564</span></div>
+                                <div class="flex justify-between items-end border-b border-current pb-1 opacity-80"><span class="text-rose-200 font-medium text-xs">Veces "Te amo"</span><span class="text-white font-black text-lg">843</span></div>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 w-full flex justify-between items-center opacity-90 border-t border-white/20">
+                            <p class="text-[9px] font-serif italic text-green-200">Para mi niña valiente.</p>
+                            <p class="text-[9px] text-white font-bold uppercase tracking-widest">C & Y</p>
                         </div>
                     </div>
                 </div>
@@ -468,8 +500,8 @@
                 <!-- Buttons (ABOVE the tap zones) -->
                 <div class="mt-2 z-[60] relative gsap-reveal flex flex-col gap-3 w-full max-w-sm px-6">
                     <button id="btn-download" onclick="downloadShareCard()" class="w-full py-3.5 bg-pink-600 text-white font-black rounded-full hover:bg-pink-500 transition-all shadow-[0_0_20px_rgba(236,72,153,0.4)] uppercase tracking-widest text-sm pointer-events-auto flex items-center justify-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                        Descargar Resumen
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                        Compartir Resumen
                     </button>
                     <button onclick="window.location.href='index.html'" class="w-full py-3.5 bg-white/10 text-white font-bold rounded-full hover:bg-white/20 transition-all backdrop-blur-sm border border-white/10 uppercase tracking-widest text-sm pointer-events-auto">
                         Volver a Nuestro Mundo
@@ -768,7 +800,7 @@
             cards[nextIndex].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         }
 
-        function downloadShareCard() {
+        async function downloadShareCard() {
             const btn = document.getElementById('btn-download');
             const originalText = btn.innerHTML;
             
@@ -782,26 +814,55 @@
             clone.style.transform = 'none';
             document.body.appendChild(clone);
 
-            btn.innerHTML = `<span class="opacity-50">Generando Imagen...</span>`;
+            btn.innerHTML = `<span class="opacity-50">Preparando...</span>`;
             
-            html2canvas(clone, {
-                backgroundColor: null,
-                scale: 3, 
-                logging: false,
-                useCORS: true
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = '28E_Wrapped.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                btn.innerHTML = originalText;
+            try {
+                const canvas = await html2canvas(clone, {
+                    backgroundColor: null,
+                    scale: 3, 
+                    logging: false,
+                    useCORS: true
+                });
+
                 document.body.removeChild(clone);
-            }).catch(err => {
+
+                canvas.toBlob(async (blob) => {
+                    const file = new File([blob], '28E_Wrapped.png', { type: 'image/png' });
+
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        try {
+                            await navigator.share({
+                                title: 'Mi 28E Wrapped',
+                                text: '¡Mira mi resumen de nuestros 120 días juntos!',
+                                files: [file]
+                            });
+                            btn.innerHTML = originalText;
+                        } catch (err) {
+                            console.error("Share failed/canceled:", err);
+                            // Fallback a descarga si falla o el usuario cancela
+                            downloadFallback(canvas);
+                            btn.innerHTML = originalText;
+                        }
+                    } else {
+                        // Fallback a descarga directa si no soporta API de compartir
+                        downloadFallback(canvas);
+                        btn.innerHTML = originalText;
+                    }
+                }, 'image/png');
+
+            } catch (err) {
                 console.error("Export Error:", err);
-                btn.innerHTML = "Error al descargar";
-                document.body.removeChild(clone);
+                btn.innerHTML = "Error al compartir";
+                if(document.body.contains(clone)) document.body.removeChild(clone);
                 setTimeout(() => btn.innerHTML = originalText, 2000);
-            });
+            }
+        }
+
+        function downloadFallback(canvas) {
+            const link = document.createElement('a');
+            link.download = '28E_Wrapped.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
         }
     </script>
 </body>
