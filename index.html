@@ -4169,13 +4169,22 @@
                         } else {
                             if (!zenoAudio.src || zenoAudio.src === window.location.href) {
                                 // Live Zeno FM Stream
+                                zenoAudio.crossOrigin = "anonymous";
                                 zenoAudio.src = 'https://stream.zeno.fm/ox28sopxqt1vv'; 
+                                zenoAudio.load();
                             }
+                            
+                            // Optimistic UI update so the user knows it's loading/playing
+                            isSpotPlaying = true;
+                            spotlightUpdateUI();
+                            
                             zenoAudio.play().then(() => {
-                                isSpotPlaying = true;
-                                spotlightUpdateUI();
                                 document.title = '28E FM (Live)';
-                            }).catch(console.error);
+                            }).catch(err => {
+                                console.error('Zeno stream playback failed:', err);
+                                isSpotPlaying = false;
+                                spotlightUpdateUI();
+                            });
                         }
                         return;
                     }
