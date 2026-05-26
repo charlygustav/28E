@@ -722,7 +722,6 @@
                 isPaused = false;
                 pauseTimeOffset = 0;
                 showSlide(0);
-                startAutoAdvance();
             }, 500);
         }
 
@@ -735,7 +734,12 @@
             }
             gsap.killTweensOf('.gsap-text, .gsap-reveal, .collage-img');
             
-            document.getElementById('start-screen').style.display = 'flex';
+            const startScreen = document.getElementById('start-screen');
+            startScreen.style.display = 'flex';
+            // Force reflow
+            void startScreen.offsetWidth;
+            startScreen.style.opacity = '1';
+            
             document.getElementById('mute-btn').classList.add('hidden');
             document.getElementById('pause-btn').classList.add('hidden');
             
