@@ -477,7 +477,7 @@
            this._render(this._tplConnected());
         } else {
           if (document.getElementById('vc-reconnect')) this._render(this._tplDisconnected());
-          else if (document.querySelector('.animate-spin')) this._render(this._tplLoading());
+          else if (this.panel.querySelector('.animate-spin')) this._render(this._tplLoading());
           else this._render(this._tplLogin());
         }
       });
@@ -485,7 +485,7 @@
       window.addEventListener('yaireAuthChanged', () => {
         if (!this.connected) {
           if (document.getElementById('vc-reconnect')) this._render(this._tplDisconnected());
-          else if (document.querySelector('.animate-spin')) this._render(this._tplLoading());
+          else if (this.panel.querySelector('.animate-spin')) this._render(this._tplLoading());
           else this._render(this._tplLogin());
         }
       });
@@ -504,7 +504,7 @@
           this._bar.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
         } else {
           if (document.getElementById('vc-reconnect')) this._render(this._tplDisconnected());
-          else if (document.querySelector('.animate-spin')) this._render(this._tplLoading());
+          else if (this.panel.querySelector('.animate-spin')) this._render(this._tplLoading());
           else this._render(this._tplLogin());
         }
         this._playSfx('flyin', 0.4, false, 'fly');
@@ -548,7 +548,7 @@
       return `
         <div class="flex items-center justify-between px-5 py-4 border-b border-white/5 bg-zinc-900/50">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center relative overflow-hidden">${ICONS.sound}</div>
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center relative overflow-hidden [&>svg]:w-5 [&>svg]:h-5 [&>svg]:relative [&>svg]:z-10">${ICONS.sound}</div>
             <div><div class="text-white font-bold text-sm">#principal</div><div class="text-white/40 text-[11px]">${_t('vc_sub')}</div></div>
           </div>
           <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
@@ -575,7 +575,7 @@
       return `
         <div class="flex items-center justify-between px-5 py-4 border-b border-white/5 bg-zinc-900/50">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">${ICONS.sound}</div>
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5">${ICONS.sound}</div>
             <div><div class="text-white font-bold text-sm">#principal</div><div class="text-white/40 text-[11px]">${_t('st_conn')}</div></div>
           </div>
           <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
@@ -590,7 +590,7 @@
       return `
         <div class="flex items-center justify-between px-5 py-4 border-b border-white/5 bg-zinc-900/50">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">${ICONS.sound}</div>
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5">${ICONS.sound}</div>
             <div><div class="text-white font-bold text-sm">#principal</div><div class="text-red-500 text-[11px]">${_t('st_disc')}</div></div>
           </div>
           <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
@@ -652,7 +652,7 @@
         <!-- Header -->
         <div class="flex items-center justify-between px-5 py-4 bg-zinc-900/50">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center relative overflow-hidden">${ICONS.sound}</div>
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center relative overflow-hidden [&>svg]:w-5 [&>svg]:h-5 [&>svg]:relative [&>svg]:z-10">${ICONS.sound}</div>
             <div>
               <div class="text-white font-bold text-sm">#principal</div>
               <div class="text-white/40 text-[11px] flex items-center gap-1.5 vc-sub">
