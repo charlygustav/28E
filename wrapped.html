@@ -373,36 +373,51 @@
 
             <!-- Slide 19: Conclusion / Share Card -->
             <div class="slide flex flex-col items-center justify-center p-6 overflow-y-auto" data-bg1="bg-zinc-900" data-bg2="bg-black" data-bg3="bg-zinc-800">
-                <!-- Exportable Card -->
-                <div id="share-card" class="relative w-full max-w-sm bg-gradient-to-br from-indigo-900 via-pink-900 to-rose-900 rounded-3xl p-8 shadow-2xl border border-white/10 gsap-reveal">
-                    <div class="absolute top-0 right-0 p-4 opacity-20 text-6xl">🌷</div>
-                    <p class="text-pink-300 font-bold uppercase tracking-widest text-xs mb-6">28E Wrapped</p>
-                    <h2 class="text-4xl font-black text-white mb-8 leading-none tracking-tight">Nuestros<br>120 Días</h2>
-                    
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-end border-b border-white/10 pb-2">
-                            <span class="text-zinc-300 font-medium">Mensajes</span>
-                            <span class="text-white font-black text-xl">32,371</span>
+                
+                <div class="flex items-center justify-center gap-2 w-full max-w-md gsap-reveal z-50 pointer-events-auto">
+                    <!-- Left Arrow -->
+                    <button onclick="prevTheme()" class="text-white/50 hover:text-white p-2">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+
+                    <!-- Exportable Card -->
+                    <div id="share-card" class="relative w-full max-w-[260px] sm:max-w-xs bg-gradient-to-br from-indigo-900 via-pink-900 to-rose-900 rounded-3xl p-6 shadow-2xl border border-white/10 transition-colors duration-500">
+                        <div class="absolute top-0 right-0 p-3 opacity-20 text-5xl">🌷</div>
+                        <p id="card-subtitle" class="text-pink-300 font-bold uppercase tracking-widest text-[10px] mb-4">28E Wrapped</p>
+                        <h2 id="card-title" class="text-3xl font-black text-white mb-6 leading-none tracking-tight">Nuestros<br>120 Días</h2>
+                        
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80">
+                                <span class="val-secondary text-zinc-300 font-medium text-xs">Mensajes</span>
+                                <span class="val-primary text-white font-black text-lg">32,371</span>
+                            </div>
+                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80">
+                                <span class="val-secondary text-zinc-300 font-medium text-xs">Conexión (Hrs)</span>
+                                <span class="val-primary text-white font-black text-lg">2,880</span>
+                            </div>
+                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80">
+                                <span class="val-secondary text-zinc-300 font-medium text-xs">Veces "Amor"</span>
+                                <span class="val-primary text-white font-black text-lg">2,564</span>
+                            </div>
+                            <div class="flex justify-between items-end border-b border-current pb-1 opacity-80">
+                                <span class="val-secondary text-zinc-300 font-medium text-xs">Veces "Te amo"</span>
+                                <span class="val-primary text-white font-black text-lg">843</span>
+                            </div>
                         </div>
-                        <div class="flex justify-between items-end border-b border-white/10 pb-2">
-                            <span class="text-zinc-300 font-medium">Conexión (Hrs)</span>
-                            <span class="text-white font-black text-xl">2,880</span>
-                        </div>
-                        <div class="flex justify-between items-end border-b border-white/10 pb-2">
-                            <span class="text-zinc-300 font-medium">Veces "Amor"</span>
-                            <span class="text-white font-black text-xl">2,564</span>
-                        </div>
-                        <div class="flex justify-between items-end border-b border-white/10 pb-2">
-                            <span class="text-zinc-300 font-medium">Veces "Te amo"</span>
-                            <span class="text-white font-black text-xl">843</span>
+                        
+                        <div class="mt-6 pt-3 flex justify-between items-center opacity-90">
+                            <p class="val-footer text-[10px] font-serif italic text-pink-200">Para mi niña valiente.</p>
+                            <p class="val-primary text-[10px] text-white font-bold uppercase tracking-widest">Charles & Yaire</p>
                         </div>
                     </div>
-                    
-                    <div class="mt-8 pt-4 border-t border-white/20 flex justify-between items-center">
-                        <p class="text-sm font-serif italic text-pink-200">Para mi niña valiente.</p>
-                        <p class="text-xs text-white/50 font-bold uppercase tracking-widest">Charles & Yaire</p>
-                    </div>
+
+                    <!-- Right Arrow -->
+                    <button onclick="nextTheme()" class="text-white/50 hover:text-white p-2">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
                 </div>
+                
+                <p id="theme-indicator" class="text-[10px] text-white/40 tracking-widest uppercase mt-4 gsap-reveal">Diseño 1 de 4</p>
                 
                 <!-- Buttons (ABOVE the tap zones) -->
                 <div class="mt-8 z-50 relative gsap-reveal flex flex-col gap-4 w-full max-w-sm">
@@ -648,6 +663,75 @@
         function goHome() {
             audioEl.pause();
             window.location.href = 'index.html';
+        }
+
+        // Themes Logic
+        const themes = [
+            {
+                bg: "from-indigo-900 via-pink-900 to-rose-900",
+                textTitle: "text-white",
+                textPrimary: "text-white",
+                textSecondary: "text-zinc-300",
+                textAccent: "text-pink-300",
+                border: "border-white/10"
+            },
+            { // Black
+                bg: "from-zinc-900 via-black to-zinc-900",
+                textTitle: "text-white",
+                textPrimary: "text-white",
+                textSecondary: "text-zinc-400",
+                textAccent: "text-zinc-200",
+                border: "border-white/10"
+            },
+            { // White
+                bg: "from-white via-slate-50 to-zinc-200",
+                textTitle: "text-black",
+                textPrimary: "text-black",
+                textSecondary: "text-zinc-600",
+                textAccent: "text-rose-600",
+                border: "border-black/10"
+            },
+            { // Green & Red
+                bg: "from-red-900 via-rose-800 to-emerald-900",
+                textTitle: "text-white",
+                textPrimary: "text-white",
+                textSecondary: "text-rose-200",
+                textAccent: "text-green-300",
+                border: "border-white/20"
+            }
+        ];
+        
+        let currentTheme = 0;
+
+        function applyTheme(index) {
+            const card = document.getElementById('share-card');
+            const theme = themes[index];
+            
+            card.className = `relative w-full max-w-[260px] sm:max-w-xs bg-gradient-to-br ${theme.bg} rounded-3xl p-6 shadow-2xl border ${theme.border} transition-colors duration-500`;
+            
+            document.getElementById('card-title').className = `text-3xl font-black ${theme.textTitle} mb-6 leading-none tracking-tight`;
+            document.getElementById('card-subtitle').className = `${theme.textAccent} font-bold uppercase tracking-widest text-[10px] mb-4`;
+            
+            const primaryTexts = card.querySelectorAll('.val-primary');
+            primaryTexts.forEach(el => el.className = `val-primary font-black text-lg ${theme.textPrimary}`);
+            
+            const secondaryTexts = card.querySelectorAll('.val-secondary');
+            secondaryTexts.forEach(el => el.className = `val-secondary font-medium text-xs ${theme.textSecondary}`);
+
+            const footerTexts = card.querySelectorAll('.val-footer');
+            footerTexts.forEach(el => el.className = `val-footer text-[10px] font-serif italic ${theme.textAccent}`);
+
+            document.getElementById('theme-indicator').innerText = `Diseño ${index + 1} de ${themes.length}`;
+        }
+
+        function nextTheme() {
+            currentTheme = (currentTheme + 1) % themes.length;
+            applyTheme(currentTheme);
+        }
+
+        function prevTheme() {
+            currentTheme = (currentTheme - 1 + themes.length) % themes.length;
+            applyTheme(currentTheme);
         }
 
         function toggleMute() {
