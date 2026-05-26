@@ -4135,9 +4135,9 @@
                         }
                     });
 
-                    // Actualizar título de ventana con la canción actual
+                    // Actualizar título de ventana
                     if (isSpotPlaying) {
-                        document.title = `${track.title}`;
+                        document.title = spotlightMode === 'radio' ? '28E FM (Live)' : `${track.title}`;
                     }
                 }
 
@@ -4153,7 +4153,7 @@
                 function spotlightUpdateTitle() {
                     const track = spotlightTracks[currentSpotTrack];
                     if (isSpotPlaying && track) {
-                        document.title = `${track.title}`;
+                        document.title = spotlightMode === 'radio' ? '28E FM (Live)' : `${track.title}`;
                     } else {
                         document.title = '28E';
                     }
@@ -4177,9 +4177,7 @@
                             isSpotPlaying = true;
                             spotlightUpdateUI();
                             
-                            zenoAudio.play().then(() => {
-                                document.title = '28E FM (Live)';
-                            }).catch(err => {
+                            zenoAudio.play().catch(err => {
                                 console.error('Zeno stream playback failed:', err);
                                 isSpotPlaying = false;
                                 spotlightUpdateUI();
@@ -4329,12 +4327,12 @@
                     initSpotlight();
                 }
 
-                // Restaurar título al volver a la pestaña si la radio está pausada
+                // Restaurar título al volver a la pestaña
                 document.addEventListener('visibilitychange', () => {
                     if (document.visibilityState === 'visible') {
                         if (isSpotPlaying && spotlightTracks[currentSpotTrack]) {
                             const t = spotlightTracks[currentSpotTrack];
-                            document.title = `${t.title}`;
+                            document.title = spotlightMode === 'radio' ? '28E FM (Live)' : `${t.title}`;
                         } else {
                             document.title = '28E';
                         }
