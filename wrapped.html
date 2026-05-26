@@ -34,7 +34,7 @@
         .slide.active {
             opacity: 1;
             z-index: 60;
-            pointer-events: none; /* Deja pasar los clics hacia las tap-zones excepto en elementos explícitos */
+            pointer-events: auto;
         }
 
         /* Progress Bar */
@@ -620,6 +620,17 @@
                 index = slides.length - 1;
                 cancelAnimationFrame(slideTimer);
                 return;
+            }
+
+            // Hide tap zones on the last slide to allow full touch interactions
+            const tapLeft = document.querySelector('.tap-zone-left');
+            const tapRight = document.querySelector('.tap-zone-right');
+            if (index === slides.length - 1) {
+                if(tapLeft) tapLeft.style.display = 'none';
+                if(tapRight) tapRight.style.display = 'none';
+            } else {
+                if(tapLeft) tapLeft.style.display = 'block';
+                if(tapRight) tapRight.style.display = 'block';
             }
 
             // Update UI
