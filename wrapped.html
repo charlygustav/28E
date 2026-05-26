@@ -408,9 +408,16 @@
                 <p class="text-xl text-pink-200 font-bold uppercase tracking-widest gsap-reveal z-30 relative drop-shadow-md w-full text-left px-8">Cada instante...</p>
                 
                 <!-- Collage Images (absolute positioned) -->
-                <img src="https://i.ibb.co/yByRfq5y/IMG-20260125-WA0097.jpg" class="collage-img img-1" style="top: 22%; left: 5%;">
-                <img src="https://i.ibb.co/DDHBsJy2/IMG-20260127-WA0067.jpg" class="collage-img img-2" style="top: 38%; right: 5%;">
-                <img src="https://i.ibb.co/SDfLGvby/IMG-20260301-WA0027.jpg" class="collage-img img-3" style="top: 55%; left: 15%;">
+                <img src="https://i.ibb.co/yByRfq5y/IMG-20260125-WA0097.jpg" class="collage-img img-1" style="top: 15%; left: 5%; width: 40vw; max-width: 180px;">
+                <img src="https://i.ibb.co/DDHBsJy2/IMG-20260127-WA0067.jpg" class="collage-img img-2" style="top: 25%; right: 5%; width: 40vw; max-width: 180px;">
+                <img src="https://i.ibb.co/SDfLGvby/IMG-20260301-WA0027.jpg" class="collage-img img-3" style="top: 45%; left: 10%; width: 40vw; max-width: 180px;">
+                <img src="lasfotos/1000004047.jpg" class="collage-img img-4" style="top: 10%; left: 40%; width: 35vw; max-width: 160px; z-index: 10;">
+                <img src="lasfotos/1000007900.jpg" class="collage-img img-5" style="top: 55%; right: 10%; width: 35vw; max-width: 160px; z-index: 12;">
+                <img src="lasfotos/1000007992.jpg" class="collage-img img-6" style="top: 65%; left: 5%; width: 35vw; max-width: 160px; z-index: 15;">
+                <img src="lasfotos/1000019581.jpg" class="collage-img img-7" style="top: 35%; left: 50%; width: 35vw; max-width: 160px; z-index: 11;">
+                <img src="lasfotos/1000020209.jpg" class="collage-img img-8" style="top: 20%; right: 25%; width: 35vw; max-width: 160px; z-index: 9;">
+                <img src="lasfotos/AirBrush_20260327204142.jpg" class="collage-img img-9" style="top: 75%; right: 30%; width: 35vw; max-width: 160px; z-index: 14;">
+                <img src="lasfotos/IMG-20260208-WA0043.jpg" class="collage-img img-10" style="top: 5%; right: 10%; width: 35vw; max-width: 160px; z-index: 8;">
                 
                 <h2 class="text-4xl md:text-6xl font-black text-white z-30 relative drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] gsap-text w-full text-left px-8 mb-4">es una obra<br>de arte. ✨</h2>
             </div>
@@ -804,9 +811,17 @@
 
             // Specific Collage Animations (Slide 18)
             if (index === 18) {
-                gsap.to('.img-1', { opacity: 1, scale: 1, rotation: -10, duration: 1, ease: "back.out(1.5)", delay: 0.8 });
-                gsap.to('.img-2', { opacity: 1, scale: 1.1, rotation: 15, duration: 1, ease: "back.out(1.5)", delay: 1.5 });
-                gsap.to('.img-3', { opacity: 1, scale: 1, rotation: -5, duration: 1, ease: "back.out(1.5)", delay: 2.2 });
+                gsap.utils.toArray('.collage-img').forEach((img, i) => {
+                    const rotations = [-12, 10, -8, 5, -15, 12, -6, 8, -10, 14];
+                    gsap.to(img, { 
+                        opacity: 1, 
+                        scale: i % 2 === 0 ? 1 : 1.05, 
+                        rotation: rotations[i] || (Math.random() * 30 - 15), 
+                        duration: 1, 
+                        ease: "back.out(1.5)", 
+                        delay: 0.8 + (i * 0.3) 
+                    });
+                });
             }
         }
 
