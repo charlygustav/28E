@@ -4169,7 +4169,6 @@
                         } else {
                             if (!zenoAudio.src || zenoAudio.src === window.location.href) {
                                 // Live Zeno FM Stream
-                                zenoAudio.crossOrigin = "anonymous";
                                 zenoAudio.src = 'https://stream.zeno.fm/ox28sopxqt1vv'; 
                                 zenoAudio.load();
                             }
@@ -4184,6 +4183,7 @@
                                 console.error('Zeno stream playback failed:', err);
                                 isSpotPlaying = false;
                                 spotlightUpdateUI();
+                                alert('No se pudo conectar a la transmisión en vivo. Asegúrate de que la radio está ENCENDIDA y transmitiendo en Zeno.fm.');
                             });
                         }
                         return;
