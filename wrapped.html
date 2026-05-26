@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>28E Wrapped</title>
+    <title>28E Wrapped - 4 Meses</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Merriweather:ital@0;1&display=swap" rel="stylesheet">
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     
     <style>
         body {
@@ -25,15 +27,12 @@
             padding: 2rem;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.5s ease-in-out, transform 0.5s ease-out;
-            transform: scale(0.95);
             z-index: 10;
         }
 
         .slide.active {
             opacity: 1;
             pointer-events: auto;
-            transform: scale(1);
             z-index: 20;
         }
 
@@ -63,16 +62,16 @@
             transform-origin: left;
         }
 
-        /* Tap zones */
+        /* Tap zones (Fixed z-index to not block buttons) */
         .tap-zone-left {
             position: absolute;
-            top: 0; left: 0; bottom: 0; width: 30%;
-            z-index: 40;
+            top: 3rem; left: 0; bottom: 5rem; width: 30%;
+            z-index: 30;
         }
         .tap-zone-right {
             position: absolute;
-            top: 0; right: 0; bottom: 0; width: 70%;
-            z-index: 40;
+            top: 3rem; right: 0; bottom: 5rem; width: 70%;
+            z-index: 30;
         }
 
         /* Ambient Orbs */
@@ -80,18 +79,40 @@
             position: absolute;
             border-radius: 50%;
             filter: blur(80px);
-            opacity: 0.5;
-            transition: all 1s ease;
+            opacity: 0.6;
+            transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Slide specific styles */
+        /* Typography */
         .text-huge {
-            font-size: clamp(3rem, 10vw, 5rem);
+            font-size: clamp(3rem, 12vw, 6rem);
             line-height: 1;
             font-weight: 900;
             letter-spacing: -0.05em;
         }
         
+        /* Floating Emojis / Particles */
+        .particle {
+            position: absolute;
+            font-size: 1.5rem;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 15;
+        }
+
+        /* Image Collage */
+        .collage-img {
+            position: absolute;
+            width: 60vw;
+            max-width: 300px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 4px solid rgba(255,255,255,0.1);
+            opacity: 0;
+            transform: scale(0.5) rotate(0deg);
+        }
+
+        /* Loader */
         #auth-overlay {
             position: fixed;
             inset: 0;
@@ -101,6 +122,7 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
+            transition: opacity 0.5s ease;
         }
 
         .loader {
@@ -108,12 +130,17 @@
             height: 48px;
             border: 3px solid rgba(255,255,255,0.1);
             border-radius: 50%;
-            border-top-color: #fff;
+            border-top-color: #ec4899; /* Tulip 500 */
             animation: spin 1s ease-in-out infinite;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
+        }
+        
+        .gsap-text, .gsap-reveal {
+            opacity: 0;
+            transform: translateY(30px);
         }
     </style>
 </head>
@@ -125,12 +152,16 @@
         <p class="text-zinc-500 font-mono text-sm tracking-widest uppercase">Verificando Credenciales</p>
     </div>
 
+    <!-- Wrapped Audio -->
+    <audio id="wrapped-audio" src="radio/Don Toliver - No Pole.mp3" loop></audio>
+
     <!-- Wrapped Container -->
     <div id="wrapped-app" class="hidden relative w-full h-screen h-[100dvh] overflow-hidden">
         
         <!-- Ambient Backgrounds (Changes per slide) -->
-        <div id="orb1" class="orb w-96 h-96 top-[-10%] left-[-10%] bg-amber-500"></div>
-        <div id="orb2" class="orb w-96 h-96 bottom-[-10%] right-[-10%] bg-rose-500"></div>
+        <div id="orb1" class="orb w-96 h-96 top-[-10%] left-[-10%] bg-pink-600"></div>
+        <div id="orb2" class="orb w-96 h-96 bottom-[-10%] right-[-10%] bg-rose-600"></div>
+        <div id="orb3" class="orb w-96 h-96 top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-purple-600 opacity-0"></div>
 
         <!-- Progress Indicator -->
         <div class="progress-container" id="progress-container">
@@ -142,43 +173,60 @@
         <div class="tap-zone-right" onclick="nextSlide()"></div>
 
         <!-- Start Button -->
-        <div id="start-screen" class="absolute inset-0 flex flex-col items-center justify-center z-[60] bg-black/50 backdrop-blur-md transition-opacity duration-500">
-            <h1 class="text-5xl font-black mb-2 tracking-tight">28E Wrapped</h1>
-            <p class="text-zinc-400 mb-8 font-mono uppercase tracking-[0.2em] text-xs">Especial 4 Meses</p>
-            <button onclick="startWrapped()" class="px-8 py-4 bg-white text-black font-bold rounded-full hover:scale-105 transition-transform active:scale-95 text-lg">
-                Comenzar
+        <div id="start-screen" class="absolute inset-0 flex flex-col items-center justify-center z-[60] bg-black/60 backdrop-blur-xl transition-opacity duration-500">
+            <h1 class="text-5xl md:text-7xl font-black mb-2 tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-400">28E Wrapped</h1>
+            <p class="text-zinc-400 mb-12 font-serif italic text-lg md:text-xl px-6 text-center">Enciende el sonido. La magia está a punto de empezar.</p>
+            
+            <button onclick="startWrapped()" class="relative group px-10 py-5 bg-white text-black font-black uppercase tracking-widest rounded-full hover:scale-105 transition-all active:scale-95 text-sm overflow-hidden shadow-[0_0_40px_rgba(255,255,255,0.3)]">
+                <span class="relative z-10">Reproducir Historia</span>
+                <div class="absolute inset-0 bg-gradient-to-r from-pink-200 to-white opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </button>
         </div>
 
         <!-- Slides -->
         <div id="slides-wrapper">
-            <!-- Slide 0 -->
-            <div class="slide" data-bg1="bg-zinc-800" data-bg2="bg-zinc-900">
-                <h2 class="text-huge text-white mb-4">120<br>Días.</h2>
-                <p class="text-xl text-zinc-400 font-medium max-w-sm">Parece que fue ayer cuando sintonizamos la misma frecuencia por primera vez.</p>
+            
+            <!-- Slide 0: Intro -->
+            <div class="slide" data-bg1="bg-zinc-800" data-bg2="bg-zinc-900" data-bg3="bg-transparent">
+                <p class="text-xl text-zinc-400 font-bold uppercase tracking-widest mb-4 gsap-reveal">Han pasado exactamente</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">120<br>Días.</h2>
+                <p class="text-xl text-zinc-300 font-serif italic max-w-sm mt-4 gsap-reveal">Desde el primer momento en que sintonizamos la misma frecuencia. 🤍</p>
             </div>
 
-            <!-- Slide 1 -->
-            <div class="slide" data-bg1="bg-blue-600" data-bg2="bg-purple-600">
-                <p class="text-xl text-blue-200 font-bold uppercase tracking-widest mb-4">Nuestra Conexión</p>
-                <h2 class="text-huge text-white mb-4">2,880<br>Horas.</h2>
-                <p class="text-lg text-blue-100 max-w-sm">Entre llamadas, mensajes y el canal de voz, hemos construido nuestro propio universo.</p>
+            <!-- Slide 1: Stats & Voice -->
+            <div class="slide" data-bg1="bg-blue-600" data-bg2="bg-purple-600" data-bg3="bg-indigo-600">
+                <p class="text-xl text-blue-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Nuestra Conexión</p>
+                <h2 class="text-huge text-white mb-2 gsap-text">2,880<br>Horas.</h2>
+                <div class="space-y-4 mt-8 gsap-reveal">
+                    <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-xl">
+                        <p class="text-blue-100 font-medium">Entre llamadas, mensajes infinitos y madrugadas en nuestro canal de voz, hemos construido nuestro propio universo.</p>
+                    </div>
+                </div>
+                <div class="absolute top-1/2 right-10 text-5xl opacity-20 rotate-12">🎙️</div>
             </div>
 
-            <!-- Slide 2 -->
-            <div class="slide" data-bg1="bg-emerald-500" data-bg2="bg-teal-700">
-                <p class="text-xl text-emerald-200 font-bold uppercase tracking-widest mb-4">Nuestra Música</p>
-                <h2 class="text-huge text-white mb-4">Spotlight<br>Radio.</h2>
-                <p class="text-lg text-emerald-100 max-w-sm">La banda sonora de nuestras madrugadas. Siempre sonando, siempre nuestra.</p>
+            <!-- Slide 2: Collage -->
+            <div class="slide" data-bg1="bg-pink-500" data-bg2="bg-rose-600" data-bg3="bg-red-500">
+                <p class="text-xl text-pink-200 font-bold uppercase tracking-widest mb-2 gsap-reveal z-30 relative drop-shadow-md">Cada instante...</p>
+                
+                <!-- Collage Images (absolute positioned) -->
+                <img src="https://i.ibb.co/yByRfq5y/IMG-20260125-WA0097.jpg" class="collage-img img-1" style="top: 15%; left: 5%;">
+                <img src="https://i.ibb.co/DDHBsJy2/IMG-20260127-WA0067.jpg" class="collage-img img-2" style="top: 35%; right: 5%;">
+                <img src="https://i.ibb.co/SDfLGvby/IMG-20260301-WA0027.jpg" class="collage-img img-3" style="top: 55%; left: 15%;">
+                
+                <h2 class="text-4xl md:text-6xl font-black text-white mt-auto z-30 relative drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] gsap-text">es una obra de arte. ✨</h2>
             </div>
 
-            <!-- Slide 3 -->
-            <div class="slide" data-bg1="bg-rose-500" data-bg2="bg-orange-500">
-                <h2 class="text-4xl md:text-5xl font-black text-white mb-6 leading-tight">Y esto es<br>solo el<br>principio.</h2>
-                <p class="text-xl text-rose-100 font-medium">Felices 4 meses, Yaire.</p>
-                <div class="mt-12 flex justify-center w-full">
-                    <button onclick="window.location.href='index.html'" class="px-6 py-3 border border-white/20 rounded-full font-bold hover:bg-white/10 transition-colors">
-                        Volver al Inicio
+            <!-- Slide 3: Conclusion -->
+            <div class="slide flex flex-col items-center text-center justify-center" data-bg1="bg-orange-500" data-bg2="bg-amber-600" data-bg3="bg-red-600">
+                <div class="text-7xl mb-6 gsap-reveal">🌷</div>
+                <h2 class="text-5xl md:text-7xl font-black text-white mb-6 leading-tight gsap-text">Felices 4 Meses.</h2>
+                <p class="text-2xl text-orange-100 font-serif italic mb-12 gsap-reveal">Te amo, Yaire.</p>
+                
+                <!-- This button is ABOVE the tap zones (z-50) -->
+                <div class="mt-8 z-50 relative gsap-reveal">
+                    <button onclick="goHome()" class="px-8 py-4 bg-white/10 backdrop-blur-xl border border-white/30 rounded-full font-black text-white hover:bg-white hover:text-black transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] uppercase tracking-widest text-sm">
+                        Volver a Nuestro Mundo
                     </button>
                 </div>
             </div>
@@ -216,25 +264,27 @@
                     initWrapped();
                 }, 500);
             } else {
-                // No autenticado, expulsar
+                // No autenticado
                 window.location.replace('index.html');
             }
         });
     </script>
 
-    <!-- Wrapped Logic -->
+    <!-- Wrapped Logic & GSAP -->
     <script>
-        const SLIDE_DURATION = 5000; // 5 seconds per slide
+        const SLIDE_DURATION = 8000; // 8 seconds per slide for more emotion
         let currentSlide = 0;
         let slides = [];
         let progressBars = [];
         let slideTimer;
         let animationStart;
         let isPlaying = false;
+        let audioEl;
 
         function initWrapped() {
             slides = document.querySelectorAll('.slide');
             const progContainer = document.getElementById('progress-container');
+            audioEl = document.getElementById('wrapped-audio');
             
             // Create progress bars
             slides.forEach((_, i) => {
@@ -244,10 +294,22 @@
                 progContainer.appendChild(bar);
                 progressBars.push(document.getElementById(`fill-${i}`));
             });
+            
+            // Pre-set GSAP initial states
+            gsap.set('.gsap-text, .gsap-reveal', { y: 40, opacity: 0 });
+            gsap.set('.collage-img', { scale: 0.5, opacity: 0, rotation: 0 });
         }
 
         function startWrapped() {
             document.getElementById('start-screen').style.opacity = '0';
+            
+            // Play Audio
+            audioEl.volume = 0;
+            audioEl.play().then(() => {
+                // Fade in audio smoothly
+                gsap.to(audioEl, { volume: 0.8, duration: 2 });
+            }).catch(e => console.log("Audio play failed:", e));
+
             setTimeout(() => {
                 document.getElementById('start-screen').style.display = 'none';
                 isPlaying = true;
@@ -255,10 +317,38 @@
             }, 500);
         }
 
+        function playSlideAnimations(index) {
+            const slide = slides[index];
+            
+            // Reset all animations
+            gsap.killTweensOf('.gsap-text, .gsap-reveal, .collage-img');
+            gsap.set('.gsap-text, .gsap-reveal', { y: 40, opacity: 0 });
+            gsap.set('.collage-img', { scale: 0.5, opacity: 0, rotation: 0 });
+
+            // Animate Texts
+            const texts = slide.querySelectorAll('.gsap-text, .gsap-reveal');
+            if (texts.length > 0) {
+                gsap.to(texts, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1,
+                    stagger: 0.3,
+                    ease: "power3.out",
+                    delay: 0.2
+                });
+            }
+
+            // Specific Collage Animations (Slide 2)
+            if (index === 2) {
+                gsap.to('.img-1', { opacity: 1, scale: 1, rotation: -10, duration: 1, ease: "back.out(1.5)", delay: 0.8 });
+                gsap.to('.img-2', { opacity: 1, scale: 1.1, rotation: 15, duration: 1, ease: "back.out(1.5)", delay: 1.5 });
+                gsap.to('.img-3', { opacity: 1, scale: 1, rotation: -5, duration: 1, ease: "back.out(1.5)", delay: 2.2 });
+            }
+        }
+
         function showSlide(index) {
             if (index < 0) index = 0;
             if (index >= slides.length) {
-                // End of wrapped
                 index = slides.length - 1;
                 cancelAnimationFrame(slideTimer);
                 return;
@@ -268,9 +358,24 @@
             slides.forEach((s, i) => {
                 if (i === index) {
                     s.classList.add('active');
-                    // Change ambient orbs based on slide data
-                    document.getElementById('orb1').className = `orb w-[150vw] h-[150vw] md:w-96 md:h-96 top-[-20%] left-[-20%] ${s.dataset.bg1}`;
-                    document.getElementById('orb2').className = `orb w-[150vw] h-[150vw] md:w-96 md:h-96 bottom-[-20%] right-[-20%] ${s.dataset.bg2}`;
+                    // Change ambient orbs dynamically
+                    const orb1 = document.getElementById('orb1');
+                    const orb2 = document.getElementById('orb2');
+                    const orb3 = document.getElementById('orb3');
+                    
+                    orb1.className = `orb w-[150vw] h-[150vw] md:w-[60vw] md:h-[60vw] top-[-20%] left-[-20%] ${s.dataset.bg1}`;
+                    orb2.className = `orb w-[150vw] h-[150vw] md:w-[60vw] md:h-[60vw] bottom-[-20%] right-[-20%] ${s.dataset.bg2}`;
+                    
+                    if (s.dataset.bg3 && s.dataset.bg3 !== 'bg-transparent') {
+                        orb3.className = `orb w-[100vw] h-[100vw] md:w-[50vw] md:h-[50vw] top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 ${s.dataset.bg3}`;
+                        gsap.to(orb3, { opacity: 0.4, duration: 1 });
+                    } else {
+                        gsap.to(orb3, { opacity: 0, duration: 0.5 });
+                    }
+
+                    // Trigger GSAP timeline for this slide
+                    playSlideAnimations(index);
+
                 } else {
                     s.classList.remove('active');
                 }
@@ -284,7 +389,7 @@
 
             currentSlide = index;
             
-            // If it's the last slide, don't auto-advance
+            // If it's the last slide, stop auto-advance
             if (index === slides.length - 1) {
                 progressBars[index].style.width = '100%';
                 cancelAnimationFrame(slideTimer);
@@ -323,6 +428,13 @@
             if (currentSlide > 0) {
                 showSlide(currentSlide - 1);
             }
+        }
+
+        function goHome() {
+            // Fade out audio gracefully before leaving
+            gsap.to(audioEl, { volume: 0, duration: 1, onComplete: () => {
+                window.location.href = 'index.html';
+            }});
         }
     </script>
 </body>
