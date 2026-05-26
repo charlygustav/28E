@@ -668,6 +668,7 @@
         let pauseTimeOffset = 0;
         let pauseStartTime = 0;
         let audioEl;
+        let audioElFinal;
         let autoAdvanceTimer;
 
         function initWrapped() {
@@ -676,9 +677,14 @@
             
             // Inicializar el audio vía JS puro
             audioEl = new Audio();
-            audioEl.src = "radio/John Legend - Crowd Go Crazy.mp3";
+            audioEl.src = "radio/Don Toliver - No Pole.mp3";
             audioEl.loop = true;
             audioEl.load();
+
+            audioElFinal = new Audio();
+            audioElFinal.src = "radio/John Legend - Crowd Go Crazy.mp3";
+            audioElFinal.loop = true;
+            audioElFinal.load();
             
             // Create progress bars
             slides.forEach((_, i) => {
@@ -700,6 +706,8 @@
             // Play Audio directly to maximize compatibility
             audioEl.volume = 1.0;
             audioEl.muted = false;
+            audioElFinal.volume = 1.0;
+            audioElFinal.muted = false;
             
             const playPromise = audioEl.play();
             if (playPromise !== undefined) {
@@ -732,6 +740,10 @@
             if (audioEl) {
                 audioEl.pause();
                 audioEl.currentTime = 0;
+            }
+            if (audioElFinal) {
+                audioElFinal.pause();
+                audioElFinal.currentTime = 0;
             }
             gsap.killTweensOf('.gsap-text, .gsap-reveal, .collage-img');
             
@@ -795,21 +807,27 @@
                 if (iconPause) iconPause.classList.add('hidden');
                 if (iconPlay) iconPlay.classList.remove('hidden');
                 if (audioEl) audioEl.pause();
+                if (audioElFinal) audioElFinal.pause();
                 pauseStartTime = performance.now();
             } else {
                 if (iconPause) iconPause.classList.remove('hidden');
                 if (iconPlay) iconPlay.classList.add('hidden');
-                if (audioEl) audioEl.play().catch(e => console.log(e));
+                if (currentSlide === slides.length - 1) {
+                    if (audioElFinal) audioElFinal.play().catch(e => console.log(e));
+                } else {
+                    if (audioEl) audioEl.play().catch(e => console.log(e));
+                }
                 pauseTimeOffset += (performance.now() - pauseStartTime);
             }
         }
 
         function toggleMute() {
-            if (!audioEl) return;
-            audioEl.muted = !audioEl.muted;
+            if (audioEl) audioEl.muted = !audioEl.muted;
+            if (audioElFinal) audioElFinal.muted = !audioElFinal.muted;
             const iconMuted = document.getElementById('icon-muted');
             const iconUnmuted = document.getElementById('icon-unmuted');
-            if (audioEl.muted) {
+            const isMuted = audioEl ? audioEl.muted : false;
+            if (isMuted) {
                 if (iconMuted) iconMuted.classList.remove('hidden');
                 if (iconUnmuted) iconUnmuted.classList.add('hidden');
             } else {
@@ -832,9 +850,17 @@
             if (index === slides.length - 1) {
                 if(tapLeft) tapLeft.style.display = 'none';
                 if(tapRight) tapRight.style.display = 'none';
+                
+                // Cambiar la música a John Legend en la última pantalla
+                if (audioEl && !audioEl.paused) audioEl.pause();
+                if (!isPaused && audioElFinal && audioElFinal.paused) audioElFinal.play().catch(e => console.log(e));
             } else {
                 if(tapLeft) tapLeft.style.display = 'block';
                 if(tapRight) tapRight.style.display = 'block';
+                
+                // Cambiar de vuelta a Don Toliver si se retrocede
+                if (audioElFinal && !audioElFinal.paused) audioElFinal.pause();
+                if (!isPaused && audioEl && audioEl.paused) audioEl.play().catch(e => console.log(e));
             }
 
             // Update UI
