@@ -153,7 +153,7 @@
     </div>
 
     <!-- Wrapped Audio -->
-    <audio id="wrapped-audio" src="radio/Don%20Toliver%20-%20No%20Pole.mp3" preload="auto" loop></audio>
+    <audio id="wrapped-audio" src="radio/Don Toliver - No Pole.mp3" preload="auto" loop></audio>
 
     <!-- Wrapped Container -->
     <div id="wrapped-app" class="hidden relative w-full h-screen h-[100dvh] overflow-hidden">
@@ -303,12 +303,9 @@
         function startWrapped() {
             document.getElementById('start-screen').style.opacity = '0';
             
-            // Play Audio
-            audioEl.volume = 0;
-            audioEl.play().then(() => {
-                // Fade in audio smoothly
-                gsap.to(audioEl, { volume: 0.8, duration: 2 });
-            }).catch(e => console.log("Audio play failed:", e));
+            // Play Audio directly to maximize compatibility
+            audioEl.volume = 1.0;
+            audioEl.play().catch(e => console.log("Audio play failed:", e));
 
             setTimeout(() => {
                 document.getElementById('start-screen').style.display = 'none';
@@ -431,10 +428,8 @@
         }
 
         function goHome() {
-            // Fade out audio gracefully before leaving
-            gsap.to(audioEl, { volume: 0, duration: 1, onComplete: () => {
-                window.location.href = 'index.html';
-            }});
+            audioEl.pause();
+            window.location.href = 'index.html';
         }
     </script>
 </body>
