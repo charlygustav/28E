@@ -4163,21 +4163,27 @@
                 }
 
                 function spotlightPlayTrack(i) {
+                    spotAudio.pause(); // Force pause to clear any pending play requests
+                    
                     if (currentSpotTrack !== i) {
                         spotlightLoadTrack(i);
-                        spotAudio.load();
                     }
                     
                     isSpotPlaying = true;
                     spotlightUpdateUI();
                     
-                    spotAudio.play().then(() => {
-                        spotlightUpdateTitle();
-                    }).catch(err => {
-                        console.error('Music playback failed:', err);
-                        isSpotPlaying = false;
-                        spotlightUpdateUI();
-                    });
+                    // Timeout allows browser event loop to process the new .src before playing
+                    setTimeout(() => {
+                        spotAudio.play().then(() => {
+                            spotlightUpdateTitle();
+                        }).catch(err => {
+                            console.error('Music playback failed:', err);
+                            if (currentSpotTrack === i) {
+                                isSpotPlaying = false;
+                                spotlightUpdateUI();
+                            }
+                        });
+                    }, 50);
                 }
 
                 function spotlightUpdateTitle() {
