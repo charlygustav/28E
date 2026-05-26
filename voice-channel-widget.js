@@ -1685,11 +1685,11 @@
             ${track.type === 'spotify' ? `<div class="mt-3 w-full" id="vc-spotify-embed"></div>` : ''}
             
             <div class="flex justify-center gap-4 mt-3 relative z-10">
-              <button class="w-10 h-10 rounded-full bg-white text-black font-bold flex items-center justify-center hover:scale-105 transition-transform" id="vc-music-playpause">
-                ${isPlaying ? 'II' : '►'}
+              <button class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:scale-105 transition-transform [&>svg]:w-4 [&>svg]:h-4" id="vc-music-playpause">
+                ${isPlaying ? ICONS.pause : ICONS.play}
               </button>
-              <button class="w-10 h-10 rounded-full bg-white/10 font-bold text-white flex items-center justify-center hover:bg-white/20 transition-colors" id="vc-music-skip">
-                ▶▶
+              <button class="w-10 h-10 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors [&>svg]:w-4 [&>svg]:h-4" id="vc-music-skip">
+                ${ICONS.skipFwd}
               </button>
             </div>
           </div>`;
@@ -1708,7 +1708,7 @@
                 <div class="text-[10px] text-white/30 truncate">${t.addedByName || ''}</div>
               </div>
               <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-white/30">${t.type === 'youtube' ? 'YT' : 'SP'}</span>
-              ${!isCur ? `<button class="w-6 h-6 flex items-center justify-center text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded transition-colors" data-track-id="${t.id}">✕</button>` : ''}
+              ${!isCur ? `<button class="w-6 h-6 flex items-center justify-center text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded transition-colors [&>svg]:w-3 [&>svg]:h-3" data-track-id="${t.id}">${ICONS.trash}</button>` : ''}
             </div>`;
           }).join('')
         : `<div class="text-center text-white/20 text-xs py-4">${_t('vc_music_empty_q')}</div>`;
