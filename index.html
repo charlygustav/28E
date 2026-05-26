@@ -4268,11 +4268,16 @@
                         const vinylArt = document.getElementById('spotlight-vinyl-art');
                         if (vinylArt) vinylArt.classList.add('scale-[0.8]', 'transition-transform', 'duration-300');
                         
+                        const dict = typeof dictionary !== 'undefined' && typeof currentLang !== 'undefined' && dictionary[currentLang] ? dictionary[currentLang] : {
+                            radio_live_badge: '🔴 EN VIVO',
+                            radio_live_title: '🔴 Transmisión en Vivo'
+                        };
+                        
                         // Set live text
                         if (compactTitle) compactTitle.textContent = 'Spotlight Radio';
-                        if (compactArtist) compactArtist.innerHTML = '<span class="text-red-500 font-bold tracking-wider animate-pulse">🔴 EN VIVO</span>';
+                        if (compactArtist) compactArtist.innerHTML = `<span class="text-red-500 font-bold tracking-wider animate-pulse">${dict.radio_live_badge}</span>`;
                         if (expTitle) expTitle.textContent = '28E FM Radio';
-                        if (expArtist) expArtist.innerHTML = '<span class="text-red-500 font-bold tracking-widest uppercase animate-pulse">🔴 Transmisión en Vivo</span>';
+                        if (expArtist) expArtist.innerHTML = `<span class="text-red-500 font-bold tracking-widest uppercase animate-pulse">${dict.radio_live_title}</span>`;
                         
                         // Use default radio artwork
                         updateAllArtwork('tulip.ico?v=3');
@@ -4427,8 +4432,8 @@
                     ✕
                 </button>
                 <div class="flex bg-zinc-100 dark:bg-zinc-800/80 p-1 rounded-full border border-zinc-200/50 dark:border-zinc-700/50 select-none">
-                    <button onclick="setSpotlightMode('music')" id="spot-mode-btn-music" class="px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all bg-white dark:bg-zinc-700 text-brand-500 shadow-sm">Music</button>
-                    <button onclick="setSpotlightMode('radio')" id="spot-mode-btn-radio" class="px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300">Radio</button>
+                    <button onclick="setSpotlightMode('music')" id="spot-mode-btn-music" class="px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all bg-white dark:bg-zinc-700 text-brand-500 shadow-sm" data-i18n="spot_mode_music">Music</button>
+                    <button onclick="setSpotlightMode('radio')" id="spot-mode-btn-radio" class="px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300" data-i18n="spot_mode_radio">Radio</button>
                 </div>
                 <div class="w-8"></div>
             </div>
@@ -4519,8 +4524,8 @@
                         <i class="ph-duotone ph-broadcast text-2xl"></i>
                     </div>
                 </div>
-                <h4 class="text-xs font-extrabold text-zinc-800 dark:text-zinc-200 mb-1 tracking-widest uppercase">Señal en Vivo</h4>
-                <p class="text-[10px] text-zinc-500 dark:text-zinc-400 text-center max-w-[200px] leading-snug">
+                <h4 class="text-xs font-extrabold text-zinc-800 dark:text-zinc-200 mb-1 tracking-widest uppercase" data-i18n="radio_signal">Señal en Vivo</h4>
+                <p class="text-[10px] text-zinc-500 dark:text-zinc-400 text-center max-w-[200px] leading-snug" data-i18n="radio_desc">
                     Sintonizando la frecuencia de 28E. Emisión ininterrumpida de amor y recuerdos.
                 </p>
             </div>
@@ -11653,6 +11658,7 @@
                 flag: "ES", code: "ES", nav_subtitle: "Para Yaire",
                 menu_nav: "Spotlight", menu_home: "Inicio", menu_story: "Historia & Tiempo", menu_name: "Tu Nombre", menu_tulips: "Tus Flores", menu_quiz: "El Misterio", menu_dist: "La Distancia", menu_food: "El Pacto", menu_universe: "Su Universo", menu_gallery: "Galería de Arte", menu_games: "Minijuegos", menu_promises: "Promesas", menu_memorial: "Para tu Ángel", menu_hype: "El Hype", menu_stats: "Estadísticas", menu_secret: "El Último Secreto", menu_settings: "Ajustes de Sistema", menu_theme: "Tema Visual", menu_lang: "Idioma", menu_new_badge: "Nuevo",
                 menu_colors: "Colores Favoritos", menu_tulip_colors: "Guía de Colores", menu_healing: "Sanación", menu_guestbook: "Muro de Dedicatorias",
+                spot_mode_music: "Música", spot_mode_radio: "Radio", radio_signal: "Señal en Vivo", radio_desc: "Sintonizando la frecuencia de 28E. Emisión ininterrumpida de amor y recuerdos.", radio_live_badge: "🔴 EN VIVO", radio_live_title: "🔴 Transmisión en Vivo",
                 gb_auth_req: "Para firmar el muro, por favor identifícate.", gb_auth_google: "Continuar con Google", gb_auth_manual: "Prefiero escribir mi nombre manualmente", auth_prompt: "Inicia sesión para entrar al canal de voz y guardar progreso.", auth_login_btn: "Iniciar sesión", auth_logout_btn: "Cerrar sesión", gb_tag: "Muro de Dedicatorias", gb_title: "Dejando Huella", gb_desc: "Un espacio para dejar mensajes, recuerdos o simplemente un saludo. Todo lo que se escriba aquí quedará guardado para siempre.", gb_form_title: "Escribe un mensaje", gb_label_name: "Tu Nombre", gb_ph_name: "Ej. Visitante Anónimo", gb_label_msg: "Mensaje", gb_ph_msg: "Escribe algo bonito...", gb_btn: "Publicar Mensaje", gb_loading: "Cargando mensajes...", gb_empty: "Aún no hay mensajes. ¡Sé el primero!", gb_recent: "Reciente", gb_save_changes: "Guardar Cambios", gb_cancel_edit: "Cancelar Edición", gb_delete_confirm: "¿Estás seguro de que quieres borrar este mensaje para siempre?", gb_deleted_title: "Borrado", gb_deleted_msg: "El mensaje ha sido eliminado", gb_updated_title: "Actualizado", gb_updated_msg: "Tu mensaje ha sido modificado", gb_edit_title: "Editar mensaje", gb_delete_title: "Borrar mensaje", gb_edited_tag: "(editado)",
                 menu_cat_essence: "✦ ESENCIA", menu_cat_exp: "✦ EXPERIENCIAS", menu_cat_special: "✦ ESPECIAL", menu_search: "Buscar sección...",
                 search_empty_title: "Sin resultados...", search_empty_sub: "Intenta con otra frase, mi amor.", search_game_tag: "(Minijuego)", search_game_btn: "Abrir Juego", search_recipe_btn: "Ver Receta", search_tool_btn: "Abrir Herramienta", menu_recipe: "Gastronomía", menu_tools: "Herramientas",
@@ -12009,6 +12015,7 @@
             en: {
                 flag: "EN", code: "EN", nav_subtitle: "For Yaire", menu_nav: "Spotlight", menu_home: "Home", menu_story: "Story & Time", menu_name: "Your Name", menu_tulips: "Your Flowers", menu_quiz: "The Mystery", menu_dist: "The Distance", menu_food: "The Pact", menu_universe: "Her Universe", menu_gallery: "Art Gallery", menu_games: "Minigames", menu_promises: "Promises", menu_memorial: "For Your Angel", menu_hype: "The Hype", menu_stats: "Statistics", menu_secret: "The Last Secret", menu_settings: "System Settings", menu_theme: "Visual Theme", menu_lang: "Language", menu_new_badge: "New",
                 menu_colors: "Favorite Colors", menu_tulip_colors: "Color Guide", menu_healing: "Healing", menu_guestbook: "Guestbook",
+                spot_mode_music: "Music", spot_mode_radio: "Radio", radio_signal: "Live Signal", radio_desc: "Tuning into the 28E frequency. Uninterrupted broadcast of love and memories.", radio_live_badge: "🔴 LIVE", radio_live_title: "🔴 Live Broadcast",
                 gb_auth_req: "To sign the guestbook, please identify yourself.", gb_auth_google: "Continue with Google", gb_auth_manual: "I prefer to write my name manually", auth_prompt: "Log in to enter the voice channel and save progress.", auth_login_btn: "Log in", auth_logout_btn: "Log out", gb_tag: "Guestbook", gb_title: "Leaving a Mark", gb_desc: "A space to leave messages, memories, or just a greeting. Everything written here will be kept forever.", gb_form_title: "Write a message", gb_label_name: "Your Name", gb_ph_name: "Ex. Anonymous Guest", gb_label_msg: "Message", gb_ph_msg: "Write something nice...", gb_btn: "Post Message", gb_loading: "Loading messages...", gb_empty: "No messages yet. Be the first!", gb_recent: "Recent", gb_save_changes: "Save Changes", gb_cancel_edit: "Cancel Editing", gb_delete_confirm: "Are you sure you want to delete this message forever?", gb_deleted_title: "Deleted", gb_deleted_msg: "The message has been deleted", gb_updated_title: "Updated", gb_updated_msg: "Your message has been modified", gb_edit_title: "Edit message", gb_delete_title: "Delete message", gb_edited_tag: "(edited)",
                 menu_cat_essence: "🌸 ESSENCE", menu_cat_exp: "✨ EXPERIENCES", menu_cat_special: "🌟 SPECIAL", menu_search: "Search section...",
                 search_empty_title: "No results...", search_empty_sub: "Try another phrase, my love.", search_game_tag: "(Minigame)", search_game_btn: "Open Game", search_recipe_btn: "View Recipe", search_tool_btn: "Open Tool", menu_recipe: "Gastronomy", menu_tools: "Tools",
@@ -12675,7 +12682,8 @@
             },
             pt: {
                 flag: "PT", code: "PT", nav_subtitle: "Para Yaire", menu_nav: "Spotlight", menu_home: "Início", menu_story: "História & Tempo", menu_name: "Seu Nome", menu_tulips: "Suas Flores", menu_quiz: "O Mistério", menu_dist: "A Distância", menu_food: "O Pacto", menu_universe: "O Universo Dela", menu_gallery: "Galeria de Arte", menu_games: "Minijogos", menu_promises: "Promessas", menu_memorial: "Para seu Anjo", menu_hype: "O Hype", menu_stats: "Estatísticas", menu_secret: "O Último Segredo", menu_settings: "Configurações do Sistema", menu_theme: "Tema Visual", menu_lang: "Idioma", menu_new_badge: "Novo",
-                menu_colors: "Cores Favoritas", menu_tulip_colors: "Guia de Cores", menu_healing: "Cura", menu_guestbook: "Mural de Dedicatórias", gb_auth_req: "Para assinar o mural, por favor, identifique-se.", gb_auth_google: "Continuar com o Google", gb_auth_manual: "Prefiro escrever meu nome manualmente", auth_prompt: "Faça login para entrar no canal de voz e salvar o progresso.", auth_login_btn: "Entrar", auth_logout_btn: "Sair", gb_tag: "Mural de Dedicatórias", gb_title: "Deixando uma Marca", gb_desc: "Um espaço para deixar mensagens, lembranças ou apenas um oi. Tudo o que for escrito aqui será guardado para sempre.", gb_form_title: "Escreva uma mensagem", gb_label_name: "Seu Nome", gb_ph_name: "Ex. Visitante Anônimo", gb_label_msg: "Mensagem", gb_ph_msg: "Escreva algo bonito...", gb_btn: "Publicar Mensagem", gb_loading: "Carregando mensagens...", gb_empty: "Nenhuma mensagem ainda. Seja o primeiro!", gb_recent: "Recente", gb_save_changes: "Salvar Alterações", gb_cancel_edit: "Cancelar Edição", gb_delete_confirm: "Tem certeza de que deseja apagar esta mensagem para sempre?", gb_deleted_title: "Apagado", gb_deleted_msg: "A mensagem foi apagada", gb_updated_title: "Atualizado", gb_updated_msg: "Sua mensagem foi modificada", gb_edit_title: "Editar mensagem", gb_delete_title: "Apagar mensagem", gb_edited_tag: "(editado)",
+                menu_colors: "Cores Favoritas", menu_tulip_colors: "Guia de Cores", menu_healing: "Cura", menu_guestbook: "Mural de Dedicatórias",
+                spot_mode_music: "Música", spot_mode_radio: "Rádio", radio_signal: "Sinal ao Vivo", radio_desc: "Sintonizando a frequência de 28E. Transmissão ininterrupta de amor e memórias.", radio_live_badge: "🔴 AO VIVO", radio_live_title: "🔴 Transmissão ao Vivo", gb_auth_req: "Para assinar o mural, por favor, identifique-se.", gb_auth_google: "Continuar com o Google", gb_auth_manual: "Prefiro escrever meu nome manualmente", auth_prompt: "Faça login para entrar no canal de voz e salvar o progresso.", auth_login_btn: "Entrar", auth_logout_btn: "Sair", gb_tag: "Mural de Dedicatórias", gb_title: "Deixando uma Marca", gb_desc: "Um espaço para deixar mensagens, lembranças ou apenas um oi. Tudo o que for escrito aqui será guardado para sempre.", gb_form_title: "Escreva uma mensagem", gb_label_name: "Seu Nome", gb_ph_name: "Ex. Visitante Anônimo", gb_label_msg: "Mensagem", gb_ph_msg: "Escreva algo bonito...", gb_btn: "Publicar Mensagem", gb_loading: "Carregando mensagens...", gb_empty: "Nenhuma mensagem ainda. Seja o primeiro!", gb_recent: "Recente", gb_save_changes: "Salvar Alterações", gb_cancel_edit: "Cancelar Edição", gb_delete_confirm: "Tem certeza de que deseja apagar esta mensagem para sempre?", gb_deleted_title: "Apagado", gb_deleted_msg: "A mensagem foi apagada", gb_updated_title: "Atualizado", gb_updated_msg: "Sua mensagem foi modificada", gb_edit_title: "Editar mensagem", gb_delete_title: "Apagar mensagem", gb_edited_tag: "(editado)",
                 menu_cat_essence: "🌸 ESSÊNCIA", menu_cat_exp: "✨ EXPERIÊNCIAS", menu_cat_special: "🌟 ESPECIAL", menu_search: "Pesquisar seção...",
                 search_empty_title: "Nenhum resultado...", search_empty_sub: "Tente outra frase, meu amor.", search_game_tag: "(Minijogo)", search_game_btn: "Abrir Jogo", search_recipe_btn: "Ver Receita", search_tool_btn: "Abrir Ferramenta", menu_recipe: "Gastronomia", menu_tools: "Ferramentas",
                 theme_light: "Claro", theme_dark: "Escuro", theme_system: "Sistema",
