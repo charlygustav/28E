@@ -181,10 +181,30 @@ io.on('connection', (socket) => {
   });
 
   // ── MUSIC ─────────────────────────────────────────────────────────────────
-  socket.on('music_add', ({ url, title, type }) => {
+  socket.on('music_add', async ({ url, title, type }) => {
     const user = users.get(socket.id);
     if (!user) return;
-    const track = { id: Date.now().toString(36) + Math.random().toString(36).slice(2,5), url, title: title || url, type, addedBy: socket.id, addedByName: user.displayName };
+    
+    let trackUrl = url;
+    let trackType = type;
+    let trackTitle = title || url;
+    
+    // Automatically convert Spotify links to YouTube for synchronized playback
+    if (type === 'spotify') {
+      try {
+        const yts = require('yt-search');
+        const r = await yts(trackTitle + ' audio');
+        if (r && r.videos.length > 0) {
+          trackUrl = r.videos[0].url;
+          trackType = 'youtube';
+          trackTitle = r.videos[0].title + ' (Spotify)';
+        }
+      } catch (e) {
+        console.error('yt-search error:', e);
+      }
+    }
+
+    const track = { id: Date.now().toString(36) + Math.random().toString(36).slice(2,5), url: trackUrl, title: trackTitle, type: trackType, addedBy: socket.id, addedByName: user.displayName };
     musicQueue.push(track);
     io.to(CHANNEL).emit('music_queue_update', { queue: musicQueue, state: musicState });
     if (musicState.currentIndex === -1) {
