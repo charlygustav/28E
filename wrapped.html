@@ -372,11 +372,19 @@
             </div>
 
             <!-- Slide 19: Conclusion / Share Card -->
-            <div class="slide flex flex-col items-center justify-center p-6" data-bg1="bg-zinc-900" data-bg2="bg-black" data-bg3="bg-zinc-800">
+            <div class="slide flex flex-col items-center justify-center p-6 relative" data-bg1="bg-zinc-900" data-bg2="bg-black" data-bg3="bg-zinc-800">
                 
                 <p class="text-[10px] text-white/50 uppercase tracking-widest mb-4 gsap-reveal z-50">Desliza para elegir tu tarjeta ➔</p>
 
-                <div id="cards-container" class="flex overflow-x-auto snap-x snap-mandatory gap-6 w-[100vw] px-[calc(50vw-130px)] pb-6 gsap-reveal z-50 pointer-events-auto" style="scrollbar-width: none; -ms-overflow-style: none;">
+                <!-- Flechas de navegación (Solo PC) -->
+                <button onclick="scrollCards(-1)" class="absolute left-6 top-1/2 -translate-y-1/2 z-50 p-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white backdrop-blur-md hidden md:flex pointer-events-auto transition-colors shadow-lg">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <button onclick="scrollCards(1)" class="absolute right-6 top-1/2 -translate-y-1/2 z-50 p-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white backdrop-blur-md hidden md:flex pointer-events-auto transition-colors shadow-lg">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+
+                <div id="cards-container" class="flex overflow-x-auto snap-x snap-mandatory gap-6 w-[100vw] px-[calc(50vw-130px)] pb-6 gsap-reveal z-40 pointer-events-auto scroll-smooth" style="scrollbar-width: none; -ms-overflow-style: none;">
                     
                     <!-- Card 1: Pink/Rose -->
                     <div class="share-card-item flex-shrink-0 w-[260px] snap-center relative bg-gradient-to-br from-indigo-900 via-pink-900 to-rose-900 rounded-3xl p-6 shadow-2xl border border-white/10">
@@ -715,6 +723,13 @@
                 }
             });
             return closest;
+        }
+
+        function scrollCards(direction) {
+            const container = document.getElementById('cards-container');
+            // Ancho de la tarjeta (260px) + gap (24px) = 284px aprox.
+            const scrollAmount = 284 * direction;
+            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
         }
 
         function downloadShareCard() {
