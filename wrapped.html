@@ -727,11 +727,11 @@
         }
 
         window.resetWrapped = function() {
-            clearTimeout(autoAdvanceTimeout);
+            clearTimeout(autoAdvanceTimer);
             isPlaying = false;
-            if (audio) {
-                audio.pause();
-                audio.currentTime = 0;
+            if (audioEl) {
+                audioEl.pause();
+                audioEl.currentTime = 0;
             }
             gsap.killTweensOf('.gsap-text, .gsap-reveal, .collage-img');
             
@@ -1013,7 +1013,8 @@
                 canvas.toBlob(async (blob) => {
                     const file = new File([blob], '28E_Wrapped.png', { type: 'image/png' });
 
-                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                    if (isMobile && navigator.canShare && navigator.canShare({ files: [file] })) {
                         try {
                             await navigator.share({
                                 title: 'Mi 28E Wrapped',
