@@ -377,7 +377,7 @@
             </div>
 
             <!-- Slide 19: Export/Share -->
-            <div class="slide flex-col items-center justify-center pt-24 pb-4 px-0 relative" data-bg1="bg-zinc-900" data-bg2="bg-black" data-bg3="bg-zinc-800">
+            <div class="slide flex-col items-center justify-center pt-20 md:pt-10 pb-4 px-0 relative" data-bg1="bg-zinc-900" data-bg2="bg-black" data-bg3="bg-zinc-800">
                 
                 <p class="text-[10px] text-white/50 uppercase tracking-widest mb-3 gsap-reveal z-50 md:hidden">Desliza para elegir tu tarjeta ➔</p>
 
@@ -392,7 +392,13 @@
                 <div id="cards-container" class="flex overflow-x-auto snap-x snap-mandatory gap-6 w-[100vw] px-[calc(50vw-120px)] pb-2 gsap-reveal relative z-[60] scroll-smooth" style="scrollbar-width: none; -ms-overflow-style: none;">
                     
                     <!-- Card 1: Pink/Rose -->
-                    <div class="share-card-item flex-shrink-0 snap-center relative bg-gradient-to-br from-indigo-900 via-pink-900 to-rose-900 rounded-md p-5 shadow-2xl border border-white/10 overflow-hidden block" style="width: 240px; height: 426px;">
+                    <div class="share-card-item pc-card-active flex-shrink-0 snap-center relative bg-gradient-to-br from-indigo-900 via-pink-900 to-rose-900 rounded-md p-5 shadow-2xl border border-white/10 overflow-hidden block" style="width: 240px; height: 426px;">
+                        <!-- Badge PC -->
+                        <div class="pc-indicator hidden md:flex absolute -top-1 right-3 bg-white text-black text-[10px] font-bold px-3 py-1.5 rounded-b-lg shadow-xl items-center gap-1 opacity-0 translate-y-[-10px] scale-95 transition-all z-50">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-green-600"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            SELECCIONADA
+                        </div>
+                        
                         <div class="absolute top-4 right-4 opacity-20 text-4xl" style="line-height: 1;">🌷</div>
                         
                         <div class="mb-8" style="position: relative; z-index: 10;">
@@ -416,7 +422,13 @@
                     </div>
 
                     <!-- Card 2: Black/Dark -->
-                    <div class="share-card-item flex-shrink-0 snap-center relative bg-gradient-to-br from-zinc-900 via-black to-zinc-900 rounded-md p-5 shadow-2xl border border-white/10 overflow-hidden block" style="width: 240px; height: 426px;">
+                    <div class="share-card-item pc-card-inactive flex-shrink-0 snap-center relative bg-gradient-to-br from-zinc-900 via-black to-zinc-900 rounded-md p-5 shadow-2xl border border-white/10 overflow-hidden block" style="width: 240px; height: 426px;">
+                        <!-- Badge PC -->
+                        <div class="pc-indicator hidden md:flex absolute -top-1 right-3 bg-white text-black text-[10px] font-bold px-3 py-1.5 rounded-b-lg shadow-xl items-center gap-1 opacity-0 translate-y-[-10px] scale-95 transition-all z-50">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-green-600"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            SELECCIONADA
+                        </div>
+                        
                         <div class="absolute top-4 right-4 opacity-10 text-4xl" style="line-height: 1;">✨</div>
                         
                         <div class="mb-8" style="position: relative; z-index: 10;">
@@ -440,7 +452,13 @@
                     </div>
 
                     <!-- Card 3: White/Light -->
-                    <div class="share-card-item flex-shrink-0 snap-center relative bg-gradient-to-br from-white via-slate-50 to-zinc-200 rounded-md p-5 shadow-2xl border border-black/10 overflow-hidden block" style="width: 240px; height: 426px;">
+                    <div class="share-card-item pc-card-inactive flex-shrink-0 snap-center relative bg-gradient-to-br from-white via-slate-50 to-zinc-200 rounded-md p-5 shadow-2xl border border-black/10 overflow-hidden block" style="width: 240px; height: 426px;">
+                        <!-- Badge PC -->
+                        <div class="pc-indicator hidden md:flex absolute -top-1 right-3 bg-zinc-900 text-white text-[10px] font-bold px-3 py-1.5 rounded-b-lg shadow-xl items-center gap-1 opacity-0 translate-y-[-10px] scale-95 transition-all z-50">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-green-400"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            SELECCIONADA
+                        </div>
+                        
                         <div class="absolute top-4 right-4 opacity-20 text-4xl" style="line-height: 1;">☁️</div>
                         
                         <div class="mb-8" style="position: relative; z-index: 10;">
@@ -464,7 +482,13 @@
                     </div>
 
                     <!-- Card 4: Green/Red -->
-                    <div class="share-card-item flex-shrink-0 snap-center relative bg-gradient-to-br from-red-900 via-rose-800 to-emerald-900 rounded-md p-5 shadow-2xl border border-white/20 overflow-hidden block" style="width: 240px; height: 426px;">
+                    <div class="share-card-item pc-card-inactive flex-shrink-0 snap-center relative bg-gradient-to-br from-red-900 via-rose-800 to-emerald-900 rounded-md p-5 shadow-2xl border border-white/20 overflow-hidden block" style="width: 240px; height: 426px;">
+                        <!-- Badge PC -->
+                        <div class="pc-indicator hidden md:flex absolute -top-1 right-3 bg-white text-black text-[10px] font-bold px-3 py-1.5 rounded-b-lg shadow-xl items-center gap-1 opacity-0 translate-y-[-10px] scale-95 transition-all z-50">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-green-600"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            SELECCIONADA
+                        </div>
+                        
                         <div class="absolute top-4 right-4 opacity-20 text-4xl" style="line-height: 1;">🍉</div>
                         
                         <div class="mb-8" style="position: relative; z-index: 10;">
@@ -488,18 +512,55 @@
                     </div>
                 </div>
 
-                <!-- Webkit scrollbar hide for cards container -->
                 <style>
-                    #cards-container::-webkit-scrollbar { display: none; }
+                    /* Custom Scrollbar for horizontal scrolling if needed */
+                    ::-webkit-scrollbar {
+                        height: 4px;
+                        width: 4px;
+                    }
+                    ::-webkit-scrollbar-track {
+                        background: rgba(255, 255, 255, 0.05); 
+                    }
+                    ::-webkit-scrollbar-thumb {
+                        background: rgba(255, 255, 255, 0.2); 
+                        border-radius: 4px;
+                    }
+                    ::-webkit-scrollbar-thumb:hover {
+                        background: rgba(255, 255, 255, 0.4); 
+                    }
+                    
+                    /* Hide tap zones on PC */
+                    @media (min-width: 768px) {
+                        .tap-zone-left, .tap-zone-right { display: none !important; }
+                        
+                        /* PC Card Highlight Effects */
+                        .pc-card-active {
+                            transform: scale(1.02);
+                            opacity: 1;
+                            filter: brightness(1);
+                            box-shadow: 0 0 40px rgba(255,255,255,0.15);
+                        }
+                        .pc-card-inactive {
+                            transform: scale(0.92);
+                            opacity: 0.4;
+                            filter: brightness(0.6);
+                        }
+                        .share-card-item {
+                            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                        }
+                        .pc-card-active .pc-indicator {
+                            opacity: 1 !important;
+                            transform: translateY(0) scale(1) !important;
+                        }
+                    }
                 </style>
                 
-                <!-- Buttons (ABOVE the tap zones) -->
-                <div class="mt-2 z-[60] relative gsap-reveal flex flex-col gap-3 w-full max-w-sm px-6">
-                    <button id="btn-download" onclick="downloadShareCard()" class="w-full py-3.5 bg-pink-600 text-white font-black rounded-full hover:bg-pink-500 transition-all shadow-[0_0_20px_rgba(236,72,153,0.4)] uppercase tracking-widest text-sm flex items-center justify-center gap-2">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                <div class="mt-6 md:mt-8 flex flex-col md:flex-row items-center justify-center gap-4 w-full max-w-xs md:max-w-2xl z-50 pointer-events-auto relative px-4">
+                    <button id="btn-download" onclick="downloadShareCard()" class="w-full md:w-auto md:px-8 py-3.5 bg-rose-600 text-white font-bold rounded-full hover:bg-rose-500 transition-all shadow-lg shadow-rose-600/30 flex items-center justify-center gap-2 uppercase tracking-widest text-sm pointer-events-auto">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
                         Compartir Resumen
                     </button>
-                    <button onclick="window.location.href='index.html'" class="w-full py-3.5 bg-white/10 text-white font-bold rounded-full hover:bg-white/20 transition-all backdrop-blur-sm border border-white/10 uppercase tracking-widest text-sm">
+                    <button onclick="window.location.href='index.html'" class="w-full md:w-auto md:px-8 py-3.5 bg-white/10 text-white font-bold rounded-full hover:bg-white/20 transition-all backdrop-blur-sm border border-white/10 uppercase tracking-widest text-sm pointer-events-auto">
                         Volver a Nuestro Mundo
                     </button>
                 </div>
@@ -609,6 +670,12 @@
                 document.getElementById('start-screen').style.display = 'none';
                 document.getElementById('mute-btn').classList.remove('hidden');
                 document.getElementById('pause-btn').classList.remove('hidden');
+                
+                // Inicializar eventos de scroll para indicador PC
+                const cardsContainer = document.getElementById('cards-container');
+                if (cardsContainer) {
+                    cardsContainer.addEventListener('scroll', updatePcIndicator);
+                }
                 
                 isPlaying = true;
                 isPaused = false;
@@ -800,6 +867,24 @@
                 }
             });
             return closest;
+        }
+
+        function updatePcIndicator() {
+            if (window.innerWidth < 768) return; // Solo actua visualmente en PC
+            const container = document.getElementById('cards-container');
+            if (!container) return;
+            const cards = container.querySelectorAll('.share-card-item');
+            const visibleCard = getVisibleCard();
+            
+            cards.forEach(card => {
+                if (card === visibleCard) {
+                    card.classList.add('pc-card-active');
+                    card.classList.remove('pc-card-inactive');
+                } else {
+                    card.classList.remove('pc-card-active');
+                    card.classList.add('pc-card-inactive');
+                }
+            });
         }
 
         function scrollCards(direction) {
