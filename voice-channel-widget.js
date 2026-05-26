@@ -637,7 +637,7 @@
             <div class="flex-1 min-w-0">
               <div class="text-white text-sm font-medium truncate">${u.displayName} ${isMe ? `<span class="text-white/30 text-[10px] ml-1 px-1.5 py-0.5 rounded-md bg-white/10">${_t('tag_you')}</span>` : ''}</div>
             </div>
-            <div class="flex items-center gap-2 pr-1 opacity-100">
+            <div class="flex items-center gap-2 pr-1 opacity-100 vc-icons-container">
                ${bellIcon}${micIcon}
             </div>
           </div>`;
@@ -762,29 +762,46 @@
         let node = document.getElementById(`vc-u-${u.id}`);
         if (!node) {
           node = document.createElement('div');
-          node.className = 'vc-user';
+          node.className = 'flex items-center gap-3 p-2 hover:bg-white/5 rounded-xl transition-colors vc-user group';
           node.id = `vc-u-${u.id}`;
+          
+          const avatarHtml = (u.photoURL || (isMe && window.yaireCurrentUser?.photoURL)) 
+            ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" class="w-full h-full rounded-full object-cover" draggable="false" />` 
+            : u.displayName.slice(0, 2).toUpperCase();
+            
           node.innerHTML = `
-            <div class="vc-av${isMe ? ' me' : ''}" id="vc-av-${u.id}">
-              ${(u.photoURL || (isMe && window.yaireCurrentUser?.photoURL)) ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" draggable="false" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />` : u.displayName.slice(0, 2).toUpperCase()}
+            <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold transition-all relative ${isMe ? 'bg-amber-500/20 text-amber-500 border-2 border-transparent' : 'bg-pink-500/20 text-pink-500 border-2 border-transparent'} vc-av" id="vc-av-${u.id}">
+              ${avatarHtml}
             </div>
-            <div class="vc-uname">${u.displayName}${isMe ? `<span class="tag">${_t('tag_you')}</span>` : ''}</div>
+            <div class="flex-1 min-w-0">
+              <div class="text-white text-sm font-medium truncate">${u.displayName} ${isMe ? `<span class="text-white/30 text-[10px] ml-1 px-1.5 py-0.5 rounded-md bg-white/10">${_t('tag_you')}</span>` : ''}</div>
+            </div>
+            <div class="flex items-center gap-2 pr-1 opacity-100 vc-icons-container">
+            </div>
           `;
           container.appendChild(node);
         }
         
-        const existingDnd = node.querySelector('.vc-dico');
+        let iconContainer = node.querySelector('.vc-icons-container');
+        if (!iconContainer) {
+            // Fallback for nodes that somehow lack the container
+            iconContainer = document.createElement('div');
+            iconContainer.className = 'flex items-center gap-2 pr-1 opacity-100 vc-icons-container';
+            node.appendChild(iconContainer);
+        }
+        
+        const existingDnd = iconContainer.querySelector('.vc-dico');
         if (isDnd && !existingDnd) {
-          const mico = node.querySelector('.vc-mico');
-          if (mico) mico.insertAdjacentHTML('beforebegin', `<span class="vc-dico" title="${_t('btn_dnd')}">${ICONS.dnd}</span>`);
-          else node.insertAdjacentHTML('beforeend', `<span class="vc-dico" title="${_t('btn_dnd')}">${ICONS.dnd}</span>`);
+          const mico = iconContainer.querySelector('.vc-mico');
+          if (mico) mico.insertAdjacentHTML('beforebegin', `<span class="text-purple-400 w-4 h-4 vc-dico" title="${_t('btn_dnd')}">${ICONS.dnd}</span>`);
+          else iconContainer.insertAdjacentHTML('beforeend', `<span class="text-purple-400 w-4 h-4 vc-dico" title="${_t('btn_dnd')}">${ICONS.dnd}</span>`);
         } else if (!isDnd && existingDnd) {
           existingDnd.remove();
         }
         
-        const existingMic = node.querySelector('.vc-mico');
+        const existingMic = iconContainer.querySelector('.vc-mico');
         if (isMuted && !existingMic) {
-          node.insertAdjacentHTML('beforeend', `<span class="vc-mico">${ICONS.micOff}</span>`);
+          iconContainer.insertAdjacentHTML('beforeend', `<span class="text-red-500 w-4 h-4 vc-mico">${ICONS.micOff}</span>`);
         } else if (!isMuted && existingMic) {
           existingMic.remove();
         }
