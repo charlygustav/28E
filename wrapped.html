@@ -62,7 +62,7 @@
             height: 100%;
             background: white;
             width: 0%;
-            transition: width 0.1s linear;
+            will-change: width;
         }
 
         /* Tap Zones */
@@ -828,6 +828,7 @@
             progressBars.forEach((bar, i) => {
                 if (i < index) bar.style.width = '100%';
                 else if (i > index) bar.style.width = '0%';
+                else bar.style.width = '0%'; // Reset current bar instantly
             });
 
             currentSlide = index;
