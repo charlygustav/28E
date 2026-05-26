@@ -4165,15 +4165,34 @@
                 function spotlightPlayTrack(i) {
                     spotAudio.pause();
                     
-                    if (currentSpotTrack !== i) {
-                        spotlightLoadTrack(i);
-                    }
-                    
                     isSpotPlaying = true;
                     spotlightUpdateUI();
                     
-                    // Wait for the browser to confirm it has loaded enough audio data
-                    const doPlay = () => {
+                    if (currentSpotTrack !== i) {
+                        // Register the play handler BEFORE changing the source
+                        // so we don't miss the canplay event on cached/local files
+                        let played = false;
+                        const doPlay = () => {
+                            if (played) return;
+                            played = true;
+                            spotAudio.play().then(() => {
+                                spotlightUpdateTitle();
+                            }).catch(err => {
+                                console.error('Music playback failed:', err);
+                                isSpotPlaying = false;
+                                spotlightUpdateUI();
+                            });
+                        };
+                        spotAudio.addEventListener('canplay', doPlay, { once: true });
+                        
+                        // Now change the source (this triggers loading)
+                        spotlightLoadTrack(i);
+                        
+                        // Safety: if canplay doesn't fire within 3 seconds, force play
+                        setTimeout(() => { doPlay(); }, 3000);
+                    } else {
+                        // Same track, just replay from start
+                        spotAudio.currentTime = 0;
                         spotAudio.play().then(() => {
                             spotlightUpdateTitle();
                         }).catch(err => {
@@ -4181,14 +4200,6 @@
                             isSpotPlaying = false;
                             spotlightUpdateUI();
                         });
-                    };
-                    
-                    if (spotAudio.readyState >= 3) {
-                        // Audio already buffered enough — play immediately
-                        doPlay();
-                    } else {
-                        // Wait for browser to signal it can play
-                        spotAudio.addEventListener('canplay', doPlay, { once: true });
                     }
                 }
 
