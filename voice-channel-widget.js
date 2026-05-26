@@ -490,17 +490,6 @@
   .vc-music-ctrl-btn svg { width:14px; height:14px; }
   .vc-music-ctrl-btn.primary { width:36px; height:36px; background:rgba(245,158,11,.15); border-color:rgba(245,158,11,.3); color:#f59e0b; }
   .vc-music-ctrl-btn.primary:hover { background:rgba(245,158,11,.25); }
-  .vc-music-vol-wrap { display:flex; align-items:center; gap:6px; padding:0 16px 8px; }
-  .vc-music-vol-wrap svg { width:14px; height:14px; color:rgba(255,255,255,.3); flex-shrink:0; }
-  .vc-music-vol-slider {
-    flex:1; -webkit-appearance:none; appearance:none; height:3px; border-radius:2px;
-    background:rgba(255,255,255,.1); outline:none; cursor:pointer;
-  }
-  .vc-music-vol-slider::-webkit-slider-thumb {
-    -webkit-appearance:none; width:12px; height:12px; border-radius:50%;
-    background:#f59e0b; cursor:pointer; border:none;
-  }
-  .vc-music-vol-slider::-moz-range-thumb { width:12px; height:12px; border-radius:50%; background:#f59e0b; cursor:pointer; border:none; }
   .vc-music-queue-lbl { padding:8px 16px 4px; font-size:10px; color:rgba(255,255,255,.22); font-weight:700; letter-spacing:.8px; text-transform:uppercase; display:flex; justify-content:space-between; align-items:center; }
   .vc-music-queue-list { max-height:120px; overflow-y:auto; padding:0 16px 8px; scrollbar-width:thin; scrollbar-color:rgba(255,255,255,.08) transparent; }
   .vc-music-queue-list::-webkit-scrollbar { width:4px; }
@@ -1945,8 +1934,7 @@
           <div class="vc-music-ctrls">
             <button class="vc-music-ctrl-btn primary" id="vc-music-playpause">${isPlaying ? ICONS.pause : ICONS.play}</button>
             <button class="vc-music-ctrl-btn" id="vc-music-skip">${ICONS.skipFwd}</button>
-          </div>
-          <div class="vc-music-vol-wrap">${ICONS.volumeUp}<input type="range" class="vc-music-vol-slider" id="vc-music-vol" min="0" max="100" value="${this._musicVolume}"></div>`;
+          </div>`;
       } else {
         nowPlaying = `<div class="vc-music-empty" style="padding:16px 0">${_t('vc_music_no_track')}</div>`;
       }
@@ -1993,11 +1981,6 @@
       if (playPause) playPause.addEventListener('click', () => this._musicTogglePlayPause());
       const skip = document.getElementById('vc-music-skip');
       if (skip) skip.addEventListener('click', () => { if (this.socket) this.socket.emit('music_skip'); });
-      const vol = document.getElementById('vc-music-vol');
-      if (vol) vol.addEventListener('input', (e) => {
-        this._musicVolume = parseInt(e.target.value);
-        this._setMusicVolume(this._musicVolume);
-      });
       const addBtn = document.getElementById('vc-music-add');
       const urlInput = document.getElementById('vc-music-url');
       if (addBtn) addBtn.addEventListener('click', () => this._addMusicFromInput());
