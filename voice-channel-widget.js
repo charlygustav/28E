@@ -221,322 +221,19 @@
 
   // ── CSS ──────────────────────────────────────────────────────────────────
   const CSS = `
-  #vc-fab {
-    position:fixed; bottom:28px; right:28px; z-index:9999;
-    width:52px; height:52px; border-radius:50%;
-    background:#0d0d0d; border:1px solid rgba(255,255,255,0.08);
-    display:flex; align-items:center; justify-content:center;
-    cursor:pointer; box-shadow:0 4px 24px rgba(0,0,0,.7);
-    transition: transform .25s cubic-bezier(.34,1.56,.64,1), border-color .2s, box-shadow .2s;
-  }
-  #vc-fab:hover { transform:scale(1.12); border-color:rgba(245,158,11,.45); box-shadow:0 4px 28px rgba(245,158,11,.22); }
-  #vc-fab.connected { background:rgba(245,158,11,.13); border-color:rgba(245,158,11,.5); animation:vc-pulse 2s infinite; }
-  #vc-fab svg { width:22px; height:22px; color:#f59e0b; }
   @keyframes vc-pulse { 0%,100%{box-shadow:0 4px 24px rgba(245,158,11,.2)} 50%{box-shadow:0 4px 32px rgba(245,158,11,.45)} }
-
-  #vc-panel {
-    position:fixed; bottom:88px; right:28px; z-index:9998;
-    width:298px; background:#0a0a0a;
-    border:1px solid rgba(255,255,255,0.07); border-radius:16px;
-    overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.85);
-    font-family:'Inter',-apple-system,sans-serif;
-    transform:scale(.85) translateY(12px); opacity:0; pointer-events:none;
-    transition: transform .25s cubic-bezier(.34,1.56,.64,1), opacity .2s;
-  }
-  #vc-panel.open { transform:scale(1) translateY(0); opacity:1; pointer-events:all; }
-
-  .vc-hdr { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid rgba(255,255,255,.05); }
-  .vc-hdr-l { display:flex; align-items:center; gap:10px; }
-  .vc-icon { position:relative; overflow:hidden; width:34px; height:34px; border-radius:9px; background:rgba(245,158,11,.12); display:flex; align-items:center; justify-content:center; color:#f59e0b; }
-  .vc-icon::after { content:""; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:linear-gradient(to bottom right,rgba(255,255,255,0) 0%,rgba(255,255,255,0.2) 50%,rgba(255,255,255,0) 100%); transform:rotate(45deg) translateY(-100%); animation:vc-shine 3.5s infinite; }
   @keyframes vc-shine { 0% { transform:rotate(45deg) translateY(-100%); } 20%, 100% { transform:rotate(45deg) translateY(100%); } }
-  .vc-icon svg { width:17px; height:17px; z-index:1; }
-  .vc-title { color:#fff; font-size:13.5px; font-weight:600; letter-spacing:-.2px; }
-  .vc-sub { color:rgba(255,255,255,.3); font-size:11px; margin-top:1px; }
-  .vc-x { background:none; border:none; color:rgba(255,255,255,.3); cursor:pointer; font-size:18px; line-height:1; padding:2px 6px; border-radius:5px; transition:all .15s; }
-  .vc-x:hover { color:#fff; background:rgba(255,255,255,.07); transform:scale(1.1); }
-  .vc-x:active { transform:scale(0.9); }
-
-  .vc-body { padding:16px; }
-  .vc-label { display:block; color:rgba(255,255,255,.35); font-size:10.5px; font-weight:600; letter-spacing:.6px; text-transform:uppercase; margin-bottom:5px; }
-  .vc-field { margin-bottom:12px; }
-  .vc-input {
-    width:100%; box-sizing:border-box; background:#131313;
-    border:1px solid rgba(255,255,255,.07); border-radius:8px;
-    padding:9px 11px; color:#fff; font-size:13px; font-family:inherit;
-    outline:none; transition:border-color .15s;
-  }
-  .vc-input:focus { border-color:rgba(245,158,11,.4); }
-  .vc-input::placeholder { color:rgba(255,255,255,.18); }
-  .vc-btn {
-    width:100%; padding:11px; border:none; border-radius:9px;
-    background:rgba(245,158,11,.9); color:#000; font-size:13px;
-    font-weight:700; cursor:pointer; transition:all .15s cubic-bezier(.34,1.56,.64,1);
-  }
-  .vc-btn:hover:not(:disabled) { background:#f59e0b; transform:translateY(-2px); box-shadow:0 6px 16px rgba(245,158,11,.3); }
-  .vc-btn:active:not(:disabled) { transform:scale(0.96); box-shadow:none; }
-  .vc-btn:disabled { opacity:.45; cursor:not-allowed; transform:none; }
-  .vc-err { color:#ef4444; font-size:12px; text-align:center; margin-top:9px; min-height:16px; }
-
-  .vc-loader { padding:24px; text-align:center; color:rgba(255,255,255,.35); font-size:13px; }
-  .vc-spin { width:22px; height:22px; border:2px solid rgba(245,158,11,.2); border-top-color:#f59e0b; border-radius:50%; animation:vc-spin .75s linear infinite; margin:0 auto 10px; }
   @keyframes vc-spin { to{transform:rotate(360deg)} }
-
-  .vc-sect { padding:4px 16px 12px; }
-  .vc-sect-lbl { color:rgba(255,255,255,.22); font-size:10px; font-weight:700; letter-spacing:.8px; text-transform:uppercase; margin-bottom:8px; }
   @keyframes vc-slideIn { from { opacity:0; transform:translateX(-8px); } to { opacity:1; transform:translateX(0); } }
-  .vc-user { display:flex; align-items:center; gap:9px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,.04); animation: vc-slideIn .3s cubic-bezier(.16,1,.3,1) backwards; }
-  .vc-user:nth-child(1) { animation-delay: 0.05s; }
-  .vc-user:nth-child(2) { animation-delay: 0.10s; }
-  .vc-user:nth-child(3) { animation-delay: 0.15s; }
-  .vc-user:nth-child(4) { animation-delay: 0.20s; }
-  .vc-user:last-child { border-bottom:none; }
-  .vc-av {
-    width:30px; height:30px; border-radius:50%; flex-shrink:0;
-    display:flex; align-items:center; justify-content:center;
-    font-size:11px; font-weight:700;
-    background:rgba(244,114,182,.12); border:1.5px solid rgba(244,114,182,.25); color:#f472b6;
-    transition:border-color .2s, box-shadow .2s;
-  }
-  .vc-av.me { background:rgba(245,158,11,.12); border-color:transparent; color:#f59e0b; }
   @keyframes vc-speak-pulse { 0% { box-shadow:0 0 0 0 rgba(34,197,94,.4); } 70% { box-shadow:0 0 0 6px rgba(34,197,94,0); } 100% { box-shadow:0 0 0 0 rgba(34,197,94,0); } }
-  .vc-av.speaking { border-color:#22c55e; animation: vc-speak-pulse 1.2s infinite; }
-  .vc-uname { flex:1; color:#fff; font-size:13px; font-weight:500; }
-  .vc-uname .tag { color:rgba(255,255,255,.3); font-size:11px; font-weight:400; margin-left:4px; }
-  .vc-mico svg { width:14px; height:14px; color:rgba(239,68,68,.75); }
-
-  .vc-ctrls { display:flex; gap:7px; padding:12px 16px 15px; border-top:1px solid rgba(255,255,255,.05); }
-  .vc-cb {
-    flex:1; padding:9px 6px; border-radius:8px;
-    border:1px solid rgba(255,255,255,.07); background:#131313;
-    color:rgba(255,255,255,.65); font-size:12px; font-weight:500;
-    cursor:pointer; display:flex; align-items:center; justify-content:center; gap:5px;
-    transition:all .2s cubic-bezier(.34,1.56,.64,1);
-  }
-  .vc-cb:hover { background:#1a1a1a; color:#fff; transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,.4); }
-  .vc-cb:active { transform:scale(0.92); box-shadow:none; }
-  .vc-cb svg { width:14px; height:14px; transition:transform .2s cubic-bezier(.34,1.56,.64,1); }
-  .vc-cb.muted { background:rgba(239,68,68,.1); border-color:rgba(239,68,68,.3); color:#ef4444; }
-  .vc-cb.leave { background:rgba(239,68,68,.07); border-color:rgba(239,68,68,.2); color:rgba(239,68,68,.8); }
-  .vc-cb.leave:hover { background:rgba(239,68,68,.18); color:#ef4444; }
-  .vc-cb.dnd { background:rgba(124,58,237,.1); border-color:rgba(124,58,237,.3); color:#a78bfa; }
   @keyframes vc-pop { from { transform:scale(0); opacity:0; } to { transform:scale(1); opacity:1; } }
-  .vc-mico svg { width:14px; height:14px; color:rgba(239,68,68,.75); animation:vc-pop .25s cubic-bezier(.34,1.56,.64,1); }
-  .vc-dico svg { width:14px; height:14px; color:rgba(167,139,250,.85); animation:vc-pop .25s cubic-bezier(.34,1.56,.64,1); }
-  .vc-sbar { padding:7px 16px; background:rgba(34,197,94,.06); border-top:1px solid rgba(34,197,94,.1); display:flex; align-items:center; gap:6px; font-size:11px; color:rgba(34,197,94,.85); }
-  .vc-dot { width:6px; height:6px; border-radius:50%; background:#22c55e; animation:vc-blink 2s infinite; }
   @keyframes vc-blink { 0%,100%{opacity:1} 50%{opacity:.35} }
-
-  .vc-empty { padding:16px; text-align:center; color:rgba(255,255,255,.2); font-size:12px; }
-  .vc-timer { font-size:11px; color:rgba(255,255,255,.4); font-variant-numeric:tabular-nums; }
-  .vc-cb.dnd { background:rgba(124,58,237,.1); border-color:rgba(124,58,237,.3); color:#a78bfa; }
-  .vc-hist { padding:8px 16px 14px; border-top:1px solid rgba(255,255,255,.05); }
-  .vc-hist-row { display:flex; justify-content:space-between; font-size:11px; color:rgba(255,255,255,.3); padding:3px 0; }
-  .vc-hist-row span:first-child { color:rgba(255,255,255,.5); }
-  #vc-bar {
-    position:fixed; bottom:90px; right:28px; z-index:9997;
-    background:#0d0d0d; border:1px solid rgba(245,158,11,.25);
-    border-radius:20px; display:none; align-items:center; gap:8px;
-    padding:6px 10px 6px 12px;
-    font-size:11.5px; color:rgba(255,255,255,.7); font-family:'Inter',-apple-system,sans-serif;
-    box-shadow:0 4px 20px rgba(0,0,0,.6); white-space:nowrap;
-  }
-  @keyframes vc-bar-up { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-  #vc-bar.show { display:flex; animation: vc-bar-up .35s cubic-bezier(.34,1.56,.64,1); }
-  #vc-bar-open {
-    background:rgba(245,158,11,.15); border:1px solid rgba(245,158,11,.35);
-    color:#f59e0b; border-radius:12px; padding:3px 9px;
-    font-size:11px; font-weight:600; cursor:pointer;
-    transition:background .15s;
-  }
-  #vc-bar-open:hover { background:rgba(245,158,11,.25); }
-  .vc-toast {
-    position:fixed; bottom:72px; right:24px; z-index:10000;
-    background:#1a1a1a; border:1px solid rgba(255,255,255,.09); border-radius:10px;
-    padding:10px 14px; font-size:12.5px; color:#fff; font-family:'Inter',-apple-system,sans-serif;
-    box-shadow:0 8px 32px rgba(0,0,0,.7); transform:translateY(8px); opacity:0;
-    transition:all .3s cubic-bezier(.34,1.56,.64,1); pointer-events:none; max-width:240px;
-  }
-  .vc-toast.show { transform:translateY(0); opacity:1; }
-  .vc-toast.join { border-left:3px solid #22c55e; }
-  .vc-toast.leave { border-left:3px solid #ef4444; }
-  .vc-toast.info { border-left:3px solid #f59e0b; }
-
-  /* ── Chat ── */
-  .vc-chat-wrap { border-top:1px solid rgba(255,255,255,.05); }
-  .vc-chat-badge-sm {
-    position:absolute; top:-4px; right:-4px;
-    background:#ef4444; color:#fff; font-size:9px; font-weight:800;
-    min-width:16px; height:16px; border-radius:8px; display:flex;
-    align-items:center; justify-content:center; padding:0 3px;
-    animation:vc-pop .25s cubic-bezier(.34,1.56,.64,1);
-    box-shadow:0 2px 4px rgba(0,0,0,.5);
-  }
-  .vc-chat-body { display:none; }
-  .vc-chat-body.open { display:block; }
-  .vc-msgs {
-    max-height:140px; overflow-y:auto; padding:6px 16px 8px;
-    scrollbar-width:thin; scrollbar-color:rgba(255,255,255,.08) transparent;
-  }
-  .vc-msgs::-webkit-scrollbar { width:4px; }
-  .vc-msgs::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
-  .vc-msg {
-    margin-bottom:8px; animation:vc-slideIn .25s cubic-bezier(.16,1,.3,1) backwards;
-  }
-  .vc-msg-head { display:flex; align-items:baseline; gap:6px; margin-bottom:2px; }
-  .vc-msg-name { color:#f59e0b; font-size:11px; font-weight:700; }
-  .vc-msg-name.me { color:rgba(245,158,11,.6); }
-  .vc-msg-time { color:rgba(255,255,255,.2); font-size:9.5px; }
-  .vc-msg-text { color:rgba(255,255,255,.75); font-size:12.5px; line-height:1.4; word-break:break-word; }
-  .vc-chat-input-row {
-    display:flex; gap:6px; padding:8px 12px 10px; border-top:1px solid rgba(255,255,255,.04);
-  }
-  .vc-chat-in {
-    flex:1; background:#131313; border:1px solid rgba(255,255,255,.07);
-    border-radius:8px; padding:7px 10px; color:#fff; font-size:12px;
-    font-family:inherit; outline:none; transition:border-color .15s;
-  }
-  .vc-chat-in:focus { border-color:rgba(245,158,11,.4); }
-  .vc-chat-in::placeholder { color:rgba(255,255,255,.18); }
-  .vc-chat-send {
-    background:rgba(245,158,11,.85); border:none; border-radius:8px;
-    padding:7px 10px; color:#000; cursor:pointer; display:flex;
-    align-items:center; justify-content:center; transition:all .15s;
-  }
-  .vc-chat-send:hover { background:#f59e0b; transform:scale(1.05); }
-  .vc-chat-send:active { transform:scale(0.92); }
-  .vc-chat-send svg { width:14px; height:14px; }
-  .vc-chat-empty { text-align:center; padding:12px 0; color:rgba(255,255,255,.15); font-size:11px; }
-
-  /* ── Typing Indicator ── */
-  .vc-chat-typing {
-    padding:4px 16px 8px; color:rgba(245,158,11,.8); font-size:10px; font-style:normal;
-    animation:vc-slideIn .25s backwards; display:none;
-  }
-  .vc-chat-typing.show { display:block; }
-
-  /* ── Ringtone Overlay ── */
-  #vc-ring-overlay {
-    position:fixed; inset:0; z-index:10001;
-    background:rgba(0,0,0,.85); backdrop-filter:blur(12px);
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    gap:16px; font-family:'Inter',-apple-system,sans-serif;
-    animation:vc-ring-in .4s cubic-bezier(.16,1,.3,1);
-  }
   @keyframes vc-ring-in { from { opacity:0; } to { opacity:1; } }
-  .vc-ring-avatar {
-    width:72px; height:72px; border-radius:50%;
-    background:rgba(245,158,11,.12); border:2px solid rgba(245,158,11,.4);
-    display:flex; align-items:center; justify-content:center;
-    font-size:26px; font-weight:800; color:#f59e0b;
-    animation:vc-ring-pulse 1.5s infinite;
-  }
-  @keyframes vc-ring-pulse {
-    0%,100% { box-shadow:0 0 0 0 rgba(245,158,11,.3); }
-    50% { box-shadow:0 0 0 18px rgba(245,158,11,0); }
-  }
-  .vc-ring-label { color:rgba(255,255,255,.35); font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.8px; }
-  .vc-ring-name { color:#fff; font-size:20px; font-weight:700; }
-  .vc-ring-sub { color:rgba(255,255,255,.4); font-size:13px; }
-  .vc-ring-btns { display:flex; gap:16px; margin-top:8px; }
-  .vc-ring-btn {
-    padding:12px 28px; border:none; border-radius:12px;
-    font-size:13px; font-weight:700; cursor:pointer;
-    transition:all .2s cubic-bezier(.34,1.56,.64,1);
-  }
-  .vc-ring-btn:active { transform:scale(0.92); }
-  .vc-ring-btn.join {
-    background:#f59e0b; color:#000;
-    box-shadow:0 4px 20px rgba(245,158,11,.35);
-  }
-  .vc-ring-btn.join:hover { background:#fbbf24; transform:translateY(-2px); }
-  .vc-ring-btn.ignore {
-    background:rgba(255,255,255,.06); color:rgba(255,255,255,.5);
-    border:1px solid rgba(255,255,255,.1);
-  }
-  .vc-ring-btn.ignore:hover { background:rgba(255,255,255,.1); color:#fff; }
-
-  /* ── Music ── */
-  .vc-music-wrap { border-top:1px solid rgba(255,255,255,.05); }
-  .vc-music-body { display:none; }
-  .vc-music-body.open { display:block; }
-  .vc-music-now {
-    padding:10px 16px; display:flex; align-items:center; gap:10px;
-    background:rgba(245,158,11,.04); border-bottom:1px solid rgba(255,255,255,.04);
-  }
-  .vc-music-now-icon {
-    width:36px; height:36px; border-radius:8px; flex-shrink:0;
-    background:rgba(245,158,11,.12); display:flex; align-items:center; justify-content:center;
-    color:#f59e0b; position:relative; overflow:hidden;
-  }
-  .vc-music-now-icon svg { width:16px; height:16px; z-index:1; }
+  @keyframes vc-ring-pulse { 0%,100% { box-shadow:0 0 0 0 rgba(245,158,11,.3); } 50% { box-shadow:0 0 0 18px rgba(245,158,11,0); } }
   @keyframes vc-music-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
-  .vc-music-now-icon.playing { animation:vc-music-pulse 1.5s infinite; }
-  .vc-music-now-info { flex:1; min-width:0; }
-  .vc-music-now-label { font-size:9px; color:rgba(245,158,11,.7); text-transform:uppercase; font-weight:700; letter-spacing:.5px; }
-  .vc-music-now-title { font-size:12.5px; color:#fff; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .vc-music-now-artist { font-size:10.5px; color:rgba(255,255,255,.35); }
-  .vc-music-progress { height:3px; background:rgba(255,255,255,.06); border-radius:2px; margin:0 16px; cursor:pointer; position:relative; }
-  .vc-music-progress-fill { height:100%; background:linear-gradient(90deg,#f59e0b,#fbbf24); border-radius:2px; width:0; transition:width .3s linear; }
-  .vc-music-time { padding:2px 16px 8px; font-size:9.5px; color:rgba(255,255,255,.3); font-variant-numeric:tabular-nums; display:flex; justify-content:space-between; }
-  .vc-music-ctrls { display:flex; align-items:center; justify-content:center; gap:8px; padding:6px 16px 10px; }
-  .vc-music-ctrl-btn {
-    width:32px; height:32px; border-radius:50%; border:1px solid rgba(255,255,255,.08);
-    background:rgba(255,255,255,.04); color:rgba(255,255,255,.6); display:flex;
-    align-items:center; justify-content:center; cursor:pointer; transition:all .2s;
-  }
-  .vc-music-ctrl-btn:hover { background:rgba(245,158,11,.15); color:#f59e0b; border-color:rgba(245,158,11,.3); transform:scale(1.1); }
-  .vc-music-ctrl-btn:active { transform:scale(0.9); }
-  .vc-music-ctrl-btn svg { width:14px; height:14px; }
-  .vc-music-ctrl-btn.primary { width:36px; height:36px; background:rgba(245,158,11,.15); border-color:rgba(245,158,11,.3); color:#f59e0b; }
-  .vc-music-ctrl-btn.primary:hover { background:rgba(245,158,11,.25); }
-  .vc-music-queue-lbl { padding:8px 16px 4px; font-size:10px; color:rgba(255,255,255,.22); font-weight:700; letter-spacing:.8px; text-transform:uppercase; display:flex; justify-content:space-between; align-items:center; }
-  .vc-music-queue-list { max-height:120px; overflow-y:auto; padding:0 16px 8px; scrollbar-width:thin; scrollbar-color:rgba(255,255,255,.08) transparent; }
-  .vc-music-queue-list::-webkit-scrollbar { width:4px; }
-  .vc-music-queue-list::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
-  .vc-music-track {
-    display:flex; align-items:center; gap:8px; padding:5px 0;
-    border-bottom:1px solid rgba(255,255,255,.03); animation:vc-slideIn .25s backwards;
-  }
-  .vc-music-track:last-child { border-bottom:none; }
-  .vc-music-track.current { background:rgba(245,158,11,.06); margin:0 -16px; padding:5px 16px; border-radius:6px; }
-  .vc-music-track-num { font-size:10px; color:rgba(255,255,255,.2); width:16px; text-align:center; flex-shrink:0; }
-  .vc-music-track.current .vc-music-track-num { color:#f59e0b; }
-  .vc-music-track-info { flex:1; min-width:0; }
-  .vc-music-track-title { font-size:11.5px; color:rgba(255,255,255,.7); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .vc-music-track.current .vc-music-track-title { color:#fff; font-weight:600; }
-  .vc-music-track-by { font-size:9.5px; color:rgba(255,255,255,.2); }
-  .vc-music-track-type { font-size:8px; padding:1px 5px; border-radius:3px; font-weight:700; text-transform:uppercase; flex-shrink:0; }
-  .vc-music-track-type.youtube { background:rgba(255,0,0,.12); color:#ff4444; }
-  .vc-music-track-type.spotify { background:rgba(30,215,96,.12); color:#1ed760; }
-  .vc-music-track-rm { background:none; border:none; color:rgba(255,255,255,.15); cursor:pointer; padding:2px; border-radius:4px; transition:all .15s; flex-shrink:0; }
-  .vc-music-track-rm:hover { color:#ef4444; background:rgba(239,68,68,.1); }
-  .vc-music-track-rm svg { width:12px; height:12px; }
-  .vc-music-input-row { display:flex; gap:6px; padding:8px 12px 10px; border-top:1px solid rgba(255,255,255,.04); }
-  .vc-music-in {
-    flex:1; background:#131313; border:1px solid rgba(255,255,255,.07);
-    border-radius:8px; padding:7px 10px; color:#fff; font-size:11.5px;
-    font-family:inherit; outline:none; transition:border-color .15s;
-  }
-  .vc-music-in:focus { border-color:rgba(245,158,11,.4); }
-  .vc-music-in::placeholder { color:rgba(255,255,255,.18); }
-  .vc-music-add-btn {
-    background:rgba(245,158,11,.85); border:none; border-radius:8px;
-    padding:7px 12px; color:#000; cursor:pointer; font-size:11px; font-weight:700;
-    display:flex; align-items:center; gap:4px; transition:all .15s; white-space:nowrap;
-  }
-  .vc-music-add-btn:hover { background:#f59e0b; transform:scale(1.05); }
-  .vc-music-add-btn:active { transform:scale(0.92); }
-  .vc-music-empty { text-align:center; padding:12px 0; color:rgba(255,255,255,.15); font-size:11px; }
-  .vc-music-spotify-embed { padding:8px 12px; }
-  .vc-music-spotify-embed iframe { border-radius:8px; }
-  .vc-music-err { color:#ef4444; font-size:11px; text-align:center; padding:4px 16px; min-height:14px; }
   @keyframes vc-eq { 0%,100%{height:3px} 50%{height:12px} }
-  .vc-eq-bars { display:flex; align-items:flex-end; gap:2px; height:14px; }
-  .vc-eq-bar { width:3px; background:#f59e0b; border-radius:1px; animation:vc-eq .8s ease-in-out infinite; }
-  .vc-eq-bar:nth-child(2) { animation-delay:.2s; }
-  .vc-eq-bar:nth-child(3) { animation-delay:.4s; }
-  .vc-eq-bar:nth-child(4) { animation-delay:.1s; }
+  .vc-scroll::-webkit-scrollbar { width:4px; }
+  .vc-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
   `;
 
   // ── ICONS ─────────────────────────────────────────────────────────────────
@@ -591,7 +288,6 @@
 
       // Chat state
       this._chatMsgs   = [];
-      this._chatOpen   = false;
       this._chatUnread = 0;
 
       // Ring state
@@ -603,8 +299,10 @@
       // Typing state
       this._isTyping = false;
 
+      // New Tabs State (room, chat, music)
+      this._activeTab = 'room';
+
       // Music state
-      this._musicOpen = false;
       this._musicQueue = [];
       this._musicState = { currentIndex: -1, isPlaying: false };
       this._musicCurrentTrack = null;
@@ -734,16 +432,19 @@
       this.fab = document.createElement('div');
       this.fab.id = 'vc-fab';
       this.fab.title = _t('vc_title');
-      this.fab.innerHTML = ICONS.mic;
+      this.fab.className = 'fixed bottom-6 right-6 z-[9999] flex items-center justify-center cursor-pointer transition-all duration-300 rounded-full bg-zinc-900 border border-white/10 shadow-2xl hover:scale-110 hover:border-amber-500/50 w-14 h-14 group';
+      this.fab.innerHTML = `<span class="text-amber-500 transition-transform duration-300 group-hover:scale-110 flex items-center justify-center w-6 h-6">${ICONS.mic}</span>`;
       this.fab.addEventListener('click', () => this._toggle());
 
       this.panel = document.createElement('div');
       this.panel.id = 'vc-panel';
+      this.panel.className = 'fixed bottom-24 right-6 w-full max-w-[350px] bg-zinc-950/85 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] overflow-hidden z-[9998] transition-all duration-300 transform scale-95 opacity-0 pointer-events-none translate-y-4 font-sans';
       this.panel.innerHTML = this._tplLogin();
 
       this._bar = document.createElement('div');
       this._bar.id = 'vc-bar';
-      this._bar.innerHTML = `<div class="vc-dot"></div><span>#principal &nbsp;<span id="vc-bar-timer" style="font-variant-numeric:tabular-nums;color:rgba(255,255,255,.45)">00:00</span></span>`;
+      this._bar.className = 'fixed bottom-24 right-6 z-[9997] bg-zinc-900/90 backdrop-blur-md border border-amber-500/30 rounded-full flex items-center gap-2 px-4 py-2 text-xs text-white/80 shadow-xl opacity-0 pointer-events-none transition-all duration-300 translate-y-4';
+      this._bar.innerHTML = `<div class="w-1.5 h-1.5 rounded-full bg-green-500" style="animation: vc-blink 2s infinite"></div><span class="font-medium">#principal &nbsp;<span id="vc-bar-timer" class="text-white/40 tabular-nums font-mono">00:00</span></span>`;
 
       document.body.appendChild(this.fab);
       document.body.appendChild(this.panel);
@@ -751,50 +452,32 @@
 
       this.panel.addEventListener('click', (e) => e.stopPropagation());
 
-      // ── ESC para cerrar el panel ──────────────────────────────────────────
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && this.panel.classList.contains('open')) {
-          this.panel.classList.remove('open');
-          if (this.connected) this._bar.classList.add('show');
-          this._playSfx('flyout', 0.4, false, 'fly');
+        if (e.key === 'Escape' && this.panel.classList.contains('scale-100')) {
+          this._toggle();
         }
       });
 
-      // ── Click fuera cierra — pero NO si el drag empezó dentro del panel ──
-      // Bug: al arrastrar para seleccionar texto, el mouseup puede caer fuera
-      // del panel y disparar este listener, cerrando la ventana incorrectamente.
       let _panelMousedown = false;
       this.panel.addEventListener('mousedown', () => { _panelMousedown = true; });
-      document.addEventListener('mouseup', () => {
-        // Resetear después del ciclo actual para que el click handler lo vea
-        requestAnimationFrame(() => { _panelMousedown = false; });
-      });
+      document.addEventListener('mouseup', () => { requestAnimationFrame(() => { _panelMousedown = false; }); });
 
       document.addEventListener('click', (e) => {
-        if (!this.panel.classList.contains('open')) return;
+        if (!this.panel.classList.contains('scale-100')) return;
         if (this.panel.contains(e.target) || this.fab.contains(e.target)) return;
-        // No cerrar si el mousedown empezó dentro del panel (drag de selección)
         if (_panelMousedown) return;
-        // No cerrar si hay texto seleccionado (usuario acaba de seleccionar)
         if (window.getSelection && window.getSelection().toString()) return;
-
-        this.panel.classList.remove('open');
-        if (this.connected) this._bar.classList.add('show');
-        this._playSfx('flyout', 0.4, false, 'fly');
+        this._toggle();
       });
 
       window.addEventListener('languagechange', () => {
         if (this.fab) this.fab.title = _t('vc_title');
         
         if (this.connected) {
-          if (!document.getElementById('vc-leave')) {
-             this._render(this._tplConnected());
-          } else {
-             this._render(this._tplConnected());
-          }
+           this._render(this._tplConnected());
         } else {
           if (document.getElementById('vc-reconnect')) this._render(this._tplDisconnected());
-          else if (document.querySelector('.vc-loader')) this._render(this._tplLoading());
+          else if (document.querySelector('.animate-spin')) this._render(this._tplLoading());
           else this._render(this._tplLogin());
         }
       });
@@ -802,7 +485,7 @@
       window.addEventListener('yaireAuthChanged', () => {
         if (!this.connected) {
           if (document.getElementById('vc-reconnect')) this._render(this._tplDisconnected());
-          else if (document.querySelector('.vc-loader')) this._render(this._tplLoading());
+          else if (document.querySelector('.animate-spin')) this._render(this._tplLoading());
           else this._render(this._tplLogin());
         }
       });
@@ -811,18 +494,27 @@
     }
 
     _toggle() {
-      const willOpen = !this.panel.classList.contains('open');
-      this.panel.classList.toggle('open');
-      if (this.connected && willOpen) this._bar.classList.remove('show');
+      const willOpen = !this.panel.classList.contains('scale-100');
       
       if (willOpen) {
-        if (!this.connected) {
+        this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
+        this.panel.classList.add('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
+        if (this.connected) {
+          this._bar.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+          this._bar.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+        } else {
           if (document.getElementById('vc-reconnect')) this._render(this._tplDisconnected());
-          else if (document.querySelector('.vc-loader')) this._render(this._tplLoading());
+          else if (document.querySelector('.animate-spin')) this._render(this._tplLoading());
           else this._render(this._tplLogin());
         }
         this._playSfx('flyin', 0.4, false, 'fly');
       } else {
+        this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
+        this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
+        if (this.connected) {
+          this._bar.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+          this._bar.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+        }
         this._playSfx('flyout', 0.4, false, 'fly');
       }
     }
@@ -832,21 +524,21 @@
       const user = window.yaireCurrentUser;
       if (!user) {
         return `
-          <div class="vc-hdr">
-            <div class="vc-hdr-l">
-              <div class="vc-icon">${ICONS.sound}</div>
-              <div><div class="vc-title">#principal</div><div class="vc-sub">${_t('vc_sub')}</div></div>
+          <div class="flex items-center justify-between px-5 py-4 border-b border-white/5 bg-zinc-900/50">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center relative overflow-hidden">${ICONS.sound}</div>
+              <div><div class="text-white font-bold text-sm">#principal</div><div class="text-white/40 text-[11px]">${_t('vc_sub')}</div></div>
             </div>
-            <button class="vc-x" id="vc-close">✕</button>
+            <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
           </div>
-          <div class="vc-body" style="text-align: center; padding: 30px 20px;">
-            <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(245,158,11,0.15); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                <i class="ph-bold ph-lock-key" style="font-size: 24px; color: #f59e0b;"></i>
+          <div class="p-8 text-center">
+            <div class="w-16 h-16 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center mx-auto mb-5 shadow-[0_0_20px_rgba(245,158,11,0.1)]">
+               <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
             </div>
-            <h3 style="color: #fff; font-size: 15px; font-weight: bold; margin-bottom: 8px;">${_t('vc_restricted')}</h3>
-            <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin-bottom: 20px; line-height: 1.5;">${_t('vc_req_login')}</p>
-            <button id="vc-google-login-btn" style="background: white; color: black; border-radius: 12px; padding: 10px 16px; font-weight: bold; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0 auto; border: none; cursor: pointer; transition: opacity 0.2s; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width: 18px; height: 18px;" draggable="false" />
+            <h3 class="text-white font-bold text-lg mb-2">${_t('vc_restricted')}</h3>
+            <p class="text-white/50 text-xs mb-6 leading-relaxed">${_t('vc_req_login')}</p>
+            <button id="vc-google-login-btn" class="w-full flex items-center justify-center gap-2 bg-white text-black font-bold py-3.5 px-4 rounded-xl hover:bg-zinc-200 transition-colors shadow-xl">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5" />
                 ${_t('vc_login_google')}
             </button>
           </div>
@@ -854,59 +546,60 @@
       }
 
       return `
-        <div class="vc-hdr">
-          <div class="vc-hdr-l">
-            <div class="vc-icon">${ICONS.sound}</div>
-            <div><div class="vc-title">#principal</div><div class="vc-sub">${_t('vc_sub')}</div></div>
+        <div class="flex items-center justify-between px-5 py-4 border-b border-white/5 bg-zinc-900/50">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center relative overflow-hidden">${ICONS.sound}</div>
+            <div><div class="text-white font-bold text-sm">#principal</div><div class="text-white/40 text-[11px]">${_t('vc_sub')}</div></div>
           </div>
-          <button class="vc-x" id="vc-close">✕</button>
+          <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
         </div>
-        <div class="vc-body">
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
-              <img src="${user.photoURL}" draggable="false" style="width: 36px; height: 36px; border-radius: 50%;" />
+        <div class="p-5">
+          <div class="flex items-center gap-3 mb-5 bg-white/5 p-3 rounded-xl border border-white/10">
+              <img src="${user.photoURL}" class="w-10 h-10 rounded-full object-cover" />
               <div>
-                  <div style="font-size: 9px; color: #f59e0b; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 2px;">${_t('vc_session_as')}</div>
-                  <div style="font-size: 14px; font-weight: bold; color: #fff;">${user.displayName}</div>
+                  <div class="text-[9px] text-amber-500 font-bold uppercase tracking-wider mb-0.5">${_t('vc_session_as')}</div>
+                  <div class="text-sm font-bold text-white">${user.displayName}</div>
               </div>
           </div>
-          <div class="vc-field" style="display:none;">
-            <input class="vc-input" id="vc-name" type="hidden" value="${user.displayName}"/>
-          </div>
-          <div class="vc-field" style="display:none;">
-            <input class="vc-input" id="vc-pass" type="hidden" value="nopass"/>
-          </div>
-          <button class="vc-btn" id="vc-join">${_t('btn_join')}</button>
-          <div class="vc-err" id="vc-err">${err}</div>
+          <input id="vc-name" type="hidden" value="${user.displayName}"/>
+          <input id="vc-pass" type="hidden" value="nopass"/>
+          <button id="vc-join" class="w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl transition-all shadow-[0_4px_16px_rgba(245,158,11,0.3)] hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed">
+            ${_t('btn_join')}
+          </button>
+          <div class="text-red-500 text-xs text-center mt-3 min-h-[16px]" id="vc-err">${err}</div>
         </div>
         ${this._tplHistory()}`;
     }
 
     _tplLoading() {
       return `
-        <div class="vc-hdr">
-          <div class="vc-hdr-l">
-            <div class="vc-icon">${ICONS.sound}</div>
-            <div><div class="vc-title">#principal</div><div class="vc-sub">${_t('st_conn')}</div></div>
+        <div class="flex items-center justify-between px-5 py-4 border-b border-white/5 bg-zinc-900/50">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">${ICONS.sound}</div>
+            <div><div class="text-white font-bold text-sm">#principal</div><div class="text-white/40 text-[11px]">${_t('st_conn')}</div></div>
           </div>
-          <button class="vc-x" id="vc-close">✕</button>
+          <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
         </div>
-        <div class="vc-loader"><div class="vc-spin"></div>${_t('st_estab')}</div>`;
+        <div class="p-10 text-center text-white/40 text-sm flex flex-col items-center justify-center">
+          <div class="w-6 h-6 border-2 border-amber-500/20 border-t-amber-500 rounded-full animate-spin mb-3"></div>
+          ${_t('st_estab')}
+        </div>`;
     }
 
     _tplDisconnected() {
       return `
-        <div class="vc-hdr">
-          <div class="vc-hdr-l">
-            <div class="vc-icon">${ICONS.sound}</div>
-            <div><div class="vc-title">#principal</div><div class="vc-sub" style="color:#ef4444">${_t('st_disc')}</div></div>
+        <div class="flex items-center justify-between px-5 py-4 border-b border-white/5 bg-zinc-900/50">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">${ICONS.sound}</div>
+            <div><div class="text-white font-bold text-sm">#principal</div><div class="text-red-500 text-[11px]">${_t('st_disc')}</div></div>
           </div>
-          <button class="vc-x" id="vc-close">✕</button>
+          <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
         </div>
-        <div class="vc-body">
-          <p style="color:rgba(255,255,255,.4);font-size:13px;text-align:center;margin:0 0 14px">
-            ${_t('msg_disc')}
-          </p>
-          <button class="vc-btn" id="vc-reconnect">${_t('btn_reconn')}</button>
+        <div class="p-6 text-center">
+          <p class="text-white/40 text-sm mb-5">${_t('msg_disc')}</p>
+          <button id="vc-reconnect" class="w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl transition-all shadow-[0_4px_16px_rgba(245,158,11,0.3)]">
+            ${_t('btn_reconn')}
+          </button>
         </div>`;
     }
 
@@ -917,9 +610,9 @@
         const d = new Date(s.date);
         const label = d.toLocaleDateString('es',{month:'short',day:'numeric'}) + ' ' + d.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
         const m = Math.floor(s.duration/60), sec = s.duration%60;
-        return `<div class="vc-hist-row"><span>${s.name}</span><span>${label} · ${m}m${sec}s</span></div>`;
+        return `<div class="flex justify-between text-xs py-1.5"><span class="text-white/60">${s.name}</span><span class="text-white/30">${label} · ${m}m${sec}s</span></div>`;
       }).join('');
-      return `<div class="vc-hist"><div class="vc-sect-lbl" style="margin-bottom:6px">${_t('hist_title')}</div>${rows}</div>`;
+      return `<div class="px-5 pb-5 pt-3 border-t border-white/5"><div class="text-[10px] text-white/30 font-bold uppercase tracking-wider mb-2">${_t('hist_title')}</div>${rows}</div>`;
     }
 
     _tplConnected() {
@@ -928,63 +621,107 @@
         const initials = u.displayName.slice(0, 2).toUpperCase();
         const isMuted = isMe ? this.muted : u.muted;
         const isDnd   = isMe ? this.dnd   : u.dnd;
-        const muteIcon = isMuted ? `<span class="vc-mico">${ICONS.micOff}</span>` : '';
-        const dndIcon  = isDnd   ? `<span class="vc-dico" title="${_t('btn_dnd')}">${ICONS.dnd}</span>`  : '';
+        
+        const avatarHtml = (u.photoURL || (isMe && window.yaireCurrentUser?.photoURL)) 
+          ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" class="w-full h-full rounded-full object-cover" draggable="false" />` 
+          : initials;
+
+        const micIcon = isMuted ? `<span class="text-red-500 w-4 h-4 vc-mico">${ICONS.micOff}</span>` : '';
+        const bellIcon = isDnd ? `<span class="text-purple-400 w-4 h-4 vc-dico" title="DND">${ICONS.dnd}</span>` : '';
+
         return `
-          <div class="vc-user" id="vc-u-${u.id}">
-            <div class="vc-av${isMe ? ' me' : ''}" id="vc-av-${u.id}">
-              ${(u.photoURL || (isMe && window.yaireCurrentUser?.photoURL)) ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" draggable="false" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />` : initials}
+          <div class="flex items-center gap-3 p-2 hover:bg-white/5 rounded-xl transition-colors vc-user group" id="vc-u-${u.id}">
+            <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold transition-all relative ${isMe ? 'bg-amber-500/20 text-amber-500 border-2 border-transparent' : 'bg-pink-500/20 text-pink-500 border-2 border-transparent'} vc-av" id="vc-av-${u.id}">
+              ${avatarHtml}
             </div>
-            <div class="vc-uname">${u.displayName}${isMe ? `<span class="tag">${_t('tag_you')}</span>` : ''}</div>
-            ${dndIcon}${muteIcon}
+            <div class="flex-1 min-w-0">
+              <div class="text-white text-sm font-medium truncate">${u.displayName} ${isMe ? `<span class="text-white/30 text-[10px] ml-1 px-1.5 py-0.5 rounded-md bg-white/10">${_t('tag_you')}</span>` : ''}</div>
+            </div>
+            <div class="flex items-center gap-2 pr-1 opacity-100">
+               ${bellIcon}${micIcon}
+            </div>
           </div>`;
       }).join('');
 
+      // Render tab contents based on _activeTab state
+      const isRoom = this._activeTab === 'room';
+      const isChat = this._activeTab === 'chat';
+      const isMusic = this._activeTab === 'music';
+
       return `
-        <div class="vc-hdr">
-          <div class="vc-hdr-l">
-            <div class="vc-icon">${ICONS.sound}</div>
-            <div><div class="vc-title">#principal</div><div class="vc-sub">${this.users.length}/4 · <span class="vc-timer" id="vc-timer">00:00</span></div></div>
-          </div>
-          <button class="vc-x" id="vc-close">✕</button>
-        </div>
-        <div class="vc-sect">
-          <div class="vc-sect-lbl">${_t('sect_in')}</div>
-          ${userRows || `<div class="vc-empty">${_t('empty_chan')}</div>`}
-        </div>
-        <div class="vc-ctrls">
-          <button class="vc-cb${this.muted ? ' muted' : ''}" id="vc-mute">
-            ${this.muted ? ICONS.micOff : ICONS.mic}
-            ${this.muted ? _t('btn_muted') : _t('btn_mic')}
-          </button>
-          <button class="vc-cb${this.dnd ? ' dnd' : ''}" id="vc-dnd">
-            ${ICONS.bell} DND
-          </button>
-          <button class="vc-cb" id="vc-chat-toggle" style="position:relative;" title="${_t('vc_chat')}">
-            ${ICONS.chat}
-            ${this._chatUnread > 0 ? `<span class="vc-chat-badge-sm">${this._chatUnread}</span>` : ''}
-          </button>
-          <button class="vc-cb" id="vc-music-toggle" style="position:relative;" title="${_t('vc_music')}">
-            ${ICONS.music}
-          </button>
-          <button class="vc-cb leave" id="vc-leave">${ICONS.phone}</button>
-        </div>
-        <div class="vc-chat-wrap">
-          <div class="vc-chat-body${this._chatOpen ? ' open' : ''}" id="vc-chat-body">
-            <div class="vc-msgs" id="vc-msgs">${this._renderChatMsgs()}</div>
-            <div class="vc-chat-typing" id="vc-chat-typing"></div>
-            <div class="vc-chat-input-row">
-              <input class="vc-chat-in" id="vc-chat-in" type="text" placeholder="${_t('vc_chat_ph')}" maxlength="500" autocomplete="off"/>
-              <button class="vc-chat-send" id="vc-chat-send">${ICONS.send}</button>
+        <!-- Header -->
+        <div class="flex items-center justify-between px-5 py-4 bg-zinc-900/50">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center relative overflow-hidden">${ICONS.sound}</div>
+            <div>
+              <div class="text-white font-bold text-sm">#principal</div>
+              <div class="text-white/40 text-[11px] flex items-center gap-1.5 vc-sub">
+                <div class="w-1.5 h-1.5 rounded-full bg-green-500" style="animation: vc-blink 2s infinite"></div>
+                ${this.users.length}/4 · <span id="vc-timer" class="tabular-nums font-mono vc-timer">00:00</span>
+              </div>
             </div>
           </div>
+          <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
         </div>
-        <div class="vc-music-wrap">
-          <div class="vc-music-body${this._musicOpen ? ' open' : ''}" id="vc-music-body">
-            ${this._renderMusicPanel()}
+
+        <!-- Navigation Tabs -->
+        <div class="flex items-center px-2 py-1 mx-5 mt-2 bg-black/40 rounded-lg p-1">
+          <button class="flex-1 py-1.5 text-xs font-medium rounded-md transition-all ${isRoom ? 'bg-zinc-800 text-white shadow-md' : 'text-white/40 hover:text-white/80'}" id="vc-tab-room">
+             Sala
+          </button>
+          <button class="flex-1 py-1.5 text-xs font-medium rounded-md transition-all relative ${isChat ? 'bg-zinc-800 text-white shadow-md' : 'text-white/40 hover:text-white/80'}" id="vc-tab-chat">
+             Chat ${this._chatUnread > 0 ? `<span class="absolute top-0 right-2 w-2 h-2 bg-red-500 rounded-full"></span>` : ''}
+          </button>
+          <button class="flex-1 py-1.5 text-xs font-medium rounded-md transition-all ${isMusic ? 'bg-zinc-800 text-white shadow-md' : 'text-white/40 hover:text-white/80'}" id="vc-tab-music">
+             Música
+          </button>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="h-[260px] relative overflow-hidden">
+          
+          <!-- ROOM TAB -->
+          <div class="absolute inset-0 flex flex-col transition-all duration-300 ${isRoom ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 -translate-x-8 pointer-events-none'}" id="vc-content-room">
+            <div class="flex-1 overflow-y-auto px-4 py-2 vc-scroll vc-sect">
+              <div class="text-[10px] text-white/30 font-bold uppercase tracking-wider mb-2 px-2 mt-2 vc-sect-lbl">${_t('sect_in')}</div>
+              ${userRows || `<div class="text-center text-white/20 text-xs py-8 vc-empty">${_t('empty_chan')}</div>`}
+            </div>
           </div>
+
+          <!-- CHAT TAB -->
+          <div class="absolute inset-0 flex flex-col transition-all duration-300 ${isChat ? 'opacity-100 translate-x-0 pointer-events-auto' : (isRoom ? 'opacity-0 translate-x-8 pointer-events-none' : 'opacity-0 -translate-x-8 pointer-events-none')}" id="vc-content-chat">
+            <div class="flex-1 overflow-y-auto px-4 pt-2 pb-1 vc-scroll" id="vc-msgs">${this._renderChatMsgs()}</div>
+            <div class="px-4 pb-2 text-amber-500/80 text-[10px] hidden" id="vc-chat-typing"></div>
+            <div class="p-3 border-t border-white/5 flex gap-2">
+              <input class="flex-1 bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-white text-xs outline-none focus:border-amber-500/50 transition-colors" id="vc-chat-in" type="text" placeholder="${_t('vc_chat_ph')}" autocomplete="off"/>
+              <button class="bg-amber-500 text-black w-10 h-10 rounded-xl flex items-center justify-center hover:bg-amber-400 transition-colors shadow-lg" id="vc-chat-send">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- MUSIC TAB -->
+          <div class="absolute inset-0 flex flex-col transition-all duration-300 ${isMusic ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 translate-x-8 pointer-events-none'}" id="vc-content-music">
+            <div class="flex-1 overflow-y-auto vc-scroll">
+               ${this._renderMusicPanel()}
+            </div>
+          </div>
+
         </div>
-        <div class="vc-sbar"><div class="vc-dot"></div>${_t('bar_conn')}</div>`;
+
+        <!-- Global Controls -->
+        <div class="flex gap-2 p-4 border-t border-white/5 bg-zinc-900/50">
+          <button class="flex-1 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${this.muted ? 'bg-red-500/10 text-red-500 border border-red-500/30' : 'bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white'}" id="vc-mute">
+            <span class="w-4 h-4">${this.muted ? ICONS.micOff : ICONS.mic}</span>
+            ${this.muted ? _t('btn_muted') : _t('btn_mic')}
+          </button>
+          <button class="flex-1 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${this.dnd ? 'bg-purple-500/10 text-purple-400 border border-purple-500/30' : 'bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white'}" id="vc-dnd">
+            <span class="w-4 h-4">${ICONS.bell}</span> DND
+          </button>
+          <button class="w-[46px] flex-shrink-0 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20 flex items-center justify-center hover:bg-red-500/20 transition-all" id="vc-leave" title="Salir">
+            <span class="w-4 h-4">${ICONS.phone}</span>
+          </button>
+        </div>`;
     }
 
     _updateUsersDOM() {
@@ -1108,9 +845,26 @@
       if (dndBtn)   dndBtn.addEventListener('click',   () => this._toggleDND());
       if (leaveBtn) leaveBtn.addEventListener('click', () => this._leave());
 
-      // Chat toggle
-      const chatToggle = document.getElementById('vc-chat-toggle');
-      if (chatToggle) chatToggle.addEventListener('click', () => this._toggleChat());
+      // Tabs logic
+      const switchTab = (tab) => {
+        if (this._activeTab === tab) return;
+        this._activeTab = tab;
+        if (tab === 'chat') {
+          this._chatUnread = 0;
+          this._playSfx('toggleOn', 0.3);
+        } else {
+          this._playSfx('toggleOff', 0.3);
+        }
+        this._updateTabs();
+      };
+      
+      const tabRoom = document.getElementById('vc-tab-room');
+      const tabChat = document.getElementById('vc-tab-chat');
+      const tabMusic = document.getElementById('vc-tab-music');
+
+      if (tabRoom) tabRoom.addEventListener('click', () => switchTab('room'));
+      if (tabChat) tabChat.addEventListener('click', () => switchTab('chat'));
+      if (tabMusic) tabMusic.addEventListener('click', () => switchTab('music'));
 
       // Chat send & typing
       const chatSend = document.getElementById('vc-chat-send');
@@ -1138,12 +892,20 @@
             if (this.socket) this.socket.emit('chat_typing', { isTyping: false });
           }
         });
+        
+        // Auto focus if chat tab was just opened
+        if (this._activeTab === 'chat' && document.activeElement !== chatIn) {
+           setTimeout(() => chatIn.focus(), 50);
+        }
       }
 
-      // Music toggle & events
-      const musicToggle = document.getElementById('vc-music-toggle');
-      if (musicToggle) musicToggle.addEventListener('click', () => this._toggleMusic());
       this._bindMusicEvents();
+    }
+
+    _updateTabs() {
+      if (this.connected) {
+         this._render(this._tplConnected());
+      }
     }
 
     async _doJoin(name) {
@@ -1566,27 +1328,7 @@
       }).join('');
     }
 
-    _toggleChat() {
-      this._chatOpen = !this._chatOpen;
-      const body = document.getElementById('vc-chat-body');
-      if (body) body.classList.toggle('open', this._chatOpen);
-      if (this._chatOpen) {
-        this._chatUnread = 0;
-        const badge = document.querySelector('.vc-chat-badge-sm');
-        if (badge) badge.remove();
-        const msgsEl = document.getElementById('vc-msgs');
-        if (msgsEl) msgsEl.scrollTop = msgsEl.scrollHeight;
-        const input = document.getElementById('vc-chat-in');
-        if (input) setTimeout(() => input.focus(), 100);
-        // ✨ Restaurar título al abrir el chat
-        document.title = '28E';
-        if (this._vcTitleListener) {
-          document.removeEventListener('visibilitychange', this._vcTitleListener);
-          this._vcTitleListener = null;
-        }
-      }
-      this._playSfx(this._chatOpen ? 'toggleOn' : 'toggleOff', 0.3);
-    }
+    // Obsolete _toggleChat removed
 
     _sendChat() {
       const input = document.getElementById('vc-chat-in');
@@ -1609,14 +1351,9 @@
       const isMe = from === this.myId;
 
       // Unread badge logic
-      if (!this._chatOpen && !isMe) {
+      if (this._activeTab !== 'chat' && !isMe) {
         this._chatUnread++;
-        const toggle = document.getElementById('vc-chat-toggle');
-        if (toggle) {
-          const badgeEl = toggle.querySelector('.vc-chat-badge-sm');
-          if (badgeEl) { badgeEl.textContent = this._chatUnread; }
-          else { toggle.insertAdjacentHTML('beforeend', `<span class="vc-chat-badge-sm">${this._chatUnread}</span>`); }
-        }
+        if (this.connected) this._updateTabs();
 
         // ✨ Notificación en título de ventana
         const preview = text.length > 30 ? text.slice(0, 30) + '...' : text;
@@ -1896,17 +1633,7 @@
     }
 
     // ── MUSIC METHODS ─────────────────────────────────────────────────────
-    _toggleMusic() {
-      this._musicOpen = !this._musicOpen;
-      const body = document.getElementById('vc-music-body');
-      if (body) body.classList.toggle('open', this._musicOpen);
-      if (this._musicOpen && this._chatOpen) {
-        this._chatOpen = false;
-        const chatBody = document.getElementById('vc-chat-body');
-        if (chatBody) chatBody.classList.remove('open');
-      }
-      this._playSfx(this._musicOpen ? 'toggleOn' : 'toggleOff', 0.3);
-    }
+    // Obsolete _toggleMusic removed
 
     _renderMusicPanel() {
       const track = this._musicCurrentTrack;
