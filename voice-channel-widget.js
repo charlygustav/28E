@@ -702,7 +702,7 @@
 
           <!-- MUSIC TAB -->
           <div class="absolute inset-0 flex flex-col transition-all duration-300 ${isMusic ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 translate-x-8 pointer-events-none'}" id="vc-content-music">
-            <div class="flex-1 overflow-y-auto vc-scroll">
+            <div class="flex-1 overflow-y-auto vc-scroll" id="vc-music-inner">
                ${this._renderMusicPanel()}
             </div>
           </div>
@@ -712,14 +712,14 @@
         <!-- Global Controls -->
         <div class="flex gap-2 p-4 border-t border-white/5 bg-zinc-900/50">
           <button class="flex-1 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${this.muted ? 'bg-red-500/10 text-red-500 border border-red-500/30' : 'bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white'}" id="vc-mute">
-            <span class="w-4 h-4">${this.muted ? ICONS.micOff : ICONS.mic}</span>
+            <span class="w-4 h-4 [&>svg]:w-4 [&>svg]:h-4 flex items-center justify-center">${this.muted ? ICONS.micOff : ICONS.mic}</span>
             ${this.muted ? _t('btn_muted') : _t('btn_mic')}
           </button>
           <button class="flex-1 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${this.dnd ? 'bg-purple-500/10 text-purple-400 border border-purple-500/30' : 'bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white'}" id="vc-dnd">
-            <span class="w-4 h-4">${ICONS.bell}</span> DND
+            <span class="w-4 h-4 [&>svg]:w-4 [&>svg]:h-4 flex items-center justify-center">${ICONS.bell}</span> DND
           </button>
-          <button class="w-[46px] flex-shrink-0 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20 flex items-center justify-center hover:bg-red-500/20 transition-all" id="vc-leave" title="Salir">
-            <span class="w-4 h-4">${ICONS.phone}</span>
+          <button class="w-[46px] flex-shrink-0 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20 flex items-center justify-center hover:bg-red-500/20 transition-all [&>svg]:w-4 [&>svg]:h-4" id="vc-leave" title="Salir">
+            ${ICONS.phone}
           </button>
         </div>`;
     }
@@ -1320,11 +1320,20 @@
 
     // ── CHAT METHODS ────────────────────────────────────────────────────
     _renderChatMsgs() {
-      if (this._chatMsgs.length === 0) return `<div class="vc-chat-empty">${_t('vc_chat_empty')}</div>`;
+      if (this._chatMsgs.length === 0) return `<div class="text-center text-white/20 text-xs py-8">${_t('vc_chat_empty')}</div>`;
       return this._chatMsgs.map(m => {
         const isMe = m.from === this.myId;
         const time = new Date(m.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        return `<div class="vc-msg"><div class="vc-msg-head"><span class="vc-msg-name${isMe ? ' me' : ''}">${m.name}</span><span class="vc-msg-time">${time}</span></div><div class="vc-msg-text">${this._escHtml(m.text)}</div></div>`;
+        return `
+          <div class="flex flex-col mb-3 ${isMe ? 'items-end' : 'items-start'}">
+            <div class="flex items-baseline gap-2 mb-1 px-1">
+              <span class="text-[10px] font-bold ${isMe ? 'text-amber-500' : 'text-white/60'}">${m.name}</span>
+              <span class="text-[9px] text-white/30">${time}</span>
+            </div>
+            <div class="max-w-[85%] px-3 py-2 text-xs shadow-sm ${isMe ? 'bg-amber-500 text-black rounded-2xl rounded-tr-sm' : 'bg-white/10 text-white/90 rounded-2xl rounded-tl-sm border border-white/5'}">
+              ${this._escHtml(m.text)}
+            </div>
+          </div>`;
       }).join('');
     }
 
@@ -1372,16 +1381,20 @@
       // Append to DOM
       const msgsEl = document.getElementById('vc-msgs');
       if (msgsEl) {
-        const emptyEl = msgsEl.querySelector('.vc-chat-empty');
-        if (emptyEl) emptyEl.remove();
+        // remove empty state if exists
+        const emptyEl = msgsEl.firstElementChild;
+        if (emptyEl && emptyEl.textContent === _t('vc_chat_empty')) emptyEl.remove();
+        
         const time = new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         msgsEl.insertAdjacentHTML('beforeend', `
-          <div class="vc-msg">
-            <div class="vc-msg-head">
-              <span class="vc-msg-name${isMe ? ' me' : ''}">${name}</span>
-              <span class="vc-msg-time">${time}</span>
+          <div class="flex flex-col mb-3 ${isMe ? 'items-end' : 'items-start'} animate-[vc-slideIn_0.2s_ease-out]">
+            <div class="flex items-baseline gap-2 mb-1 px-1">
+              <span class="text-[10px] font-bold ${isMe ? 'text-amber-500' : 'text-white/60'}">${name}</span>
+              <span class="text-[9px] text-white/30">${time}</span>
             </div>
-            <div class="vc-msg-text">${this._escHtml(text)}</div>
+            <div class="max-w-[85%] px-3 py-2 text-xs shadow-sm ${isMe ? 'bg-amber-500 text-black rounded-2xl rounded-tr-sm' : 'bg-white/10 text-white/90 rounded-2xl rounded-tl-sm border border-white/5'}">
+              ${this._escHtml(text)}
+            </div>
           </div>`);
         msgsEl.scrollTop = msgsEl.scrollHeight;
       }
@@ -1641,56 +1654,80 @@
       let nowPlaying = '';
       if (track) {
         const eqBars = isPlaying
-          ? `<div class="vc-eq-bars"><div class="vc-eq-bar"></div><div class="vc-eq-bar"></div><div class="vc-eq-bar"></div><div class="vc-eq-bar"></div></div>`
-          : ICONS.music;
+          ? `<div class="flex items-end gap-0.5 h-3"><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite]"></div><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite_0.2s]"></div><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite_0.4s]"></div></div>`
+          : `<span class="w-4 h-4 text-white/40 [&>svg]:w-4 [&>svg]:h-4 flex items-center justify-center">${ICONS.sound || '♪'}</span>`;
         nowPlaying = `
-          <div class="vc-music-now">
-            <div class="vc-music-now-icon${isPlaying ? ' playing' : ''}">${eqBars}</div>
-            <div class="vc-music-now-info">
-              <div class="vc-music-now-label">${_t('vc_music_now')}</div>
-              <div class="vc-music-now-title">${this._escHtml(track.title)}</div>
-              <div class="vc-music-now-artist">${track.addedByName ? `${_t('vc_music_by')} ${track.addedByName}` : ''}</div>
+          <div class="bg-white/5 border border-white/10 rounded-xl p-3 mb-4 relative overflow-hidden">
+            <div class="flex items-center gap-3 relative z-10">
+              <div class="w-10 h-10 rounded-lg bg-black/40 flex items-center justify-center flex-shrink-0">
+                ${eqBars}
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="text-[9px] text-amber-500 font-bold uppercase tracking-wider mb-0.5">${_t('vc_music_now')}</div>
+                <div class="text-sm font-bold text-white truncate">${this._escHtml(track.title)}</div>
+                <div class="text-xs text-white/40 truncate">${track.addedByName ? `${_t('vc_music_by')} ${track.addedByName}` : ''}</div>
+              </div>
+              <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-white/50">${track.type === 'youtube' ? 'YT' : 'SP'}</span>
             </div>
-            <span class="vc-music-track-type ${track.type}">${track.type === 'youtube' ? 'YT' : 'SP'}</span>
-          </div>
-          ${track.type === 'youtube' ? `
-            <div class="vc-music-progress" id="vc-music-progress"><div class="vc-music-progress-fill" id="vc-music-progress-fill"></div></div>
-            <div class="vc-music-time"><span id="vc-music-time-current">0:00</span><span id="vc-music-time-total">0:00</span></div>
-          ` : ''}
-          ${track.type === 'spotify' ? `<div class="vc-music-spotify-embed" id="vc-spotify-embed"></div>` : ''}
-          <div class="vc-music-ctrls">
-            <button class="vc-music-ctrl-btn primary" id="vc-music-playpause">${isPlaying ? ICONS.pause : ICONS.play}</button>
-            <button class="vc-music-ctrl-btn" id="vc-music-skip">${ICONS.skipFwd}</button>
+            
+            ${track.type === 'youtube' ? `
+              <div class="mt-3 relative z-10">
+                <div class="h-1 bg-black/50 rounded-full overflow-hidden cursor-pointer relative" id="vc-music-progress">
+                  <div class="absolute top-0 left-0 h-full bg-amber-500 w-0 transition-all duration-200" id="vc-music-progress-fill"></div>
+                </div>
+                <div class="flex justify-between text-[9px] text-white/40 mt-1 font-mono">
+                  <span id="vc-music-time-current">0:00</span>
+                  <span id="vc-music-time-total">0:00</span>
+                </div>
+              </div>
+            ` : ''}
+            
+            ${track.type === 'spotify' ? `<div class="mt-3 w-full" id="vc-spotify-embed"></div>` : ''}
+            
+            <div class="flex justify-center gap-4 mt-3 relative z-10">
+              <button class="w-10 h-10 rounded-full bg-white text-black font-bold flex items-center justify-center hover:scale-105 transition-transform" id="vc-music-playpause">
+                ${isPlaying ? 'II' : '►'}
+              </button>
+              <button class="w-10 h-10 rounded-full bg-white/10 font-bold text-white flex items-center justify-center hover:bg-white/20 transition-colors" id="vc-music-skip">
+                ▶▶
+              </button>
+            </div>
           </div>`;
       } else {
-        nowPlaying = `<div class="vc-music-empty" style="padding:16px 0">${_t('vc_music_no_track')}</div>`;
+        nowPlaying = `<div class="text-center text-white/20 text-xs py-6 mb-4 bg-white/5 rounded-xl border border-white/5">${_t('vc_music_no_track')}</div>`;
       }
+      
       const queueItems = this._musicQueue.length > 0
         ? this._musicQueue.map((t, i) => {
             const isCur = i === this._musicState.currentIndex;
-            return `<div class="vc-music-track${isCur ? ' current' : ''}">
-              <span class="vc-music-track-num">${isCur && this._musicPlaying ? '\u266A' : (i + 1)}</span>
-              <div class="vc-music-track-info">
-                <div class="vc-music-track-title">${this._escHtml(t.title)}</div>
-                <div class="vc-music-track-by">${t.addedByName || ''}</div>
+            return `
+            <div class="flex items-center gap-3 p-2 rounded-lg transition-colors ${isCur ? 'bg-amber-500/10 border border-amber-500/20' : 'hover:bg-white/5'}">
+              <span class="w-4 text-center text-[10px] font-bold ${isCur ? 'text-amber-500' : 'text-white/30'}">${isCur && this._musicPlaying ? '♪' : (i + 1)}</span>
+              <div class="flex-1 min-w-0">
+                <div class="text-xs font-medium text-white truncate ${isCur ? 'text-amber-500' : ''}">${this._escHtml(t.title)}</div>
+                <div class="text-[10px] text-white/30 truncate">${t.addedByName || ''}</div>
               </div>
-              <span class="vc-music-track-type ${t.type}">${t.type === 'youtube' ? 'YT' : 'SP'}</span>
-              ${!isCur ? `<button class="vc-music-track-rm" data-track-id="${t.id}">${ICONS.trash}</button>` : ''}
+              <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-white/30">${t.type === 'youtube' ? 'YT' : 'SP'}</span>
+              ${!isCur ? `<button class="w-6 h-6 flex items-center justify-center text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded transition-colors" data-track-id="${t.id}">✕</button>` : ''}
             </div>`;
           }).join('')
-        : `<div class="vc-music-empty">${_t('vc_music_empty_q')}</div>`;
-      return `${nowPlaying}
-        <div class="vc-music-queue-lbl">${_t('vc_music_queue')} ${this._musicQueue.length > 0 ? `(${this._musicQueue.length})` : ''}</div>
-        <div class="vc-music-queue-list" id="vc-music-queue">${queueItems}</div>
-        <div class="vc-music-err" id="vc-music-err"></div>
-        <div class="vc-music-input-row">
-          <input class="vc-music-in" id="vc-music-url" type="text" placeholder="${_t('vc_music_ph')}" autocomplete="off"/>
-          <button class="vc-music-add-btn" id="vc-music-add">+ ${_t('vc_music_add')}</button>
+        : `<div class="text-center text-white/20 text-xs py-4">${_t('vc_music_empty_q')}</div>`;
+        
+      return `
+        <div class="p-4">
+          ${nowPlaying}
+          <div class="text-[10px] text-white/30 font-bold uppercase tracking-wider mb-2 px-1">${_t('vc_music_queue')} ${this._musicQueue.length > 0 ? `(${this._musicQueue.length})` : ''}</div>
+          <div class="flex flex-col gap-1 mb-4" id="vc-music-queue">${queueItems}</div>
+          <div class="text-red-500 text-xs text-center mb-2 min-h-[16px]" id="vc-music-err"></div>
+          <div class="flex gap-2">
+            <input class="flex-1 bg-black/40 border border-white/10 rounded-xl px-3 py-2.5 text-white text-xs outline-none focus:border-amber-500/50 transition-colors" id="vc-music-url" type="text" placeholder="${_t('vc_music_ph')}" autocomplete="off"/>
+            <button class="bg-amber-500 text-black px-4 font-bold text-xs rounded-xl hover:bg-amber-400 transition-colors whitespace-nowrap" id="vc-music-add">+ ${_t('vc_music_add')}</button>
+          </div>
         </div>`;
     }
 
     _updateMusicUI() {
-      const body = document.getElementById('vc-music-body');
+      const body = document.getElementById('vc-music-inner');
       if (body) {
         body.innerHTML = this._renderMusicPanel();
         this._bindMusicEvents();
