@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>28E Wrapped</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow: hidden;
+            touch-action: none; /* Prevent scroll on touch devices */
+        }
+        
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-out;
+            transform: scale(0.95);
+            z-index: 10;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+            z-index: 20;
+        }
+
+        /* Progress bars at the top */
+        .progress-container {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.25rem;
+            z-index: 50;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #fff;
+            width: 0%;
+            transform-origin: left;
+        }
+
+        /* Tap zones */
+        .tap-zone-left {
+            position: absolute;
+            top: 0; left: 0; bottom: 0; width: 30%;
+            z-index: 40;
+        }
+        .tap-zone-right {
+            position: absolute;
+            top: 0; right: 0; bottom: 0; width: 70%;
+            z-index: 40;
+        }
+
+        /* Ambient Orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            transition: all 1s ease;
+        }
+
+        /* Slide specific styles */
+        .text-huge {
+            font-size: clamp(3rem, 10vw, 5rem);
+            line-height: 1;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+        }
+        
+        #auth-overlay {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Auth Protection Overlay -->
+    <div id="auth-overlay">
+        <div class="loader mb-4"></div>
+        <p class="text-zinc-500 font-mono text-sm tracking-widest uppercase">Verificando Credenciales</p>
+    </div>
+
+    <!-- Wrapped Container -->
+    <div id="wrapped-app" class="hidden relative w-full h-screen h-[100dvh] overflow-hidden">
+        
+        <!-- Ambient Backgrounds (Changes per slide) -->
+        <div id="orb1" class="orb w-96 h-96 top-[-10%] left-[-10%] bg-amber-500"></div>
+        <div id="orb2" class="orb w-96 h-96 bottom-[-10%] right-[-10%] bg-rose-500"></div>
+
+        <!-- Progress Indicator -->
+        <div class="progress-container" id="progress-container">
+            <!-- Bars injected by JS -->
+        </div>
+
+        <!-- Tap Controls -->
+        <div class="tap-zone-left" onclick="prevSlide()"></div>
+        <div class="tap-zone-right" onclick="nextSlide()"></div>
+
+        <!-- Start Button -->
+        <div id="start-screen" class="absolute inset-0 flex flex-col items-center justify-center z-[60] bg-black/50 backdrop-blur-md transition-opacity duration-500">
+            <h1 class="text-5xl font-black mb-2 tracking-tight">28E Wrapped</h1>
+            <p class="text-zinc-400 mb-8 font-mono uppercase tracking-[0.2em] text-xs">Especial 4 Meses</p>
+            <button onclick="startWrapped()" class="px-8 py-4 bg-white text-black font-bold rounded-full hover:scale-105 transition-transform active:scale-95 text-lg">
+                Comenzar
+            </button>
+        </div>
+
+        <!-- Slides -->
+        <div id="slides-wrapper">
+            <!-- Slide 0 -->
+            <div class="slide" data-bg1="bg-zinc-800" data-bg2="bg-zinc-900">
+                <h2 class="text-huge text-white mb-4">120<br>Días.</h2>
+                <p class="text-xl text-zinc-400 font-medium max-w-sm">Parece que fue ayer cuando sintonizamos la misma frecuencia por primera vez.</p>
+            </div>
+
+            <!-- Slide 1 -->
+            <div class="slide" data-bg1="bg-blue-600" data-bg2="bg-purple-600">
+                <p class="text-xl text-blue-200 font-bold uppercase tracking-widest mb-4">Nuestra Conexión</p>
+                <h2 class="text-huge text-white mb-4">2,880<br>Horas.</h2>
+                <p class="text-lg text-blue-100 max-w-sm">Entre llamadas, mensajes y el canal de voz, hemos construido nuestro propio universo.</p>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="slide" data-bg1="bg-emerald-500" data-bg2="bg-teal-700">
+                <p class="text-xl text-emerald-200 font-bold uppercase tracking-widest mb-4">Nuestra Música</p>
+                <h2 class="text-huge text-white mb-4">Spotlight<br>Radio.</h2>
+                <p class="text-lg text-emerald-100 max-w-sm">La banda sonora de nuestras madrugadas. Siempre sonando, siempre nuestra.</p>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="slide" data-bg1="bg-rose-500" data-bg2="bg-orange-500">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-6 leading-tight">Y esto es<br>solo el<br>principio.</h2>
+                <p class="text-xl text-rose-100 font-medium">Felices 4 meses, Yaire.</p>
+                <div class="mt-12 flex justify-center w-full">
+                    <button onclick="window.location.href='index.html'" class="px-6 py-3 border border-white/20 rounded-full font-bold hover:bg-white/10 transition-colors">
+                        Volver al Inicio
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDE_FAKE_KEY_DONT_EXPOSE_IN_PROD_USE_YOUR_OWN", // Se usará la config del index.html, nota: la config real está en la db pero la de auth es pública
+            authDomain: "yairealvarado.firebaseapp.com",
+            databaseURL: "https://yaire-591ca-default-rtdb.firebaseio.com",
+            projectId: "yairealvarado",
+            storageBucket: "yaire-591ca.firebasestorage.app",
+            messagingSenderId: "53493863484",
+            appId: "1:53493863484:web:58309a4d2c8849b2512134"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Protect Page
+        onAuthStateChanged(auth, (user) => {
+            const overlay = document.getElementById('auth-overlay');
+            if (user) {
+                // Autenticado
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    document.getElementById('wrapped-app').classList.remove('hidden');
+                    initWrapped();
+                }, 500);
+            } else {
+                // No autenticado, expulsar
+                window.location.replace('index.html');
+            }
+        });
+    </script>
+
+    <!-- Wrapped Logic -->
+    <script>
+        const SLIDE_DURATION = 5000; // 5 seconds per slide
+        let currentSlide = 0;
+        let slides = [];
+        let progressBars = [];
+        let slideTimer;
+        let animationStart;
+        let isPlaying = false;
+
+        function initWrapped() {
+            slides = document.querySelectorAll('.slide');
+            const progContainer = document.getElementById('progress-container');
+            
+            // Create progress bars
+            slides.forEach((_, i) => {
+                const bar = document.createElement('div');
+                bar.className = 'progress-bar';
+                bar.innerHTML = `<div class="progress-fill" id="fill-${i}"></div>`;
+                progContainer.appendChild(bar);
+                progressBars.push(document.getElementById(`fill-${i}`));
+            });
+        }
+
+        function startWrapped() {
+            document.getElementById('start-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('start-screen').style.display = 'none';
+                isPlaying = true;
+                showSlide(0);
+            }, 500);
+        }
+
+        function showSlide(index) {
+            if (index < 0) index = 0;
+            if (index >= slides.length) {
+                // End of wrapped
+                index = slides.length - 1;
+                cancelAnimationFrame(slideTimer);
+                return;
+            }
+
+            // Update UI
+            slides.forEach((s, i) => {
+                if (i === index) {
+                    s.classList.add('active');
+                    // Change ambient orbs based on slide data
+                    document.getElementById('orb1').className = `orb w-[150vw] h-[150vw] md:w-96 md:h-96 top-[-20%] left-[-20%] ${s.dataset.bg1}`;
+                    document.getElementById('orb2').className = `orb w-[150vw] h-[150vw] md:w-96 md:h-96 bottom-[-20%] right-[-20%] ${s.dataset.bg2}`;
+                } else {
+                    s.classList.remove('active');
+                }
+            });
+
+            // Update progress bars
+            progressBars.forEach((bar, i) => {
+                if (i < index) bar.style.width = '100%';
+                else if (i > index) bar.style.width = '0%';
+            });
+
+            currentSlide = index;
+            
+            // If it's the last slide, don't auto-advance
+            if (index === slides.length - 1) {
+                progressBars[index].style.width = '100%';
+                cancelAnimationFrame(slideTimer);
+                return;
+            }
+
+            // Start animation timer
+            cancelAnimationFrame(slideTimer);
+            animationStart = performance.now();
+            animateProgress();
+        }
+
+        function animateProgress() {
+            if (!isPlaying) return;
+            
+            const now = performance.now();
+            const elapsed = now - animationStart;
+            const percentage = Math.min((elapsed / SLIDE_DURATION) * 100, 100);
+            
+            progressBars[currentSlide].style.width = `${percentage}%`;
+
+            if (percentage >= 100) {
+                nextSlide();
+            } else {
+                slideTimer = requestAnimationFrame(animateProgress);
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+    </script>
+</body>
+</html>
