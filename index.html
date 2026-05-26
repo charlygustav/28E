@@ -18254,7 +18254,6 @@
                 isClosing = true;
                 toast.classList.remove('translate-y-0', 'opacity-100');
                 toast.classList.add('translate-y-10', 'opacity-0');
-                if (window.playEffect) window.playEffect('sounds/sliderbajo.wav'); else new Audio('sounds/sliderbajo.wav').play().catch(() => { });
                 setTimeout(() => toast.remove(), 500);
             };
 
@@ -18268,7 +18267,6 @@
                 requestAnimationFrame(() => {
                     toast.classList.remove('translate-y-10', 'opacity-0');
                     toast.classList.add('translate-y-0', 'opacity-100');
-                    if (window.playEffect) window.playEffect('sounds/slideralto.wav'); else new Audio('sounds/slideralto.wav').play().catch(() => { });
                 });
             });
 
