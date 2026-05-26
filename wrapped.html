@@ -104,11 +104,13 @@
         /* Image Collage */
         .collage-img {
             position: absolute;
-            width: 60vw;
-            max-width: 300px;
+            width: 55vw;
+            max-width: 250px;
+            max-height: 30vh;
+            object-fit: cover;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 4px solid rgba(255,255,255,0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            border: 4px solid rgba(255,255,255,0.15);
             opacity: 0;
             transform: scale(0.5) rotate(0deg);
         }
@@ -358,15 +360,15 @@
             </div>
 
             <!-- Slide 18: Collage -->
-            <div class="slide" data-bg1="bg-pink-500" data-bg2="bg-rose-600" data-bg3="bg-red-500">
-                <p class="text-xl text-pink-200 font-bold uppercase tracking-widest mb-2 gsap-reveal z-30 relative drop-shadow-md">Cada instante...</p>
+            <div class="slide flex flex-col justify-between items-center py-16" data-bg1="bg-pink-500" data-bg2="bg-rose-600" data-bg3="bg-red-500">
+                <p class="text-xl text-pink-200 font-bold uppercase tracking-widest gsap-reveal z-30 relative drop-shadow-md w-full text-left px-8">Cada instante...</p>
                 
                 <!-- Collage Images (absolute positioned) -->
-                <img src="https://i.ibb.co/yByRfq5y/IMG-20260125-WA0097.jpg" class="collage-img img-1" style="top: 15%; left: 5%;">
-                <img src="https://i.ibb.co/DDHBsJy2/IMG-20260127-WA0067.jpg" class="collage-img img-2" style="top: 35%; right: 5%;">
+                <img src="https://i.ibb.co/yByRfq5y/IMG-20260125-WA0097.jpg" class="collage-img img-1" style="top: 22%; left: 5%;">
+                <img src="https://i.ibb.co/DDHBsJy2/IMG-20260127-WA0067.jpg" class="collage-img img-2" style="top: 38%; right: 5%;">
                 <img src="https://i.ibb.co/SDfLGvby/IMG-20260301-WA0027.jpg" class="collage-img img-3" style="top: 55%; left: 15%;">
                 
-                <h2 class="text-4xl md:text-6xl font-black text-white mt-auto z-30 relative drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] gsap-text">es una obra de arte. ✨</h2>
+                <h2 class="text-4xl md:text-6xl font-black text-white z-30 relative drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] gsap-text w-full text-left px-8 mb-4">es una obra<br>de arte. ✨</h2>
             </div>
 
             <!-- Slide 19: Conclusion / Share Card -->
