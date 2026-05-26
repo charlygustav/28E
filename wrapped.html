@@ -815,12 +815,14 @@
             const iconPause = document.getElementById('icon-pause');
             const iconPlay = document.getElementById('icon-play');
             if (isPaused) {
+                new Audio('sounds/sliderbajo.wav').play().catch(e => console.log(e));
                 if (iconPause) iconPause.classList.add('hidden');
                 if (iconPlay) iconPlay.classList.remove('hidden');
                 if (audioEl) audioEl.pause();
                 if (audioElFinal) audioElFinal.pause();
                 pauseStartTime = performance.now();
             } else {
+                new Audio('sounds/slideralto.wav').play().catch(e => console.log(e));
                 if (iconPause) iconPause.classList.remove('hidden');
                 if (iconPlay) iconPlay.classList.add('hidden');
                 if (currentSlide === slides.length - 1) {
@@ -839,9 +841,11 @@
             const iconUnmuted = document.getElementById('icon-unmuted');
             const isMuted = audioEl ? audioEl.muted : false;
             if (isMuted) {
+                new Audio('sounds/sliderbajo.wav').play().catch(e => console.log(e));
                 if (iconMuted) iconMuted.classList.remove('hidden');
                 if (iconUnmuted) iconUnmuted.classList.add('hidden');
             } else {
+                new Audio('sounds/slideralto.wav').play().catch(e => console.log(e));
                 if (iconMuted) iconMuted.classList.add('hidden');
                 if (iconUnmuted) iconUnmuted.classList.remove('hidden');
             }
