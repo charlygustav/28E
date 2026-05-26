@@ -4275,9 +4275,9 @@
                         
                         // Set live text
                         if (compactTitle) compactTitle.textContent = 'Spotlight Radio';
-                        if (compactArtist) compactArtist.innerHTML = `<span class="text-red-500 font-bold tracking-wider animate-pulse">${dict.radio_live_badge}</span>`;
+                        if (compactArtist) compactArtist.innerHTML = `<span class="text-red-500 font-bold tracking-wider animate-pulse" data-i18n="radio_live_badge">${dict.radio_live_badge}</span>`;
                         if (expTitle) expTitle.textContent = '28E FM Radio';
-                        if (expArtist) expArtist.innerHTML = `<span class="text-red-500 font-bold tracking-widest uppercase animate-pulse">${dict.radio_live_title}</span>`;
+                        if (expArtist) expArtist.innerHTML = `<span class="text-red-500 font-bold tracking-widest uppercase animate-pulse" data-i18n="radio_live_title">${dict.radio_live_title}</span>`;
                         
                         // Use default radio artwork
                         updateAllArtwork('tulip.ico?v=3');
