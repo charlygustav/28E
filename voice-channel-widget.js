@@ -237,7 +237,7 @@
   .vc-av.speaking { border-color: #10B981 !important; box-shadow: 0 0 12px rgba(16, 185, 129, 0.4); animation: vc-speak-pulse 1.5s infinite; }
   @keyframes vc-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
   .vc-marquee-container { display: flex; overflow: hidden; white-space: nowrap; mask-image: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent); width: 100%; }
-  .vc-marquee-content { flex-shrink: 0; animation: vc-marquee 8s linear infinite; padding-right: 2rem; }
+  .vc-marquee-content { flex-shrink: 0; animation: vc-marquee 18s linear infinite; padding-right: 2rem; }
   `;
 
   // ── ICONS ─────────────────────────────────────────────────────────────────
