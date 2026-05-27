@@ -18024,14 +18024,14 @@
         
         window.yaireVcHistoryAdd = async (sessionData) => {
             if (!currentUser) return;
+            // Optimistic update for instant UI response
+            if (!window.yaireVcHistoryData) window.yaireVcHistoryData = [];
+            window.yaireVcHistoryData.unshift(sessionData);
+            window.yaireVcHistoryData = window.yaireVcHistoryData.slice(0, 5);
+            
             try {
                 const historyRef = ref(db, `users/${currentUser.uid}/vc_history`);
-                const snap = await get(historyRef);
-                let history = snap.exists() ? snap.val() : [];
-                history.unshift(sessionData);
-                history = history.slice(0, 5); // Max 5 items
-                await set(historyRef, history);
-                window.yaireVcHistoryData = history;
+                await set(historyRef, window.yaireVcHistoryData);
             } catch (e) {
                 console.error("Error saving VC history:", e);
             }
