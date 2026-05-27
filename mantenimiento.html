@@ -60,175 +60,187 @@
 
     
     
+    
     /* ═══ Orbs & Background ═══ */
     body {
-      background: #030303;
-      background-image: radial-gradient(circle at 50% 50%, #0a0a0c 0%, #000000 100%);
+      background: #050505;
       overflow: hidden;
+      font-family: 'Inter', sans-serif;
     }
 
-    /* ═══ Open Canvas & HUD ═══ */
-    .hud-container {
+    /* ═══ Zen Glass Concept ═══ */
+    .zen-background {
       position: absolute;
       top: 0; left: 0; width: 100vw; height: 100dvh;
+      overflow: hidden;
+      z-index: 1;
       pointer-events: none;
-      z-index: 10;
     }
 
-    .hud-element {
+    .zen-orb {
       position: absolute;
-      pointer-events: auto;
-      padding: 2.5rem;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70vw; height: 70vw;
+      max-width: 900px; max-height: 900px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(236,72,153,0.15) 0%, rgba(245,158,11,0.05) 100%);
+      filter: blur(120px);
+      animation: zenBreathe 12s ease-in-out infinite alternate;
     }
 
-    .hud-top-left { top: 0; left: 0; }
-    .hud-top-right { top: 0; right: 0; }
-    .hud-bottom-left { bottom: 5rem; left: 0; }
-    .hud-bottom-right { bottom: 5rem; right: 0; }
+    @keyframes zenBreathe {
+      0% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.9); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+    }
 
-    /* Logo */
-    .logo-area-hud {
-      font-weight: 900;
-      font-size: 1.5rem;
-      letter-spacing: -0.05em;
-      color: #fff;
+    .zen-layout {
+      position: relative;
+      z-index: 2;
+      width: 100vw;
+      height: 100dvh;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-    }
-    .logo-dot {
-      width: 8px; height: 8px;
-      background: var(--tulip-500);
-      border-radius: 50%;
-      box-shadow: 0 0 10px var(--tulip-500);
-      animation: pulseGlow 2s infinite alternate;
+      justify-content: center;
+      padding: 1.5rem;
     }
 
-    /* Eclipse Central */
-    .eclipse-container {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 1;
-      width: 100%; height: 100%;
-      display: flex; justify-content: center; align-items: center;
-      pointer-events: none;
-    }
-
-    .eclipse {
-      width: 35vw;
-      height: 35vw;
-      max-width: 500px;
-      max-height: 500px;
-      border-radius: 50%;
-      background: #030303;
-      box-shadow: 
-        0 0 150px rgba(236,72,153, 0.4), 
-        0 0 250px rgba(245,158,11, 0.2);
-      position: relative;
-      animation: eclipseBreathe 8s ease-in-out infinite alternate;
-    }
-
-    @keyframes eclipseBreathe {
-      0% { transform: scale(0.95); box-shadow: 0 0 100px rgba(236,72,153,0.3), 0 0 150px rgba(245,158,11,0.1); }
-      100% { transform: scale(1.05); box-shadow: 0 0 200px rgba(236,72,153,0.6), 0 0 300px rgba(245,158,11,0.3); }
-    }
-
-    /* Título Gigante */
-    .hero-title-container {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 5;
-      text-align: center;
-      width: 100vw;
+    .zen-card {
+      background: rgba(15, 15, 18, 0.4);
+      backdrop-filter: blur(40px) saturate(1.2);
+      -webkit-backdrop-filter: blur(40px) saturate(1.2);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 32px;
+      padding: 4rem 3rem;
+      width: 100%;
+      max-width: 600px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      text-align: center;
+      box-shadow: 
+        0 40px 80px -20px rgba(0,0,0,0.5), 
+        inset 0 1px 0 rgba(255,255,255,0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .zen-logo {
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-transform: uppercase;
+    }
+
+    .zen-dot {
+      width: 6px; height: 6px;
+      background: var(--tulip-400);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--tulip-400);
+      animation: pulseGlow 2s infinite alternate;
+    }
+
+    .zen-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      color: #fff;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .zen-subtitle {
+      font-family: 'Merriweather', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: #a1a1aa;
+      line-height: 1.7;
+      max-width: 400px;
+      margin-bottom: 3.5rem;
+      letter-spacing: 0.03em;
+    }
+
+    /* Concept Line */
+    .zen-concept-line {
+      width: 2px;
+      height: 40px;
+      background: linear-gradient(to bottom, transparent, var(--tulip-500), transparent);
+      margin-bottom: 3rem;
+      opacity: 0.5;
+      animation: lineBreathe 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes lineBreathe {
+      0% { height: 20px; opacity: 0.2; }
+      100% { height: 50px; opacity: 0.8; }
+    }
+    @keyframes pulseGlow { 0% { opacity: 0.4; } 100% { opacity: 1; } }
+
+    /* Pill Music Player */
+    .zen-music-container {
+      width: 100%;
+      display: flex;
       justify-content: center;
     }
 
-    .massive-title {
-      font-size: clamp(2rem, 7vw, 7rem);
-      font-family: 'Inter', sans-serif;
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      line-height: 0.9;
-      text-transform: uppercase;
-      color: #fff;
-      mix-blend-mode: overlay;
-      opacity: 0.9;
-      text-align: center;
-    }
-
-    .hero-subtitle {
-      font-size: clamp(0.8rem, 1.5vw, 1.2rem);
-      font-family: 'Merriweather', serif;
-      font-style: italic;
-      color: var(--muted);
-      margin-top: 2rem;
-      letter-spacing: 0.05em;
-      text-align: center;
-      max-width: 600px;
-    }
-
-    /* Progreso Laser */
-    .laser-progress {
-      width: 300px;
-      max-width: 80vw;
-    }
-    .laser-label {
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      font-weight: 800;
-      color: var(--muted);
-      margin-bottom: 0.5rem;
-      display: flex;
-      justify-content: space-between;
-    }
-    .laser-track {
-      width: 100%; height: 2px;
-      background: rgba(255,255,255,0.1);
+    .mini-player.zen-pill {
       position: relative;
+      top: 0; right: 0;
+      transform: none !important; /* GSAP will animate parent opacity */
+      width: 100%;
+      max-width: 320px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 999px;
+      padding: 0.5rem 1.2rem 0.5rem 0.5rem;
+      box-shadow: none;
+      opacity: 1;
     }
-    .laser-fill {
-      position: absolute; top: 0; left: 0; height: 100%;
-      width: 15%;
+
+    .zen-pill .mini-player-top {
+      gap: 1rem;
+    }
+
+    .zen-pill .mp-cover {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+    }
+
+    .zen-pill .mp-progress-wrap {
+      display: none; /* Hide progress bar for absolute minimalism */
+    }
+
+    .zen-pill .mp-info {
+      text-align: left;
+    }
+
+    .zen-pill .mp-title { font-size: 0.85rem; }
+    .zen-pill .mp-artist { font-size: 0.65rem; }
+
+    /* Progress Indicators (Minimalist version of status) */
+    .zen-status-dots {
+      display: flex;
+      gap: 1rem;
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .zen-status-dot {
+      width: 4px; height: 4px; border-radius: 50%;
+      background: #52525b;
+    }
+    .zen-status-dot.active {
       background: var(--tulip-400);
-      box-shadow: 0 0 10px var(--tulip-400), 0 0 20px var(--tulip-500);
-      animation: laserSlide 3s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+      box-shadow: 0 0 8px var(--tulip-400);
     }
-    @keyframes laserSlide { 0% { width: 5%; } 100% { width: 95%; } }
-    @keyframes pulseGlow { 0% { opacity: 0.4; } 100% { opacity: 1; } }
-
-    /* Minimal Pills */
-    .minimal-status {
-      display: flex; flex-direction: column; gap: 0.5rem;
-    }
-    .min-pill {
-      font-size: 0.7rem; font-weight: 600; color: #a1a1aa;
-      text-transform: uppercase; letter-spacing: 0.1em;
-      display: flex; align-items: center; gap: 0.5rem;
-    }
-    .min-dot { width: 4px; height: 4px; border-radius: 50%; }
-    .min-dot.ok { background: #10b981; box-shadow: 0 0 6px #10b981; }
-    .min-dot.wrn { background: var(--amber-500); box-shadow: 0 0 6px var(--amber-500); }
-
-    /* Countdown HUD */
-    .hud-countdown {
-      display: flex; gap: 1rem; align-items: flex-end;
-    }
-    .hud-cd-item { display: flex; flex-direction: column; }
-    .hud-cd-num { font-size: 3rem; font-weight: 900; line-height: 0.8; color: #fff; }
-    .hud-cd-lbl { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--tulip-500); margin-top: 0.25rem; font-weight: 800; }
-
-    /* Partículas de fondo */
-    .stardust {
-      position: absolute; width: 2px; height: 2px; background: #fff; border-radius: 50%;
-      box-shadow: 0 0 4px #fff; pointer-events: none; opacity: 0;
-    }
-    /* Footer strip */
+\n\n    /* Footer strip */
     .footer-strip {
       position: fixed;
       bottom: 0;
@@ -511,59 +523,57 @@
 
   
   
-  <!-- Fondo Estelar -->
-  <div id="stardust-container"></div>
-
-  <!-- Eclipse Central -->
-  <div class="eclipse-container">
-    <div class="eclipse gs-eclipse"></div>
+  
+  <!-- Fondo Conceptual -->
+  <div class="zen-background">
+    <div class="zen-orb gs-orb"></div>
   </div>
 
-  <!-- Titular Inmersivo -->
-  <div class="hero-title-container" id="visual-center">
-    <div class="massive-title gs-title">SISTEMAS<br>EN<br>SUSPENSIÓN</div>
-    <div class="hero-subtitle gs-sub" id="maint-subtitle">Estamos preparando una experiencia visual increíble para ti. Vuelve pronto. 🌸</div>
-  </div>
+  <!-- Contenedor Principal Centrado -->
+  <div class="zen-layout">
+    <div class="zen-card gs-card" id="visual-center">
+      
+      <!-- Logo Superior -->
+      <div class="zen-logo gs-item">
+        <div class="zen-dot"></div>
+        28E
+      </div>
 
-  <!-- Contador Inmersivo (Oculto por defecto) -->
-  <div class="hero-title-container" id="visual-countdown" style="display: none;">
-    <div class="hero-subtitle gs-sub" style="margin-bottom: 2rem;">MANTENIMIENTO PROGRAMADO HASTA:</div>
-    <div class="hud-countdown" style="justify-content: center;">
-      <div class="hud-cd-item"><span class="hud-cd-num" id="cd-days">00</span><span class="hud-cd-lbl">Días</span></div>
-      <div class="hud-cd-item"><span class="hud-cd-num" id="cd-hours">00</span><span class="hud-cd-lbl">Horas</span></div>
-      <div class="hud-cd-item"><span class="hud-cd-num" id="cd-mins">00</span><span class="hud-cd-lbl">Mins</span></div>
-      <div class="hud-cd-item"><span class="hud-cd-num" id="cd-secs">00</span><span class="hud-cd-lbl">Segs</span></div>
-    </div>
-  </div>
+      <!-- Título Principal -->
+      <h1 class="zen-title gs-item">Mantenimiento</h1>
 
-  <!-- HUD Anchors -->
-  <div class="hud-container">
-    <!-- Top Left -->
-    <div class="hud-element hud-top-left gs-hud-tl">
-      <div class="logo-area-hud"><div class="logo-dot"></div> 28E</div>
-    </div>
+      <!-- Línea conceptual -->
+      <div class="zen-concept-line gs-item"></div>
 
-    <!-- Bottom Left -->
-    <div class="hud-element hud-bottom-left gs-hud-bl">
-      <div class="minimal-status">
-        <div class="min-pill"><div class="min-dot ok"></div> Servidor Operativo</div>
-        <div class="min-pill"><div class="min-dot wrn"></div> Despliegue en proceso</div>
-        <div class="min-pill"><div class="min-dot ok"></div> Integridad al 100%</div>
+      <!-- Subtítulo -->
+      <p class="zen-subtitle gs-item" id="maint-subtitle">Estamos puliendo cada detalle para que todo luzca perfecto para ti. Gracias por tu paciencia. 🌸</p>
+
+      <!-- Reproductor Integrado en Píldora -->
+      <div class="zen-music-container gs-item" id="visual-progress">
+        <!-- El JS inyecta el mini player aquí o lo movemos vía DOM -->
+      </div>
+      
+      <!-- Indicadores flotantes de la tarjeta -->
+      <div class="zen-status-dots gs-item">
+        <div class="zen-status-dot active"></div>
+        <div class="zen-status-dot"></div>
+        <div class="zen-status-dot"></div>
       </div>
     </div>
 
-    <!-- Bottom Right -->
-    <div class="hud-element hud-bottom-right gs-hud-br" id="visual-progress">
-      <div class="laser-progress">
-        <div class="laser-label">
-          <span>Optimizando</span>
-          <span style="color: var(--tulip-400);">Por favor espera</span>
-        </div>
-        <div class="laser-track"><div class="laser-fill"></div></div>
+    <!-- Contador Oculto (Si el mantenimiento es programado) -->
+    <div class="zen-card gs-card" id="visual-countdown" style="display: none;">
+      <div class="zen-logo"><div class="zen-dot"></div> 28E</div>
+      <h1 class="zen-title">Regresamos en</h1>
+      <div style="display: flex; gap: 1.5rem; justify-content: center; margin-top: 2rem;">
+        <div style="text-align:center"><span id="cd-days" style="font-size:2.5rem;font-weight:300;color:#fff;">00</span><br><span style="font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;">Días</span></div>
+        <div style="text-align:center"><span id="cd-hours" style="font-size:2.5rem;font-weight:300;color:#fff;">00</span><br><span style="font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;">Hrs</span></div>
+        <div style="text-align:center"><span id="cd-mins" style="font-size:2.5rem;font-weight:300;color:#fff;">00</span><br><span style="font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;">Min</span></div>
+        <div style="text-align:center"><span id="cd-secs" style="font-size:2.5rem;font-weight:300;color:var(--tulip-400);">00</span><br><span style="font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;">Seg</span></div>
       </div>
     </div>
   </div>
-  <!-- Footer strip -->
+\n\n  <!-- Footer strip -->
   <footer class="footer-strip">
     <span>&copy; <span id="yr"></span> Charles Gustav. Todos los derechos reservados.</span>
     <div style="display: flex; align-items: center; gap: 1rem;">
@@ -651,35 +661,23 @@
       });
     }
 
-    // ── GSAP Espectáculo Cinematic Timeline ──
-    const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
-
-    // Dividimos el texto gigante manualmente para el efecto (ya que no tenemos SplitText de pago)
-    const titleEl = document.querySelector('.massive-title');
-    if(titleEl) {
-      const html = titleEl.innerHTML;
-      const lines = html.split('<br>');
-      titleEl.innerHTML = lines.map(line => `<span style="display:inline-block; overflow:hidden;"><span class="gs-title-line" style="display:inline-block;">${line}</span></span>`).join('<br>');
-    }
+    
+    // ── GSAP Zen Timeline ──
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
     tl
-      // 1. Aparece el eclipse desde el centro oscuro
-      .from('.gs-eclipse', { scale: 0, opacity: 0, duration: 2, ease: 'expo.out' }, 0.2)
+      // 1. El orbe de fondo aparece suavemente
+      .from('.gs-orb', { opacity: 0, scale: 0.8, duration: 3, ease: 'sine.inOut' }, 0)
       
-      // 2. El texto masivo se revela línea por línea desde abajo
-      .from('.gs-title-line', { y: 200, opacity: 0, duration: 1.5, stagger: 0.15, ease: 'power4.out' }, 0.8)
+      // 2. La tarjeta Zen asciende y se revela
+      .from('.gs-card', { y: 40, opacity: 0, duration: 1.5 }, 0.5)
       
-      // 3. Subtítulo hace fade in
-      .from('.gs-sub', { opacity: 0, y: 20, duration: 1 }, 1.5)
-
-      // 4. Los HUD de las esquinas entran deslizándose hacia sus posiciones
-      .from('.gs-hud-tl', { x: -50, y: -50, opacity: 0, duration: 1.2 }, 1.6)
-      .from('.gs-hud-bl', { x: -50, y: 50, opacity: 0, duration: 1.2 }, 1.7)
-      .from('.gs-hud-br', { x: 50, y: 50, opacity: 0, duration: 1.2 }, 1.8)
-
-      // Footer
-      .from('.footer-strip', { opacity: 0, y: 20, duration: 0.8 }, 2.0);
-    // GSAP: reveal the mini player
+      // 3. Elementos internos aparecen en cascada
+      .from('.gs-item', { y: 15, opacity: 0, duration: 1, stagger: 0.15 }, 1.0)
+      
+      // 4. Footer
+      .from('.footer-strip', { opacity: 0, y: 10, duration: 1 }, 1.5);
+\n\n    // GSAP: reveal the mini player
     gsap.set('#mini-player', { opacity: 0, y: -20 });
     gsap.to('#mini-player', { opacity: 1, y: 0, duration: .6, delay: 1.3, ease: 'power3.out', onComplete: () => player.classList.add('visible') });
 
