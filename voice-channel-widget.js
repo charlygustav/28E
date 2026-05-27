@@ -780,7 +780,7 @@
         </div>
 
         <!-- Main Content Area -->
-        <div class="h-[220px] relative overflow-hidden">
+        <div class="h-[250px] relative overflow-hidden">
           
           <!-- ROOM TAB -->
           <div class="absolute inset-0 flex flex-col ${isRoom ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 -translate-x-8 pointer-events-none'}" id="vc-content-room">
