@@ -741,7 +741,13 @@
       // Remove stale nodes
       container.querySelectorAll('.vc-user').forEach(node => {
         const id = node.id.replace('vc-u-', '');
-        if (!currentIds.includes(id)) node.remove();
+        if (!currentIds.includes(id)) {
+          if (window.gsap) {
+            gsap.to(node, { x: 30, opacity: 0, scale: 0.9, duration: 0.3, ease: "power2.in", onComplete: () => node.remove() });
+          } else {
+            node.remove();
+          }
+        }
       });
       
       if (this.users.length === 0) {
@@ -783,12 +789,10 @@
           container.appendChild(node);
           
           if (window.gsap) {
-            gsap.from(node, {
-              x: -30,
-              opacity: 0,
-              duration: 0.5,
-              ease: "back.out(1.2)"
-            });
+            gsap.fromTo(node, 
+              { x: -30, opacity: 0, scale: 0.9 },
+              { x: 0, opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.2)" }
+            );
           }
         }
         
