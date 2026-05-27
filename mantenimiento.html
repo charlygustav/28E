@@ -174,7 +174,7 @@
     .sp-cd-item { text-align: center; }
     .sp-cd-num { font-size: 3rem; font-weight: 200; color: #fff; line-height: 1; }
     .sp-cd-lbl { font-size: 0.7rem; color: var(--tulip-400); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.5rem; display: block; }
-\n\n    /* Footer strip */
+    /* Footer strip */
     .footer-strip {
       position: fixed;
       bottom: 0;
@@ -496,7 +496,7 @@
       </div>
     </div>
   </div>
-\n\n  <!-- Footer strip -->
+  <!-- Footer strip -->
   <footer class="footer-strip">
     <span>&copy; <span id="yr"></span> Charles Gustav. Todos los derechos reservados.</span>
     <div style="display: flex; align-items: center; gap: 1rem;">
@@ -678,7 +678,7 @@
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
     tl.from('.gs-item', { y: 30, opacity: 0, duration: 1.2, stagger: 0.2 }, 0.5)
       .from('.footer-strip', { opacity: 0, y: 10, duration: 1 }, 1.5);
-\n\n    // GSAP: reveal the mini player
+    // GSAP: reveal the mini player
     gsap.set('#mini-player', { opacity: 0, y: -20 });
     gsap.to('#mini-player', { opacity: 1, y: 0, duration: .6, delay: 1.3, ease: 'power3.out', onComplete: () => player.classList.add('visible') });
 
