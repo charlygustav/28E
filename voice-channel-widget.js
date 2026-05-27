@@ -530,25 +530,25 @@
             <div class="absolute top-0 right-0 w-48 h-48 bg-amber-500/10 rounded-full blur-[50px] pointer-events-none"></div>
             <div class="absolute bottom-0 left-0 w-48 h-48 bg-pink-500/10 rounded-full blur-[50px] pointer-events-none"></div>
 
-            <div class="relative z-10 flex items-center justify-between px-5 py-4 border-b border-white/5 bg-black/20 backdrop-blur-sm">
+            <div class="relative z-10 flex items-center justify-between px-5 py-3 border-b border-white/5 bg-black/20 backdrop-blur-sm">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center relative overflow-hidden [&>svg]:w-5 [&>svg]:h-5 [&>svg]:relative [&>svg]:z-10">${ICONS.sound}</div>
-                <div><div class="text-white font-bold text-sm">#principal</div><div class="text-white/40 text-[11px]">${_t('vc_sub')}</div></div>
+                <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center relative overflow-hidden [&>svg]:w-4 [&>svg]:h-4 [&>svg]:relative [&>svg]:z-10">${ICONS.sound}</div>
+                <div><div class="text-white font-bold text-[13px]">#principal</div><div class="text-white/40 text-[10px]">${_t('vc_sub')}</div></div>
               </div>
               <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
             </div>
             
-            <div class="relative z-10 p-6 text-center flex-1 flex flex-col justify-center items-center">
-              <div class="relative mb-4">
+            <div class="relative z-10 py-4 px-6 text-center flex-1 flex flex-col justify-center items-center">
+              <div class="relative mb-3">
                 <div class="absolute inset-0 bg-amber-500/20 blur-xl rounded-full"></div>
-                <div class="w-14 h-14 rounded-2xl bg-zinc-900/80 border border-amber-500/30 text-amber-500 flex items-center justify-center relative z-10 shadow-2xl backdrop-blur-md">
-                   <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                <div class="w-12 h-12 rounded-2xl bg-zinc-900/80 border border-amber-500/30 text-amber-500 flex items-center justify-center relative z-10 shadow-2xl backdrop-blur-md">
+                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                 </div>
               </div>
-              <h3 class="text-white font-extrabold text-lg mb-1.5 tracking-tight">${_t('vc_restricted')}</h3>
-              <p class="text-white/40 text-xs mb-5 leading-relaxed max-w-[250px] mx-auto">${_t('vc_req_login')}</p>
+              <h3 class="text-white font-extrabold text-lg mb-1 tracking-tight">${_t('vc_restricted')}</h3>
+              <p class="text-white/40 text-xs mb-4 leading-relaxed max-w-[250px] mx-auto">${_t('vc_req_login')}</p>
               
-              <button id="vc-google-login-btn" class="w-full flex items-center justify-center gap-3 bg-white/5 border border-white/10 text-white font-bold py-3 px-4 rounded-xl hover:bg-white/10 hover:border-white/20 transition-all shadow-xl backdrop-blur-md group">
+              <button id="vc-google-login-btn" class="w-full flex items-center justify-center gap-3 bg-white/5 border border-white/10 text-white font-bold py-2.5 px-4 rounded-xl hover:bg-white/10 hover:border-white/20 transition-all shadow-xl backdrop-blur-md group">
                   <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-4 h-4 group-hover:scale-110 transition-transform" />
                   ${_t('vc_login_google')}
               </button>
@@ -563,19 +563,19 @@
           <div class="absolute -top-20 -right-20 w-64 h-64 bg-amber-500/10 rounded-full blur-[60px] pointer-events-none"></div>
           <div class="absolute bottom-10 -left-10 w-48 h-48 bg-pink-500/10 rounded-full blur-[50px] pointer-events-none"></div>
 
-          <div class="relative z-10 flex items-center justify-between px-5 py-4 border-b border-white/5 bg-black/20 backdrop-blur-sm">
+          <div class="relative z-10 flex items-center justify-between px-5 py-3 border-b border-white/5 bg-black/20 backdrop-blur-sm">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center relative overflow-hidden [&>svg]:w-5 [&>svg]:h-5 [&>svg]:relative [&>svg]:z-10">${ICONS.sound}</div>
-              <div><div class="text-white font-bold text-sm">#principal</div><div class="text-white/40 text-[11px]">${_t('vc_sub')}</div></div>
+              <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center relative overflow-hidden [&>svg]:w-4 [&>svg]:h-4 [&>svg]:relative [&>svg]:z-10">${ICONS.sound}</div>
+              <div><div class="text-white font-bold text-[13px]">#principal</div><div class="text-white/40 text-[10px]">${_t('vc_sub')}</div></div>
             </div>
             <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
           </div>
           
-          <div class="relative z-10 p-6 flex-1 flex flex-col justify-center">
+          <div class="relative z-10 py-4 px-6 flex-1 flex flex-col justify-center">
             <div class="flex flex-col items-center mb-4">
                 <div class="relative group mb-2">
                     <div class="absolute inset-0 rounded-full bg-amber-500/30 blur-md group-hover:bg-amber-500/50 transition-colors duration-500 animate-pulse"></div>
-                    <img src="${user.photoURL}" class="w-16 h-16 rounded-full object-cover border-2 border-amber-500/50 relative z-10 shadow-xl" />
+                    <img src="${user.photoURL}" class="w-14 h-14 rounded-full object-cover border-2 border-amber-500/50 relative z-10 shadow-xl" />
                 </div>
                 <div class="text-[9px] text-amber-500/80 font-bold uppercase tracking-[0.2em] mb-0.5">${_t('vc_session_as')}</div>
                 <div class="text-lg font-extrabold text-white tracking-tight">${user.displayName}</div>
@@ -586,12 +586,12 @@
             
             <div class="relative">
                 <div class="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-500 blur opacity-40 rounded-xl"></div>
-                <button id="vc-join" class="relative w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-extrabold text-sm rounded-xl overflow-hidden group shadow-2xl transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
+                <button id="vc-join" class="relative w-full py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-extrabold text-sm rounded-xl overflow-hidden group shadow-2xl transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
                   <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
                   <span class="relative z-10 flex items-center justify-center gap-2">${_t('btn_join')}</span>
                 </button>
             </div>
-            <div class="text-red-400 text-xs text-center mt-2 h-[16px] font-medium" id="vc-err">${err}</div>
+            <div class="text-red-400 text-xs text-center mt-1.5 h-[16px] font-medium" id="vc-err">${err}</div>
           </div>
           ${this._tplHistory()}
         </div>`;
@@ -650,13 +650,13 @@
     _tplHistory() {
       const h = JSON.parse(localStorage.getItem('28e_vc_history') || '[]');
       if (!h.length) return '';
-      const rows = h.slice(0,3).map(s => {
+      const rows = h.slice(0,2).map(s => {
         const d = new Date(s.date);
         const label = d.toLocaleDateString('es',{month:'short',day:'numeric'}) + ' ' + d.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
         const m = Math.floor(s.duration/60), sec = s.duration%60;
-        return `<div class="flex justify-between text-[11px] py-1.5"><span class="text-white/70 font-medium">${s.name}</span><span class="text-white/30">${label} · ${m}m${sec}s</span></div>`;
+        return `<div class="flex justify-between text-[10px] py-1"><span class="text-white/70 font-medium">${s.name}</span><span class="text-white/30">${label} · ${m}m${sec}s</span></div>`;
       }).join('');
-      return `<div class="relative z-10 px-5 pb-5 pt-3 bg-zinc-900/30 backdrop-blur-md border-t border-white/5"><div class="text-[9px] text-white/30 font-bold uppercase tracking-[0.15em] mb-1.5">${_t('hist_title')}</div>${rows}</div>`;
+      return `<div class="relative z-10 px-5 pb-4 pt-2 bg-zinc-900/30 backdrop-blur-md border-t border-white/5"><div class="text-[9px] text-white/30 font-bold uppercase tracking-[0.15em] mb-1.5">${_t('hist_title')}</div>${rows}</div>`;
     }
 
     _tplConnected() {
