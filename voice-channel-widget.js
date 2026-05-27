@@ -804,7 +804,7 @@
 
           <!-- MUSIC TAB -->
           <div class="absolute inset-0 flex flex-col ${isMusic ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 translate-x-8 pointer-events-none'}" id="vc-content-music">
-            <div class="flex-1 overflow-y-auto vc-scroll" id="vc-music-inner">
+            <div class="flex-1 overflow-y-auto vc-scroll flex flex-col" id="vc-music-inner">
                ${this._renderMusicPanel()}
             </div>
           </div>
@@ -1878,14 +1878,16 @@
         : `<div class="text-center text-white/20 text-xs py-4">${_t('vc_music_empty_q')}</div>`;
         
       return `
-        <div class="p-3">
+        <div class="p-3 flex-1 flex flex-col">
           ${nowPlaying}
           <div class="text-[10px] text-white/30 font-bold uppercase tracking-wider mb-1 px-1">${_t('vc_music_queue')} ${this._musicQueue.length > 0 ? `(${this._musicQueue.length})` : ''}</div>
           <div class="flex flex-col gap-1 mb-2" id="vc-music-queue">${queueItems}</div>
-          <div class="text-red-500 text-xs text-center mb-1 min-h-[16px]" id="vc-music-err"></div>
-          <div class="flex gap-2">
-            <input class="flex-1 bg-black/40 border border-white/10 rounded-xl px-3 py-2.5 text-white text-xs outline-none focus:border-amber-500/50 transition-colors" id="vc-music-url" type="text" placeholder="${_t('vc_music_ph')}" autocomplete="off"/>
-            <button class="bg-amber-500 text-black px-4 font-bold text-xs rounded-xl hover:bg-amber-400 transition-colors whitespace-nowrap" id="vc-music-add">+ ${_t('vc_music_add')}</button>
+          <div class="mt-auto pt-2">
+            <div class="text-red-500 text-xs text-center mb-1 min-h-[16px]" id="vc-music-err"></div>
+            <div class="flex gap-2">
+              <input class="flex-1 bg-black/40 border border-white/10 rounded-xl px-3 py-2.5 text-white text-xs outline-none focus:border-amber-500/50 transition-colors" id="vc-music-url" type="text" placeholder="${_t('vc_music_ph')}" autocomplete="off"/>
+              <button class="bg-amber-500 text-black px-4 font-bold text-xs rounded-xl hover:bg-amber-400 transition-colors whitespace-nowrap" id="vc-music-add">+ ${_t('vc_music_add')}</button>
+            </div>
           </div>
         </div>`;
     }
