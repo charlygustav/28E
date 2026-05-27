@@ -592,7 +592,7 @@
             </div>
             <div class="text-red-400 text-xs text-center mt-1.5 h-[16px] font-medium" id="vc-err">${err}</div>
           </div>
-          <div id="vc-history-container"><div class="text-[9px] text-white/30 font-bold uppercase tracking-[0.15em] text-center animate-pulse px-5 pb-4 pt-2">${_t('hist_title')}...</div></div>
+          ${this._tplHistory()}
         </div>`;
     }
 
@@ -646,7 +646,8 @@
         </div>`;
     }
 
-    _tplHistory(h = []) {
+    _tplHistory() {
+      const h = window.yaireVcHistoryData || [];
       if (!window.yaireCurrentUser || !h.length) return '';
       const rows = h.slice(0,5).map(s => {
         const d = new Date(s.date);
@@ -873,17 +874,6 @@
     }
 
     _bindPanelEvents() {
-      const historyContainer = document.getElementById('vc-history-container');
-      if (historyContainer && window.yaireCurrentUser && window.yaireVcHistoryGet) {
-          window.yaireVcHistoryGet().then(history => {
-             if (history && history.length) {
-                 historyContainer.outerHTML = this._tplHistory(history);
-             } else {
-                 historyContainer.outerHTML = '';
-             }
-          }).catch(() => { historyContainer.outerHTML = ''; });
-      }
-
       const xBtn = document.getElementById('vc-close');
       if (xBtn) xBtn.addEventListener('click', () => this._toggle());
 

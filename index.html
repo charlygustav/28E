@@ -18031,6 +18031,7 @@
                 history.unshift(sessionData);
                 history = history.slice(0, 5); // Max 5 items
                 await set(historyRef, history);
+                window.yaireVcHistoryData = history;
             } catch (e) {
                 console.error("Error saving VC history:", e);
             }
@@ -18043,9 +18044,14 @@
         const authIcon = document.getElementById('auth-icon');
         const authAvatar = document.getElementById('auth-avatar');
 
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             currentUser = user;
             window.yaireCurrentUser = user; // Expose globally
+            if (user) {
+                window.yaireVcHistoryData = await window.yaireVcHistoryGet();
+            } else {
+                window.yaireVcHistoryData = [];
+            }
             window.dispatchEvent(new Event('yaireAuthChanged'));
             if (user) {
                 authIcon.classList.add('hidden');
