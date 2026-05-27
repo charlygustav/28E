@@ -439,7 +439,7 @@
 
       this.panel = document.createElement('div');
       this.panel.id = 'vc-panel';
-      this.panel.className = 'fixed bottom-24 right-6 w-full max-w-[350px] bg-zinc-950/85 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] overflow-hidden z-[9998] transition-all duration-300 transform scale-95 opacity-0 pointer-events-none translate-y-4 font-sans';
+      this.panel.className = 'fixed bottom-24 right-6 w-full max-w-[320px] bg-zinc-950/85 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] overflow-hidden z-[9998] transition-all duration-300 transform scale-95 opacity-0 pointer-events-none translate-y-4 font-sans';
       this.panel.innerHTML = this._tplLogin();
 
       this._bar = document.createElement('div');
@@ -726,7 +726,7 @@
         </div>
 
         <!-- Main Content Area -->
-        <div class="h-[260px] relative overflow-hidden">
+        <div class="h-[220px] relative overflow-hidden">
           
           <!-- ROOM TAB -->
           <div class="absolute inset-0 flex flex-col ${isRoom ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 -translate-x-8 pointer-events-none'}" id="vc-content-room">
