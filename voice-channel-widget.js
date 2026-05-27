@@ -682,7 +682,7 @@
         <div class="h-[260px] relative overflow-hidden">
           
           <!-- ROOM TAB -->
-          <div class="absolute inset-0 flex flex-col transition-all duration-300 ${isRoom ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 -translate-x-8 pointer-events-none'}" id="vc-content-room">
+          <div class="absolute inset-0 flex flex-col ${isRoom ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 -translate-x-8 pointer-events-none'}" id="vc-content-room">
             <div class="flex-1 overflow-y-auto px-4 py-2 vc-scroll vc-sect">
               <div class="text-[10px] text-white/30 font-bold uppercase tracking-wider mb-2 px-2 mt-2 vc-sect-lbl">${_t('sect_in')}</div>
               ${userRows || `<div class="text-center text-white/20 text-xs py-8 vc-empty">${_t('empty_chan')}</div>`}
@@ -690,7 +690,7 @@
           </div>
 
           <!-- CHAT TAB -->
-          <div class="absolute inset-0 flex flex-col transition-all duration-300 ${isChat ? 'opacity-100 translate-x-0 pointer-events-auto' : (isRoom ? 'opacity-0 translate-x-8 pointer-events-none' : 'opacity-0 -translate-x-8 pointer-events-none')}" id="vc-content-chat">
+          <div class="absolute inset-0 flex flex-col ${isChat ? 'opacity-100 translate-x-0 pointer-events-auto' : (isRoom ? 'opacity-0 translate-x-8 pointer-events-none' : 'opacity-0 -translate-x-8 pointer-events-none')}" id="vc-content-chat">
             <div class="flex-1 overflow-y-auto px-4 pt-2 pb-1 vc-scroll" id="vc-msgs">${this._renderChatMsgs()}</div>
             <div class="px-4 pb-2 text-amber-500/80 text-[10px] hidden" id="vc-chat-typing"></div>
             <div class="p-3 border-t border-white/5 flex gap-2">
@@ -702,7 +702,7 @@
           </div>
 
           <!-- MUSIC TAB -->
-          <div class="absolute inset-0 flex flex-col transition-all duration-300 ${isMusic ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 translate-x-8 pointer-events-none'}" id="vc-content-music">
+          <div class="absolute inset-0 flex flex-col ${isMusic ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 translate-x-8 pointer-events-none'}" id="vc-content-music">
             <div class="flex-1 overflow-y-auto vc-scroll" id="vc-music-inner">
                ${this._renderMusicPanel()}
             </div>
@@ -781,6 +781,15 @@
             </div>
           `;
           container.appendChild(node);
+          
+          if (window.gsap) {
+            gsap.from(node, {
+              x: -30,
+              opacity: 0,
+              duration: 0.5,
+              ease: "back.out(1.2)"
+            });
+          }
         }
         
         let iconContainer = node.querySelector('.vc-icons-container');
@@ -923,6 +932,16 @@
     _updateTabs() {
       if (this.connected) {
          this._render(this._tplConnected());
+         
+         if (window.gsap) {
+           const activeContent = document.getElementById(`vc-content-${this._activeTab}`);
+           if (activeContent) {
+             gsap.fromTo(activeContent, 
+               { opacity: 0, x: 20 },
+               { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }
+             );
+           }
+         }
       }
     }
 
@@ -1407,7 +1426,7 @@
         
         const time = new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         msgsEl.insertAdjacentHTML('beforeend', `
-          <div class="flex flex-col mb-3 ${isMe ? 'items-end' : 'items-start'} animate-[vc-slideIn_0.2s_ease-out]">
+          <div class="flex flex-col mb-3 ${isMe ? 'items-end' : 'items-start'} vc-chat-msg">
             <div class="flex items-baseline gap-2 mb-1 px-1">
               <span class="text-[10px] font-bold ${isMe ? 'text-amber-500' : 'text-white/60'}">${name}</span>
               <span class="text-[9px] text-white/30">${time}</span>
@@ -1416,6 +1435,20 @@
               ${this._escHtml(text)}
             </div>
           </div>`);
+          
+        if (window.gsap) {
+          const newMsg = msgsEl.lastElementChild;
+          if (newMsg) {
+            gsap.from(newMsg, {
+              y: 20,
+              opacity: 0,
+              scale: 0.9,
+              duration: 0.4,
+              ease: "back.out(1.5)",
+              onComplete: () => { msgsEl.scrollTop = msgsEl.scrollHeight; }
+            });
+          }
+        }
         msgsEl.scrollTop = msgsEl.scrollHeight;
       }
 
