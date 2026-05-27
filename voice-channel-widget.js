@@ -61,7 +61,9 @@
       vc_hist_more: "Ver más",
       vc_nobody: "Nadie en el canal por ahora",
       vc_person: "persona conectada",
-      vc_persons: "personas conectadas"
+      vc_persons: "personas conectadas",
+      vc_tab_room: "Sala",
+      vc_hist_full: "Historial de Sesiones"
     },
     en: {
       vc_title: "Voice Channel",
@@ -115,7 +117,9 @@
       vc_hist_more: "See more",
       vc_nobody: "No one in the channel yet",
       vc_person: "person connected",
-      vc_persons: "people connected"
+      vc_persons: "people connected",
+      vc_tab_room: "Room",
+      vc_hist_full: "Session History"
     },
     pt: {
       vc_title: "Canal de Voz",
@@ -169,7 +173,9 @@
       vc_hist_more: "Ver mais",
       vc_nobody: "Ninguém no canal por enquanto",
       vc_person: "pessoa conectada",
-      vc_persons: "pessoas conectadas"
+      vc_persons: "pessoas conectadas",
+      vc_tab_room: "Sala",
+      vc_hist_full: "Histórico de Sessões"
     },
     fr: {
       vc_title: "Canal Vocal",
@@ -223,7 +229,9 @@
       vc_hist_more: "Voir plus",
       vc_nobody: "Personne dans le canal pour l'instant",
       vc_person: "personne connectée",
-      vc_persons: "personnes connectées"
+      vc_persons: "personnes connectées",
+      vc_tab_room: "Salon",
+      vc_hist_full: "Historique des Sessions"
     }
   };
 
@@ -713,7 +721,7 @@
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="vc-det-bg"></div>
         <div class="relative w-full max-w-lg max-h-[80vh] flex flex-col bg-zinc-950/90 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden scale-95 transition-transform duration-300" id="vc-det-card">
           <div class="flex items-center justify-between p-6 border-b border-white/5 bg-white/5">
-            <h2 class="text-white font-extrabold text-xl tracking-tight">Historial de Sesiones</h2>
+            <h2 class="text-white font-extrabold text-xl tracking-tight">${_t('vc_hist_full')}</h2>
             <button class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white/50 hover:bg-white/20 hover:text-white transition-colors" id="vc-det-close">✕</button>
           </div>
           <div class="flex-1 overflow-y-auto p-6 flex flex-col gap-3 vc-scroll">
@@ -791,13 +799,13 @@
         <!-- Navigation Tabs -->
         <div class="flex items-center px-2 py-1 mx-5 mt-2 bg-black/40 rounded-lg p-1">
           <button class="flex-1 py-1.5 text-xs font-medium rounded-md transition-all ${isRoom ? 'bg-zinc-800 text-white shadow-md' : 'text-white/40 hover:text-white/80'}" id="vc-tab-room">
-             Sala
+             ${_t('vc_tab_room')}
           </button>
           <button class="flex-1 py-1.5 text-xs font-medium rounded-md transition-all relative ${isChat ? 'bg-zinc-800 text-white shadow-md' : 'text-white/40 hover:text-white/80'}" id="vc-tab-chat">
-             Chat ${this._chatUnread > 0 ? `<span class="absolute top-0 right-2 w-2 h-2 bg-red-500 rounded-full"></span>` : ''}
+             ${_t('vc_chat')} ${this._chatUnread > 0 ? `<span class="absolute top-0 right-2 w-2 h-2 bg-red-500 rounded-full"></span>` : ''}
           </button>
           <button class="flex-1 py-1.5 text-xs font-medium rounded-md transition-all flex items-center justify-center gap-1.5 ${isMusic ? 'bg-zinc-800 text-white shadow-md' : 'text-white/40 hover:text-white/80'}" id="vc-tab-music">
-             Música ${this._musicPlaying ? `<div class="flex items-end gap-[1px] h-2.5 vc-music-ind">
+             ${_t('vc_music')} ${this._musicPlaying ? `<div class="flex items-end gap-[1px] h-2.5 vc-music-ind">
                <div class="w-[2px] bg-amber-500 animate-[vc-eq_0.8s_ease-in-out_infinite]"></div>
                <div class="w-[2px] bg-amber-500 animate-[vc-eq_0.8s_ease-in-out_infinite_0.2s]"></div>
                <div class="w-[2px] bg-amber-500 animate-[vc-eq_0.8s_ease-in-out_infinite_0.4s]"></div>
