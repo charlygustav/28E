@@ -1815,6 +1815,14 @@
     // ── MUSIC METHODS ─────────────────────────────────────────────────────
     // Obsolete _toggleMusic removed
 
+    _cleanMusicTitle(t) {
+      if (!t) return t;
+      let c = t.replace(/\s*[\[\(](official.*|video oficial|audio oficial|audio|video|music video|lyric.*|visualizer|hd)[\]\)]/gi, '');
+      c = c.replace(/\s*[\[\(]?(Spotify|YouTube)[\]\)]?/gi, '');
+      c = c.replace(/\s*[-|]\s*$/g, '');
+      return c.trim();
+    }
+
     _renderMusicPanel() {
       const track = this._musicCurrentTrack;
       const isPlaying = this._musicPlaying;
@@ -1831,12 +1839,12 @@
               </div>
               <div class="flex-1 min-w-0">
                 <div class="text-[9px] text-amber-500 font-bold uppercase tracking-wider mb-0.5">${_t('vc_music_now')}</div>
-                ${track.title.length > 25 
+                ${this._cleanMusicTitle(track.title).length > 25 
                   ? `<div class="vc-marquee-container text-sm font-bold text-white">
-                       <div class="vc-marquee-content">${this._escHtml(track.title)}</div>
-                       <div class="vc-marquee-content" aria-hidden="true">${this._escHtml(track.title)}</div>
+                       <div class="vc-marquee-content">${this._escHtml(this._cleanMusicTitle(track.title))}</div>
+                       <div class="vc-marquee-content" aria-hidden="true">${this._escHtml(this._cleanMusicTitle(track.title))}</div>
                      </div>` 
-                  : `<div class="text-sm font-bold text-white truncate">${this._escHtml(track.title)}</div>`
+                  : `<div class="text-sm font-bold text-white truncate">${this._escHtml(this._cleanMusicTitle(track.title))}</div>`
                 }
                 <div class="text-xs text-white/40 truncate">${track.addedByName ? `${_t('vc_music_by')} ${track.addedByName}` : ''}</div>
               </div>
@@ -1877,7 +1885,7 @@
             <div class="flex items-center gap-3 p-2 rounded-lg transition-colors ${isCur ? 'bg-amber-500/10 border border-amber-500/20' : 'hover:bg-white/5'}">
               <span class="w-4 text-center text-[10px] font-bold ${isCur ? 'text-amber-500' : 'text-white/30'}">${isCur && this._musicPlaying ? '♪' : (i + 1)}</span>
               <div class="flex-1 min-w-0">
-                <div class="text-xs font-medium text-white truncate ${isCur ? 'text-amber-500' : ''}">${this._escHtml(t.title)}</div>
+                <div class="text-xs font-medium text-white truncate ${isCur ? 'text-amber-500' : ''}">${this._escHtml(this._cleanMusicTitle(t.title))}</div>
                 <div class="text-[10px] text-white/30 truncate">${t.addedByName || ''}</div>
               </div>
               <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-white/30">${t.type === 'youtube' ? 'YT' : 'SP'}</span>
