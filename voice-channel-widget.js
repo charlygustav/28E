@@ -240,6 +240,10 @@
     if (typeof currentLang !== 'undefined') lang = currentLang;
     else if (window.currentLang) lang = window.currentLang;
     else if (localStorage.getItem('yaire_lang')) lang = localStorage.getItem('yaire_lang');
+    else if (navigator.language) {
+      const bLang = navigator.language.slice(0, 2).toLowerCase();
+      if (VC_I18N[bLang]) lang = bLang;
+    }
     return lang;
   };
 
@@ -356,6 +360,16 @@
       };
 
       this._initAudio();
+
+      // Auto-detect language changes
+      this._lastLang = _getLang();
+      setInterval(() => {
+        const current = _getLang();
+        if (current !== this._lastLang) {
+          this._lastLang = current;
+          this.updateTranslations();
+        }
+      }, 500);
 
       this.ice = {
         iceServers: [
@@ -1132,6 +1146,23 @@
       }
 
       this._bindMusicEvents();
+    }
+
+    updateTranslations() {
+      if (this.fab) this.fab.title = _t('vc_title');
+      
+      if (this.connected) {
+         this._updateTabs();
+      } else if (this.panel && this.panel.classList.contains('scale-100')) {
+         this._render(this._tplLogin());
+      }
+      
+      const bTitle = document.getElementById('vc-bar-title');
+      const bSub = document.getElementById('vc-bar-sub');
+      if (bTitle && bSub) {
+        bTitle.textContent = _t('bar_conn').split(' · ')[0];
+        bSub.textContent = _t('bar_conn').split(' · ')[1] || '';
+      }
     }
 
     _updateTabs() {
