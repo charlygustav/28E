@@ -57,7 +57,11 @@
       vc_music_no_track: "Nada sonando",
       vc_music_by: "por",
       vc_music_skip: "Siguiente",
-      vc_music_err_url: "Link no válido. Usa YouTube o Spotify."
+      vc_music_err_url: "Link no válido. Usa YouTube o Spotify.",
+      vc_hist_more: "Ver más",
+      vc_nobody: "Nadie en el canal por ahora",
+      vc_person: "persona conectada",
+      vc_persons: "personas conectadas"
     },
     en: {
       vc_title: "Voice Channel",
@@ -107,7 +111,11 @@
       vc_music_no_track: "Nothing playing",
       vc_music_by: "by",
       vc_music_skip: "Skip",
-      vc_music_err_url: "Invalid link. Use YouTube or Spotify."
+      vc_music_err_url: "Invalid link. Use YouTube or Spotify.",
+      vc_hist_more: "See more",
+      vc_nobody: "No one in the channel yet",
+      vc_person: "person connected",
+      vc_persons: "people connected"
     },
     pt: {
       vc_title: "Canal de Voz",
@@ -157,7 +165,11 @@
       vc_music_no_track: "Nada tocando",
       vc_music_by: "por",
       vc_music_skip: "Próxima",
-      vc_music_err_url: "Link inválido. Use YouTube ou Spotify."
+      vc_music_err_url: "Link inválido. Use YouTube ou Spotify.",
+      vc_hist_more: "Ver mais",
+      vc_nobody: "Ninguém no canal por enquanto",
+      vc_person: "pessoa conectada",
+      vc_persons: "pessoas conectadas"
     },
     fr: {
       vc_title: "Canal Vocal",
@@ -207,15 +219,24 @@
       vc_music_no_track: "Rien en lecture",
       vc_music_by: "par",
       vc_music_skip: "Suivant",
-      vc_music_err_url: "Lien invalide. Utilise YouTube ou Spotify."
+      vc_music_err_url: "Lien invalide. Utilise YouTube ou Spotify.",
+      vc_hist_more: "Voir plus",
+      vc_nobody: "Personne dans le canal pour l'instant",
+      vc_person: "personne connectée",
+      vc_persons: "personnes connectées"
     }
   };
 
-  const _t = (key) => {
+  const _getLang = () => {
     let lang = 'es';
     if (typeof currentLang !== 'undefined') lang = currentLang;
     else if (window.currentLang) lang = window.currentLang;
     else if (localStorage.getItem('yaire_lang')) lang = localStorage.getItem('yaire_lang');
+    return lang;
+  };
+
+  const _t = (key) => {
+    const lang = _getLang();
     return (VC_I18N[lang] && VC_I18N[lang][key]) ? VC_I18N[lang][key] : VC_I18N['es'][key];
   };
 
@@ -653,22 +674,24 @@
     _tplHistory() {
       const h = window.yaireVcHistoryData || [];
       if (!window.yaireCurrentUser || !h.length) return '';
+      const lang = _getLang();
       const rows = h.slice(0,3).map(s => {
         const d = new Date(s.date);
-        const label = d.toLocaleDateString('es',{month:'short',day:'numeric'}) + ' ' + d.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+        const label = d.toLocaleDateString(lang, {month:'short',day:'numeric'}) + ' ' + d.toLocaleTimeString(lang, {hour:'2-digit',minute:'2-digit'});
         const m = Math.floor(s.duration/60), sec = s.duration%60;
         return `<div class="flex justify-between text-[10px] py-1"><span class="text-white/70 font-medium">${s.name}</span><span class="text-white/30">${label} · ${m}m${sec}s</span></div>`;
       }).join('');
-      const moreBtn = h.length > 3 ? `<button id="vc-btn-ver-mas" class="w-full mt-2 text-[9px] text-amber-500/80 hover:text-amber-400 font-bold uppercase tracking-wider py-1 border border-white/5 rounded-md bg-white/5 hover:bg-white/10 transition-colors">Ver más</button>` : '';
+      const moreBtn = h.length > 3 ? `<button id="vc-btn-ver-mas" class="w-full mt-2 text-[9px] text-amber-500/80 hover:text-amber-400 font-bold uppercase tracking-wider py-1 border border-white/5 rounded-md bg-white/5 hover:bg-white/10 transition-colors">${_t('vc_hist_more')}</button>` : '';
       return `<div class="relative z-10 px-5 pb-4 pt-2 bg-zinc-900/30 backdrop-blur-md border-t border-white/5"><div class="text-[9px] text-white/30 font-bold uppercase tracking-[0.15em] mb-1.5">${_t('hist_title')}</div>${rows}${moreBtn}</div>`;
     }
 
     _showDetailedHistory() {
       if (document.getElementById('vc-detailed-history')) return;
       const h = window.yaireVcHistoryData || [];
+      const lang = _getLang();
       const rows = h.map(s => {
         const d = new Date(s.date);
-        const label = d.toLocaleDateString('es',{weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) + ' a las ' + d.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+        const label = d.toLocaleDateString(lang, {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) + ' · ' + d.toLocaleTimeString(lang, {hour:'2-digit',minute:'2-digit'});
         const m = Math.floor(s.duration/60), sec = s.duration%60;
         return `
           <div class="flex justify-between items-center p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors">
@@ -937,9 +960,9 @@
             const cnt = document.getElementById('vc-conn-count');
             if (cnt) {
               if (data.users === 0) {
-                cnt.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-white/20 inline-block mr-1.5"></span><span class="text-white/30">Nadie en el canal por ahora</span>`;
+                cnt.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-white/20 inline-block mr-1.5"></span><span class="text-white/30">${_t('vc_nobody')}</span>`;
               } else {
-                cnt.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block mr-1.5 animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.6)]"></span><span class="text-amber-500/90">${data.users} ${data.users === 1 ? 'persona conectada' : 'personas conectadas'}</span>`;
+                cnt.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block mr-1.5 animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.6)]"></span><span class="text-amber-500/90">${data.users} ${data.users === 1 ? _t('vc_person') : _t('vc_persons')}</span>`;
               }
               cnt.classList.remove('opacity-0');
             }
