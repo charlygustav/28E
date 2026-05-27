@@ -59,222 +59,178 @@
     }
 
     
-    /* ═══ Orbs ═══ */
-    .bg-orb { position: fixed; border-radius: 50%; filter: blur(130px); pointer-events: none; z-index: 0; animation: orbDrift 16s ease-in-out infinite alternate; }
-    .orb-pink { width: 55vw; height: 55vw; max-width: 700px; max-height: 700px; background: radial-gradient(circle, rgba(236, 72, 153, .15) 0%, transparent 70%); top: -15vh; left: -8vw; }
-    .orb-amber { width: 40vw; height: 40vw; max-width: 520px; max-height: 520px; background: radial-gradient(circle, rgba(245, 158, 11, .12) 0%, transparent 70%); bottom: -10vh; right: -5vw; animation-delay: -8s; }
-    .orb-indigo { width: 30vw; height: 30vw; max-width: 400px; max-height: 400px; background: radial-gradient(circle, rgba(99, 102, 241, .1) 0%, transparent 70%); top: 40%; left: 45%; animation-delay: -4s; }
-
-    @keyframes orbDrift { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, -20px) scale(1.1); } }
-
-    /* ═══ Glassmorphism Layout ═══ */
-    .glass-layout {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100vw;
-      height: 100dvh;
-      padding: 1.5rem;
-    }
-
-    .glass-card {
-      background: rgba(18, 18, 20, 0.4);
-      backdrop-filter: blur(40px);
-      -webkit-backdrop-filter: blur(40px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 2rem;
-      padding: 4rem 3rem;
-      width: 100%;
-      max-width: 680px;
-      position: relative;
+    
+    /* ═══ Orbs & Background ═══ */
+    body {
+      background: #030303;
+      background-image: radial-gradient(circle at 50% 50%, #0a0a0c 0%, #000000 100%);
       overflow: hidden;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      opacity: 0; /* For GSAP */
-      transform: translateY(30px) scale(0.95); /* For GSAP */
     }
 
-    /* Core Orb */
-    .core-orb-container {
-      position: relative;
-      width: 120px;
-      height: 120px;
-      margin-bottom: 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .core-orb {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #fff, var(--tulip-400), #831843);
-      box-shadow: 0 0 40px rgba(236,72,153,0.6), inset -10px -10px 20px rgba(0,0,0,0.5);
-      animation: corePulse 4s ease-in-out infinite;
-      z-index: 2;
-    }
-    
-    .core-orb-glow {
+    /* ═══ Open Canvas & HUD ═══ */
+    .hud-container {
       position: absolute;
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      background: var(--amber-500);
-      filter: blur(30px);
-      opacity: 0.3;
-      animation: coreGlow 4s ease-in-out infinite alternate;
-      z-index: 1;
+      top: 0; left: 0; width: 100vw; height: 100dvh;
+      pointer-events: none;
+      z-index: 10;
     }
 
-    @keyframes corePulse {
-      0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(236,72,153,0.4), inset -10px -10px 20px rgba(0,0,0,0.5); }
-      50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(236,72,153,0.8), inset -10px -10px 20px rgba(0,0,0,0.5); }
-    }
-    @keyframes coreGlow {
-      0% { opacity: 0.2; transform: scale(0.9); }
-      100% { opacity: 0.5; transform: scale(1.1); }
+    .hud-element {
+      position: absolute;
+      pointer-events: auto;
+      padding: 2.5rem;
     }
 
-    .main-title {
-      font-size: clamp(2.5rem, 6vw, 4rem);
-      font-family: 'Merriweather', serif;
+    .hud-top-left { top: 0; left: 0; }
+    .hud-top-right { top: 0; right: 0; }
+    .hud-bottom-left { bottom: 0; left: 0; }
+    .hud-bottom-right { bottom: 0; right: 0; }
+
+    /* Logo */
+    .logo-area-hud {
       font-weight: 900;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
-      margin-bottom: 1rem;
-      background: linear-gradient(135deg, #fff 30%, var(--tulip-400) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .subtitle {
-      font-size: 1.05rem;
-      color: var(--muted);
-      max-width: 480px;
-      line-height: 1.6;
-      margin-bottom: 3rem;
-    }
-
-    /* Neon Progress */
-    .neon-progress-container {
-      width: 100%;
-      max-width: 400px;
-      margin-bottom: 3rem;
-    }
-    .progress-label-center {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-weight: 600;
-      color: var(--muted);
-      margin-bottom: 0.75rem;
-    }
-    .neon-track {
-      width: 100%;
-      height: 4px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 4px;
-      position: relative;
-      overflow: hidden;
-    }
-    .neon-fill {
-      position: absolute;
-      top: 0; left: 0; bottom: 0;
-      width: 30%;
-      background: linear-gradient(90deg, var(--tulip-500), var(--amber-400));
-      border-radius: 4px;
-      box-shadow: 0 0 10px var(--amber-400);
-      animation: neonSlide 2s ease-in-out infinite alternate;
-    }
-    @keyframes neonSlide {
-      0% { width: 20%; }
-      100% { width: 80%; }
-    }
-    @keyframes dotBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-    /* Status Pills */
-    .status-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      justify-content: center;
-    }
-    .status-pill {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 100px;
-      padding: 0.5rem 1rem;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: #a1a1aa;
+      font-size: 1.5rem;
+      letter-spacing: -0.05em;
+      color: #fff;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      backdrop-filter: blur(10px);
-      transition: all 0.3s;
     }
-    .status-pill:hover {
-      background: rgba(255,255,255,0.08);
-      color: #fff;
-    }
-    .dot {
-      width: 6px;
-      height: 6px;
+    .logo-dot {
+      width: 8px; height: 8px;
+      background: var(--tulip-500);
       border-radius: 50%;
+      box-shadow: 0 0 10px var(--tulip-500);
+      animation: pulseGlow 2s infinite alternate;
     }
-    .dot.ok { background: #10b981; box-shadow: 0 0 8px #10b981; animation: dotBlink 3s infinite; }
-    .dot.wrn { background: var(--amber-500); box-shadow: 0 0 8px var(--amber-500); animation: dotBlink 1.5s infinite; }
 
-    /* Countdown Center */
-    .countdown-wrap-center {
-      margin-bottom: 3rem;
+    /* Eclipse Central */
+    .eclipse-container {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      width: 100%; height: 100%;
+      display: flex; justify-content: center; align-items: center;
+      pointer-events: none;
     }
-    .countdown-title-center {
-      font-size: 0.75rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--muted);
-      margin-bottom: 1.5rem;
+
+    .eclipse {
+      width: 45vw;
+      height: 45vw;
+      max-width: 600px;
+      max-height: 600px;
+      border-radius: 50%;
+      background: #000;
+      box-shadow: 
+        0 0 120px rgba(236,72,153, 0.4), 
+        0 0 200px rgba(245,158,11, 0.2), 
+        inset 0 0 40px rgba(0,0,0, 1);
+      position: relative;
+      animation: eclipseBreathe 8s ease-in-out infinite alternate;
     }
-    .countdown-grid-center {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
+    .eclipse::after {
+      content: '';
+      position: absolute;
+      top: -2px; left: -2px; right: -2px; bottom: -2px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--tulip-500), transparent, var(--amber-400));
+      z-index: -1;
+      animation: spinGradient 10s linear infinite;
     }
-    .cd-box-glass {
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 1rem;
-      padding: 1rem 1.2rem;
-      min-width: 80px;
+
+    @keyframes spinGradient { 100% { transform: rotate(360deg); } }
+    @keyframes eclipseBreathe {
+      0% { transform: scale(0.95); box-shadow: 0 0 80px rgba(236,72,153,0.3), 0 0 150px rgba(245,158,11,0.1); }
+      100% { transform: scale(1.05); box-shadow: 0 0 150px rgba(236,72,153,0.6), 0 0 250px rgba(245,158,11,0.3); }
     }
-    .cd-num {
-      font-size: 2.5rem;
+
+    /* Título Gigante */
+    .hero-title-container {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      text-align: center;
+      width: 100vw;
+    }
+
+    .massive-title {
+      font-size: clamp(3rem, 12vw, 12rem);
+      font-family: 'Inter', sans-serif;
       font-weight: 900;
-      background: linear-gradient(135deg, #fff, var(--tulip-400));
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: block;
-      line-height: 1;
-      margin-bottom: 0.25rem;
-    }
-    .cd-label {
-      font-size: 0.65rem;
-      font-weight: 700;
-      color: var(--muted);
+      letter-spacing: -0.04em;
+      line-height: 0.9;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      color: #fff;
+      mix-blend-mode: overlay;
+      opacity: 0.9;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(0.8rem, 1.5vw, 1.2rem);
+      font-family: 'Merriweather', serif;
+      font-style: italic;
+      color: var(--muted);
+      margin-top: 1rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* Progreso Laser */
+    .laser-progress {
+      width: 300px;
+      max-width: 80vw;
+    }
+    .laser-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-weight: 800;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    .laser-track {
+      width: 100%; height: 2px;
+      background: rgba(255,255,255,0.1);
+      position: relative;
+    }
+    .laser-fill {
+      position: absolute; top: 0; left: 0; height: 100%;
+      width: 15%;
+      background: var(--tulip-400);
+      box-shadow: 0 0 10px var(--tulip-400), 0 0 20px var(--tulip-500);
+      animation: laserSlide 3s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+    }
+    @keyframes laserSlide { 0% { width: 5%; } 100% { width: 95%; } }
+    @keyframes pulseGlow { 0% { opacity: 0.4; } 100% { opacity: 1; } }
+
+    /* Minimal Pills */
+    .minimal-status {
+      display: flex; flex-direction: column; gap: 0.5rem;
+    }
+    .min-pill {
+      font-size: 0.7rem; font-weight: 600; color: #a1a1aa;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .min-dot { width: 4px; height: 4px; border-radius: 50%; }
+    .min-dot.ok { background: #10b981; box-shadow: 0 0 6px #10b981; }
+    .min-dot.wrn { background: var(--amber-500); box-shadow: 0 0 6px var(--amber-500); }
+
+    /* Countdown HUD */
+    .hud-countdown {
+      display: flex; gap: 1rem; align-items: flex-end;
+    }
+    .hud-cd-item { display: flex; flex-direction: column; }
+    .hud-cd-num { font-size: 3rem; font-weight: 900; line-height: 0.8; color: #fff; }
+    .hud-cd-lbl { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--tulip-500); margin-top: 0.25rem; font-weight: 800; }
+
+    /* Partículas de fondo */
+    .stardust {
+      position: absolute; width: 2px; height: 2px; background: #fff; border-radius: 50%;
+      box-shadow: 0 0 4px #fff; pointer-events: none; opacity: 0;
     }
 \n\n    /* Footer strip */
     .footer-strip {
@@ -558,55 +514,57 @@
 
 
   
-  <!-- Nuevo Layout principal Glassmorphism -->
-  <div class="glass-layout" id="main-layout">
-    <div class="glass-card" id="main-card">
-      
-      <!-- Orbe brillante interno interactivo -->
-      <div id="visual-center" class="core-orb-container gs-element">
-        <div class="core-orb" id="core-orb"></div>
-        <div class="core-orb-glow"></div>
+  
+  <!-- Fondo Estelar -->
+  <div id="stardust-container"></div>
+
+  <!-- Eclipse Central -->
+  <div class="eclipse-container">
+    <div class="eclipse gs-eclipse"></div>
+  </div>
+
+  <!-- Titular Inmersivo -->
+  <div class="hero-title-container" id="visual-center">
+    <div class="massive-title gs-title">SISTEMAS<br>EN<br>SUSPENSIÓN</div>
+    <div class="hero-subtitle gs-sub" id="maint-subtitle">Estamos preparando una experiencia visual increíble para ti. Vuelve pronto. 🌸</div>
+  </div>
+
+  <!-- Contador Inmersivo (Oculto por defecto) -->
+  <div class="hero-title-container" id="visual-countdown" style="display: none;">
+    <div class="hero-subtitle gs-sub" style="margin-bottom: 2rem;">MANTENIMIENTO PROGRAMADO HASTA:</div>
+    <div class="hud-countdown" style="justify-content: center;">
+      <div class="hud-cd-item"><span class="hud-cd-num" id="cd-days">00</span><span class="hud-cd-lbl">Días</span></div>
+      <div class="hud-cd-item"><span class="hud-cd-num" id="cd-hours">00</span><span class="hud-cd-lbl">Horas</span></div>
+      <div class="hud-cd-item"><span class="hud-cd-num" id="cd-mins">00</span><span class="hud-cd-lbl">Mins</span></div>
+      <div class="hud-cd-item"><span class="hud-cd-num" id="cd-secs">00</span><span class="hud-cd-lbl">Segs</span></div>
+    </div>
+  </div>
+
+  <!-- HUD Anchors -->
+  <div class="hud-container">
+    <!-- Top Left -->
+    <div class="hud-element hud-top-left gs-hud-tl">
+      <div class="logo-area-hud"><div class="logo-dot"></div> 28E</div>
+    </div>
+
+    <!-- Bottom Left -->
+    <div class="hud-element hud-bottom-left gs-hud-bl">
+      <div class="minimal-status">
+        <div class="min-pill"><div class="min-dot ok"></div> Servidor Operativo</div>
+        <div class="min-pill"><div class="min-dot wrn"></div> Despliegue en proceso</div>
+        <div class="min-pill"><div class="min-dot ok"></div> Integridad al 100%</div>
       </div>
+    </div>
 
-      <!-- Título -->
-      <h1 class="main-title gs-element">Puliendo Detalles</h1>
-      
-      <!-- Subtítulo -->
-      <p class="subtitle gs-element" id="maint-subtitle">
-        Estamos preparando una experiencia visual increíble para <em>ti</em>.&nbsp;
-        Vuelve pronto. 🌸
-      </p>
-
-      <!-- Progreso y Línea de neón -->
-      <div class="neon-progress-container gs-element" id="visual-progress">
-        <div class="progress-label-center">
-          <span>Optimizando sistemas...</span>
-          <span id="pct" style="color: var(--tulip-400); animation: dotBlink 1.4s infinite;">En proceso</span>
+    <!-- Bottom Right -->
+    <div class="hud-element hud-bottom-right gs-hud-br" id="visual-progress">
+      <div class="laser-progress">
+        <div class="laser-label">
+          <span>Optimizando</span>
+          <span style="color: var(--tulip-400);">Por favor espera</span>
         </div>
-        <div class="neon-track">
-          <div class="neon-fill"></div>
-        </div>
+        <div class="laser-track"><div class="laser-fill"></div></div>
       </div>
-
-      <!-- Countdown (oculto por defecto) -->
-      <div id="visual-countdown" class="countdown-wrap-center gs-element" style="display: none;">
-        <h2 class="countdown-title-center">Regresamos en:</h2>
-        <div class="countdown-grid-center">
-          <div class="cd-box-glass"><span class="cd-num" id="cd-days">00</span><span class="cd-label">Días</span></div>
-          <div class="cd-box-glass"><span class="cd-num" id="cd-hours">00</span><span class="cd-label">Horas</span></div>
-          <div class="cd-box-glass"><span class="cd-num" id="cd-mins">00</span><span class="cd-label">Mins</span></div>
-          <div class="cd-box-glass"><span class="cd-num" id="cd-secs">00</span><span class="cd-label">Segs</span></div>
-        </div>
-      </div>
-
-      <!-- Status Pills -->
-      <div class="status-pills gs-element">
-        <div class="status-pill gs-pill"><span class="dot ok"></span>Servidor</div>
-        <div class="status-pill gs-pill"><span class="dot wrn"></span>Despliegue</div>
-        <div class="status-pill gs-pill"><span class="dot ok"></span>Datos</div>
-        <div class="status-pill gs-pill"><span class="dot ok"></span>Seguridad</div>
-      </div>
-
     </div>
   </div>
 \n\n  <!-- Footer strip -->
@@ -627,7 +585,7 @@
   <audio id="bg-music" preload="auto"></audio>
 
   <!-- Mini Player -->
-  <div class="mini-player" id="mini-player">
+  <div class="mini-player hud-element hud-top-right" id="mini-player" style="position:absolute; top:0; right:0; z-index:20;">
     <div class="mini-player-top">
       <!-- Track Info -->
       <div class="mp-info">
@@ -676,25 +634,56 @@
 
 
     
-    // ── GSAP Premium Entrance Timeline ──
+    
+    // ── Partículas Estelares (Stardust) ──
+    const starContainer = document.getElementById('stardust-container');
+    for(let i=0; i<40; i++){
+      let star = document.createElement('div');
+      star.className = 'stardust';
+      star.style.left = Math.random() * 100 + 'vw';
+      star.style.top = Math.random() * 100 + 'vh';
+      starContainer.appendChild(star);
+      
+      gsap.to(star, {
+        y: '-=100',
+        opacity: Math.random() * 0.5 + 0.1,
+        duration: Math.random() * 5 + 5,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        delay: Math.random() * 5
+      });
+    }
+
+    // ── GSAP Espectáculo Cinematic Timeline ──
     const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
 
+    // Dividimos el texto gigante manualmente para el efecto (ya que no tenemos SplitText de pago)
+    const titleEl = document.querySelector('.massive-title');
+    if(titleEl) {
+      const html = titleEl.innerHTML;
+      const lines = html.split('<br>');
+      titleEl.innerHTML = lines.map(line => `<span style="display:inline-block; overflow:hidden;"><span class="gs-title-line" style="display:inline-block;">${line}</span></span>`).join('<br>');
+    }
+
     tl
-      // Card scales up and fades in
-      .to('#main-card', { opacity: 1, y: 0, scale: 1, duration: 1.2 }, 0.2)
+      // 1. Aparece el eclipse desde el centro oscuro
+      .from('.gs-eclipse', { scale: 0, opacity: 0, duration: 2, ease: 'expo.out' }, 0.2)
       
-      // Core orb pop
-      .from('.core-orb', { scale: 0, opacity: 0, duration: 1, ease: 'back.out(2)' }, 0.5)
-      .from('.core-orb-glow', { opacity: 0, duration: 1 }, 0.7)
+      // 2. El texto masivo se revela línea por línea desde abajo
+      .from('.gs-title-line', { y: 200, opacity: 0, duration: 1.5, stagger: 0.15, ease: 'power4.out' }, 0.8)
       
-      // Elements fade up staggered
-      .from('.gs-element', { opacity: 0, y: 20, duration: 0.8, stagger: 0.1 }, 0.8)
-      
+      // 3. Subtítulo hace fade in
+      .from('.gs-sub', { opacity: 0, y: 20, duration: 1 }, 1.5)
+
+      // 4. Los HUD de las esquinas entran deslizándose hacia sus posiciones
+      .from('.gs-hud-tl', { x: -50, y: -50, opacity: 0, duration: 1.2 }, 1.6)
+      .from('.gs-hud-bl', { x: -50, y: 50, opacity: 0, duration: 1.2 }, 1.7)
+      .from('.gs-hud-br', { x: 50, y: 50, opacity: 0, duration: 1.2 }, 1.8)
+
       // Footer
-      .from('.footer-strip', { opacity: 0, y: 20, duration: 0.8 }, 1.2);
-
-
-    // GSAP: reveal the mini player
+      .from('.footer-strip', { opacity: 0, y: 20, duration: 0.8 }, 2.0);
+\n\n    // GSAP: reveal the mini player
     gsap.set('#mini-player', { opacity: 0, y: -20 });
     gsap.to('#mini-player', { opacity: 1, y: 0, duration: .6, delay: 1.3, ease: 'power3.out', onComplete: () => player.classList.add('visible') });
 
