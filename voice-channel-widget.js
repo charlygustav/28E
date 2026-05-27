@@ -507,7 +507,7 @@
                </div>
              </div>
           </div>
-          <span class="text-[10px] text-white/50 font-medium leading-none">${_t('bar_conn').split(' · ')[1]}</span>
+          <span id="vc-bar-sub" class="text-[10px] text-white/50 font-medium leading-none">${_t('bar_conn').split(' · ')[1]}</span>
         </div>
         <div class="w-[1px] h-6 bg-white/10 mx-1"></div>
         <div class="flex items-center px-1">
@@ -1138,6 +1138,13 @@
       if (this.connected) {
          this._render(this._tplConnected());
          this._updateBarChatState();
+         
+         const bTitle = document.getElementById('vc-bar-title');
+         const bSub = document.getElementById('vc-bar-sub');
+         if (bTitle && bSub) {
+           bTitle.textContent = _t('bar_conn').split(' · ')[0];
+           bSub.textContent = _t('bar_conn').split(' · ')[1] || '';
+         }
          
          if (window.gsap) {
            const activeContent = document.getElementById(`vc-content-${this._activeTab}`);
