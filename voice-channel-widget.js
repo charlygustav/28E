@@ -614,7 +614,7 @@
           <div class="relative z-10 p-10 flex-1 flex flex-col items-center justify-center">
             <div class="relative mb-6">
                <div class="absolute inset-0 bg-amber-500/30 blur-xl rounded-full animate-pulse"></div>
-               <div class="w-16 h-16 rounded-full border-4 border-zinc-800 border-t-amber-500 animate-spin relative z-10"></div>
+               <div class="w-10 h-10 rounded-full border-[3px] border-zinc-800 border-t-amber-500 animate-spin relative z-10"></div>
             </div>
             <div class="text-white/50 text-sm font-medium tracking-wide animate-pulse">${_t('st_estab')}</div>
           </div>
