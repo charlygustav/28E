@@ -484,12 +484,29 @@
       this._bar.id = 'vc-bar';
       this._bar.className = 'fixed bottom-24 right-6 z-[9997] flex items-center gap-3 px-3.5 py-2.5 bg-zinc-950/80 backdrop-blur-xl border border-white/5 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] opacity-0 pointer-events-none transition-all duration-500 translate-y-4 scale-95 origin-bottom-right';
       this._bar.innerHTML = `
-        <div class="flex items-center justify-center w-7 h-7 rounded-full bg-green-500/10 border border-green-500/20 relative shrink-0">
-          <div class="absolute inset-0 rounded-full bg-green-500/20 animate-ping opacity-50"></div>
-          <div class="w-1.5 h-1.5 bg-green-500 rounded-full shadow-[0_0_10px_rgba(34,197,94,1)]"></div>
+        <div class="flex items-center justify-center w-7 h-7 rounded-full bg-green-500/10 border border-green-500/20 relative shrink-0 transition-colors duration-300" id="vc-bar-indicator-bg">
+          <div class="absolute inset-0 rounded-full bg-green-500/20 animate-ping opacity-50 transition-all duration-300" id="vc-bar-indicator-ping"></div>
+          <div class="w-1.5 h-1.5 bg-green-500 rounded-full shadow-[0_0_10px_rgba(34,197,94,1)] transition-colors duration-300" id="vc-bar-indicator-dot"></div>
+          
+          <div id="vc-bar-waveform" class="absolute inset-0 flex items-center justify-center gap-[2px] opacity-0 transition-opacity duration-300">
+             <div class="w-1 bg-green-400 rounded-full animate-[vc-eq_0.5s_ease-in-out_infinite]"></div>
+             <div class="w-1 bg-green-400 rounded-full animate-[vc-eq_0.5s_ease-in-out_infinite_0.1s]"></div>
+             <div class="w-1 bg-green-400 rounded-full animate-[vc-eq_0.5s_ease-in-out_infinite_0.2s]"></div>
+          </div>
         </div>
-        <div class="flex flex-col justify-center">
-          <span class="text-[9px] font-extrabold text-green-400 uppercase tracking-[0.2em] leading-none mb-1">${_t('bar_conn').split(' · ')[0]}</span>
+        <div class="flex flex-col justify-center min-w-[65px]">
+          <div class="flex items-center gap-1.5 mb-1">
+             <span class="text-[9px] font-extrabold text-green-400 uppercase tracking-[0.2em] leading-none transition-colors duration-300" id="vc-bar-title">${_t('bar_conn').split(' · ')[0]}</span>
+             <div class="flex items-center gap-1" id="vc-bar-icons">
+               <div id="vc-bar-music-icon" class="hidden text-amber-500 transition-opacity">
+                 <svg class="w-3 h-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
+               </div>
+               <div id="vc-bar-chat-icon" class="hidden text-red-400 relative transition-opacity">
+                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                 <span class="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-red-500 rounded-full shadow-[0_0_5px_rgba(239,68,68,0.8)] animate-pulse"></span>
+               </div>
+             </div>
+          </div>
           <span class="text-[10px] text-white/50 font-medium leading-none">${_t('bar_conn').split(' · ')[1]}</span>
         </div>
         <div class="w-[1px] h-6 bg-white/10 mx-1"></div>
@@ -1120,6 +1137,7 @@
     _updateTabs() {
       if (this.connected) {
          this._render(this._tplConnected());
+         this._updateBarChatState();
          
          if (window.gsap) {
            const activeContent = document.getElementById(`vc-content-${this._activeTab}`);
@@ -2016,6 +2034,7 @@
       } else if (ind) {
         ind.remove();
       }
+      this._updateBarMusicState();
     }
 
     _bindMusicEvents() {
@@ -2437,6 +2456,49 @@
     _updateAvatar(userId, speaking) {
       const el = document.getElementById(`vc-av-${userId}`);
       if (el) el.classList.toggle('speaking', speaking);
+      this._updateBarSpeakingState();
+    }
+
+    _updateBarSpeakingState() {
+      const isAnyoneSpeaking = document.querySelector('.vc-av.speaking') !== null;
+      const bg = document.getElementById('vc-bar-indicator-bg');
+      const ping = document.getElementById('vc-bar-indicator-ping');
+      const dot = document.getElementById('vc-bar-indicator-dot');
+      const wave = document.getElementById('vc-bar-waveform');
+      const title = document.getElementById('vc-bar-title');
+      if (!bg || !ping || !dot || !wave || !title) return;
+      
+      if (isAnyoneSpeaking) {
+        bg.classList.replace('bg-green-500/10', 'bg-amber-500/10');
+        bg.classList.replace('border-green-500/20', 'border-amber-500/20');
+        ping.classList.add('hidden');
+        dot.classList.add('hidden');
+        wave.classList.replace('opacity-0', 'opacity-100');
+        title.classList.replace('text-green-400', 'text-amber-400');
+      } else {
+        bg.classList.replace('bg-amber-500/10', 'bg-green-500/10');
+        bg.classList.replace('border-amber-500/20', 'border-green-500/20');
+        ping.classList.remove('hidden');
+        dot.classList.remove('hidden');
+        wave.classList.replace('opacity-100', 'opacity-0');
+        title.classList.replace('text-amber-400', 'text-green-400');
+      }
+    }
+
+    _updateBarMusicState() {
+      const barMusicIcon = document.getElementById('vc-bar-music-icon');
+      if (barMusicIcon) {
+        if (this._musicPlaying) barMusicIcon.classList.remove('hidden');
+        else barMusicIcon.classList.add('hidden');
+      }
+    }
+
+    _updateBarChatState() {
+      const barChatIcon = document.getElementById('vc-bar-chat-icon');
+      if (barChatIcon) {
+        if (this._chatUnread > 0) barChatIcon.classList.remove('hidden');
+        else barChatIcon.classList.add('hidden');
+      }
     }
 
     // ── VISUALIZER ────────────────────────────────────────────────────────
