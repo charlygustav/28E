@@ -121,28 +121,17 @@
       max-width: 500px;
       max-height: 500px;
       border-radius: 50%;
-      background: #000;
+      background: #030303;
       box-shadow: 
-        0 0 120px rgba(236,72,153, 0.4), 
-        0 0 200px rgba(245,158,11, 0.2), 
-        inset 0 0 40px rgba(0,0,0, 1);
+        0 0 150px rgba(236,72,153, 0.4), 
+        0 0 250px rgba(245,158,11, 0.2);
       position: relative;
       animation: eclipseBreathe 8s ease-in-out infinite alternate;
     }
-    .eclipse::after {
-      content: '';
-      position: absolute;
-      top: -2px; left: -2px; right: -2px; bottom: -2px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--tulip-500), transparent, var(--amber-400));
-      z-index: -1;
-      animation: spinGradient 10s linear infinite;
-    }
 
-    @keyframes spinGradient { 100% { transform: rotate(360deg); } }
     @keyframes eclipseBreathe {
-      0% { transform: scale(0.95); box-shadow: 0 0 80px rgba(236,72,153,0.3), 0 0 150px rgba(245,158,11,0.1); }
-      100% { transform: scale(1.05); box-shadow: 0 0 150px rgba(236,72,153,0.6), 0 0 250px rgba(245,158,11,0.3); }
+      0% { transform: scale(0.95); box-shadow: 0 0 100px rgba(236,72,153,0.3), 0 0 150px rgba(245,158,11,0.1); }
+      100% { transform: scale(1.05); box-shadow: 0 0 200px rgba(236,72,153,0.6), 0 0 300px rgba(245,158,11,0.3); }
     }
 
     /* Título Gigante */
@@ -153,6 +142,10 @@
       z-index: 5;
       text-align: center;
       width: 100vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
     .massive-title {
@@ -165,21 +158,18 @@
       color: #fff;
       mix-blend-mode: overlay;
       opacity: 0.9;
+      text-align: center;
     }
 
     .hero-subtitle {
-      position: absolute;
-      top: 110%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90vw;
-      text-align: center;
       font-size: clamp(0.8rem, 1.5vw, 1.2rem);
       font-family: 'Merriweather', serif;
       font-style: italic;
       color: var(--muted);
-      margin-top: 1rem;
+      margin-top: 2rem;
       letter-spacing: 0.05em;
+      text-align: center;
+      max-width: 600px;
     }
 
     /* Progreso Laser */
