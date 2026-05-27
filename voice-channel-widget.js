@@ -1836,7 +1836,7 @@
             
             ${track.type === 'youtube' ? `
               <div class="mt-3 relative z-10">
-                <div class="h-1 bg-black/50 rounded-full overflow-hidden cursor-pointer relative" id="vc-music-progress">
+                <div class="h-1 bg-black/50 rounded-full overflow-hidden relative" id="vc-music-progress">
                   <div class="absolute top-0 left-0 h-full bg-amber-500 w-0 transition-all duration-200" id="vc-music-progress-fill"></div>
                 </div>
                 <div class="flex justify-between text-[9px] text-white/40 mt-1 font-mono">
@@ -1940,22 +1940,12 @@
         });
       });
       const progressBar = document.getElementById('vc-music-progress');
-      if (progressBar) {
-        progressBar.addEventListener('click', (e) => {
-          if (this._ytPlayer && typeof this._ytPlayer.getDuration === 'function') {
-            const rect = progressBar.getBoundingClientRect();
-            const pct = (e.clientX - rect.left) / rect.width;
-            const time = pct * this._ytPlayer.getDuration();
-            this._ytPlayer.seekTo(time, true);
-            if (this.socket) this.socket.emit('music_seek', { time });
-          }
-        });
-      }
     }
 
     async _addMusicFromInput() {
       const input = document.getElementById('vc-music-url');
-      if (!input) return;
+      const addBtn = document.getElementById('vc-music-add');
+      if (!input || !addBtn) return;
       const url = input.value.trim();
       if (!url) return;
       const parsed = this._parseMusicUrl(url);
@@ -1964,11 +1954,19 @@
         if (err) { err.textContent = _t('vc_music_err_url'); setTimeout(() => { err.textContent = ''; }, 3000); }
         return;
       }
-      input.value = '';
+      
+      const originalText = addBtn.innerHTML;
+      addBtn.innerHTML = `<div class="w-3 h-3 rounded-full border-[2px] border-black border-t-transparent animate-spin inline-block align-middle"></div>`;
+      addBtn.disabled = true;
       input.disabled = true;
+      
       let title = parsed.type === 'youtube' ? 'YouTube Video' : 'Spotify Track';
       try { title = await this._fetchMusicTitle(parsed.url, parsed.type); } catch(e) {}
+      
+      input.value = '';
       input.disabled = false;
+      addBtn.disabled = false;
+      addBtn.innerHTML = originalText;
       if (this.socket) {
         this.socket.emit('music_add', { url: parsed.url, title, type: parsed.type });
         this._playSfx('toggleOn', 0.3);
