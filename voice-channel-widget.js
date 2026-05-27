@@ -1995,8 +1995,9 @@
     async _fetchMusicTitle(url, type) {
       const cleanTitle = (t) => {
         if (!t) return t;
-        let c = t.replace(/\s*[\[\(](official.*|audio|video|music video|lyric.*|visualizer|hd)[\]\)]/gi, '');
-        c = c.replace(/\s*[-|]\s*Spotify/gi, '');
+        let c = t.replace(/\s*[\[\(](official.*|video oficial|audio oficial|audio|video|music video|lyric.*|visualizer|hd)[\]\)]/gi, '');
+        c = c.replace(/\s*[\[\(]?Spotify[\]\)]?/gi, '');
+        c = c.replace(/\s*[-|]\s*$/g, '');
         return c.trim();
       };
       try {
