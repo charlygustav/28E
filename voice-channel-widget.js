@@ -588,13 +588,12 @@
             <input id="vc-pass" type="hidden" value="nopass"/>
             
             <div class="relative">
-                <div class="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-500 blur opacity-40 rounded-xl"></div>
-                <button id="vc-join" class="relative w-full py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-extrabold text-sm rounded-xl overflow-hidden group shadow-2xl transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
-                  <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
+                <button id="vc-join" class="relative w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-sm rounded-xl shadow-xl transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
                   <span class="relative z-10 flex items-center justify-center gap-2">${_t('btn_join')}</span>
                 </button>
             </div>
             <div class="text-red-400 text-xs text-center mt-1.5 h-[16px] font-medium" id="vc-err">${err}</div>
+            <div id="vc-conn-count" class="text-[10px] font-medium text-center mt-0.5 h-3 flex items-center justify-center transition-opacity opacity-0"></div>
           </div>
           ${this._tplHistory()}
         </div>`;
@@ -929,6 +928,20 @@
     _render(tpl) {
       this.panel.innerHTML = tpl;
       this._bindPanelEvents();
+      
+      if (document.getElementById('vc-join')) {
+        fetch(SIGNALING_URL + '/health').then(r => r.json()).then(data => {
+          const cnt = document.getElementById('vc-conn-count');
+          if (cnt) {
+            if (data.users === 0) {
+              cnt.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-white/20 inline-block mr-1.5"></span><span class="text-white/30">Nadie en el canal por ahora</span>`;
+            } else {
+              cnt.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block mr-1.5 animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.6)]"></span><span class="text-amber-500/90">${data.users} ${data.users === 1 ? 'persona conectada' : 'personas conectadas'}</span>`;
+            }
+            cnt.classList.remove('opacity-0');
+          }
+        }).catch(()=>{});
+      }
     }
 
     _bindPanelEvents() {
