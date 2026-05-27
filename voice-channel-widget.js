@@ -1996,7 +1996,7 @@
       const cleanTitle = (t) => {
         if (!t) return t;
         let c = t.replace(/\s*[\[\(](official.*|video oficial|audio oficial|audio|video|music video|lyric.*|visualizer|hd)[\]\)]/gi, '');
-        c = c.replace(/\s*[\[\(]?Spotify[\]\)]?/gi, '');
+        c = c.replace(/\s*[\[\(]?(Spotify|YouTube)[\]\)]?/gi, '');
         c = c.replace(/\s*[-|]\s*$/g, '');
         return c.trim();
       };
