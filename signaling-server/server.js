@@ -251,30 +251,26 @@ io.on('connection', (socket) => {
     io.to(CHANNEL).emit('music_state_update', { state: musicState });
   });
 
-  socket.on('music_skip', () => {
+  const handleNextTrack = () => {
     if (musicQueue.length === 0) return;
-    const next = musicState.currentIndex + 1;
-    if (next < musicQueue.length) {
-      musicState = { currentIndex: next, isPlaying: true, startedAt: Date.now(), pausedAt: null, pausedTime: 0 };
-      io.to(CHANNEL).emit('music_play', { track: musicQueue[next], state: musicState });
+    if (musicState.currentIndex !== -1) {
+      musicQueue.splice(musicState.currentIndex, 1);
+      if (musicState.currentIndex >= musicQueue.length) {
+        musicState.currentIndex = musicQueue.length > 0 ? 0 : -1;
+      }
+    }
+    if (musicState.currentIndex !== -1 && musicQueue[musicState.currentIndex]) {
+      musicState = { ...musicState, isPlaying: true, startedAt: Date.now(), pausedAt: null, pausedTime: 0 };
+      io.to(CHANNEL).emit('music_play', { track: musicQueue[musicState.currentIndex], state: musicState });
     } else {
       musicState = { currentIndex: -1, isPlaying: false, startedAt: null, pausedAt: null, pausedTime: 0 };
       io.to(CHANNEL).emit('music_stop', {});
     }
     io.to(CHANNEL).emit('music_queue_update', { queue: musicQueue, state: musicState });
-  });
+  };
 
-  socket.on('music_ended', () => {
-    const next = musicState.currentIndex + 1;
-    if (next < musicQueue.length) {
-      musicState = { currentIndex: next, isPlaying: true, startedAt: Date.now(), pausedAt: null, pausedTime: 0 };
-      io.to(CHANNEL).emit('music_play', { track: musicQueue[next], state: musicState });
-    } else {
-      musicState = { currentIndex: -1, isPlaying: false, startedAt: null, pausedAt: null, pausedTime: 0 };
-      io.to(CHANNEL).emit('music_stop', {});
-    }
-    io.to(CHANNEL).emit('music_queue_update', { queue: musicQueue, state: musicState });
-  });
+  socket.on('music_skip', handleNextTrack);
+  socket.on('music_ended', handleNextTrack);
 
   socket.on('music_seek', ({ time }) => {
     if (musicState.currentIndex === -1) return;
