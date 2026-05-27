@@ -235,6 +235,9 @@
   .vc-scroll::-webkit-scrollbar { width:4px; }
   .vc-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
   .vc-av.speaking { border-color: #10B981 !important; box-shadow: 0 0 12px rgba(16, 185, 129, 0.4); animation: vc-speak-pulse 1.5s infinite; }
+  @keyframes vc-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+  .vc-marquee-container { display: flex; overflow: hidden; white-space: nowrap; mask-image: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent); width: 100%; }
+  .vc-marquee-content { flex-shrink: 0; animation: vc-marquee 8s linear infinite; padding-right: 2rem; }
   `;
 
   // ── ICONS ─────────────────────────────────────────────────────────────────
@@ -1828,7 +1831,13 @@
               </div>
               <div class="flex-1 min-w-0">
                 <div class="text-[9px] text-amber-500 font-bold uppercase tracking-wider mb-0.5">${_t('vc_music_now')}</div>
-                <div class="text-sm font-bold text-white truncate">${this._escHtml(track.title)}</div>
+                ${track.title.length > 25 
+                  ? `<div class="vc-marquee-container text-sm font-bold text-white">
+                       <div class="vc-marquee-content">${this._escHtml(track.title)}</div>
+                       <div class="vc-marquee-content" aria-hidden="true">${this._escHtml(track.title)}</div>
+                     </div>` 
+                  : `<div class="text-sm font-bold text-white truncate">${this._escHtml(track.title)}</div>`
+                }
                 <div class="text-xs text-white/40 truncate">${track.addedByName ? `${_t('vc_music_by')} ${track.addedByName}` : ''}</div>
               </div>
               <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-white/50">${track.type === 'youtube' ? 'YT' : 'SP'}</span>
