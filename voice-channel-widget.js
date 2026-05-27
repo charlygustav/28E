@@ -465,8 +465,8 @@
       this.fab = document.createElement('div');
       this.fab.id = 'vc-fab';
       this.fab.title = _t('vc_title');
-      this.fab.className = 'fixed bottom-6 right-6 z-[9999] flex items-center justify-center cursor-pointer transition-all duration-300 rounded-full bg-zinc-900 border border-white/10 shadow-2xl hover:scale-110 hover:border-amber-500/50 w-14 h-14 group';
-      this.fab.innerHTML = `<span class="text-amber-500 transition-transform duration-300 group-hover:scale-110 flex items-center justify-center w-6 h-6">${ICONS.mic}</span>`;
+      this.fab.className = 'fixed bottom-6 right-6 z-[9999] flex items-center justify-center cursor-pointer transition-all duration-300 rounded-full bg-zinc-900 border border-white/10 shadow-2xl hover:-translate-y-1 hover:shadow-[0_8px_25px_rgba(245,158,11,0.25)] hover:border-amber-500/50 hover:bg-zinc-800/80 w-12 h-12 group';
+      this.fab.innerHTML = `<span class="text-amber-500 transition-transform duration-300 group-hover:scale-110 flex items-center justify-center w-5 h-5">${ICONS.mic}</span>`;
       this.fab.addEventListener('click', () => this._toggle());
 
       this.panel = document.createElement('div');
