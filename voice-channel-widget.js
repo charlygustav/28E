@@ -780,7 +780,7 @@
         </div>
 
         <!-- Main Content Area -->
-        <div class="h-[260px] relative overflow-hidden">
+        <div class="h-[220px] relative overflow-hidden">
           
           <!-- ROOM TAB -->
           <div class="absolute inset-0 flex flex-col ${isRoom ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 -translate-x-8 pointer-events-none'}" id="vc-content-room">
@@ -1821,7 +1821,7 @@
           ? `<div class="flex items-end gap-0.5 h-3"><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite]"></div><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite_0.2s]"></div><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite_0.4s]"></div></div>`
           : `<span class="w-4 h-4 text-white/40 [&>svg]:w-4 [&>svg]:h-4 flex items-center justify-center">${ICONS.sound || '♪'}</span>`;
         nowPlaying = `
-          <div class="bg-white/5 border border-white/10 rounded-xl p-3 mb-4 relative overflow-hidden">
+          <div class="bg-white/5 border border-white/10 rounded-xl p-3 mb-2 relative overflow-hidden">
             <div class="flex items-center gap-3 relative z-10">
               <div class="w-10 h-10 rounded-lg bg-black/40 flex items-center justify-center flex-shrink-0">
                 ${eqBars}
@@ -1858,7 +1858,7 @@
             </div>
           </div>`;
       } else {
-        nowPlaying = `<div class="text-center text-white/20 text-xs py-6 mb-4 bg-white/5 rounded-xl border border-white/5">${_t('vc_music_no_track')}</div>`;
+        nowPlaying = `<div class="text-center text-white/20 text-xs py-3 mb-2 bg-white/5 rounded-xl border border-white/5">${_t('vc_music_no_track')}</div>`;
       }
       
       const queueItems = this._musicQueue.length > 0
@@ -1878,11 +1878,11 @@
         : `<div class="text-center text-white/20 text-xs py-4">${_t('vc_music_empty_q')}</div>`;
         
       return `
-        <div class="p-4">
+        <div class="p-3">
           ${nowPlaying}
-          <div class="text-[10px] text-white/30 font-bold uppercase tracking-wider mb-2 px-1">${_t('vc_music_queue')} ${this._musicQueue.length > 0 ? `(${this._musicQueue.length})` : ''}</div>
-          <div class="flex flex-col gap-1 mb-4" id="vc-music-queue">${queueItems}</div>
-          <div class="text-red-500 text-xs text-center mb-2 min-h-[16px]" id="vc-music-err"></div>
+          <div class="text-[10px] text-white/30 font-bold uppercase tracking-wider mb-1 px-1">${_t('vc_music_queue')} ${this._musicQueue.length > 0 ? `(${this._musicQueue.length})` : ''}</div>
+          <div class="flex flex-col gap-1 mb-2" id="vc-music-queue">${queueItems}</div>
+          <div class="text-red-500 text-xs text-center mb-1 min-h-[16px]" id="vc-music-err"></div>
           <div class="flex gap-2">
             <input class="flex-1 bg-black/40 border border-white/10 rounded-xl px-3 py-2.5 text-white text-xs outline-none focus:border-amber-500/50 transition-colors" id="vc-music-url" type="text" placeholder="${_t('vc_music_ph')}" autocomplete="off"/>
             <button class="bg-amber-500 text-black px-4 font-bold text-xs rounded-xl hover:bg-amber-400 transition-colors whitespace-nowrap" id="vc-music-add">+ ${_t('vc_music_add')}</button>
