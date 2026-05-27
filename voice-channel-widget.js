@@ -575,26 +575,26 @@
             <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
           </div>
           
-          <div class="relative z-10 py-4 px-6 flex-1 flex flex-col justify-center">
-            <div class="flex flex-col items-center mb-4">
-                <div class="relative group mb-2">
+          <div class="relative z-10 py-5 px-6 flex-1 flex flex-col items-center justify-center gap-5">
+            <div class="flex flex-col items-center">
+                <div class="relative group mb-3">
                     <div class="absolute inset-0 rounded-full bg-amber-500/30 blur-md group-hover:bg-amber-500/50 transition-colors duration-500 animate-pulse"></div>
-                    <img src="${user.photoURL}" class="w-14 h-14 rounded-full object-cover border-2 border-amber-500/50 relative z-10 shadow-xl" />
+                    <img src="${user.photoURL}" class="w-16 h-16 rounded-full object-cover border-2 border-amber-500/50 relative z-10 shadow-xl" />
                 </div>
-                <div class="text-[9px] text-amber-500/80 font-bold uppercase tracking-[0.2em] mb-0.5">${_t('vc_session_as')}</div>
-                <div class="text-lg font-extrabold text-white tracking-tight">${user.displayName}</div>
+                <div class="text-[9px] text-amber-500/80 font-bold uppercase tracking-[0.2em] mb-1">${_t('vc_session_as')}</div>
+                <div class="text-xl font-extrabold text-white tracking-tight">${user.displayName}</div>
             </div>
             
             <input id="vc-name" type="hidden" value="${user.displayName}"/>
             <input id="vc-pass" type="hidden" value="nopass"/>
             
-            <div class="relative">
+            <div class="w-full flex flex-col items-center gap-2">
                 <button id="vc-join" class="relative w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-sm rounded-xl shadow-xl transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
                   <span class="relative z-10 flex items-center justify-center gap-2">${_t('btn_join')}</span>
                 </button>
+                <div id="vc-conn-count" class="text-[10px] font-medium text-center flex items-center justify-center transition-opacity opacity-0 h-3"></div>
+                <div class="text-red-400 text-[10px] text-center font-medium empty:hidden" id="vc-err">${err}</div>
             </div>
-            <div class="text-red-400 text-xs text-center mt-1.5 h-[16px] font-medium" id="vc-err">${err}</div>
-            <div id="vc-conn-count" class="text-[10px] font-medium text-center mt-0.5 h-3 flex items-center justify-center transition-opacity opacity-0"></div>
           </div>
           ${this._tplHistory()}
         </div>`;
