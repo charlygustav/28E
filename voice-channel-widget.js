@@ -532,7 +532,7 @@
 
             <div class="relative z-10 flex items-center justify-between px-5 py-4 border-b border-white/5 bg-black/20 backdrop-blur-sm">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center relative overflow-hidden">${ICONS.sound}</div>
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center relative overflow-hidden [&>svg]:w-5 [&>svg]:h-5 [&>svg]:relative [&>svg]:z-10">${ICONS.sound}</div>
                 <div><div class="text-white font-bold text-sm">#principal</div><div class="text-white/40 text-[11px]">${_t('vc_sub')}</div></div>
               </div>
               <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
