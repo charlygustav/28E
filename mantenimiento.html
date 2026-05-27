@@ -781,111 +781,59 @@
   <div class="bg-orb orb-indigo"></div>
 
 
-  <!-- Layout principal -->
-  <div class="layout" id="main-layout">
-
-    <!-- ── COLUMNA IZQUIERDA ── -->
-    <div class="col-left">
-
-      <!-- Logo -->
-      <div class="logo-area">
-        <span class="logo-text">28E</span>
-      </div>
-
-      <!-- Centro visual (Reemplazo del contador) -->
-      <div id="visual-center"
-        style="display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; margin: 3rem 0;">
-        <div
-          style="font-size: clamp(4rem, 8vw, 6.5rem); filter: drop-shadow(0 0 20px rgba(236,72,153,0.4)); animation: floatIcon 4s ease-in-out infinite;">
-          🔮</div>
-        <div
-          style="font-size: 0.7rem; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.2em; margin-top: 1.5rem;">
-          Sistemas en Suspensión</div>
-      </div>
-
-      <!-- Contador (Cuenta regresiva) -->
-      <div id="visual-countdown"
-        style="display: none; flex-direction: column; justify-content: center; flex: 1; margin: 3rem 0;"
-        class="countdown-wrap">
-        <h2 class="countdown-title">Mantenimiento Programado Hasta:</h2>
-        <div class="countdown-grid">
-          <div class="cd-box"><span class="cd-num" id="cd-days">00</span><span class="cd-label">Días</span></div>
-          <div class="cd-box"><span class="cd-num" id="cd-hours">00</span><span class="cd-label">Horas</span></div>
-          <div class="cd-box"><span class="cd-num" id="cd-mins">00</span><span class="cd-label">Mins</span></div>
-          <div class="cd-box"><span class="cd-num" id="cd-secs">00</span><span class="cd-label">Segs</span></div>
-        </div>
-      </div>
-
-      <!-- Estado de sistemas -->
-      <div class="status-grid">
-        <div class="status-card">
-          <div class="status-card-icon">🖥️</div>
-          <div class="status-card-label">Servidor</div>
-          <div class="status-card-val ok">Operativo</div>
-        </div>
-        <div class="status-card">
-          <div class="status-card-icon">🔄</div>
-          <div class="status-card-label">Despliegue</div>
-          <div class="status-card-val wrn">En proceso</div>
-        </div>
-        <div class="status-card">
-          <div class="status-card-icon">🗃️</div>
-          <div class="status-card-label">Base de datos</div>
-          <div class="status-card-val ok">Estable</div>
-        </div>
-        <div class="status-card">
-          <div class="status-card-icon">🛡️</div>
-          <div class="status-card-label">Seguridad</div>
-          <div class="status-card-val ok">Activa</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── COLUMNA DERECHA ── -->
-    <div class="col-right">
-
-      <!-- Badge -->
-      <div class="badge">
-        <span class="badge-dot"></span>
-        En mantenimiento
+  
+  <!-- Nuevo Layout principal Glassmorphism -->
+  <div class="glass-layout" id="main-layout">
+    <div class="glass-card" id="main-card">
+      
+      <!-- Orbe brillante interno interactivo -->
+      <div id="visual-center" class="core-orb-container gs-element">
+        <div class="core-orb" id="core-orb"></div>
+        <div class="core-orb-glow"></div>
       </div>
 
       <!-- Título -->
-      <h1>Volvemos<br>muy pronto</h1>
-
+      <h1 class="main-title gs-element">Puliendo Detalles</h1>
+      
       <!-- Subtítulo -->
-      <p class="subtitle" id="maint-subtitle">
-        Estamos puliendo cada detalle para que todo
-        luzca perfecto para <em>ti</em>.&nbsp;
-        Gracias por tu paciencia. 🌸
+      <p class="subtitle gs-element" id="maint-subtitle">
+        Estamos preparando una experiencia visual increíble para <em>ti</em>.&nbsp;
+        Vuelve pronto. 🌸
       </p>
 
-      <!-- Progreso -->
-      <div class="progress-label">
-        <span>Optimizando sistemas de Yaire...</span>
-        <span id="pct" style="color: var(--tulip-400); animation: dotBlink 1.4s ease-in-out infinite;">En proceso</span>
-      </div>
-      <div class="progress-track">
-        <div class="progress-fill"></div>
-      </div>
-
-      <hr class="divider">
-
-      <!-- Pills -->
-      <div class="pills">
-        <div class="pill">🔧 Actualizando dependencias</div>
-        <div class="pill">⚡ Optimizando velocidad</div>
-        <div class="pill">🎨 Nuevas sorpresas</div>
-        <div class="pill">💾 Respaldando datos</div>
-        <div class="pill">🔒 Mejorando seguridad</div>
-        <div class="pill">🌸 Añadiendo detalles</div>
+      <!-- Progreso y Línea de neón -->
+      <div class="neon-progress-container gs-element" id="visual-progress">
+        <div class="progress-label-center">
+          <span>Optimizando sistemas...</span>
+          <span id="pct" style="color: var(--tulip-400); animation: dotBlink 1.4s infinite;">En proceso</span>
+        </div>
+        <div class="neon-track">
+          <div class="neon-fill"></div>
+        </div>
       </div>
 
+      <!-- Countdown (oculto por defecto) -->
+      <div id="visual-countdown" class="countdown-wrap-center gs-element" style="display: none;">
+        <h2 class="countdown-title-center">Regresamos en:</h2>
+        <div class="countdown-grid-center">
+          <div class="cd-box-glass"><span class="cd-num" id="cd-days">00</span><span class="cd-label">Días</span></div>
+          <div class="cd-box-glass"><span class="cd-num" id="cd-hours">00</span><span class="cd-label">Horas</span></div>
+          <div class="cd-box-glass"><span class="cd-num" id="cd-mins">00</span><span class="cd-label">Mins</span></div>
+          <div class="cd-box-glass"><span class="cd-num" id="cd-secs">00</span><span class="cd-label">Segs</span></div>
+        </div>
+      </div>
+
+      <!-- Status Pills -->
+      <div class="status-pills gs-element">
+        <div class="status-pill gs-pill"><span class="dot ok"></span>Servidor</div>
+        <div class="status-pill gs-pill"><span class="dot wrn"></span>Despliegue</div>
+        <div class="status-pill gs-pill"><span class="dot ok"></span>Datos</div>
+        <div class="status-pill gs-pill"><span class="dot ok"></span>Seguridad</div>
+      </div>
 
     </div>
   </div>
-
-  <!-- Footer strip -->
+\n\n  <!-- Footer strip -->
   <footer class="footer-strip">
     <span>&copy; <span id="yr"></span> Charles Gustav. Todos los derechos reservados.</span>
     <div style="display: flex; align-items: center; gap: 1rem;">
@@ -951,196 +899,24 @@
 
 
 
-    // ── GSAP Entrance Timeline ──
-    gsap.set('.col-left', { opacity: 0, x: -60 });
-    gsap.set('.col-right', { opacity: 0, x: 60 });
-    gsap.set('.logo-area', { opacity: 0, y: -20 });
-    gsap.set('.status-card', { opacity: 0, y: 30 });
-    gsap.set('.badge', { opacity: 0, scale: 0.8 });
-    gsap.set('h1', { opacity: 0, y: 32 });
-    gsap.set('.subtitle', { opacity: 0, y: 20 });
-    gsap.set('.progress-label, .progress-track', { opacity: 0 });
-    gsap.set('.divider', { opacity: 0, scaleX: 0 });
-    gsap.set('.pill', { opacity: 0, y: 16, scale: 0.9 });
-    gsap.set('.footer-strip', { opacity: 0, y: 20 });
-
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    
+    // ── GSAP Premium Entrance Timeline ──
+    const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
 
     tl
-      // Columnas entran desde los lados
-      .to('.col-left', { opacity: 1, x: 0, duration: .8 }, 0)
-      .to('.col-right', { opacity: 1, x: 0, duration: .8 }, 0.1)
-
-      // Logo
-      .to('.logo-area', { opacity: 1, y: 0, duration: .5 }, 0.3)
-
-      // Tarjetas de estado
-      .to('.status-card', {
-        opacity: 1, y: 0,
-        duration: .5,
-        stagger: 0.09
-      }, 0.75)
-
-      // Columna derecha: badge, h1, subtitle
-      .to('.badge', { opacity: 1, scale: 1, duration: .45, ease: 'back.out(2)' }, 0.4)
-      .to('h1', { opacity: 1, y: 0, duration: .6 }, 0.55)
-      .to('.subtitle', { opacity: 1, y: 0, duration: .5 }, 0.7)
-
-      // Barra de progreso
-      .to('.progress-label, .progress-track', { opacity: 1, duration: .4 }, 0.85)
-
-      // Divider con efecto wipe
-      .to('.divider', { opacity: 1, scaleX: 1, duration: .5, ease: 'power2.inOut', transformOrigin: 'left center' }, 0.95)
-
-      // Pills en cascada
-      .to('.pill', {
-        opacity: 1, y: 0, scale: 1,
-        duration: .4,
-        ease: 'back.out(1.4)',
-        stagger: 0.07
-      }, 1.0)
-
+      // Card scales up and fades in
+      .to('#main-card', { opacity: 1, y: 0, scale: 1, duration: 1.2 }, 0.2)
+      
+      // Core orb pop
+      .from('.core-orb', { scale: 0, opacity: 0, duration: 1, ease: 'back.out(2)' }, 0.5)
+      .from('.core-orb-glow', { opacity: 0, duration: 1 }, 0.7)
+      
+      // Elements fade up staggered
+      .from('.gs-element', { opacity: 0, y: 20, duration: 0.8, stagger: 0.1 }, 0.8)
+      
       // Footer
-      .to('.footer-strip', { opacity: 1, y: 0, duration: .45 }, 1.1);
-    const audio = document.getElementById('bg-music');
-    const player = document.getElementById('mini-player');
-    const mpTitle = document.getElementById('mp-title');
-    const mpArtist = document.getElementById('mp-artist');
-    const mpPlayBtn = document.getElementById('mp-play');
-    const mpIconPlay = document.getElementById('mp-icon-play');
-    const mpIconPause = document.getElementById('mp-icon-pause');
-    const mpPrev = document.getElementById('mp-prev');
-    const mpNext = document.getElementById('mp-next');
-    const mpProgressTrack = document.getElementById('mp-progress-track');
-    const mpProgressFill = document.getElementById('mp-progress-fill');
-    const mpTimeNow = document.getElementById('mp-time-now');
-    const mpTimeEnd = document.getElementById('mp-time-end');
-
-    const playlist = [
-      { src: 'sounds/Otis McDonald - O.Sky.mp3', title: 'O.Sky', artist: 'Otis McDonald', icon: '☀️', gradient: 'linear-gradient(135deg, #f59e0b, #ef4444)' },
-      { src: 'sounds/THIZZY52 - BLOCKKIDS.mp3', title: 'BLOCKKIDS', artist: 'THIZZY52', icon: '🔥', gradient: 'linear-gradient(135deg, #8b5cf6, #3b82f6)' },
-      { src: "sounds/Oro Fundido - Oblivion's Mighty Trash - SpotubeDL.com.mp3", title: 'Oro Fundido', artist: "Oblivion's Mighty Trash", icon: '✨', gradient: 'linear-gradient(135deg, #fbbf24, #d97706)' },
-      { src: 'sounds/Otis McDonald - CRAZY - Live (SPOTISAVER).mp3', title: 'CRAZY (Live)', artist: 'Otis McDonald', icon: '🎸', gradient: 'linear-gradient(135deg, #ec4899, #8b5cf6)' },
-      { src: 'sounds/Huan62 - Toto Lindo.mp3', title: 'Toto Lindo', artist: 'Huan62', icon: '🌴', gradient: 'linear-gradient(135deg, #10b981, #06b6d4)' },
-    ];
-    let trackIndex = 0;
-    let isPlaying = false;
-
-    function formatTime(sec) {
-      if (!sec || isNaN(sec)) return '0:00';
-      const m = Math.floor(sec / 60);
-      const s = Math.floor(sec % 60);
-      return m + ':' + String(s).padStart(2, '0');
-    }
-
-    function loadTrack(index, autoplay) {
-      const track = playlist[index];
-      audio.src = track.src;
-      mpTitle.textContent = track.title;
-      mpArtist.textContent = track.artist;
-      mpTimeNow.textContent = '0:00';
-      mpTimeEnd.textContent = '0:00';
-      mpProgressFill.style.width = '0%';
-
-      if (autoplay) {
-        audio.play().then(() => setPlaying(true)).catch(() => { });
-      }
-    }
-
-    function setPlaying(playing) {
-      isPlaying = playing;
-      mpIconPlay.style.display = playing ? 'none' : 'block';
-      mpIconPause.style.display = playing ? 'block' : 'none';
-    }
-
-    // Play/Pause
-    mpPlayBtn.addEventListener('click', () => {
-      if (audio.paused) {
-        audio.play().then(() => setPlaying(true)).catch(() => { });
-      } else {
-        audio.pause();
-        setPlaying(false);
-      }
-    });
-
-    // Next
-    mpNext.addEventListener('click', () => {
-      trackIndex = (trackIndex + 1) % playlist.length;
-      loadTrack(trackIndex, true);
-    });
-
-    // Prev
-    mpPrev.addEventListener('click', () => {
-      if (audio.currentTime > 3) {
-        audio.currentTime = 0;
-      } else {
-        trackIndex = (trackIndex - 1 + playlist.length) % playlist.length;
-        loadTrack(trackIndex, true);
-      }
-    });
-
-    // Auto next on end
-    audio.addEventListener('ended', () => {
-      trackIndex = (trackIndex + 1) % playlist.length;
-      loadTrack(trackIndex, true);
-    });
-
-    // Progress bar update
-    audio.addEventListener('timeupdate', () => {
-      if (!audio.duration) return;
-      const pct = (audio.currentTime / audio.duration) * 100;
-      mpProgressFill.style.width = pct + '%';
-      mpTimeNow.textContent = formatTime(audio.currentTime);
-    });
-
-    audio.addEventListener('loadedmetadata', () => {
-      mpTimeEnd.textContent = formatTime(audio.duration);
-    });
-
-    // Click to seek
-    mpProgressTrack.addEventListener('click', (e) => {
-      const rect = mpProgressTrack.getBoundingClientRect();
-      const ratio = (e.clientX - rect.left) / rect.width;
-      if (audio.duration) {
-        audio.currentTime = ratio * audio.duration;
-      }
-    });
-
-    // Init first track
-    loadTrack(0, false);
-
-    // Autoplay attempt with fade-in
-    audio.volume = 0;
-    const playPromise = audio.play();
-    if (playPromise !== undefined) {
-      playPromise.then(() => {
-        setPlaying(true);
-        let vol = 0;
-        const fade = setInterval(() => {
-          vol = Math.min(1, vol + 0.04);
-          audio.volume = vol;
-          if (vol >= 1) clearInterval(fade);
-        }, 80);
-      }).catch(() => {
-        setPlaying(false);
-        document.addEventListener('click', function firstClick() {
-          audio.volume = 0;
-          audio.play().then(() => {
-            setPlaying(true);
-            let vol = 0;
-            const fade = setInterval(() => {
-              vol = Math.min(1, vol + 0.04);
-              audio.volume = vol;
-              if (vol >= 1) clearInterval(fade);
-            }, 80);
-          });
-          document.removeEventListener('click', firstClick);
-        }, { once: true });
-      });
-    }
-
-
-    // GSAP: reveal the mini player
+      .from('.footer-strip', { opacity: 0, y: 20, duration: 0.8 }, 1.2);
+\n\n    // GSAP: reveal the mini player
     gsap.set('#mini-player', { opacity: 0, y: -20 });
     gsap.to('#mini-player', { opacity: 1, y: 0, duration: .6, delay: 1.3, ease: 'power3.out', onComplete: () => player.classList.add('visible') });
 
@@ -1179,8 +955,7 @@
         }
 
         if (cfg.maintType === 'scheduled' && cfg.maintDate) {
-          document.getElementById('visual-center').style.display = 'none';
-          document.getElementById('visual-countdown').style.display = 'flex';
+          document.getElementById('visual-center').style.display = 'none';\n          document.getElementById('visual-progress').style.display = 'none';\n          document.getElementById('visual-countdown').style.display = 'block';
 
           const targetDate = new Date(cfg.maintDate).getTime();
 
@@ -1222,8 +997,7 @@
 
         } else {
           // Mantenimiento indefinido → mostrar globo animado
-          document.getElementById('visual-center').style.display = 'flex';
-          document.getElementById('visual-countdown').style.display = 'none';
+          document.getElementById('visual-center').style.display = 'flex';\n          document.getElementById('visual-progress').style.display = 'block';\n          document.getElementById('visual-countdown').style.display = 'none';
           if (countdownInterval) clearInterval(countdownInterval);
         }
 
