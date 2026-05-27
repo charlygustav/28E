@@ -608,7 +608,7 @@
             <div class="flex flex-col items-center">
                 <div class="relative group mb-3">
                     <div class="absolute inset-0 rounded-full bg-amber-500/30 blur-md group-hover:bg-amber-500/50 transition-colors duration-500 animate-pulse"></div>
-                    <img src="${user.photoURL}" class="w-16 h-16 rounded-full object-cover border-2 border-amber-500/50 relative z-10 shadow-xl" />
+                    <img src="${user.photoURL}" class="w-16 h-16 rounded-full object-cover border-2 border-amber-500/50 relative z-10 shadow-xl" draggable="false" />
                 </div>
                 <div class="text-[9px] text-amber-500/80 font-bold uppercase tracking-[0.2em] mb-1">${_t('vc_session_as')}</div>
                 <div class="text-xl font-extrabold text-white tracking-tight">${user.displayName}</div>
