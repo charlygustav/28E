@@ -61,185 +61,119 @@
     
     
     
-    /* ═══ Orbs & Background ═══ */
-    body {
-      background: #050505;
+    
+    /* ═══ Reset & Body ═══ */
+    body, html {
+      margin: 0; padding: 0; width: 100%; height: 100%;
+      background-color: #030305;
       overflow: hidden;
       font-family: 'Inter', sans-serif;
+      color: #fff;
     }
 
-    /* ═══ Zen Glass Concept ═══ */
-    .zen-background {
+    /* ═══ Canvas Espectáculo ═══ */
+    #particle-canvas {
       position: absolute;
-      top: 0; left: 0; width: 100vw; height: 100dvh;
-      overflow: hidden;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       z-index: 1;
-      pointer-events: none;
+      pointer-events: auto;
     }
 
-    .zen-orb {
+    /* ═══ Contenedor Principal (Ordenado) ═══ */
+    .spectacle-layout {
       position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 70vw; height: 70vw;
-      max-width: 900px; max-height: 900px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(236,72,153,0.15) 0%, rgba(245,158,11,0.05) 100%);
-      filter: blur(120px);
-      animation: zenBreathe 12s ease-in-out infinite alternate;
-    }
-
-    @keyframes zenBreathe {
-      0% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.9); }
-      100% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-    }
-
-    .zen-layout {
-      position: relative;
-      z-index: 2;
-      width: 100vw;
-      height: 100dvh;
+      top: 0; left: 0;
+      width: 100vw; height: 100dvh;
+      z-index: 5;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 1.5rem;
+      pointer-events: none; /* Let clicks pass to canvas */
     }
 
-    .zen-card {
-      background: rgba(15, 15, 18, 0.4);
-      backdrop-filter: blur(40px) saturate(1.2);
-      -webkit-backdrop-filter: blur(40px) saturate(1.2);
-      border: 1px solid rgba(255, 255, 255, 0.04);
-      border-radius: 32px;
-      padding: 4rem 3rem;
-      width: 100%;
-      max-width: 600px;
+    /* ═══ Elementos ═══ */
+    .spectacle-content {
+      pointer-events: auto; /* Re-enable clicks for content */
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      box-shadow: 
-        0 40px 80px -20px rgba(0,0,0,0.5), 
-        inset 0 1px 0 rgba(255,255,255,0.08);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .zen-logo {
-      font-size: 0.85rem;
-      font-weight: 800;
-      letter-spacing: 0.15em;
-      color: var(--muted);
-      margin-bottom: 2.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-transform: uppercase;
-    }
-
-    .zen-dot {
-      width: 6px; height: 6px;
-      background: var(--tulip-400);
+      padding: 2rem;
+      background: radial-gradient(circle, rgba(0,0,0,0.6) 0%, transparent 70%);
       border-radius: 50%;
-      box-shadow: 0 0 12px var(--tulip-400);
-      animation: pulseGlow 2s infinite alternate;
     }
 
-    .zen-title {
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 300;
-      letter-spacing: 0.18em;
-      color: #fff;
-      margin-bottom: 1rem;
-      line-height: 1.2;
+    .sp-logo {
+      font-size: 1rem; font-weight: 900; letter-spacing: 0.2em;
+      color: var(--tulip-400); margin-bottom: 2rem;
       text-transform: uppercase;
+      text-shadow: 0 0 20px var(--tulip-500);
     }
 
-    .zen-subtitle {
+    .sp-title {
+      font-size: clamp(2.5rem, 5vw, 5rem);
+      font-weight: 200; letter-spacing: 0.15em;
+      margin-bottom: 1rem; line-height: 1.1;
+      text-transform: uppercase;
+      background: linear-gradient(to right, #fff, #a1a1aa);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .sp-subtitle {
       font-family: 'Merriweather', serif;
-      font-style: italic;
-      font-size: 0.95rem;
-      color: #a1a1aa;
-      line-height: 1.7;
-      max-width: 400px;
-      margin-bottom: 3.5rem;
-      letter-spacing: 0.03em;
-    }
-
-    /* Concept Line */
-    .zen-concept-line {
-      width: 2px;
-      height: 40px;
-      background: linear-gradient(to bottom, transparent, var(--tulip-500), transparent);
+      font-style: italic; font-size: 1.1rem;
+      color: #d4d4d8; max-width: 500px; line-height: 1.6;
       margin-bottom: 3rem;
-      opacity: 0.5;
-      animation: lineBreathe 3s ease-in-out infinite alternate;
     }
 
-    @keyframes lineBreathe {
-      0% { height: 20px; opacity: 0.2; }
-      100% { height: 50px; opacity: 0.8; }
+    /* Línea de carga animada */
+    .sp-loader {
+      width: 200px; height: 1px;
+      background: rgba(255,255,255,0.1);
+      position: relative; overflow: hidden;
+      margin-bottom: 3rem;
     }
-    @keyframes pulseGlow { 0% { opacity: 0.4; } 100% { opacity: 1; } }
-
-    /* Pill Music Player */
-    .zen-music-container {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
-
-    .mini-player.zen-pill {
-      position: relative;
-      top: 0; right: 0;
-      transform: none !important; /* GSAP will animate parent opacity */
-      width: 100%;
-      max-width: 320px;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 999px;
-      padding: 0.5rem 1.2rem 0.5rem 0.5rem;
-      box-shadow: none;
-      opacity: 1;
-    }
-
-    .zen-pill .mini-player-top {
-      gap: 1rem;
-    }
-
-    .zen-pill .mp-cover {
-      width: 42px; height: 42px;
-      border-radius: 50%;
-    }
-
-    .zen-pill .mp-progress-wrap {
-      display: none; /* Hide progress bar for absolute minimalism */
-    }
-
-    .zen-pill .mp-info {
-      text-align: left;
-    }
-
-    .zen-pill .mp-title { font-size: 0.85rem; }
-    .zen-pill .mp-artist { font-size: 0.65rem; }
-
-    /* Progress Indicators (Minimalist version of status) */
-    .zen-status-dots {
-      display: flex;
-      gap: 1rem;
-      position: absolute;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-    .zen-status-dot {
-      width: 4px; height: 4px; border-radius: 50%;
-      background: #52525b;
-    }
-    .zen-status-dot.active {
+    .sp-loader::after {
+      content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 40%;
       background: var(--tulip-400);
-      box-shadow: 0 0 8px var(--tulip-400);
+      box-shadow: 0 0 10px var(--tulip-500);
+      animation: spLoad 2s ease-in-out infinite alternate;
     }
+    @keyframes spLoad { 0% { left: -40%; } 100% { left: 100%; } }
+
+    /* Pill Music Player Rediseñado */
+    .sp-music-container {
+      width: 100%;
+      display: flex; justify-content: center;
+    }
+    .mini-player.sp-pill {
+      position: relative; top: auto; right: auto;
+      width: auto; min-width: 280px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 999px;
+      padding: 0.5rem 1rem 0.5rem 0.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      transition: border-color 0.3s ease;
+    }
+    .sp-pill:hover { border-color: rgba(255, 255, 255, 0.2); }
+    .sp-pill .mini-player-top { gap: 1rem; }
+    .sp-pill .mp-cover { width: 45px; height: 45px; border-radius: 50%; }
+    .sp-pill .mp-progress-wrap { display: none; }
+    .sp-pill .mp-info { text-align: left; }
+
+    /* Contador Oculto (Si el mantenimiento es programado) */
+    .sp-countdown {
+      display: flex; gap: 2rem; justify-content: center; margin-top: 1rem;
+    }
+    .sp-cd-item { text-align: center; }
+    .sp-cd-num { font-size: 3rem; font-weight: 200; color: #fff; line-height: 1; }
+    .sp-cd-lbl { font-size: 0.7rem; color: var(--tulip-400); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.5rem; display: block; }
 \n\n    /* Footer strip */
     .footer-strip {
       position: fixed;
@@ -524,52 +458,41 @@
   
   
   
-  <!-- Fondo Conceptual -->
-  <div class="zen-background">
-    <div class="zen-orb gs-orb"></div>
-  </div>
+  
+  <!-- El Espectáculo (Canvas Interactivo) -->
+  <canvas id="particle-canvas"></canvas>
 
-  <!-- Contenedor Principal Centrado -->
-  <div class="zen-layout">
-    <div class="zen-card gs-card" id="visual-center">
+  <!-- Contenedor Principal (Orden Absoluto) -->
+  <div class="spectacle-layout">
+    <div class="spectacle-content" id="visual-center">
       
-      <!-- Logo Superior -->
-      <div class="zen-logo gs-item">
-        <div class="zen-dot"></div>
-        28E
-      </div>
+      <!-- Logo -->
+      <div class="sp-logo gs-item">28E</div>
 
-      <!-- Título Principal -->
-      <h1 class="zen-title gs-item">Mantenimiento</h1>
-
-      <!-- Línea conceptual -->
-      <div class="zen-concept-line gs-item"></div>
+      <!-- Título -->
+      <h1 class="sp-title gs-item">Mantenimiento</h1>
 
       <!-- Subtítulo -->
-      <p class="zen-subtitle gs-item" id="maint-subtitle">Estamos puliendo cada detalle para que todo luzca perfecto para ti. Gracias por tu paciencia. 🌸</p>
+      <p class="sp-subtitle gs-item" id="maint-subtitle">Estamos puliendo cada detalle para que todo luzca perfecto para ti. Gracias por tu paciencia. 🌸</p>
 
-      <!-- Reproductor Integrado en Píldora -->
-      <div class="zen-music-container gs-item" id="visual-progress">
-        <!-- El JS inyecta el mini player aquí o lo movemos vía DOM -->
-      </div>
-      
-      <!-- Indicadores flotantes de la tarjeta -->
-      <div class="zen-status-dots gs-item">
-        <div class="zen-status-dot active"></div>
-        <div class="zen-status-dot"></div>
-        <div class="zen-status-dot"></div>
+      <!-- Barra láser central -->
+      <div class="sp-loader gs-item"></div>
+
+      <!-- Reproductor Integrado -->
+      <div class="sp-music-container gs-item" id="visual-progress">
+        <!-- JS inserta el player aquí -->
       </div>
     </div>
 
-    <!-- Contador Oculto (Si el mantenimiento es programado) -->
-    <div class="zen-card gs-card" id="visual-countdown" style="display: none;">
-      <div class="zen-logo"><div class="zen-dot"></div> 28E</div>
-      <h1 class="zen-title">Regresamos en</h1>
-      <div style="display: flex; gap: 1.5rem; justify-content: center; margin-top: 2rem;">
-        <div style="text-align:center"><span id="cd-days" style="font-size:2.5rem;font-weight:300;color:#fff;">00</span><br><span style="font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;">Días</span></div>
-        <div style="text-align:center"><span id="cd-hours" style="font-size:2.5rem;font-weight:300;color:#fff;">00</span><br><span style="font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;">Hrs</span></div>
-        <div style="text-align:center"><span id="cd-mins" style="font-size:2.5rem;font-weight:300;color:#fff;">00</span><br><span style="font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;">Min</span></div>
-        <div style="text-align:center"><span id="cd-secs" style="font-size:2.5rem;font-weight:300;color:var(--tulip-400);">00</span><br><span style="font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;">Seg</span></div>
+    <!-- Contador Oculto -->
+    <div class="spectacle-content" id="visual-countdown" style="display: none;">
+      <div class="sp-logo">28E</div>
+      <h1 class="sp-title">Regresamos</h1>
+      <div class="sp-countdown">
+        <div class="sp-cd-item"><span class="sp-cd-num" id="cd-days">00</span><span class="sp-cd-lbl">Días</span></div>
+        <div class="sp-cd-item"><span class="sp-cd-num" id="cd-hours">00</span><span class="sp-cd-lbl">Hrs</span></div>
+        <div class="sp-cd-item"><span class="sp-cd-num" id="cd-mins">00</span><span class="sp-cd-lbl">Min</span></div>
+        <div class="sp-cd-item"><span class="sp-cd-num" id="cd-secs" style="color:var(--tulip-400);">00</span><span class="sp-cd-lbl">Seg</span></div>
       </div>
     </div>
   </div>
@@ -591,7 +514,7 @@
   <audio id="bg-music" preload="auto"></audio>
 
   <!-- Mini Player -->
-  <div class="mini-player hud-element hud-top-right" id="mini-player" style="position:absolute; top:0; right:0; z-index:20;">
+  <div class="mini-player sp-pill" id="mini-player" style="position:absolute; top:0; right:0; z-index:20;">
     <div class="mini-player-top">
       <!-- Track Info -->
       <div class="mp-info">
@@ -662,20 +585,98 @@
     }
 
     
-    // ── GSAP Zen Timeline ──
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    
+    // ── Espectáculo de Partículas Interactivas (Canvas) ──
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particlesArray;
 
-    tl
-      // 1. El orbe de fondo aparece suavemente
-      .from('.gs-orb', { opacity: 0, scale: 0.8, duration: 3, ease: 'sine.inOut' }, 0)
-      
-      // 2. La tarjeta Zen asciende y se revela
-      .from('.gs-card', { y: 40, opacity: 0, duration: 1.5 }, 0.5)
-      
-      // 3. Elementos internos aparecen en cascada
-      .from('.gs-item', { y: 15, opacity: 0, duration: 1, stagger: 0.15 }, 1.0)
-      
-      // 4. Footer
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let mouse = { x: null, y: null, radius: (canvas.height/80) * (canvas.width/80) };
+
+    window.addEventListener('mousemove', function(event) {
+      mouse.x = event.x; mouse.y = event.y;
+    });
+
+    class Particle {
+      constructor(x, y, directionX, directionY, size, color) {
+        this.x = x; this.y = y;
+        this.directionX = directionX; this.directionY = directionY;
+        this.size = size; this.color = color;
+      }
+      draw() {
+        ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+        ctx.fillStyle = this.color; ctx.fill();
+      }
+      update() {
+        if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
+        if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
+
+        // Interactive mouse collision
+        let dx = mouse.x - this.x; let dy = mouse.y - this.y;
+        let distance = Math.sqrt(dx*dx + dy*dy);
+        if (distance < mouse.radius + this.size){
+          if (mouse.x < this.x && this.x < canvas.width - this.size * 10) this.x += 10;
+          if (mouse.x > this.x && this.x > this.size * 10) this.x -= 10;
+          if (mouse.y < this.y && this.y < canvas.height - this.size * 10) this.y += 10;
+          if (mouse.y > this.y && this.y > this.size * 10) this.y -= 10;
+        }
+        this.x += this.directionX; this.y += this.directionY;
+        this.draw();
+      }
+    }
+
+    function initParticles() {
+      particlesArray = [];
+      let numberOfParticles = (canvas.height * canvas.width) / 9000;
+      for (let i = 0; i < numberOfParticles; i++) {
+        let size = (Math.random() * 2) + 1;
+        let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+        let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+        let directionX = (Math.random() * 1) - 0.5;
+        let directionY = (Math.random() * 1) - 0.5;
+        let color = '#ec4899'; // tulip-500
+        particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+      }
+    }
+
+    function animateParticles() {
+      requestAnimationFrame(animateParticles);
+      ctx.clearRect(0,0,innerWidth, innerHeight);
+      for (let i = 0; i < particlesArray.length; i++) particlesArray[i].update();
+      connectParticles();
+    }
+
+    function connectParticles() {
+      let opacityValue = 1;
+      for (let a = 0; a < particlesArray.length; a++) {
+        for (let b = a; b < particlesArray.length; b++) {
+          let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+          if (distance < (canvas.width/7) * (canvas.height/7)) {
+            opacityValue = 1 - (distance/20000);
+            ctx.strokeStyle = 'rgba(236, 72, 153,' + opacityValue + ')';
+            ctx.lineWidth = 1; ctx.beginPath();
+            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    window.addEventListener('resize', function(){
+      canvas.width = innerWidth; canvas.height = innerHeight;
+      mouse.radius = ((canvas.height/80) * (canvas.height/80));
+      initParticles();
+    });
+
+    initParticles(); animateParticles();
+
+    // ── GSAP Timeline ──
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    tl.from('.gs-item', { y: 30, opacity: 0, duration: 1.2, stagger: 0.2 }, 0.5)
       .from('.footer-strip', { opacity: 0, y: 10, duration: 1 }, 1.5);
 \n\n    // GSAP: reveal the mini player
     gsap.set('#mini-player', { opacity: 0, y: -20 });
