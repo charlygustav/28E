@@ -6,128 +6,128 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-05-25T23:38:10.775Z",
+  "lastUpdated": "2026-05-27T05:24:19.068Z",
   "maintDate": "2026-05-25T19:40",
   "maintMsg": "",
-  "maintType": "scheduled",
+  "maintType": "indefinite",
   "mantenimiento": true,
   "refugeText": "",
   "refugeTitle": "Te escucho, mi amor",
   "songs": [
     {
-      "title": "MAMI 100PRE SABE (INTERLUDE)",
       "artist": "Alvaro Díaz, Nsqk",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779506420904_Alvaro_D_az_-_MAMI_100PRE_SABE__INTERLUDE_.mp3"
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779506420904_Alvaro_D_az_-_MAMI_100PRE_SABE__INTERLUDE_.mp3",
+      "title": "MAMI 100PRE SABE (INTERLUDE)"
     },
     {
-      "title": "LLAMADAS_PERDIDAS / Sesion Mundial #1",
       "artist": "Rodezel, Joi, Ashley Verdugo, Lala, Neomai",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779434759286_LLAMADAS_PERDIDAS_Sesion_Mundial__1_-_Rodezel__Joi__Ashley_Verdugo__Lala__Neomai.flac"
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779434759286_LLAMADAS_PERDIDAS_Sesion_Mundial__1_-_Rodezel__Joi__Ashley_Verdugo__Lala__Neomai.flac",
+      "title": "LLAMADAS_PERDIDAS / Sesion Mundial #1"
     },
     {
-      "title": "Young Black & Rich",
       "artist": "Melly Mike",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779426578999_Young_Black___Rich_-_Melly_Mike.flac"
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779426578999_Young_Black___Rich_-_Melly_Mike.flac",
+      "title": "Young Black & Rich"
     },
     {
-      "title": "Ramooned",
       "artist": "Eric Pressley",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779268921400_Ramooned_-_Eric_Pressley.flac"
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779268921400_Ramooned_-_Eric_Pressley.flac",
+      "title": "Ramooned"
     },
     {
-      "title": "fuëgo",
       "artist": "BNYX®, Bizarrap, Yeat, Peso Pluma",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942588655_fu_go__feat._Bizarrap__Yeat__Peso_Pluma__-_BNYX___Bizarrap__Yeat__Peso_Pluma.mp3"
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942588655_fu_go__feat._Bizarrap__Yeat__Peso_Pluma__-_BNYX___Bizarrap__Yeat__Peso_Pluma.mp3",
+      "title": "fuëgo"
     },
     {
-      "title": "worry - Slowed",
       "artist": "LONOWN, riserayss",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942600398_worry_-_Slowed_-_LONOWN__riserayss.mp3"
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942600398_worry_-_Slowed_-_LONOWN__riserayss.mp3",
+      "title": "worry - Slowed"
     },
     {
-      "title": "Bon Bon",
       "artist": "Fcukers",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942990131_Bon_Bon_-_Fcukers.mp3"
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942990131_Bon_Bon_-_Fcukers.mp3",
+      "title": "Bon Bon"
     },
     {
-      "title": "MALASNOTICIAS.",
       "artist": "Alvaro Diaz, LATIN MAFIA",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942999880_MALASNOTICIAS_-_Alvaro_Diaz__LATIN_MAFIA.mp3"
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942999880_MALASNOTICIAS_-_Alvaro_Diaz__LATIN_MAFIA.mp3",
+      "title": "MALASNOTICIAS."
     },
     {
-      "title": "Bing Bong",
       "artist": "Yailin la Mas Viral, Puyalo Pantera",
-      "src": "radio/Bing Bong - Yailin la Mas Viral - SpotubeDL.com.mp3"
+      "src": "radio/Bing Bong - Yailin la Mas Viral - SpotubeDL.com.mp3",
+      "title": "Bing Bong"
     },
     {
-      "title": "Brazilera - Remix",
       "artist": "Chimbala, Fetti031, Chucky73",
-      "src": "radio/Brazilera - Remix - Chimbala - SpotubeDL.com.mp3"
+      "src": "radio/Brazilera - Remix - Chimbala - SpotubeDL.com.mp3",
+      "title": "Brazilera - Remix"
     },
     {
-      "title": "Como Panas",
       "artist": "Bryant Myers",
-      "src": "radio/Como Panas - Bryant Myers - SpotubeDL.com.mp3"
+      "src": "radio/Como Panas - Bryant Myers - SpotubeDL.com.mp3",
+      "title": "Como Panas"
     },
     {
-      "title": "Delincuente",
       "artist": "Tokischa",
-      "src": "radio/Delincuente - Tokischa - SpotubeDL.com.mp3"
+      "src": "radio/Delincuente - Tokischa - SpotubeDL.com.mp3",
+      "title": "Delincuente"
     },
     {
-      "title": "God is a woman",
       "artist": "Ariana Grande",
-      "src": "radio/God is a woman - Ariana Grande - SpotubeDL.com.mp3"
+      "src": "radio/God is a woman - Ariana Grande - SpotubeDL.com.mp3",
+      "title": "God is a woman"
     },
     {
-      "title": "God's Plan",
       "artist": "Drake",
-      "src": "radio/God's Plan - Drake - SpotubeDL.com.mp3"
+      "src": "radio/God's Plan - Drake - SpotubeDL.com.mp3",
+      "title": "God's Plan"
     },
     {
-      "title": "I Like It",
       "artist": "Cardi B, Bad Bunny, J Balvin",
-      "src": "radio/I Like It - Cardi B - SpotubeDL.com.mp3"
+      "src": "radio/I Like It - Cardi B - SpotubeDL.com.mp3",
+      "title": "I Like It"
     },
     {
-      "title": "Inolvidable",
       "artist": "Ovy On The Drums, Beéle",
-      "src": "radio/Inolvidable - Ovy On The Drums - SpotubeDL.com.mp3"
+      "src": "radio/Inolvidable - Ovy On The Drums - SpotubeDL.com.mp3",
+      "title": "Inolvidable"
     },
     {
-      "title": "Oscar Winning Tears.",
       "artist": "RAYE",
-      "src": "radio/Oscar Winning Tears. - RAYE - SpotubeDL.com.mp3"
+      "src": "radio/Oscar Winning Tears. - RAYE - SpotubeDL.com.mp3",
+      "title": "Oscar Winning Tears."
     },
     {
-      "title": "Pasao De Famarcia",
       "artist": "Lil Naay",
-      "src": "radio/Pasao De Famarcia - Lil Naay - SpotubeDL.com.mp3"
+      "src": "radio/Pasao De Famarcia - Lil Naay - SpotubeDL.com.mp3",
+      "title": "Pasao De Famarcia"
     },
     {
-      "title": "Thootie",
       "artist": "Ice Spice, Tokischa",
-      "src": "radio/Thootie (feat. Tokischa) - Ice Spice - SpotubeDL.com.mp3"
+      "src": "radio/Thootie (feat. Tokischa) - Ice Spice - SpotubeDL.com.mp3",
+      "title": "Thootie"
     },
     {
-      "title": "Toto Lindo",
       "artist": "Huan62, Tokischa",
-      "src": "radio/Toto Lindo - Huan62 - SpotubeDL.com.mp3"
+      "src": "radio/Toto Lindo - Huan62 - SpotubeDL.com.mp3",
+      "title": "Toto Lindo"
     },
     {
-      "title": "Oro Fundido",
       "artist": "Oblivion's Mighty Trash, Nimaca",
-      "src": "sounds/Oro Fundido - Oblivion's Mighty Trash - SpotubeDL.com.mp3"
+      "src": "sounds/Oro Fundido - Oblivion's Mighty Trash - SpotubeDL.com.mp3",
+      "title": "Oro Fundido"
     },
     {
-      "title": "CRAZY (Live)",
       "artist": "Otis McDonald",
-      "src": "sounds/Otis McDonald - CRAZY - Live (SPOTISAVER).mp3"
+      "src": "sounds/Otis McDonald - CRAZY - Live (SPOTISAVER).mp3",
+      "title": "CRAZY (Live)"
     },
     {
-      "title": "O.Sky",
       "artist": "Otis McDonald",
-      "src": "sounds/Otis McDonald - O.Sky.mp3"
+      "src": "sounds/Otis McDonald - O.Sky.mp3",
+      "title": "O.Sky"
     }
   ],
   "spotlightTips": {
