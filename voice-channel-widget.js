@@ -649,13 +649,67 @@
     _tplHistory() {
       const h = window.yaireVcHistoryData || [];
       if (!window.yaireCurrentUser || !h.length) return '';
-      const rows = h.slice(0,5).map(s => {
+      const rows = h.slice(0,3).map(s => {
         const d = new Date(s.date);
         const label = d.toLocaleDateString('es',{month:'short',day:'numeric'}) + ' ' + d.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
         const m = Math.floor(s.duration/60), sec = s.duration%60;
         return `<div class="flex justify-between text-[10px] py-1"><span class="text-white/70 font-medium">${s.name}</span><span class="text-white/30">${label} · ${m}m${sec}s</span></div>`;
       }).join('');
-      return `<div class="relative z-10 px-5 pb-4 pt-2 bg-zinc-900/30 backdrop-blur-md border-t border-white/5"><div class="text-[9px] text-white/30 font-bold uppercase tracking-[0.15em] mb-1.5">${_t('hist_title')}</div>${rows}</div>`;
+      const moreBtn = h.length > 3 ? `<button id="vc-btn-ver-mas" class="w-full mt-2 text-[9px] text-amber-500/80 hover:text-amber-400 font-bold uppercase tracking-wider py-1 border border-white/5 rounded-md bg-white/5 hover:bg-white/10 transition-colors">Ver más</button>` : '';
+      return `<div class="relative z-10 px-5 pb-4 pt-2 bg-zinc-900/30 backdrop-blur-md border-t border-white/5"><div class="text-[9px] text-white/30 font-bold uppercase tracking-[0.15em] mb-1.5">${_t('hist_title')}</div>${rows}${moreBtn}</div>`;
+    }
+
+    _showDetailedHistory() {
+      if (document.getElementById('vc-detailed-history')) return;
+      const h = window.yaireVcHistoryData || [];
+      const rows = h.map(s => {
+        const d = new Date(s.date);
+        const label = d.toLocaleDateString('es',{weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) + ' a las ' + d.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+        const m = Math.floor(s.duration/60), sec = s.duration%60;
+        return `
+          <div class="flex justify-between items-center p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors">
+            <div>
+              <div class="text-white font-bold text-sm mb-1">${s.name}</div>
+              <div class="text-white/40 text-[11px] capitalize">${label}</div>
+            </div>
+            <div class="text-amber-400 font-medium text-xs bg-amber-400/10 px-3 py-1.5 rounded-lg border border-amber-400/20">
+              ${m}m ${sec}s
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const modal = document.createElement('div');
+      modal.id = 'vc-detailed-history';
+      modal.className = 'fixed inset-0 z-[100000] flex items-center justify-center p-4 opacity-0 transition-opacity duration-300';
+      modal.innerHTML = `
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="vc-det-bg"></div>
+        <div class="relative w-full max-w-lg max-h-[80vh] flex flex-col bg-zinc-950/90 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden scale-95 transition-transform duration-300" id="vc-det-card">
+          <div class="flex items-center justify-between p-6 border-b border-white/5 bg-white/5">
+            <h2 class="text-white font-extrabold text-xl tracking-tight">Historial de Sesiones</h2>
+            <button class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white/50 hover:bg-white/20 hover:text-white transition-colors" id="vc-det-close">✕</button>
+          </div>
+          <div class="flex-1 overflow-y-auto p-6 flex flex-col gap-3 vc-scroll">
+            ${rows}
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+
+      // Animate in
+      requestAnimationFrame(() => {
+        modal.classList.remove('opacity-0');
+        modal.querySelector('#vc-det-card').classList.remove('scale-95');
+      });
+
+      const closeFunc = () => {
+        modal.classList.add('opacity-0');
+        modal.querySelector('#vc-det-card').classList.add('scale-95');
+        setTimeout(() => modal.remove(), 300);
+      };
+
+      modal.querySelector('#vc-det-close').addEventListener('click', closeFunc);
+      modal.querySelector('#vc-det-bg').addEventListener('click', closeFunc);
     }
 
     _tplConnected() {
@@ -874,6 +928,9 @@
     }
 
     _bindPanelEvents() {
+      const btnVerMas = document.getElementById('vc-btn-ver-mas');
+      if (btnVerMas) btnVerMas.addEventListener('click', () => this._showDetailedHistory());
+
       const xBtn = document.getElementById('vc-close');
       if (xBtn) xBtn.addEventListener('click', () => this._toggle());
 

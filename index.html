@@ -18027,7 +18027,7 @@
             // Optimistic update for instant UI response
             if (!window.yaireVcHistoryData) window.yaireVcHistoryData = [];
             window.yaireVcHistoryData.unshift(sessionData);
-            window.yaireVcHistoryData = window.yaireVcHistoryData.slice(0, 5);
+            window.yaireVcHistoryData = window.yaireVcHistoryData.slice(0, 50);
             
             try {
                 const historyRef = ref(db, `users/${currentUser.uid}/vc_history`);
