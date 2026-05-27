@@ -553,7 +553,6 @@
                   ${_t('vc_login_google')}
               </button>
             </div>
-            ${this._tplHistory()}
           </div>`;
       }
 
@@ -593,7 +592,7 @@
             </div>
             <div class="text-red-400 text-xs text-center mt-1.5 h-[16px] font-medium" id="vc-err">${err}</div>
           </div>
-          ${this._tplHistory()}
+          <div id="vc-history-container"><div class="text-[9px] text-white/30 font-bold uppercase tracking-[0.15em] text-center animate-pulse px-5 pb-4 pt-2">${_t('hist_title')}...</div></div>
         </div>`;
     }
 
@@ -647,10 +646,9 @@
         </div>`;
     }
 
-    _tplHistory() {
-      const h = JSON.parse(localStorage.getItem('28e_vc_history') || '[]');
-      if (!h.length) return '';
-      const rows = h.slice(0,2).map(s => {
+    _tplHistory(h = []) {
+      if (!window.yaireCurrentUser || !h.length) return '';
+      const rows = h.slice(0,5).map(s => {
         const d = new Date(s.date);
         const label = d.toLocaleDateString('es',{month:'short',day:'numeric'}) + ' ' + d.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
         const m = Math.floor(s.duration/60), sec = s.duration%60;
@@ -875,6 +873,17 @@
     }
 
     _bindPanelEvents() {
+      const historyContainer = document.getElementById('vc-history-container');
+      if (historyContainer && window.yaireCurrentUser && window.yaireVcHistoryGet) {
+          window.yaireVcHistoryGet().then(history => {
+             if (history && history.length) {
+                 historyContainer.outerHTML = this._tplHistory(history);
+             } else {
+                 historyContainer.outerHTML = '';
+             }
+          }).catch(() => { historyContainer.outerHTML = ''; });
+      }
+
       const xBtn = document.getElementById('vc-close');
       if (xBtn) xBtn.addEventListener('click', () => this._toggle());
 
@@ -2350,10 +2359,9 @@
       this._timerInt = null;
       if (this._callStart) {
         const dur = Math.floor((Date.now() - this._callStart) / 1000);
-        const h = JSON.parse(localStorage.getItem('28e_vc_history') || '[]');
-        h.unshift({ date: new Date().toISOString(), duration: dur, name: this.myName });
-        h.splice(10);
-        localStorage.setItem('28e_vc_history', JSON.stringify(h));
+        if (window.yaireVcHistoryAdd) {
+            window.yaireVcHistoryAdd({ date: new Date().toISOString(), duration: dur, name: this.myName });
+        }
         this._callStart = null;
       }
       this.fab.title = 'Canal de Voz';

@@ -18010,6 +18010,32 @@
         updatePresence();
         window.yaireUpdatePresence = (sec) => { currentSection = sec; updatePresence(); };
 
+        // --- VC HISTORY WRAPPERS ---
+        window.yaireVcHistoryGet = async () => {
+            if (!currentUser) return [];
+            try {
+                const snap = await get(ref(db, `users/${currentUser.uid}/vc_history`));
+                return snap.exists() ? snap.val() : [];
+            } catch (e) {
+                console.error("Error fetching VC history:", e);
+                return [];
+            }
+        };
+        
+        window.yaireVcHistoryAdd = async (sessionData) => {
+            if (!currentUser) return;
+            try {
+                const historyRef = ref(db, `users/${currentUser.uid}/vc_history`);
+                const snap = await get(historyRef);
+                let history = snap.exists() ? snap.val() : [];
+                history.unshift(sessionData);
+                history = history.slice(0, 5); // Max 5 items
+                await set(historyRef, history);
+            } catch (e) {
+                console.error("Error saving VC history:", e);
+            }
+        };
+
         // --- AUTH ---
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
