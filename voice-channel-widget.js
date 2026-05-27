@@ -468,6 +468,7 @@
         if (this.panel.contains(e.target) || this.fab.contains(e.target)) return;
         if (_panelMousedown) return;
         if (window.getSelection && window.getSelection().toString()) return;
+        if (document.getElementById('vc-detailed-history')) return;
         this._toggle();
       });
 
