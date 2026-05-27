@@ -276,7 +276,7 @@
       text-transform: uppercase;
       letter-spacing: 0.1em;
     }
-\n\n    /* Footer strip */
+    /* Footer strip */
     .footer-strip {
       position: fixed;
       bottom: 0;
@@ -559,14 +559,15 @@
 
   
   <!-- Nuevo Layout principal Glassmorphism -->
+  <!-- Logo Superior Flotante -->
+  <div style="position: absolute; top: 2rem; left: 3rem; font-size: 1.5rem; font-family: 'Inter', sans-serif; font-weight: 800; letter-spacing: -0.05em; color: #fff; display: flex; align-items: center; gap: 0.8rem; z-index: 10;">
+    <div style="width: 8px; height: 8px; background: var(--tulip-500); border-radius: 50%; box-shadow: 0 0 15px var(--tulip-500);"></div>
+    28E
+  </div>
+
   <div class="glass-layout" id="main-layout">
     <div class="glass-card" id="main-card">
       
-      <!-- Logo Superior -->
-      <div style="font-size: 0.9rem; font-weight: 800; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 2.5rem; display: flex; align-items: center; gap: 0.6rem; text-transform: uppercase;">
-        <div style="width: 6px; height: 6px; background: var(--tulip-400); border-radius: 50%; box-shadow: 0 0 12px var(--tulip-400); animation: pulseGlow 2s infinite alternate;"></div>
-        28E
-      </div>
       <!-- Orbe brillante interno interactivo -->
       <div id="visual-center" class="core-orb-container gs-element">
         <div class="core-orb" id="core-orb"></div>
