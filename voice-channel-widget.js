@@ -1993,15 +1993,21 @@
     }
 
     async _fetchMusicTitle(url, type) {
+      const cleanTitle = (t) => {
+        if (!t) return t;
+        let c = t.replace(/\s*[\[\(](official.*|audio|video|music video|lyric.*|visualizer|hd)[\]\)]/gi, '');
+        c = c.replace(/\s*[-|]\s*Spotify/gi, '');
+        return c.trim();
+      };
       try {
         if (type === 'youtube') {
           const res = await fetch(`https://noembed.com/embed?url=${encodeURIComponent(url)}`);
           const data = await res.json();
-          return data.title || 'YouTube Video';
+          return cleanTitle(data.title) || 'YouTube Video';
         } else if (type === 'spotify') {
           const res = await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`);
           const data = await res.json();
-          return data.title || 'Spotify Track';
+          return cleanTitle(data.title) || 'Spotify Track';
         }
       } catch(e) { return type === 'youtube' ? 'YouTube Video' : 'Spotify Track'; }
     }
