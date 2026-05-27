@@ -846,10 +846,10 @@
       renderer.setPixelRatio(window.devicePixelRatio);
       renderer.setClearColor(new THREE.Color(0x000000));
 
-      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, -1);
+      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -1, 1);
 
       const uniforms = {
-        resolution: { value: [window.innerWidth, window.innerHeight] },
+        resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
         time: { value: 0.0 },
         xScale: { value: 1.0 },
         yScale: { value: 0.5 },
@@ -883,7 +883,7 @@
         const width = window.innerWidth;
         const height = window.innerHeight;
         renderer.setSize(width, height, false);
-        uniforms.resolution.value = [width, height];
+        uniforms.resolution.value.set(width, height);
       };
       
       handleResize();
