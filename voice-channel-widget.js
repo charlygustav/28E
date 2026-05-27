@@ -538,18 +538,18 @@
               <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
             </div>
             
-            <div class="relative z-10 p-8 text-center flex-1 flex flex-col justify-center items-center">
-              <div class="relative mb-6">
+            <div class="relative z-10 p-6 text-center flex-1 flex flex-col justify-center items-center">
+              <div class="relative mb-4">
                 <div class="absolute inset-0 bg-amber-500/20 blur-xl rounded-full"></div>
-                <div class="w-16 h-16 rounded-2xl bg-zinc-900/80 border border-amber-500/30 text-amber-500 flex items-center justify-center relative z-10 shadow-2xl backdrop-blur-md">
-                   <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                <div class="w-14 h-14 rounded-2xl bg-zinc-900/80 border border-amber-500/30 text-amber-500 flex items-center justify-center relative z-10 shadow-2xl backdrop-blur-md">
+                   <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                 </div>
               </div>
-              <h3 class="text-white font-extrabold text-xl mb-2 tracking-tight">${_t('vc_restricted')}</h3>
-              <p class="text-white/40 text-xs mb-8 leading-relaxed max-w-[250px] mx-auto">${_t('vc_req_login')}</p>
+              <h3 class="text-white font-extrabold text-lg mb-1.5 tracking-tight">${_t('vc_restricted')}</h3>
+              <p class="text-white/40 text-xs mb-5 leading-relaxed max-w-[250px] mx-auto">${_t('vc_req_login')}</p>
               
-              <button id="vc-google-login-btn" class="w-full flex items-center justify-center gap-3 bg-white/5 border border-white/10 text-white font-bold py-3.5 px-4 rounded-xl hover:bg-white/10 hover:border-white/20 transition-all shadow-xl backdrop-blur-md group">
-                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5 group-hover:scale-110 transition-transform" />
+              <button id="vc-google-login-btn" class="w-full flex items-center justify-center gap-3 bg-white/5 border border-white/10 text-white font-bold py-3 px-4 rounded-xl hover:bg-white/10 hover:border-white/20 transition-all shadow-xl backdrop-blur-md group">
+                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-4 h-4 group-hover:scale-110 transition-transform" />
                   ${_t('vc_login_google')}
               </button>
             </div>
@@ -572,13 +572,13 @@
           </div>
           
           <div class="relative z-10 p-6 flex-1 flex flex-col justify-center">
-            <div class="flex flex-col items-center mb-6">
-                <div class="relative group mb-3">
+            <div class="flex flex-col items-center mb-4">
+                <div class="relative group mb-2">
                     <div class="absolute inset-0 rounded-full bg-amber-500/30 blur-md group-hover:bg-amber-500/50 transition-colors duration-500 animate-pulse"></div>
-                    <img src="${user.photoURL}" class="w-20 h-20 rounded-full object-cover border-2 border-amber-500/50 relative z-10 shadow-xl" />
+                    <img src="${user.photoURL}" class="w-16 h-16 rounded-full object-cover border-2 border-amber-500/50 relative z-10 shadow-xl" />
                 </div>
-                <div class="text-[9px] text-amber-500/80 font-bold uppercase tracking-[0.2em] mb-1">${_t('vc_session_as')}</div>
-                <div class="text-xl font-extrabold text-white tracking-tight">${user.displayName}</div>
+                <div class="text-[9px] text-amber-500/80 font-bold uppercase tracking-[0.2em] mb-0.5">${_t('vc_session_as')}</div>
+                <div class="text-lg font-extrabold text-white tracking-tight">${user.displayName}</div>
             </div>
             
             <input id="vc-name" type="hidden" value="${user.displayName}"/>
@@ -586,12 +586,12 @@
             
             <div class="relative">
                 <div class="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-500 blur opacity-40 rounded-xl"></div>
-                <button id="vc-join" class="relative w-full py-3.5 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-extrabold text-sm rounded-xl overflow-hidden group shadow-2xl transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
+                <button id="vc-join" class="relative w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-extrabold text-sm rounded-xl overflow-hidden group shadow-2xl transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
                   <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
                   <span class="relative z-10 flex items-center justify-center gap-2">${_t('btn_join')}</span>
                 </button>
             </div>
-            <div class="text-red-400 text-xs text-center mt-3 h-[16px] font-medium" id="vc-err">${err}</div>
+            <div class="text-red-400 text-xs text-center mt-2 h-[16px] font-medium" id="vc-err">${err}</div>
           </div>
           ${this._tplHistory()}
         </div>`;
@@ -656,7 +656,7 @@
         const m = Math.floor(s.duration/60), sec = s.duration%60;
         return `<div class="flex justify-between text-[11px] py-1.5"><span class="text-white/70 font-medium">${s.name}</span><span class="text-white/30">${label} · ${m}m${sec}s</span></div>`;
       }).join('');
-      return `<div class="relative z-10 px-6 pb-6 pt-4 bg-zinc-900/30 backdrop-blur-md border-t border-white/5"><div class="text-[9px] text-white/30 font-bold uppercase tracking-[0.15em] mb-2">${_t('hist_title')}</div>${rows}</div>`;
+      return `<div class="relative z-10 px-5 pb-5 pt-3 bg-zinc-900/30 backdrop-blur-md border-t border-white/5"><div class="text-[9px] text-white/30 font-bold uppercase tracking-[0.15em] mb-1.5">${_t('hist_title')}</div>${rows}</div>`;
     }
 
     _tplConnected() {
