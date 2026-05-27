@@ -59,122 +59,224 @@
     }
 
     
-    
-    
-    
-    /* ═══ Reset & Body ═══ */
-    body, html {
-      margin: 0; padding: 0; width: 100%; height: 100%;
-      background-color: #030305;
-      overflow: hidden;
-      font-family: 'Inter', sans-serif;
-      color: #fff;
-    }
+    /* ═══ Orbs ═══ */
+    .bg-orb { position: fixed; border-radius: 50%; filter: blur(130px); pointer-events: none; z-index: 0; animation: orbDrift 16s ease-in-out infinite alternate; }
+    .orb-pink { width: 55vw; height: 55vw; max-width: 700px; max-height: 700px; background: radial-gradient(circle, rgba(236, 72, 153, .15) 0%, transparent 70%); top: -15vh; left: -8vw; }
+    .orb-amber { width: 40vw; height: 40vw; max-width: 520px; max-height: 520px; background: radial-gradient(circle, rgba(245, 158, 11, .12) 0%, transparent 70%); bottom: -10vh; right: -5vw; animation-delay: -8s; }
+    .orb-indigo { width: 30vw; height: 30vw; max-width: 400px; max-height: 400px; background: radial-gradient(circle, rgba(99, 102, 241, .1) 0%, transparent 70%); top: 40%; left: 45%; animation-delay: -4s; }
 
-    /* ═══ Canvas Espectáculo ═══ */
-    #particle-canvas {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+    @keyframes orbDrift { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, -20px) scale(1.1); } }
+
+    /* ═══ Glassmorphism Layout ═══ */
+    .glass-layout {
+      position: relative;
       z-index: 1;
-      pointer-events: auto;
-    }
-
-    /* ═══ Contenedor Principal (Ordenado) ═══ */
-    .spectacle-layout {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100vw; height: 100dvh;
-      z-index: 5;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      pointer-events: none; /* Let clicks pass to canvas */
+      width: 100vw;
+      height: 100dvh;
+      padding: 1.5rem;
     }
 
-    /* ═══ Elementos ═══ */
-    .spectacle-content {
-      pointer-events: auto; /* Re-enable clicks for content */
+    .glass-card {
+      background: rgba(18, 18, 20, 0.4);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 2rem;
+      padding: 4rem 3rem;
+      width: 100%;
+      max-width: 680px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+      text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      text-align: center;
-      padding: 2rem;
-      background: radial-gradient(circle, rgba(0,0,0,0.6) 0%, transparent 70%);
+      opacity: 0; /* For GSAP */
+      transform: translateY(30px) scale(0.95); /* For GSAP */
+    }
+
+    /* Core Orb */
+    .core-orb-container {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .core-orb {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #fff, var(--tulip-400), #831843);
+      box-shadow: 0 0 40px rgba(236,72,153,0.6), inset -10px -10px 20px rgba(0,0,0,0.5);
+      animation: corePulse 4s ease-in-out infinite;
+      z-index: 2;
+    }
+    
+    .core-orb-glow {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: var(--amber-500);
+      filter: blur(30px);
+      opacity: 0.3;
+      animation: coreGlow 4s ease-in-out infinite alternate;
+      z-index: 1;
+    }
+
+    @keyframes corePulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(236,72,153,0.4), inset -10px -10px 20px rgba(0,0,0,0.5); }
+      50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(236,72,153,0.8), inset -10px -10px 20px rgba(0,0,0,0.5); }
+    }
+    @keyframes coreGlow {
+      0% { opacity: 0.2; transform: scale(0.9); }
+      100% { opacity: 0.5; transform: scale(1.1); }
+    }
+
+    .main-title {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-family: 'Merriweather', serif;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 30%, var(--tulip-400) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 480px;
+      line-height: 1.6;
+      margin-bottom: 3rem;
+    }
+
+    /* Neon Progress */
+    .neon-progress-container {
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 3rem;
+    }
+    .progress-label-center {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+    .neon-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+    .neon-fill {
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 30%;
+      background: linear-gradient(90deg, var(--tulip-500), var(--amber-400));
+      border-radius: 4px;
+      box-shadow: 0 0 10px var(--amber-400);
+      animation: neonSlide 2s ease-in-out infinite alternate;
+    }
+    @keyframes neonSlide {
+      0% { width: 20%; }
+      100% { width: 80%; }
+    }
+    @keyframes dotBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    /* Status Pills */
+    .status-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+    }
+    .status-pill {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 100px;
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #a1a1aa;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s;
+    }
+    .status-pill:hover {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+    .dot {
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
     }
+    .dot.ok { background: #10b981; box-shadow: 0 0 8px #10b981; animation: dotBlink 3s infinite; }
+    .dot.wrn { background: var(--amber-500); box-shadow: 0 0 8px var(--amber-500); animation: dotBlink 1.5s infinite; }
 
-    .sp-logo {
-      font-size: 1rem; font-weight: 900; letter-spacing: 0.2em;
-      color: var(--tulip-400); margin-bottom: 2rem;
-      text-transform: uppercase;
-      text-shadow: 0 0 20px var(--tulip-500);
+    /* Countdown Center */
+    .countdown-wrap-center {
+      margin-bottom: 3rem;
     }
-
-    .sp-title {
-      font-size: clamp(2.5rem, 5vw, 5rem);
-      font-weight: 200; letter-spacing: 0.15em;
-      margin-bottom: 1rem; line-height: 1.1;
+    .countdown-title-center {
+      font-size: 0.75rem;
+      font-weight: 800;
       text-transform: uppercase;
-      background: linear-gradient(to right, #fff, #a1a1aa);
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .countdown-grid-center {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+    .cd-box-glass {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 1rem;
+      padding: 1rem 1.2rem;
+      min-width: 80px;
+    }
+    .cd-num {
+      font-size: 2.5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff, var(--tulip-400));
       -webkit-background-clip: text;
       background-clip: text;
-      color: transparent;
+      -webkit-text-fill-color: transparent;
+      display: block;
+      line-height: 1;
+      margin-bottom: 0.25rem;
     }
-
-    .sp-subtitle {
-      font-family: 'Merriweather', serif;
-      font-style: italic; font-size: 1.1rem;
-      color: #d4d4d8; max-width: 500px; line-height: 1.6;
-      margin-bottom: 3rem;
+    .cd-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
     }
-
-    /* Línea de carga animada */
-    .sp-loader {
-      width: 200px; height: 1px;
-      background: rgba(255,255,255,0.1);
-      position: relative; overflow: hidden;
-      margin-bottom: 3rem;
-    }
-    .sp-loader::after {
-      content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 40%;
-      background: var(--tulip-400);
-      box-shadow: 0 0 10px var(--tulip-500);
-      animation: spLoad 2s ease-in-out infinite alternate;
-    }
-    @keyframes spLoad { 0% { left: -40%; } 100% { left: 100%; } }
-
-    /* Pill Music Player Rediseñado */
-    .sp-music-container {
-      width: 100%;
-      display: flex; justify-content: center;
-    }
-    .mini-player.sp-pill {
-      position: relative; top: auto; right: auto;
-      width: auto; min-width: 280px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 999px;
-      padding: 0.5rem 1rem 0.5rem 0.5rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      transition: border-color 0.3s ease;
-    }
-    .sp-pill:hover { border-color: rgba(255, 255, 255, 0.2); }
-    .sp-pill .mini-player-top { gap: 1rem; }
-    .sp-pill .mp-cover { width: 45px; height: 45px; border-radius: 50%; }
-    .sp-pill .mp-progress-wrap { display: none; }
-    .sp-pill .mp-info { text-align: left; }
-
-    /* Contador Oculto (Si el mantenimiento es programado) */
-    .sp-countdown {
-      display: flex; gap: 2rem; justify-content: center; margin-top: 1rem;
-    }
-    .sp-cd-item { text-align: center; }
-    .sp-cd-num { font-size: 3rem; font-weight: 200; color: #fff; line-height: 1; }
-    .sp-cd-lbl { font-size: 0.7rem; color: var(--tulip-400); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.5rem; display: block; }
-    /* Footer strip */
+\n\n    /* Footer strip */
     .footer-strip {
       position: fixed;
       bottom: 0;
@@ -456,47 +558,58 @@
 
 
   
-  
-  
-  
-  <!-- El Espectáculo (Canvas Interactivo) -->
-  <canvas id="particle-canvas"></canvas>
-
-  <!-- Contenedor Principal (Orden Absoluto) -->
-  <div class="spectacle-layout">
-    <div class="spectacle-content" id="visual-center">
+  <!-- Nuevo Layout principal Glassmorphism -->
+  <div class="glass-layout" id="main-layout">
+    <div class="glass-card" id="main-card">
       
-      <!-- Logo -->
-      <div class="sp-logo gs-item">28E</div>
+      <!-- Orbe brillante interno interactivo -->
+      <div id="visual-center" class="core-orb-container gs-element">
+        <div class="core-orb" id="core-orb"></div>
+        <div class="core-orb-glow"></div>
+      </div>
 
       <!-- Título -->
-      <h1 class="sp-title gs-item">Mantenimiento</h1>
-
+      <h1 class="main-title gs-element">Puliendo Detalles</h1>
+      
       <!-- Subtítulo -->
-      <p class="sp-subtitle gs-item" id="maint-subtitle">Estamos puliendo cada detalle para que todo luzca perfecto para ti. Gracias por tu paciencia. 🌸</p>
+      <p class="subtitle gs-element" id="maint-subtitle">
+        Estamos preparando una experiencia visual increíble para <em>ti</em>.&nbsp;
+        Vuelve pronto. 🌸
+      </p>
 
-      <!-- Barra láser central -->
-      <div class="sp-loader gs-item"></div>
-
-      <!-- Reproductor Integrado -->
-      <div class="sp-music-container gs-item" id="visual-progress">
-        <!-- JS inserta el player aquí -->
+      <!-- Progreso y Línea de neón -->
+      <div class="neon-progress-container gs-element" id="visual-progress">
+        <div class="progress-label-center">
+          <span>Optimizando sistemas...</span>
+          <span id="pct" style="color: var(--tulip-400); animation: dotBlink 1.4s infinite;">En proceso</span>
+        </div>
+        <div class="neon-track">
+          <div class="neon-fill"></div>
+        </div>
       </div>
-    </div>
 
-    <!-- Contador Oculto -->
-    <div class="spectacle-content" id="visual-countdown" style="display: none;">
-      <div class="sp-logo">28E</div>
-      <h1 class="sp-title">Regresamos</h1>
-      <div class="sp-countdown">
-        <div class="sp-cd-item"><span class="sp-cd-num" id="cd-days">00</span><span class="sp-cd-lbl">Días</span></div>
-        <div class="sp-cd-item"><span class="sp-cd-num" id="cd-hours">00</span><span class="sp-cd-lbl">Hrs</span></div>
-        <div class="sp-cd-item"><span class="sp-cd-num" id="cd-mins">00</span><span class="sp-cd-lbl">Min</span></div>
-        <div class="sp-cd-item"><span class="sp-cd-num" id="cd-secs" style="color:var(--tulip-400);">00</span><span class="sp-cd-lbl">Seg</span></div>
+      <!-- Countdown (oculto por defecto) -->
+      <div id="visual-countdown" class="countdown-wrap-center gs-element" style="display: none;">
+        <h2 class="countdown-title-center">Regresamos en:</h2>
+        <div class="countdown-grid-center">
+          <div class="cd-box-glass"><span class="cd-num" id="cd-days">00</span><span class="cd-label">Días</span></div>
+          <div class="cd-box-glass"><span class="cd-num" id="cd-hours">00</span><span class="cd-label">Horas</span></div>
+          <div class="cd-box-glass"><span class="cd-num" id="cd-mins">00</span><span class="cd-label">Mins</span></div>
+          <div class="cd-box-glass"><span class="cd-num" id="cd-secs">00</span><span class="cd-label">Segs</span></div>
+        </div>
       </div>
+
+      <!-- Status Pills -->
+      <div class="status-pills gs-element">
+        <div class="status-pill gs-pill"><span class="dot ok"></span>Servidor</div>
+        <div class="status-pill gs-pill"><span class="dot wrn"></span>Despliegue</div>
+        <div class="status-pill gs-pill"><span class="dot ok"></span>Datos</div>
+        <div class="status-pill gs-pill"><span class="dot ok"></span>Seguridad</div>
+      </div>
+
     </div>
   </div>
-  <!-- Footer strip -->
+\n\n  <!-- Footer strip -->
   <footer class="footer-strip">
     <span>&copy; <span id="yr"></span> Charles Gustav. Todos los derechos reservados.</span>
     <div style="display: flex; align-items: center; gap: 1rem;">
@@ -514,7 +627,7 @@
   <audio id="bg-music" preload="auto"></audio>
 
   <!-- Mini Player -->
-  <div class="mini-player sp-pill" id="mini-player" style="position:absolute; top:0; right:0; z-index:20;">
+  <div class="mini-player" id="mini-player">
     <div class="mini-player-top">
       <!-- Track Info -->
       <div class="mp-info">
@@ -563,121 +676,24 @@
 
 
     
-    
-    // ── Partículas Estelares (Stardust) ──
-    const starContainer = document.getElementById('stardust-container');
-    for(let i=0; i<40; i++){
-      let star = document.createElement('div');
-      star.className = 'stardust';
-      star.style.left = Math.random() * 100 + 'vw';
-      star.style.top = Math.random() * 100 + 'vh';
-      starContainer.appendChild(star);
+    // ── GSAP Premium Entrance Timeline ──
+    const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+
+    tl
+      // Card scales up and fades in
+      .to('#main-card', { opacity: 1, y: 0, scale: 1, duration: 1.2 }, 0.2)
       
-      gsap.to(star, {
-        y: '-=100',
-        opacity: Math.random() * 0.5 + 0.1,
-        duration: Math.random() * 5 + 5,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        delay: Math.random() * 5
-      });
-    }
+      // Core orb pop
+      .from('.core-orb', { scale: 0, opacity: 0, duration: 1, ease: 'back.out(2)' }, 0.5)
+      .from('.core-orb-glow', { opacity: 0, duration: 1 }, 0.7)
+      
+      // Elements fade up staggered
+      .from('.gs-element', { opacity: 0, y: 20, duration: 0.8, stagger: 0.1 }, 0.8)
+      
+      // Footer
+      .from('.footer-strip', { opacity: 0, y: 20, duration: 0.8 }, 1.2);
 
-    
-    
-    // ── Espectáculo de Partículas Interactivas (Canvas) ──
-    const canvas = document.getElementById('particle-canvas');
-    const ctx = canvas.getContext('2d');
-    let particlesArray;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    let mouse = { x: null, y: null, radius: (canvas.height/80) * (canvas.width/80) };
-
-    window.addEventListener('mousemove', function(event) {
-      mouse.x = event.x; mouse.y = event.y;
-    });
-
-    class Particle {
-      constructor(x, y, directionX, directionY, size, color) {
-        this.x = x; this.y = y;
-        this.directionX = directionX; this.directionY = directionY;
-        this.size = size; this.color = color;
-      }
-      draw() {
-        ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-        ctx.fillStyle = this.color; ctx.fill();
-      }
-      update() {
-        if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
-        if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
-
-        // Interactive mouse collision
-        let dx = mouse.x - this.x; let dy = mouse.y - this.y;
-        let distance = Math.sqrt(dx*dx + dy*dy);
-        if (distance < mouse.radius + this.size){
-          if (mouse.x < this.x && this.x < canvas.width - this.size * 10) this.x += 10;
-          if (mouse.x > this.x && this.x > this.size * 10) this.x -= 10;
-          if (mouse.y < this.y && this.y < canvas.height - this.size * 10) this.y += 10;
-          if (mouse.y > this.y && this.y > this.size * 10) this.y -= 10;
-        }
-        this.x += this.directionX; this.y += this.directionY;
-        this.draw();
-      }
-    }
-
-    function initParticles() {
-      particlesArray = [];
-      let numberOfParticles = (canvas.height * canvas.width) / 9000;
-      for (let i = 0; i < numberOfParticles; i++) {
-        let size = (Math.random() * 2) + 1;
-        let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
-        let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
-        let directionX = (Math.random() * 1) - 0.5;
-        let directionY = (Math.random() * 1) - 0.5;
-        let color = '#ec4899'; // tulip-500
-        particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
-      }
-    }
-
-    function animateParticles() {
-      requestAnimationFrame(animateParticles);
-      ctx.clearRect(0,0,innerWidth, innerHeight);
-      for (let i = 0; i < particlesArray.length; i++) particlesArray[i].update();
-      connectParticles();
-    }
-
-    function connectParticles() {
-      let opacityValue = 1;
-      for (let a = 0; a < particlesArray.length; a++) {
-        for (let b = a; b < particlesArray.length; b++) {
-          let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
-          if (distance < (canvas.width/7) * (canvas.height/7)) {
-            opacityValue = 1 - (distance/20000);
-            ctx.strokeStyle = 'rgba(236, 72, 153,' + opacityValue + ')';
-            ctx.lineWidth = 1; ctx.beginPath();
-            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-            ctx.stroke();
-          }
-        }
-      }
-    }
-
-    window.addEventListener('resize', function(){
-      canvas.width = innerWidth; canvas.height = innerHeight;
-      mouse.radius = ((canvas.height/80) * (canvas.height/80));
-      initParticles();
-    });
-
-    initParticles(); animateParticles();
-
-    // ── GSAP Timeline ──
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-    tl.from('.gs-item', { y: 30, opacity: 0, duration: 1.2, stagger: 0.2 }, 0.5)
-      .from('.footer-strip', { opacity: 0, y: 10, duration: 1 }, 1.5);
     // GSAP: reveal the mini player
     gsap.set('#mini-player', { opacity: 0, y: -20 });
     gsap.to('#mini-player', { opacity: 1, y: 0, duration: .6, delay: 1.3, ease: 'power3.out', onComplete: () => player.classList.add('visible') });
