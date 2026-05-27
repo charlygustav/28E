@@ -197,14 +197,14 @@ io.on('connection', (socket) => {
         if (r && r.videos.length > 0) {
           trackUrl = r.videos[0].url;
           trackType = 'youtube';
-          trackTitle = r.videos[0].title + ' (Spotify)';
+          trackTitle = r.videos[0].title;
         }
       } catch (e) {
         console.error('yt-search error:', e);
       }
     }
 
-    const track = { id: Date.now().toString(36) + Math.random().toString(36).slice(2,5), url: trackUrl, title: trackTitle, type: trackType, addedBy: socket.id, addedByName: user.displayName };
+    const track = { id: Date.now().toString(36) + Math.random().toString(36).slice(2,5), url: trackUrl, title: trackTitle, type: trackType, source: type, addedBy: socket.id, addedByName: user.displayName };
     musicQueue.push(track);
     io.to(CHANNEL).emit('music_queue_update', { queue: musicQueue, state: musicState });
     if (musicState.currentIndex === -1) {

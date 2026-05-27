@@ -1848,7 +1848,7 @@
                 }
                 <div class="text-xs text-white/40 truncate">${track.addedByName ? `${_t('vc_music_by')} ${track.addedByName}` : ''}</div>
               </div>
-              <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-white/50">${track.type === 'youtube' ? 'YT' : 'SP'}</span>
+              <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-white/50">${(track.source || track.type) === 'youtube' ? 'YT' : 'SP'}</span>
             </div>
             
             ${track.type === 'youtube' ? `
@@ -1888,7 +1888,7 @@
                 <div class="text-xs font-medium text-white truncate ${isCur ? 'text-amber-500' : ''}">${this._escHtml(this._cleanMusicTitle(t.title))}</div>
                 <div class="text-[10px] text-white/30 truncate">${t.addedByName || ''}</div>
               </div>
-              <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-white/30">${t.type === 'youtube' ? 'YT' : 'SP'}</span>
+              <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-white/30">${(t.source || t.type) === 'youtube' ? 'YT' : 'SP'}</span>
               ${!isCur ? `<button class="w-6 h-6 flex items-center justify-center text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded transition-colors [&>svg]:w-3 [&>svg]:h-3" data-track-id="${t.id}">${ICONS.trash}</button>` : ''}
             </div>`;
           }).join('')
