@@ -673,8 +673,8 @@
           <button class="flex-1 py-1.5 text-xs font-medium rounded-md transition-all relative ${isChat ? 'bg-zinc-800 text-white shadow-md' : 'text-white/40 hover:text-white/80'}" id="vc-tab-chat">
              Chat ${this._chatUnread > 0 ? `<span class="absolute top-0 right-2 w-2 h-2 bg-red-500 rounded-full"></span>` : ''}
           </button>
-          <button class="flex-1 py-1.5 text-xs font-medium rounded-md transition-all relative ${isMusic ? 'bg-zinc-800 text-white shadow-md' : 'text-white/40 hover:text-white/80'}" id="vc-tab-music">
-             Música ${this._musicPlaying ? `<div class="absolute top-[4px] right-2 flex items-end gap-[1px] h-2.5 vc-music-ind">
+          <button class="flex-1 py-1.5 text-xs font-medium rounded-md transition-all flex items-center justify-center gap-1.5 ${isMusic ? 'bg-zinc-800 text-white shadow-md' : 'text-white/40 hover:text-white/80'}" id="vc-tab-music">
+             Música ${this._musicPlaying ? `<div class="flex items-end gap-[1px] h-2.5 vc-music-ind">
                <div class="w-[2px] bg-amber-500 animate-[vc-eq_0.8s_ease-in-out_infinite]"></div>
                <div class="w-[2px] bg-amber-500 animate-[vc-eq_0.8s_ease-in-out_infinite_0.2s]"></div>
                <div class="w-[2px] bg-amber-500 animate-[vc-eq_0.8s_ease-in-out_infinite_0.4s]"></div>
@@ -1811,7 +1811,7 @@
       let ind = tab.querySelector('.vc-music-ind');
       if (this._musicPlaying) {
         if (!ind) {
-          tab.insertAdjacentHTML('beforeend', `<div class="absolute top-[4px] right-2 flex items-end gap-[1px] h-2.5 vc-music-ind">
+          tab.insertAdjacentHTML('beforeend', `<div class="flex items-end gap-[1px] h-2.5 vc-music-ind">
              <div class="w-[2px] bg-amber-500 animate-[vc-eq_0.8s_ease-in-out_infinite]"></div>
              <div class="w-[2px] bg-amber-500 animate-[vc-eq_0.8s_ease-in-out_infinite_0.2s]"></div>
              <div class="w-[2px] bg-amber-500 animate-[vc-eq_0.8s_ease-in-out_infinite_0.4s]"></div>
