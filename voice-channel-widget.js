@@ -514,6 +514,7 @@
         }
         this._playSfx('flyin', 0.4, false, 'fly');
       } else {
+        if (this._loginPollInt) { clearInterval(this._loginPollInt); this._loginPollInt = null; }
         this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
         this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
         if (this.connected) {
@@ -926,21 +927,26 @@
     }
 
     _render(tpl) {
+      if (this._loginPollInt) { clearInterval(this._loginPollInt); this._loginPollInt = null; }
       this.panel.innerHTML = tpl;
       this._bindPanelEvents();
       
       if (document.getElementById('vc-join')) {
-        fetch(SIGNALING_URL + '/health').then(r => r.json()).then(data => {
-          const cnt = document.getElementById('vc-conn-count');
-          if (cnt) {
-            if (data.users === 0) {
-              cnt.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-white/20 inline-block mr-1.5"></span><span class="text-white/30">Nadie en el canal por ahora</span>`;
-            } else {
-              cnt.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block mr-1.5 animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.6)]"></span><span class="text-amber-500/90">${data.users} ${data.users === 1 ? 'persona conectada' : 'personas conectadas'}</span>`;
+        const updateConnCount = () => {
+          fetch(SIGNALING_URL + '/health').then(r => r.json()).then(data => {
+            const cnt = document.getElementById('vc-conn-count');
+            if (cnt) {
+              if (data.users === 0) {
+                cnt.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-white/20 inline-block mr-1.5"></span><span class="text-white/30">Nadie en el canal por ahora</span>`;
+              } else {
+                cnt.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block mr-1.5 animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.6)]"></span><span class="text-amber-500/90">${data.users} ${data.users === 1 ? 'persona conectada' : 'personas conectadas'}</span>`;
+              }
+              cnt.classList.remove('opacity-0');
             }
-            cnt.classList.remove('opacity-0');
-          }
-        }).catch(()=>{});
+          }).catch(()=>{});
+        };
+        updateConnCount();
+        this._loginPollInt = setInterval(updateConnCount, 5000);
       }
     }
 
