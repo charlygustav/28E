@@ -490,8 +490,16 @@
       this.panel.addEventListener('click', (e) => e.stopPropagation());
 
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && this.panel.classList.contains('scale-100')) {
-          this._toggle();
+        if (e.key === 'Escape') {
+          const detHist = document.getElementById('vc-detailed-history');
+          if (detHist) {
+            const btn = document.getElementById('vc-det-close');
+            if (btn) btn.click();
+            return;
+          }
+          if (this.panel.classList.contains('scale-100')) {
+            this._toggle();
+          }
         }
       });
 
