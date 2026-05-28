@@ -149,12 +149,7 @@
                                         window.location.replace(targetPage);
                                     }
                                 } else {
-                                    if (!sessionStorage.getItem('yaire_config_reloaded')) {
-                                        sessionStorage.setItem('yaire_config_reloaded', '1');
-                                        window.location.reload(); // Recargar la página si cambió cualquier otra cosa
-                                    } else {
-                                        console.warn("Previniendo bucle de recarga infinito por config de Firebase.");
-                                    }
+                                    window.location.reload(); // Recargar la página si cambió cualquier otra cosa
                                 }
                                 return;
                             } else if (!oldStr) {
