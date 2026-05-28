@@ -811,6 +811,8 @@
   </style>
   <!-- GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <!-- jsmediatags -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
 </head>
 
 <body>
@@ -962,6 +964,11 @@
   <div class="mini-player" id="mini-player">
 
     <div class="mini-player-top">
+      <!-- Cover -->
+      <div id="mp-cover" style="width: 32px; height: 32px; border-radius: 6px; overflow: hidden; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+        <img id="mp-cover-img" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+        <svg id="mp-cover-fallback" style="width: 16px; height: 16px; fill: #71717a;" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+      </div>
       <!-- Info -->
       <div class="mp-info">
         <div class="mp-title-wrap">
@@ -1096,6 +1103,9 @@
       }
     }
 
+    const mpCoverImg = document.getElementById('mp-cover-img');
+    const mpCoverFallback = document.getElementById('mp-cover-fallback');
+
     function loadTrack(index, autoplay) {
       const track = playlist[index];
       audio.src = track.src;
@@ -1103,6 +1113,30 @@
       mpArtist.textContent = track.artist;
       
       checkMarquee();
+
+      mpCoverImg.style.display = 'none';
+      mpCoverFallback.style.display = 'block';
+
+      if (window.jsmediatags) {
+        window.jsmediatags.read(track.src, {
+          onSuccess: function(tag) {
+            const image = tag.tags.picture;
+            if (image) {
+              let base64String = "";
+              for (let i = 0; i < image.data.length; i++) {
+                  base64String += String.fromCharCode(image.data[i]);
+              }
+              const base64 = "data:" + image.format + ";base64," + window.btoa(base64String);
+              mpCoverImg.src = base64;
+              mpCoverImg.style.display = 'block';
+              mpCoverFallback.style.display = 'none';
+            }
+          },
+          onError: function(error) {
+            console.log('No ID3 cover found or error:', error.type);
+          }
+        });
+      }
 
       if (autoplay) {
         audio.play().then(() => setPlaying(true)).catch(() => { });
