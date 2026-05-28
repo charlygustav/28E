@@ -333,7 +333,30 @@
 
         if (cfg.maintType === 'indefinite') {
             document.querySelector('.countdown').style.display = 'none';
-            document.querySelector('.title').innerHTML = 'Volvemos pronto<br><span style="font-size: 1.2rem; font-weight: 400; opacity: 0.8">Estamos preparando algo especial...</span>';
+            
+            const phrases = [
+                "Estamos preparando algo especial...",
+                "Afinando los últimos detalles...",
+                "Puliendo cada pequeño rincón...",
+                "Asegurando que todo sea perfecto...",
+                "Haciendo un poco de magia..."
+            ];
+            let phraseIndex = 0;
+            
+            document.querySelector('.title').innerHTML = `Volvemos pronto<br><span id="maint-phrase" style="font-size: 1.2rem; font-weight: 400; opacity: 0.8; transition: opacity 0.5s ease; display: inline-block; min-height: 1.8rem; margin-top: 8px;">${phrases[0]}</span>`;
+            
+            setInterval(() => {
+                const phraseEl = document.getElementById('maint-phrase');
+                if (phraseEl) {
+                    phraseEl.style.opacity = '0';
+                    setTimeout(() => {
+                        phraseIndex = (phraseIndex + 1) % phrases.length;
+                        phraseEl.textContent = phrases[phraseIndex];
+                        phraseEl.style.opacity = '0.8';
+                    }, 500);
+                }
+            }, 3500);
+
             document.getElementById('progress-fill').style.width = '100%';
             if (countdownInterval) {
                 clearInterval(countdownInterval);
