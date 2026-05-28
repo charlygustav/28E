@@ -1118,7 +1118,7 @@
       mpCoverFallback.style.display = 'block';
 
       if (window.jsmediatags && track && track.src) {
-        fetch(track.src)
+        fetch(track.src, { headers: { range: 'bytes=0-512000' } })
           .then(res => res.blob())
           .then(blob => {
             window.jsmediatags.read(blob, {
