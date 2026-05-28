@@ -127,7 +127,7 @@
     .col-left {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
       padding: 3rem 3.5rem;
       border-right: 1px solid var(--border);
       animation: fadeSlideL .9s cubic-bezier(.22, 1, .36, 1) both;
@@ -282,35 +282,82 @@
     }
 
     .status-card {
-      background: rgba(255, 255, 255, .03);
-      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, .04);
+      backdrop-filter: blur(24px) saturate(1.4);
+      -webkit-backdrop-filter: blur(24px) saturate(1.4);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, .3), inset 0 1px 0 rgba(255, 255, 255, .06);
       border-radius: 1rem;
       padding: 1rem 1.1rem;
-      transition: background .2s;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .status-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(circle at top right, rgba(255,255,255,0.03), transparent 70%);
+      pointer-events: none;
     }
 
     .status-card:hover {
-      background: rgba(255, 255, 255, .06);
+      background: rgba(30, 30, 36, 0.7);
+      border-color: rgba(255, 255, 255, 0.15);
     }
 
-    .status-card-icon {
-      font-size: 1.3rem;
-      margin-bottom: .45rem;
+    .status-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.8rem;
     }
 
     .status-card-label {
-      font-size: .6rem;
+      font-size: 0.55rem;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: .12em;
+      letter-spacing: 0.15em;
       color: var(--muted);
-      margin-bottom: .15rem;
     }
 
+    .status-led {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 8px rgba(74, 222, 128, 0.8);
+      animation: pulseLed 2s infinite;
+    }
+    .status-led.wrn {
+      background: #f59e0b;
+      box-shadow: 0 0 8px rgba(245, 158, 11, 0.8);
+      animation: pulseLedWrn 1.5s infinite;
+    }
+
+    @keyframes pulseLed { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    @keyframes pulseLedWrn { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.2); } }
+
     .status-card-val {
-      font-size: .9rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 1.1rem;
       font-weight: 700;
-      color: var(--text);
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 0.3rem;
+    }
+
+    .status-card-meta {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
     }
 
     .ok {
@@ -436,6 +483,11 @@
       background: linear-gradient(90deg, var(--tulip-500), var(--amber-400), var(--tulip-400));
       background-size: 200% 100%;
       animation: indeterminateBar 2s cubic-bezier(0.4, 0, 0.2, 1) infinite, shimmerFill 2.6s linear infinite;
+    }
+
+    .progress-fill.determinate {
+      animation: shimmerFill 2.6s linear infinite;
+      transition: width 1s linear;
     }
 
     @keyframes indeterminateBar {
@@ -565,22 +617,26 @@
       }
     }
 
-    /* ── Mini Player ── */
+    /* ── Mini Player Rediseñado ── */
     .mini-player {
       position: fixed;
       top: 1.5rem;
       right: 1.5rem;
       z-index: 60;
-      width: 310px;
+      width: 260px; /* Reducido de 310px a 260px */
       background: rgba(255, 255, 255, .04);
       border: 1px solid rgba(255, 255, 255, .07);
-      border-radius: 1rem;
+      border-radius: 1.2rem; /* Más redondeado */
       backdrop-filter: blur(24px) saturate(1.4);
+      -webkit-backdrop-filter: blur(24px) saturate(1.4);
       box-shadow: 0 8px 32px rgba(0, 0, 0, .3), inset 0 1px 0 rgba(255, 255, 255, .06);
-      padding: .85rem 1rem;
+      padding: .6rem .8rem;
       opacity: 0;
       transform: translateY(20px);
       transition: opacity .4s ease, transform .4s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
 
     .mini-player.visible {
@@ -591,62 +647,46 @@
     .mini-player-top {
       display: flex;
       align-items: center;
-      gap: .75rem;
-    }
-
-    .mp-cover {
-      width: 40px;
-      height: 40px;
-      border-radius: .6rem;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, .35);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .mp-cover-bg {
-      position: absolute;
-      inset: 0;
-      transition: opacity .4s ease;
-    }
-
-    .mp-cover-icon {
-      position: relative;
-      z-index: 1;
-      filter: drop-shadow(0 1px 4px rgba(0, 0, 0, .6));
-    }
-
-    .mp-cover.spinning .mp-cover-icon {
-      animation: coverSpin 4s linear infinite;
-    }
-
-    @keyframes coverSpin {
-      from {
-        transform: rotate(0deg);
-      }
-
-      to {
-        transform: rotate(360deg);
-      }
+      justify-content: space-between;
+      gap: 0.5rem;
     }
 
     .mp-info {
       flex: 1;
       min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
+    /* Marquesina inteligente */
+    .mp-title-wrap {
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+    }
+    
     .mp-title {
       font-size: .8rem;
       font-weight: 700;
       color: #f4f4f5;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      line-height: 1.3;
+      display: inline-block;
+    }
+    
+    .mp-title.scroll {
+      animation: marquee 8s linear infinite;
+    }
+    
+    @keyframes marquee {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .mp-artist-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
     }
 
     .mp-artist {
@@ -658,16 +698,49 @@
       text-overflow: ellipsis;
     }
 
-    .mp-controls {
+    /* Controles Secundarios (Loop, Mute) */
+    .mp-controls-sec {
       display: flex;
       align-items: center;
-      gap: .15rem;
-      flex-shrink: 0;
+      gap: 0.2rem;
+    }
+
+    .mp-ctrl-s {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: transparent;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .mp-ctrl-s:hover {
+      background: rgba(255,255,255,0.08);
+    }
+    .mp-ctrl-s svg {
+      width: 14px;
+      height: 14px;
+      fill: #a1a1aa;
+      transition: fill 0.2s;
+    }
+    .mp-ctrl-s.active svg, .mp-ctrl-s:hover svg {
+      fill: var(--tulip-400);
+    }
+
+    /* Controles Principales */
+    .mp-controls-main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.6rem;
     }
 
     .mp-ctrl {
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
       border: none;
       background: transparent;
@@ -675,20 +748,20 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: background .2s, transform .15s;
+      transition: background .2s, transform .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     .mp-ctrl:hover {
-      background: rgba(255, 255, 255, .08);
+      background: rgba(255, 255, 255, .05);
     }
 
     .mp-ctrl:active {
-      transform: scale(0.9);
+      transform: scale(0.85);
     }
 
     .mp-ctrl svg {
-      width: 14px;
-      height: 14px;
+      width: 12px;
+      height: 12px;
       fill: #a1a1aa;
       transition: fill .2s;
     }
@@ -698,66 +771,33 @@
     }
 
     .mp-ctrl-play {
-      width: 38px;
-      height: 38px;
-      background: var(--tulip-500);
+      width: 34px;
+      height: 34px;
+      background: #fff;
       border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      position: relative;
+      transition: background .2s, transform .2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow .2s;
     }
 
     .mp-ctrl-play:hover {
-      background: var(--tulip-400);
+      background: #f4f4f5;
+      transform: scale(1.08);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+    }
+
+    .mp-ctrl-play:active {
+      transform: scale(0.92);
     }
 
     .mp-ctrl-play svg {
-      fill: #fff;
-      width: 16px;
-      height: 16px;
+      fill: #18181b;
+      width: 14px;
+      height: 14px;
     }
 
     .mp-ctrl-play:hover svg {
-      fill: #fff;
-    }
-
-    /* Progress bar */
-    .mp-progress-wrap {
-      margin-top: .55rem;
-      display: flex;
-      align-items: center;
-      gap: .55rem;
-    }
-
-    .mp-time {
-      font-size: .55rem;
-      font-weight: 600;
-      color: #52525b;
-      min-width: 28px;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .mp-time-end {
-      text-align: right;
-    }
-
-    .mp-progress-track {
-      flex: 1;
-      height: 4px;
-      background: rgba(255, 255, 255, .08);
-      border-radius: 999px;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .mp-progress-track:hover {
-      height: 6px;
-    }
-
-    .mp-progress-fill {
-      height: 100%;
-      width: 0%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, var(--tulip-500), var(--amber-400));
-      transition: width .15s linear;
+      fill: #18181b;
     }
 
     @media (max-width: 768px) {
@@ -794,7 +834,7 @@
 
       <!-- Centro visual (Reemplazo del contador) -->
       <div id="visual-center"
-        style="display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; margin: 3rem 0;">
+        style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: auto; margin-bottom: 3rem;">
         <div
           style="font-size: clamp(4rem, 8vw, 6.5rem); filter: drop-shadow(0 0 20px rgba(236,72,153,0.4)); animation: floatIcon 4s ease-in-out infinite;">
           🔮</div>
@@ -805,7 +845,7 @@
 
       <!-- Contador (Cuenta regresiva) -->
       <div id="visual-countdown"
-        style="display: none; flex-direction: column; justify-content: center; flex: 1; margin: 3rem 0;"
+        style="display: none; flex-direction: column; justify-content: center; margin-top: auto; margin-bottom: 3rem;"
         class="countdown-wrap">
         <h2 class="countdown-title">Mantenimiento Programado Hasta:</h2>
         <div class="countdown-grid">
@@ -816,27 +856,43 @@
         </div>
       </div>
 
-      <!-- Estado de sistemas -->
-      <div class="status-grid">
+      <!-- Estado de sistemas (NOC Panel) -->
+      <div class="status-grid" style="margin-bottom: auto;">
+        <!-- EDGE NODE -->
         <div class="status-card">
-          <div class="status-card-icon">🖥️</div>
-          <div class="status-card-label">Servidor</div>
-          <div class="status-card-val ok">Operativo</div>
+          <div class="status-card-header">
+            <div class="status-card-label">EDGE NODE</div>
+            <div class="status-led" id="led-server"></div>
+          </div>
+          <div class="status-card-val" id="val-server">PINGING...</div>
+          <div class="status-card-meta" id="meta-server"><span style="color:var(--muted)">●</span> Routing via CDN</div>
         </div>
+        <!-- DATABASE -->
         <div class="status-card">
-          <div class="status-card-icon">🔄</div>
-          <div class="status-card-label">Despliegue</div>
-          <div class="status-card-val wrn">En proceso</div>
+          <div class="status-card-header">
+            <div class="status-card-label">DATABASE</div>
+            <div class="status-led wrn" id="led-db"></div>
+          </div>
+          <div class="status-card-val" id="val-db">CONNECTING...</div>
+          <div class="status-card-meta" id="meta-db"><span style="color:var(--muted)">●</span> RTDB Check</div>
         </div>
+        <!-- DEPLOYMENT -->
         <div class="status-card">
-          <div class="status-card-icon">🗃️</div>
-          <div class="status-card-label">Base de datos</div>
-          <div class="status-card-val ok">Estable</div>
+          <div class="status-card-header">
+            <div class="status-card-label">DEPLOYMENT</div>
+            <div class="status-led" id="led-deploy"></div>
+          </div>
+          <div class="status-card-val" id="val-deploy">PRODUCTION</div>
+          <div class="status-card-meta" id="meta-deploy"><span style="color:var(--muted)">●</span> Vercel Network</div>
         </div>
+        <!-- SECURITY -->
         <div class="status-card">
-          <div class="status-card-icon">🛡️</div>
-          <div class="status-card-label">Seguridad</div>
-          <div class="status-card-val ok">Activa</div>
+          <div class="status-card-header">
+            <div class="status-card-label">SECURITY</div>
+            <div class="status-led" id="led-sec"></div>
+          </div>
+          <div class="status-card-val" id="val-sec">VERIFYING...</div>
+          <div class="status-card-meta" id="meta-sec"><span style="color:var(--muted)">●</span> Certificates</div>
         </div>
       </div>
     </div>
@@ -851,7 +907,7 @@
       </div>
 
       <!-- Título -->
-      <h1>Volvemos<br>muy pronto</h1>
+      <h1 id="dynamic-title" style="transition: opacity 0.5s ease; min-height: 2.4em;">Volvemos<br>muy pronto</h1>
 
       <!-- Subtítulo -->
       <p class="subtitle" id="maint-subtitle">
@@ -862,23 +918,23 @@
 
       <!-- Progreso -->
       <div class="progress-label">
-        <span>Optimizando sistemas de Yaire...</span>
+        <span>Preparando sorpresas para ti...</span>
         <span id="pct" style="color: var(--tulip-400); animation: dotBlink 1.4s ease-in-out infinite;">En proceso</span>
       </div>
       <div class="progress-track">
-        <div class="progress-fill"></div>
+        <div class="progress-fill" id="progress-fill"></div>
       </div>
 
       <hr class="divider">
 
       <!-- Pills -->
       <div class="pills">
-        <div class="pill">🔧 Actualizando dependencias</div>
-        <div class="pill">⚡ Optimizando velocidad</div>
-        <div class="pill">🎨 Nuevas sorpresas</div>
-        <div class="pill">💾 Respaldando datos</div>
-        <div class="pill">🔒 Mejorando seguridad</div>
-        <div class="pill">🌸 Añadiendo detalles</div>
+        <div class="pill">✨ Preparando sorpresas</div>
+        <div class="pill">💖 Añadiendo cariño</div>
+        <div class="pill">🎨 Pintando recuerdos</div>
+        <div class="pill">💌 Guardando nuestra historia</div>
+        <div class="pill">🔒 Protegiendo nuestro rincón</div>
+        <div class="pill">🌸 Perfeccionando detalles</div>
       </div>
 
 
@@ -902,43 +958,43 @@
   <!-- Audio de fondo -->
   <audio id="bg-music" preload="auto"></audio>
 
-  <!-- Mini Player -->
+  <!-- Mini Player Rediseñado -->
   <div class="mini-player" id="mini-player">
+
     <div class="mini-player-top">
-      <!-- Track Info -->
+      <!-- Info -->
       <div class="mp-info">
-        <div class="mp-title" id="mp-title">O.Sky</div>
-        <div class="mp-artist" id="mp-artist">Otis McDonald</div>
+        <div class="mp-title-wrap">
+          <div class="mp-title" id="mp-title">O.Sky</div>
+        </div>
+        <div class="mp-artist-wrap">
+          <div class="mp-artist" id="mp-artist">Otis McDonald</div>
+        </div>
       </div>
-      <!-- Controls -->
-      <div class="mp-controls">
-        <button class="mp-ctrl" id="mp-prev" aria-label="Anterior">
-          <svg viewBox="0 0 24 24">
-            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
-          </svg>
+      <!-- Controles Secundarios -->
+      <div class="mp-controls-sec">
+        <button class="mp-ctrl-s" id="mp-loop" aria-label="Repetir">
+          <svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
         </button>
-        <button class="mp-ctrl mp-ctrl-play" id="mp-play" aria-label="Play">
-          <svg id="mp-icon-play" viewBox="0 0 24 24">
-            <path d="M8 5v14l11-7z" />
-          </svg>
-          <svg id="mp-icon-pause" viewBox="0 0 24 24" style="display:none">
-            <path d="M6 19h4V5H6zm8-14v14h4V5z" />
-          </svg>
-        </button>
-        <button class="mp-ctrl" id="mp-next" aria-label="Siguiente">
-          <svg viewBox="0 0 24 24">
-            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6z" />
-          </svg>
+        <button class="mp-ctrl-s" id="mp-mute" aria-label="Volumen">
+          <svg id="icon-vol-on" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+          <svg id="icon-vol-off" style="display:none" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
         </button>
       </div>
     </div>
-    <!-- Progress -->
-    <div class="mp-progress-wrap">
-      <span class="mp-time" id="mp-time-now">0:00</span>
-      <div class="mp-progress-track" id="mp-progress-track">
-        <div class="mp-progress-fill" id="mp-progress-fill"></div>
-      </div>
-      <span class="mp-time mp-time-end" id="mp-time-end">0:00</span>
+    
+    <!-- Controles Principales -->
+    <div class="mp-controls-main">
+      <button class="mp-ctrl" id="mp-prev" aria-label="Anterior">
+        <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" /></svg>
+      </button>
+      <button class="mp-ctrl mp-ctrl-play" id="mp-play" aria-label="Play">
+        <svg id="mp-icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+        <svg id="mp-icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6zm8-14v14h4V5z" /></svg>
+      </button>
+      <button class="mp-ctrl" id="mp-next" aria-label="Siguiente">
+        <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6z" /></svg>
+      </button>
     </div>
   </div>
 
@@ -1011,12 +1067,11 @@
     const mpIconPause = document.getElementById('mp-icon-pause');
     const mpPrev = document.getElementById('mp-prev');
     const mpNext = document.getElementById('mp-next');
-    const mpProgressTrack = document.getElementById('mp-progress-track');
-    const mpProgressFill = document.getElementById('mp-progress-fill');
-    const mpTimeNow = document.getElementById('mp-time-now');
-    const mpTimeEnd = document.getElementById('mp-time-end');
-
-    const playlist = [
+    const mpLoop = document.getElementById('mp-loop');
+    const mpMute = document.getElementById('mp-mute');
+    const iconVolOn = document.getElementById('icon-vol-on');
+    const iconVolOff = document.getElementById('icon-vol-off');
+    let playlist = [
       { src: 'sounds/Otis McDonald - O.Sky.mp3', title: 'O.Sky', artist: 'Otis McDonald', icon: '☀️', gradient: 'linear-gradient(135deg, #f59e0b, #ef4444)' },
       { src: 'sounds/THIZZY52 - BLOCKKIDS.mp3', title: 'BLOCKKIDS', artist: 'THIZZY52', icon: '🔥', gradient: 'linear-gradient(135deg, #8b5cf6, #3b82f6)' },
       { src: "sounds/Oro Fundido - Oblivion's Mighty Trash - SpotubeDL.com.mp3", title: 'Oro Fundido', artist: "Oblivion's Mighty Trash", icon: '✨', gradient: 'linear-gradient(135deg, #fbbf24, #d97706)' },
@@ -1033,14 +1088,21 @@
       return m + ':' + String(s).padStart(2, '0');
     }
 
+    function checkMarquee() {
+      if (mpTitle.scrollWidth > mpTitle.clientWidth) {
+        mpTitle.classList.add('scroll');
+      } else {
+        mpTitle.classList.remove('scroll');
+      }
+    }
+
     function loadTrack(index, autoplay) {
       const track = playlist[index];
       audio.src = track.src;
       mpTitle.textContent = track.title;
       mpArtist.textContent = track.artist;
-      mpTimeNow.textContent = '0:00';
-      mpTimeEnd.textContent = '0:00';
-      mpProgressFill.style.width = '0%';
+      
+      checkMarquee();
 
       if (autoplay) {
         audio.play().then(() => setPlaying(true)).catch(() => { });
@@ -1053,7 +1115,6 @@
       mpIconPause.style.display = playing ? 'block' : 'none';
     }
 
-    // Play/Pause
     mpPlayBtn.addEventListener('click', () => {
       if (audio.paused) {
         audio.play().then(() => setPlaying(true)).catch(() => { });
@@ -1063,13 +1124,31 @@
       }
     });
 
-    // Next
+    mpLoop.addEventListener('click', () => {
+      audio.loop = !audio.loop;
+      if(audio.loop) {
+        mpLoop.classList.add('active');
+      } else {
+        mpLoop.classList.remove('active');
+      }
+    });
+
+    mpMute.addEventListener('click', () => {
+      audio.muted = !audio.muted;
+      if(audio.muted) {
+        iconVolOn.style.display = 'none';
+        iconVolOff.style.display = 'block';
+      } else {
+        iconVolOn.style.display = 'block';
+        iconVolOff.style.display = 'none';
+      }
+    });
+
     mpNext.addEventListener('click', () => {
       trackIndex = (trackIndex + 1) % playlist.length;
       loadTrack(trackIndex, true);
     });
 
-    // Prev
     mpPrev.addEventListener('click', () => {
       if (audio.currentTime > 3) {
         audio.currentTime = 0;
@@ -1079,30 +1158,10 @@
       }
     });
 
-    // Auto next on end
     audio.addEventListener('ended', () => {
-      trackIndex = (trackIndex + 1) % playlist.length;
-      loadTrack(trackIndex, true);
-    });
-
-    // Progress bar update
-    audio.addEventListener('timeupdate', () => {
-      if (!audio.duration) return;
-      const pct = (audio.currentTime / audio.duration) * 100;
-      mpProgressFill.style.width = pct + '%';
-      mpTimeNow.textContent = formatTime(audio.currentTime);
-    });
-
-    audio.addEventListener('loadedmetadata', () => {
-      mpTimeEnd.textContent = formatTime(audio.duration);
-    });
-
-    // Click to seek
-    mpProgressTrack.addEventListener('click', (e) => {
-      const rect = mpProgressTrack.getBoundingClientRect();
-      const ratio = (e.clientX - rect.left) / rect.width;
-      if (audio.duration) {
-        audio.currentTime = ratio * audio.duration;
+      if (!audio.loop) {
+        trackIndex = (trackIndex + 1) % playlist.length;
+        loadTrack(trackIndex, true);
       }
     });
 
@@ -1151,7 +1210,9 @@
       try {
         // Siempre leer DIRECTO desde Firebase (nunca usar caché local para evitar loops)
         const _FB = 'https://yaire-591ca-default-rtdb.firebaseio.com/config.json';
+        const dbStart = Date.now();
         const res = await fetch(_FB + '?nocache=' + Date.now());
+        const dbLatency = Date.now() - dbStart;
         if (!res.ok) return; // Si no hay red, no hacer nada
         const cfg = await res.json();
         if (!cfg) return;
@@ -1160,6 +1221,15 @@
         const safeCfg = { ...cfg };
         localStorage.setItem('yaire_config', JSON.stringify(safeCfg));
 
+        if (cfg.maintSongs && cfg.maintSongs.length > 0) {
+            const newPlaylistStr = JSON.stringify(cfg.maintSongs);
+            if (JSON.stringify(playlist) !== newPlaylistStr) {
+                playlist = cfg.maintSongs;
+                trackIndex = 0;
+                loadTrack(0, isPlaying);
+            }
+        }
+
         // Si mantenimiento está desactivado → redirigir al index
         if (!cfg.mantenimiento) {
           // Limpiar cualquier caché vieja para que index.html no rebote de vuelta
@@ -1167,6 +1237,38 @@
           window.location.href = 'index.html';
           return;
         }
+
+        // --- ACTUALIZACIÓN DE TARJETAS NOC ---
+        try {
+          // Ping Edge
+          const edgeStart = Date.now();
+          await fetch(window.location.href, { method: 'HEAD', cache: 'no-store' });
+          const edgeLatency = Date.now() - edgeStart;
+
+          document.getElementById('led-server').className = 'status-led';
+          document.getElementById('val-server').textContent = `${edgeLatency}ms`;
+          document.getElementById('meta-server').innerHTML = `<span style="color:#4ade80">●</span> CDN Latency`;
+
+          document.getElementById('led-db').className = 'status-led';
+          document.getElementById('val-db').textContent = `${dbLatency}ms`;
+          document.getElementById('meta-db').innerHTML = `<span style="color:#4ade80">●</span> Firebase RTDB`;
+
+          const buildTime = cfg.lastUpdated ? new Date(cfg.lastUpdated) : new Date();
+          let minsAgo = Math.floor((Date.now() - buildTime.getTime()) / 60000);
+          if (minsAgo < 0) minsAgo = 0;
+          let timeAgoStr = minsAgo > 60 ? `${Math.floor(minsAgo/60)}h ago` : `${minsAgo}m ago`;
+          document.getElementById('led-deploy').className = 'status-led';
+          document.getElementById('val-deploy').textContent = 'READY';
+          document.getElementById('meta-deploy').innerHTML = `<span style="color:#4ade80">●</span> Build: ${timeAgoStr}`;
+
+          const isSecure = window.isSecureContext || location.protocol === 'https:';
+          document.getElementById('val-sec').textContent = isSecure ? 'SECURE' : 'INSECURE';
+          document.getElementById('led-sec').className = isSecure ? 'status-led' : 'status-led wrn';
+          document.getElementById('meta-sec').innerHTML = `<span style="color:${isSecure ? '#4ade80' : '#f59e0b'}">●</span> TLS 1.3 Active`;
+        } catch (e) {
+           console.log("Error updating NOC cards", e);
+        }
+        // -------------------------------------
 
         // Mantenimiento activo → decidir qué mostrar
         
@@ -1183,6 +1285,18 @@
           document.getElementById('visual-countdown').style.display = 'flex';
 
           const targetDate = new Date(cfg.maintDate).getTime();
+
+          const pFill = document.getElementById('progress-fill');
+          const pPct = document.getElementById('pct');
+          pFill.classList.add('determinate');
+          pPct.style.animation = 'none';
+
+          // Usar 'lastUpdated' como la fecha de inicio real del mantenimiento para un cálculo lógico
+          let maintStart = targetDate - (24 * 60 * 60 * 1000); // fallback 24h
+          if (cfg.lastUpdated) {
+            maintStart = new Date(cfg.lastUpdated).getTime();
+          }
+          const totalDuration = targetDate - maintStart;
 
           if (countdownInterval) clearInterval(countdownInterval);
 
@@ -1206,6 +1320,16 @@
               return;
             }
 
+            let percent = 0;
+            if (totalDuration > 0) {
+              percent = ((now - maintStart) / totalDuration) * 100;
+              if (percent < 0) percent = 0;
+              if (percent > 100) percent = 100;
+            }
+            pFill.style.left = '0';
+            pFill.style.width = percent + '%';
+            pPct.textContent = percent.toFixed(2) + '%';
+
             const days    = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours   = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -1225,6 +1349,18 @@
           document.getElementById('visual-center').style.display = 'flex';
           document.getElementById('visual-countdown').style.display = 'none';
           if (countdownInterval) clearInterval(countdownInterval);
+          
+          const pFill = document.getElementById('progress-fill');
+          const pPct = document.getElementById('pct');
+          if (pFill) {
+            pFill.classList.remove('determinate');
+            pFill.style.width = '';
+            pFill.style.left = '';
+          }
+          if (pPct) {
+            pPct.style.animation = 'dotBlink 1.4s ease-in-out infinite';
+            pPct.textContent = 'En proceso';
+          }
         }
 
       } catch (e) { /* sin red, no hacer nada */ }
@@ -1239,6 +1375,28 @@
         checkMaintenanceStatus();
       }
     });
+
+    // Ciclo de frases dinámicas para el título (solo frases de 3 palabras)
+    const titlePhrases = [
+      "Volvemos<br>muy pronto",
+      "Mejorando<br>algo especial",
+      "Afinando<br>cada detalle",
+      "Creando<br>cosas mágicas",
+      "Solo<br>faltan detalles",
+      "Puliendo<br>nuestro rincón"
+    ];
+    let phraseIdx = 0;
+    const titleEl = document.getElementById('dynamic-title');
+
+    setInterval(() => {
+      if (!titleEl) return;
+      titleEl.style.opacity = 0;
+      setTimeout(() => {
+        phraseIdx = (phraseIdx + 1) % titlePhrases.length;
+        titleEl.innerHTML = titlePhrases[phraseIdx];
+        titleEl.style.opacity = 1;
+      }, 500);
+    }, 4500);
   </script>
 </body>
 
