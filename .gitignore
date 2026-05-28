@@ -1,3 +1,8 @@
 .vercel
 
 yt-dlp.exe
+
+node_modules/
+dist/
+android/
+ios/
