@@ -6,7 +6,7 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-05-28T09:06:48.631Z",
+  "lastUpdated": "2026-05-28T09:07:16.858Z",
   "maintDate": "2026-05-28T12:00",
   "maintMsg": "",
   "maintType": "scheduled",
@@ -149,8 +149,8 @@
   "voicePassword": "yairealvarado",
   "maintSongs": [
     {
-      "title": "Michael Jackson - Heaven Can Wait",
-      "artist": "Desconocido",
+      "title": "Heaven Can Wait",
+      "artist": "Michael Jackson",
       "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779959174756_Michael_Jackson_-_Heaven_Can_Wait.mp3"
     },
     {
