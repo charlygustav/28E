@@ -236,34 +236,7 @@
       .subtitle { margin-bottom: 1.5rem; }
     }
 
-    /* ── Mute Button ── */
-    .mute-btn {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: rgba(255, 255, 255, 0.8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 50;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .mute-btn:hover {
-      background: rgba(255,255,255,0.15);
-      color: white;
-      transform: scale(1.08);
-      border-color: rgba(255,255,255,0.2);
-    }
-    .mute-btn:active {
-      transform: scale(0.95);
-    }
+    /* ── Mute Button Removed ── */
   </style>
 </head>
 
@@ -271,26 +244,13 @@
 
   <!-- Video Background -->
   <div class="video-bg">
-    <video autoplay loop playsinline muted preload="auto">
+    <video id="bg-video" loop playsinline preload="auto">
       <source src="maintenance_bg.mp4" type="video/mp4">
     </video>
   </div>
 
   <!-- Overlay -->
   <div class="overlay"></div>
-
-  <!-- Mute Button -->
-  <button id="mute-btn" class="mute-btn" aria-label="Activar Sonido" title="Activar Sonido">
-    <svg id="icon-muted" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-      <line x1="23" y1="9" x2="17" y2="15"></line>
-      <line x1="17" y1="9" x2="23" y2="15"></line>
-    </svg>
-    <svg id="icon-unmuted" style="display:none;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-      <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-    </svg>
-  </button>
 
   <!-- Content -->
   <div class="container">
@@ -339,25 +299,22 @@
     let globalMaintStart = null;
     let countdownInterval = null;
 
-    // ── Mute Logic ──
-    const videoEl = document.querySelector('video');
-    const muteBtn = document.getElementById('mute-btn');
-    const iconMuted = document.getElementById('icon-muted');
-    const iconUnmuted = document.getElementById('icon-unmuted');
-
-    muteBtn.addEventListener('click', () => {
-      if (videoEl) {
-        if (videoEl.muted) {
-          videoEl.muted = false;
-          iconMuted.style.display = 'none';
-          iconUnmuted.style.display = 'block';
-        } else {
+    // ── Autoplay Logic ──
+    const videoEl = document.getElementById('bg-video');
+    if (videoEl) {
+      // Intentar reproducir con sonido automáticamente
+      videoEl.muted = false;
+      const playPromise = videoEl.play();
+      
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          // Si el navegador bloquea el sonido (política de Apple/Google en móviles)
+          // silenciamos para que al menos el video no se quede congelado.
           videoEl.muted = true;
-          iconMuted.style.display = 'block';
-          iconUnmuted.style.display = 'none';
-        }
+          videoEl.play().catch(e => console.error('Fallo absoluto al reproducir video:', e));
+        });
       }
-    });
+    }
 
     async function fetchConfig() {
       try {
