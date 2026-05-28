@@ -14,5 +14,12 @@
         }
       ]
     }
-  ]
+  ],
+  "experimentalServices": {
+    "signaling-server": {
+      "root": "signaling-server",
+      "entrypoint": "server.js",
+      "routePrefix": "/"
+    }
+  }
 }
