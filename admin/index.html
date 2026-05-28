@@ -1849,7 +1849,6 @@
                 maintType: document.getElementById('maint-type')?.value || '',
                 maintScreen: document.getElementById('maint-screen-type')?.value || 'standard',
                 maintDate: document.getElementById('maint-date')?.value || '',
-                maintMsg: document.getElementById('maint-msg')?.value || '',
                 ghRepo: document.getElementById('gh-repo')?.value || '',
                 ghToken: document.getElementById('gh-token')?.value || '',
                 gal1: document.getElementById('gal-1')?.value || '',
@@ -1874,7 +1873,6 @@
                 maintType: document.getElementById('maint-type')?.value || '',
                 maintScreen: document.getElementById('maint-screen-type')?.value || 'standard',
                 maintDate: document.getElementById('maint-date')?.value || '',
-                maintMsg: document.getElementById('maint-msg')?.value || '',
                 ghRepo: document.getElementById('gh-repo')?.value || '',
                 ghToken: document.getElementById('gh-token')?.value || '',
                 gal1: document.getElementById('gal-1')?.value || '',
@@ -1917,7 +1915,6 @@
             if (document.getElementById('maint-type')) document.getElementById('maint-type').value = state.maintType;
             if (document.getElementById('maint-screen-type')) document.getElementById('maint-screen-type').value = state.maintScreen || 'standard';
             if (document.getElementById('maint-date')) document.getElementById('maint-date').value = state.maintDate;
-            if (document.getElementById('maint-msg')) document.getElementById('maint-msg').value = state.maintMsg;
             if (document.getElementById('gh-repo')) document.getElementById('gh-repo').value = state.ghRepo;
             if (document.getElementById('gh-token')) document.getElementById('gh-token').value = state.ghToken;
             if (document.getElementById('gal-1')) { document.getElementById('gal-1').value = state.gal1; document.getElementById('preview-gal-1').src = state.gal1; }
@@ -2886,7 +2883,6 @@
             document.getElementById('maint-type').value = cfg.maintType || 'indefinite';
             document.getElementById('maint-screen-type').value = cfg.maintScreen || 'standard';
             document.getElementById('maint-date').value = cfg.maintDate || '';
-            document.getElementById('maint-msg').value = cfg.maintMsg || '';
             toggleMaintOptions(false);
             toggleMaintDate();
 
@@ -3835,7 +3831,6 @@
             cfg.maintType = document.getElementById('maint-type').value;
             cfg.maintScreen = document.getElementById('maint-screen-type').value;
             cfg.maintDate = document.getElementById('maint-date').value;
-            cfg.maintMsg = document.getElementById('maint-msg').value;
             cfg.ghRepo = document.getElementById('gh-repo').value || 'charlygustav/yaire';
             // Solo actualizar el token si el usuario escribió uno nuevo en el campo
             const inputToken = document.getElementById('gh-token').value.trim();
@@ -3949,9 +3944,6 @@
                 if (cfg.mantenimiento !== oldCfg.mantenimiento) {
                     addLog('Estado del Sistema', `Modo mantenimiento ${cfg.mantenimiento ? 'Activado' : 'Desactivado'}.`, cfg.mantenimiento ? 'amber-500' : 'emerald-500');
                 }
-                if (cfg.maintMsg !== oldCfg.maintMsg) {
-                    addLog('Estado del Sistema', 'Mensaje de mantenimiento modificado.', 'amber-500');
-                }
                 if (cfg.maintDate !== oldCfg.maintDate) {
                     addLog('Estado del Sistema', `Fecha límite de mantenimiento cambiada a ${cfg.maintDate}.`, 'amber-500');
                 }
@@ -3968,7 +3960,7 @@
                     addLog('Pistas Musicales', 'La lista de canciones del Spotlight fue modificada.', 'blue-500');
                 }
                 // Si no hubo ningún log granular, lanzar uno genérico
-                if (cfg.mantenimiento === oldCfg.mantenimiento && cfg.maintMsg === oldCfg.maintMsg && cfg.ghToken === oldCfg.ghToken && cfg.heroBadge === oldCfg.heroBadge && JSON.stringify(cfg.songs) === JSON.stringify(oldCfg.songs || [])) {
+                if (cfg.mantenimiento === oldCfg.mantenimiento && cfg.ghToken === oldCfg.ghToken && cfg.heroBadge === oldCfg.heroBadge && JSON.stringify(cfg.songs) === JSON.stringify(oldCfg.songs || [])) {
                     addLog('Configuración Guardada', 'Se guardaron ajustes generales del sistema.', 'zinc-700');
                 }
                 // -------------------------------------------
