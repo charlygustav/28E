@@ -350,8 +350,29 @@
         document.getElementById('cd-secs').textContent = '00';
         if (document.getElementById('pct')) document.getElementById('pct').textContent = '100%';
         document.getElementById('progress-fill').style.width = '100%';
-        // Redirect back to main site immediately
-        window.location.href = 'index.html';
+
+        // Turn off maintenance in Firebase automatically
+        fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json?nocache=' + Date.now())
+          .then(res => res.json())
+          .then(currentCfg => {
+            if (currentCfg) {
+              const updatedCfg = { ...currentCfg, mantenimiento: false };
+              delete updatedCfg.ghToken;
+              delete updatedCfg.ghRepo;
+              return fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedCfg)
+              });
+            }
+          })
+          .then(() => {
+            localStorage.removeItem('yaire_config');
+            window.location.href = 'index.html';
+          })
+          .catch(() => {
+            window.location.href = 'index.html';
+          });
         return;
       }
 
