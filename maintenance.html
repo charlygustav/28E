@@ -292,17 +292,18 @@
   </div>
 
   <script>
-    // ── Fetch config from Firebase and run countdown ──
+    // ── Global Variables ──
+    let globalTargetDate = null;
+    let globalMaintStart = null;
     let countdownInterval = null;
 
-    async function initCountdown() {
+    async function fetchConfig() {
       try {
-        const res = await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json');
+        const res = await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json?nocache=' + Date.now());
         const cfg = await res.json();
-
         if (!cfg) return;
 
-        // Redirect back to main site ONLY when admin disables maintenance
+        // Redirect back to main site when admin disables maintenance
         if (cfg.mantenimiento === false) {
           window.location.href = 'index.html';
           return;
@@ -319,57 +320,66 @@
           maintStart = new Date(cfg.lastUpdated).getTime();
         }
 
-        const totalDuration = targetDate - maintStart;
+        // Update globals
+        globalTargetDate = targetDate;
+        globalMaintStart = maintStart;
 
-        const update = () => {
-          const now = Date.now();
-          const distance = targetDate - now;
-
-          if (distance <= 0) {
-            clearInterval(countdownInterval);
-            document.getElementById('cd-days').textContent = '00';
-            document.getElementById('cd-hours').textContent = '00';
-            document.getElementById('cd-mins').textContent = '00';
-            document.getElementById('cd-secs').textContent = '00';
-            if (document.getElementById('pct')) document.getElementById('pct').textContent = '100%';
-            document.getElementById('progress-fill').style.width = '100%';
-            // Redirect back to main site immediately
-            window.location.href = 'index.html';
-            return;
-          }
-
-          // Progress
-          let percent = 0;
-          if (totalDuration > 0) {
-            percent = ((now - maintStart) / totalDuration) * 100;
-            if (percent < 0) percent = 0;
-            if (percent > 100) percent = 100;
-          }
-          document.getElementById('progress-fill').style.width = percent + '%';
-
-          // Countdown values
-          const days    = Math.floor(distance / (1000 * 60 * 60 * 24));
-          const hours   = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-          document.getElementById('cd-days').textContent  = String(days).padStart(2, '0');
-          document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
-          document.getElementById('cd-mins').textContent  = String(minutes).padStart(2, '0');
-          document.getElementById('cd-secs').textContent  = String(seconds).padStart(2, '0');
-        };
-
-        update();
-        countdownInterval = setInterval(update, 1000);
+        // Start countdown if not running
+        if (!countdownInterval) {
+          updateTimer();
+          countdownInterval = setInterval(updateTimer, 1000);
+        }
 
       } catch (e) {
         console.error('Error fetching config:', e);
       }
     }
 
-    initCountdown();
-    // Refresh config every 3s
-    setInterval(initCountdown, 3000);
+    function updateTimer() {
+      if (!globalTargetDate || !globalMaintStart) return;
+
+      const now = Date.now();
+      const distance = globalTargetDate - now;
+      const totalDuration = globalTargetDate - globalMaintStart;
+
+      if (distance <= 0) {
+        if (countdownInterval) clearInterval(countdownInterval);
+        document.getElementById('cd-days').textContent = '00';
+        document.getElementById('cd-hours').textContent = '00';
+        document.getElementById('cd-mins').textContent = '00';
+        document.getElementById('cd-secs').textContent = '00';
+        if (document.getElementById('pct')) document.getElementById('pct').textContent = '100%';
+        document.getElementById('progress-fill').style.width = '100%';
+        // Redirect back to main site immediately
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // Progress
+      let percent = 0;
+      if (totalDuration > 0) {
+        percent = ((now - globalMaintStart) / totalDuration) * 100;
+        if (percent < 0) percent = 0;
+        if (percent > 100) percent = 100;
+      }
+      document.getElementById('progress-fill').style.width = percent + '%';
+
+      // Countdown values
+      const days    = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours   = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById('cd-days').textContent  = String(days).padStart(2, '0');
+      document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('cd-mins').textContent  = String(minutes).padStart(2, '0');
+      document.getElementById('cd-secs').textContent  = String(seconds).padStart(2, '0');
+    }
+
+    // Initial fetch
+    fetchConfig();
+    // Poll every 3 seconds for dynamic updates
+    setInterval(() => { if (!document.hidden) fetchConfig(); }, 3000);
   </script>
 
 </body>
