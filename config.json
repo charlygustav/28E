@@ -6,9 +6,46 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-05-28T09:14:05.080Z",
+  "lastUpdated": "2026-05-28T11:40:18.338Z",
   "maintDate": "2026-05-28T12:00",
   "maintMsg": "",
+  "maintSongs": [
+    {
+      "artist": "Michael Jackson",
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779959174756_Michael_Jackson_-_Heaven_Can_Wait.mp3",
+      "title": "Heaven Can Wait"
+    },
+    {
+      "artist": "John Legend",
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779958727306_John_Legend_-_Crowd_Go_Crazy.mp3",
+      "title": "Crowd Go Crazy"
+    },
+    {
+      "artist": "Otis McDonald",
+      "src": "sounds/Otis McDonald - O.Sky.mp3",
+      "title": "O.Sky"
+    },
+    {
+      "artist": "THIZZY52",
+      "src": "sounds/THIZZY52 - BLOCKKIDS.mp3",
+      "title": "BLOCKKIDS"
+    },
+    {
+      "artist": "Oblivion's Mighty Trash",
+      "src": "sounds/Oro Fundido - Oblivion's Mighty Trash - SpotubeDL.com.mp3",
+      "title": "Oro Fundido"
+    },
+    {
+      "artist": "Otis McDonald",
+      "src": "sounds/Otis McDonald - CRAZY - Live (SPOTISAVER).mp3",
+      "title": "CRAZY (Live)"
+    },
+    {
+      "artist": "Huan62",
+      "src": "sounds/Huan62 - Toto Lindo.mp3",
+      "title": "Toto Lindo"
+    }
+  ],
   "maintType": "scheduled",
   "mantenimiento": true,
   "refugeText": "",
@@ -147,41 +184,5 @@
   },
   "vaultHint": "Pista: La identidad que usaste cuando nuestra historia continuó entre píxeles.",
   "voicePassword": "yairealvarado",
-  "maintSongs": [
-    {
-      "artist": "Michael Jackson",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779959174756_Michael_Jackson_-_Heaven_Can_Wait.mp3",
-      "title": "Heaven Can Wait"
-    },
-    {
-      "artist": "John Legend",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779958727306_John_Legend_-_Crowd_Go_Crazy.mp3",
-      "title": "Crowd Go Crazy"
-    },
-    {
-      "artist": "Otis McDonald",
-      "src": "sounds/Otis McDonald - O.Sky.mp3",
-      "title": "O.Sky"
-    },
-    {
-      "artist": "THIZZY52",
-      "src": "sounds/THIZZY52 - BLOCKKIDS.mp3",
-      "title": "BLOCKKIDS"
-    },
-    {
-      "artist": "Oblivion's Mighty Trash",
-      "src": "sounds/Oro Fundido - Oblivion's Mighty Trash - SpotubeDL.com.mp3",
-      "title": "Oro Fundido"
-    },
-    {
-      "artist": "Otis McDonald",
-      "src": "sounds/Otis McDonald - CRAZY - Live (SPOTISAVER).mp3",
-      "title": "CRAZY (Live)"
-    },
-    {
-      "artist": "Huan62",
-      "src": "sounds/Huan62 - Toto Lindo.mp3",
-      "title": "Toto Lindo"
-    }
-  ]
+  "maintScreen": "cinematic"
 }
