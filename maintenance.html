@@ -270,7 +270,7 @@
   <!-- Video Background -->
   <div class="video-bg">
     <video autoplay loop playsinline>
-      <source src="Apple April Event 2021 - Intro [tVOZLkRDl0U].mp4" type="video/mp4">
+      <source src="maintenance_bg.mp4" type="video/mp4">
     </video>
   </div>
 
@@ -346,11 +346,12 @@
           return;
         }
 
-        const maintStart = cfg.maintStart || Date.now();
-        const targetDate = cfg.maintEnd;
+        const targetDate = new Date(cfg.maintDate).getTime();
+        if (!targetDate || isNaN(targetDate)) return;
 
-        if (!targetDate) {
-          return;
+        let maintStart = targetDate - (24 * 60 * 60 * 1000); // fallback 24h
+        if (cfg.lastUpdated) {
+          maintStart = new Date(cfg.lastUpdated).getTime();
         }
 
         const totalDuration = targetDate - maintStart;
