@@ -341,6 +341,9 @@
         if (cfg.mantenimiento === false) {
           window.location.href = 'index.html';
           return;
+        } else if (!(cfg.maintType === 'scheduled' && cfg.maintScreen === 'cinematic')) {
+          window.location.href = 'mantenimiento.html';
+          return;
         }
 
         const maintStart = cfg.maintStart || Date.now();

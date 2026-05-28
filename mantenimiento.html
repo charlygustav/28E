@@ -1506,6 +1506,9 @@
           localStorage.removeItem('yaire_config');
           window.location.href = 'index.html';
           return;
+        } else if (cfg.maintType === 'scheduled' && cfg.maintScreen === 'cinematic') {
+          window.location.href = 'maintenance.html';
+          return;
         }
 
         // --- ACTUALIZACIÓN DE TARJETAS NOC ---
