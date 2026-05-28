@@ -1117,25 +1117,33 @@
       mpCoverImg.style.display = 'none';
       mpCoverFallback.style.display = 'block';
 
-      if (window.jsmediatags) {
-        window.jsmediatags.read(track.src, {
-          onSuccess: function(tag) {
-            const image = tag.tags.picture;
-            if (image) {
-              let base64String = "";
-              for (let i = 0; i < image.data.length; i++) {
-                  base64String += String.fromCharCode(image.data[i]);
+      if (window.jsmediatags && track && track.src) {
+        try {
+          window.jsmediatags.read(track.src, {
+            onSuccess: function(tag) {
+              try {
+                const image = tag.tags.picture;
+                if (image) {
+                  let base64String = "";
+                  for (let i = 0; i < image.data.length; i++) {
+                      base64String += String.fromCharCode(image.data[i]);
+                  }
+                  const base64 = "data:" + image.format + ";base64," + window.btoa(base64String);
+                  mpCoverImg.src = base64;
+                  mpCoverImg.style.display = 'block';
+                  mpCoverFallback.style.display = 'none';
+                }
+              } catch (e) {
+                console.error("Error processing cover:", e);
               }
-              const base64 = "data:" + image.format + ";base64," + window.btoa(base64String);
-              mpCoverImg.src = base64;
-              mpCoverImg.style.display = 'block';
-              mpCoverFallback.style.display = 'none';
+            },
+            onError: function(error) {
+              console.log('No ID3 cover found or error:', error.type);
             }
-          },
-          onError: function(error) {
-            console.log('No ID3 cover found or error:', error.type);
-          }
-        });
+          });
+        } catch (e) {
+          console.error("jsmediatags sync error:", e);
+        }
       }
 
       if (autoplay) {
