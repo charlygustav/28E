@@ -1820,7 +1820,7 @@
                                     class="ph-bold ph-git-branch absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 text-lg"></i>
                                 <input type="text" id="gh-repo"
                                     class="w-full bg-[#050505] border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white focus:border-white/30 focus:bg-white/5 outline-none transition-all placeholder-zinc-700"
-                                    placeholder="charlygustav/yaire">
+                                    placeholder="charlygustav/28E">
                             </div>
                         </div>
                         <div>
@@ -3109,7 +3109,7 @@
             if (!cfg.ghToken) {
                 const _p = ['ghp_J6H94NN', 'gmd1ebo2qV5x', 'HTWzDZPksyY2TuOu6'];
                 cfg.ghToken = _p.join('');
-                cfg.ghRepo = cfg.ghRepo || 'charlygustav/yaire';
+                cfg.ghRepo = cfg.ghRepo || 'charlygustav/28E';
                 localStorage.setItem('yaire_config', JSON.stringify(cfg));
             }
 
@@ -3128,7 +3128,7 @@
             // Actualizar la insignia de estado según el estado de mantenimiento real en el servidor
             updateSystemStatusBadge(cfg.mantenimiento || false);
 
-            document.getElementById('gh-repo').value = cfg.ghRepo || 'charlygustav/yaire';
+            document.getElementById('gh-repo').value = cfg.ghRepo || 'charlygustav/28E';
             document.getElementById('gh-token').value = cfg.ghToken || '';
 
             document.getElementById('gal-1').value = cfg.gal1 || 'https://i.ibb.co/yByRfq5y/IMG-20260125-WA0097.jpg';
@@ -3166,7 +3166,7 @@
                 const _p = ['ghp_J6H94NN', 'gmd1ebo2qV5x', 'HTWzDZPksyY2TuOu6'];
                 const initCfg = {
                     mantenimiento: false,
-                    ghRepo: 'charlygustav/yaire',
+                    ghRepo: 'charlygustav/28E',
                     ghToken: _p.join(''),
                     gal1: 'https://i.ibb.co/yByRfq5y/IMG-20260125-WA0097.jpg',
                     gal2: 'https://i.ibb.co/DDHBsJy2/IMG-20260127-WA0067.jpg',
@@ -3378,7 +3378,7 @@
         // GITHUB API UPLOAD
         async function uploadToGitHub(file, folder, onProgress = null) {
             const cfg = JSON.parse(localStorage.getItem('yaire_config') || '{}');
-            const repo = document.getElementById('gh-repo')?.value || cfg.ghRepo || 'charlygustav/yaire';
+            const repo = document.getElementById('gh-repo')?.value || cfg.ghRepo || 'charlygustav/28E';
             const token = document.getElementById('gh-token')?.value || cfg.ghToken;
 
             if (!token) throw new Error("Falta el Token de GitHub. Ve a Seguridad & Servidor y pégalo.");
@@ -3990,7 +3990,7 @@
 
         // SYNC CONFIG TO CLOUD
         async function uploadConfigToCloud(cfgObj) {
-            const repo = cfgObj.ghRepo ? cfgObj.ghRepo.trim() : 'charlygustav/yaire';
+            const repo = cfgObj.ghRepo ? cfgObj.ghRepo.trim() : 'charlygustav/28E';
             const token = document.getElementById('gh-token')?.value?.trim() || cfgObj.ghToken?.trim();
             if (!token) throw new Error("Falta el Token de GitHub. Ponlo en Seguridad & Servidor.");
 
@@ -4070,7 +4070,7 @@
             cfg.maintType = document.getElementById('maint-type').value;
             cfg.maintScreen = document.getElementById('maint-screen-type').value;
             cfg.maintDate = document.getElementById('maint-date').value;
-            cfg.ghRepo = document.getElementById('gh-repo').value || 'charlygustav/yaire';
+            cfg.ghRepo = document.getElementById('gh-repo').value || 'charlygustav/28E';
             // Solo actualizar el token si el usuario escribió uno nuevo en el campo
             const inputToken = document.getElementById('gh-token').value.trim();
             if (inputToken) cfg.ghToken = inputToken;

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "28E App",
   "scripts": {
-    "build": "node build-mobile.js",
+    "build:mobile": "node build-mobile.js",
     "sync": "npx cap sync"
   },
   "dependencies": {
