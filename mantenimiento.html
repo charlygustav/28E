@@ -65,7 +65,7 @@
       width: auto;
       height: auto;
       transform: translate(-50%, -50%) scale(1.1);
-      z-index: -1;
+      z-index: 0;
       opacity: 1;
       filter: saturate(1.2);
       pointer-events: none;
@@ -75,7 +75,7 @@
       position: fixed;
       inset: 0;
       background: rgba(9, 9, 11, 0.75); /* Dark overlay to guarantee contrast */
-      z-index: 0;
+      z-index: 1;
       pointer-events: none;
     }
 
@@ -86,7 +86,7 @@
       border-radius: 50%;
       filter: blur(130px);
       pointer-events: none;
-      z-index: 0;
+      z-index: 1;
       animation: orbDrift 16s ease-in-out infinite alternate;
     }
 
@@ -137,7 +137,7 @@
     /* ═══ Layout principal: dos columnas ═══ */
     .layout {
       position: relative;
-      z-index: 1;
+      z-index: 2;
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 1fr;
