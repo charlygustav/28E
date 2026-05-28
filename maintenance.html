@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>28E - Mantenimiento</title>
+  <meta name="description" content="La página está temporalmente en mantenimiento. Volvemos pronto.">
+  <link rel="icon" type="image/x-icon" href="tulip.ico?v=3">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --tulip-400: #ec4899;
+      --tulip-500: #db2777;
+      --amber-400: #f59e0b;
+      --text: #f4f4f5;
+      --muted: #71717a;
+      --border: rgba(255, 255, 255, .08);
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #09090b;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Video Background ── */
+    .video-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .video-bg video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ── Overlay ── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.55) 0%,
+        rgba(0, 0, 0, 0.40) 40%,
+        rgba(0, 0, 0, 0.55) 100%
+      );
+    }
+
+    /* ── Start Overlay ── */
+    #start-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: #09090b;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: opacity 0.5s ease;
+    }
+    #start-overlay p {
+      color: var(--muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-top: 1rem;
+      animation: pulse 1.5s infinite;
+    }
+
+    /* ── Main Content ── */
+    .container {
+      position: relative;
+      z-index: 2;
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+      text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Logo */
+    .logo {
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: -.06em;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(.22, 1, .36, 1) 0.2s forwards;
+    }
+
+    .aesthetic-icon {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(.22, 1, .36, 1) 0.25s forwards, breath 4s ease-in-out infinite alternate;
+    }
+
+    /* Title */
+    .title {
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -.02em;
+      margin-bottom: 2.5rem;
+      color: rgba(255, 255, 255, 0.9);
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(.22, 1, .36, 1) 0.3s forwards;
+    }
+
+    /* ── Countdown ── */
+    .countdown {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(.22, 1, .36, 1) 0.7s forwards;
+    }
+
+    .cd-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(20px) saturate(1.5);
+      -webkit-backdrop-filter: blur(20px) saturate(1.5);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 1rem;
+      padding: 1rem .8rem .7rem;
+      min-width: 70px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0.5px 0 rgba(255, 255, 255, 0.2);
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .cd-unit:hover {
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .cd-val {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 900;
+      letter-spacing: -.04em;
+      line-height: 1;
+      color: #ffffff;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+    }
+
+    .cd-label {
+      font-size: .5rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: rgba(255, 255, 255, 0.85);
+      margin-top: .35rem;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+    }
+
+    .cd-sep {
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 900;
+      color: #ffffff;
+      padding-bottom: 1rem;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+    }
+
+    /* ── Progress Bar ── */
+    .progress-wrapper {
+      width: 100%;
+      max-width: 420px;
+      margin-top: -1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(.22, 1, .36, 1) 0.5s forwards;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, .06);
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      position: absolute;
+      top: 0; left: 0;
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--tulip-500), var(--amber-400), var(--tulip-400));
+      background-size: 200% 100%;
+      animation: shimmer 2.6s linear infinite;
+      transition: width 1s linear;
+    }
+
+    /* ── Keyframes ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes breath {
+      0% { transform: scale(0.95); opacity: 0.4; text-shadow: 0 0 4px rgba(255,255,255,0.2); }
+      100% { transform: scale(1.1); opacity: 0.9; text-shadow: 0 0 16px rgba(255,255,255,1); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .2; }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% center; }
+      100% { background-position: -200% center; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .countdown { gap: .4rem; }
+      .cd-unit { min-width: 56px; padding: .8rem .5rem .5rem; border-radius: .8rem; }
+      .cd-val { font-size: clamp(1.4rem, 8vw, 2rem); }
+      .cd-label { font-size: .45rem; }
+      .cd-sep { font-size: 1.2rem; padding-bottom: .7rem; }
+      .logo { font-size: 1.6rem; margin-bottom: 2rem; }
+      .subtitle { margin-bottom: 2rem; }
+      .progress-wrapper { max-width: 300px; }
+    }
+
+    @media (max-width: 400px) {
+      .container { padding: 1.5rem; }
+      .countdown { gap: .3rem; }
+      .cd-unit { min-width: 48px; padding: .6rem .4rem .4rem; border-radius: .6rem; }
+      .cd-val { font-size: clamp(1.2rem, 10vw, 1.6rem); }
+      .cd-sep { font-size: 1rem; }
+      .logo { font-size: 1.4rem; margin-bottom: 1.5rem; }
+      .title { margin-bottom: .5rem; }
+      .subtitle { margin-bottom: 1.5rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Start Overlay -->
+  <div id="start-overlay">
+    <div class="logo" style="opacity: 1; animation: none; margin-bottom: 0;">28E</div>
+    <p>Haz clic para entrar</p>
+  </div>
+
+  <!-- Video Background -->
+  <div class="video-bg">
+    <video autoplay loop playsinline>
+      <source src="Apple April Event 2021 - Intro [tVOZLkRDl0U].mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- Overlay -->
+  <div class="overlay"></div>
+
+  <!-- Content -->
+  <div class="container">
+
+    <div class="logo">28E</div>
+
+    <div class="aesthetic-icon">✦</div>
+
+    <h1 class="title">La página se revelará en:</h1>
+
+    <!-- Countdown -->
+    <div class="countdown">
+      <div class="cd-unit">
+        <span class="cd-val" id="cd-days">00</span>
+        <span class="cd-label">Días</span>
+      </div>
+      <span class="cd-sep">:</span>
+      <div class="cd-unit">
+        <span class="cd-val" id="cd-hours">00</span>
+        <span class="cd-label">Horas</span>
+      </div>
+      <span class="cd-sep">:</span>
+      <div class="cd-unit">
+        <span class="cd-val" id="cd-mins">00</span>
+        <span class="cd-label">Mins</span>
+      </div>
+      <span class="cd-sep">:</span>
+      <div class="cd-unit">
+        <span class="cd-val" id="cd-secs">00</span>
+        <span class="cd-label">Segs</span>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-wrapper">
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ── Video Autoplay Fix ──
+    document.getElementById('start-overlay').addEventListener('click', function() {
+      const video = document.querySelector('video');
+      video.play().catch(e => console.log('Playback failed', e));
+      this.style.opacity = '0';
+      setTimeout(() => this.remove(), 500);
+    });
+
+    // ── Fetch config from Firebase and run countdown ──
+    let countdownInterval = null;
+
+    async function initCountdown() {
+      try {
+        const res = await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json');
+        const cfg = await res.json();
+
+        if (!cfg) return;
+
+        // Redirect back to main site ONLY when admin disables maintenance
+        if (cfg.mantenimiento === false) {
+          window.location.href = 'index.html';
+          return;
+        }
+
+        const maintStart = cfg.maintStart || Date.now();
+        const targetDate = cfg.maintEnd;
+
+        if (!targetDate) {
+          return;
+        }
+
+        const totalDuration = targetDate - maintStart;
+
+        const update = () => {
+          const now = Date.now();
+          const distance = targetDate - now;
+
+          if (distance <= 0) {
+            clearInterval(countdownInterval);
+            document.getElementById('cd-days').textContent = '00';
+            document.getElementById('cd-hours').textContent = '00';
+            document.getElementById('cd-mins').textContent = '00';
+            document.getElementById('cd-secs').textContent = '00';
+            if (document.getElementById('pct')) document.getElementById('pct').textContent = '100%';
+            document.getElementById('progress-fill').style.width = '100%';
+            // Do NOT redirect here. Wait for admin to turn off maintenance flag in Firebase.
+            return;
+          }
+
+          // Progress
+          let percent = 0;
+          if (totalDuration > 0) {
+            percent = ((now - maintStart) / totalDuration) * 100;
+            if (percent < 0) percent = 0;
+            if (percent > 100) percent = 100;
+          }
+          document.getElementById('progress-fill').style.width = percent + '%';
+
+          // Countdown values
+          const days    = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours   = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          document.getElementById('cd-days').textContent  = String(days).padStart(2, '0');
+          document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+          document.getElementById('cd-mins').textContent  = String(minutes).padStart(2, '0');
+          document.getElementById('cd-secs').textContent  = String(seconds).padStart(2, '0');
+        };
+
+        update();
+        countdownInterval = setInterval(update, 1000);
+
+      } catch (e) {
+        console.error('Error fetching config:', e);
+      }
+    }
+
+    initCountdown();
+    // Refresh config every 30s
+    setInterval(initCountdown, 30000);
+  </script>
+
+</body>
+
+</html>

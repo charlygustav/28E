@@ -18,7 +18,7 @@
             const _FB = 'https://yaire-591ca-default-rtdb.firebaseio.com/config.json';
 
             // Función para iniciar la cuenta regresiva e inyectar el Toast
-            function startMaintenanceCountdown() {
+            function startMaintenanceCountdown(targetPage = 'mantenimiento.html') {
                 if (document.getElementById('maintenance-countdown-overlay')) return;
 
                 // Detener el polling
@@ -105,7 +105,7 @@
                         overlay.style.transition = 'opacity 0.3s ease-in';
 
                         setTimeout(() => {
-                            window.location.replace('mantenimiento.html');
+                            window.location.replace(targetPage);
                         }, 300);
                     }
                 }, 1000);
@@ -135,11 +135,12 @@
                                 localStorage.setItem('yaire_config', newStr);
                                 window.dispatchEvent(new CustomEvent('yaire_config_updated', { detail: fbCfg }));
                                 if (fbCfg.mantenimiento) {
+                                    const targetPage = (fbCfg.maintType === 'scheduled' && fbCfg.maintScreen === 'cinematic') ? 'maintenance.html' : 'mantenimiento.html';
                                     // Solo si el estado previo NO era mantenimiento y ahora sí es mantenimiento
                                     if (oldCfg && !oldCfg.mantenimiento) {
-                                        startMaintenanceCountdown();
+                                        startMaintenanceCountdown(targetPage);
                                     } else {
-                                        window.location.replace('mantenimiento.html');
+                                        window.location.replace(targetPage);
                                     }
                                 } else {
                                     if (!sessionStorage.getItem('yaire_config_reloaded')) {
@@ -156,7 +157,8 @@
                             }
 
                             if (fbCfg.mantenimiento) {
-                                window.location.replace('mantenimiento.html');
+                                const targetPage = (fbCfg.maintType === 'scheduled' && fbCfg.maintScreen === 'cinematic') ? 'maintenance.html' : 'mantenimiento.html';
+                                window.location.replace(targetPage);
                                 return;
                             }
                         }
