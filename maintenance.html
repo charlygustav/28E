@@ -326,9 +326,20 @@
         if (cfg.mantenimiento === false) {
           window.location.href = 'index.html';
           return;
-        } else if (!(cfg.maintType === 'scheduled' && cfg.maintScreen === 'cinematic')) {
+        } else if (cfg.maintScreen !== 'cinematic') {
           window.location.href = 'mantenimiento.html';
           return;
+        }
+
+        if (cfg.maintType === 'indefinite') {
+            document.querySelector('.countdown').style.display = 'none';
+            document.querySelector('.title').innerHTML = 'Volvemos pronto<br><span style="font-size: 1.2rem; font-weight: 400; opacity: 0.8">Estamos preparando algo especial...</span>';
+            document.getElementById('progress-fill').style.width = '100%';
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+            return;
         }
 
         const targetDate = new Date(cfg.maintDate).getTime();

@@ -141,7 +141,7 @@
                                 }
 
                                 if (fbCfg.mantenimiento && !timeIsUp) {
-                                    const targetPage = (fbCfg.maintType === 'scheduled' && fbCfg.maintScreen === 'cinematic') ? 'maintenance.html' : 'mantenimiento.html';
+                                    const targetPage = (fbCfg.maintScreen === 'cinematic') ? 'maintenance.html' : 'mantenimiento.html';
                                     // Solo si el estado previo NO era mantenimiento y ahora sí es mantenimiento
                                     if (oldCfg && !oldCfg.mantenimiento) {
                                         startMaintenanceCountdown(targetPage);
@@ -162,7 +162,7 @@
                                 if (Date.now() >= new Date(fbCfg.maintDate).getTime()) timeIsUp = true;
                             }
                             if (fbCfg.mantenimiento && !timeIsUp) {
-                                const targetPage = (fbCfg.maintType === 'scheduled' && fbCfg.maintScreen === 'cinematic') ? 'maintenance.html' : 'mantenimiento.html';
+                                const targetPage = (fbCfg.maintScreen === 'cinematic') ? 'maintenance.html' : 'mantenimiento.html';
                                 window.location.replace(targetPage);
                                 return;
                             }
