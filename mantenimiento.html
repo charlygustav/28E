@@ -1108,6 +1108,10 @@
 
     let currentCoverFetchId = 0;
 
+    function animateButton(btn) {
+      if(window.gsap) gsap.fromTo(btn, { scale: 0.8 }, { scale: 1, duration: 0.3, ease: 'back.out(2)' });
+    }
+
     function loadTrack(index, autoplay) {
       const track = playlist[index];
       audio.src = track.src;
@@ -1115,6 +1119,14 @@
       mpArtist.textContent = track.artist;
       
       checkMarquee();
+
+      // Track change animation
+      if (window.gsap) {
+        gsap.fromTo(['#mp-cover', '.mp-info'], 
+          { opacity: 0, y: 5, scale: 0.97 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: 'power2.out', stagger: 0.05 }
+        );
+      }
 
       mpCoverImg.style.display = 'none';
       mpCoverFallback.style.display = 'block';
@@ -1165,6 +1177,7 @@
     }
 
     mpPlayBtn.addEventListener('click', () => {
+      animateButton(mpPlayBtn);
       if (audio.paused) {
         audio.play().then(() => setPlaying(true)).catch(() => { });
       } else {
@@ -1174,6 +1187,7 @@
     });
 
     mpLoop.addEventListener('click', () => {
+      animateButton(mpLoop);
       audio.loop = !audio.loop;
       if(audio.loop) {
         mpLoop.classList.add('active');
@@ -1183,6 +1197,7 @@
     });
 
     mpMute.addEventListener('click', () => {
+      animateButton(mpMute);
       audio.muted = !audio.muted;
       if(audio.muted) {
         iconVolOn.style.display = 'none';
@@ -1194,11 +1209,13 @@
     });
 
     mpNext.addEventListener('click', () => {
+      animateButton(mpNext);
       trackIndex = (trackIndex + 1) % playlist.length;
       loadTrack(trackIndex, true);
     });
 
     mpPrev.addEventListener('click', () => {
+      animateButton(mpPrev);
       if (audio.currentTime > 3) {
         audio.currentTime = 0;
       } else {
