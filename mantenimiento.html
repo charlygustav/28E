@@ -1106,6 +1106,8 @@
     const mpCoverImg = document.getElementById('mp-cover-img');
     const mpCoverFallback = document.getElementById('mp-cover-fallback');
 
+    let currentCoverFetchId = 0;
+
     function loadTrack(index, autoplay) {
       const track = playlist[index];
       audio.src = track.src;
@@ -1117,6 +1119,8 @@
       mpCoverImg.style.display = 'none';
       mpCoverFallback.style.display = 'block';
 
+      const fetchId = ++currentCoverFetchId;
+
       if (window.jsmediatags && track && track.src) {
         fetch(track.src, { headers: { range: 'bytes=0-512000' } })
           .then(res => res.blob())
@@ -1124,6 +1128,8 @@
             window.jsmediatags.read(blob, {
               onSuccess: function(tag) {
                 try {
+                  if (fetchId !== currentCoverFetchId) return; // Prevent race condition
+
                   const image = tag.tags.picture;
                   if (image) {
                     let base64String = "";
