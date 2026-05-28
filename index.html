@@ -134,7 +134,13 @@
                                 } catch (err) { }
                                 localStorage.setItem('yaire_config', newStr);
                                 window.dispatchEvent(new CustomEvent('yaire_config_updated', { detail: fbCfg }));
-                                if (fbCfg.mantenimiento) {
+                                // Check if scheduled time is up
+                                let timeIsUp = false;
+                                if (fbCfg.maintType === 'scheduled' && fbCfg.maintDate) {
+                                    if (Date.now() >= new Date(fbCfg.maintDate).getTime()) timeIsUp = true;
+                                }
+
+                                if (fbCfg.mantenimiento && !timeIsUp) {
                                     const targetPage = (fbCfg.maintType === 'scheduled' && fbCfg.maintScreen === 'cinematic') ? 'maintenance.html' : 'mantenimiento.html';
                                     // Solo si el estado previo NO era mantenimiento y ahora sí es mantenimiento
                                     if (oldCfg && !oldCfg.mantenimiento) {
@@ -156,7 +162,11 @@
                                 window.dispatchEvent(new CustomEvent('yaire_config_updated', { detail: fbCfg }));
                             }
 
-                            if (fbCfg.mantenimiento) {
+                            let timeIsUp = false;
+                            if (fbCfg.maintType === 'scheduled' && fbCfg.maintDate) {
+                                if (Date.now() >= new Date(fbCfg.maintDate).getTime()) timeIsUp = true;
+                            }
+                            if (fbCfg.mantenimiento && !timeIsUp) {
                                 const targetPage = (fbCfg.maintType === 'scheduled' && fbCfg.maintScreen === 'cinematic') ? 'maintenance.html' : 'mantenimiento.html';
                                 window.location.replace(targetPage);
                                 return;

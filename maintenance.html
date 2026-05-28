@@ -333,7 +333,8 @@
             document.getElementById('cd-secs').textContent = '00';
             if (document.getElementById('pct')) document.getElementById('pct').textContent = '100%';
             document.getElementById('progress-fill').style.width = '100%';
-            // Do NOT redirect here. Wait for admin to turn off maintenance flag in Firebase.
+            // Redirect back to main site immediately
+            window.location.href = 'index.html';
             return;
           }
 
