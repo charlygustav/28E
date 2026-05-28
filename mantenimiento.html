@@ -639,31 +639,118 @@
       }
     }
 
-    /* ── Mini Player Rediseñado ── */
-    .mini-player {
+    /* ── Auth & Dropdown ── */
+    .auth-wrapper {
       position: fixed;
       top: 1.5rem;
       right: 1.5rem;
       z-index: 60;
-      width: 260px; /* Reducido de 310px a 260px */
-      background: rgba(255, 255, 255, .04);
-      border: 1px solid rgba(255, 255, 255, .07);
-      border-radius: 1.2rem; /* Más redondeado */
-      backdrop-filter: blur(24px) saturate(1.4);
-      -webkit-backdrop-filter: blur(24px) saturate(1.4);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, .3), inset 0 1px 0 rgba(255, 255, 255, .06);
-      padding: .6rem .8rem;
       opacity: 0;
       transform: translateY(20px);
-      transition: opacity .4s ease, transform .4s ease;
+    }
+    
+    .auth-btn {
+      background: rgba(255, 255, 255, .05);
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 999px;
+      backdrop-filter: blur(24px) saturate(1.4);
+      padding: 0.6rem 1.2rem;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+    .auth-btn:hover { background: rgba(255, 255, 255, .1); border-color: rgba(255, 255, 255, .2); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    
+    .user-profile-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(255, 255, 255, .04);
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 999px;
+      backdrop-filter: blur(24px) saturate(1.4);
+      padding: 0.4rem 0.4rem 0.4rem 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .user-profile-btn:hover { background: rgba(255, 255, 255, .08); border-color: rgba(255, 255, 255, .2); }
+    
+    .user-name-display {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    
+    .user-profile-btn img {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .auth-dropdown {
+      position: absolute;
+      top: calc(100% + 0.8rem);
+      right: 0;
+      width: 280px;
+      background: rgba(24, 24, 27, 0.75);
+      backdrop-filter: blur(24px) saturate(1.4);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1.2rem;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+      transform-origin: top right;
+    }
+    .auth-dropdown.open {
+      opacity: 1; visibility: visible; transform: translateY(0);
+    }
+    
+    .dropdown-header {
+      display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.5rem; padding: 0.2rem 0.4rem;
+    }
+    .dropdown-header img {
+      width: 40px; height: 40px; border-radius: 50%; object-fit: cover;
+    }
+    .dropdown-info {
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .dropdown-name {
+      font-size: 0.85rem; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .dropdown-email {
+      font-size: 0.65rem; color: #a1a1aa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .dropdown-divider {
+      height: 1px; background: rgba(255, 255, 255, 0.06); margin: 0.8rem 0;
+    }
+    
+    .dropdown-btn {
+      width: 100%; background: transparent; border: none; padding: 0.6rem 0.8rem; border-radius: 0.6rem; color: #f4f4f5; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 0.6rem; cursor: pointer; transition: background 0.2s;
+    }
+    .dropdown-btn:hover { background: rgba(255, 255, 255, 0.06); }
+    .logout-btn { color: #f87171; }
+    .logout-btn:hover { background: rgba(248, 113, 113, 0.1); }
+
+    /* ── Mini Player Ajustado para Dropdown ── */
+    .mini-player {
+      width: 100%;
+      background: rgba(255, 255, 255, .04);
+      border: 1px solid rgba(255, 255, 255, .07);
+      border-radius: 1rem;
+      padding: .6rem .8rem;
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
-    }
-
-    .mini-player.visible {
-      opacity: 1;
-      transform: translateY(0);
     }
 
     .mini-player-top {
@@ -823,11 +910,9 @@
     }
 
     @media (max-width: 768px) {
-      .mini-player {
-        left: .75rem;
-        right: .75rem;
-        width: auto;
-        top: .75rem;
+      .auth-wrapper {
+        top: 0.75rem;
+        right: 0.75rem;
       }
     }
   </style>
@@ -987,47 +1072,75 @@
   <!-- Audio de fondo -->
   <audio id="bg-music" preload="auto"></audio>
 
-  <!-- Mini Player Rediseñado -->
-  <div class="mini-player" id="mini-player">
-
-    <div class="mini-player-top">
-      <!-- Cover -->
-      <div id="mp-cover" style="width: 32px; height: 32px; border-radius: 6px; overflow: hidden; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-        <img id="mp-cover-img" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;">
-        <svg id="mp-cover-fallback" style="width: 16px; height: 16px; fill: #71717a;" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-      </div>
-      <!-- Info -->
-      <div class="mp-info">
-        <div class="mp-title-wrap">
-          <div class="mp-title" id="mp-title">O.Sky</div>
-        </div>
-        <div class="mp-artist-wrap">
-          <div class="mp-artist" id="mp-artist">Otis McDonald</div>
-        </div>
-      </div>
-      <!-- Controles Secundarios -->
-      <div class="mp-controls-sec">
-        <button class="mp-ctrl-s" id="mp-loop" aria-label="Repetir">
-          <svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
-        </button>
-        <button class="mp-ctrl-s" id="mp-mute" aria-label="Volumen">
-          <svg id="icon-vol-on" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-          <svg id="icon-vol-off" style="display:none" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
-        </button>
-      </div>
+  <!-- Top Right Auth & Dropdown -->
+  <div class="auth-wrapper" id="auth-wrapper">
+    <button class="auth-btn" id="btn-login">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12,2C6.477,2,2,6.477,2,12s4.477,10,10,10c5.524,0,10-4.477,10-10S17.524,2,12,2z M12,6c1.657,0,3,1.343,3,3 s-1.343,3-3,3s-3-1.343-3-3S10.343,6,12,6z M12,20c-2.673,0-5.111-1.282-6.669-3.267C5.461,15.539,8.513,14,12,14 s6.539,1.539,6.669,2.733C17.111,18.718,14.673,20,12,20z"/></svg>
+      Iniciar Sesión
+    </button>
+    <div class="user-profile-btn" id="btn-user-profile" style="display: none;">
+      <span id="user-name-display" class="user-name-display"></span>
+      <img id="user-avatar" src="" alt="Avatar">
     </div>
     
-    <!-- Controles Principales -->
-    <div class="mp-controls-main">
-      <button class="mp-ctrl" id="mp-prev" aria-label="Anterior">
-        <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" /></svg>
-      </button>
-      <button class="mp-ctrl mp-ctrl-play" id="mp-play" aria-label="Play">
-        <svg id="mp-icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-        <svg id="mp-icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6zm8-14v14h4V5z" /></svg>
-      </button>
-      <button class="mp-ctrl" id="mp-next" aria-label="Siguiente">
-        <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6z" /></svg>
+    <div class="auth-dropdown" id="auth-dropdown">
+      <div class="dropdown-header">
+        <img id="dropdown-avatar" src="" alt="Avatar">
+        <div class="dropdown-info">
+          <div id="dropdown-name" class="dropdown-name"></div>
+          <div id="dropdown-email" class="dropdown-email"></div>
+        </div>
+      </div>
+      <div class="dropdown-divider"></div>
+      
+      <!-- Mini Player Rediseñado (Dentro del Dropdown) -->
+      <div class="mini-player" id="mini-player">
+        <div class="mini-player-top">
+          <!-- Cover -->
+          <div id="mp-cover" style="width: 32px; height: 32px; border-radius: 6px; overflow: hidden; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+            <img id="mp-cover-img" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+            <svg id="mp-cover-fallback" style="width: 16px; height: 16px; fill: #71717a;" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+          </div>
+          <!-- Info -->
+          <div class="mp-info">
+            <div class="mp-title-wrap">
+              <div class="mp-title" id="mp-title">O.Sky</div>
+            </div>
+            <div class="mp-artist-wrap">
+              <div class="mp-artist" id="mp-artist">Otis McDonald</div>
+            </div>
+          </div>
+          <!-- Controles Secundarios -->
+          <div class="mp-controls-sec">
+            <button class="mp-ctrl-s" id="mp-loop" aria-label="Repetir">
+              <svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
+            </button>
+            <button class="mp-ctrl-s" id="mp-mute" aria-label="Volumen">
+              <svg id="icon-vol-on" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+              <svg id="icon-vol-off" style="display:none" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Controles Principales -->
+        <div class="mp-controls-main">
+          <button class="mp-ctrl" id="mp-prev" aria-label="Anterior">
+            <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" /></svg>
+          </button>
+          <button class="mp-ctrl mp-ctrl-play" id="mp-play" aria-label="Play">
+            <svg id="mp-icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+            <svg id="mp-icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6zm8-14v14h4V5z" /></svg>
+          </button>
+          <button class="mp-ctrl" id="mp-next" aria-label="Siguiente">
+            <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6z" /></svg>
+          </button>
+        </div>
+      </div>
+      
+      <div class="dropdown-divider"></div>
+      <button class="dropdown-btn logout-btn" id="btn-logout">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+        Cerrar sesión
       </button>
     </div>
   </div>
@@ -1294,7 +1407,7 @@
 
     // GSAP: reveal the mini player
     gsap.set('#mini-player', { opacity: 0, y: -20 });
-    gsap.to('#mini-player', { opacity: 1, y: 0, duration: .6, delay: 1.3, ease: 'power3.out', onComplete: () => player.classList.add('visible') });
+    gsap.to('#auth-wrapper', { opacity: 1, y: 0, duration: .6, delay: 1.3, ease: 'power3.out' });
 
     // Admin Panel: Detectar cuando se desactiva el mantenimiento
     let countdownInterval;
@@ -1490,6 +1603,92 @@
         titleEl.style.opacity = 1;
       }, 500);
     }, 4500);
+  </script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDFkuktrXnsV9-jg2bv5dpJQRR-he8PT3g",
+      authDomain: "yairealvarado.firebaseapp.com",
+      databaseURL: "https://yaire-591ca-default-rtdb.firebaseio.com",
+      projectId: "yaire-591ca",
+      storageBucket: "yaire-591ca.firebasestorage.app",
+      messagingSenderId: "450381430658",
+      appId: "1:450381430658:web:262d1bb7b1732c3990d99b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    const btnLogin = document.getElementById('btn-login');
+    const btnUserProfile = document.getElementById('btn-user-profile');
+    const authDropdown = document.getElementById('auth-dropdown');
+    const btnLogout = document.getElementById('btn-logout');
+
+    const userNameDisplay = document.getElementById('user-name-display');
+    const userAvatar = document.getElementById('user-avatar');
+    const dropdownAvatar = document.getElementById('dropdown-avatar');
+    const dropdownName = document.getElementById('dropdown-name');
+    const dropdownEmail = document.getElementById('dropdown-email');
+
+    // Login
+    btnLogin.addEventListener('click', async () => {
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (error) {
+        console.error("Error signing in", error);
+      }
+    });
+
+    // Logout
+    btnLogout.addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        authDropdown.classList.remove('open');
+      } catch (error) {
+        console.error("Error signing out", error);
+      }
+    });
+
+    // Toggle Dropdown
+    btnUserProfile.addEventListener('click', (e) => {
+      e.stopPropagation();
+      authDropdown.classList.toggle('open');
+    });
+
+    // Close Dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!authDropdown.contains(e.target) && !btnUserProfile.contains(e.target)) {
+        authDropdown.classList.remove('open');
+      }
+    });
+
+    // Auth State Listener
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+        btnLogin.style.display = 'none';
+        btnUserProfile.style.display = 'flex';
+        
+        // Show first and last name (max 2 words) next to avatar
+        const names = (user.displayName || "Usuario").split(" ");
+        const shortName = names.slice(0, 2).join(" "); 
+        
+        userNameDisplay.textContent = shortName;
+        userAvatar.src = user.photoURL || 'https://via.placeholder.com/32';
+        
+        dropdownAvatar.src = user.photoURL || 'https://via.placeholder.com/40';
+        dropdownName.textContent = user.displayName;
+        dropdownEmail.textContent = user.email;
+      } else {
+        // User is signed out
+        btnLogin.style.display = 'flex';
+        btnUserProfile.style.display = 'none';
+        authDropdown.classList.remove('open');
+      }
+    });
   </script>
 </body>
 
