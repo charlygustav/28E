@@ -1434,36 +1434,7 @@
 
     // Init first track
     loadTrack(0, false);
-
-    // Autoplay attempt with fade-in
-    audio.volume = 0;
-    const playPromise = audio.play();
-    if (playPromise !== undefined) {
-      playPromise.then(() => {
-        setPlaying(true);
-        let vol = 0;
-        const fade = setInterval(() => {
-          vol = Math.min(1, vol + 0.04);
-          audio.volume = vol;
-          if (vol >= 1) clearInterval(fade);
-        }, 80);
-      }).catch(() => {
-        setPlaying(false);
-        document.addEventListener('click', function firstClick() {
-          audio.volume = 0;
-          audio.play().then(() => {
-            setPlaying(true);
-            let vol = 0;
-            const fade = setInterval(() => {
-              vol = Math.min(1, vol + 0.04);
-              audio.volume = vol;
-              if (vol >= 1) clearInterval(fade);
-            }, 80);
-          });
-          document.removeEventListener('click', firstClick);
-        }, { once: true });
-      });
-    }
+    audio.volume = 1;
 
 
     // GSAP: reveal the auth wrapper
