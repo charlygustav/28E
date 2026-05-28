@@ -601,42 +601,116 @@
       color: var(--tulip-400);
     }
 
-    /* ═══ Responsive: una columna en mobile ═══ */
+    /* ═══ Responsive: Tablet ═══ */
+    @media (max-width: 1024px) {
+      .col-left { padding: 2.5rem 2.5rem; }
+      .col-right { padding: 2.5rem 2.5rem; }
+    }
+
+    /* ═══ Responsive: Mobile ═══ */
     @media (max-width: 768px) {
 
-      html,
-      body {
-        overflow: auto;
-      }
+      html, body { overflow: auto; }
 
       .layout {
         grid-template-columns: 1fr;
-        grid-template-rows: auto 1fr;
+        grid-template-rows: auto auto;
         height: auto;
         min-height: 100dvh;
+        padding-bottom: 3.5rem;
       }
 
       .col-left {
         border-right: none;
         border-bottom: 1px solid var(--border);
-        padding: 2rem 1.5rem;
+        padding: 1.5rem 1.2rem;
+        order: 2;
       }
 
       .col-right {
-        padding: 2rem 1.5rem;
+        padding: 1.8rem 1.2rem;
+        order: 1;
       }
 
-      .clock-time {
-        font-size: 3.5rem;
-      }
+      .logo-area { margin-bottom: 0; }
+      .logo-text { font-size: 1.5rem; }
+      .logo-emoji { font-size: 1.5rem; }
 
-      .status-grid {
-        grid-template-columns: 1fr 1fr;
-      }
+      .countdown-wrap { margin-top: 1rem; }
+      .countdown-title { font-size: .6rem; margin-bottom: .8rem; }
+      .countdown-grid { gap: .5rem; }
+      .cd-box { border-radius: .9rem; padding: .8rem .4rem .6rem; }
+      .cd-num { font-size: clamp(1.8rem, 8vw, 2.8rem); }
+      .cd-label { font-size: .5rem; margin-top: .25rem; }
+      .cd-sep { font-size: clamp(1.2rem, 4vw, 1.8rem); padding-bottom: .8rem; }
 
+      .status-grid { grid-template-columns: 1fr 1fr; gap: .5rem; margin-top: 1rem; }
+      .status-card { padding: .7rem .8rem; border-radius: .75rem; }
+      .status-card-val { font-size: .9rem; }
+      .status-card-label { font-size: .5rem; }
+      .status-card-meta { font-size: .55rem; }
+
+      .badge { font-size: .55rem; padding: .25rem .7rem; margin-bottom: 1rem; }
+      h1 { font-size: clamp(1.6rem, 7vw, 2.4rem); margin-bottom: .7rem; }
+      .subtitle { font-size: clamp(.8rem, 3vw, .95rem); margin-bottom: 1.5rem; max-width: none; }
+      .progress-label { font-size: .6rem; }
+      .progress-track { margin-bottom: 1.5rem; }
+      .pills { gap: .4rem; margin-bottom: 1.5rem; }
+      .pill { font-size: .6rem; padding: .3rem .7rem; }
+      .divider { margin: 0 0 1rem; }
+
+      /* Footer en mobile */
       .footer-strip {
-        padding: .6rem 1.5rem;
+        padding: .5rem 1rem;
+        flex-direction: column;
+        gap: 0.4rem;
+        align-items: center;
       }
+
+      .mini-player { justify-content: center; }
+      .mp-title-wrap { max-width: 90px !important; }
+      .mp-artist-wrap { max-width: 70px !important; }
+
+      /* Auth button mobile */
+      .auth-wrapper { top: 1rem; right: 1rem; }
+      .auth-btn { padding: 0.5rem 0.9rem; font-size: 0.75rem; }
+      .user-name-display { font-size: 0.75rem; }
+      .auth-dropdown { width: 200px; }
+    }
+
+    /* ═══ Responsive: Small phones (< 400px) ═══ */
+    @media (max-width: 400px) {
+      .col-left { padding: 1.2rem 1rem; }
+      .col-right { padding: 1.5rem 1rem; }
+
+      .logo-text { font-size: 1.3rem; }
+
+      .countdown-grid { gap: .35rem; }
+      .cd-box { border-radius: .7rem; padding: .6rem .3rem .5rem; }
+      .cd-num { font-size: clamp(1.5rem, 10vw, 2rem); }
+
+      .status-grid { grid-template-columns: 1fr 1fr; gap: .4rem; }
+      .status-card { padding: .5rem .6rem; }
+      .status-card-val { font-size: .75rem; }
+
+      h1 { font-size: clamp(1.4rem, 6vw, 1.8rem); }
+      .subtitle { font-size: .8rem; }
+      .pill { font-size: .55rem; padding: .25rem .6rem; }
+
+      /* Footer compact en phones pequeños */
+      .footer-strip { padding: .4rem .8rem; }
+      .mp-title-wrap { max-width: 70px !important; }
+      .mp-artist-wrap { display: none !important; }
+      .mp-info span { display: none; }
+      .mp-controls-sec { display: none !important; }
+
+      .auth-wrapper { top: 0.7rem; right: 0.7rem; }
+      .auth-btn { padding: 0.4rem 0.7rem; font-size: 0.7rem; }
+      .auth-btn svg { width: 14px; height: 14px; }
+      .user-profile-btn { padding: 0.3rem 0.3rem 0.3rem 0.8rem !important; }
+      .user-name-display { font-size: 0.7rem; }
+      #user-avatar { width: 26px !important; height: 26px !important; }
+      .auth-dropdown { width: 180px; padding: 0.5rem; }
     }
 
     /* ── Auth & Dropdown ── */
