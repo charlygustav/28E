@@ -242,7 +242,7 @@
 
   <!-- Video Background -->
   <div class="video-bg">
-    <video autoplay muted loop playsinline preload="auto">
+    <video autoplay loop playsinline preload="auto">
       <source src="maintenance_bg.mp4" type="video/mp4">
     </video>
   </div>
@@ -292,25 +292,6 @@
   </div>
 
   <script>
-    // ── Video Invisible Unmute Trick ──
-    const video = document.querySelector('video');
-    let hasUnmuted = false;
-
-    // Listen for the first interaction anywhere on the page to unmute
-    const enableSound = () => {
-      if (!hasUnmuted) {
-        video.muted = false;
-        video.currentTime = 0; // Restart video so audio matches visuals perfectly
-        video.play().catch(e => console.log('Unmuted playback failed', e));
-        hasUnmuted = true;
-        document.removeEventListener('click', enableSound);
-        document.removeEventListener('touchstart', enableSound);
-      }
-    };
-
-    document.addEventListener('click', enableSound);
-    document.addEventListener('touchstart', enableSound);
-
     // ── Fetch config from Firebase and run countdown ──
     let countdownInterval = null;
 
