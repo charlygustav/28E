@@ -59,27 +59,6 @@
       );
     }
 
-    /* ── Start Overlay ── */
-    #start-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 999;
-      background: #09090b;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: opacity 0.5s ease;
-    }
-    #start-overlay p {
-      color: var(--muted);
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      margin-top: 1rem;
-      animation: pulse 1.5s infinite;
-    }
 
     /* ── Main Content ── */
     .container {
@@ -261,15 +240,9 @@
 
 <body>
 
-  <!-- Start Overlay -->
-  <div id="start-overlay">
-    <div class="logo" style="opacity: 1; animation: none; margin-bottom: 0;">28E</div>
-    <p>Haz clic para entrar</p>
-  </div>
-
   <!-- Video Background -->
   <div class="video-bg">
-    <video loop playsinline preload="auto">
+    <video autoplay muted loop playsinline preload="auto">
       <source src="maintenance_bg.mp4" type="video/mp4">
     </video>
   </div>
@@ -319,13 +292,24 @@
   </div>
 
   <script>
-    // ── Video Autoplay Fix ──
-    document.getElementById('start-overlay').addEventListener('click', function() {
-      const video = document.querySelector('video');
-      video.play().catch(e => console.log('Playback failed', e));
-      this.style.opacity = '0';
-      setTimeout(() => this.remove(), 500);
-    });
+    // ── Video Invisible Unmute Trick ──
+    const video = document.querySelector('video');
+    let hasUnmuted = false;
+
+    // Listen for the first interaction anywhere on the page to unmute
+    const enableSound = () => {
+      if (!hasUnmuted) {
+        video.muted = false;
+        video.currentTime = 0; // Restart video so audio matches visuals perfectly
+        video.play().catch(e => console.log('Unmuted playback failed', e));
+        hasUnmuted = true;
+        document.removeEventListener('click', enableSound);
+        document.removeEventListener('touchstart', enableSound);
+      }
+    };
+
+    document.addEventListener('click', enableSound);
+    document.addEventListener('touchstart', enableSound);
 
     // ── Fetch config from Firebase and run countdown ──
     let countdownInterval = null;
