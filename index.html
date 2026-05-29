@@ -137,7 +137,10 @@
                                 // Check if scheduled time is up
                                 let timeIsUp = false;
                                 if (fbCfg.maintType === 'scheduled' && fbCfg.maintDate) {
-                                    if (Date.now() >= new Date(fbCfg.maintDate).getTime()) timeIsUp = true;
+                                    const [dPart, tPart] = fbCfg.maintDate.split('T');
+                                    const [yyyy, mm, dd] = dPart.split('-');
+                                    const [hh, min] = tPart.split(':');
+                                    if (Date.now() >= new Date(yyyy, mm - 1, dd, hh, min).getTime()) timeIsUp = true;
                                 }
 
                                 if (fbCfg.mantenimiento && !timeIsUp) {
@@ -159,7 +162,10 @@
 
                             let timeIsUp = false;
                             if (fbCfg.maintType === 'scheduled' && fbCfg.maintDate) {
-                                if (Date.now() >= new Date(fbCfg.maintDate).getTime()) timeIsUp = true;
+                                const [dPart, tPart] = fbCfg.maintDate.split('T');
+                                const [yyyy, mm, dd] = dPart.split('-');
+                                const [hh, min] = tPart.split(':');
+                                if (Date.now() >= new Date(yyyy, mm - 1, dd, hh, min).getTime()) timeIsUp = true;
                             }
                             if (fbCfg.mantenimiento && !timeIsUp) {
                                 const targetPage = (fbCfg.maintScreen === 'cinematic') ? 'maintenance.html' : 'mantenimiento.html';

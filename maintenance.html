@@ -377,7 +377,11 @@
             return;
         }
 
-        const targetDate = new Date(cfg.maintDate).getTime();
+        if (!cfg.maintDate) return;
+        const [dPart, tPart] = cfg.maintDate.split('T');
+        const [yyyy, mm, dd] = dPart.split('-');
+        const [hh, min] = tPart.split(':');
+        const targetDate = new Date(yyyy, mm - 1, dd, hh, min).getTime();
         if (!targetDate || isNaN(targetDate)) return;
 
         let maintStart = targetDate - (24 * 60 * 60 * 1000); // fallback 24h
@@ -471,3 +475,4 @@
 </body>
 
 </html>
+
