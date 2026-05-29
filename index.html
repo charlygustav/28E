@@ -4636,7 +4636,7 @@
             <div class="relative z-10 flex flex-col items-center">
                 <div id="hero-badge-container" class="hero-anim hero-anim-1 inline-flex flex-col sm:flex-row items-center gap-1 sm:gap-2.5 px-5 py-2.5 rounded-full border border-brand-500/30 bg-gradient-to-r from-brand-500/10 to-tulip-500/10 text-brand-600 dark:text-brand-400 text-sm font-bold mb-8 uppercase tracking-widest glow-effect transition-all hover:border-brand-500/50">
                     <span class="flex items-center gap-1.5">
-                        <span data-i18n="hero_badge">¡Felices 4 Meses!</span> <span id="hero-badge-e1">✨</span>
+                        <span id="hero-badge-text" data-i18n="hero_badge">¡Felices 4 Meses!</span> <span id="hero-badge-e1">✨</span>
                     </span>
                     <span class="inline-flex items-center gap-1.5 font-extrabold" style="font-variant-numeric: tabular-nums;">
                         <span id="hero-badge-dot" class="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse"></span>
@@ -14559,12 +14559,14 @@
                 const diff = target - now;
 
                 if (diff <= 0) {
-                    // Already past 3 months!
-                    const badgeEl = document.querySelector('[data-i18n="hero_badge"]');
-                    if (badgeEl) {
-                        badgeEl.innerHTML = t.hero_badge || '¡Felices 3 Meses!';
+                    // Already past — only apply defaults if admin hasn't overridden
+                    if (!window.__adminBadgeApplied) {
+                        const badgeEl = document.querySelector('[data-i18n="hero_badge"]');
+                        if (badgeEl) {
+                            badgeEl.innerHTML = t.hero_badge || '¡Felices 3 Meses!';
+                        }
+                        el.textContent = '🎉';
                     }
-                    el.textContent = '🎉';
                     return;
                 }
 
@@ -17840,15 +17842,37 @@
                             if (dictionary['fr']) dictionary['fr'].hero_badge_link = linkFr;
                         }
 
+                        // Marcar que el admin controla el badge (evita que initHeroCountdown sobreescriba)
+                        window.__adminBadgeApplied = true;
+
                         // DOM Updates for Badge Elements
+                        const badgeTextEl = document.getElementById('hero-badge-text');
                         const e1 = document.getElementById('hero-badge-e1');
-                        if (e1) e1.textContent = cfg.heroBadgeEmoji1 || '✨';
-                        
                         const e2 = document.getElementById('hero-badge-e2');
                         const cDown = document.getElementById('hero-countdown');
                         const dot = document.getElementById('hero-badge-dot');
                         const linkEl = document.getElementById('hero-badge-link');
-                        
+
+                        // Texto principal: si vacío, ocultar
+                        if (badgeTextEl) {
+                            if (!cfg.heroBadge || cfg.heroBadge.trim() === '') {
+                                badgeTextEl.style.display = 'none';
+                            } else {
+                                badgeTextEl.style.display = '';
+                            }
+                        }
+
+                        // Emoji izquierdo: si vacío, ocultar
+                        if (e1) {
+                            if (!cfg.heroBadgeEmoji1 || cfg.heroBadgeEmoji1.trim() === '') {
+                                e1.style.display = 'none';
+                            } else {
+                                e1.textContent = cfg.heroBadgeEmoji1;
+                                e1.style.display = '';
+                            }
+                        }
+
+                        // Enlace o Emoji derecho
                         if (linkEl && cfg.heroBadgeLinkText && cfg.heroBadgeLinkText.trim() !== '') {
                             linkEl.href = cfg.heroBadgeLinkUrl || '#';
                             linkEl.classList.remove('hidden');
@@ -17857,8 +17881,12 @@
                             if (e2) e2.classList.add('hidden');
                         } else if (e2) {
                             if (linkEl) linkEl.classList.add('hidden');
-                            e2.textContent = cfg.heroBadgeEmoji2 || '🎉';
-                            e2.classList.remove('hidden');
+                            if (!cfg.heroBadgeEmoji2 || cfg.heroBadgeEmoji2.trim() === '') {
+                                e2.style.display = 'none';
+                            } else {
+                                e2.textContent = cfg.heroBadgeEmoji2;
+                                e2.classList.remove('hidden');
+                            }
                             if (cDown) cDown.style.display = 'none';
                             if (dot) dot.classList.add('hidden');
                         }
