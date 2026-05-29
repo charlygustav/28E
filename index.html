@@ -4634,15 +4634,15 @@
             class="relative min-h-[85vh] flex flex-col justify-center items-center text-center pt-10 pb-32 overflow-hidden hero-enter-ready">
 
             <div class="relative z-10 flex flex-col items-center">
-                <div
-                    class="hero-anim hero-anim-1 inline-flex flex-col sm:flex-row items-center gap-1 sm:gap-2.5 px-5 py-2.5 rounded-full border border-brand-500/30 bg-gradient-to-r from-brand-500/10 to-tulip-500/10 text-brand-600 dark:text-brand-400 text-sm font-bold mb-8 uppercase tracking-widest glow-effect">
+                <div id="hero-badge-container" class="hero-anim hero-anim-1 inline-flex flex-col sm:flex-row items-center gap-1 sm:gap-2.5 px-5 py-2.5 rounded-full border border-brand-500/30 bg-gradient-to-r from-brand-500/10 to-tulip-500/10 text-brand-600 dark:text-brand-400 text-sm font-bold mb-8 uppercase tracking-widest glow-effect transition-all hover:border-brand-500/50">
                     <span class="flex items-center gap-1.5">
-                        <span data-i18n="hero_badge">¡Felices 4 Meses!</span> ✨
+                        <span data-i18n="hero_badge">¡Felices 4 Meses!</span> <span id="hero-badge-e1">✨</span>
                     </span>
-                    <span class="inline-flex items-center gap-1.5 font-extrabold"
-                        style="font-variant-numeric: tabular-nums;">
-                        <span class="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse"></span>
+                    <span class="inline-flex items-center gap-1.5 font-extrabold" style="font-variant-numeric: tabular-nums;">
+                        <span id="hero-badge-dot" class="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse"></span>
+                        <a id="hero-badge-link" href="#" class="hidden hover:text-brand-500 transition-colors"><span data-i18n="hero_badge_link"></span></a>
                         <span id="hero-countdown" class="text-[10px] sm:text-xs tracking-wider"></span>
+                        <span id="hero-badge-e2" class="hidden">🎉</span>
                     </span>
                 </div>
                 <h1
@@ -17829,6 +17829,39 @@
                         if (dictionary['en']) dictionary['en'].hero_badge = enTxt;
                         if (dictionary['pt']) dictionary['pt'].hero_badge = ptTxt;
                         if (dictionary['fr']) dictionary['fr'].hero_badge = frTxt;
+
+                        if (cfg.heroBadgeLinkText) {
+                            const linkEn = cfg.heroBadgeLinkText_en || cfg.heroBadgeLinkText;
+                            const linkPt = cfg.heroBadgeLinkText_pt || cfg.heroBadgeLinkText;
+                            const linkFr = cfg.heroBadgeLinkText_fr || cfg.heroBadgeLinkText;
+                            if (dictionary['es']) dictionary['es'].hero_badge_link = cfg.heroBadgeLinkText;
+                            if (dictionary['en']) dictionary['en'].hero_badge_link = linkEn;
+                            if (dictionary['pt']) dictionary['pt'].hero_badge_link = linkPt;
+                            if (dictionary['fr']) dictionary['fr'].hero_badge_link = linkFr;
+                        }
+
+                        // DOM Updates for Badge Elements
+                        const e1 = document.getElementById('hero-badge-e1');
+                        if (e1) e1.textContent = cfg.heroBadgeEmoji1 || '✨';
+                        
+                        const e2 = document.getElementById('hero-badge-e2');
+                        const cDown = document.getElementById('hero-countdown');
+                        const dot = document.getElementById('hero-badge-dot');
+                        const linkEl = document.getElementById('hero-badge-link');
+                        
+                        if (linkEl && cfg.heroBadgeLinkText && cfg.heroBadgeLinkText.trim() !== '') {
+                            linkEl.href = cfg.heroBadgeLinkUrl || '#';
+                            linkEl.classList.remove('hidden');
+                            if (cDown) cDown.style.display = 'none';
+                            if (dot) dot.classList.add('hidden');
+                            if (e2) e2.classList.add('hidden');
+                        } else if (e2) {
+                            if (linkEl) linkEl.classList.add('hidden');
+                            e2.textContent = cfg.heroBadgeEmoji2 || '🎉';
+                            e2.classList.remove('hidden');
+                            if (cDown) cDown.style.display = 'none';
+                            if (dot) dot.classList.add('hidden');
+                        }
 
                         // Aplicar los cambios de inmediato si la función existe
                         if (typeof setLanguage === 'function' && typeof currentLang !== 'undefined') {
