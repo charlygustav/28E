@@ -6,10 +6,10 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-05-29T01:14:32.227Z",
-  "maintDate": "2026-05-28T19:30",
+  "lastUpdated": "2026-05-29T01:15:04.189Z",
+  "maintDate": "2026-05-28T21:30",
   "maintMsg": "",
-  "maintScreen": "standard",
+  "maintScreen": "cinematic",
   "maintSongs": [
     {
       "artist": "John Legend",
@@ -42,8 +42,8 @@
       "title": "Toto Lindo"
     }
   ],
-  "maintType": "indefinite",
-  "mantenimiento": false,
+  "maintType": "scheduled",
+  "mantenimiento": true,
   "refugeText": "",
   "refugeTitle": "Te escucho, mi amor",
   "songs": [
