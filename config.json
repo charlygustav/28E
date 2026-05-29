@@ -6,16 +6,11 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-05-29T00:34:40.024Z",
+  "lastUpdated": "2026-05-29T00:36:05.057Z",
   "maintDate": "2026-05-28T19:30",
   "maintMsg": "",
   "maintScreen": "standard",
   "maintSongs": [
-    {
-      "artist": "Michael Jackson",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779959174756_Michael_Jackson_-_Heaven_Can_Wait.mp3",
-      "title": "Heaven Can Wait"
-    },
     {
       "artist": "John Legend",
       "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779958727306_John_Legend_-_Crowd_Go_Crazy.mp3",
