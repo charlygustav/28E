@@ -6,7 +6,7 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-05-29T05:06:27.590Z",
+  "lastUpdated": "2026-05-29T05:06:46.525Z",
   "maintDate": "2026-05-29T02:06",
   "maintMsg": "",
   "maintScreen": "cinematic",
@@ -43,7 +43,7 @@
     }
   ],
   "maintType": "scheduled",
-  "mantenimiento": false,
+  "mantenimiento": true,
   "refugeText": "",
   "refugeTitle": "Te escucho, mi amor",
   "songs": [
