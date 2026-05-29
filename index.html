@@ -17818,7 +17818,7 @@
                 }
 
                 // 4. Hero Badge
-                if (cfg.heroBadge) {
+                if (cfg.heroBadge || cfg.heroBadgeLinkText || cfg.heroBadgeEmoji1 || cfg.heroBadgeEmoji2) {
                     // Traducciones base desde Firebase o el propio texto
                     const enTxt = cfg.heroBadge_en && cfg.heroBadge_en.trim() !== '' ? cfg.heroBadge_en : cfg.heroBadge;
                     const ptTxt = cfg.heroBadge_pt && cfg.heroBadge_pt.trim() !== '' ? cfg.heroBadge_pt : cfg.heroBadge;
