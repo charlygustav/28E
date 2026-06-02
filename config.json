@@ -3,11 +3,18 @@
   "gal2": "https://i.ibb.co/DDHBsJy2/IMG-20260127-WA0067.jpg",
   "gal3": "https://i.ibb.co/SDfLGvby/IMG-20260301-WA0027.jpg",
   "heroBadge": "¡Felices 4 Meses!",
+  "heroBadgeEmoji1": "✨",
+  "heroBadgeEmoji2": "🎉",
+  "heroBadgeLinkText": "",
+  "heroBadgeLinkText_en": "NEW: Check out your 28E Wrapped here.",
+  "heroBadgeLinkText_fr": "NOUVEAU : Découvrez votre 28E Wrapped ici.",
+  "heroBadgeLinkText_pt": "NOVO: Confira seu 28E embrulhado aqui.",
+  "heroBadgeLinkUrl": "",
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-05-30T00:35:46.483Z",
-  "maintDate": "2026-05-29T22:00",
+  "lastUpdated": "2026-06-02T03:20:06.182Z",
+  "maintDate": "2026-06-02T00:19",
   "maintMsg": "",
   "maintScreen": "cinematic",
   "maintSongs": [
@@ -42,7 +49,7 @@
       "title": "Toto Lindo"
     }
   ],
-  "maintType": "scheduled",
+  "maintType": "indefinite",
   "mantenimiento": true,
   "refugeText": "",
   "refugeTitle": "Te escucho, mi amor",
@@ -179,12 +186,5 @@
     ]
   },
   "vaultHint": "Pista: La identidad que usaste cuando nuestra historia continuó entre píxeles.",
-  "voicePassword": "yairealvarado",
-  "heroBadgeEmoji1": "✨",
-  "heroBadgeEmoji2": "🎉",
-  "heroBadgeLinkText": "",
-  "heroBadgeLinkUrl": "",
-  "heroBadgeLinkText_en": "NEW: Check out your 28E Wrapped here.",
-  "heroBadgeLinkText_pt": "NOVO: Confira seu 28E embrulhado aqui.",
-  "heroBadgeLinkText_fr": "NOUVEAU : Découvrez votre 28E Wrapped ici."
+  "voicePassword": "yairealvarado"
 }
