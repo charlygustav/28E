@@ -657,7 +657,7 @@
                 }, 500);
             } else {
                 // No autenticado
-                window.location.replace('index.html');
+                window.location.replace('/');
             }
         });
     </script>
@@ -745,7 +745,7 @@
             const inicioAudio = new Audio('sounds/inicio.wav');
             inicioAudio.play().catch(e => console.log(e));
             setTimeout(() => {
-                window.location.href = 'index.html';
+                window.location.href = '/';
             }, 400);
         };
 
@@ -977,7 +977,7 @@
 
         function goHome() {
             audioEl.pause();
-            window.location.href = 'index.html';
+            window.location.href = '/';
         }
 
         function getVisibleCard() {

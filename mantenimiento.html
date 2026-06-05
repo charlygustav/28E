@@ -1165,7 +1165,7 @@
       </div>
     </div>
     <div style="display: flex; align-items: center; gap: 1rem;">
-      <a href="privacy.html" title="Política de Privacidad" style="opacity: 0.5; transition: opacity 0.2s ease; display: flex; align-items: center; gap: 0.25rem;">
+      <a href="privacy" title="Política de Privacidad" style="opacity: 0.5; transition: opacity 0.2s ease; display: flex; align-items: center; gap: 0.25rem;">
         <span>🛡️</span> Privacidad
       </a>
       <a href="https://28adminpanel.vercel.app/" target="_blank" title="Panel de Administración" style="opacity: 0.5; transition: opacity 0.2s ease; display: flex; align-items: center; gap: 0.25rem;">
@@ -1471,10 +1471,10 @@
         if (!cfg.mantenimiento) {
           // Limpiar cualquier caché vieja para que index.html no rebote de vuelta
           localStorage.removeItem('yaire_config');
-          window.location.href = 'index.html';
+          window.location.href = '/';
           return;
         } else if (cfg.maintScreen === 'cinematic') {
-          window.location.href = 'maintenance.html';
+          window.location.href = 'maintenance';
           return;
         }
 
@@ -1548,7 +1548,7 @@
                 body: JSON.stringify(updatedCfg)
               }).catch(() => {});
               localStorage.removeItem('yaire_config');
-              window.location.href = 'index.html';
+              window.location.href = '/';
               return;
             }
 

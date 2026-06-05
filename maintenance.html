@@ -324,10 +324,10 @@
 
         // Redirect back to main site when admin disables maintenance
         if (cfg.mantenimiento === false) {
-          window.location.href = 'index.html';
+          window.location.href = '/';
           return;
         } else if (cfg.maintScreen !== 'cinematic') {
-          window.location.href = 'mantenimiento.html';
+          window.location.href = 'mantenimiento';
           return;
         }
 
@@ -437,10 +437,10 @@
           })
           .then(() => {
             localStorage.removeItem('yaire_config');
-            window.location.href = 'index.html';
+            window.location.href = '/';
           })
           .catch(() => {
-            window.location.href = 'index.html';
+            window.location.href = '/';
           });
         return;
       }

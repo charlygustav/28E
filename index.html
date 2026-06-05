@@ -18,7 +18,7 @@
             const _FB = 'https://yaire-591ca-default-rtdb.firebaseio.com/config.json';
 
             // Función para iniciar la cuenta regresiva e inyectar el Toast
-            function startMaintenanceCountdown(targetPage = 'mantenimiento.html') {
+            function startMaintenanceCountdown(targetPage = 'mantenimiento') {
                 if (document.getElementById('maintenance-countdown-overlay')) return;
 
                 // Detener el polling
@@ -144,7 +144,7 @@
                                 }
 
                                 if (fbCfg.mantenimiento && !timeIsUp) {
-                                    const targetPage = (fbCfg.maintScreen === 'cinematic') ? 'maintenance.html' : 'mantenimiento.html';
+                                    const targetPage = (fbCfg.maintScreen === 'cinematic') ? 'maintenance' : 'mantenimiento';
                                     // Solo si el estado previo NO era mantenimiento y ahora sí es mantenimiento
                                     if (oldCfg && !oldCfg.mantenimiento) {
                                         startMaintenanceCountdown(targetPage);
@@ -168,7 +168,7 @@
                                 if (Date.now() >= new Date(yyyy, mm - 1, dd, hh, min).getTime()) timeIsUp = true;
                             }
                             if (fbCfg.mantenimiento && !timeIsUp) {
-                                const targetPage = (fbCfg.maintScreen === 'cinematic') ? 'maintenance.html' : 'mantenimiento.html';
+                                const targetPage = (fbCfg.maintScreen === 'cinematic') ? 'maintenance' : 'mantenimiento';
                                 window.location.replace(targetPage);
                                 return;
                             }
@@ -178,7 +178,7 @@
 
                 // Si no hay mantenimiento, verificar fecha de lanzamiento
                 if (new Date() < unlockDate && urlParams.get('dev') !== '1') {
-                    window.location.replace('mantenimiento.html');
+                    window.location.replace('mantenimiento');
                 }
             }
 
@@ -5914,7 +5914,7 @@
                                     data-i18n="univ_wrapped_title">28E Wrapped</h3>
                                 <p class="text-zinc-600 dark:text-zinc-400 text-sm font-medium text-center mb-4 relative z-10"
                                     data-i18n="univ_wrapped_subtitle">Una sorpresa especial por nuestros 4 meses juntos. Tu resumen personalizado de nuestros momentos.</p>
-                                <button onclick="if(window.yaireCurrentUser){ if(window.AudioManager) window.AudioManager.play('slideralto.wav', 0.8); else new Audio('sounds/slideralto.wav').play(); setTimeout(()=>window.location.href='wrapped.html', 300); } else { if(window.showPremiumAlert) window.showPremiumAlert('Acceso Restringido', 'Inicia sesión con tu cuenta de Google primero para ver tu 28E Wrapped.', 'error'); }"
+                                <button onclick="if(window.yaireCurrentUser){ if(window.AudioManager) window.AudioManager.play('slideralto.wav', 0.8); else new Audio('sounds/slideralto.wav').play(); setTimeout(()=>window.location.href='wrapped', 300); } else { if(window.showPremiumAlert) window.showPremiumAlert('Acceso Restringido', 'Inicia sesión con tu cuenta de Google primero para ver tu 28E Wrapped.', 'error'); }"
                                     class="relative z-10 px-8 py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-brand-500 to-tulip-500 hover:scale-105 transition-transform active:scale-95 shadow-lg shadow-brand-500/30 uppercase tracking-widest flex items-center gap-2"
                                     data-i18n="univ_wrapped_btn">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
@@ -11713,7 +11713,7 @@
             exclusivamente a Yaire.</p>
         <p class="mt-2 text-xs font-mono">28.01.2026 — ∞</p>
         <div class="mt-4 flex items-center justify-center gap-4">
-            <a href="privacy.html"
+            <a href="privacy"
                 class="inline-flex items-center gap-1 text-[9px] uppercase tracking-widest text-zinc-400 dark:text-zinc-600 hover:text-zinc-500 dark:hover:text-zinc-400 transition-colors opacity-50 hover:opacity-100">
                 <span data-i18n="footer_privacy">Política de Privacidad</span>
             </a>
@@ -14235,7 +14235,7 @@
                                 setTimeout(() => {
                                     if(window.yaireCurrentUser){
                                         if(window.AudioManager) window.AudioManager.play('slideralto.wav', 0.8);
-                                        window.location.href='wrapped.html';
+                                        window.location.href='wrapped';
                                     } else {
                                         if(window.showPremiumAlert) window.showPremiumAlert('Acceso Restringido', 'Inicia sesión con tu cuenta de Google primero para ver tu 28E Wrapped.', 'error');
                                     }
