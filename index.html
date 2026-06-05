@@ -3802,7 +3802,104 @@
                 ];
                 let currentSpotTrack = 0;
                 let spotAudio = new Audio();
-                let zenoAudio = new Audio(); // Placeholder until URL is provided
+                let fbRadioAudio = new Audio();
+let radioUnsubscribe = null;
+let serverTimeOffset = 0;
+
+function startFirebaseRadio() {
+    if (!window.yaireRadioFb) {
+        setTimeout(startFirebaseRadio, 100);
+        return;
+    }
+    const { db, ref, onValue } = window.yaireRadioFb;
+    
+    if (!radioUnsubscribe) {
+        onValue(ref(db, '.info/serverTimeOffset'), snap => {
+            serverTimeOffset = snap.val() || 0;
+        });
+
+        radioUnsubscribe = onValue(ref(db, 'radio_state/current'), snap => {
+            const state = snap.val();
+            if (!state || spotlightMode !== 'radio') return;
+
+            const expTitle = document.getElementById('spotlight-expanded-title');
+            const expArtist = document.getElementById('spotlight-expanded-artist');
+            const compactArtist = document.getElementById('spotlight-artist');
+            
+            if (expTitle) expTitle.textContent = state.title || 'Spotlight Radio';
+            if (expArtist) expArtist.innerHTML = `<span class="text-red-500 font-bold tracking-widest uppercase animate-pulse">🔴 EN VIVO: ${state.artist || 'Transmisión'}</span>`;
+            if (compactArtist) compactArtist.innerHTML = `<span class="text-red-500 font-bold tracking-wider animate-pulse">🔴 ${state.artist || 'EN VIVO'}</span>`;
+
+            if (state.title && state.artist) {
+                fetchSpotlightArtwork({title: state.title, artist: state.artist}).then(url => updateAllArtwork(url || 'tulip.ico?v=3'));
+            }
+
+            if (state.isPlaying) {
+                if (fbRadioAudio.src !== new URL(state.src, document.baseURI).href) {
+                    fbRadioAudio.src = state.src;
+                    fbRadioAudio.load();
+                }
+                
+                const now = Date.now() + serverTimeOffset;
+                let seekTime = (now - state.startTime) / 1000;
+                if (seekTime < 0) seekTime = 0;
+                
+                if (Math.abs(fbRadioAudio.currentTime - seekTime) > 2) {
+                    fbRadioAudio.currentTime = seekTime;
+                }
+
+                if (fbRadioAudio.paused && isSpotPlaying) {
+                    fbRadioAudio.play().catch(e => console.error("Radio play error:", e));
+                }
+            } else {
+                fbRadioAudio.pause();
+            }
+        });
+    }
+
+    if (!isSpotPlaying) {
+        isSpotPlaying = true;
+        spotlightUpdateUI();
+        if (fbRadioAudio.src) {
+            fbRadioAudio.play().catch(e => console.error("Radio play error:", e));
+        }
+    }
+}
+
+function stopFirebaseRadio() {
+    isSpotPlaying = false;
+    fbRadioAudio.pause();
+    spotlightUpdateUI();
+    document.title = '28E';
+}
+
+fbRadioAudio.addEventListener('ended', () => {
+    if (spotlightMode !== 'radio' || !window.yaireRadioFb) return;
+    const { db, ref, runTransaction, serverTimestamp } = window.yaireRadioFb;
+    const endedSrc = fbRadioAudio.src;
+
+    runTransaction(ref(db, 'radio_state/current'), (currentData) => {
+        if (!currentData) return currentData;
+        const currentAbsoluteSrc = new URL(currentData.src, document.baseURI).href;
+        if (currentAbsoluteSrc !== endedSrc) return; // Alguien más ya avanzó
+
+        let nextIndex = 0;
+        const currentIndex = spotlightTracks.findIndex(t => t.src === currentData.src || new URL(t.src, document.baseURI).href === currentData.src);
+        if (currentIndex !== -1) {
+            nextIndex = (currentIndex + 1) % spotlightTracks.length;
+        }
+
+        const nextTrack = spotlightTracks[nextIndex];
+        currentData.src = nextTrack.src;
+        currentData.title = nextTrack.title;
+        currentData.artist = nextTrack.artist;
+        currentData.startTime = serverTimestamp();
+        currentData.isPlaying = true;
+        currentData.source = 'auto';
+
+        return currentData;
+    });
+});
                 let spotlightMode = 'music'; // 'music' or 'radio'
                 let isSpotPlaying = false;
                 let isSpotlightExpanded = false;
@@ -4228,27 +4325,9 @@
                 function spotlightTogglePlay() {
                     if (spotlightMode === 'radio') {
                         if (isSpotPlaying) {
-                            zenoAudio.pause();
-                            isSpotPlaying = false;
-                            spotlightUpdateUI();
-                            document.title = '28E';
+                            stopFirebaseRadio();
                         } else {
-                            if (!zenoAudio.src || zenoAudio.src === window.location.href) {
-                                // Live Zeno FM Stream
-                                zenoAudio.src = 'https://stream.zeno.fm/ox28sopxqt1vv'; 
-                                zenoAudio.load();
-                            }
-                            
-                            // Optimistic UI update so the user knows it's loading/playing
-                            isSpotPlaying = true;
-                            spotlightUpdateUI();
-                            
-                            zenoAudio.play().catch(err => {
-                                console.error('Zeno stream playback failed:', err);
-                                isSpotPlaying = false;
-                                spotlightUpdateUI();
-                                alert('No se pudo conectar a la transmisión en vivo. Asegúrate de que la radio está ENCENDIDA y transmitiendo en Zeno.fm.');
-                            });
+                            startFirebaseRadio();
                         }
                         return;
                     }
@@ -4296,8 +4375,8 @@
                     
                     // Pause current playback on switch
                     if (isSpotPlaying) {
-                        if (mode === 'radio' && spotAudio) spotAudio.pause();
-                        if (mode === 'music' && zenoAudio) zenoAudio.pause();
+                        if (mode === 'radio' && spotAudio) { spotAudio.pause(); if (isSpotPlaying) startFirebaseRadio(); }
+                        if (mode === 'music') stopFirebaseRadio();
                         isSpotPlaying = false;
                         spotlightUpdateUI();
                         document.title = '28E';
@@ -18021,7 +18100,7 @@
     <!-- Firebase SDK for Realtime Features -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
-        import { getDatabase, ref, push, onValue, onDisconnect, set, serverTimestamp, get, remove, update } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js';
+        import { getDatabase, ref, push, onValue, onDisconnect, set, serverTimestamp, get, remove, update, runTransaction } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js';
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
 
         const firebaseConfig = {
@@ -18036,6 +18115,7 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
+        window.yaireRadioFb = { db, ref, onValue, set, serverTimestamp, runTransaction };
 
         // --- PRESENCIA ---
         const sessionId = 'session_' + Math.random().toString(36).substr(2, 9);
