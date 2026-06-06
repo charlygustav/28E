@@ -3845,7 +3845,7 @@ function startFirebaseRadio() {
                     let seekTime = (now - state.startTime) / 1000;
                     
                     if (seekTime < 5) {
-                        const announcerText = `Estás escuchando ${state.title} de ${state.artist}, en Yaire FM.`;
+                        const announcerText = `Estás escuchando ${state.title} de ${state.artist}, en Spotlight Radio.`;
                         const announcerAudio = new Audio(`/api/tts?text=${encodeURIComponent(announcerText)}`);
                         
                         // We use the Audio object directly to check if API is available
