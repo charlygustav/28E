@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     return res.status(503).json({ error: 'ELEVENLABS_API_KEY is not configured' });
   }
 
-  const voiceId = 'pNInz6obpgDQGcFmaJcg'; 
+  const voiceId = 'IKne3meq5aSn9XLyUdCD';  
 
   try {
     const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}/stream`, {
