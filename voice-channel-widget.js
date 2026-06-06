@@ -1393,6 +1393,7 @@
         this.socket.on('disconnect', (reason) => {
           if (reason === 'io client disconnect' || reason === 'io server disconnect') {
             this._cleanup();
+            if (this._bar) this._bar.classList.remove('show');
             this._render(this._tplLogin());
           }
           // For transport drops, socket.io reconnects silently in background
