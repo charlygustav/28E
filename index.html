@@ -3803,6 +3803,7 @@
                 let currentSpotTrack = 0;
                 let spotAudio = new Audio();
                 let fbRadioAudio = new Audio();
+let currentRadioState = null;
 let radioUnsubscribe = null;
 let serverTimeOffset = 0;
 
@@ -3821,6 +3822,7 @@ function startFirebaseRadio() {
         
         radioUnsubscribe = onValue(ref(db, 'radio_state/current'), snap => {
             const state = snap.val();
+            currentRadioState = state;
             if (!state || spotlightMode !== 'radio') return;
 
             const expTitle = document.getElementById('spotlight-expanded-title');
@@ -3917,6 +3919,13 @@ function startFirebaseRadio() {
         isSpotPlaying = true;
         spotlightUpdateUI();
         if (fbRadioAudio.src) {
+            // Resync current time when locally resumed
+            if (currentRadioState && currentRadioState.isPlaying && currentRadioState.startTime) {
+                const now = Date.now() + serverTimeOffset;
+                let seekTime = (now - currentRadioState.startTime) / 1000;
+                if (seekTime < 0) seekTime = 0;
+                fbRadioAudio.currentTime = seekTime;
+            }
             fbRadioAudio.play().catch(e => console.error("Radio play error:", e));
         }
     }
