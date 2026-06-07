@@ -3692,6 +3692,10 @@
                     <span class="menu-link-icon bg-purple-50 dark:bg-purple-900/20 shadow-[0_0_12px_rgba(168,85,247,0.3)]">🎮</span>
                     <span data-i18n="menu_games">Minijuegos</span>
                 </a>
+                <a href="javascript:void(0)" onclick="openRoulette(); toggleMenu();" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400 relative">
+                    <span class="menu-link-icon bg-red-50 dark:bg-red-900/20 shadow-[0_0_12px_rgba(239,68,68,0.3)]">🎰</span>
+                    <span>Ruleta de Citas</span>
+                </a>
                 <a href="#colores-yaire" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
                     <span class="menu-link-icon bg-rose-50 dark:bg-rose-900/20 shadow-[0_0_12px_rgba(244,63,94,0.3)]">🎨</span>
                     <span data-i18n="menu_colors">Colores Favoritos</span>
@@ -18781,6 +18785,39 @@ fbRadioAudio.addEventListener('ended', () => {
             }
         };
     </script>
+
+    <!-- Roulette Modal -->
+    <div id="roulette-modal" class="fixed inset-0 z-[100] hidden flex-col items-center justify-center opacity-0 transition-opacity duration-500">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-xl" onclick="closeRoulette()"></div>
+        <!-- Modal Content -->
+        <div class="relative w-11/12 max-w-md bg-white/10 dark:bg-black/40 backdrop-blur-3xl border border-white/20 rounded-[2rem] shadow-[0_16px_64px_rgba(0,0,0,0.5)] p-8 text-center flex flex-col items-center overflow-hidden">
+            <!-- Glow -->
+            <div class="absolute -top-32 -left-32 w-64 h-64 bg-brand-500/30 rounded-full blur-[80px] pointer-events-none"></div>
+            <div class="absolute -bottom-32 -right-32 w-64 h-64 bg-tulip-500/30 rounded-full blur-[80px] pointer-events-none"></div>
+            
+            <h2 class="text-3xl font-extrabold text-white mb-2 tracking-tight drop-shadow-md">Ruleta de Citas</h2>
+            <p class="text-zinc-200 text-sm mb-8 font-medium">Nuestra próxima cita virtual será...</p>
+            
+            <!-- Slot Machine Display -->
+            <div class="relative w-full h-24 bg-black/50 border border-white/20 rounded-2xl overflow-hidden shadow-inner mb-8">
+                <!-- Highlight line -->
+                <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-10 bg-white/10 border-y border-white/20 pointer-events-none z-10"></div>
+                <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/80 pointer-events-none z-20"></div>
+                <!-- Numbers/Text container -->
+                <div id="roulette-slot" class="absolute left-0 right-0 flex flex-col items-center transition-transform" style="transform: translateY(0px); top: 1.25rem;">
+                    <!-- JS will populate options here -->
+                </div>
+            </div>
+            
+            <button id="roulette-spin-btn" onclick="spinRoulette()" class="px-8 py-3 bg-gradient-to-r from-brand-500 to-tulip-500 text-white font-bold rounded-xl shadow-[0_0_20px_rgba(236,72,153,0.5)] hover:shadow-[0_0_30px_rgba(236,72,153,0.8)] hover:scale-105 transition-all active:scale-95">
+                🎰 Tirar de la Palanca
+            </button>
+            <button onclick="closeRoulette()" class="mt-5 text-xs font-bold text-zinc-400 hover:text-white transition-colors tracking-widest uppercase">
+                Cerrar
+            </button>
+        </div>
+    </div>
 </body>
 
 </html>
