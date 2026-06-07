@@ -18869,6 +18869,8 @@ fbRadioAudio.addEventListener('ended', () => {
 
 
         let isSpinningRoulette = false;
+        let lastWinnerIndex = 0;
+        
         function initRouletteSlot() {
             const slot = document.getElementById('roulette-slot');
             slot.innerHTML = '';
@@ -18886,6 +18888,7 @@ fbRadioAudio.addEventListener('ended', () => {
             
             if (!isSpinningRoulette && window.gsap) {
                 gsap.set(slot, { y: 0 });
+                lastWinnerIndex = 0;
             }
         }
 
@@ -18897,7 +18900,12 @@ fbRadioAudio.addEventListener('ended', () => {
             const itemHeight = 48; 
             const totalItems = rouletteIdeas.length;
             
+            // Instantly snap to the equivalent item near the top to allow infinite spinning
+            gsap.set(slot, { y: -(lastWinnerIndex * itemHeight) });
+            
             const winnerIndex = Math.floor(Math.random() * totalItems);
+            lastWinnerIndex = winnerIndex;
+            
             const targetItemIndex = (20 * totalItems) + winnerIndex;
             
             const targetY = -(targetItemIndex * itemHeight);
