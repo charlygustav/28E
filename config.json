@@ -13,10 +13,10 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-06-02T03:20:42.666Z",
-  "maintDate": "2026-06-02T00:19",
+  "lastUpdated": "2026-06-07T09:26:41.990Z",
+  "maintDate": "2026-06-05T19:22",
   "maintMsg": "",
-  "maintScreen": "cinematic",
+  "maintScreen": "standard",
   "maintSongs": [
     {
       "artist": "John Legend",
@@ -49,8 +49,8 @@
       "title": "Toto Lindo"
     }
   ],
-  "maintType": "scheduled",
-  "mantenimiento": false,
+  "maintType": "indefinite",
+  "mantenimiento": true,
   "refugeText": "",
   "refugeTitle": "Te escucho, mi amor",
   "songs": [
@@ -162,29 +162,9 @@
       "Sugerencias: 'te amo' o 'manzanita'...",
       "Busca 'El Pacto' para ver nuestra promesa...",
       "Prueba a escribir 'yaire' y dale Enter..."
-    ],
-    "en": [
-      "Search curiosities of the page...",
-      "Explore the 'Tulip Garden'...",
-      "Suggestions: 'I love you' or 'manzanita'...",
-      "Search 'The Covenant' to see our promise...",
-      "Try typing 'yaire' and hit Enter..."
-    ],
-    "pt": [
-      "Pesquise curiosidades da página...",
-      "Explore o 'Jardim das Tulipas'...",
-      "Sugestões: 'eu te amo' ou 'manzanita'...",
-      "Pesquise 'The Covenant' para ver nossa promessa...",
-      "Tente digitar 'yaire' e pressione Enter..."
-    ],
-    "fr": [
-      "Rechercher les curiosités de la page...",
-      "Explorez le « jardin des tulipes »...",
-      "Suggestions : 'Je t'aime' ou 'manzanita'...",
-      "Recherchez « The Covenant » pour voir notre promesse...",
-      "Essayez de taper « yaire » et appuyez sur Entrée..."
     ]
   },
   "vaultHint": "Pista: La identidad que usaste cuando nuestra historia continuó entre píxeles.",
-  "voicePassword": "yairealvarado"
+  "voicePassword": "yairealvarado",
+  "vaultHash": "19a232736e936a30eac2a3fc8fcbad4fbda086f9b67b3a809fef476c0bd85a84"
 }
