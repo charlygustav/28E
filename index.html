@@ -6941,7 +6941,7 @@ fbRadioAudio.addEventListener('ended', () => {
                     <div class="absolute -inset-1 bg-gradient-to-r from-brand-500 via-rose-500 to-orange-500 rounded-2xl blur-md opacity-70 group-hover:opacity-100 transition duration-300"></div>
                     <div class="relative px-8 py-4 bg-gradient-to-b from-brand-500 to-rose-600 border-t border-white/20 text-white font-black text-xl rounded-xl shadow-[0_6px_0_#9f1239,0_15px_20px_rgba(0,0,0,0.4)] group-active:shadow-[0_0px_0_#9f1239,0_5px_10px_rgba(0,0,0,0.4)] group-active:translate-y-[6px] transition-all flex items-center justify-center gap-3 tracking-wide uppercase">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-2h2v2zm0-4H9V8h2v4zm4 4h-2v-2h2v2zm0-4h-2V8h2v4z"/></svg>
-                        Tirar de la Palanca
+                        <span id="roulette-spin-text">Tirar de la Palanca</span>
                     </div>
                 </button>
             </div>
@@ -18903,7 +18903,8 @@ fbRadioAudio.addEventListener('ended', () => {
             const targetY = -(targetItemIndex * itemHeight);
             
             const btn = document.getElementById('roulette-spin-btn');
-            btn.innerText = 'Girando...';
+            const btnText = document.getElementById('roulette-spin-text');
+            btnText.innerText = 'Girando...';
             btn.style.opacity = '0.5';
             btn.style.pointerEvents = 'none';
             
@@ -18913,7 +18914,7 @@ fbRadioAudio.addEventListener('ended', () => {
                 ease: "power4.out",
                 onComplete: () => {
                     isSpinningRoulette = false;
-                    btn.innerText = '🎰 Tirar de la Palanca';
+                    btnText.innerText = 'Tirar de la Palanca';
                     btn.style.opacity = '1';
                     btn.style.pointerEvents = 'auto';
                     try {
