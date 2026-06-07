@@ -18818,6 +18818,111 @@ fbRadioAudio.addEventListener('ended', () => {
             </button>
         </div>
     </div>
+    
+    <!-- ROULETTE LOGIC -->
+    <script>
+        const rouletteIdeas = [
+            "🍕 Cena Sorpresa (UberEats cruzado)",
+            "🍿 Noche de Cine Sincronizada",
+            "🎮 Noche Gamer Juntos",
+            "✈️ Turismo Virtual por Europa",
+            "🎵 Batalla Musical de la Radio",
+            "🍷 Cita de Gala en Llamada",
+            "🛌 Pijamada en Llamada",
+            "❓ Test de Preguntas Profundas",
+            "🎨 Noche de Dibujar Juntos",
+            "☕ Café Virtual por la Mañana"
+        ];
+        
+        window.openRoulette = function() {
+            const modal = document.getElementById('roulette-modal');
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.classList.add('opacity-100');
+            }, 10);
+            initRouletteSlot();
+        };
+
+        window.closeRoulette = function() {
+            const modal = document.getElementById('roulette-modal');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.style.display = '';
+            }, 500);
+        };
+
+        let isSpinningRoulette = false;
+        function initRouletteSlot() {
+            const slot = document.getElementById('roulette-slot');
+            slot.innerHTML = '';
+            const longList = [];
+            for(let i=0; i<30; i++) {
+                longList.push(...rouletteIdeas);
+            }
+            
+            longList.forEach(idea => {
+                const div = document.createElement('div');
+                div.className = 'h-10 flex items-center justify-center text-lg font-bold text-white whitespace-nowrap';
+                div.innerText = idea;
+                slot.appendChild(div);
+            });
+            
+            if (!isSpinningRoulette && window.gsap) {
+                gsap.set(slot, { y: 0 });
+            }
+        }
+
+        window.spinRoulette = function() {
+            if (isSpinningRoulette || !window.gsap) return;
+            isSpinningRoulette = true;
+            
+            const slot = document.getElementById('roulette-slot');
+            const itemHeight = 40; 
+            const totalItems = rouletteIdeas.length;
+            
+            const winnerIndex = Math.floor(Math.random() * totalItems);
+            const targetItemIndex = (20 * totalItems) + winnerIndex;
+            
+            const targetY = -(targetItemIndex * itemHeight);
+            
+            const btn = document.getElementById('roulette-spin-btn');
+            btn.innerText = 'Girando...';
+            btn.style.opacity = '0.5';
+            btn.style.pointerEvents = 'none';
+            
+            gsap.to(slot, {
+                y: targetY,
+                duration: 6,
+                ease: "power4.out",
+                onComplete: () => {
+                    isSpinningRoulette = false;
+                    btn.innerText = '🎰 Tirar de la Palanca';
+                    btn.style.opacity = '1';
+                    btn.style.pointerEvents = 'auto';
+                    try {
+                        if (window.confetti) {
+                            confetti({
+                                particleCount: 150,
+                                spread: 80,
+                                origin: { y: 0.6 },
+                                colors: ['#ec4899', '#8b5cf6', '#f43f5e', '#fbbf24'],
+                                zIndex: 9999
+                            });
+                        }
+                    } catch(e){}
+                    
+                    try {
+                        const audio = new Audio('/api/tts?text=' + encodeURIComponent("Su cita de hoy será: " + rouletteIdeas[winnerIndex]));
+                        audio.play().catch(e=>console.log(e));
+                    } catch(e){}
+                }
+            });
+        };
+    </script>
 </body>
 
 </html>
