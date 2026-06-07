@@ -3692,7 +3692,7 @@
                     <span class="menu-link-icon bg-purple-50 dark:bg-purple-900/20 shadow-[0_0_12px_rgba(168,85,247,0.3)]">🎮</span>
                     <span data-i18n="menu_games">Minijuegos</span>
                 </a>
-                <a href="#ruleta" onclick="toggleMenu();" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400 relative">
+                <a href="#ruleta" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400 relative">
                     <span class="menu-link-icon bg-red-50 dark:bg-red-900/20 shadow-[0_0_12px_rgba(239,68,68,0.3)]">🎰</span>
                     <span>Ruleta de Citas</span>
                 </a>
@@ -14779,7 +14779,7 @@ fbRadioAudio.addEventListener('ended', () => {
             document.querySelectorAll('.cv-section').forEach(el => animPauseObs.observe(el));
 
             // Scroll spy del menú — usa la sección más centrada en pantalla
-            const sectionIds = ['hero', 'historia', 'nombre', 'tulipanes', 'guia-colores-tulipan', 'quiz-girasol', 'distancia', 'comida', 'universo', 'galeria', 'minijuegos', 'promesas', 'guestbook', 'colores-yaire', 'memorial', 'hype', 'estadisticas', 'top5yaire', 'enigma-28', 'tu-cancion', 'secreto'];
+            const sectionIds = ['hero', 'historia', 'nombre', 'tulipanes', 'guia-colores-tulipan', 'quiz-girasol', 'distancia', 'comida', 'universo', 'galeria', 'minijuegos', 'ruleta', 'promesas', 'guestbook', 'colores-yaire', 'memorial', 'hype', 'estadisticas', 'top5yaire', 'enigma-28', 'tu-cancion', 'secreto'];
 
             // Cache: elementos del DOM resueltos una sola vez — evitar getElementById en cada tick de scroll
             const _sectionEls = {};
@@ -18482,6 +18482,7 @@ fbRadioAudio.addEventListener('ended', () => {
                     "universo": "Universo",
                     "galeria": "Galería de Arte",
                     "minijuegos": "Zona de Juegos",
+                    "ruleta": "Ruleta de Citas",
                     "promesas": "Mis Promesas",
                     "guestbook": "Muro de Dedicatorias",
                     "colores-yaire": "Colores de Yaire",
