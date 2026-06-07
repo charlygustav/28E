@@ -4624,28 +4624,6 @@ fbRadioAudio.addEventListener('ended', () => {
             </script>
         </div>
 
-        <!-- Footer: Language Selector -->
-        <div
-            class="px-5 py-4 border-t border-zinc-200/60 dark:border-zinc-800/60 flex items-center justify-between flex-shrink-0 bg-zinc-50/50 dark:bg-zinc-900/30">
-            <span class="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest"
-                data-i18n="menu_lang">Idioma</span>
-            <div
-                class="flex items-center p-1 rounded-full bg-zinc-100 dark:bg-zinc-800/80 border border-zinc-200/60 dark:border-zinc-700/60 shadow-inner">
-                <button
-                    class="lang-btn px-3.5 py-1.5 text-[10px] font-extrabold rounded-full transition-all duration-300"
-                    data-lang="es">ES</button>
-                <button
-                    class="lang-btn px-3.5 py-1.5 text-[10px] font-extrabold rounded-full transition-all duration-300"
-                    data-lang="en">EN</button>
-                <button
-                    class="lang-btn px-3.5 py-1.5 text-[10px] font-extrabold rounded-full transition-all duration-300"
-                    data-lang="fr">FR</button>
-                <button
-                    class="lang-btn px-3.5 py-1.5 text-[10px] font-extrabold rounded-full transition-all duration-300"
-                    data-lang="pt">PT</button>
-            </div>
-        </div>
-
         <!-- Spotlight Expanded Playlist & Player Overlay -->
         <div id="spotlight-expanded" class="absolute inset-0 z-[60] flex flex-col pointer-events-none"
             style="background: #ffffff; transform: translateY(100%); opacity: 0;">
@@ -13950,7 +13928,7 @@ fbRadioAudio.addEventListener('ended', () => {
         }
 
         function initLanguage() {
-            document.querySelectorAll('.lang-btn').forEach(b => b.addEventListener('click', (e) => setLanguage(e.currentTarget.getAttribute('data-lang'), true)));
+            
             setLanguage('es', false);
         }
 
