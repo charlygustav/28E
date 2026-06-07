@@ -1392,11 +1392,20 @@
         // Only clean up UI on intentional/permanent disconnects
         this.socket.on('disconnect', (reason) => {
           if (reason === 'io client disconnect' || reason === 'io server disconnect') {
+            this.connected = false;
             this._cleanup();
             if (this._bar) this._bar.classList.remove('show');
             this._render(this._tplLogin());
           }
           // For transport drops, socket.io reconnects silently in background
+        });
+
+        this.socket.on('kicked', () => {
+          this.connected = false;
+          if (this.socket) { this.socket.disconnect(); }
+          this._cleanup();
+          if (this._bar) this._bar.classList.remove('show');
+          this._render(this._tplLogin("Has sido expulsado del canal por un administrador."));
         });
 
         // ── MUSIC EVENTS ────────────────────────────────────────────────────
@@ -2317,8 +2326,9 @@
     }
 
     _cleanup() {
-      this._stopSfx(this.progNode); this.progNode = null;
-      this._stopTimer();
+        this.connected = false;
+        this._stopSfx(this.progNode); this.progNode = null;
+        this._stopTimer();
       this._stopSpeaking();
       this._stopKeepAlive();
       cancelAnimationFrame(this._vizRaf);
