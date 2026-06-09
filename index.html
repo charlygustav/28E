@@ -2308,22 +2308,25 @@
 
     <!-- 1.5 Wrapped Redirect Modal -->
     <div id="wrapped-redirect-modal"
-        class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-zinc-900/60 backdrop-blur-sm transform-gpu transition-opacity opacity-0"
+        class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-zinc-950/85 backdrop-blur-md transform-gpu transition-opacity opacity-0 px-4"
         onclick="if(event.target === this) closeModal('wrapped-redirect-modal', 'wrapped-redirect-content')">
-        <div class="bg-white dark:bg-zinc-900 p-8 rounded-3xl shadow-2xl border border-zinc-200 dark:border-zinc-800 max-w-md w-full mx-4 transform scale-95 transition-transform duration-300"
+        <div class="bg-white dark:bg-[#0e0e12] p-8 sm:p-10 rounded-[2.25rem] sm:rounded-[2.5rem] shadow-[0_30px_80px_rgba(0,0,0,.5)] border border-zinc-200/50 dark:border-zinc-700/40 max-w-md w-full transform scale-95 transition-transform duration-300 relative overflow-hidden"
             id="wrapped-redirect-content">
-            <div class="text-5xl mb-4 text-center">🎉</div>
-            <h3 class="text-2xl font-bold mb-2 text-center text-zinc-900 dark:text-white" data-i18n="univ_wrapped_title">28E Wrapped</h3>
-            <p class="text-zinc-600 dark:text-zinc-400 text-center mb-6 leading-relaxed">
+            
+            <div class="absolute inset-0 bg-gradient-to-br from-brand-500/10 to-tulip-500/10 pointer-events-none"></div>
+
+            <div class="text-5xl mb-6 text-center relative z-10">🎉</div>
+            <h3 class="text-3xl font-black mb-3 text-center text-zinc-900 dark:text-white tracking-tight relative z-10" data-i18n="univ_wrapped_title">28E Wrapped</h3>
+            <p class="text-zinc-600 dark:text-zinc-400 text-center mb-8 leading-relaxed font-medium relative z-10">
                 Estás a punto de ir a tu resumen personalizado. Prepárate para un viaje lleno de recuerdos.<br><br>¿Continuar?
             </p>
-            <div class="flex flex-col sm:flex-row gap-3">
+            <div class="flex flex-col sm:flex-row gap-3 relative z-10">
                 <button onclick="closeModal('wrapped-redirect-modal', 'wrapped-redirect-content')"
-                    class="flex-1 px-6 py-3 rounded-xl font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors">
+                    class="flex-1 px-6 py-3.5 rounded-2xl font-bold bg-zinc-100 dark:bg-zinc-800/80 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all border border-zinc-200 dark:border-zinc-700/50">
                     Aún no
                 </button>
-                <button onclick="if(window.AudioManager) window.AudioManager.play('slideralto.wav', 0.8); else new Audio('sounds/slideralto.wav').play(); window.location.href='wrapped';"
-                    class="flex-1 px-6 py-3 rounded-xl font-bold bg-gradient-to-r from-pink-500 to-rose-500 text-white hover:opacity-90 transition-opacity text-center flex items-center justify-center gap-2">
+                <button onclick="if(window.AudioManager) window.AudioManager.play('entry.wav', 0.6); window.location.href='wrapped';"
+                    class="flex-1 px-6 py-3.5 rounded-2xl font-bold bg-gradient-to-r from-brand-500 to-tulip-500 text-white hover:scale-105 active:scale-95 shadow-lg shadow-brand-500/30 transition-all text-center flex items-center justify-center gap-2 tracking-wide uppercase text-sm">
                     ¡Vamos!
                 </button>
             </div>
