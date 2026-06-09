@@ -435,6 +435,8 @@
         load('act_join', 'sounds/activity_user_join.mp3');
         load('act_left', 'sounds/activity_user_left.mp3');
         load('music_start', 'sounds/lamusicadelvoz.wav');
+        load('vc_chat_msg', 'sounds/nuevomensajeenelchatdevoz.wav');
+        load('music_end_all', 'sounds/yanomasmusica.wav');
       } catch(e) {}
     }
 
@@ -1432,7 +1434,7 @@
         this.socket.on('music_stop', () => {
           this._musicState = { currentIndex: -1, isPlaying: false };
           this._stopMusic();
-          this._playSfx('act_end', 0.3);
+          this._playSfx('music_end_all', 0.5);
         });
 
         this.socket.on('music_seek', ({ time }) => {
@@ -1679,6 +1681,7 @@
       if (this._chatMsgs.length > 50) this._chatMsgs.shift();
 
       const isMe = from === this.myId;
+      if (!isMe) this._playSfx('vc_chat_msg', 0.4);
 
       // Unread badge logic
       if (this._activeTab !== 'chat' && !isMe) {
