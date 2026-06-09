@@ -1617,20 +1617,44 @@
     // ── CHAT METHODS ────────────────────────────────────────────────────
     _renderChatMsgs() {
       if (this._chatMsgs.length === 0) return `<div class="text-center text-white/20 text-xs py-8">${_t('vc_chat_empty')}</div>`;
-      return this._chatMsgs.map(m => {
+      
+      let html = '';
+      let lastFrom = null;
+
+      for (let i = 0; i < this._chatMsgs.length; i++) {
+        const m = this._chatMsgs[i];
         const isMe = m.from === this.myId;
         const time = new Date(m.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        return `
-          <div class="flex flex-col mb-3 ${isMe ? 'items-end' : 'items-start'}">
+        const escText = this._escHtml(m.text);
+        const isEmojiOnly = /^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F|\s)+$/u.test(m.text) && m.text.trim().length > 0;
+        
+        const bubbleClass = isEmojiOnly 
+          ? 'text-4xl py-1' 
+          : 'bg-white text-zinc-900 rounded-2xl px-3 py-2 text-sm shadow-sm font-medium';
+              
+        const isGrouped = (lastFrom === m.from);
+        
+        if (!isGrouped) {
+          if (i > 0) html += `</div></div>`; // close previous group
+          html += `
+          <div class="flex flex-col mb-3 ${isMe ? 'items-end' : 'items-start'} vc-chat-msg" data-from="${m.from}">
             <div class="flex items-baseline gap-2 mb-1 px-1">
               <span class="text-[10px] font-bold ${isMe ? 'text-amber-500' : 'text-white/60'}">${m.name}</span>
               <span class="text-[9px] text-white/30">${time}</span>
             </div>
-            <div class="max-w-[85%] px-3 py-2 text-xs shadow-sm ${isMe ? 'bg-amber-500 text-black rounded-2xl rounded-tr-sm' : 'bg-white/10 text-white/90 rounded-2xl rounded-tl-sm border border-white/5'}">
-              ${this._escHtml(m.text)}
-            </div>
-          </div>`;
-      }).join('');
+            <div class="flex flex-col gap-1 w-full ${isMe ? 'items-end' : 'items-start'} vc-chat-bubbles">
+              <div class="max-w-[85%] ${bubbleClass}">${escText}</div>`;
+        } else {
+          html += `<div class="max-w-[85%] ${bubbleClass}">${escText}</div>`;
+        }
+        
+        lastFrom = m.from;
+        
+        if (i === this._chatMsgs.length - 1) {
+          html += `</div></div>`; // close last group
+        }
+      }
+      return html;
     }
 
     // Obsolete _toggleChat removed
@@ -1682,29 +1706,47 @@
         if (emptyEl && emptyEl.textContent === _t('vc_chat_empty')) emptyEl.remove();
         
         const time = new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        msgsEl.insertAdjacentHTML('beforeend', `
-          <div class="flex flex-col mb-3 ${isMe ? 'items-end' : 'items-start'} vc-chat-msg">
-            <div class="flex items-baseline gap-2 mb-1 px-1">
-              <span class="text-[10px] font-bold ${isMe ? 'text-amber-500' : 'text-white/60'}">${name}</span>
-              <span class="text-[9px] text-white/30">${time}</span>
-            </div>
-            <div class="max-w-[85%] px-3 py-2 text-xs shadow-sm ${isMe ? 'bg-amber-500 text-black rounded-2xl rounded-tr-sm' : 'bg-white/10 text-white/90 rounded-2xl rounded-tl-sm border border-white/5'}">
-              ${this._escHtml(text)}
-            </div>
-          </div>`);
+        const escText = this._escHtml(text);
+        const isEmojiOnly = /^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F|\s)+$/u.test(text) && text.trim().length > 0;
+        
+        const bubbleClass = isEmojiOnly 
+          ? 'text-4xl py-1' 
+          : 'bg-white text-zinc-900 rounded-2xl px-3 py-2 text-sm shadow-sm font-medium';
+              
+        const lastMsgEl = msgsEl.lastElementChild;
+        const lastFrom = lastMsgEl ? lastMsgEl.getAttribute('data-from') : null;
+        
+        let newBubbleEl;
+
+        if (lastFrom === from) {
+          // append just the bubble
+          const bubblesContainer = lastMsgEl.querySelector('.vc-chat-bubbles');
+          bubblesContainer.insertAdjacentHTML('beforeend', `<div class="max-w-[85%] ${bubbleClass}">${escText}</div>`);
+          newBubbleEl = bubblesContainer.lastElementChild;
+        } else {
+          // append full group
+          msgsEl.insertAdjacentHTML('beforeend', `
+            <div class="flex flex-col mb-3 ${isMe ? 'items-end' : 'items-start'} vc-chat-msg" data-from="${from}">
+              <div class="flex items-baseline gap-2 mb-1 px-1">
+                <span class="text-[10px] font-bold ${isMe ? 'text-amber-500' : 'text-white/60'}">${name}</span>
+                <span class="text-[9px] text-white/30">${time}</span>
+              </div>
+              <div class="flex flex-col gap-1 w-full ${isMe ? 'items-end' : 'items-start'} vc-chat-bubbles">
+                <div class="max-w-[85%] ${bubbleClass}">${escText}</div>
+              </div>
+            </div>`);
+          newBubbleEl = msgsEl.lastElementChild.querySelector('.vc-chat-bubbles').lastElementChild;
+        }
           
-        if (window.gsap) {
-          const newMsg = msgsEl.lastElementChild;
-          if (newMsg) {
-            gsap.from(newMsg, {
-              y: 20,
-              opacity: 0,
-              scale: 0.9,
-              duration: 0.4,
-              ease: "back.out(1.5)",
-              onComplete: () => { msgsEl.scrollTop = msgsEl.scrollHeight; }
-            });
-          }
+        if (window.gsap && newBubbleEl) {
+          gsap.from(newBubbleEl, {
+            y: 20,
+            opacity: 0,
+            scale: 0.9,
+            duration: 0.4,
+            ease: "back.out(1.5)",
+            onComplete: () => { msgsEl.scrollTop = msgsEl.scrollHeight; }
+          });
         }
         msgsEl.scrollTop = msgsEl.scrollHeight;
       }
