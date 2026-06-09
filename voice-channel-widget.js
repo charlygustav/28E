@@ -434,6 +434,7 @@
         load('act_end', 'sounds/activity_end.mp3');
         load('act_join', 'sounds/activity_user_join.mp3');
         load('act_left', 'sounds/activity_user_left.mp3');
+        load('music_start', 'sounds/lamusicadelvoz.wav');
       } catch(e) {}
     }
 
@@ -2244,6 +2245,7 @@
     }
 
     async _playMusicTrack(track, seekTime = 0) {
+      if (seekTime === 0) this._playSfx('music_start', 0.5);
       this._musicCurrentTrack = track;
       this._musicPlaying = true;
       this._destroyMusicPlayer();
