@@ -1418,7 +1418,7 @@
 
         this.socket.on('music_play', async ({ track, state }) => {
           this._musicState = state;
-          this._playSfx('act_launch', 0.3);
+          this._playSfx('music_start', 0.5);
           const elapsed = state.startedAt ? (Date.now() - state.startedAt) / 1000 : 0;
           await this._playMusicTrack(track, Math.max(0, elapsed));
         });
@@ -2262,7 +2262,6 @@
     }
 
     async _playMusicTrack(track, seekTime = 0) {
-      if (seekTime === 0) this._playSfx('music_start', 0.5);
       this._musicCurrentTrack = track;
       this._musicPlaying = true;
       this._destroyMusicPlayer();
