@@ -2208,7 +2208,7 @@
       addBtn.innerHTML = originalText;
       if (this.socket) {
         this.socket.emit('music_add', { url: parsed.url, title, type: parsed.type });
-        this._playSfx('music_start', 0.5);
+        this._playSfx('toggleOn', 0.3);
       }
     }
 
