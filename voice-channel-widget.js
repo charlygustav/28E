@@ -1630,7 +1630,7 @@
         
         const bubbleClass = isEmojiOnly 
           ? 'text-4xl py-1' 
-          : 'bg-white text-zinc-900 rounded-2xl px-3 py-2 text-sm shadow-sm font-medium';
+          : (isMe ? 'bg-black text-white rounded-2xl px-3 py-2 text-sm shadow-sm font-medium border border-white/10' : 'bg-white text-zinc-900 rounded-2xl px-3 py-2 text-sm shadow-sm font-medium');
               
         const isGrouped = (lastFrom === m.from);
         
@@ -1711,7 +1711,7 @@
         
         const bubbleClass = isEmojiOnly 
           ? 'text-4xl py-1' 
-          : 'bg-white text-zinc-900 rounded-2xl px-3 py-2 text-sm shadow-sm font-medium';
+          : (isMe ? 'bg-black text-white rounded-2xl px-3 py-2 text-sm shadow-sm font-medium border border-white/10' : 'bg-white text-zinc-900 rounded-2xl px-3 py-2 text-sm shadow-sm font-medium');
               
         const lastMsgEl = msgsEl.lastElementChild;
         const lastFrom = lastMsgEl ? lastMsgEl.getAttribute('data-from') : null;
