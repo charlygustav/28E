@@ -2169,6 +2169,23 @@
         });
       });
       const progressBar = document.getElementById('vc-music-progress');
+      if (progressBar) {
+        progressBar.addEventListener('click', (e) => {
+          if (!this._musicCurrentTrack || this._musicCurrentTrack.type !== 'youtube') return;
+          const rect = progressBar.getBoundingClientRect();
+          const percent = (e.clientX - rect.left) / rect.width;
+          if (this._ytPlayer && typeof this._ytPlayer.getDuration === 'function') {
+            const time = this._ytPlayer.getDuration() * percent;
+            this._seekMusic(time);
+          }
+        });
+      }
+      const volSlider = document.getElementById('vc-music-vol-slider');
+      if (volSlider) {
+        volSlider.addEventListener('input', (e) => {
+          this._setMusicVolume(e.target.value);
+        });
+      }
     }
 
     async _addMusicFromInput() {
