@@ -2284,8 +2284,14 @@
     }
 
     _setMusicVolume(vol) {
-      this._musicVolume = vol;
-      if (this._ytPlayer && typeof this._ytPlayer.setVolume === 'function') this._ytPlayer.setVolume(vol);
+      const v = Number(vol);
+      this._musicVolume = v;
+      if (this._ytPlayer && typeof this._ytPlayer.setVolume === 'function') {
+        this._ytPlayer.setVolume(this.dnd ? 0 : v);
+        if (v > 0 && typeof this._ytPlayer.unMute === 'function') {
+          this._ytPlayer.unMute();
+        }
+      }
     }
 
     _onTrackEnded() {
