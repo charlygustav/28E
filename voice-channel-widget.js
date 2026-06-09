@@ -2013,12 +2013,31 @@
       const isPlaying = this._musicPlaying;
       let nowPlaying = '';
       if (track) {
+        let currentPct = 0;
+        let cTimeFmt = '0:00';
+        let tTimeFmt = '0:00';
+        
+        if (track.type === 'youtube' && this._ytPlayer && typeof this._ytPlayer.getCurrentTime === 'function') {
+          const cur = this._ytPlayer.getCurrentTime() || 0;
+          const tot = this._ytPlayer.getDuration() || 0;
+          if (tot > 0) currentPct = (cur / tot) * 100;
+          
+          const fmt = (secs) => {
+            if (!secs || isNaN(secs)) return '0:00';
+            const m = Math.floor(secs / 60);
+            const s = Math.floor(secs % 60);
+            return `${m}:${s < 10 ? '0'+s : s}`;
+          };
+          cTimeFmt = fmt(cur);
+          tTimeFmt = fmt(tot);
+        }
+
         const eqBars = isPlaying
           ? `<div class="flex items-end gap-0.5 h-3"><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite]"></div><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite_0.2s]"></div><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite_0.4s]"></div></div>`
           : `<span class="w-4 h-4 text-white/40 [&>svg]:w-4 [&>svg]:h-4 flex items-center justify-center">${ICONS.sound || '♪'}</span>`;
         nowPlaying = `
           <div class="bg-white/5 border border-white/10 rounded-xl p-3 mb-2 relative overflow-hidden">
-            <div class="flex items-center gap-3 relative z-10">
+            <div class="flex items-center gap-3 relative z-10 mb-2">
               <div class="w-10 h-10 rounded-lg bg-black/40 flex items-center justify-center flex-shrink-0">
                 ${eqBars}
               </div>
@@ -2031,32 +2050,38 @@
                      </div>` 
                   : `<div class="text-sm font-bold text-white truncate">${this._escHtml(this._cleanMusicTitle(track.title))}</div>`
                 }
-                <div class="text-xs text-white/40 truncate">${track.addedByName ? `${_t('vc_music_by')} ${track.addedByName}` : ''}</div>
+                <div class="text-[10px] text-white/40 truncate">${track.addedByName ? `${_t('vc_music_by')} ${track.addedByName}` : ''}</div>
               </div>
               <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-white/50">${(track.source || track.type) === 'youtube' ? 'YT' : 'SP'}</span>
             </div>
             
             ${track.type === 'youtube' ? `
-              <div class="mt-3 relative z-10">
+              <div class="relative z-10 mb-3">
                 <div class="h-1 bg-black/50 rounded-full overflow-hidden relative" id="vc-music-progress">
-                  <div class="absolute top-0 left-0 h-full bg-amber-500 w-0 transition-all duration-200" id="vc-music-progress-fill"></div>
+                  <div class="absolute top-0 left-0 h-full bg-amber-500 transition-all duration-200" id="vc-music-progress-fill" style="width: ${currentPct}%"></div>
                 </div>
                 <div class="flex justify-between text-[9px] text-white/40 mt-1 font-mono">
-                  <span id="vc-music-time-current">0:00</span>
-                  <span id="vc-music-time-total">0:00</span>
+                  <span id="vc-music-time-current">${cTimeFmt}</span>
+                  <span id="vc-music-time-total">${tTimeFmt}</span>
                 </div>
               </div>
             ` : ''}
             
-            ${track.type === 'spotify' ? `<div class="mt-3 w-full" id="vc-spotify-embed"></div>` : ''}
+            ${track.type === 'spotify' ? `<div class="mt-2 w-full" id="vc-spotify-embed"></div>` : ''}
             
-            <div class="flex justify-center gap-4 mt-3 relative z-10">
-              <button class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:scale-105 transition-transform [&>svg]:w-4 [&>svg]:h-4" id="vc-music-playpause">
-                ${isPlaying ? ICONS.pause : ICONS.play}
-              </button>
-              <button class="w-10 h-10 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors [&>svg]:w-4 [&>svg]:h-4" id="vc-music-skip">
-                ${ICONS.skipFwd}
-              </button>
+            <div class="flex justify-between items-center relative z-10">
+              <div class="flex items-center gap-2">
+                <button class="w-9 h-9 rounded-full bg-white text-black flex items-center justify-center hover:scale-105 transition-transform [&>svg]:w-4 [&>svg]:h-4 shadow-md" id="vc-music-playpause">
+                  ${isPlaying ? ICONS.pause : ICONS.play}
+                </button>
+                <button class="w-9 h-9 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors [&>svg]:w-4 [&>svg]:h-4" id="vc-music-skip">
+                  ${ICONS.skipFwd}
+                </button>
+              </div>
+              <div class="w-[45%] flex items-center gap-2 pr-1">
+                <span class="text-white/40 [&>svg]:w-3.5 [&>svg]:h-3.5">${ICONS.volumeUp}</span>
+                <input type="range" id="vc-music-vol-slider" min="0" max="100" value="${this._musicVolume}" class="w-full h-1 bg-black/50 rounded-lg appearance-none cursor-pointer accent-amber-500" />
+              </div>
             </div>
           </div>`;
       } else {
