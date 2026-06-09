@@ -1100,6 +1100,7 @@
         this._activeTab = tab;
         if (tab === 'chat') {
           this._chatUnread = 0;
+          document.title = '28E';
           this._playSfx('toggleOn', 0.3);
         } else {
           this._playSfx('toggleOff', 0.3);
@@ -1689,8 +1690,8 @@
         if (this.connected) this._updateTabs();
 
         // ✨ Notificación en título de ventana
-        const preview = text.length > 30 ? text.slice(0, 30) + '...' : text;
-        document.title = `\uD83D\uDCAC ${name}: ${preview} | 28E`;
+        const unreadCount = this._chatUnread > 9 ? '+9' : `+${this._chatUnread}`;
+        document.title = `\uD83D\uDCAC ${unreadCount} | 28E`;
         // Restaurar título automáticamente al volver a la pestaña
         if (!this._vcTitleListener) {
           this._vcTitleListener = () => {
