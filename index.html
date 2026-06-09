@@ -2306,6 +2306,30 @@
         </div>
     </div>
 
+    <!-- 1.5 Wrapped Redirect Modal -->
+    <div id="wrapped-redirect-modal"
+        class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-zinc-900/60 backdrop-blur-sm transform-gpu transition-opacity opacity-0"
+        onclick="if(event.target === this) closeModal('wrapped-redirect-modal', 'wrapped-redirect-content')">
+        <div class="bg-white dark:bg-zinc-900 p-8 rounded-3xl shadow-2xl border border-zinc-200 dark:border-zinc-800 max-w-md w-full mx-4 transform scale-95 transition-transform duration-300"
+            id="wrapped-redirect-content">
+            <div class="text-5xl mb-4 text-center">🎉</div>
+            <h3 class="text-2xl font-bold mb-2 text-center text-zinc-900 dark:text-white" data-i18n="univ_wrapped_title">28E Wrapped</h3>
+            <p class="text-zinc-600 dark:text-zinc-400 text-center mb-6 leading-relaxed">
+                Estás a punto de ir a tu resumen personalizado. Prepárate para un viaje lleno de recuerdos.<br><br>¿Continuar?
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button onclick="closeModal('wrapped-redirect-modal', 'wrapped-redirect-content')"
+                    class="flex-1 px-6 py-3 rounded-xl font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors">
+                    Aún no
+                </button>
+                <button onclick="if(window.AudioManager) window.AudioManager.play('slideralto.wav', 0.8); else new Audio('sounds/slideralto.wav').play(); window.location.href='wrapped';"
+                    class="flex-1 px-6 py-3 rounded-xl font-bold bg-gradient-to-r from-pink-500 to-rose-500 text-white hover:opacity-90 transition-opacity text-center flex items-center justify-center gap-2">
+                    ¡Vamos!
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- 2. Interactive Recipe Modal — REDESIGNED -->
     <div id="recipe-modal"
         class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-zinc-950/85 backdrop-blur-md transform-gpu transition-opacity opacity-0 px-4 sm:p-4 lg:p-6"
@@ -6041,7 +6065,7 @@ fbRadioAudio.addEventListener('ended', () => {
                                     data-i18n="univ_wrapped_title">28E Wrapped</h3>
                                 <p class="text-zinc-600 dark:text-zinc-400 text-sm font-medium text-center mb-4 relative z-10"
                                     data-i18n="univ_wrapped_subtitle">Una sorpresa especial por nuestros 4 meses juntos. Tu resumen personalizado de nuestros momentos.</p>
-                                <button onclick="if(window.yaireCurrentUser){ if(window.AudioManager) window.AudioManager.play('slideralto.wav', 0.8); else new Audio('sounds/slideralto.wav').play(); setTimeout(()=>window.location.href='wrapped', 300); } else { if(window.showPremiumAlert) window.showPremiumAlert('Acceso Restringido', 'Inicia sesión con tu cuenta de Google primero para ver tu 28E Wrapped.', 'error'); }"
+                                <button onclick="if(window.yaireCurrentUser){ openModal('wrapped-redirect-modal', 'wrapped-redirect-content'); } else { if(window.showPremiumAlert) window.showPremiumAlert('Acceso Restringido', 'Inicia sesión con tu cuenta de Google primero para ver tu 28E Wrapped.', 'error'); }"
                                     class="relative z-10 px-8 py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-brand-500 to-tulip-500 hover:scale-105 transition-transform active:scale-95 shadow-lg shadow-brand-500/30 uppercase tracking-widest flex items-center gap-2"
                                     data-i18n="univ_wrapped_btn">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
@@ -13404,7 +13428,7 @@ fbRadioAudio.addEventListener('ended', () => {
                                 setTimeout(() => {
                                     if(window.yaireCurrentUser){
                                         if(window.AudioManager) window.AudioManager.play('slideralto.wav', 0.8);
-                                        window.location.href='wrapped';
+                                        openModal('wrapped-redirect-modal', 'wrapped-redirect-content');
                                     } else {
                                         if(window.showPremiumAlert) window.showPremiumAlert('Acceso Restringido', 'Inicia sesión con tu cuenta de Google primero para ver tu 28E Wrapped.', 'error');
                                     }
