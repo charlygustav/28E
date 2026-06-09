@@ -1536,11 +1536,20 @@
       return pc;
     }
 
+    _forceHighBitrateSDP(sdp) {
+      if (sdp.includes('useinbandfec=1')) {
+        return sdp.replace(/useinbandfec=1/g, 'useinbandfec=1; stereo=1; sprop-stereo=1; maxaveragebitrate=128000');
+      } else {
+        return sdp.replace(/(a=fmtp:111\s+.*)/g, '$1; stereo=1; sprop-stereo=1; maxaveragebitrate=128000');
+      }
+    }
+
     async _createOffer(peerId) {
       const pc = this._makePeer(peerId);
       const offer = await pc.createOffer();
+      offer.sdp = this._forceHighBitrateSDP(offer.sdp);
       await pc.setLocalDescription(offer);
-      console.log(`[VC] Sending offer to ${peerId}`);
+      console.log(`[VC] Sending offer to ${peerId} (HQ Audio)`);
       this.socket.emit('webrtc_offer', { to: peerId, sdp: pc.localDescription });
     }
 
@@ -1548,6 +1557,7 @@
       const pc = this._makePeer(fromId);
       await pc.setRemoteDescription(new RTCSessionDescription(sdp));
       const answer = await pc.createAnswer();
+      answer.sdp = this._forceHighBitrateSDP(answer.sdp);
       await pc.setLocalDescription(answer);
       this.socket.emit('webrtc_answer', { to: fromId, sdp: pc.localDescription });
       this._flushIce(fromId);
@@ -1881,22 +1891,22 @@
 
         const source = ctx.createMediaStreamSource(this.stream);
 
-        // ── 1. High-pass filter — kill rumble/hum below 90Hz ──
+        // ── 1. High-pass filter — kill rumble/hum below 60Hz ──
         const highPass1 = ctx.createBiquadFilter();
         highPass1.type = 'highpass';
-        highPass1.frequency.value = 90;
+        highPass1.frequency.value = 60;
         highPass1.Q.value = 0.7;
 
-        // ── 2. Secondary high-pass at 120Hz for extra speech isolation ──
+        // ── 2. Secondary high-pass at 80Hz for extra speech isolation ──
         const highPass2 = ctx.createBiquadFilter();
         highPass2.type = 'highpass';
-        highPass2.frequency.value = 120;
+        highPass2.frequency.value = 80;
         highPass2.Q.value = 0.5;
 
-        // ── 3. Low-pass filter — remove harsh hiss above 8kHz ──
+        // ── 3. Low-pass filter — remove harsh hiss above 16kHz ──
         const lowPass = ctx.createBiquadFilter();
         lowPass.type = 'lowpass';
-        lowPass.frequency.value = 8000;
+        lowPass.frequency.value = 16000;
         lowPass.Q.value = 0.5;
 
         // ── 4. Analyser for noise gate control ──
@@ -1911,9 +1921,9 @@
 
         // ── 6. Dynamics compressor — even out volume ──
         const compressor = ctx.createDynamicsCompressor();
-        compressor.threshold.value = -40;
+        compressor.threshold.value = -24;
         compressor.knee.value = 20;
-        compressor.ratio.value = 8;
+        compressor.ratio.value = 4;
         compressor.attack.value = 0.005;
         compressor.release.value = 0.25;
 
