@@ -2047,236 +2047,309 @@
         onclick="if(event.target === this) closeModal('credits-modal', 'credits-content')">
         
         <!-- Contenedor Principal con Glassmorphism -->
-        <div class="relative w-full max-w-4xl mx-4 max-h-[85vh] flex flex-col bg-zinc-950/40 border border-white/10 rounded-2xl shadow-2xl shadow-brand-500/10 overflow-hidden transform scale-95 transition-transform duration-300 backdrop-blur-2xl"
+        <div class="relative w-full max-w-4xl mx-4 max-h-[85vh] flex flex-col bg-zinc-950/60 border border-white/[0.07] rounded-[1.25rem] shadow-2xl shadow-brand-500/10 overflow-hidden transform scale-95 transition-transform duration-300 backdrop-blur-2xl"
             id="credits-content">
             
-            <!-- Orbes de fondo decorativos (Mantenidos) -->
-            <div class="absolute -top-40 -right-40 w-96 h-96 bg-brand-500/20 rounded-full blur-[100px] pointer-events-none"></div>
-            <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-tulip-500/20 rounded-full blur-[100px] pointer-events-none"></div>
+            <!-- Orbes de fondo decorativos -->
+            <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-[120px] pointer-events-none" style="background: radial-gradient(circle, rgba(245, 158, 11, 0.2), transparent 70%);"></div>
+            <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-[120px] pointer-events-none" style="background: radial-gradient(circle, rgba(236, 72, 153, 0.18), transparent 70%);"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full blur-[140px] pointer-events-none" style="background: radial-gradient(circle, rgba(99, 102, 241, 0.06), transparent 70%);"></div>
 
-            <!-- Ambient Crystal Glow -->
-        <div class="absolute inset-0 bg-gradient-to-br from-brand-500/10 via-transparent to-purple-500/10 pointer-events-none" style="z-index:-1;"></div>
-        <div class="absolute inset-0 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)] dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)] rounded-[2rem] pointer-events-none" style="z-index:-1;"></div>
+            <!-- Top accent line -->
+            <div class="absolute top-0 left-8 right-8 h-[1px] z-20 pointer-events-none" style="background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.4), rgba(236, 72, 153, 0.4), transparent);"></div>
+
         <!-- Header -->
-            <div class="relative flex-shrink-0 pt-8 pb-4 px-8 text-center border-b border-white/5 z-10">
+            <div class="relative flex-shrink-0 pt-7 pb-5 px-8 text-center border-b border-white/5 z-10">
                 <button onclick="closeModal('credits-modal','credits-content')"
-                    class="absolute top-6 right-6 p-2 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all border border-white/5 hover:border-white/20 active:scale-95 group">
-                    <svg class="w-5 h-5 transition-transform group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="absolute top-5 right-5 p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] text-zinc-500 hover:text-white transition-all border border-white/[0.06] hover:border-white/20 active:scale-90 group">
+                    <svg class="w-4 h-4 transition-transform duration-300 group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
-                <h3 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-zinc-100 to-zinc-400 uppercase tracking-[0.2em]"
+                <!-- Shield icon -->
+                <div class="mx-auto w-14 h-14 mb-3 rounded-[0.85rem] flex items-center justify-center text-xl border" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(236, 72, 153, 0.12)); border-color: rgba(245, 158, 11, 0.2); box-shadow: 0 0 40px rgba(245, 158, 11, 0.08), 0 0 80px rgba(236, 72, 153, 0.04);">⚡</div>
+                <h3 class="text-xl font-black uppercase tracking-[0.18em]"
+                    style="background: linear-gradient(135deg, #fff 20%, #fbbf24 50%, #f472b6 80%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"
                     data-i18n="credits_title">Créditos Oficiales</h3>
+                <p class="text-[10px] text-zinc-500 mt-1.5 tracking-wide">Todo lo que hace posible esta experiencia</p>
             </div>
 
             <!-- Body con Scroll -->
-            <div class="flex-1 overflow-y-auto px-6 md:px-10 py-6 space-y-10 custom-scrollbar z-10 relative"
-                style="scrollbar-width: thin; scrollbar-color: rgba(245, 158, 11, 0.5) transparent;">
+            <div class="flex-1 overflow-y-auto px-6 md:px-10 py-6 space-y-8 z-10 relative"
+                style="scrollbar-width: thin; scrollbar-color: rgba(245, 158, 11, 0.3) transparent;">
 
                 <style>
-                    .credit-card {
+                    .cr-card {
                         background: rgba(255, 255, 255, 0.02);
                         border: 1px solid rgba(255, 255, 255, 0.05);
-                        border-radius: 0.5rem; /* Más serio, menos redondeado */
-                        padding: 1rem;
-                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                        border-radius: 0.85rem;
+                        padding: 0.9rem 1rem;
+                        transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
                         display: flex;
                         flex-direction: column;
                         justify-content: center;
                         position: relative;
                         overflow: hidden;
                     }
-                    .credit-card::before {
+                    .cr-card::before {
                         content: '';
                         position: absolute;
-                        top: 0; left: 0; right: 0; bottom: 0;
-                        background: linear-gradient(135deg, rgba(255,255,255,0.05), transparent);
+                        inset: 0;
+                        background: linear-gradient(135deg, rgba(255,255,255,0.04), transparent);
                         opacity: 0;
-                        transition: opacity 0.3s;
+                        transition: opacity 0.35s;
                     }
-                    .credit-card:hover {
-                        background: rgba(255, 255, 255, 0.04);
-                        border-color: rgba(255, 255, 255, 0.15);
-                        transform: translateY(-2px);
+                    .cr-card:hover {
+                        background: rgba(255, 255, 255, 0.045);
+                        transform: translateY(-3px);
                     }
-                    .credit-card:hover::before { opacity: 1; }
+                    .cr-card:hover::before { opacity: 1; }
                     
-                    /* Específicos para colores en hover (Mantenidos) */
-                    .card-brand:hover { border-color: rgba(245, 158, 11, 0.4); box-shadow: 0 4px 20px -10px rgba(245, 158, 11, 0.15); }
-                    .card-blue:hover { border-color: rgba(59, 130, 246, 0.4); box-shadow: 0 4px 20px -10px rgba(59, 130, 246, 0.15); }
-                    .card-purple:hover { border-color: rgba(168, 85, 247, 0.4); box-shadow: 0 4px 20px -10px rgba(168, 85, 247, 0.15); }
-                    .card-teal:hover { border-color: rgba(20, 184, 166, 0.4); box-shadow: 0 4px 20px -10px rgba(20, 184, 166, 0.15); }
-                    .card-red:hover { border-color: rgba(239, 68, 68, 0.4); box-shadow: 0 4px 20px -10px rgba(239, 68, 68, 0.15); }
+                    .cr-brand:hover { border-color: rgba(245, 158, 11, 0.35); box-shadow: 0 12px 35px -12px rgba(245, 158, 11, 0.15); }
+                    .cr-blue:hover { border-color: rgba(56, 189, 248, 0.35); box-shadow: 0 12px 35px -12px rgba(56, 189, 248, 0.12); }
+                    .cr-red:hover { border-color: rgba(251, 113, 133, 0.35); box-shadow: 0 12px 35px -12px rgba(251, 113, 133, 0.12); }
+                    .cr-purple:hover { border-color: rgba(192, 132, 252, 0.35); box-shadow: 0 12px 35px -12px rgba(192, 132, 252, 0.12); }
+                    .cr-teal:hover { border-color: rgba(45, 212, 191, 0.35); box-shadow: 0 12px 35px -12px rgba(45, 212, 191, 0.12); }
+
+                    /* Section icon with glow */
+                    .cr-sec-icon {
+                        width: 34px; height: 34px;
+                        border-radius: 0.65rem;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 0.95rem;
+                        flex-shrink: 0;
+                        position: relative;
+                    }
+                    .cr-sec-icon::after {
+                        content: '';
+                        position: absolute;
+                        inset: -3px;
+                        border-radius: 0.8rem;
+                        background: inherit;
+                        opacity: 0.25;
+                        filter: blur(8px);
+                        z-index: -1;
+                    }
+
+                    /* Staggered entrance */
+                    .credits-section-block {
+                        opacity: 0;
+                        transform: translateY(16px);
+                        animation: crFadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+                    }
+                    .credits-section-block:nth-child(1) { animation-delay: 0.15s; }
+                    .credits-section-block:nth-child(2) { animation-delay: 0.25s; }
+                    .credits-section-block:nth-child(3) { animation-delay: 0.35s; }
+                    .credits-section-block:nth-child(4) { animation-delay: 0.45s; }
+                    .credits-section-block:nth-child(5) { animation-delay: 0.55s; }
+
+                    @keyframes crFadeIn {
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+
+                    .cr-label {
+                        font-size: 0.52rem;
+                        font-weight: 800;
+                        letter-spacing: 0.14em;
+                        text-transform: uppercase;
+                        margin-bottom: 0.3rem;
+                    }
+                    .cr-value {
+                        font-weight: 600;
+                        letter-spacing: 0.01em;
+                    }
                 </style>
 
-                <!-- Sección: Dirección -->
-                <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <p class="text-[10px] font-bold text-brand-500 uppercase tracking-[0.2em]"
+                <!-- Sección: Concepto & Diseño -->
+                <div class="credits-section-block">
+                    <div class="flex items-center gap-2.5 mb-3.5">
+                        <div class="cr-sec-icon" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.22);">✨</div>
+                        <div>
+                            <p class="text-[8px] font-extrabold text-zinc-600 uppercase tracking-[0.12em]">Sección 01</p>
+                            <p class="text-[11px] font-bold text-brand-400 uppercase tracking-[0.16em]"
                             data-i18n="credits_sec_dir">Concepto & Diseño</p>
-                        <div class="h-[1px] flex-1 bg-gradient-to-r from-brand-500/30 to-transparent"></div>
+                        </div>
+                        <div class="h-[1px] flex-1 bg-gradient-to-r from-brand-500/25 to-transparent"></div>
                     </div>
                     
-                    <div class="grid md:grid-cols-4 gap-3 text-sm">
-                        <div class="credit-card card-brand">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1" data-i18n="credits_lbl_dir">Dirección Creativa</span>
-                            <span class="font-medium text-zinc-100 tracking-wide">Charles Gustav</span>
+                    <div class="grid md:grid-cols-4 gap-2.5 text-sm">
+                        <div class="cr-card cr-brand">
+                            <span class="cr-label text-zinc-500" data-i18n="credits_lbl_dir">Dirección Creativa</span>
+                            <span class="cr-value text-zinc-100 text-sm tracking-wide">Charles Gustav</span>
                         </div>
-                        <div class="credit-card card-brand">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1" data-i18n="credits_lbl_insp">Inspiración Absoluta</span>
-                            <span class="font-medium text-zinc-100 tracking-wide">Yaire Alvarado</span>
+                        <div class="cr-card cr-brand">
+                            <span class="cr-label text-zinc-500" data-i18n="credits_lbl_insp">Inspiración Absoluta</span>
+                            <span class="cr-value text-zinc-100 text-sm tracking-wide">Yaire Alvarado</span>
                         </div>
-                        <div class="credit-card card-brand">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1" data-i18n="credits_lbl_dev">Desarrollo UI/UX & Código</span>
-                            <span class="font-medium text-zinc-100">Antigravity AI</span>
+                        <div class="cr-card cr-brand">
+                            <span class="cr-label text-zinc-500" data-i18n="credits_lbl_dev">Desarrollo UI/UX & Código</span>
+                            <span class="cr-value text-zinc-100 text-sm">Antigravity AI</span>
                         </div>
-                        <div class="credit-card card-brand">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1" data-i18n="credits_lbl_thanks">Agradecimiento Especial</span>
-                            <span class="font-medium text-zinc-100">Key</span>
+                        <div class="cr-card cr-brand">
+                            <span class="cr-label text-zinc-500" data-i18n="credits_lbl_thanks">Agradecimiento Especial</span>
+                            <span class="cr-value text-zinc-100 text-sm">Key</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Sección: Arquitectura Core -->
-                <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <p class="text-[10px] font-bold text-blue-400 uppercase tracking-[0.2em]" data-i18n="credits_sec_tech">Tecnologías & Core</p>
-                        <div class="h-[1px] flex-1 bg-gradient-to-r from-blue-500/30 to-transparent"></div>
+                <!-- Sección: Tecnologías & Core -->
+                <div class="credits-section-block">
+                    <div class="flex items-center gap-2.5 mb-3.5">
+                        <div class="cr-sec-icon" style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.22);">⚙️</div>
+                        <div>
+                            <p class="text-[8px] font-extrabold text-zinc-600 uppercase tracking-[0.12em]">Sección 02</p>
+                            <p class="text-[11px] font-bold text-sky-400 uppercase tracking-[0.16em]" data-i18n="credits_sec_tech">Tecnologías & Core</p>
+                        </div>
+                        <div class="h-[1px] flex-1 bg-gradient-to-r from-sky-500/25 to-transparent"></div>
                     </div>
                     
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                        <div class="credit-card card-blue">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Lenguaje Base</span>
-                            <span class="font-medium text-zinc-200 text-xs">Vanilla JS (ES6+)</span>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 text-sm">
+                        <div class="cr-card cr-blue">
+                            <span class="cr-label text-zinc-500">Lenguaje Base</span>
+                            <span class="cr-value text-zinc-200 text-xs">Vanilla JS (ES6+)</span>
                         </div>
-                        <div class="credit-card card-blue">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Estructura</span>
-                            <span class="font-medium text-zinc-200 text-xs">HTML5 Semántico</span>
+                        <div class="cr-card cr-blue">
+                            <span class="cr-label text-zinc-500">Estructura</span>
+                            <span class="cr-value text-zinc-200 text-xs">HTML5 Semántico</span>
                         </div>
-                        <div class="credit-card card-blue">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Estilos & UI</span>
-                            <span class="font-medium text-zinc-200 text-xs">Tailwind CSS</span>
+                        <div class="cr-card cr-blue">
+                            <span class="cr-label text-zinc-500">Estilos & UI</span>
+                            <span class="cr-value text-zinc-200 text-xs">Tailwind CSS</span>
                         </div>
-                        <div class="credit-card card-blue">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Arquitectura</span>
-                            <span class="font-medium text-zinc-200 text-xs">Progressive Web App</span>
+                        <div class="cr-card cr-blue">
+                            <span class="cr-label text-zinc-500">Arquitectura</span>
+                            <span class="cr-value text-zinc-200 text-xs">Progressive Web App</span>
                         </div>
-                        <div class="credit-card card-blue">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Despliegue & Hosting</span>
-                            <span class="font-medium text-zinc-200 text-xs">Vercel Network</span>
+                        <div class="cr-card cr-blue">
+                            <span class="cr-label text-zinc-500">Despliegue & Hosting</span>
+                            <span class="cr-value text-zinc-200 text-xs">Vercel Network</span>
                         </div>
-                        <div class="credit-card card-blue">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Version Control</span>
-                            <span class="font-medium text-zinc-200 text-xs">GitHub Repository</span>
+                        <div class="cr-card cr-blue">
+                            <span class="cr-label text-zinc-500">Version Control</span>
+                            <span class="cr-value text-zinc-200 text-xs">GitHub Repository</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Sección: Comunicación & Voz -->
-                <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <p class="text-[10px] font-bold text-red-400 uppercase tracking-[0.2em]">Comunicaciones & Voz</p>
-                        <div class="h-[1px] flex-1 bg-gradient-to-r from-red-500/30 to-transparent"></div>
+                <div class="credits-section-block">
+                    <div class="flex items-center gap-2.5 mb-3.5">
+                        <div class="cr-sec-icon" style="background: rgba(251, 113, 133, 0.1); border: 1px solid rgba(251, 113, 133, 0.22);">🎧</div>
+                        <div>
+                            <p class="text-[8px] font-extrabold text-zinc-600 uppercase tracking-[0.12em]">Sección 03</p>
+                            <p class="text-[11px] font-bold text-rose-400 uppercase tracking-[0.16em]">Comunicaciones & Voz</p>
+                        </div>
+                        <div class="h-[1px] flex-1 bg-gradient-to-r from-rose-500/25 to-transparent"></div>
                     </div>
                     
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                        <div class="credit-card card-red">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Motor de Conexión</span>
-                            <span class="font-medium text-zinc-200 text-xs">WebRTC (Peer-to-Peer)</span>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 text-sm">
+                        <div class="cr-card cr-red">
+                            <span class="cr-label text-zinc-500">Motor de Conexión</span>
+                            <span class="cr-value text-zinc-200 text-xs">WebRTC (Peer-to-Peer)</span>
                         </div>
-                        <div class="credit-card card-red">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Señalización</span>
-                            <span class="font-medium text-zinc-200 text-xs">Socket.IO Server</span>
+                        <div class="cr-card cr-red">
+                            <span class="cr-label text-zinc-500">Señalización</span>
+                            <span class="cr-value text-zinc-200 text-xs">Socket.IO Server</span>
                         </div>
-                        <div class="credit-card card-red">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Retransmisión Global</span>
-                            <span class="font-medium text-zinc-200 text-xs">Metered.ca (TURN/STUN)</span>
+                        <div class="cr-card cr-red">
+                            <span class="cr-label text-zinc-500">Retransmisión Global</span>
+                            <span class="cr-value text-zinc-200 text-xs">Metered.ca (TURN/STUN)</span>
                         </div>
-                        <div class="credit-card card-red">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Procesamiento Audio</span>
-                            <span class="font-medium text-zinc-200 text-xs">Web Audio API</span>
+                        <div class="cr-card cr-red">
+                            <span class="cr-label text-zinc-500">Procesamiento Audio</span>
+                            <span class="cr-value text-zinc-200 text-xs">Web Audio API</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Sección: Librerías Visuales y Multimedia -->
-                <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <p class="text-[10px] font-bold text-purple-400 uppercase tracking-[0.2em]" data-i18n="credits_sec_lib">Gráficos & Multimedia</p>
-                        <div class="h-[1px] flex-1 bg-gradient-to-r from-purple-500/30 to-transparent"></div>
+                <!-- Sección: Gráficos & Multimedia -->
+                <div class="credits-section-block">
+                    <div class="flex items-center gap-2.5 mb-3.5">
+                        <div class="cr-sec-icon" style="background: rgba(192, 132, 252, 0.1); border: 1px solid rgba(192, 132, 252, 0.22);">🎨</div>
+                        <div>
+                            <p class="text-[8px] font-extrabold text-zinc-600 uppercase tracking-[0.12em]">Sección 04</p>
+                            <p class="text-[11px] font-bold text-purple-400 uppercase tracking-[0.16em]" data-i18n="credits_sec_lib">Gráficos & Multimedia</p>
+                        </div>
+                        <div class="h-[1px] flex-1 bg-gradient-to-r from-purple-500/25 to-transparent"></div>
                     </div>
                     
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                        <div class="credit-card card-purple">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Motor de Animación</span>
-                            <span class="font-medium text-zinc-200 text-xs">GSAP 3 (GreenSock)</span>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 text-sm">
+                        <div class="cr-card cr-purple">
+                            <span class="cr-label text-zinc-500">Motor de Animación</span>
+                            <span class="cr-value text-zinc-200 text-xs">GSAP 3 (GreenSock)</span>
                         </div>
-                        <div class="credit-card card-purple">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Efectos de Scroll</span>
-                            <span class="font-medium text-zinc-200 text-xs">GSAP ScrollTrigger</span>
+                        <div class="cr-card cr-purple">
+                            <span class="cr-label text-zinc-500">Efectos de Scroll</span>
+                            <span class="cr-value text-zinc-200 text-xs">GSAP ScrollTrigger</span>
                         </div>
-                        <div class="credit-card card-purple">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Visualización Datos</span>
-                            <span class="font-medium text-zinc-200 text-xs">Chart.js Engine</span>
+                        <div class="cr-card cr-purple">
+                            <span class="cr-label text-zinc-500">Visualización Datos</span>
+                            <span class="cr-value text-zinc-200 text-xs">Chart.js Engine</span>
                         </div>
-                        <div class="credit-card card-purple">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Renderizado Gráfico</span>
-                            <span class="font-medium text-zinc-200 text-xs">HTML5 Canvas API</span>
+                        <div class="cr-card cr-purple">
+                            <span class="cr-label text-zinc-500">Renderizado Gráfico</span>
+                            <span class="cr-value text-zinc-200 text-xs">HTML5 Canvas API</span>
                         </div>
-                        <div class="credit-card card-purple">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">CDN Multimedia</span>
-                            <span class="font-medium text-zinc-200 text-xs">ImgBB & GitHub Raw</span>
+                        <div class="cr-card cr-purple">
+                            <span class="cr-label text-zinc-500">CDN Multimedia</span>
+                            <span class="cr-value text-zinc-200 text-xs">ImgBB & GitHub Raw</span>
                         </div>
-                        <div class="credit-card card-purple">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Tipografía UI</span>
-                            <span class="font-medium text-zinc-200 text-xs">Google Fonts (Inter)</span>
+                        <div class="cr-card cr-purple">
+                            <span class="cr-label text-zinc-500">Tipografía UI</span>
+                            <span class="cr-value text-zinc-200 text-xs">Google Fonts (Inter)</span>
                         </div>
-                        <div class="credit-card card-purple">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Iconografía</span>
-                            <span class="font-medium text-zinc-200 text-xs">Phosphor Icons (SVG)</span>
+                        <div class="cr-card cr-purple">
+                            <span class="cr-label text-zinc-500">Iconografía</span>
+                            <span class="cr-value text-zinc-200 text-xs">Phosphor Icons (SVG)</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Sección: Motores de Datos -->
-                <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <p class="text-[10px] font-bold text-teal-400 uppercase tracking-[0.2em]" data-i18n="credits_sec_sys">Motores de Datos & Seguridad</p>
-                        <div class="h-[1px] flex-1 bg-gradient-to-r from-teal-500/30 to-transparent"></div>
+                <!-- Sección: Motores de Datos & Seguridad -->
+                <div class="credits-section-block">
+                    <div class="flex items-center gap-2.5 mb-3.5">
+                        <div class="cr-sec-icon" style="background: rgba(45, 212, 191, 0.1); border: 1px solid rgba(45, 212, 191, 0.22);">🔒</div>
+                        <div>
+                            <p class="text-[8px] font-extrabold text-zinc-600 uppercase tracking-[0.12em]">Sección 05</p>
+                            <p class="text-[11px] font-bold text-teal-400 uppercase tracking-[0.16em]" data-i18n="credits_sec_sys">Motores de Datos & Seguridad</p>
+                        </div>
+                        <div class="h-[1px] flex-1 bg-gradient-to-r from-teal-500/25 to-transparent"></div>
                     </div>
                     
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                        <div class="credit-card card-teal">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Base de Datos</span>
-                            <span class="font-medium text-zinc-200 text-xs">Firebase Realtime DB</span>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 text-sm">
+                        <div class="cr-card cr-teal">
+                            <span class="cr-label text-zinc-500">Base de Datos</span>
+                            <span class="cr-value text-zinc-200 text-xs">Firebase Realtime DB</span>
                         </div>
-                        <div class="credit-card card-teal">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Autenticación</span>
-                            <span class="font-medium text-zinc-200 text-xs">Firebase Auth (Google)</span>
+                        <div class="cr-card cr-teal">
+                            <span class="cr-label text-zinc-500">Autenticación</span>
+                            <span class="cr-value text-zinc-200 text-xs">Firebase Auth (Google)</span>
                         </div>
-                        <div class="credit-card card-teal">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Almacenamiento Local</span>
-                            <span class="font-medium text-zinc-200 text-xs">Local/Session Storage</span>
+                        <div class="cr-card cr-teal">
+                            <span class="cr-label text-zinc-500">Almacenamiento Local</span>
+                            <span class="cr-value text-zinc-200 text-xs">Local/Session Storage</span>
                         </div>
-                        <div class="credit-card card-teal">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Motor de Idiomas</span>
-                            <span class="font-medium text-zinc-200 text-xs">Custom i18n Engine</span>
+                        <div class="cr-card cr-teal">
+                            <span class="cr-label text-zinc-500">Motor de Idiomas</span>
+                            <span class="cr-value text-zinc-200 text-xs">Custom i18n Engine</span>
                         </div>
-                        <div class="credit-card card-teal">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Seguridad P2P</span>
-                            <span class="font-medium text-zinc-200 text-xs">End-to-End Encryption</span>
+                        <div class="cr-card cr-teal">
+                            <span class="cr-label text-zinc-500">Seguridad P2P</span>
+                            <span class="cr-value text-zinc-200 text-xs">End-to-End Encryption</span>
                         </div>
-                        <div class="credit-card card-teal">
-                            <span class="text-zinc-500 uppercase text-[9px] tracking-[0.15em] mb-1">Transporte</span>
-                            <span class="font-medium text-zinc-200 text-xs">HTTPS / TLS 1.3</span>
+                        <div class="cr-card cr-teal">
+                            <span class="cr-label text-zinc-500">Transporte</span>
+                            <span class="cr-value text-zinc-200 text-xs">HTTPS / TLS 1.3</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Footer del Modal -->
-            <div class="flex-shrink-0 pt-4 pb-6 px-8 border-t border-white/5 text-center relative z-10 bg-black/40">
-                <p class="text-[9px] text-zinc-500 font-mono tracking-[0.3em] uppercase mb-1">Build v3.0.0</p>
+            <div class="flex-shrink-0 pt-4 pb-5 px-8 border-t border-white/5 text-center relative z-10" style="background: rgba(0,0,0,0.3);">
+                <p class="text-[8px] font-mono tracking-[0.3em] uppercase mb-1" style="background: linear-gradient(90deg, #fbbf24, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 700;">Build v3.0.0</p>
                 <p class="text-[10px] text-zinc-600">© 2026 Charles Gustav. Todos los derechos reservados.</p>
             </div>
         </div>
