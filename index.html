@@ -5052,14 +5052,14 @@
     <main class="pt-32 pb-24 px-6 max-w-6xl mx-auto">
 
         <!-- Section: Hero (Rediseñado Inmersivo) -->
-        <section id="hero" class="relative min-h-[90vh] w-full flex flex-col justify-center items-center text-center pt-20 pb-32 overflow-hidden hero-enter-ready mt-[-8rem]">
+        <section id="hero" class="relative min-h-[90vh] w-full flex flex-col justify-center items-center text-center pt-32 pb-32 overflow-hidden hero-enter-ready">
             
             <!-- Atmosfera / Orbes de luz de fondo -->
-            <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none mix-blend-screen opacity-60 dark:opacity-40">
+            <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-80 dark:opacity-60">
                 <!-- Orbe 1: Naranja/Brand -->
-                <div class="absolute top-1/4 left-1/4 w-[40vw] h-[40vw] bg-brand-500/30 rounded-full blur-[80px] sm:blur-[120px]" style="animation: ambientDrift 15s infinite alternate ease-in-out;"></div>
+                <div class="absolute top-[10%] left-[20%] w-[50vw] h-[50vw] max-w-[500px] max-h-[500px] bg-brand-500/40 rounded-full blur-3xl" style="animation: ambientDrift 15s infinite alternate ease-in-out;"></div>
                 <!-- Orbe 2: Rosa/Tulip -->
-                <div class="absolute bottom-1/4 right-1/4 w-[35vw] h-[35vw] bg-tulip-500/30 rounded-full blur-[80px] sm:blur-[120px]" style="animation: ambientDrift 18s infinite alternate-reverse ease-in-out; animation-delay: -5s;"></div>
+                <div class="absolute bottom-[10%] right-[15%] w-[45vw] h-[45vw] max-w-[450px] max-h-[450px] bg-tulip-500/40 rounded-full blur-3xl" style="animation: ambientDrift 18s infinite alternate-reverse ease-in-out; animation-delay: -5s;"></div>
             </div>
 
             <!-- Contenido Principal Flotante -->
@@ -5067,7 +5067,7 @@
                 
                 <!-- Badge de 4 Meses (True Glassmorphism) -->
                 <div id="hero-badge-container"
-                    class="hero-anim hero-anim-1 inline-flex flex-col sm:flex-row items-center gap-1 sm:gap-2.5 px-6 py-3 rounded-full border border-white/20 dark:border-white/10 bg-white/40 dark:bg-black/20 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] text-brand-600 dark:text-brand-400 text-xs sm:text-sm font-bold mb-10 uppercase tracking-widest transition-all hover:scale-105 hover:bg-white/60 dark:hover:bg-white/5 cursor-default group relative overflow-hidden">
+                    class="hero-anim hero-anim-1 inline-flex flex-col sm:flex-row items-center gap-1 sm:gap-2.5 px-6 py-3 rounded-full border border-zinc-200/50 dark:border-white/10 bg-white/60 dark:bg-black/40 backdrop-blur-2xl shadow-xl dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] text-brand-600 dark:text-brand-400 text-xs sm:text-sm font-bold mb-10 uppercase tracking-widest transition-all hover:scale-105 hover:bg-white/80 dark:hover:bg-white/10 cursor-default group relative overflow-hidden">
                     <div class="absolute inset-0 bg-gradient-to-r from-brand-500/0 via-brand-500/10 to-brand-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
                     <span class="flex items-center gap-2 relative z-10">
                         <span id="hero-badge-text" data-i18n="hero_badge">¡Felices 4 Meses!</span>
@@ -5077,7 +5077,7 @@
                         style="font-variant-numeric: tabular-nums;">
                         <span id="hero-badge-dot" class="w-1.5 h-1.5 rounded-full bg-brand-500 shadow-[0_0_8px_rgba(245,158,11,0.8)] animate-ping"></span>
                         <a id="hero-badge-link" href="#"
-                            class="hidden hover:text-brand-300 transition-all cursor-pointer"><span
+                            class="hidden hover:text-brand-400 transition-all cursor-pointer"><span
                                 data-i18n="hero_badge_link"></span></a>
                         <span id="hero-countdown" class="text-[10px] sm:text-xs tracking-wider opacity-80"></span>
                         <span id="hero-badge-e2" class="hidden">🎉</span>
@@ -5086,21 +5086,21 @@
 
                 <!-- Titulo Impactante -->
                 <h1
-                    class="hero-anim hero-anim-2 text-6xl md:text-8xl lg:text-[7.5rem] font-extrabold tracking-tighter mb-8 leading-[1.05] drop-shadow-2xl dark:drop-shadow-[0_0_40px_rgba(255,255,255,0.05)] relative">
+                    class="hero-anim hero-anim-2 text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-8 leading-[1.1] drop-shadow-2xl dark:drop-shadow-[0_0_40px_rgba(255,255,255,0.05)] relative">
                     <span data-i18n="hero_title1" class="text-zinc-900 dark:text-white">Mi lugar favorito</span><br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-br from-brand-400 via-brand-500 to-tulip-600"
-                        data-i18n="hero_title2" style="filter: drop-shadow(0px 10px 20px rgba(236,72,153,0.2));">es contigo.</span>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-br from-brand-400 via-brand-500 to-tulip-500"
+                        data-i18n="hero_title2">es contigo.</span>
                 </h1>
 
                 <!-- Subtitulo Poetico -->
-                <p class="hero-anim hero-anim-3 max-w-2xl mx-auto text-lg md:text-xl text-zinc-700/80 dark:text-zinc-300/80 font-light leading-relaxed mb-12 font-serif italic px-4"
+                <p class="hero-anim hero-anim-3 max-w-2xl mx-auto text-lg md:text-xl text-zinc-700 dark:text-zinc-300 font-light leading-relaxed mb-12 font-serif italic px-4"
                     data-i18n="hero_subtitle">Eres la casualidad más hermosa que me ha pasado, la dueña de mis pensamientos más profundos, el motivo de mis mejores sonrisas y la mujer con la que quiero compartir cada instante de mis días.</p>
             </div>
 
             <!-- Botón de bajar (Glassmorphism Ripple) -->
             <div class="hero-anim hero-anim-4 absolute bottom-12 w-full flex justify-center z-20">
                 <a href="#historia" onclick="AudioManager.play('typing.wav', 0.6);"
-                    class="relative flex items-center justify-center w-14 h-14 rounded-full bg-white/50 dark:bg-black/40 backdrop-blur-md border border-white/40 dark:border-white/10 text-zinc-800 dark:text-white hover:text-brand-500 dark:hover:text-brand-400 transition-all shadow-xl group" style="animation: pulseRipple 3s infinite;">
+                    class="relative flex items-center justify-center w-14 h-14 rounded-full bg-white/70 dark:bg-black/50 backdrop-blur-lg border border-zinc-200 dark:border-white/10 text-zinc-800 dark:text-white hover:text-brand-500 dark:hover:text-brand-400 transition-all shadow-xl group" style="animation: pulseRipple 3s infinite;">
                     <div class="absolute inset-0 rounded-full bg-brand-500/0 group-hover:bg-brand-500/10 transition-colors"></div>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 relative z-10 group-hover:translate-y-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
