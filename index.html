@@ -440,6 +440,7 @@
             pointer-events: none;
             z-index: 1;
         }
+
         .blob-1 {
             width: 450px;
             height: 450px;
@@ -448,6 +449,7 @@
             left: -10%;
             animation: blob-drift-1 10s ease-in-out infinite alternate;
         }
+
         .blob-2 {
             width: 500px;
             height: 500px;
@@ -456,16 +458,44 @@
             right: -10%;
             animation: blob-drift-2 13s ease-in-out infinite alternate;
         }
+
         @keyframes blob-drift-1 {
-            0% { transform: translate(0, 0) scale(1); opacity: 0.15; }
-            33% { transform: translate(220px, 140px) scale(1.3); opacity: 0.28; }
-            66% { transform: translate(-80px, 220px) scale(0.85); opacity: 0.18; }
-            100% { transform: translate(100px, -50px) scale(1.1); opacity: 0.25; }
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.15;
+            }
+
+            33% {
+                transform: translate(220px, 140px) scale(1.3);
+                opacity: 0.28;
+            }
+
+            66% {
+                transform: translate(-80px, 220px) scale(0.85);
+                opacity: 0.18;
+            }
+
+            100% {
+                transform: translate(100px, -50px) scale(1.1);
+                opacity: 0.25;
+            }
         }
+
         @keyframes blob-drift-2 {
-            0% { transform: translate(0, 0) scale(1.1); opacity: 0.22; }
-            50% { transform: translate(-200px, -180px) scale(0.8); opacity: 0.12; }
-            100% { transform: translate(120px, 80px) scale(1.25); opacity: 0.3; }
+            0% {
+                transform: translate(0, 0) scale(1.1);
+                opacity: 0.22;
+            }
+
+            50% {
+                transform: translate(-200px, -180px) scale(0.8);
+                opacity: 0.12;
+            }
+
+            100% {
+                transform: translate(120px, 80px) scale(1.25);
+                opacity: 0.3;
+            }
         }
 
         .loader-hidden {
@@ -2045,29 +2075,38 @@
     <div id="credits-modal"
         class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-zinc-950/80 backdrop-blur-xl transform-gpu transition-opacity opacity-0"
         onclick="if(event.target === this) closeModal('credits-modal', 'credits-content')">
-        
+
         <!-- Contenedor Principal con Glassmorphism -->
         <div class="relative w-full max-w-4xl mx-4 max-h-[85vh] flex flex-col bg-zinc-950/60 border border-white/[0.07] rounded-[1.25rem] shadow-2xl shadow-brand-500/10 overflow-hidden transform scale-95 transition-transform duration-300 backdrop-blur-2xl"
             id="credits-content">
-            
+
             <!-- Orbes de fondo decorativos -->
-            <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-[120px] pointer-events-none" style="background: radial-gradient(circle, rgba(245, 158, 11, 0.2), transparent 70%);"></div>
-            <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-[120px] pointer-events-none" style="background: radial-gradient(circle, rgba(236, 72, 153, 0.18), transparent 70%);"></div>
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full blur-[140px] pointer-events-none" style="background: radial-gradient(circle, rgba(99, 102, 241, 0.06), transparent 70%);"></div>
+            <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-[120px] pointer-events-none"
+                style="background: radial-gradient(circle, rgba(245, 158, 11, 0.2), transparent 70%);"></div>
+            <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-[120px] pointer-events-none"
+                style="background: radial-gradient(circle, rgba(236, 72, 153, 0.18), transparent 70%);"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full blur-[140px] pointer-events-none"
+                style="background: radial-gradient(circle, rgba(99, 102, 241, 0.06), transparent 70%);"></div>
 
             <!-- Top accent line -->
-            <div class="absolute top-0 left-8 right-8 h-[1px] z-20 pointer-events-none" style="background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.4), rgba(236, 72, 153, 0.4), transparent);"></div>
+            <div class="absolute top-0 left-8 right-8 h-[1px] z-20 pointer-events-none"
+                style="background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.4), rgba(236, 72, 153, 0.4), transparent);">
+            </div>
 
-        <!-- Header -->
+            <!-- Header -->
             <div class="relative flex-shrink-0 pt-7 pb-5 px-8 text-center border-b border-white/5 z-10">
                 <button onclick="closeModal('credits-modal','credits-content')"
                     class="absolute top-5 right-5 p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] text-zinc-500 hover:text-white transition-all border border-white/[0.06] hover:border-white/20 active:scale-90 group">
-                    <svg class="w-4 h-4 transition-transform duration-300 group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    <svg class="w-4 h-4 transition-transform duration-300 group-hover:rotate-90" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
                     </svg>
                 </button>
                 <!-- Shield icon -->
-                <div class="mx-auto w-14 h-14 mb-3 rounded-[0.85rem] flex items-center justify-center text-xl border" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(236, 72, 153, 0.12)); border-color: rgba(245, 158, 11, 0.2); box-shadow: 0 0 40px rgba(245, 158, 11, 0.08), 0 0 80px rgba(236, 72, 153, 0.04);">⚡</div>
+                <div class="mx-auto w-14 h-14 mb-3 rounded-[0.85rem] flex items-center justify-center text-xl border"
+                    style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(236, 72, 153, 0.12)); border-color: rgba(245, 158, 11, 0.2); box-shadow: 0 0 40px rgba(245, 158, 11, 0.08), 0 0 80px rgba(236, 72, 153, 0.04);">
+                    ⚡</div>
                 <h3 class="text-xl font-black uppercase tracking-[0.18em]"
                     style="background: linear-gradient(135deg, #fff 20%, #fbbf24 50%, #f472b6 80%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"
                     data-i18n="credits_title">Créditos Oficiales</h3>
@@ -2091,29 +2130,54 @@
                         position: relative;
                         overflow: hidden;
                     }
+
                     .cr-card::before {
                         content: '';
                         position: absolute;
                         inset: 0;
-                        background: linear-gradient(135deg, rgba(255,255,255,0.04), transparent);
+                        background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent);
                         opacity: 0;
                         transition: opacity 0.35s;
                     }
+
                     .cr-card:hover {
                         background: rgba(255, 255, 255, 0.045);
                         transform: translateY(-3px);
                     }
-                    .cr-card:hover::before { opacity: 1; }
-                    
-                    .cr-brand:hover { border-color: rgba(245, 158, 11, 0.35); box-shadow: 0 12px 35px -12px rgba(245, 158, 11, 0.15); }
-                    .cr-blue:hover { border-color: rgba(56, 189, 248, 0.35); box-shadow: 0 12px 35px -12px rgba(56, 189, 248, 0.12); }
-                    .cr-red:hover { border-color: rgba(251, 113, 133, 0.35); box-shadow: 0 12px 35px -12px rgba(251, 113, 133, 0.12); }
-                    .cr-purple:hover { border-color: rgba(192, 132, 252, 0.35); box-shadow: 0 12px 35px -12px rgba(192, 132, 252, 0.12); }
-                    .cr-teal:hover { border-color: rgba(45, 212, 191, 0.35); box-shadow: 0 12px 35px -12px rgba(45, 212, 191, 0.12); }
+
+                    .cr-card:hover::before {
+                        opacity: 1;
+                    }
+
+                    .cr-brand:hover {
+                        border-color: rgba(245, 158, 11, 0.35);
+                        box-shadow: 0 12px 35px -12px rgba(245, 158, 11, 0.15);
+                    }
+
+                    .cr-blue:hover {
+                        border-color: rgba(56, 189, 248, 0.35);
+                        box-shadow: 0 12px 35px -12px rgba(56, 189, 248, 0.12);
+                    }
+
+                    .cr-red:hover {
+                        border-color: rgba(251, 113, 133, 0.35);
+                        box-shadow: 0 12px 35px -12px rgba(251, 113, 133, 0.12);
+                    }
+
+                    .cr-purple:hover {
+                        border-color: rgba(192, 132, 252, 0.35);
+                        box-shadow: 0 12px 35px -12px rgba(192, 132, 252, 0.12);
+                    }
+
+                    .cr-teal:hover {
+                        border-color: rgba(45, 212, 191, 0.35);
+                        box-shadow: 0 12px 35px -12px rgba(45, 212, 191, 0.12);
+                    }
 
                     /* Section icon with glow */
                     .cr-sec-icon {
-                        width: 34px; height: 34px;
+                        width: 34px;
+                        height: 34px;
                         border-radius: 0.65rem;
                         display: flex;
                         align-items: center;
@@ -2122,6 +2186,7 @@
                         flex-shrink: 0;
                         position: relative;
                     }
+
                     .cr-sec-icon::after {
                         content: '';
                         position: absolute;
@@ -2139,14 +2204,32 @@
                         transform: translateY(16px);
                         animation: crFadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
                     }
-                    .credits-section-block:nth-child(1) { animation-delay: 0.15s; }
-                    .credits-section-block:nth-child(2) { animation-delay: 0.25s; }
-                    .credits-section-block:nth-child(3) { animation-delay: 0.35s; }
-                    .credits-section-block:nth-child(4) { animation-delay: 0.45s; }
-                    .credits-section-block:nth-child(5) { animation-delay: 0.55s; }
+
+                    .credits-section-block:nth-child(1) {
+                        animation-delay: 0.15s;
+                    }
+
+                    .credits-section-block:nth-child(2) {
+                        animation-delay: 0.25s;
+                    }
+
+                    .credits-section-block:nth-child(3) {
+                        animation-delay: 0.35s;
+                    }
+
+                    .credits-section-block:nth-child(4) {
+                        animation-delay: 0.45s;
+                    }
+
+                    .credits-section-block:nth-child(5) {
+                        animation-delay: 0.55s;
+                    }
 
                     @keyframes crFadeIn {
-                        to { opacity: 1; transform: translateY(0); }
+                        to {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
                     }
 
                     .cr-label {
@@ -2156,6 +2239,7 @@
                         text-transform: uppercase;
                         margin-bottom: 0.3rem;
                     }
+
                     .cr-value {
                         font-weight: 600;
                         letter-spacing: 0.01em;
@@ -2165,30 +2249,36 @@
                 <!-- Sección: Concepto & Diseño -->
                 <div class="credits-section-block">
                     <div class="flex items-center gap-2.5 mb-3.5">
-                        <div class="cr-sec-icon" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.22);">✨</div>
+                        <div class="cr-sec-icon"
+                            style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.22);">✨
+                        </div>
                         <div>
-                            <p class="text-[8px] font-extrabold text-zinc-600 uppercase tracking-[0.12em]">Sección 01</p>
+                            <p class="text-[8px] font-extrabold text-zinc-600 uppercase tracking-[0.12em]">Sección 01
+                            </p>
                             <p class="text-[11px] font-bold text-brand-400 uppercase tracking-[0.16em]"
-                            data-i18n="credits_sec_dir">Concepto & Diseño</p>
+                                data-i18n="credits_sec_dir">Concepto & Diseño</p>
                         </div>
                         <div class="h-[1px] flex-1 bg-gradient-to-r from-brand-500/25 to-transparent"></div>
                     </div>
-                    
+
                     <div class="grid md:grid-cols-4 gap-2.5 text-sm">
                         <div class="cr-card cr-brand">
                             <span class="cr-label text-zinc-500" data-i18n="credits_lbl_dir">Dirección Creativa</span>
                             <span class="cr-value text-zinc-100 text-sm tracking-wide">Charles Gustav</span>
                         </div>
                         <div class="cr-card cr-brand">
-                            <span class="cr-label text-zinc-500" data-i18n="credits_lbl_insp">Inspiración Absoluta</span>
+                            <span class="cr-label text-zinc-500" data-i18n="credits_lbl_insp">Inspiración
+                                Absoluta</span>
                             <span class="cr-value text-zinc-100 text-sm tracking-wide">Yaire Alvarado</span>
                         </div>
                         <div class="cr-card cr-brand">
-                            <span class="cr-label text-zinc-500" data-i18n="credits_lbl_dev">Desarrollo UI/UX & Código</span>
+                            <span class="cr-label text-zinc-500" data-i18n="credits_lbl_dev">Desarrollo UI/UX &
+                                Código</span>
                             <span class="cr-value text-zinc-100 text-sm">Antigravity AI</span>
                         </div>
                         <div class="cr-card cr-brand">
-                            <span class="cr-label text-zinc-500" data-i18n="credits_lbl_thanks">Agradecimiento Especial</span>
+                            <span class="cr-label text-zinc-500" data-i18n="credits_lbl_thanks">Agradecimiento
+                                Especial</span>
                             <span class="cr-value text-zinc-100 text-sm">Key</span>
                         </div>
                     </div>
@@ -2197,14 +2287,18 @@
                 <!-- Sección: Tecnologías & Core -->
                 <div class="credits-section-block">
                     <div class="flex items-center gap-2.5 mb-3.5">
-                        <div class="cr-sec-icon" style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.22);">⚙️</div>
+                        <div class="cr-sec-icon"
+                            style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.22);">⚙️
+                        </div>
                         <div>
-                            <p class="text-[8px] font-extrabold text-zinc-600 uppercase tracking-[0.12em]">Sección 02</p>
-                            <p class="text-[11px] font-bold text-sky-400 uppercase tracking-[0.16em]" data-i18n="credits_sec_tech">Tecnologías & Core</p>
+                            <p class="text-[8px] font-extrabold text-zinc-600 uppercase tracking-[0.12em]">Sección 02
+                            </p>
+                            <p class="text-[11px] font-bold text-sky-400 uppercase tracking-[0.16em]"
+                                data-i18n="credits_sec_tech">Tecnologías & Core</p>
                         </div>
                         <div class="h-[1px] flex-1 bg-gradient-to-r from-sky-500/25 to-transparent"></div>
                     </div>
-                    
+
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 text-sm">
                         <div class="cr-card cr-blue">
                             <span class="cr-label text-zinc-500">Lenguaje Base</span>
@@ -2236,14 +2330,18 @@
                 <!-- Sección: Comunicación & Voz -->
                 <div class="credits-section-block">
                     <div class="flex items-center gap-2.5 mb-3.5">
-                        <div class="cr-sec-icon" style="background: rgba(251, 113, 133, 0.1); border: 1px solid rgba(251, 113, 133, 0.22);">🎧</div>
+                        <div class="cr-sec-icon"
+                            style="background: rgba(251, 113, 133, 0.1); border: 1px solid rgba(251, 113, 133, 0.22);">
+                            🎧</div>
                         <div>
-                            <p class="text-[8px] font-extrabold text-zinc-600 uppercase tracking-[0.12em]">Sección 03</p>
-                            <p class="text-[11px] font-bold text-rose-400 uppercase tracking-[0.16em]">Comunicaciones & Voz</p>
+                            <p class="text-[8px] font-extrabold text-zinc-600 uppercase tracking-[0.12em]">Sección 03
+                            </p>
+                            <p class="text-[11px] font-bold text-rose-400 uppercase tracking-[0.16em]">Comunicaciones &
+                                Voz</p>
                         </div>
                         <div class="h-[1px] flex-1 bg-gradient-to-r from-rose-500/25 to-transparent"></div>
                     </div>
-                    
+
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 text-sm">
                         <div class="cr-card cr-red">
                             <span class="cr-label text-zinc-500">Motor de Conexión</span>
@@ -2267,14 +2365,18 @@
                 <!-- Sección: Gráficos & Multimedia -->
                 <div class="credits-section-block">
                     <div class="flex items-center gap-2.5 mb-3.5">
-                        <div class="cr-sec-icon" style="background: rgba(192, 132, 252, 0.1); border: 1px solid rgba(192, 132, 252, 0.22);">🎨</div>
+                        <div class="cr-sec-icon"
+                            style="background: rgba(192, 132, 252, 0.1); border: 1px solid rgba(192, 132, 252, 0.22);">
+                            🎨</div>
                         <div>
-                            <p class="text-[8px] font-extrabold text-zinc-600 uppercase tracking-[0.12em]">Sección 04</p>
-                            <p class="text-[11px] font-bold text-purple-400 uppercase tracking-[0.16em]" data-i18n="credits_sec_lib">Gráficos & Multimedia</p>
+                            <p class="text-[8px] font-extrabold text-zinc-600 uppercase tracking-[0.12em]">Sección 04
+                            </p>
+                            <p class="text-[11px] font-bold text-purple-400 uppercase tracking-[0.16em]"
+                                data-i18n="credits_sec_lib">Gráficos & Multimedia</p>
                         </div>
                         <div class="h-[1px] flex-1 bg-gradient-to-r from-purple-500/25 to-transparent"></div>
                     </div>
-                    
+
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 text-sm">
                         <div class="cr-card cr-purple">
                             <span class="cr-label text-zinc-500">Motor de Animación</span>
@@ -2310,14 +2412,18 @@
                 <!-- Sección: Motores de Datos & Seguridad -->
                 <div class="credits-section-block">
                     <div class="flex items-center gap-2.5 mb-3.5">
-                        <div class="cr-sec-icon" style="background: rgba(45, 212, 191, 0.1); border: 1px solid rgba(45, 212, 191, 0.22);">🔒</div>
+                        <div class="cr-sec-icon"
+                            style="background: rgba(45, 212, 191, 0.1); border: 1px solid rgba(45, 212, 191, 0.22);">🔒
+                        </div>
                         <div>
-                            <p class="text-[8px] font-extrabold text-zinc-600 uppercase tracking-[0.12em]">Sección 05</p>
-                            <p class="text-[11px] font-bold text-teal-400 uppercase tracking-[0.16em]" data-i18n="credits_sec_sys">Motores de Datos & Seguridad</p>
+                            <p class="text-[8px] font-extrabold text-zinc-600 uppercase tracking-[0.12em]">Sección 05
+                            </p>
+                            <p class="text-[11px] font-bold text-teal-400 uppercase tracking-[0.16em]"
+                                data-i18n="credits_sec_sys">Motores de Datos & Seguridad</p>
                         </div>
                         <div class="h-[1px] flex-1 bg-gradient-to-r from-teal-500/25 to-transparent"></div>
                     </div>
-                    
+
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 text-sm">
                         <div class="cr-card cr-teal">
                             <span class="cr-label text-zinc-500">Base de Datos</span>
@@ -2348,8 +2454,11 @@
             </div>
 
             <!-- Footer del Modal -->
-            <div class="flex-shrink-0 pt-4 pb-5 px-8 border-t border-white/5 text-center relative z-10" style="background: rgba(0,0,0,0.3);">
-                <p class="text-[8px] font-mono tracking-[0.3em] uppercase mb-1" style="background: linear-gradient(90deg, #fbbf24, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 700;">Build v3.0.0</p>
+            <div class="flex-shrink-0 pt-4 pb-5 px-8 border-t border-white/5 text-center relative z-10"
+                style="background: rgba(0,0,0,0.3);">
+                <p class="text-[8px] font-mono tracking-[0.3em] uppercase mb-1"
+                    style="background: linear-gradient(90deg, #fbbf24, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 700;">
+                    Build v3.0.0</p>
                 <p class="text-[10px] text-zinc-600">© 2026 Charles Gustav. Todos los derechos reservados.</p>
             </div>
         </div>
@@ -2385,11 +2494,12 @@
         onclick="if(event.target === this) closeModal('wrapped-redirect-modal', 'wrapped-redirect-content')">
         <div class="bg-white dark:bg-[#0e0e12] p-8 sm:p-10 rounded-[2.25rem] sm:rounded-[2.5rem] shadow-[0_30px_80px_rgba(0,0,0,.5)] border border-zinc-200/50 dark:border-zinc-700/40 max-w-md w-full transform scale-95 transition-transform duration-300 relative overflow-hidden"
             id="wrapped-redirect-content">
-            
+
             <div class="absolute inset-0 bg-gradient-to-br from-brand-500/10 to-tulip-500/10 pointer-events-none"></div>
 
             <div class="text-5xl mb-6 text-center relative z-10">🎉</div>
-            <h3 class="text-3xl font-black mb-3 text-center text-zinc-900 dark:text-white tracking-tight relative z-10" data-i18n="univ_wrapped_title">28E Wrapped</h3>
+            <h3 class="text-3xl font-black mb-3 text-center text-zinc-900 dark:text-white tracking-tight relative z-10"
+                data-i18n="univ_wrapped_title">28E Wrapped</h3>
             <p class="text-zinc-600 dark:text-zinc-400 text-center mb-8 leading-relaxed font-medium relative z-10">
                 Saldrás hacia tu resumen personalizado. ¡Recuerda acceder con Google para poder verlo!
             </p>
@@ -2398,7 +2508,8 @@
                     class="flex-1 px-6 py-3.5 rounded-2xl font-bold bg-zinc-100 dark:bg-zinc-800/80 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all border border-zinc-200 dark:border-zinc-700/50">
                     Aún no
                 </button>
-                <button onclick="if(typeof AudioManager !== 'undefined') AudioManager.play('entry.wav', 0.6); window.location.href='wrapped';"
+                <button
+                    onclick="if(typeof AudioManager !== 'undefined') AudioManager.play('entry.wav', 0.6); window.location.href='wrapped';"
                     class="flex-1 px-6 py-3.5 rounded-2xl font-bold bg-gradient-to-r from-brand-500 to-tulip-500 text-white hover:scale-105 active:scale-95 shadow-lg shadow-brand-500/30 transition-all text-center flex items-center justify-center gap-2 tracking-wide">
                     Ir al Wrapped
                 </button>
@@ -3503,23 +3614,29 @@
     <!-- Loader Screen — Balanced Modern Elegance -->
     <div id="loader" class="fixed inset-0 z-[200] flex flex-col items-center justify-center overflow-hidden"
         style="position:fixed;inset:0;z-index:200;background:#080406;display:flex;align-items:center;justify-content:center;overflow:hidden;will-change:transform,opacity;">
-        
+
         <!-- Ambient moving blobs -->
         <div class="loader-bg-blob blob-1"></div>
         <div class="loader-bg-blob blob-2"></div>
-        
-        <div id="loader-logo" style="position:relative; z-index:10; opacity:0; margin-bottom: 2rem; text-align:center; will-change: opacity, transform;">
-            <span style="font-family:'Inter',sans-serif; font-weight:800; font-size:3.5rem; letter-spacing:-0.05em; color:#fff; line-height:1;">28E</span>
+
+        <div id="loader-logo"
+            style="position:relative; z-index:10; opacity:0; margin-bottom: 2rem; text-align:center; will-change: opacity, transform;">
+            <span
+                style="font-family:'Inter',sans-serif; font-weight:800; font-size:3.5rem; letter-spacing:-0.05em; color:#fff; line-height:1;">28E</span>
         </div>
 
-        <div class="loader-wrapper" id="custom-loader-wrapper" style="position:relative; z-index:10; opacity: 0; will-change: opacity, transform;">
+        <div class="loader-wrapper" id="custom-loader-wrapper"
+            style="position:relative; z-index:10; opacity: 0; will-change: opacity, transform;">
             <div class="loader-circle-bg"></div>
         </div>
 
         <!-- Loader Footer — Symmetrical Luxury Brand Info -->
-        <div id="loader-footer" style="position: absolute; bottom: 2.5rem; left: 2.5rem; right: 2.5rem; z-index: 15; display: flex; justify-content: space-between; align-items: center; color: rgba(255,255,255,0.25); font-family: 'Inter', sans-serif; font-size: 0.75rem; letter-spacing: 0.03em; will-change: opacity, transform; pointer-events: none;">
+        <div id="loader-footer"
+            style="position: absolute; bottom: 2.5rem; left: 2.5rem; right: 2.5rem; z-index: 15; display: flex; justify-content: space-between; align-items: center; color: rgba(255,255,255,0.25); font-family: 'Inter', sans-serif; font-size: 0.75rem; letter-spacing: 0.03em; will-change: opacity, transform; pointer-events: none;">
             <div style="font-weight: 300;">© 2026 Charles Gustav. Todos los derechos reservados.</div>
-            <div id="loader-percent" style="font-variant-numeric: tabular-nums; font-weight: 500; font-size: 0.85rem; color: rgba(255,255,255,0.45);">0%</div>
+            <div id="loader-percent"
+                style="font-variant-numeric: tabular-nums; font-weight: 500; font-size: 0.85rem; color: rgba(255,255,255,0.45);">
+                0%</div>
         </div>
 
         <!-- Hidden elements for JS compatibility so we don't break existing scripts -->
@@ -3563,6 +3680,7 @@
                         0 20px 30px 0 #f59e0b inset,
                         0 60px 60px 0 #ec4899 inset;
                 }
+
                 50% {
                     transform: rotate(270deg);
                     box-shadow:
@@ -3570,6 +3688,7 @@
                         0 20px 10px 0 #ec4899 inset,
                         0 40px 60px 0 #d97706 inset;
                 }
+
                 100% {
                     transform: rotate(450deg);
                     box-shadow:
@@ -3589,19 +3708,55 @@
                 border: none;
             }
 
-            .loader-letter:nth-child(1) { animation-delay: 0s; }
-            .loader-letter:nth-child(2) { animation-delay: 0.1s; }
-            .loader-letter:nth-child(3) { animation-delay: 0.2s; }
-            .loader-letter:nth-child(4) { animation-delay: 0.3s; }
-            .loader-letter:nth-child(5) { animation-delay: 0.4s; }
-            .loader-letter:nth-child(6) { animation-delay: 0.5s; }
-            .loader-letter:nth-child(7) { animation-delay: 0.6s; }
-            .loader-letter:nth-child(8) { animation-delay: 0.7s; }
+            .loader-letter:nth-child(1) {
+                animation-delay: 0s;
+            }
+
+            .loader-letter:nth-child(2) {
+                animation-delay: 0.1s;
+            }
+
+            .loader-letter:nth-child(3) {
+                animation-delay: 0.2s;
+            }
+
+            .loader-letter:nth-child(4) {
+                animation-delay: 0.3s;
+            }
+
+            .loader-letter:nth-child(5) {
+                animation-delay: 0.4s;
+            }
+
+            .loader-letter:nth-child(6) {
+                animation-delay: 0.5s;
+            }
+
+            .loader-letter:nth-child(7) {
+                animation-delay: 0.6s;
+            }
+
+            .loader-letter:nth-child(8) {
+                animation-delay: 0.7s;
+            }
 
             @keyframes loader-letter-anim {
-                0%, 100% { opacity: 0.4; transform: translateY(0); }
-                20% { opacity: 1; transform: scale(1.15); }
-                40% { opacity: 0.7; transform: translateY(0); }
+
+                0%,
+                100% {
+                    opacity: 0.4;
+                    transform: translateY(0);
+                }
+
+                20% {
+                    opacity: 1;
+                    transform: scale(1.15);
+                }
+
+                40% {
+                    opacity: 0.7;
+                    transform: translateY(0);
+                }
             }
 
             /* Main loader hide logic */
@@ -3702,15 +3857,18 @@
             <p class="menu-category-label text-brand-500" data-i18n="menu_cat_essence">✦ ESENCIA</p>
             <div class="menu-grid">
                 <a href="#hero" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
-                    <span class="menu-link-icon bg-amber-50 dark:bg-amber-900/20 shadow-[0_0_12px_rgba(245,158,11,0.3)]">🏠</span>
+                    <span
+                        class="menu-link-icon bg-amber-50 dark:bg-amber-900/20 shadow-[0_0_12px_rgba(245,158,11,0.3)]">🏠</span>
                     <span data-i18n="menu_home">Inicio</span>
                 </a>
                 <a href="#historia" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
-                    <span class="menu-link-icon bg-blue-50 dark:bg-blue-900/20 shadow-[0_0_12px_rgba(59,130,246,0.3)]">📖</span>
+                    <span
+                        class="menu-link-icon bg-blue-50 dark:bg-blue-900/20 shadow-[0_0_12px_rgba(59,130,246,0.3)]">📖</span>
                     <span data-i18n="menu_story">Historia &amp; Tiempo</span>
                 </a>
                 <a href="#nombre" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
-                    <span class="menu-link-icon bg-violet-50 dark:bg-violet-900/20 shadow-[0_0_12px_rgba(139,92,246,0.3)]">✨</span>
+                    <span
+                        class="menu-link-icon bg-violet-50 dark:bg-violet-900/20 shadow-[0_0_12px_rgba(139,92,246,0.3)]">✨</span>
                     <span data-i18n="menu_name">Tu Nombre</span>
                 </a>
                 <a href="#tulipanes" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
@@ -3718,7 +3876,8 @@
                     <span data-i18n="menu_tulips">Tus Flores</span>
                 </a>
                 <a href="#quiz-girasol" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
-                    <span class="menu-link-icon bg-yellow-50 dark:bg-yellow-900/20 shadow-[0_0_12px_rgba(234,179,8,0.3)]">🌻</span>
+                    <span
+                        class="menu-link-icon bg-yellow-50 dark:bg-yellow-900/20 shadow-[0_0_12px_rgba(234,179,8,0.3)]">🌻</span>
                     <span data-i18n="menu_quiz">El Misterio</span>
                 </a>
                 <a href="#distancia" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
@@ -3731,7 +3890,8 @@
             <p class="menu-category-label text-tulip-500" data-i18n="menu_cat_exp">✦ EXPERIENCIAS</p>
             <div class="menu-grid">
                 <a href="#comida" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
-                    <span class="menu-link-icon bg-orange-50 dark:bg-orange-900/20 shadow-[0_0_12px_rgba(249,115,22,0.3)]">🍽️</span>
+                    <span
+                        class="menu-link-icon bg-orange-50 dark:bg-orange-900/20 shadow-[0_0_12px_rgba(249,115,22,0.3)]">🍽️</span>
                     <span data-i18n="menu_food">El Pacto</span>
                 </a>
                 <a href="#universo" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
@@ -3739,19 +3899,23 @@
                     <span data-i18n="menu_universe">Su Universo</span>
                 </a>
                 <a href="#galeria" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
-                    <span class="menu-link-icon bg-indigo-50 dark:bg-indigo-900/20 shadow-[0_0_12px_rgba(99,102,241,0.3)]">🖼️</span>
+                    <span
+                        class="menu-link-icon bg-indigo-50 dark:bg-indigo-900/20 shadow-[0_0_12px_rgba(99,102,241,0.3)]">🖼️</span>
                     <span data-i18n="menu_gallery">Galería de Arte</span>
                 </a>
                 <a href="#minijuegos" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400 relative">
-                    <span class="menu-link-icon bg-purple-50 dark:bg-purple-900/20 shadow-[0_0_12px_rgba(168,85,247,0.3)]">🎮</span>
+                    <span
+                        class="menu-link-icon bg-purple-50 dark:bg-purple-900/20 shadow-[0_0_12px_rgba(168,85,247,0.3)]">🎮</span>
                     <span data-i18n="menu_games">Minijuegos</span>
                 </a>
                 <a href="#ruleta" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400 relative">
-                    <span class="menu-link-icon bg-red-50 dark:bg-red-900/20 shadow-[0_0_12px_rgba(239,68,68,0.3)]">🎰</span>
+                    <span
+                        class="menu-link-icon bg-red-50 dark:bg-red-900/20 shadow-[0_0_12px_rgba(239,68,68,0.3)]">🎰</span>
                     <span>Ruleta de Citas</span>
                 </a>
                 <a href="#colores-yaire" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
-                    <span class="menu-link-icon bg-rose-50 dark:bg-rose-900/20 shadow-[0_0_12px_rgba(244,63,94,0.3)]">🎨</span>
+                    <span
+                        class="menu-link-icon bg-rose-50 dark:bg-rose-900/20 shadow-[0_0_12px_rgba(244,63,94,0.3)]">🎨</span>
                     <span data-i18n="menu_colors">Colores Favoritos</span>
                 </a>
                 <a href="#guestbook" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
@@ -3864,168 +4028,168 @@
                 let currentSpotTrack = 0;
                 let spotAudio = new Audio();
                 let fbRadioAudio = new Audio();
-let currentRadioState = null;
-let radioUnsubscribe = null;
-let serverTimeOffset = 0;
+                let currentRadioState = null;
+                let radioUnsubscribe = null;
+                let serverTimeOffset = 0;
 
-function startFirebaseRadio() {
-    if (!window.yaireRadioFb) {
-        setTimeout(startFirebaseRadio, 100);
-        return;
-    }
-    const { db, ref, onValue } = window.yaireRadioFb;
-    
-    if (!radioUnsubscribe) {
-        onValue(ref(db, '.info/serverTimeOffset'), snap => {
-            serverTimeOffset = snap.val() || 0;
-        });
+                function startFirebaseRadio() {
+                    if (!window.yaireRadioFb) {
+                        setTimeout(startFirebaseRadio, 100);
+                        return;
+                    }
+                    const { db, ref, onValue } = window.yaireRadioFb;
 
-        
-        radioUnsubscribe = onValue(ref(db, 'radio_state/current'), snap => {
-            const state = snap.val();
-            currentRadioState = state;
-            if (!state || spotlightMode !== 'radio') return;
+                    if (!radioUnsubscribe) {
+                        onValue(ref(db, '.info/serverTimeOffset'), snap => {
+                            serverTimeOffset = snap.val() || 0;
+                        });
 
-            const expTitle = document.getElementById('spotlight-expanded-title');
-            const expArtist = document.getElementById('spotlight-expanded-artist');
-            const compactArtist = document.getElementById('spotlight-artist');
-            
-            if (expTitle) expTitle.textContent = state.title || 'Spotlight Radio';
-            if (expArtist) expArtist.innerHTML = `<span class="text-red-500 font-bold tracking-widest uppercase animate-pulse">🔴 EN VIVO: ${state.artist || 'Transmisión'}</span>`;
-            if (compactArtist) compactArtist.innerHTML = `<span class="text-red-500 font-bold tracking-wider animate-pulse">🔴 ${state.artist || 'EN VIVO'}</span>`;
 
-            if (state.title && state.artist) {
-                fetchSpotlightArtwork({title: state.title, artist: state.artist}).then(url => updateAllArtwork(url || 'tulip.ico?v=3'));
-            }
+                        radioUnsubscribe = onValue(ref(db, 'radio_state/current'), snap => {
+                            const state = snap.val();
+                            currentRadioState = state;
+                            if (!state || spotlightMode !== 'radio') return;
 
-            
-            if (state.isPlaying) {
-                if (fbRadioAudio.src !== new URL(state.src, document.baseURI).href) {
-                    fbRadioAudio.src = state.src;
-                    fbRadioAudio.load();
-                    
-                    const now = Date.now() + serverTimeOffset;
-                    let seekTime = (now - state.startTime) / 1000;
-                    
-                    if (seekTime < 5) {
-                        const announcerText = `Estás escuchando ${state.title} de ${state.artist}, en Spotlight Radio.`;
-                        const announcerAudio = new Audio(`/api/tts?text=${encodeURIComponent(announcerText)}`);
-                        
-                        // We use the Audio object directly to check if API is available
-                        setTimeout(() => {
-                            announcerAudio.play().then(() => {
-                                // Aplicar Ducking
-                                const currentGlobal = fbRadioAudio.volume;
-                                fbRadioAudio.volume = currentGlobal * 0.2;
-                                
-                                announcerAudio.onended = () => {
-                                    fbRadioAudio.volume = currentGlobal;
-                                };
-                            }).catch(e => {
-                                // Si falla (e.g. no API key o autoplay bloqueado) no hacemos ducking
-                                console.warn("TTS Announcer skipped:", e);
+                            const expTitle = document.getElementById('spotlight-expanded-title');
+                            const expArtist = document.getElementById('spotlight-expanded-artist');
+                            const compactArtist = document.getElementById('spotlight-artist');
+
+                            if (expTitle) expTitle.textContent = state.title || 'Spotlight Radio';
+                            if (expArtist) expArtist.innerHTML = `<span class="text-red-500 font-bold tracking-widest uppercase animate-pulse">🔴 EN VIVO: ${state.artist || 'Transmisión'}</span>`;
+                            if (compactArtist) compactArtist.innerHTML = `<span class="text-red-500 font-bold tracking-wider animate-pulse">🔴 ${state.artist || 'EN VIVO'}</span>`;
+
+                            if (state.title && state.artist) {
+                                fetchSpotlightArtwork({ title: state.title, artist: state.artist }).then(url => updateAllArtwork(url || 'tulip.ico?v=3'));
+                            }
+
+
+                            if (state.isPlaying) {
+                                if (fbRadioAudio.src !== new URL(state.src, document.baseURI).href) {
+                                    fbRadioAudio.src = state.src;
+                                    fbRadioAudio.load();
+
+                                    const now = Date.now() + serverTimeOffset;
+                                    let seekTime = (now - state.startTime) / 1000;
+
+                                    if (seekTime < 5) {
+                                        const announcerText = `Estás escuchando ${state.title} de ${state.artist}, en Spotlight Radio.`;
+                                        const announcerAudio = new Audio(`/api/tts?text=${encodeURIComponent(announcerText)}`);
+
+                                        // We use the Audio object directly to check if API is available
+                                        setTimeout(() => {
+                                            announcerAudio.play().then(() => {
+                                                // Aplicar Ducking
+                                                const currentGlobal = fbRadioAudio.volume;
+                                                fbRadioAudio.volume = currentGlobal * 0.2;
+
+                                                announcerAudio.onended = () => {
+                                                    fbRadioAudio.volume = currentGlobal;
+                                                };
+                                            }).catch(e => {
+                                                // Si falla (e.g. no API key o autoplay bloqueado) no hacemos ducking
+                                                console.warn("TTS Announcer skipped:", e);
+                                            });
+                                        }, 500); // Wait half a second before speaking
+                                    }
+                                }
+
+                                const now = Date.now() + serverTimeOffset;
+                                let seekTime = (now - state.startTime) / 1000;
+                                if (seekTime < 0) seekTime = 0;
+
+                                if (Math.abs(fbRadioAudio.currentTime - seekTime) > 2) {
+                                    fbRadioAudio.currentTime = seekTime;
+                                }
+
+                                if (fbRadioAudio.paused && isSpotPlaying) {
+                                    fbRadioAudio.play().catch(e => console.error("Radio play error:", e));
+                                }
+                            } else {
+                                fbRadioAudio.pause();
+                            }
+                        });
+
+                        onValue(ref(db, 'radio_state/globalVolume'), snap => {
+                            const vol = snap.val();
+                            if (vol !== null) {
+                                fbRadioAudio.volume = vol;
+                            }
+                        });
+
+                        ['airhorn', 'applause', 'djdrop'].forEach(sfxId => {
+                            onValue(ref(db, 'radio_state/sfx_' + sfxId), snap => {
+                                const ts = snap.val();
+                                if (ts && (!window['__last_sfx_' + sfxId] || ts > window['__last_sfx_' + sfxId])) {
+                                    // Only play if we are in radio mode and it's a recent trigger (within 10 seconds)
+                                    const isNew = !window['__last_sfx_' + sfxId]; // ignore initial load
+                                    window['__last_sfx_' + sfxId] = ts;
+
+                                    if (!isNew && spotlightMode === 'radio' && isSpotPlaying && (Date.now() + serverTimeOffset - ts < 10000)) {
+                                        const urls = {
+                                            airhorn: 'https://www.myinstants.com/media/sounds/mlg-airhorn.mp3',
+                                            applause: 'https://www.myinstants.com/media/sounds/applause-1.mp3',
+                                            djdrop: 'https://www.myinstants.com/media/sounds/dj-airhorn-sound-effect.mp3'
+                                        };
+                                        const a = new Audio(urls[sfxId]);
+                                        a.volume = fbRadioAudio.volume;
+                                        a.play().catch(() => { });
+                                    }
+                                }
                             });
-                        }, 500); // Wait half a second before speaking
+                        });
+
+                    }
+
+                    if (!isSpotPlaying) {
+                        isSpotPlaying = true;
+                        spotlightUpdateUI();
+                        if (fbRadioAudio.src) {
+                            // Resync current time when locally resumed
+                            if (currentRadioState && currentRadioState.isPlaying && currentRadioState.startTime) {
+                                const now = Date.now() + serverTimeOffset;
+                                let seekTime = (now - currentRadioState.startTime) / 1000;
+                                if (seekTime < 0) seekTime = 0;
+                                fbRadioAudio.currentTime = seekTime;
+                            }
+                            fbRadioAudio.play().catch(e => console.error("Radio play error:", e));
+                        }
                     }
                 }
-                
-                const now = Date.now() + serverTimeOffset;
-                let seekTime = (now - state.startTime) / 1000;
-                if (seekTime < 0) seekTime = 0;
-                
-                if (Math.abs(fbRadioAudio.currentTime - seekTime) > 2) {
-                    fbRadioAudio.currentTime = seekTime;
+
+                function stopFirebaseRadio() {
+                    isSpotPlaying = false;
+                    fbRadioAudio.pause();
+                    spotlightUpdateUI();
+                    document.title = '28E';
                 }
 
-                if (fbRadioAudio.paused && isSpotPlaying) {
-                    fbRadioAudio.play().catch(e => console.error("Radio play error:", e));
-                }
-            } else {
-                fbRadioAudio.pause();
-            }
-        });
+                fbRadioAudio.addEventListener('ended', () => {
+                    if (spotlightMode !== 'radio' || !window.yaireRadioFb) return;
+                    const { db, ref, runTransaction, serverTimestamp } = window.yaireRadioFb;
+                    const endedSrc = fbRadioAudio.src;
 
-        onValue(ref(db, 'radio_state/globalVolume'), snap => {
-            const vol = snap.val();
-            if (vol !== null) {
-                fbRadioAudio.volume = vol;
-            }
-        });
+                    runTransaction(ref(db, 'radio_state/current'), (currentData) => {
+                        if (!currentData) return currentData;
+                        const currentAbsoluteSrc = new URL(currentData.src, document.baseURI).href;
+                        if (currentAbsoluteSrc !== endedSrc) return; // Alguien más ya avanzó
 
-        ['airhorn', 'applause', 'djdrop'].forEach(sfxId => {
-            onValue(ref(db, 'radio_state/sfx_' + sfxId), snap => {
-                const ts = snap.val();
-                if (ts && (!window['__last_sfx_' + sfxId] || ts > window['__last_sfx_' + sfxId])) {
-                    // Only play if we are in radio mode and it's a recent trigger (within 10 seconds)
-                    const isNew = !window['__last_sfx_' + sfxId]; // ignore initial load
-                    window['__last_sfx_' + sfxId] = ts;
-                    
-                    if (!isNew && spotlightMode === 'radio' && isSpotPlaying && (Date.now() + serverTimeOffset - ts < 10000)) {
-                        const urls = {
-                            airhorn: 'https://www.myinstants.com/media/sounds/mlg-airhorn.mp3',
-                            applause: 'https://www.myinstants.com/media/sounds/applause-1.mp3',
-                            djdrop: 'https://www.myinstants.com/media/sounds/dj-airhorn-sound-effect.mp3'
-                        };
-                        const a = new Audio(urls[sfxId]);
-                        a.volume = fbRadioAudio.volume;
-                        a.play().catch(()=>{});
-                    }
-                }
-            });
-        });
+                        let nextIndex = 0;
+                        const currentIndex = spotlightTracks.findIndex(t => t.src === currentData.src || new URL(t.src, document.baseURI).href === currentData.src);
+                        if (currentIndex !== -1) {
+                            nextIndex = (currentIndex + 1) % spotlightTracks.length;
+                        }
 
-    }
+                        const nextTrack = spotlightTracks[nextIndex];
+                        currentData.src = nextTrack.src;
+                        currentData.title = nextTrack.title;
+                        currentData.artist = nextTrack.artist;
+                        currentData.startTime = serverTimestamp();
+                        currentData.isPlaying = true;
+                        currentData.source = 'auto';
 
-    if (!isSpotPlaying) {
-        isSpotPlaying = true;
-        spotlightUpdateUI();
-        if (fbRadioAudio.src) {
-            // Resync current time when locally resumed
-            if (currentRadioState && currentRadioState.isPlaying && currentRadioState.startTime) {
-                const now = Date.now() + serverTimeOffset;
-                let seekTime = (now - currentRadioState.startTime) / 1000;
-                if (seekTime < 0) seekTime = 0;
-                fbRadioAudio.currentTime = seekTime;
-            }
-            fbRadioAudio.play().catch(e => console.error("Radio play error:", e));
-        }
-    }
-}
-
-function stopFirebaseRadio() {
-    isSpotPlaying = false;
-    fbRadioAudio.pause();
-    spotlightUpdateUI();
-    document.title = '28E';
-}
-
-fbRadioAudio.addEventListener('ended', () => {
-    if (spotlightMode !== 'radio' || !window.yaireRadioFb) return;
-    const { db, ref, runTransaction, serverTimestamp } = window.yaireRadioFb;
-    const endedSrc = fbRadioAudio.src;
-
-    runTransaction(ref(db, 'radio_state/current'), (currentData) => {
-        if (!currentData) return currentData;
-        const currentAbsoluteSrc = new URL(currentData.src, document.baseURI).href;
-        if (currentAbsoluteSrc !== endedSrc) return; // Alguien más ya avanzó
-
-        let nextIndex = 0;
-        const currentIndex = spotlightTracks.findIndex(t => t.src === currentData.src || new URL(t.src, document.baseURI).href === currentData.src);
-        if (currentIndex !== -1) {
-            nextIndex = (currentIndex + 1) % spotlightTracks.length;
-        }
-
-        const nextTrack = spotlightTracks[nextIndex];
-        currentData.src = nextTrack.src;
-        currentData.title = nextTrack.title;
-        currentData.artist = nextTrack.artist;
-        currentData.startTime = serverTimestamp();
-        currentData.isPlaying = true;
-        currentData.source = 'auto';
-
-        return currentData;
-    });
-});
+                        return currentData;
+                    });
+                });
                 let spotlightMode = 'music'; // 'music' or 'radio'
                 let isSpotPlaying = false;
                 let isSpotlightExpanded = false;
@@ -4211,7 +4375,7 @@ fbRadioAudio.addEventListener('ended', () => {
                     const expArtist = document.getElementById('spotlight-expanded-artist');
                     if (expTitle) expTitle.textContent = track.title;
                     if (expArtist) expArtist.textContent = track.artist;
-                    
+
                     // Fetch and display artwork
                     fetchSpotlightArtwork(track).then(artUrl => updateAllArtwork(artUrl));
                 }
@@ -4400,10 +4564,10 @@ fbRadioAudio.addEventListener('ended', () => {
 
                 function spotlightPlayTrack(i) {
                     spotAudio.pause();
-                    
+
                     isSpotPlaying = true;
                     spotlightUpdateUI();
-                    
+
                     if (currentSpotTrack !== i) {
                         // Register the play handler BEFORE changing the source
                         // so we don't miss the canplay event on cached/local files
@@ -4420,10 +4584,10 @@ fbRadioAudio.addEventListener('ended', () => {
                             });
                         };
                         spotAudio.addEventListener('canplay', doPlay, { once: true });
-                        
+
                         // Now change the source (this triggers loading)
                         spotlightLoadTrack(i);
-                        
+
                         // Safety: if canplay doesn't fire within 3 seconds, force play
                         setTimeout(() => { doPlay(); }, 3000);
                     } else {
@@ -4484,7 +4648,7 @@ fbRadioAudio.addEventListener('ended', () => {
                     if (spotlightMode === mode) return;
                     spotlightMode = mode;
                     AudioManager.play('language.wav', 0.6);
-                    
+
                     const btnMusic = document.getElementById('spot-mode-btn-music');
                     const btnRadio = document.getElementById('spot-mode-btn-radio');
                     const compactNext = document.getElementById('spotlight-compact-next');
@@ -4498,7 +4662,7 @@ fbRadioAudio.addEventListener('ended', () => {
                     const expArtist = document.getElementById('spotlight-expanded-artist');
                     const compactTitle = document.getElementById('spotlight-title');
                     const compactArtist = document.getElementById('spotlight-artist');
-                    
+
                     // Pause current playback on switch
                     if (isSpotPlaying) {
                         if (mode === 'radio' && spotAudio) { spotAudio.pause(); if (isSpotPlaying) startFirebaseRadio(); }
@@ -4507,7 +4671,7 @@ fbRadioAudio.addEventListener('ended', () => {
                         spotlightUpdateUI();
                         document.title = '28E';
                     }
-                    
+
                     if (mode === 'music') {
                         // Activate Music UI
                         btnMusic.className = "px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all bg-white dark:bg-zinc-700 text-brand-500 shadow-sm";
@@ -4519,10 +4683,10 @@ fbRadioAudio.addEventListener('ended', () => {
                         if (expTimeList) expTimeList.style.display = '';
                         if (expList) expList.style.display = '';
                         if (radioVis) radioVis.style.display = 'none';
-                        
+
                         const vinylArt = document.getElementById('spotlight-vinyl-art');
                         if (vinylArt) vinylArt.classList.remove('scale-[0.8]');
-                        
+
                         // Restore track info
                         const t = spotlightTracks[currentSpotTrack];
                         if (t) {
@@ -4543,21 +4707,21 @@ fbRadioAudio.addEventListener('ended', () => {
                         if (expTimeList) expTimeList.style.display = 'none';
                         if (expList) expList.style.display = 'none';
                         if (radioVis) radioVis.style.display = 'flex';
-                        
+
                         const vinylArt = document.getElementById('spotlight-vinyl-art');
                         if (vinylArt) vinylArt.classList.add('scale-[0.8]', 'transition-transform', 'duration-300');
-                        
+
                         const dict = typeof dictionary !== 'undefined' && typeof currentLang !== 'undefined' && dictionary[currentLang] ? dictionary[currentLang] : {
                             radio_live_badge: '🔴 EN VIVO',
                             radio_live_title: '🔴 Transmisión en Vivo'
                         };
-                        
+
                         // Set live text
                         if (compactTitle) compactTitle.textContent = 'Spotlight Radio';
                         if (compactArtist) compactArtist.innerHTML = `<span class="text-red-500 font-bold tracking-wider animate-pulse" data-i18n="radio_live_badge">${dict.radio_live_badge}</span>`;
                         if (expTitle) expTitle.textContent = 'Spotlight Radio';
                         if (expArtist) expArtist.innerHTML = `<span class="text-red-500 font-bold tracking-widest uppercase animate-pulse" data-i18n="radio_live_title">${dict.radio_live_title}</span>`;
-                        
+
                         // Use default radio artwork
                         updateAllArtwork('tulip.ico?v=3');
                     }
@@ -4688,9 +4852,14 @@ fbRadioAudio.addEventListener('ended', () => {
                     class="w-8 h-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-400 hover:text-zinc-700 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all text-sm border border-zinc-200/50 dark:border-zinc-700/50 cursor-pointer">
                     ✕
                 </button>
-                <div class="flex bg-zinc-100 dark:bg-zinc-800/80 p-1 rounded-full border border-zinc-200/50 dark:border-zinc-700/50 select-none">
-                    <button onclick="setSpotlightMode('music')" id="spot-mode-btn-music" class="px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all bg-white dark:bg-zinc-700 text-brand-500 shadow-sm" data-i18n="spot_mode_music">Music</button>
-                    <button onclick="setSpotlightMode('radio')" id="spot-mode-btn-radio" class="px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300" data-i18n="spot_mode_radio">Radio</button>
+                <div
+                    class="flex bg-zinc-100 dark:bg-zinc-800/80 p-1 rounded-full border border-zinc-200/50 dark:border-zinc-700/50 select-none">
+                    <button onclick="setSpotlightMode('music')" id="spot-mode-btn-music"
+                        class="px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all bg-white dark:bg-zinc-700 text-brand-500 shadow-sm"
+                        data-i18n="spot_mode_music">Music</button>
+                    <button onclick="setSpotlightMode('radio')" id="spot-mode-btn-radio"
+                        class="px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+                        data-i18n="spot_mode_radio">Radio</button>
                 </div>
                 <div class="w-8"></div>
             </div>
@@ -4770,19 +4939,26 @@ fbRadioAudio.addEventListener('ended', () => {
             </div>
 
             <!-- Radio Visualizer / Filler -->
-            <div class="flex-1 flex flex-col items-center justify-center px-4 py-2 hidden overflow-hidden" id="spotlight-radio-visualizer">
+            <div class="flex-1 flex flex-col items-center justify-center px-4 py-2 hidden overflow-hidden"
+                id="spotlight-radio-visualizer">
                 <div class="relative w-24 h-24 mb-4 flex items-center justify-center scale-90 sm:scale-100">
                     <!-- Glowing rings -->
-                    <div class="absolute inset-0 rounded-full border border-brand-500/20 animate-ping" style="animation-duration: 3s;"></div>
-                    <div class="absolute inset-3 rounded-full border border-brand-500/40 animate-ping" style="animation-duration: 2s;"></div>
-                    <div class="absolute inset-6 rounded-full border border-brand-500/60 animate-ping" style="animation-duration: 1.5s;"></div>
+                    <div class="absolute inset-0 rounded-full border border-brand-500/20 animate-ping"
+                        style="animation-duration: 3s;"></div>
+                    <div class="absolute inset-3 rounded-full border border-brand-500/40 animate-ping"
+                        style="animation-duration: 2s;"></div>
+                    <div class="absolute inset-6 rounded-full border border-brand-500/60 animate-ping"
+                        style="animation-duration: 1.5s;"></div>
                     <!-- Icon -->
-                    <div class="w-12 h-12 rounded-full bg-brand-500/10 flex items-center justify-center text-brand-500 shadow-[0_0_15px_rgba(236,72,153,0.3)]">
+                    <div
+                        class="w-12 h-12 rounded-full bg-brand-500/10 flex items-center justify-center text-brand-500 shadow-[0_0_15px_rgba(236,72,153,0.3)]">
                         <i class="ph-duotone ph-broadcast text-2xl"></i>
                     </div>
                 </div>
-                <h4 class="text-xs font-extrabold text-zinc-800 dark:text-zinc-200 mb-1 tracking-widest uppercase" data-i18n="radio_signal">Señal en Vivo</h4>
-                <p class="text-[10px] text-zinc-500 dark:text-zinc-400 text-center max-w-[200px] leading-snug" data-i18n="radio_desc">
+                <h4 class="text-xs font-extrabold text-zinc-800 dark:text-zinc-200 mb-1 tracking-widest uppercase"
+                    data-i18n="radio_signal">Señal en Vivo</h4>
+                <p class="text-[10px] text-zinc-500 dark:text-zinc-400 text-center max-w-[200px] leading-snug"
+                    data-i18n="radio_desc">
                     Sintonizando la frecuencia de 28E. Emisión ininterrumpida de amor y recuerdos.
                 </p>
             </div>
@@ -4815,12 +4991,12 @@ fbRadioAudio.addEventListener('ended', () => {
                     </button>
                     <!-- Menú de autenticación -->
                     <div id="auth-menu"
-                        class="absolute right-0 top-full mt-4 w-56 rounded-[1.5rem] border border-zinc-200/50 dark:border-white/10 bg-white/20 dark:bg-black/20 backdrop-blur-[40px] transform-gpu shadow-xl dark:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] py-2 z-[999] opacity-0 scale-95 pointer-events-none transition-all duration-300 origin-top-right overflow-hidden"
+                        class="absolute right-0 top-full mt-4 w-56 rounded-[1.25rem] border border-black/5 dark:border-white/10 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-2xl transform-gpu shadow-xl py-2 z-[999] opacity-0 scale-95 pointer-events-none transition-all duration-300 origin-top-right overflow-hidden"
                         style="display:none;">
 
                         <!-- Estado desconectado -->
                         <div id="auth-menu-logged-out" class="px-3 py-1 flex flex-col gap-3 relative z-10">
-                            <p class="text-[11px] font-medium text-zinc-600 dark:text-white/70 text-center mb-1 leading-relaxed"><span
+                            <p class="text-[11px] font-medium text-zinc-600 dark:text-zinc-400 text-center mb-1 leading-relaxed"><span
                                     data-i18n="auth_prompt">Inicia sesión para entrar al canal de voz y guardar
                                     progreso.</span></p>
                             <button id="auth-btn-login"
@@ -4834,15 +5010,16 @@ fbRadioAudio.addEventListener('ended', () => {
 
                         <!-- Estado conectado -->
                         <div id="auth-menu-logged-in" class="hidden flex-col relative z-10">
-                            <div class="px-4 py-2.5 border-b border-black/5 dark:border-white/10 mb-1.5">
+                            <div class="px-4 py-2.5 border-b border-black/5 dark:border-white/5 mb-1.5">
                                 <p id="auth-menu-name"
                                     class="text-[0.9rem] font-bold text-zinc-900 dark:text-white tracking-tight truncate"></p>
-                                <p id="auth-menu-email" class="text-[0.65rem] font-medium text-zinc-600 dark:text-white/50 truncate mt-0.5"></p>
+                                <p id="auth-menu-email" class="text-[0.65rem] font-medium text-zinc-500 dark:text-zinc-400 truncate mt-0.5"></p>
                             </div>
                             <div class="px-2.5">
                                 <button id="auth-btn-logout"
                                     class="w-full flex items-center gap-2.5 px-3 py-2 text-[0.8rem] font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-500/10 dark:hover:bg-red-500/20 transition-colors rounded-xl group active:scale-[0.98]">
-                                    <i class="ph-bold ph-sign-out text-base group-hover:-translate-x-0.5 transition-transform"></i>
+                                    <i
+                                        class="ph-bold ph-sign-out text-base group-hover:-translate-x-0.5 transition-transform"></i>
                                     <span data-i18n="auth_logout_btn">Cerrar sesión</span>
                                 </button>
                             </div>
@@ -4861,13 +5038,18 @@ fbRadioAudio.addEventListener('ended', () => {
             class="relative min-h-[85vh] flex flex-col justify-center items-center text-center pt-10 pb-32 overflow-hidden hero-enter-ready">
 
             <div class="relative z-10 flex flex-col items-center">
-                <div id="hero-badge-container" class="hero-anim hero-anim-1 inline-flex flex-col sm:flex-row items-center gap-1 sm:gap-2.5 px-5 py-2.5 rounded-full border border-brand-500/30 bg-gradient-to-r from-brand-500/10 to-tulip-500/10 text-brand-600 dark:text-brand-400 text-sm font-bold mb-8 uppercase tracking-widest glow-effect transition-all hover:border-brand-500/50">
+                <div id="hero-badge-container"
+                    class="hero-anim hero-anim-1 inline-flex flex-col sm:flex-row items-center gap-1 sm:gap-2.5 px-5 py-2.5 rounded-full border border-brand-500/30 bg-gradient-to-r from-brand-500/10 to-tulip-500/10 text-brand-600 dark:text-brand-400 text-sm font-bold mb-8 uppercase tracking-widest glow-effect transition-all hover:border-brand-500/50">
                     <span class="flex items-center gap-1.5">
-                        <span id="hero-badge-text" data-i18n="hero_badge">¡Felices 4 Meses!</span> <span id="hero-badge-e1">✨</span>
+                        <span id="hero-badge-text" data-i18n="hero_badge">¡Felices 4 Meses!</span> <span
+                            id="hero-badge-e1">✨</span>
                     </span>
-                    <span class="inline-flex items-center gap-1.5 font-extrabold" style="font-variant-numeric: tabular-nums;">
+                    <span class="inline-flex items-center gap-1.5 font-extrabold"
+                        style="font-variant-numeric: tabular-nums;">
                         <span id="hero-badge-dot" class="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse"></span>
-                        <a id="hero-badge-link" href="#" class="hidden hover:text-brand-300 transition-all cursor-pointer"><span data-i18n="hero_badge_link"></span></a>
+                        <a id="hero-badge-link" href="#"
+                            class="hidden hover:text-brand-300 transition-all cursor-pointer"><span
+                                data-i18n="hero_badge_link"></span></a>
                         <span id="hero-countdown" class="text-[10px] sm:text-xs tracking-wider"></span>
                         <span id="hero-badge-e2" class="hidden">🎉</span>
                     </span>
@@ -6084,8 +6266,7 @@ fbRadioAudio.addEventListener('ended', () => {
                 <div class="flex flex-col gap-6 relative z-10">
                     <!-- Playlist Banner Carousel -->
                     <div class="relative group w-full reveal-fade">
-                        <div id="universe-carousel"
-                            class="flex overflow-x-auto snap-x snap-mandatory pb-2"
+                        <div id="universe-carousel" class="flex overflow-x-auto snap-x snap-mandatory pb-2"
                             style="scrollbar-width: none; -ms-overflow-style: none;">
                             <style>
                                 #universe-carousel::-webkit-scrollbar {
@@ -6132,19 +6313,24 @@ fbRadioAudio.addEventListener('ended', () => {
                                     data-i18n="univ_lock_btn">Saber más</a>
                             </div>
                             <!-- Slide 3: 28E Wrapped -->
-                            <div
-                                class="w-full flex-shrink-0 snap-center bg-zinc-200/80 dark:bg-zinc-900/50 p-6 md:p-8 rounded-[2rem] shadow-md dark:shadow-xl border border-zinc-300/60 dark:border-zinc-800/50 flex flex-col items-center justify-center gap-3 relative overflow-hidden"
+                            <div class="w-full flex-shrink-0 snap-center bg-zinc-200/80 dark:bg-zinc-900/50 p-6 md:p-8 rounded-[2rem] shadow-md dark:shadow-xl border border-zinc-300/60 dark:border-zinc-800/50 flex flex-col items-center justify-center gap-3 relative overflow-hidden"
                                 style="margin-left: 1rem; min-height: 250px;">
-                                <div class="absolute inset-0 bg-gradient-to-br from-brand-500/10 to-tulip-500/10 pointer-events-none"></div>
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-br from-brand-500/10 to-tulip-500/10 pointer-events-none">
+                                </div>
                                 <div class="text-4xl opacity-90 mb-2 relative z-10">🎉</div>
                                 <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 tracking-widest uppercase text-center relative z-10"
                                     data-i18n="univ_wrapped_title">28E Wrapped</h3>
                                 <p class="text-zinc-600 dark:text-zinc-400 text-sm font-medium text-center mb-4 relative z-10"
-                                    data-i18n="univ_wrapped_subtitle">Una sorpresa especial por nuestros 4 meses juntos. Tu resumen personalizado de nuestros momentos.</p>
-                                <button onclick="if(window.yaireCurrentUser){ if(typeof AudioManager !== 'undefined') AudioManager.play('entry.wav', 0.6); openModal('wrapped-redirect-modal', 'wrapped-redirect-content'); } else { if(window.showPremiumAlert) window.showPremiumAlert('Acceso Restringido', 'Inicia sesión con tu cuenta de Google primero para ver tu 28E Wrapped.', 'error'); }"
+                                    data-i18n="univ_wrapped_subtitle">Una sorpresa especial por nuestros 4 meses juntos.
+                                    Tu resumen personalizado de nuestros momentos.</p>
+                                <button
+                                    onclick="if(window.yaireCurrentUser){ if(typeof AudioManager !== 'undefined') AudioManager.play('entry.wav', 0.6); openModal('wrapped-redirect-modal', 'wrapped-redirect-content'); } else { if(window.showPremiumAlert) window.showPremiumAlert('Acceso Restringido', 'Inicia sesión con tu cuenta de Google primero para ver tu 28E Wrapped.', 'error'); }"
                                     class="relative z-10 px-8 py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-brand-500 to-tulip-500 hover:scale-105 transition-transform active:scale-95 shadow-lg shadow-brand-500/30 uppercase tracking-widest flex items-center gap-2"
                                     data-i18n="univ_wrapped_btn">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                    </svg>
                                     Abrir
                                 </button>
                             </div>
@@ -6158,12 +6344,14 @@ fbRadioAudio.addEventListener('ended', () => {
                         <button id="univ-btn-next"
                             class="absolute -right-4 top-1/2 -translate-y-1/2 bg-zinc-800 text-white w-10 h-10 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg shadow-black/50 border border-zinc-700 z-30"
                             onclick="AudioManager.play('transicion.wav', 0.7); document.getElementById('universe-carousel').scrollBy({left: 400, behavior: 'smooth'})">❯</button>
-                            
+
                         <!-- Indicators -->
                         <div class="flex justify-center gap-2 mt-4" id="univ-indicators">
                             <div class="w-2 h-2 rounded-full bg-white transition-all duration-300 w-4"></div>
-                            <div class="w-2 h-2 rounded-full bg-zinc-300 dark:bg-zinc-700 transition-all duration-300"></div>
-                            <div class="w-2 h-2 rounded-full bg-zinc-300 dark:bg-zinc-700 transition-all duration-300"></div>
+                            <div class="w-2 h-2 rounded-full bg-zinc-300 dark:bg-zinc-700 transition-all duration-300">
+                            </div>
+                            <div class="w-2 h-2 rounded-full bg-zinc-300 dark:bg-zinc-700 transition-all duration-300">
+                            </div>
                         </div>
 
                         <script>
@@ -6973,57 +7161,86 @@ fbRadioAudio.addEventListener('ended', () => {
 
 
         <!-- Ruleta de Citas -->
-        <section id="ruleta" class="py-24 border-t border-zinc-200 dark:border-zinc-800 scroll-mt-20 reveal cv-section relative overflow-hidden">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center relative z-10">
-        <div class="text-center mb-16 px-4">
-            <h2 class="text-sm font-bold tracking-widest uppercase text-tulip-500 mb-4">Experiencias</h2>
-            <h3 class="text-3xl md:text-5xl font-extrabold mb-4 text-zinc-900 dark:text-white">Ruleta de Citas</h3>
-            <p class="text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto text-lg font-light">Nuestra próxima experiencia a distancia juntos será...</p>
-        </div>
-        
-        <!-- The Machine Container -->
-        <div class="max-w-lg mx-auto relative p-2 rounded-[2.5rem] bg-gradient-to-b from-zinc-300 to-zinc-400 dark:from-zinc-800 dark:to-zinc-950 shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)]">
-            <!-- Inner Bezel -->
-            <div class="relative bg-zinc-100 dark:bg-zinc-900 rounded-[2.25rem] p-6 shadow-[inset_0_10px_20px_rgba(0,0,0,0.5)] border border-zinc-400/50 dark:border-black/50">
-                
-                <!-- Machine Details (Screws/Lights) -->
-                <div class="absolute top-4 left-6 w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444] animate-[pulse_2s_ease-in-out_infinite]"></div>
-                <div class="absolute top-4 right-6 w-2 h-2 rounded-full bg-brand-500 shadow-[0_0_8px_#ec4899]"></div>
-                
-                <!-- The Slot Window -->
-                <div class="relative w-full h-32 bg-black rounded-xl overflow-hidden shadow-[inset_0_0_30px_rgba(0,0,0,1)] border-2 border-zinc-700/50 dark:border-zinc-800 mt-4 mb-8">
-                    <!-- Glass reflection -->
-                    <div class="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 pointer-events-none z-30"></div>
-                    
-                    <!-- Fading top/bottom gradients to simulate curvature -->
-                    <div class="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-black via-black/80 to-transparent pointer-events-none z-20"></div>
-                    <div class="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none z-20"></div>
-                    
-                    <!-- The neon selector line (Target area) -->
-                    <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[48px] border-y-2 border-brand-500/80 bg-brand-500/10 pointer-events-none z-10 shadow-[0_0_15px_rgba(236,72,153,0.5),inset_0_0_10px_rgba(236,72,153,0.2)]">
-                        <!-- Left/Right indicator arrows -->
-                        <div class="absolute -left-1 top-1/2 -translate-y-1/2 w-0 h-0 border-y-[6px] border-y-transparent border-l-[8px] border-l-brand-500 shadow-[0_0_5px_#ec4899]"></div>
-                        <div class="absolute -right-1 top-1/2 -translate-y-1/2 w-0 h-0 border-y-[6px] border-y-transparent border-r-[8px] border-r-brand-500 shadow-[0_0_5px_#ec4899]"></div>
-                    </div>
-                    
-                    <!-- Numbers/Text container -->
-                    <div id="roulette-slot" class="absolute left-0 right-0 flex flex-col items-center transition-transform" style="transform: translateY(0px); top: 2.5rem;">
-                        <!-- JS will populate options here -->
+        <section id="ruleta"
+            class="py-24 border-t border-zinc-200 dark:border-zinc-800 scroll-mt-20 reveal cv-section relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center relative z-10">
+                <div class="text-center mb-16 px-4">
+                    <h2 class="text-sm font-bold tracking-widest uppercase text-tulip-500 mb-4">Experiencias</h2>
+                    <h3 class="text-3xl md:text-5xl font-extrabold mb-4 text-zinc-900 dark:text-white">Ruleta de Citas
+                    </h3>
+                    <p class="text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto text-lg font-light">Nuestra próxima
+                        experiencia a distancia juntos será...</p>
+                </div>
+
+                <!-- The Machine Container -->
+                <div
+                    class="max-w-lg mx-auto relative p-2 rounded-[2.5rem] bg-gradient-to-b from-zinc-300 to-zinc-400 dark:from-zinc-800 dark:to-zinc-950 shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                    <!-- Inner Bezel -->
+                    <div
+                        class="relative bg-zinc-100 dark:bg-zinc-900 rounded-[2.25rem] p-6 shadow-[inset_0_10px_20px_rgba(0,0,0,0.5)] border border-zinc-400/50 dark:border-black/50">
+
+                        <!-- Machine Details (Screws/Lights) -->
+                        <div
+                            class="absolute top-4 left-6 w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444] animate-[pulse_2s_ease-in-out_infinite]">
+                        </div>
+                        <div class="absolute top-4 right-6 w-2 h-2 rounded-full bg-brand-500 shadow-[0_0_8px_#ec4899]">
+                        </div>
+
+                        <!-- The Slot Window -->
+                        <div
+                            class="relative w-full h-32 bg-black rounded-xl overflow-hidden shadow-[inset_0_0_30px_rgba(0,0,0,1)] border-2 border-zinc-700/50 dark:border-zinc-800 mt-4 mb-8">
+                            <!-- Glass reflection -->
+                            <div
+                                class="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 pointer-events-none z-30">
+                            </div>
+
+                            <!-- Fading top/bottom gradients to simulate curvature -->
+                            <div
+                                class="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-black via-black/80 to-transparent pointer-events-none z-20">
+                            </div>
+                            <div
+                                class="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none z-20">
+                            </div>
+
+                            <!-- The neon selector line (Target area) -->
+                            <div
+                                class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[48px] border-y-2 border-brand-500/80 bg-brand-500/10 pointer-events-none z-10 shadow-[0_0_15px_rgba(236,72,153,0.5),inset_0_0_10px_rgba(236,72,153,0.2)]">
+                                <!-- Left/Right indicator arrows -->
+                                <div
+                                    class="absolute -left-1 top-1/2 -translate-y-1/2 w-0 h-0 border-y-[6px] border-y-transparent border-l-[8px] border-l-brand-500 shadow-[0_0_5px_#ec4899]">
+                                </div>
+                                <div
+                                    class="absolute -right-1 top-1/2 -translate-y-1/2 w-0 h-0 border-y-[6px] border-y-transparent border-r-[8px] border-r-brand-500 shadow-[0_0_5px_#ec4899]">
+                                </div>
+                            </div>
+
+                            <!-- Numbers/Text container -->
+                            <div id="roulette-slot"
+                                class="absolute left-0 right-0 flex flex-col items-center transition-transform"
+                                style="transform: translateY(0px); top: 2.5rem;">
+                                <!-- JS will populate options here -->
+                            </div>
+                        </div>
+
+                        <!-- The Lever/Button -->
+                        <button id="roulette-spin-btn" onclick="spinRoulette()"
+                            class="w-full relative group outline-none">
+                            <div
+                                class="absolute -inset-1 bg-gradient-to-r from-brand-500 via-rose-500 to-orange-500 rounded-2xl blur-md opacity-70 group-hover:opacity-100 transition duration-300">
+                            </div>
+                            <div
+                                class="relative px-8 py-4 bg-gradient-to-b from-brand-500 to-rose-600 border-t border-white/20 text-white font-black text-xl rounded-xl shadow-[0_6px_0_#9f1239,0_15px_20px_rgba(0,0,0,0.4)] group-active:shadow-[0_0px_0_#9f1239,0_5px_10px_rgba(0,0,0,0.4)] group-active:translate-y-[6px] transition-all flex items-center justify-center gap-3 tracking-wide uppercase">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-2h2v2zm0-4H9V8h2v4zm4 4h-2v-2h2v2zm0-4h-2V8h2v4z" />
+                                </svg>
+                                <span id="roulette-spin-text">Tirar de la Palanca</span>
+                            </div>
+                        </button>
                     </div>
                 </div>
-                
-                <!-- The Lever/Button -->
-                <button id="roulette-spin-btn" onclick="spinRoulette()" class="w-full relative group outline-none">
-                    <div class="absolute -inset-1 bg-gradient-to-r from-brand-500 via-rose-500 to-orange-500 rounded-2xl blur-md opacity-70 group-hover:opacity-100 transition duration-300"></div>
-                    <div class="relative px-8 py-4 bg-gradient-to-b from-brand-500 to-rose-600 border-t border-white/20 text-white font-black text-xl rounded-xl shadow-[0_6px_0_#9f1239,0_15px_20px_rgba(0,0,0,0.4)] group-active:shadow-[0_0px_0_#9f1239,0_5px_10px_rgba(0,0,0,0.4)] group-active:translate-y-[6px] transition-all flex items-center justify-center gap-3 tracking-wide uppercase">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-2h2v2zm0-4H9V8h2v4zm4 4h-2v-2h2v2zm0-4h-2V8h2v4z"/></svg>
-                        <span id="roulette-spin-text">Tirar de la Palanca</span>
-                    </div>
-                </button>
             </div>
-        </div>
-    </div>
-</section>
+        </section>
 
         <!-- Promesas -->
         <section id="promesas"
@@ -12365,7 +12582,7 @@ fbRadioAudio.addEventListener('ended', () => {
                 credits_sec_lib: "Librerías Visuales & Motores", credits_lbl_anim: "Animación Avanzada", credits_lbl_scroll: "Disparadores de Scroll", credits_lbl_data: "Visualización de Datos", credits_lbl_fonts: "Tipografías",
                 credits_sec_sys: "Sistemas Especiales (Custom)", credits_lbl_audio: "Motor de Sonido 0-Lag", credits_lbl_i18n: "Traducción Dinámica", credits_lbl_swipe: "Gestos Táctiles Móviles", credits_lbl_canvas: "Render de Partículas",
                 letter_next_btn: "Siguiente →", letter_fin_btn: "✓ Fin"
-        }
+            }
         };
 
         let currentLang = 'es';
@@ -12664,7 +12881,7 @@ fbRadioAudio.addEventListener('ended', () => {
                     if (typeof gsap !== 'undefined') {
                         // ── EXIT GSAP — Premium Minimal Transition ───────
                         loaderEl.style.willChange = 'opacity';
-                        
+
                         requestAnimationFrame(() => {
                             const exitTl = gsap.timeline({ defaults: { force3D: true } });
                             exitTl.addLabel('start');
@@ -12736,10 +12953,10 @@ fbRadioAudio.addEventListener('ended', () => {
                                 duration: 0.95,
                                 ease: 'power3.inOut'
                             }, 'start')
-                            .set(loaderEl, { display: 'none' }) // Ensure it is hidden from screen and pointer interactions
-                            .call(() => {
-                                document.body.classList.add('page-ready');
-                            });
+                                .set(loaderEl, { display: 'none' }) // Ensure it is hidden from screen and pointer interactions
+                                .call(() => {
+                                    document.body.classList.add('page-ready');
+                                });
 
                             // ── 4. Main Page Zoom-In Reveal (Exquisite Cushioning) ──
                             // As the user zooms past the loader, the landing page elements scale up gently
@@ -13017,7 +13234,7 @@ fbRadioAudio.addEventListener('ended', () => {
         }
 
         function initLanguage() {
-            
+
             setLanguage('es', false);
         }
 
@@ -13502,11 +13719,11 @@ fbRadioAudio.addEventListener('ended', () => {
                                 }, 300);
                             } else if (g.id === 'wrapped') {
                                 setTimeout(() => {
-                                    if(window.yaireCurrentUser){
-                                        if(typeof AudioManager !== 'undefined') AudioManager.play('entry.wav', 0.6);
+                                    if (window.yaireCurrentUser) {
+                                        if (typeof AudioManager !== 'undefined') AudioManager.play('entry.wav', 0.6);
                                         openModal('wrapped-redirect-modal', 'wrapped-redirect-content');
                                     } else {
-                                        if(window.showPremiumAlert) window.showPremiumAlert('Acceso Restringido', 'Inicia sesión con tu cuenta de Google primero para ver tu 28E Wrapped.', 'error');
+                                        if (window.showPremiumAlert) window.showPremiumAlert('Acceso Restringido', 'Inicia sesión con tu cuenta de Google primero para ver tu 28E Wrapped.', 'error');
                                     }
                                 }, 300);
                             } else {
@@ -17365,14 +17582,14 @@ fbRadioAudio.addEventListener('ended', () => {
                 return [];
             }
         };
-        
+
         window.yaireVcHistoryAdd = async (sessionData) => {
             if (!currentUser) return;
             // Optimistic update for instant UI response
             if (!window.yaireVcHistoryData) window.yaireVcHistoryData = [];
             window.yaireVcHistoryData.unshift(sessionData);
             window.yaireVcHistoryData = window.yaireVcHistoryData.slice(0, 50);
-            
+
             try {
                 const historyRef = ref(db, `users/${currentUser.uid}/vc_history`);
                 await set(historyRef, window.yaireVcHistoryData);
@@ -17921,57 +18138,57 @@ fbRadioAudio.addEventListener('ended', () => {
             "🎨 Noche de Dibujar Juntos",
             "☕ Café Virtual por la Mañana"
         ];
-        
+
 
 
         let isSpinningRoulette = false;
         let lastWinnerIndex = 0;
-        
+
         function initRouletteSlot() {
             const slot = document.getElementById('roulette-slot');
             slot.innerHTML = '';
             const longList = [];
-            for(let i=0; i<30; i++) {
+            for (let i = 0; i < 30; i++) {
                 longList.push(...rouletteIdeas);
             }
-            
+
             longList.forEach(idea => {
                 const div = document.createElement('div');
                 div.className = 'h-[48px] flex items-center justify-center text-lg md:text-xl font-bold text-zinc-100 whitespace-nowrap drop-shadow-[0_2px_4px_rgba(0,0,0,1)]';
                 div.innerText = idea;
                 slot.appendChild(div);
             });
-            
+
             if (!isSpinningRoulette && window.gsap) {
                 gsap.set(slot, { y: 0 });
                 lastWinnerIndex = 0;
             }
         }
 
-        window.spinRoulette = function() {
+        window.spinRoulette = function () {
             if (isSpinningRoulette || !window.gsap) return;
             isSpinningRoulette = true;
-            
+
             const slot = document.getElementById('roulette-slot');
-            const itemHeight = 48; 
+            const itemHeight = 48;
             const totalItems = rouletteIdeas.length;
-            
+
             // Instantly snap to the equivalent item near the top to allow infinite spinning
             gsap.set(slot, { y: -(lastWinnerIndex * itemHeight) });
-            
+
             const winnerIndex = Math.floor(Math.random() * totalItems);
             lastWinnerIndex = winnerIndex;
-            
+
             const targetItemIndex = (20 * totalItems) + winnerIndex;
-            
+
             const targetY = -(targetItemIndex * itemHeight);
-            
+
             const btn = document.getElementById('roulette-spin-btn');
             const btnText = document.getElementById('roulette-spin-text');
             btnText.innerText = 'Girando...';
             btn.style.opacity = '0.5';
             btn.style.pointerEvents = 'none';
-            
+
             gsap.to(slot, {
                 y: targetY,
                 duration: 6,
@@ -17991,16 +18208,16 @@ fbRadioAudio.addEventListener('ended', () => {
                                 zIndex: 9999
                             });
                         }
-                    } catch(e){}
-                    
+                    } catch (e) { }
+
                     try {
                         const audio = new Audio('/api/tts?text=' + encodeURIComponent("Su cita de hoy será: " + rouletteIdeas[winnerIndex]));
-                        audio.play().catch(e=>console.log(e));
-                    } catch(e){}
+                        audio.play().catch(e => console.log(e));
+                    } catch (e) { }
                 }
             });
         };
-    
+
         document.addEventListener("DOMContentLoaded", () => {
             initRouletteSlot();
         });
