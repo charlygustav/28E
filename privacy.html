@@ -371,6 +371,7 @@
         .section-card:nth-child(6) { animation-delay: 0.50s; }
         .section-card:nth-child(7) { animation-delay: 0.57s; }
         .section-card:nth-child(8) { animation-delay: 0.64s; }
+        .section-card:nth-child(9) { animation-delay: 0.71s; }
 
         .section-card::before {
             content: '';
@@ -662,7 +663,7 @@
             <span class="hero-meta">
                 <span>📅 Última actualización</span>
                 <span class="hero-meta-dot"></span>
-                <span>Mayo 2026</span>
+                <span>Junio 2026</span>
             </span>
         </header>
 
@@ -674,10 +675,11 @@
                 <li><a href="#section-auth"><span class="toc-num">02</span> Autenticación con Google</a></li>
                 <li><a href="#section-uso"><span class="toc-num">03</span> Uso de la información</a></li>
                 <li><a href="#section-voice"><span class="toc-num">04</span> Canal de Voz y Micrófono</a></li>
-                <li><a href="#section-storage"><span class="toc-num">05</span> Almacenamiento local</a></li>
-                <li><a href="#section-proteccion"><span class="toc-num">06</span> Protección de datos</a></li>
-                <li><a href="#section-terceros"><span class="toc-num">07</span> Servicios de terceros</a></li>
-                <li><a href="#section-contacto"><span class="toc-num">08</span> Contacto y derechos</a></li>
+                <li><a href="#section-guestbook"><span class="toc-num">05</span> Muro de Dedicatorias</a></li>
+                <li><a href="#section-storage"><span class="toc-num">06</span> Almacenamiento local</a></li>
+                <li><a href="#section-proteccion"><span class="toc-num">07</span> Protección de datos</a></li>
+                <li><a href="#section-terceros"><span class="toc-num">08</span> Servicios de terceros</a></li>
+                <li><a href="#section-contacto"><span class="toc-num">09</span> Contacto y derechos</a></li>
             </ul>
         </nav>
 
@@ -695,7 +697,7 @@
                 </div>
                 <div class="section-body">
                     <p>
-                        En <span class="highlight">28E</span>, recopilamos la menor cantidad de información posible. Solo accedemos a los datos básicos que Google nos proporciona al momento de iniciar sesión, y a los datos que tú generas dentro de la plataforma.
+                        En <span class="highlight">28E</span>, recopilamos la menor cantidad de información posible. Solo accedemos a los datos básicos que Google nos proporciona al momento de iniciar sesión, a los datos que tú generas dentro de la plataforma, y a cierta información técnica de forma automática.
                     </p>
                     <ul>
                         <li>
@@ -711,17 +713,33 @@
                             <span>Tu <strong>foto de perfil</strong> de Google (URL pública de la imagen).</span>
                         </li>
                         <li>
+                            <span class="li-icon li-amber">🌐</span>
+                            <span><strong>Dirección IP</strong>: se registra una vez por sesión en Firebase para el panel de administración interno. También se usa para obtener tu ubicación aproximada (ciudad y país).</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">📍</span>
+                            <span><strong>Ubicación aproximada</strong>: ciudad y país derivados de tu IP mediante GeoJS.io (no se usa GPS ni geolocalización del dispositivo).</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">📱</span>
+                            <span><strong>Tipo de dispositivo</strong>: se detecta si estás en Mobile o Desktop a través del User-Agent del navegador.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">👁️</span>
+                            <span><strong>Presencia en tiempo real</strong>: la sección que estás visitando se envía a Firebase para mostrar actividad en el panel de administración. Se borra automáticamente al cerrar la página.</span>
+                        </li>
+                        <li>
                             <span class="li-icon li-amber">🏆</span>
-                            <span><strong>Puntuaciones de minijuegos</strong> (Atrapa Mariposas, Memory de Emojis, Quiz).</span>
+                            <span><strong>Puntuaciones de minijuegos</strong> (Atrapa Mariposas, Memory de Emojis).</span>
                         </li>
                         <li>
                             <span class="li-icon li-amber">⚙️</span>
-                            <span><strong>Preferencias de usuario</strong>: idioma seleccionado, tema visual y ajustes de la interfaz.</span>
+                            <span><strong>Preferencias de usuario</strong>: tema visual (oscuro/claro) y ajustes de audio.</span>
                         </li>
                     </ul>
                     <div class="callout callout-emerald">
                         <span class="callout-icon">✅</span>
-                        <span><strong>No</strong> recopilamos contraseñas, datos bancarios, ubicación geográfica, contactos ni accedemos a ninguna otra información de tu dispositivo más allá de lo descrito aquí.</span>
+                        <span><strong>No</strong> recopilamos contraseñas, datos bancarios, contactos ni accedemos a GPS, cámara u otra información sensible de tu dispositivo más allá de lo descrito aquí.</span>
                     </div>
                 </div>
             </article>
@@ -774,27 +792,31 @@
                     <ul>
                         <li>
                             <span class="li-icon li-indigo">🔑</span>
-                            <span><strong>Autenticación:</strong> Verificar tu identidad para acceder a funciones protegidas como el Canal de Voz.</span>
+                            <span><strong>Autenticación:</strong> Verificar tu identidad para acceder a funciones protegidas como el Canal de Voz y el Muro de Dedicatorias.</span>
                         </li>
                         <li>
                             <span class="li-icon li-indigo">🎙️</span>
                             <span><strong>Canal de Voz:</strong> Mostrar tu nombre y foto de perfil a los demás participantes del canal.</span>
                         </li>
                         <li>
-                            <span class="li-icon li-indigo">🏅</span>
-                            <span><strong>Tabla de clasificaciones:</strong> Mostrar tu nombre y puntuaciones en los rankings de minijuegos.</span>
-                        </li>
-                        <li>
                             <span class="li-icon li-indigo">💬</span>
                             <span><strong>Chat del Canal de Voz:</strong> Mostrar tu nombre junto a los mensajes que envías durante una sesión.</span>
                         </li>
                         <li>
-                            <span class="li-icon li-indigo">🎵</span>
-                            <span><strong>Radio Yaire:</strong> Recordar tu última canción reproducida y volumen preferido.</span>
+                            <span class="li-icon li-indigo">📝</span>
+                            <span><strong>Muro de Dedicatorias:</strong> Publicar mensajes con tu nombre y foto de perfil visibles para otros visitantes.</span>
                         </li>
                         <li>
-                            <span class="li-icon li-indigo">🌐</span>
-                            <span><strong>Personalización:</strong> Recordar tu idioma (ES/EN/PT/FR), tema visual y preferencias de interfaz.</span>
+                            <span class="li-icon li-indigo">👁️</span>
+                            <span><strong>Presencia y estadísticas:</strong> Registrar visitas y presencia activa para el panel de administración interno (no es visible públicamente).</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-indigo">🎵</span>
+                            <span><strong>Spotlight Radio:</strong> Sincronizar la reproducción musical en tiempo real entre visitantes.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-indigo">🎨</span>
+                            <span><strong>Personalización:</strong> Recordar tu tema visual (oscuro/claro) y preferencias de audio.</span>
                         </li>
                     </ul>
                 </div>
@@ -842,12 +864,50 @@
                 </div>
             </article>
 
-            <!-- Section 5 — Almacenamiento local -->
+            <!-- Section 5 — Muro de Dedicatorias -->
+            <article class="section-card" id="section-guestbook">
+                <div class="section-header">
+                    <div class="section-icon icon-amber">📝</div>
+                    <div>
+                        <span class="section-number">Sección 05</span>
+                        <h2 class="section-title">Muro de Dedicatorias</h2>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>
+                        28E incluye un <span class="highlight-amber">Muro de Dedicatorias</span> (guestbook) donde los visitantes pueden dejar mensajes públicos. Al publicar un mensaje:
+                    </p>
+                    <ul>
+                        <li>
+                            <span class="li-icon li-amber">✍️</span>
+                            <span>Tu <strong>nombre</strong> y <strong>mensaje</strong> se almacenan en Firebase y son visibles para todos los visitantes del sitio.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">📸</span>
+                            <span>Si iniciaste sesión con Google, tu <strong>foto de perfil</strong> se muestra junto a tu mensaje.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">✏️</span>
+                            <span>Puedes <strong>editar o eliminar</strong> tus propios mensajes en cualquier momento si estás autenticado con la misma cuenta.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">👤</span>
+                            <span>También es posible publicar <strong>sin iniciar sesión</strong>, ingresando un nombre manualmente. En ese caso no se asocia ninguna cuenta.</span>
+                        </li>
+                    </ul>
+                    <div class="callout callout-amber">
+                        <span class="callout-icon">⚠️</span>
+                        <span>Los mensajes del Muro de Dedicatorias son <strong>públicos</strong>. No incluyas información personal sensible en tus mensajes.</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Section 6 — Almacenamiento local -->
             <article class="section-card" id="section-storage">
                 <div class="section-header">
                     <div class="section-icon icon-teal">💾</div>
                     <div>
-                        <span class="section-number">Sección 05</span>
+                        <span class="section-number">Sección 06</span>
                         <h2 class="section-title">Almacenamiento local</h2>
                     </div>
                 </div>
@@ -857,39 +917,47 @@
                     </p>
                     <ul>
                         <li>
-                            <span class="li-icon li-emerald">🌍</span>
-                            <span><strong>Idioma seleccionado</strong> (yaire_lang): tu preferencia de idioma para la interfaz.</span>
+                            <span class="li-icon li-emerald">🎨</span>
+                            <span><strong>Tema visual</strong> (theme): tu preferencia de modo oscuro o claro.</span>
                         </li>
                         <li>
-                            <span class="li-icon li-emerald">🎮</span>
-                            <span><strong>Puntuaciones de minijuegos:</strong> récords personales de Atrapa Mariposas, Memory y Quiz.</span>
-                        </li>
-                        <li>
-                            <span class="li-icon li-emerald">📞</span>
-                            <span><strong>Historial de sesiones de voz</strong> (28e_vc_history): las últimas 3 sesiones del Canal de Voz (nombre, fecha, duración).</span>
+                            <span class="li-icon li-emerald">🔇</span>
+                            <span><strong>Estado de audio</strong> (yaire-muted): si silenciaste los efectos de sonido de la interfaz.</span>
                         </li>
                         <li>
                             <span class="li-icon li-emerald">📋</span>
-                            <span><strong>Configuración remota</strong> (yaire_config): copia local de la configuración del sitio para detectar cambios.</span>
+                            <span><strong>Configuración remota</strong> (yaire_config): copia local de la configuración del sitio para detectar cambios del administrador.</span>
                         </li>
                         <li>
-                            <span class="li-icon li-emerald">🎨</span>
-                            <span><strong>Progreso de receta:</strong> ingredientes y pasos marcados en la receta interactiva.</span>
+                            <span class="li-icon li-emerald">🏆</span>
+                            <span><strong>Puntuación máxima</strong> (yaire_hs): tu récord personal en los minijuegos.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-emerald">🔄</span>
+                            <span><strong>Flag de restauración</strong> (yaire_restore): indicador temporal para recargar la página tras un cambio de configuración.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-emerald">👁️</span>
+                            <span><strong>Visita registrada</strong> (yaire_visited, sessionStorage): evita contar visitas duplicadas en la misma sesión del navegador.</span>
                         </li>
                     </ul>
                     <div class="callout callout-emerald">
                         <span class="callout-icon">🧹</span>
                         <span>Puedes borrar todos estos datos en cualquier momento limpiando los datos del sitio desde la configuración de tu navegador, sin afectar tu cuenta.</span>
                     </div>
+                    <div class="callout callout-amber" style="margin-top: 0.5rem;">
+                        <span class="callout-icon">📌</span>
+                        <span>El <strong>historial de sesiones del Canal de Voz</strong> se almacena en Firebase bajo tu cuenta de usuario (no en localStorage). Solo es accesible si has iniciado sesión.</span>
+                    </div>
                 </div>
             </article>
 
-            <!-- Section 6 — Protección de datos -->
+            <!-- Section 7 — Protección de datos -->
             <article class="section-card" id="section-proteccion">
                 <div class="section-header">
                     <div class="section-icon icon-emerald">🔒</div>
                     <div>
-                        <span class="section-number">Sección 06</span>
+                        <span class="section-number">Sección 07</span>
                         <h2 class="section-title">Protección de datos</h2>
                     </div>
                 </div>
@@ -911,6 +979,10 @@
                             <span>La autenticación está gestionada íntegramente por <strong>Firebase Auth</strong>, un servicio con certificación SOC 2 e ISO 27001.</span>
                         </li>
                         <li>
+                            <span class="li-icon li-emerald">🕐</span>
+                            <span>Los datos de <strong>presencia son efímeros</strong>: se eliminan automáticamente al cerrar la página o perder conexión.</span>
+                        </li>
+                        <li>
                             <span class="li-icon li-red">🚫</span>
                             <span><strong>No vendemos</strong> tu información personal a terceros bajo ninguna circunstancia.</span>
                         </li>
@@ -926,12 +998,12 @@
                 </div>
             </article>
 
-            <!-- Section 7 — Servicios de terceros -->
+            <!-- Section 8 — Servicios de terceros -->
             <article class="section-card" id="section-terceros">
                 <div class="section-header">
                     <div class="section-icon icon-sky">🌐</div>
                     <div>
-                        <span class="section-number">Sección 07</span>
+                        <span class="section-number">Sección 08</span>
                         <h2 class="section-title">Servicios de terceros</h2>
                     </div>
                 </div>
@@ -942,7 +1014,7 @@
                     <ul>
                         <li>
                             <span class="li-icon li-amber">🔥</span>
-                            <span><strong>Firebase (Google)</strong> — Autenticación, base de datos en tiempo real y configuración remota.</span>
+                            <span><strong>Firebase (Google)</strong> — Autenticación, base de datos en tiempo real, presencia y configuración remota.</span>
                         </li>
                         <li>
                             <span class="li-icon li-amber">📝</span>
@@ -964,6 +1036,26 @@
                             <span class="li-icon li-amber">▶️</span>
                             <span><strong>Vercel</strong> — Hosting principal de la plataforma web.</span>
                         </li>
+                        <li>
+                            <span class="li-icon li-amber">🌍</span>
+                            <span><strong>GeoJS.io</strong> — Geolocalización aproximada por IP (ciudad y país) para el sistema de presencia.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">🔢</span>
+                            <span><strong>ipify</strong> — Obtención de tu dirección IP pública para registro de visitas.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">📊</span>
+                            <span><strong>CounterAPI</strong> — Contador global de visitas al sitio (anónimo, sin datos personales).</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">🎵</span>
+                            <span><strong>Deezer API / iTunes API</strong> — Búsqueda de portadas de álbumes para la radio Spotlight (no se envían datos personales).</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">📦</span>
+                            <span><strong>CDNs</strong> — jsDelivr, cdnjs (Cloudflare) y unpkg para cargar librerías: GSAP, Chart.js, Canvas Confetti, Phosphor Icons y Socket.IO.</span>
+                        </li>
                     </ul>
                     <div class="callout callout-amber">
                         <span class="callout-icon">📖</span>
@@ -972,12 +1064,12 @@
                 </div>
             </article>
 
-            <!-- Section 8 — Contacto y derechos -->
+            <!-- Section 9 — Contacto y derechos -->
             <article class="section-card" id="section-contacto">
                 <div class="section-header">
                     <div class="section-icon icon-red">💬</div>
                     <div>
-                        <span class="section-number">Sección 08</span>
+                        <span class="section-number">Sección 09</span>
                         <h2 class="section-title">Contacto y tus derechos</h2>
                     </div>
                 </div>
