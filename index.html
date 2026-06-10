@@ -4815,19 +4815,16 @@ fbRadioAudio.addEventListener('ended', () => {
                     </button>
                     <!-- Menú de autenticación -->
                     <div id="auth-menu"
-                        class="absolute right-0 top-full mt-3 w-64 rounded-[1.25rem] border border-white/[0.08] dark:border-white/[0.08] bg-white/70 dark:bg-zinc-950/60 backdrop-blur-2xl transform-gpu shadow-2xl shadow-brand-500/5 py-3 z-[999] opacity-0 scale-95 pointer-events-none transition-all duration-300 origin-top-right overflow-hidden"
+                        class="absolute right-0 top-full mt-3 w-64 rounded-[1.5rem] border border-white/40 dark:border-white/10 bg-white/70 dark:bg-zinc-950/40 backdrop-blur-3xl transform-gpu shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_16px_48px_0_rgba(0,0,0,0.4)] py-3 z-[999] opacity-0 scale-95 pointer-events-none transition-all duration-300 origin-top-right overflow-hidden"
                         style="display:none;">
-                        
-                        <!-- Top gradient accent line -->
-                        <div class="absolute top-0 left-4 right-4 h-[1px] bg-gradient-to-r from-transparent via-brand-500/30 to-transparent pointer-events-none"></div>
 
                         <!-- Estado desconectado -->
                         <div id="auth-menu-logged-out" class="px-4 py-1 flex flex-col gap-3 relative z-10">
-                            <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400 text-center mb-1 leading-relaxed"><span
+                            <p class="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 text-center mb-1 leading-relaxed"><span
                                     data-i18n="auth_prompt">Inicia sesión para entrar al canal de voz y guardar
                                     progreso.</span></p>
                             <button id="auth-btn-login"
-                                class="w-full flex items-center justify-center gap-2 px-3 py-2.5 text-sm font-bold text-zinc-900 dark:text-white bg-white/50 dark:bg-white/[0.03] hover:bg-white/80 dark:hover:bg-white/[0.08] border border-black/5 dark:border-white/[0.05] hover:border-black/10 dark:hover:border-white/[0.15] transition-all rounded-xl shadow-sm group active:scale-[0.98]">
+                                class="w-full flex items-center justify-center gap-2 px-3 py-2.5 text-sm font-bold text-zinc-900 dark:text-white bg-white/50 dark:bg-white/[0.04] hover:bg-white/80 dark:hover:bg-white/[0.08] border border-black/5 dark:border-white/[0.05] hover:border-black/10 dark:hover:border-white/[0.1] transition-all rounded-xl shadow-sm group active:scale-[0.98]">
                                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
                                     class="w-4 h-4 object-contain group-hover:scale-110 transition-transform"
                                     alt="Google">
@@ -4837,14 +4834,14 @@ fbRadioAudio.addEventListener('ended', () => {
 
                         <!-- Estado conectado -->
                         <div id="auth-menu-logged-in" class="hidden flex-col relative z-10">
-                            <div class="px-5 py-3 border-b border-black/5 dark:border-white/[0.05] mb-2 bg-gradient-to-b from-black/[0.02] to-transparent dark:from-white/[0.02]">
+                            <div class="px-5 py-3 border-b border-black/5 dark:border-white/5 mb-2">
                                 <p id="auth-menu-name"
-                                    class="text-[0.95rem] font-bold text-zinc-900 dark:text-white tracking-tight truncate"></p>
-                                <p id="auth-menu-email" class="text-[0.7rem] font-medium text-zinc-500 dark:text-zinc-400/80 truncate mt-0.5"></p>
+                                    class="text-[0.95rem] font-bold text-zinc-900 dark:text-zinc-100 tracking-tight truncate"></p>
+                                <p id="auth-menu-email" class="text-[0.7rem] font-medium text-zinc-500 dark:text-zinc-500 truncate mt-0.5"></p>
                             </div>
                             <div class="px-3">
                                 <button id="auth-btn-logout"
-                                    class="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-red-500/90 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 hover:bg-red-500/10 dark:hover:bg-red-500/10 transition-colors rounded-xl group active:scale-[0.98]">
+                                    class="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors rounded-xl group active:scale-[0.98]">
                                     <i class="ph-bold ph-sign-out text-lg group-hover:-translate-x-0.5 transition-transform"></i>
                                     <span data-i18n="auth_logout_btn">Cerrar sesión</span>
                                 </button>
