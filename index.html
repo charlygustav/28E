@@ -3620,13 +3620,13 @@
         <div class="loader-bg-blob blob-2"></div>
 
         <div id="loader-logo"
-            style="position:relative; z-index:10; opacity:0; margin-bottom: 2rem; text-align:center; will-change: opacity, transform;">
+            style="position:relative; z-index:10; opacity:0; margin-bottom: 2rem; text-align:center; will-change: opacity, transform; animation: loaderFadeIn 0.8s ease 0.1s forwards;">
             <span
                 style="font-family:'Inter',sans-serif; font-weight:800; font-size:3.5rem; letter-spacing:-0.05em; color:#fff; line-height:1;">28E</span>
         </div>
 
         <div class="loader-wrapper" id="custom-loader-wrapper"
-            style="position:relative; z-index:10; opacity: 0; will-change: opacity, transform;">
+            style="position:relative; z-index:10; opacity: 0; will-change: opacity, transform; animation: loaderFadeIn 0.8s ease 0.4s forwards;">
             <div class="loader-circle-bg"></div>
         </div>
 
@@ -3765,8 +3765,33 @@
                 pointer-events: none;
                 transition: opacity 0.5s ease;
             }
+
+            /* CSS-only entrance for loader elements — no JS dependency */
+            @keyframes loaderFadeIn {
+                from { opacity: 0; transform: translateY(12px) scale(0.96); }
+                to   { opacity: 1; transform: translateY(0) scale(1); }
+            }
         </style>
     </div>
+
+    <!-- Global safety net: dismiss loader even if DOMContentLoaded is delayed -->
+    <script>
+        (function() {
+            var _loaderSafetyTimer = setTimeout(function() {
+                var ld = document.getElementById('loader');
+                if (ld && ld.style.display !== 'none' && !document.body.classList.contains('page-ready')) {
+                    ld.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    ld.style.opacity = '0';
+                    ld.style.transform = 'scale(1.05)';
+                    setTimeout(function() {
+                        ld.style.display = 'none';
+                        document.body.classList.add('page-ready');
+                    }, 650);
+                }
+            }, 6000);
+            window.__cancelLoaderSafety = function() { clearTimeout(_loaderSafetyTimer); };
+        })();
+    </script>
 
     <!-- Navegación — Floating Panel -->
     <div id="drawer-overlay"
@@ -12849,13 +12874,13 @@
                 'https://i.ibb.co/SDfLGvby/IMG-20260301-WA0027.jpg'
             ].forEach(url => addResource(loadImage(url), 1));
 
-            // 5. Absolute safety net — 10 seconds max
+            // 5. Absolute safety net — 5 seconds max
             const fallback = setTimeout(() => {
                 if (!loaderEscondido) {
                     console.warn('Loader: tiempo límite alcanzado. Forzando entrada.');
                     setProgress(100);
                 }
-            }, 10000);
+            }, 5000);
 
             // ── Progress setter ──
             function setProgress(pct) {
@@ -12872,6 +12897,7 @@
 
                 if (pct >= 100 && !loaderEscondido && _loaderMinElapsed) {
                     clearTimeout(fallback);
+                    if (window.__cancelLoaderSafety) window.__cancelLoaderSafety();
                     if (loaderMsgInterval) clearInterval(loaderMsgInterval);
                     loaderEscondido = true;
 
@@ -13028,11 +13054,11 @@
             }
 
             // Kick off — wait for all tracked resources
-            // Min 3.5s - blocks exit until elapsed, then triggers final setProgress(100)
+            // Min 2s - blocks exit until elapsed, then triggers final setProgress(100)
             setTimeout(() => {
                 _loaderMinElapsed = true;
                 setProgress(100); // now allowed to exit
-            }, 3500);
+            }, 2000);
             // Resources still update the bar visually (but can't exit before 3.5s)
             Promise.all(resources).catch(() => { });
 
