@@ -204,10 +204,7 @@
     <link rel="dns-prefetch" href="https://www.youtube.com">
     <link rel="dns-prefetch" href="https://i.ibb.co">
 
-    <!-- ═══ Preload: gallery images fetched in parallel during HTML parse ═══ -->
-    <link rel="preload" as="image" href="https://i.ibb.co/yByRfq5y/IMG-20260125-WA0097.jpg" fetchpriority="high">
-    <link rel="preload" as="image" href="https://i.ibb.co/DDHBsJy2/IMG-20260127-WA0067.jpg">
-    <link rel="preload" as="image" href="https://i.ibb.co/SDfLGvby/IMG-20260301-WA0027.jpg">
+    <!-- Gallery images load lazily — removed preloads to speed up critical path -->
 
     <!-- ═══ Blocking font load for loader screen ═══ -->
     <link rel="stylesheet"
@@ -3788,7 +3785,7 @@
                         document.body.classList.add('page-ready');
                     }, 650);
                 }
-            }, 6000);
+            }, 4000);
             window.__cancelLoaderSafety = function() { clearTimeout(_loaderSafetyTimer); };
         })();
     </script>
@@ -12769,11 +12766,11 @@
             runLoaderEntrance();
 
 
-            // Fake counter 0→80 over ~3.2s so progress feels alive
+            // Fake counter 0→90 over ~1.5s so progress feels alive
             let _ldFakeVal = 0;
             const _ldFakeInterval = setInterval(() => {
-                if (_ldFakeVal < 80) {
-                    _ldFakeVal = Math.min(80, _ldFakeVal + 1.25);
+                if (_ldFakeVal < 90) {
+                    _ldFakeVal = Math.min(90, _ldFakeVal + 3);
                     if (percentText && !loaderEscondido) percentText.textContent = Math.floor(_ldFakeVal) + '%';
                 } else {
                     clearInterval(_ldFakeInterval);
@@ -12858,29 +12855,17 @@
                 });
             }
 
-            // 1. Google Fonts (weight: 2)
+            // Only track truly critical resources — fonts + Tailwind
             addResource(document.fonts.ready, 2);
-
-            // 2. TailwindCSS CDN (weight: 3 — biggest blocking script)
             addResource(waitForScript('https://cdn.tailwindcss.com/'), 3);
 
-            // 3. Chart.js (weight: 2)
-            addResource(waitForScript('https://cdn.jsdelivr.net/npm/chart.js'), 2);
-
-            // 4. Gallery images (weight: 1 each)
-            [
-                'https://i.ibb.co/yByRfq5y/IMG-20260125-WA0097.jpg',
-                'https://i.ibb.co/DDHBsJy2/IMG-20260127-WA0067.jpg',
-                'https://i.ibb.co/SDfLGvby/IMG-20260301-WA0027.jpg'
-            ].forEach(url => addResource(loadImage(url), 1));
-
-            // 5. Absolute safety net — 5 seconds max
+            // Absolute safety net — 3 seconds max after DOMContentLoaded
             const fallback = setTimeout(() => {
                 if (!loaderEscondido) {
                     console.warn('Loader: tiempo límite alcanzado. Forzando entrada.');
                     setProgress(100);
                 }
-            }, 5000);
+            }, 3000);
 
             // ── Progress setter ──
             function setProgress(pct) {
@@ -13054,12 +13039,12 @@
             }
 
             // Kick off — wait for all tracked resources
-            // Min 2s - blocks exit until elapsed, then triggers final setProgress(100)
+            // Min 1.5s - blocks exit until elapsed, then triggers final setProgress(100)
             setTimeout(() => {
                 _loaderMinElapsed = true;
                 setProgress(100); // now allowed to exit
-            }, 2000);
-            // Resources still update the bar visually (but can't exit before 3.5s)
+            }, 1500);
+            // Resources still update the bar visually (but can't exit before 1.5s)
             Promise.all(resources).catch(() => { });
 
             // 2. Inicialización Básica
@@ -17528,7 +17513,7 @@
             } catch (e) { }
         })();
     </script>
-    <script src="voice-channel-widget.js?v=9"></script>
+    <script src="voice-channel-widget.js?v=9" defer></script>
 
     <!-- Firebase SDK for Realtime Features -->
     <script type="module">
