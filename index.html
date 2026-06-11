@@ -187,7 +187,7 @@
 
             // Polling cada 3 segundos para detectar cambios del admin en tiempo real
             // Guard: no hacer fetch mientras la pestaña está oculta (ahorra batería y red)
-            let _stateInterval = setInterval(() => { if (!document.hidden) checkState(); }, 3000);
+            let _stateInterval = setInterval(() => { if (!document.hidden) checkState(); }, 8000);
             document.addEventListener('visibilitychange', () => {
                 if (!document.hidden) checkState(); // Chequeo inmediato al volver
             });
@@ -198,13 +198,14 @@
     <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://www.youtube.com">
     <link rel="dns-prefetch" href="https://i.ibb.co">
 
     <!-- ═══ Preload: gallery images fetched in parallel during HTML parse ═══ -->
-    <link rel="preload" as="image" href="https://i.ibb.co/yByRfq5y/IMG-20260125-WA0097.jpg">
+    <link rel="preload" as="image" href="https://i.ibb.co/yByRfq5y/IMG-20260125-WA0097.jpg" fetchpriority="high">
     <link rel="preload" as="image" href="https://i.ibb.co/DDHBsJy2/IMG-20260127-WA0067.jpg">
     <link rel="preload" as="image" href="https://i.ibb.co/SDfLGvby/IMG-20260301-WA0027.jpg">
 
@@ -225,8 +226,7 @@
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image">
     <script src="https://cdn.tailwindcss.com/"></script>
-    <!-- GSAP for smooth animations -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <!-- GSAP loaded below with defer (3.12.5) — single copy to avoid double-parse -->
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -317,29 +317,6 @@
                 transform: translateY(110vh) rotate(180deg) scale(0.5);
                 opacity: 0;
             }
-        }
-
-        @keyframes ambientDrift {
-            0% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(5%, 8%) scale(1.05); }
-            66% { transform: translate(-5%, 4%) scale(0.95); }
-            100% { transform: translate(0, 0) scale(1); }
-        }
-
-        @keyframes heroFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        @keyframes pulseRipple {
-            0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(245, 158, 11, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
-        }
-
-        @keyframes orbOrbit {
-            0% { transform: rotate(0deg) translateX(150px) rotate(0deg); }
-            100% { transform: rotate(360deg) translateX(150px) rotate(-360deg); }
         }
 
         /* ═══ Performance Optimizations ═══ */
@@ -645,11 +622,11 @@
         .reveal-right,
         .reveal-scale,
         .reveal-fade {
-            will-change: opacity, transform, filter;
             opacity: 0;
             transform: translateY(40px);
             filter: blur(5px);
             transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1), filter 1s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: auto;
         }
 
         .reveal.active,
@@ -2081,7 +2058,7 @@
         }
     </style>
     <!-- GSAP ya cargado en <head> con defer — removido duplicado para evitar doble parse y doble descarga -->
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
 </head>
 
 <body
@@ -5056,56 +5033,51 @@
     <!-- Main Content -->
     <main class="pt-32 pb-24 px-6 max-w-6xl mx-auto">
 
-        <!-- Section: Hero (Rediseño Radical Visión OS) -->
-        <section id="hero" class="relative min-h-[95vh] w-full flex flex-col justify-center items-center text-center pt-32 pb-24 overflow-hidden hero-enter-ready">
-            
-            <!-- Luces Orbitales (Fondo Dinámico) -->
-            <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-80 mix-blend-screen">
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] max-w-[800px] h-[70vw] max-h-[800px]">
-                    <!-- Orb 1 -->
-                    <div class="absolute top-0 left-0 w-[80%] h-[80%] bg-brand-500/50 rounded-full blur-[100px] sm:blur-[140px]" style="animation: orbOrbit 20s linear infinite;"></div>
-                    <!-- Orb 2 -->
-                    <div class="absolute top-0 right-0 w-[80%] h-[80%] bg-tulip-500/50 rounded-full blur-[100px] sm:blur-[140px]" style="animation: orbOrbit 25s linear infinite reverse;"></div>
-                    <!-- Orb 3 -->
-                    <div class="absolute bottom-0 left-1/4 w-[80%] h-[80%] bg-indigo-500/40 rounded-full blur-[100px] sm:blur-[140px]" style="animation: orbOrbit 30s linear infinite;"></div>
+        <!-- Section: Hero -->
+        <section id="hero"
+            class="relative min-h-[85vh] flex flex-col justify-center items-center text-center pt-10 pb-32 overflow-hidden hero-enter-ready">
+
+            <div class="relative z-10 flex flex-col items-center">
+                <div id="hero-badge-container"
+                    class="hero-anim hero-anim-1 inline-flex flex-col sm:flex-row items-center gap-1 sm:gap-2.5 px-5 py-2.5 rounded-full border border-brand-500/30 bg-gradient-to-r from-brand-500/10 to-tulip-500/10 text-brand-600 dark:text-brand-400 text-sm font-bold mb-8 uppercase tracking-widest glow-effect transition-all hover:border-brand-500/50">
+                    <span class="flex items-center gap-1.5">
+                        <span id="hero-badge-text" data-i18n="hero_badge">¡Felices 4 Meses!</span> <span
+                            id="hero-badge-e1">✨</span>
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 font-extrabold"
+                        style="font-variant-numeric: tabular-nums;">
+                        <span id="hero-badge-dot" class="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse"></span>
+                        <a id="hero-badge-link" href="#"
+                            class="hidden hover:text-brand-300 transition-all cursor-pointer"><span
+                                data-i18n="hero_badge_link"></span></a>
+                        <span id="hero-countdown" class="text-[10px] sm:text-xs tracking-wider"></span>
+                        <span id="hero-badge-e2" class="hidden">🎉</span>
+                    </span>
                 </div>
+                <h1
+                    class="hero-anim hero-anim-2 text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-6 leading-tight">
+                    <span data-i18n="hero_title1">Mi lugar favorito</span><br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-tulip-500"
+                        data-i18n="hero_title2">es contigo.</span>
+                </h1>
+                <p class="hero-anim hero-anim-3 max-w-3xl mx-auto text-lg md:text-xl text-zinc-600 dark:text-zinc-400 font-light leading-relaxed mb-10 font-serif italic px-4"
+                    data-i18n="hero_subtitle">Eres la casualidad más hermosa que me ha pasado, la dueña de mis
+                    pensamientos
+                    más profundos, el motivo de mis mejores sonrisas y la mujer con la que quiero construir, cuidar y
+                    compartir cada pequeño instante del resto de mis días. Esta página es nuestra, para siempre.</p>
             </div>
 
-            <!-- Monolito de Cristal (Contenedor Principal) -->
-            <div class="relative z-10 flex flex-col items-center w-full max-w-5xl mx-4 sm:mx-6 px-6 sm:px-12 py-16 sm:py-24 rounded-[3rem] sm:rounded-[4rem] border border-white/30 dark:border-white/10 bg-white/20 dark:bg-zinc-950/40 backdrop-blur-[60px] shadow-[0_32px_100px_-10px_rgba(0,0,0,0.15)] dark:shadow-[0_32px_100px_-10px_rgba(0,0,0,0.8)] overflow-hidden" style="animation: heroFloat 8s ease-in-out infinite;">
-                
-                <!-- Reflejo superior del cristal -->
-                <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-white/50 dark:via-white/30 to-transparent"></div>
-                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-[200px] bg-white/20 dark:bg-white/5 blur-[80px] pointer-events-none"></div>
-
-                <!-- Badge -->
-                <div id="hero-badge-container"
-                    class="hero-anim hero-anim-1 inline-flex items-center gap-2 px-5 py-2 mb-10 rounded-full bg-white/30 dark:bg-white/5 backdrop-blur-md border border-white/40 dark:border-white/10 shadow-[0_4px_16px_rgba(0,0,0,0.05)] transition-transform hover:scale-105 cursor-default relative z-20">
-                    <span id="hero-badge-dot" class="w-2 h-2 rounded-full bg-brand-500 shadow-[0_0_8px_rgba(245,158,11,0.8)] animate-pulse"></span>
-                    <span id="hero-badge-text" class="text-xs font-bold tracking-[0.2em] uppercase text-zinc-800 dark:text-zinc-200" data-i18n="hero_badge">¡Felices 4 Meses!</span>
-                    <span id="hero-countdown" class="hidden"></span>
-                </div>
-
-                <!-- Titulo -->
-                <h1 class="hero-anim hero-anim-2 text-6xl md:text-7xl lg:text-[6rem] font-extrabold tracking-tighter mb-8 leading-[1.05] drop-shadow-xl relative z-20 w-full">
-                    <span data-i18n="hero_title1" class="text-zinc-900 dark:text-white">Mi lugar favorito</span><br>
-                    <span class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-brand-500 to-tulip-500 dark:from-brand-300 dark:via-brand-400 dark:to-tulip-400" data-i18n="hero_title2">es contigo.</span>
-                </h1>
-
-                <!-- Subtitulo -->
-                <p class="hero-anim hero-anim-3 w-full max-w-2xl text-lg md:text-xl text-zinc-700/90 dark:text-zinc-300/90 font-light leading-relaxed mb-16 font-serif italic relative z-20"
-                    data-i18n="hero_subtitle">Eres la casualidad más hermosa que me ha pasado, la dueña de mis pensamientos más profundos, el motivo de mis mejores sonrisas y la mujer con la que quiero construir, cuidar y compartir cada pequeño instante del resto de mis días.</p>
-
-                <!-- Botón Interactivo Ancho -->
+            <!-- Botón de bajar -->
+            <div class="hero-anim hero-anim-4 absolute bottom-8 w-full flex justify-center z-20">
                 <a href="#historia" onclick="AudioManager.play('typing.wav', 0.6);"
-                    class="hero-anim hero-anim-4 relative z-20 inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-bold tracking-wide hover:scale-105 active:scale-95 transition-all shadow-[0_8px_30px_rgba(0,0,0,0.2)] dark:shadow-[0_8px_30px_rgba(255,255,255,0.2)] group">
-                    <span>Descubre Nuestra Historia</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                    class="floating flex items-center justify-center w-14 h-14 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 hover:text-brand-500 dark:hover:text-brand-400 transition-all shadow-md hover:shadow-lg cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
                     </svg>
                 </a>
             </div>
-            
         </section>
 
 
@@ -18033,7 +18005,7 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
     <script>
         window.triggerFlowerRain = function () {
             var duration = 5 * 1000;
