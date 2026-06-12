@@ -994,10 +994,58 @@
           if (!isMe) {
             node.addEventListener('contextmenu', (e) => {
               e.preventDefault();
-              u.localMuted = !u.localMuted;
-              const audio = this.audios.get(u.id);
-              if (audio) audio.muted = u.localMuted;
-              this._updateUsersDOM();
+              
+              // Remove old menu if exists
+              const oldMenu = document.getElementById('vc-user-ctx-menu');
+              if (oldMenu) oldMenu.remove();
+              
+              const isLocallyMuted = u.localMuted;
+              const menu = document.createElement('div');
+              menu.id = 'vc-user-ctx-menu';
+              menu.className = 'fixed z-[9999] bg-zinc-900 border border-white/10 shadow-2xl shadow-black/50 rounded-xl py-1.5 px-1.5 flex flex-col min-w-[180px] transform-gpu backdrop-blur-xl';
+              
+              menu.style.left = e.clientX + 'px';
+              menu.style.top = e.clientY + 'px';
+              
+              menu.innerHTML = `
+                <div class="px-3 py-1.5 mb-1 border-b border-white/10">
+                  <div class="text-[10px] uppercase font-bold text-white/40 tracking-wider">${u.displayName}</div>
+                </div>
+                <button class="w-full text-left px-3 py-2 rounded-lg text-sm text-white/90 hover:bg-white/10 hover:text-white transition-colors flex items-center gap-2">
+                  <span class="w-4 h-4 flex items-center justify-center ${isLocallyMuted ? 'text-green-400' : 'text-red-400'}">${isLocallyMuted ? ICONS.mic : ICONS.micOff}</span>
+                  ${isLocallyMuted ? 'Desmutear localmente' : 'Silenciar localmente'}
+                </button>
+              `;
+              
+              document.body.appendChild(menu);
+              
+              // Ensure it stays inside the viewport
+              const rect = menu.getBoundingClientRect();
+              if (rect.right > window.innerWidth) menu.style.left = (window.innerWidth - rect.width - 10) + 'px';
+              if (rect.bottom > window.innerHeight) menu.style.top = (window.innerHeight - rect.height - 10) + 'px';
+              
+              // Action
+              menu.querySelector('button').addEventListener('click', () => {
+                u.localMuted = !u.localMuted;
+                const audio = this.audios.get(u.id);
+                if (audio) audio.muted = u.localMuted;
+                this._updateUsersDOM();
+                menu.remove();
+              });
+              
+              // Close handler
+              const closeMenu = (ev) => {
+                if (!menu.contains(ev.target)) {
+                  menu.remove();
+                  document.removeEventListener('click', closeMenu);
+                  document.removeEventListener('contextmenu', closeMenu);
+                }
+              };
+              
+              setTimeout(() => {
+                document.addEventListener('click', closeMenu);
+                document.addEventListener('contextmenu', closeMenu);
+              }, 10);
             });
           }
         }
