@@ -192,8 +192,21 @@ io.on('connection', (socket) => {
     // Automatically convert Spotify links to YouTube for synchronized playback
     if (type === 'spotify') {
       try {
+        let searchTitle = trackTitle;
+        // If client failed to parse title, fetch it server-side to avoid CORS issues
+        if (searchTitle === 'Spotify Track' || !searchTitle || searchTitle.trim() === '') {
+          try {
+            const res = await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(trackUrl)}`);
+            const data = await res.json();
+            const artist = data.author_name || '';
+            const title = data.title ? data.title.replace(/\s*[\[\(](official.*|video oficial|audio oficial|audio|video|music video|lyric.*|visualizer|hd)[\]\)]/gi, '').replace(/\s*[-|]\s*$/g, '').trim() : 'Spotify Track';
+            searchTitle = artist ? `${title} - ${artist}` : title;
+          } catch(e) { console.error('Spotify oembed fetch error:', e); }
+        }
+        
         const yts = require('yt-search');
-        const r = await yts(trackTitle + ' audio');
+        // Usar la query mejorada que incluye el artista
+        const r = await yts(searchTitle + ' audio');
         if (r && r.videos.length > 0) {
           trackUrl = r.videos[0].url;
           trackType = 'youtube';
