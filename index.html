@@ -12738,7 +12738,8 @@
                         // ── EXIT GSAP — Premium Minimal Transition ───────
                         loaderEl.style.willChange = 'opacity';
 
-                        requestAnimationFrame(() => {
+                        // Let the user see 100% before exiting
+                        setTimeout(() => { requestAnimationFrame(() => {
                             const exitTl = gsap.timeline({ defaults: { force3D: true } });
                             exitTl.addLabel('start');
 
@@ -12856,7 +12857,7 @@
                                     barObs.observe(top5Section);
                                 }
                             }, null, 'start+=1.35');
-                        }); // end rAF
+                        }); }, 400); // end rAF + 400ms delay to show 100%
 
                     } else {
                         // Fallback sin GSAP
