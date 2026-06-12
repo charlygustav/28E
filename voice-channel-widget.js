@@ -990,6 +990,16 @@
               { x: 0, opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.2)" }
             );
           }
+          
+          if (!isMe) {
+            node.addEventListener('contextmenu', (e) => {
+              e.preventDefault();
+              u.localMuted = !u.localMuted;
+              const audio = this.audios.get(u.id);
+              if (audio) audio.muted = u.localMuted;
+              this._updateUsersDOM();
+            });
+          }
         }
         
         let iconContainer = node.querySelector('.vc-icons-container');
@@ -1010,10 +1020,12 @@
         }
         
         const existingMic = iconContainer.querySelector('.vc-mico');
-        if (isMuted && !existingMic) {
-          iconContainer.insertAdjacentHTML('beforeend', `<span class="text-red-500 w-4 h-4 vc-mico">${ICONS.micOff}</span>`);
-        } else if (!isMuted && existingMic) {
+        if ((isMuted || u.localMuted) && !existingMic) {
+          iconContainer.insertAdjacentHTML('beforeend', `<span class="text-red-500 w-4 h-4 vc-mico" title="${u.localMuted ? 'Silenciado localmente' : 'Silenciado'}">${ICONS.micOff}</span>`);
+        } else if (!isMuted && !u.localMuted && existingMic) {
           existingMic.remove();
+        } else if ((isMuted || u.localMuted) && existingMic) {
+          existingMic.title = u.localMuted ? 'Silenciado localmente' : 'Silenciado';
         }
       });
     }
@@ -1300,7 +1312,11 @@
         });
 
         this.socket.on('channel_users', ({ users }) => {
-          this.users = users;
+          this.users = users.map(u => {
+            const existing = this.users.find(eu => eu.id === u.id);
+            if (existing && existing.localMuted !== undefined) u.localMuted = existing.localMuted;
+            return u;
+          });
           if (this.connected) {
             if (!document.getElementById('vc-leave')) {
               this._render(this._tplConnected());
@@ -1529,6 +1545,8 @@
         }
         audio.srcObject = stream;
         audio.volume = this.dnd ? 0 : 1;
+        const u = this.users.find(x => x.id === peerId);
+        audio.muted = u && u.localMuted ? true : false;
         // Robust play with retry — crucial for mobile browsers
         this._robustPlay(audio, peerId);
       };
@@ -2248,7 +2266,9 @@
         } else if (type === 'spotify') {
           const res = await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`);
           const data = await res.json();
-          return cleanTitle(data.title) || 'Spotify Track';
+          const artist = data.author_name || '';
+          const title = cleanTitle(data.title) || 'Spotify Track';
+          return artist ? `${title} - ${artist}` : title;
         }
       } catch(e) { return type === 'youtube' ? 'YouTube Video' : 'Spotify Track'; }
     }
