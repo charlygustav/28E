@@ -389,15 +389,21 @@
                         const historyEl = document.getElementById('lobby-history');
                         if (snap.exists() && snap.val().length > 0) {
                             const data = snap.val().slice(0, 15);
-                            historyEl.innerHTML = data.map(h => `
+                            historyEl.innerHTML = data.map(h => {
+                                const dateStr = h.date || h.ts;
+                                const isValidDate = dateStr ? new Date(dateStr) : null;
+                                const displayDate = isValidDate && !isNaN(isValidDate) ? isValidDate.toLocaleDateString() : 'Fecha desconocida';
+                                
+                                return `
                                 <div class="p-3 bg-white/5 border border-white/5 rounded-xl hover:bg-white/10 transition-colors">
                                     <div class="flex justify-between items-start mb-1">
-                                        <span class="text-xs font-bold text-white">${new Date(h.ts).toLocaleDateString()}</span>
-                                        <span class="text-[10px] text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-full">${h.duration}</span>
+                                        <span class="text-xs font-bold text-white">${displayDate}</span>
+                                        <span class="text-[10px] text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-full">${h.duration || '0s'}</span>
                                     </div>
-                                    <div class="text-[10px] text-zinc-400">Con: ${h.participants ? h.participants.join(', ') : 'Solo'}</div>
+                                    <div class="text-[10px] text-zinc-400">Nombre registrado: ${h.name || 'Desconocido'}</div>
                                 </div>
-                            `).join('');
+                                `;
+                            }).join('');
                         } else {
                             historyEl.innerHTML = '<div class="text-xs text-zinc-500 text-center mt-10">No hay sesiones pasadas.</div>';
                         }
