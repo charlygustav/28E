@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth dark">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>28E Oracle</title>
+    <meta name="description" content="28E Oracle - Sala inmersiva de videollamadas y sincronización multimedia.">
+    <link rel="icon" type="image/x-icon" href="tulip.ico?v=3">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com/"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap">
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #09090b; overflow: hidden; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+        
+        /* Grid transitions */
+        .video-grid {
+            display: grid;
+            gap: 1rem;
+            transition: all 0.5s ease-in-out;
+        }
+        .grid-1 { grid-template-columns: 1fr; }
+        .grid-2 { grid-template-columns: 1fr 1fr; }
+        .grid-3 { grid-template-columns: 1fr 1fr; }
+        .grid-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+
+        .video-container {
+            position: relative;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 1.5rem;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 16/9;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .video-container.has-video video { opacity: 1; }
+        
+        .avatar-fallback {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s;
+        }
+        .video-container.has-video .avatar-fallback { opacity: 0; pointer-events: none; }
+
+        .youtube-stage {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background: black;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+        .youtube-stage.active { display: block; }
+        
+        /* Layout modes */
+        .mode-video .youtube-stage { display: none; }
+        .mode-youtube .youtube-stage { display: block; }
+        .mode-youtube .video-grid {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 250px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 50;
+        }
+        .mode-youtube .video-grid .video-container {
+            aspect-ratio: 16/9;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.6);
+        }
+    </style>
+</head>
+<body class="text-white h-screen flex flex-col">
+
+    <!-- Auth / Login Overlay -->
+    <div id="auth-overlay" class="fixed inset-0 z-[100] bg-zinc-950 flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="relative w-64 h-64 mb-8">
+            <div class="absolute inset-0 bg-amber-500/20 blur-[50px] rounded-full animate-pulse"></div>
+            <div class="absolute inset-0 flex items-center justify-center text-amber-500">
+                <svg class="w-20 h-20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3a9 9 0 0 1 9 9H3a9 9 0 0 1 9-9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18"/></svg>
+            </div>
+        </div>
+        <h1 class="text-3xl font-extrabold tracking-tight mb-2">28E Oracle</h1>
+        <p class="text-zinc-500 text-sm mb-8">Iniciando conexión segura...</p>
+        
+        <div id="auth-actions" class="hidden flex-col items-center gap-4">
+            <p class="text-zinc-400 text-sm">Debes iniciar sesión para entrar a Oracle.</p>
+            <button id="btn-login-google" class="flex items-center gap-3 bg-white/5 border border-white/10 px-6 py-3 rounded-xl hover:bg-white/10 transition-colors">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5" />
+                Continuar con Google
+            </button>
+            <a href="index.html" class="text-xs text-zinc-600 hover:text-zinc-400 transition-colors mt-2">Volver al inicio</a>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="flex-1 flex overflow-hidden">
+        
+        <!-- Center Stage (Videos & YouTube) -->
+        <main class="flex-1 relative p-4 flex flex-col transition-all duration-500" id="main-stage">
+            
+            <!-- YouTube Stage -->
+            <div id="youtube-stage" class="youtube-stage flex-1 mb-4">
+                <div id="yt-player-container" class="w-full h-full"></div>
+                <!-- YouTube Overlay controls -->
+                <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-4 py-2 rounded-xl border border-white/10 flex items-center gap-3 opacity-0 hover:opacity-100 transition-opacity">
+                    <span class="text-amber-500 font-bold text-xs uppercase tracking-wider">Oracle Rave</span>
+                    <div class="w-1 h-4 bg-white/20"></div>
+                    <span id="yt-now-playing" class="text-sm font-medium text-white/80">Esperando video...</span>
+                </div>
+            </div>
+
+            <!-- Video Grid -->
+            <div id="video-grid" class="video-grid grid-1 flex-1">
+                <!-- User templates will be injected here -->
+            </div>
+
+            <!-- Global Controls (Bottom Center) -->
+            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 px-6 py-3 bg-black/80 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl z-50">
+                <button id="btn-mic" class="w-12 h-12 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 text-white transition-all" title="Micrófono">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                </button>
+                <button id="btn-cam" class="w-12 h-12 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 text-white transition-all relative overflow-hidden" title="Cámara">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                    <!-- Strike line for when disabled -->
+                    <div id="cam-strike" class="absolute w-[2px] h-8 bg-red-500 rotate-45 transform origin-center transition-transform scale-0"></div>
+                </button>
+                <div class="w-[1px] h-8 bg-white/10 mx-2"></div>
+                <button id="btn-leave" class="w-16 h-12 rounded-xl flex items-center justify-center bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-500 transition-all" title="Salir de Oracle">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.42 19.42 0 0 1 4.26 9.6a2 2 0 0 1 1-2.2 12.84 12.84 0 0 0 .7-2.81 2 2 0 0 1 2-1.72h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"/></svg>
+                </button>
+            </div>
+
+        </main>
+
+        <!-- Right Sidebar (Chat & Music Queue) -->
+        <aside class="w-80 border-l border-white/5 bg-zinc-950/80 backdrop-blur-xl flex flex-col z-40 transition-transform duration-300">
+            <div class="p-4 border-b border-white/5 flex items-center justify-between">
+                <div class="flex items-center gap-2 text-amber-500 font-bold tracking-widest text-xs uppercase">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    Conexión Oracle
+                </div>
+                <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.8)]"></div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex items-center px-4 pt-4 gap-2">
+                <button id="tab-chat" class="flex-1 py-2 text-xs font-bold rounded-lg bg-white/10 text-white transition-all">Chat</button>
+                <button id="tab-rave" class="flex-1 py-2 text-xs font-bold rounded-lg text-white/50 hover:bg-white/5 hover:text-white transition-all">Rave</button>
+            </div>
+
+            <!-- Chat Content -->
+            <div id="pane-chat" class="flex-1 flex flex-col min-h-0">
+                <div id="chat-messages" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
+                    <div class="text-center text-xs text-white/30 my-4">Bienvenido a Oracle. Tus mensajes están cifrados.</div>
+                </div>
+                <div class="p-4 border-t border-white/5 bg-black/40">
+                    <form id="chat-form" class="flex gap-2">
+                        <input type="text" id="chat-input" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-amber-500/50 transition-colors" placeholder="Escribe un mensaje..." autocomplete="off">
+                        <button type="submit" class="w-10 h-10 rounded-xl bg-amber-500 text-black flex items-center justify-center hover:bg-amber-400 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Rave Content (Hidden by default) -->
+            <div id="pane-rave" class="flex-1 flex flex-col min-h-0 hidden">
+                <div class="p-4 border-b border-white/5">
+                    <form id="rave-form" class="flex flex-col gap-2">
+                        <label class="text-[10px] uppercase font-bold text-white/40 tracking-wider">Añadir Video a Rave</label>
+                        <div class="flex gap-2">
+                            <input type="url" id="rave-input" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-pink-500/50 transition-colors" placeholder="Link de YouTube o Spotify..." required>
+                            <button type="submit" class="px-4 rounded-xl bg-pink-500 text-white font-bold text-xs hover:bg-pink-400 transition-colors shadow-[0_0_15px_rgba(236,72,153,0.3)]">Añadir</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="p-4 flex-1 overflow-y-auto">
+                    <div class="text-[10px] uppercase font-bold text-white/40 tracking-wider mb-3">Cola de Reproducción</div>
+                    <div id="rave-queue" class="flex flex-col gap-2">
+                        <div class="text-xs text-white/30 text-center py-8">La cola está vacía.</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Firebase Auth -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDFkuktrXnsV9-jg2bv5dpJQRR-he8PT3g",
+            authDomain: "yairealvarado.firebaseapp.com",
+            databaseURL: "https://yaire-591ca-default-rtdb.firebaseio.com",
+            projectId: "yaire-591ca",
+            storageBucket: "yaire-591ca.firebasestorage.app",
+            messagingSenderId: "450381430658",
+            appId: "1:450381430658:web:262d1bb7b1732c3990d99b"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        const authOverlay = document.getElementById('auth-overlay');
+        const authActions = document.getElementById('auth-actions');
+        const btnLogin = document.getElementById('btn-login-google');
+
+        btnLogin.addEventListener('click', () => {
+            signInWithPopup(auth, provider).catch(err => console.error(err));
+        });
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.yaireCurrentUser = user;
+                authOverlay.style.opacity = '0';
+                setTimeout(() => authOverlay.remove(), 500);
+                
+                // Expose globally and trigger oracle logic
+                if (window.OracleInit) window.OracleInit();
+            } else {
+                authActions.classList.remove('hidden');
+                authActions.classList.add('flex');
+                authOverlay.querySelector('p').classList.add('hidden');
+            }
+        });
+    </script>
+
+    <!-- Socket.io & Oracle Logic -->
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="oracle.js"></script>
+
+    <!-- UI Interactions Script -->
+    <script>
+        // Tab switching
+        const tabChat = document.getElementById('tab-chat');
+        const tabRave = document.getElementById('tab-rave');
+        const paneChat = document.getElementById('pane-chat');
+        const paneRave = document.getElementById('pane-rave');
+
+        tabChat.addEventListener('click', () => {
+            tabChat.classList.replace('text-white/50', 'text-white');
+            tabChat.classList.replace('hover:bg-white/5', 'bg-white/10');
+            tabRave.classList.replace('text-white', 'text-white/50');
+            tabRave.classList.replace('bg-white/10', 'hover:bg-white/5');
+            paneChat.classList.remove('hidden');
+            paneRave.classList.add('hidden');
+        });
+
+        tabRave.addEventListener('click', () => {
+            tabRave.classList.replace('text-white/50', 'text-white');
+            tabRave.classList.replace('hover:bg-white/5', 'bg-white/10');
+            tabChat.classList.replace('text-white', 'text-white/50');
+            tabChat.classList.replace('bg-white/10', 'hover:bg-white/5');
+            paneRave.classList.remove('hidden');
+            paneChat.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>

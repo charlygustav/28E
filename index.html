@@ -428,29 +428,73 @@
             pointer-events: none;
             will-change: transform, opacity;
         }
+
         .loader-glow-1 {
-            width: 380px; height: 380px;
-            background: radial-gradient(circle, rgba(245,158,11,0.07) 0%, transparent 70%);
-            top: 50%; left: 50%;
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.07) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
             transform: translate(-50%, -55%);
             animation: ldGlowPulse 4s ease-in-out infinite alternate;
         }
+
         .loader-glow-2 {
-            width: 320px; height: 320px;
-            background: radial-gradient(circle, rgba(236,72,153,0.05) 0%, transparent 70%);
-            top: 50%; left: 50%;
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.05) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
             transform: translate(-48%, -45%);
             animation: ldGlowPulse 5s ease-in-out infinite alternate-reverse;
         }
+
         @keyframes ldGlowPulse {
-            from { opacity: 0.6; transform: translate(-50%, -50%) scale(0.9); }
-            to   { opacity: 1;   transform: translate(-50%, -50%) scale(1.12); }
+            from {
+                opacity: 0.6;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.12);
+            }
         }
 
         /* CSS-only entrance keyframes */
-        @keyframes ldFadeUp   { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes ldScaleIn  { from { opacity:0; transform:scale(0.82); }      to { opacity:1; transform:scale(1); } }
-        @keyframes ldFadeIn   { from { opacity:0; }                             to { opacity:1; } }
+        @keyframes ldFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes ldScaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.82);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes ldFadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
 
         .loader-hidden {
             opacity: 0 !important;
@@ -3578,7 +3622,8 @@
         <!-- Logo -->
         <div id="loader-logo"
             style="position:relative;z-index:10;opacity:0;margin-bottom:2rem;text-align:center;animation:ldFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.15s forwards;">
-            <span style="font-family:'Inter',sans-serif;font-weight:900;font-size:2.6rem;letter-spacing:-0.06em;color:#fff;line-height:1;">28E</span>
+            <span
+                style="font-family:'Inter',sans-serif;font-weight:900;font-size:2.6rem;letter-spacing:-0.06em;color:#fff;line-height:1;">28E</span>
         </div>
 
         <!-- Sphere + Progress Ring -->
@@ -3587,14 +3632,15 @@
 
             <!-- SVG Progress Ring -->
             <svg width="220" height="220" viewBox="0 0 220 220" style="position:absolute;inset:0;z-index:2;">
-                <circle cx="110" cy="110" r="104" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-                <circle id="loader-ring-fill" cx="110" cy="110" r="104" fill="none" stroke="url(#ld-ring-grad)" stroke-width="1.5" stroke-linecap="round"
-                    stroke-dasharray="653.45" stroke-dashoffset="653.45" transform="rotate(-90 110 110)"
-                    style="transition:stroke-dashoffset 0.5s cubic-bezier(0.4,0,0.2,1);"/>
+                <circle cx="110" cy="110" r="104" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
+                <circle id="loader-ring-fill" cx="110" cy="110" r="104" fill="none" stroke="url(#ld-ring-grad)"
+                    stroke-width="1.5" stroke-linecap="round" stroke-dasharray="653.45" stroke-dashoffset="653.45"
+                    transform="rotate(-90 110 110)"
+                    style="transition:stroke-dashoffset 0.5s cubic-bezier(0.4,0,0.2,1);" />
                 <defs>
                     <linearGradient id="ld-ring-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.7"/>
-                        <stop offset="100%" stop-color="#ec4899" stop-opacity="0.7"/>
+                        <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.7" />
+                        <stop offset="100%" stop-color="#ec4899" stop-opacity="0.7" />
                     </linearGradient>
                 </defs>
             </svg>
@@ -3605,7 +3651,9 @@
             </div>
 
             <!-- Sphere shadow (ground reflection) -->
-            <div style="position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:100px;height:14px;background:radial-gradient(ellipse,rgba(236,72,153,0.12) 0%,transparent 70%);border-radius:50%;pointer-events:none;z-index:0;"></div>
+            <div
+                style="position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:100px;height:14px;background:radial-gradient(ellipse,rgba(236,72,153,0.12) 0%,transparent 70%);border-radius:50%;pointer-events:none;z-index:0;">
+            </div>
         </div>
 
         <!-- Percentage -->
@@ -3641,6 +3689,7 @@
                         0 20px 30px 0 #f59e0b inset,
                         0 60px 60px 0 #ec4899 inset;
                 }
+
                 50% {
                     transform: rotate(270deg);
                     box-shadow:
@@ -3648,6 +3697,7 @@
                         0 20px 10px 0 #ec4899 inset,
                         0 40px 60px 0 #d97706 inset;
                 }
+
                 100% {
                     transform: rotate(450deg);
                     box-shadow:
@@ -3661,17 +3711,17 @@
 
     <!-- Global safety net: dismiss loader even if DOMContentLoaded is delayed -->
     <script>
-        (function() {
-            var _t = setTimeout(function() {
+        (function () {
+            var _t = setTimeout(function () {
                 var ld = document.getElementById('loader');
                 if (ld && ld.style.display !== 'none' && !document.body.classList.contains('page-ready')) {
                     ld.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
                     ld.style.opacity = '0';
                     ld.style.transform = 'scale(1.06)';
-                    setTimeout(function() { ld.style.display = 'none'; document.body.classList.add('page-ready'); }, 650);
+                    setTimeout(function () { ld.style.display = 'none'; document.body.classList.add('page-ready'); }, 650);
                 }
             }, 4000);
-            window.__cancelLoaderSafety = function() { clearTimeout(_t); };
+            window.__cancelLoaderSafety = function () { clearTimeout(_t); };
         })();
     </script>
 
@@ -3834,6 +3884,10 @@
             <!-- Especial -->
             <p class="menu-category-label text-zinc-400 dark:text-zinc-500" data-i18n="menu_cat_special">✦ ESPECIAL</p>
             <div class="menu-grid">
+                <a href="oracle.html" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400 relative glow-effect">
+                    <span class="menu-link-icon bg-amber-500/20 text-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.5)]">🔮</span>
+                    <span class="font-bold text-amber-500 dark:text-amber-400">28E Oracle</span>
+                </a>
                 <a href="#promesas" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
                     <span class="menu-link-icon bg-amber-50 dark:bg-amber-900/20">💍</span>
                     <span data-i18n="menu_promises">Promesas</span>
@@ -4903,8 +4957,9 @@
 
                         <!-- Estado desconectado -->
                         <div id="auth-menu-logged-out" class="px-3 py-1 flex flex-col gap-3 relative z-10">
-                            <p class="text-[11px] font-medium text-zinc-600 dark:text-zinc-400 text-center mb-1 leading-relaxed"><span
-                                    data-i18n="auth_prompt">Inicia sesión para entrar al canal de voz y guardar
+                            <p
+                                class="text-[11px] font-medium text-zinc-600 dark:text-zinc-400 text-center mb-1 leading-relaxed">
+                                <span data-i18n="auth_prompt">Inicia sesión para entrar al canal de voz y guardar
                                     progreso.</span></p>
                             <button id="auth-btn-login"
                                 class="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-bold text-zinc-900 dark:text-white bg-white/50 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10 border border-black/5 dark:border-white/10 hover:border-black/10 dark:hover:border-white/20 transition-all rounded-xl shadow-sm group active:scale-[0.98]">
@@ -4919,8 +4974,11 @@
                         <div id="auth-menu-logged-in" class="hidden flex-col relative z-10">
                             <div class="px-4 py-2.5 border-b border-black/5 dark:border-white/5 mb-1.5">
                                 <p id="auth-menu-name"
-                                    class="text-[0.9rem] font-bold text-zinc-900 dark:text-white tracking-tight truncate"></p>
-                                <p id="auth-menu-email" class="text-[0.65rem] font-medium text-zinc-500 dark:text-zinc-400 truncate mt-0.5"></p>
+                                    class="text-[0.9rem] font-bold text-zinc-900 dark:text-white tracking-tight truncate">
+                                </p>
+                                <p id="auth-menu-email"
+                                    class="text-[0.65rem] font-medium text-zinc-500 dark:text-zinc-400 truncate mt-0.5">
+                                </p>
                             </div>
                             <div class="px-2.5">
                                 <button id="auth-btn-logout"
@@ -12739,125 +12797,127 @@
                         loaderEl.style.willChange = 'opacity';
 
                         // Let the user see 100% before exiting
-                        setTimeout(() => { requestAnimationFrame(() => {
-                            const exitTl = gsap.timeline({ defaults: { force3D: true } });
-                            exitTl.addLabel('start');
+                        setTimeout(() => {
+                            requestAnimationFrame(() => {
+                                const exitTl = gsap.timeline({ defaults: { force3D: true } });
+                                exitTl.addLabel('start');
 
-                            const customLoader = document.getElementById('custom-loader-wrapper');
-                            const loaderLogo = document.getElementById('loader-logo');
-                            const letters = customLoader ? gsap.utils.toArray(customLoader.querySelectorAll('.loader-letter')) : [];
-                            const circleBg = customLoader ? customLoader.querySelector('.loader-circle-bg') : null;
+                                const customLoader = document.getElementById('custom-loader-wrapper');
+                                const loaderLogo = document.getElementById('loader-logo');
+                                const letters = customLoader ? gsap.utils.toArray(customLoader.querySelectorAll('.loader-letter')) : [];
+                                const circleBg = customLoader ? customLoader.querySelector('.loader-circle-bg') : null;
 
-                            const navEl = document.querySelector('nav');
+                                const navEl = document.querySelector('nav');
 
-                            // ── 1. Set initial hidden states immediately at 'start' ──
-                            // Symmetrical landing: page elements are hidden scaled down slightly (scale: 0.94)
-                            // and the fixed navbar is shifted up, preparing for a highly cushioned zoom-in!
-                            if (heroSection) {
-                                document.querySelectorAll('.hero-anim').forEach(el => {
-                                    el.style.transition = 'none';
-                                    el.style.filter = '';
-                                    el.style.willChange = 'transform, opacity';
-                                });
-                                exitTl.set('.hero-anim', {
-                                    opacity: 0,
-                                    scale: 0.94,
-                                    y: 0
-                                }, 'start');
-                            }
-                            if (navEl) {
-                                navEl.style.willChange = 'transform, opacity';
-                                exitTl.set(navEl, {
-                                    opacity: 0,
-                                    y: -20
-                                }, 'start');
-                            }
-
-                            // ── 2. Foreground Elements Zoom-Through (Cinematic Warp Passage) ──
-                            // Symmetrical depth: the center logo and glowing ring scale UP dramatically
-                            // towards the camera, fading out as if the user is zooming right through them!
-                            const exitElements = [];
-                            if (loaderLogo) exitElements.push(loaderLogo);
-                            if (customLoader) exitElements.push(customLoader);
-
-                            if (exitElements.length) {
-                                exitTl.to(exitElements, {
-                                    opacity: 0,
-                                    scale: 1.45,
-                                    duration: 0.8,
-                                    ease: 'power3.out',
-                                    stagger: 0.04
-                                }, 'start');
-                            }
-
-                            const loaderFooter = document.getElementById('loader-footer');
-                            if (loaderFooter) {
-                                exitTl.to(loaderFooter, {
-                                    opacity: 0,
-                                    y: 20,
-                                    duration: 0.65,
-                                    ease: 'power2.out'
-                                }, 'start');
-                            }
-
-                            // ── 3. Main Background Scale & Dissolve (Guaranteed Zero Cuts) ──
-                            // To prevent any layout stutters or engine repaints, we avoid clip-paths and instead
-                            // use 100% composite-only scale-up and opacity fade on the main loader container.
-                            // The background expands softly (scale: 1.1) and fades out at a solid, buttery 60+ FPS.
-                            exitTl.to(loaderEl, {
-                                scale: 1.1,
-                                opacity: 0,
-                                duration: 0.95,
-                                ease: 'power3.inOut'
-                            }, 'start')
-                                .set(loaderEl, { display: 'none' }) // Ensure it is hidden from screen and pointer interactions
-                                .call(() => {
-                                    document.body.classList.add('page-ready');
-                                });
-
-                            // ── 4. Main Page Zoom-In Reveal (Exquisite Cushioning) ──
-                            // As the user zooms past the loader, the landing page elements scale up gently
-                            // to their final size with premium deceleration easing.
-                            if (heroSection) {
-                                exitTl.to('.hero-anim', {
-                                    opacity: 1,
-                                    scale: 1,
-                                    y: 0,
-                                    duration: 1.15,
-                                    stagger: 0.07,
-                                    ease: 'power3.out',
-                                    force3D: true,
-                                    onComplete: () => {
-                                        document.querySelectorAll('.hero-anim').forEach(el => {
-                                            el.style.willChange = 'auto';
-                                        });
-                                    }
-                                }, 'start+=0.35');
-                            }
-                            if (navEl) {
-                                exitTl.to(navEl, {
-                                    opacity: 1,
-                                    y: 0,
-                                    duration: 0.95,
-                                    ease: 'power3.out',
-                                    force3D: true,
-                                    onComplete: () => {
-                                        navEl.style.willChange = 'auto';
-                                    }
-                                }, 'start+=0.4');
-                            }
-
-                            exitTl.call(() => {
-                                initScrollSpy();
-                                const top5Section = document.getElementById('top5yaire');
-                                if (top5Section) {
-                                    const barObs = new IntersectionObserver((entries) => {
-                                        entries.forEach(e => { if (e.isIntersecting) { animateWordBars(); barObs.disconnect(); } });
-                                    }, { threshold: 0.3 });
-                                    barObs.observe(top5Section);
+                                // ── 1. Set initial hidden states immediately at 'start' ──
+                                // Symmetrical landing: page elements are hidden scaled down slightly (scale: 0.94)
+                                // and the fixed navbar is shifted up, preparing for a highly cushioned zoom-in!
+                                if (heroSection) {
+                                    document.querySelectorAll('.hero-anim').forEach(el => {
+                                        el.style.transition = 'none';
+                                        el.style.filter = '';
+                                        el.style.willChange = 'transform, opacity';
+                                    });
+                                    exitTl.set('.hero-anim', {
+                                        opacity: 0,
+                                        scale: 0.94,
+                                        y: 0
+                                    }, 'start');
                                 }
-                            }, null, 'start+=1.35');
-                        }); }, 400); // end rAF + 400ms delay to show 100%
+                                if (navEl) {
+                                    navEl.style.willChange = 'transform, opacity';
+                                    exitTl.set(navEl, {
+                                        opacity: 0,
+                                        y: -20
+                                    }, 'start');
+                                }
+
+                                // ── 2. Foreground Elements Zoom-Through (Cinematic Warp Passage) ──
+                                // Symmetrical depth: the center logo and glowing ring scale UP dramatically
+                                // towards the camera, fading out as if the user is zooming right through them!
+                                const exitElements = [];
+                                if (loaderLogo) exitElements.push(loaderLogo);
+                                if (customLoader) exitElements.push(customLoader);
+
+                                if (exitElements.length) {
+                                    exitTl.to(exitElements, {
+                                        opacity: 0,
+                                        scale: 1.45,
+                                        duration: 0.8,
+                                        ease: 'power3.out',
+                                        stagger: 0.04
+                                    }, 'start');
+                                }
+
+                                const loaderFooter = document.getElementById('loader-footer');
+                                if (loaderFooter) {
+                                    exitTl.to(loaderFooter, {
+                                        opacity: 0,
+                                        y: 20,
+                                        duration: 0.65,
+                                        ease: 'power2.out'
+                                    }, 'start');
+                                }
+
+                                // ── 3. Main Background Scale & Dissolve (Guaranteed Zero Cuts) ──
+                                // To prevent any layout stutters or engine repaints, we avoid clip-paths and instead
+                                // use 100% composite-only scale-up and opacity fade on the main loader container.
+                                // The background expands softly (scale: 1.1) and fades out at a solid, buttery 60+ FPS.
+                                exitTl.to(loaderEl, {
+                                    scale: 1.1,
+                                    opacity: 0,
+                                    duration: 0.95,
+                                    ease: 'power3.inOut'
+                                }, 'start')
+                                    .set(loaderEl, { display: 'none' }) // Ensure it is hidden from screen and pointer interactions
+                                    .call(() => {
+                                        document.body.classList.add('page-ready');
+                                    });
+
+                                // ── 4. Main Page Zoom-In Reveal (Exquisite Cushioning) ──
+                                // As the user zooms past the loader, the landing page elements scale up gently
+                                // to their final size with premium deceleration easing.
+                                if (heroSection) {
+                                    exitTl.to('.hero-anim', {
+                                        opacity: 1,
+                                        scale: 1,
+                                        y: 0,
+                                        duration: 1.15,
+                                        stagger: 0.07,
+                                        ease: 'power3.out',
+                                        force3D: true,
+                                        onComplete: () => {
+                                            document.querySelectorAll('.hero-anim').forEach(el => {
+                                                el.style.willChange = 'auto';
+                                            });
+                                        }
+                                    }, 'start+=0.35');
+                                }
+                                if (navEl) {
+                                    exitTl.to(navEl, {
+                                        opacity: 1,
+                                        y: 0,
+                                        duration: 0.95,
+                                        ease: 'power3.out',
+                                        force3D: true,
+                                        onComplete: () => {
+                                            navEl.style.willChange = 'auto';
+                                        }
+                                    }, 'start+=0.4');
+                                }
+
+                                exitTl.call(() => {
+                                    initScrollSpy();
+                                    const top5Section = document.getElementById('top5yaire');
+                                    if (top5Section) {
+                                        const barObs = new IntersectionObserver((entries) => {
+                                            entries.forEach(e => { if (e.isIntersecting) { animateWordBars(); barObs.disconnect(); } });
+                                        }, { threshold: 0.3 });
+                                        barObs.observe(top5Section);
+                                    }
+                                }, null, 'start+=1.35');
+                            });
+                        }, 400); // end rAF + 400ms delay to show 100%
 
                     } else {
                         // Fallback sin GSAP

@@ -1,0 +1,466 @@
+// 28E Oracle - Immersive Voice & Video Room
+
+class OracleRoom {
+    constructor() {
+        this.socket = null;
+        this.stream = null;
+        this.peers = new Map();
+        this.pendingIce = new Map();
+        
+        this.myId = null;
+        this.users = [];
+        this.cameraEnabled = false;
+        this.micEnabled = true;
+
+        this.ytPlayer = null;
+        this.isYtReady = false;
+        this.musicQueue = [];
+        this.musicState = { currentIndex: -1, isPlaying: false };
+
+        this.iceConfig = {
+            iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' },
+                {
+                    urls: 'turn:global.relay.metered.ca:80',
+                    username: '5187d4c4c5314e021d568c2d',
+                    credential: 'Bb9ysI8BgTjn/dET'
+                }
+            ]
+        };
+
+        this.initUI();
+    }
+
+    async init() {
+        const user = window.yaireCurrentUser;
+        if (!user) return alert("Debes iniciar sesión.");
+
+        let pass = 'nopass';
+        try {
+            const res = await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config/voicePassword.json');
+            pass = await res.json();
+        } catch(e) {}
+
+        this.connectSocket(user.displayName, pass, user.photoURL);
+        this.acquireMedia();
+    }
+
+    initUI() {
+        // Bind UI buttons
+        document.getElementById('btn-mic').addEventListener('click', () => this.toggleMic());
+        document.getElementById('btn-cam').addEventListener('click', () => this.toggleCam());
+        document.getElementById('btn-leave').addEventListener('click', () => this.leaveRoom());
+
+        document.getElementById('chat-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.sendChat();
+        });
+
+        document.getElementById('rave-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.addRaveVideo();
+        });
+    }
+
+    async acquireMedia() {
+        try {
+            if (this.stream) {
+                this.stream.getTracks().forEach(t => t.stop());
+            }
+            this.stream = await navigator.mediaDevices.getUserMedia({
+                audio: { echoCancellation: true, noiseSuppression: true },
+                video: this.cameraEnabled ? { facingMode: "user", width: { ideal: 640 }, height: { ideal: 360 } } : false
+            });
+            
+            // Sync mic state
+            this.stream.getAudioTracks().forEach(t => t.enabled = this.micEnabled);
+
+            // Create/update my own video element
+            this.updateVideoElement('local', this.stream, window.yaireCurrentUser);
+
+            // If we are already connected, we need to renegotiate WebRTC with all peers
+            for (const [peerId, pc] of this.peers.entries()) {
+                const senders = pc.getSenders();
+                this.stream.getTracks().forEach(track => {
+                    const sender = senders.find(s => s.track && s.track.kind === track.kind);
+                    if (sender) {
+                        sender.replaceTrack(track);
+                    } else {
+                        pc.addTrack(track, this.stream);
+                        // Renegotiate
+                        this.createOffer(peerId);
+                    }
+                });
+            }
+        } catch (e) {
+            console.error("No se pudo acceder a los medios", e);
+            if (this.cameraEnabled) {
+                this.cameraEnabled = false;
+                this.updateCamBtnUI();
+                alert("No se pudo acceder a la cámara.");
+                this.acquireMedia(); // fallback to audio only
+            }
+        }
+    }
+
+    updateVideoElement(id, stream, userObj) {
+        const grid = document.getElementById('video-grid');
+        let container = document.getElementById(`video-container-${id}`);
+        
+        if (!container) {
+            container = document.createElement('div');
+            container.id = `video-container-${id}`;
+            container.className = 'video-container';
+            container.innerHTML = `
+                <video id="vid-${id}" autoplay playsinline ${id === 'local' ? 'muted' : ''}></video>
+                <div class="avatar-fallback text-center">
+                    <img src="${userObj?.photoURL || ''}" class="w-20 h-20 rounded-full mb-3 shadow-lg border-2 border-white/10" onerror="this.style.display='none'" />
+                    <span class="font-bold text-sm tracking-wide text-white/80">${userObj?.displayName || 'Usuario'} ${id==='local'?'(Tú)':''}</span>
+                </div>
+            `;
+            grid.appendChild(container);
+            this.updateGridLayout();
+        }
+
+        const vid = container.querySelector('video');
+        if (stream && stream.getVideoTracks().length > 0) {
+            vid.srcObject = stream;
+            container.classList.add('has-video');
+        } else {
+            container.classList.remove('has-video');
+            if (stream) vid.srcObject = stream; // Keep audio
+        }
+    }
+
+    removeVideoElement(id) {
+        const container = document.getElementById(`video-container-${id}`);
+        if (container) {
+            container.remove();
+            this.updateGridLayout();
+        }
+    }
+
+    updateGridLayout() {
+        const grid = document.getElementById('video-grid');
+        const count = grid.children.length;
+        grid.className = 'video-grid';
+        if (count === 1) grid.classList.add('grid-1');
+        else if (count === 2) grid.classList.add('grid-2');
+        else if (count === 3) grid.classList.add('grid-3');
+        else grid.classList.add('grid-4');
+    }
+
+    // --- SOCKET LOGIC ---
+    connectSocket(name, pass, photoURL) {
+        this.socket = io('https://28e-production.up.railway.app', { transports: ['websocket'] });
+
+        this.socket.on('connect', () => {
+            this.socket.emit('join_channel', { password: pass, displayName: name, photoURL });
+        });
+
+        this.socket.on('joined', ({ userId, existingUsers }) => {
+            this.myId = userId;
+            this.users = existingUsers;
+            existingUsers.forEach(u => this.createOffer(u.id));
+            this.socket.emit('music_sync_request');
+            
+            // Show toast
+            this.appendChatMsg('system', 'Oracle', 'Te has conectado al sistema.', Date.now());
+        });
+
+        this.socket.on('channel_users', ({ users }) => {
+            this.users = users.filter(u => u.id !== this.myId);
+        });
+
+        this.socket.on('user_joined', ({ userId, displayName, photoURL }) => {
+            this.users.push({ id: userId, displayName, photoURL });
+            this.updateVideoElement(userId, null, { displayName, photoURL });
+            this.appendChatMsg('system', 'Oracle', `${displayName} se ha unido.`, Date.now());
+        });
+
+        this.socket.on('user_left', ({ userId }) => {
+            this.closePeer(userId);
+            this.removeVideoElement(userId);
+        });
+
+        // WebRTC Signaling
+        this.socket.on('webrtc_offer', async ({ from, sdp }) => this.handleOffer(from, sdp));
+        this.socket.on('webrtc_answer', async ({ from, sdp }) => {
+            const pc = this.peers.get(from);
+            if (pc) {
+                await pc.setRemoteDescription(new RTCSessionDescription(sdp));
+                this.flushIce(from);
+            }
+        });
+        this.socket.on('ice_candidate', async ({ from, candidate }) => {
+            const pc = this.peers.get(from);
+            if (pc && pc.remoteDescription) {
+                await pc.addIceCandidate(new RTCIceCandidate(candidate)).catch(()=>{});
+            } else {
+                if (!this.pendingIce.has(from)) this.pendingIce.set(from, []);
+                this.pendingIce.get(from).push(candidate);
+            }
+        });
+
+        // Chat
+        this.socket.on('chat_message', ({ from, name, text, ts }) => {
+            if (from !== this.myId) this.appendChatMsg(from, name, text, ts);
+        });
+
+        // Music/Rave Events
+        this.socket.on('music_queue_update', ({ queue, state }) => {
+            this.musicQueue = queue;
+            this.musicState = state;
+            this.updateRaveUI();
+        });
+        
+        this.socket.on('music_play', ({ track, state }) => {
+            this.musicState = state;
+            this.playRaveTrack(track, 0);
+        });
+        
+        this.socket.on('music_state_update', ({ state }) => {
+            this.musicState = state;
+            if (this.ytPlayer && this.isYtReady) {
+                if (state.isPlaying) this.ytPlayer.playVideo();
+                else this.ytPlayer.pauseVideo();
+            }
+        });
+
+        this.socket.on('music_seek', ({ time }) => {
+            if (this.ytPlayer && this.isYtReady) {
+                this.ytPlayer.seekTo(time, true);
+            }
+        });
+
+        this.socket.on('music_sync', ({ queue, state, currentTrack, currentTime }) => {
+            this.musicQueue = queue;
+            this.musicState = state;
+            if (currentTrack && state.isPlaying) {
+                this.playRaveTrack(currentTrack, currentTime || 0);
+            } else if (currentTrack) {
+                this.playRaveTrack(currentTrack, currentTime || 0, false);
+            }
+        });
+    }
+
+    // --- WEBRTC ---
+    makePeer(peerId) {
+        if (this.peers.has(peerId)) this.closePeer(peerId);
+
+        const pc = new RTCPeerConnection(this.iceConfig);
+        if (this.stream) {
+            this.stream.getTracks().forEach(t => pc.addTrack(t, this.stream));
+        }
+
+        pc.onicecandidate = ({ candidate }) => {
+            if (candidate) this.socket.emit('ice_candidate', { to: peerId, candidate });
+        };
+
+        pc.ontrack = (event) => {
+            const stream = event.streams[0] || new MediaStream([event.track]);
+            const userObj = this.users.find(u => u.id === peerId);
+            this.updateVideoElement(peerId, stream, userObj);
+        };
+
+        this.peers.set(peerId, pc);
+        return pc;
+    }
+
+    async createOffer(peerId) {
+        const pc = this.makePeer(peerId);
+        const offer = await pc.createOffer();
+        await pc.setLocalDescription(offer);
+        this.socket.emit('webrtc_offer', { to: peerId, sdp: pc.localDescription });
+    }
+
+    async handleOffer(fromId, sdp) {
+        const pc = this.makePeer(fromId);
+        await pc.setRemoteDescription(new RTCSessionDescription(sdp));
+        const answer = await pc.createAnswer();
+        await pc.setLocalDescription(answer);
+        this.socket.emit('webrtc_answer', { to: fromId, sdp: pc.localDescription });
+        this.flushIce(fromId);
+    }
+
+    flushIce(peerId) {
+        const pc = this.peers.get(peerId);
+        const queue = this.pendingIce.get(peerId) || [];
+        queue.forEach(c => pc.addIceCandidate(new RTCIceCandidate(c)).catch(()=>{}));
+        this.pendingIce.delete(peerId);
+    }
+
+    closePeer(peerId) {
+        const pc = this.peers.get(peerId);
+        if (pc) { pc.close(); this.peers.delete(peerId); }
+    }
+
+    // --- CONTROLS ---
+    toggleMic() {
+        this.micEnabled = !this.micEnabled;
+        if (this.stream) this.stream.getAudioTracks().forEach(t => t.enabled = this.micEnabled);
+        
+        const btn = document.getElementById('btn-mic');
+        if (this.micEnabled) {
+            btn.classList.replace('bg-red-500/20', 'bg-white/10');
+            btn.classList.replace('text-red-500', 'text-white');
+            btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`;
+        } else {
+            btn.classList.replace('bg-white/10', 'bg-red-500/20');
+            btn.classList.replace('text-white', 'text-red-500');
+            btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/><path d="M17 16.95A7 7 0 0 1 5 12v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`;
+        }
+    }
+
+    toggleCam() {
+        this.cameraEnabled = !this.cameraEnabled;
+        this.updateCamBtnUI();
+        this.acquireMedia(); // re-acquire media to add/remove video track
+    }
+
+    updateCamBtnUI() {
+        const strike = document.getElementById('cam-strike');
+        if (this.cameraEnabled) {
+            strike.classList.replace('scale-100', 'scale-0');
+        } else {
+            strike.classList.replace('scale-0', 'scale-100');
+        }
+    }
+
+    leaveRoom() {
+        if (this.socket) {
+            this.socket.emit('leave_channel');
+            this.socket.disconnect();
+        }
+        if (this.stream) this.stream.getTracks().forEach(t => t.stop());
+        window.location.href = 'index.html';
+    }
+
+    // --- CHAT ---
+    sendChat() {
+        const input = document.getElementById('chat-input');
+        const text = input.value.trim();
+        if (!text) return;
+        
+        this.socket.emit('chat_message', { text });
+        this.appendChatMsg(this.myId, window.yaireCurrentUser.displayName, text, Date.now());
+        input.value = '';
+    }
+
+    appendChatMsg(from, name, text, ts) {
+        const container = document.getElementById('chat-messages');
+        const isMe = from === this.myId;
+        const isSystem = from === 'system';
+        
+        const div = document.createElement('div');
+        
+        if (isSystem) {
+            div.className = 'text-center text-[10px] text-amber-500/50 my-1 font-bold tracking-wider uppercase';
+            div.textContent = text;
+        } else {
+            div.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'}`;
+            div.innerHTML = `
+                <span class="text-[9px] text-white/40 mb-1 px-1 font-bold">${name}</span>
+                <div class="px-3 py-2 text-xs rounded-xl shadow-sm ${isMe ? 'bg-amber-500 text-black rounded-tr-sm' : 'bg-white/10 text-white rounded-tl-sm'}">
+                    ${text}
+                </div>
+            `;
+        }
+        
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    // --- YOUTUBE RAVE ---
+    addRaveVideo() {
+        const input = document.getElementById('rave-input');
+        const url = input.value.trim();
+        if (!url) return;
+        
+        // Let server determine if it's youtube or spotify
+        const type = url.includes('spotify') ? 'spotify' : 'youtube';
+        this.socket.emit('music_add', { url, type });
+        input.value = '';
+    }
+
+    updateRaveUI() {
+        const qContainer = document.getElementById('rave-queue');
+        if (this.musicQueue.length === 0) {
+            qContainer.innerHTML = '<div class="text-xs text-white/30 text-center py-8">La cola está vacía.</div>';
+            document.body.classList.remove('mode-youtube');
+            document.body.classList.add('mode-video');
+            if (this.ytPlayer && this.isYtReady) this.ytPlayer.stopVideo();
+            return;
+        }
+
+        qContainer.innerHTML = this.musicQueue.map((t, idx) => `
+            <div class="p-3 bg-white/5 border border-white/5 rounded-xl flex gap-3 items-center group">
+                <div class="text-xs font-bold ${idx === this.musicState.currentIndex ? 'text-amber-500' : 'text-white/50'}">${idx + 1}</div>
+                <div class="flex-1 truncate text-xs text-white font-medium">${t.title || 'Video URL'}</div>
+            </div>
+        `).join('');
+    }
+
+    playRaveTrack(track, timeOffset = 0, autoPlay = true) {
+        if (!track) return;
+        
+        // Enter Rave Mode
+        document.body.classList.remove('mode-video');
+        document.body.classList.add('mode-youtube');
+        
+        document.getElementById('yt-now-playing').textContent = track.title;
+
+        // Parse YT ID
+        let vidId = '';
+        try {
+            if (track.url.includes('v=')) vidId = track.url.split('v=')[1].split('&')[0];
+            else if (track.url.includes('youtu.be/')) vidId = track.url.split('youtu.be/')[1].split('?')[0];
+        } catch(e) {}
+
+        if (!vidId) return;
+
+        if (!this.ytPlayer) {
+            this.ytPlayer = new YT.Player('yt-player-container', {
+                videoId: vidId,
+                playerVars: { autoplay: autoPlay ? 1 : 0, controls: 1, disablekb: 0, rel: 0 },
+                events: {
+                    onReady: (e) => {
+                        this.isYtReady = true;
+                        if (timeOffset > 0) e.target.seekTo(timeOffset, true);
+                        if (autoPlay) e.target.playVideo();
+                    },
+                    onStateChange: (e) => this.onYtStateChange(e)
+                }
+            });
+        } else if (this.isYtReady) {
+            this.ytPlayer.loadVideoById({ videoId: vidId, startSeconds: timeOffset });
+            if (!autoPlay) setTimeout(() => this.ytPlayer.pauseVideo(), 500);
+        }
+    }
+
+    onYtStateChange(e) {
+        // Only broadcast if user actively clicked (avoid infinite loops)
+        // YT.PlayerState.PLAYING = 1, PAUSED = 2
+        if (e.data === YT.PlayerState.PAUSED) {
+            this.socket.emit('music_pause', { currentTime: this.ytPlayer.getCurrentTime() });
+        } else if (e.data === YT.PlayerState.PLAYING) {
+            // Check if we resumed
+            if (!this.musicState.isPlaying) {
+                 this.socket.emit('music_resume');
+                 this.socket.emit('music_seek', { time: this.ytPlayer.getCurrentTime() });
+            }
+        }
+    }
+}
+
+// Ensure YT API is loaded globally before init
+window.onYouTubeIframeAPIReady = () => {
+    console.log("YouTube API Ready");
+};
+
+// Called when Firebase Auth is ready
+window.OracleInit = () => {
+    document.body.classList.add('mode-video');
+    window.oracleRoom = new OracleRoom();
+    window.oracleRoom.init();
+};
