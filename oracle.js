@@ -331,9 +331,31 @@ class OracleRoom {
         if (this.socket) {
             this.socket.emit('leave_channel');
             this.socket.disconnect();
+            this.socket = null;
         }
-        if (this.stream) this.stream.getTracks().forEach(t => t.stop());
-        window.location.href = 'index.html';
+        if (this.stream) {
+            this.stream.getTracks().forEach(t => t.stop());
+            this.stream = null;
+        }
+        this.peers.forEach(pc => pc.close());
+        this.peers.clear();
+        
+        const grid = document.getElementById('video-grid');
+        grid.innerHTML = '';
+        if (this.ytPlayer && this.isYtReady) this.ytPlayer.stopVideo();
+        
+        document.body.classList.remove('mode-youtube');
+        document.body.classList.add('mode-video');
+        
+        const lobbyOverlay = document.getElementById('lobby-overlay');
+        if (lobbyOverlay) {
+            lobbyOverlay.style.display = 'flex';
+            setTimeout(() => lobbyOverlay.style.opacity = '1', 50);
+        }
+        
+        // Clear chat
+        const chatContainer = document.getElementById('chat-messages');
+        if (chatContainer) chatContainer.innerHTML = '<div class="text-center text-xs text-white/30 my-4">Bienvenido a Oracle. Tus mensajes están cifrados.</div>';
     }
 
     // --- CHAT ---
@@ -459,8 +481,20 @@ window.onYouTubeIframeAPIReady = () => {
 };
 
 // Called when Firebase Auth is ready
-window.OracleInit = () => {
+window.OracleSetup = () => {
     document.body.classList.add('mode-video');
     window.oracleRoom = new OracleRoom();
-    window.oracleRoom.init();
+    
+    // Bind the join button in the lobby
+    const btnJoin = document.getElementById('btn-join-room');
+    if (btnJoin) {
+        btnJoin.addEventListener('click', () => {
+            const lobbyOverlay = document.getElementById('lobby-overlay');
+            if (lobbyOverlay) {
+                lobbyOverlay.style.opacity = '0';
+                setTimeout(() => lobbyOverlay.style.display = 'none', 500);
+            }
+            window.oracleRoom.init();
+        });
+    }
 };

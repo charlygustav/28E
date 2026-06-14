@@ -107,6 +107,49 @@
 </head>
 <body class="text-white h-screen flex flex-col">
 
+    <!-- ═══ LOADER ═══ -->
+    <div id="loader" style="position:fixed;inset:0;z-index:200;background:#050505;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;will-change:transform,opacity;transition:opacity 0.6s ease, transform 0.6s ease;">
+        <!-- Ambient glow -->
+        <div class="loader-glow loader-glow-1" style="position:absolute;width:380px;height:380px;background:radial-gradient(circle, rgba(245, 158, 11, 0.07) 0%, transparent 70%);border-radius:50%;top:50%;left:50%;transform:translate(-50%, -55%);animation:ldGlowPulse 4s ease-in-out infinite alternate;"></div>
+        <div class="loader-glow loader-glow-2" style="position:absolute;width:320px;height:320px;background:radial-gradient(circle, rgba(236, 72, 153, 0.05) 0%, transparent 70%);border-radius:50%;top:50%;left:50%;transform:translate(-48%, -45%);animation:ldGlowPulse 5s ease-in-out infinite alternate-reverse;"></div>
+
+        <!-- Logo -->
+        <div id="loader-logo" style="position:relative;z-index:10;opacity:0;margin-bottom:2rem;text-align:center;animation:ldFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.15s forwards;">
+            <span style="font-family:'Inter',sans-serif;font-weight:900;font-size:2.6rem;letter-spacing:-0.06em;color:#fff;line-height:1;">28E</span>
+        </div>
+
+        <!-- Sphere -->
+        <div id="custom-loader-wrapper" style="position:relative;z-index:10;display:flex;align-items:center;justify-content:center;width:220px;height:220px;opacity:0;animation:ldScaleIn 0.8s cubic-bezier(0.22,1,0.36,1) 0.3s forwards;">
+            <!-- SVG Progress Ring -->
+            <svg width="220" height="220" viewBox="0 0 220 220" style="position:absolute;inset:0;z-index:2;">
+                <circle cx="110" cy="110" r="104" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
+                <circle id="loader-ring-fill" cx="110" cy="110" r="104" fill="none" stroke="url(#ld-ring-grad)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="653.45" stroke-dashoffset="653.45" transform="rotate(-90 110 110)" style="transition:stroke-dashoffset 0.5s cubic-bezier(0.4,0,0.2,1);" />
+                <defs>
+                    <linearGradient id="ld-ring-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.7" />
+                        <stop offset="100%" stop-color="#ec4899" stop-opacity="0.7" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <div style="position:relative;width:180px;height:180px;border-radius:50%;user-select:none;">
+                <div class="loader-circle-bg" style="position:absolute;inset:0;border-radius:50%;animation:loader-rotate 2.5s linear infinite;"></div>
+            </div>
+        </div>
+
+        <div id="loader-percent" style="position:relative;z-index:10;opacity:0;animation:ldFadeUp 0.5s ease 0.55s forwards;margin-top:2rem;font-family:'Inter',sans-serif;font-weight:300;font-size:0.8rem;color:rgba(255,255,255,0.3);letter-spacing:0.12em;">Conectando a Oracle...</div>
+
+        <style>
+            @keyframes ldGlowPulse { from { opacity: 0.6; transform: translate(-50%, -50%) scale(0.9); } to { opacity: 1; transform: translate(-50%, -50%) scale(1.12); } }
+            @keyframes ldFadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+            @keyframes ldScaleIn { from { opacity: 0; transform: scale(0.82); } to { opacity: 1; transform: scale(1); } }
+            @keyframes loader-rotate {
+                0% { transform: rotate(90deg); box-shadow: 0 10px 20px 0 #fff inset, 0 20px 30px 0 #f59e0b inset, 0 60px 60px 0 #ec4899 inset; }
+                50% { transform: rotate(270deg); box-shadow: 0 10px 20px 0 #fff inset, 0 20px 10px 0 #ec4899 inset, 0 40px 60px 0 #d97706 inset; }
+                100% { transform: rotate(450deg); box-shadow: 0 10px 20px 0 #fff inset, 0 20px 30px 0 #f59e0b inset, 0 60px 60px 0 #ec4899 inset; }
+            }
+        </style>
+    </div>
+
     <!-- Auth / Login Overlay -->
     <div id="auth-overlay" class="fixed inset-0 z-[100] bg-zinc-950 flex flex-col items-center justify-center transition-opacity duration-500">
         <div class="relative w-64 h-64 mb-8">
@@ -220,6 +263,30 @@
         </aside>
     </div>
 
+    <!-- Pre-Join / Lobby Overlay -->
+    <div id="lobby-overlay" class="fixed inset-0 z-[60] bg-zinc-950 flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="relative p-8 rounded-3xl bg-zinc-900/50 border border-white/10 text-center max-w-sm w-full backdrop-blur-2xl shadow-2xl">
+            <!-- Glow -->
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="relative z-10">
+                <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                    <img id="lobby-avatar" src="" class="w-full h-full rounded-full object-cover hidden" />
+                    <svg id="lobby-icon" class="w-10 h-10 text-amber-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3a9 9 0 0 1 9 9H3a9 9 0 0 1 9-9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18"/></svg>
+                </div>
+                <h2 class="text-2xl font-bold text-white mb-2" id="lobby-title">Oracle</h2>
+                <p class="text-zinc-400 text-sm mb-8">Estás a punto de entrar a la sala inmersiva.</p>
+                
+                <button id="btn-join-room" class="w-full py-4 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(245,158,11,0.4)] flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    Entrar a la Sala
+                </button>
+                <a href="index.html" class="block mt-4 text-xs text-zinc-500 hover:text-white transition-colors">Volver al inicio</a>
+            </div>
+        </div>
+    </div>
+
     <!-- Firebase Auth -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
@@ -248,18 +315,40 @@
         });
 
         onAuthStateChanged(auth, (user) => {
-            if (user) {
-                window.yaireCurrentUser = user;
-                authOverlay.style.opacity = '0';
-                setTimeout(() => authOverlay.remove(), 500);
+            // Fake delay for the loader so it looks cool
+            setTimeout(() => {
+                const ld = document.getElementById('loader');
+                if (ld) {
+                    ld.style.opacity = '0';
+                    ld.style.transform = 'scale(1.06)';
+                    setTimeout(() => ld.style.display = 'none', 600);
+                }
                 
-                // Expose globally and trigger oracle logic
-                if (window.OracleInit) window.OracleInit();
-            } else {
-                authActions.classList.remove('hidden');
-                authActions.classList.add('flex');
-                authOverlay.querySelector('p').classList.add('hidden');
-            }
+                if (user) {
+                    window.yaireCurrentUser = user;
+                    authOverlay.style.opacity = '0';
+                    setTimeout(() => authOverlay.remove(), 500);
+                    
+                    // Show Lobby
+                    const lobbyAvatar = document.getElementById('lobby-avatar');
+                    const lobbyIcon = document.getElementById('lobby-icon');
+                    const lobbyTitle = document.getElementById('lobby-title');
+                    
+                    if (user.photoURL) {
+                        lobbyAvatar.src = user.photoURL;
+                        lobbyAvatar.classList.remove('hidden');
+                        lobbyIcon.classList.add('hidden');
+                    }
+                    lobbyTitle.textContent = `Hola, ${user.displayName.split(' ')[0]}`;
+                    
+                    // Expose globally and trigger oracle logic when button is clicked
+                    if (window.OracleSetup) window.OracleSetup();
+                } else {
+                    authActions.classList.remove('hidden');
+                    authActions.classList.add('flex');
+                    authOverlay.querySelector('p').classList.add('hidden');
+                }
+            }, 1500); // 1.5s delay to show off the loader
         });
     </script>
 
