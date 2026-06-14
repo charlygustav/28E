@@ -485,6 +485,57 @@ window.OracleSetup = () => {
     document.body.classList.add('mode-video');
     window.oracleRoom = new OracleRoom();
     
+    // Fetch live room status via temporary socket
+    const tempSocket = io('https://28e-production.up.railway.app', { transports: ['websocket'] });
+    tempSocket.on('connect', () => {
+        tempSocket.emit('get_room_status');
+    });
+    
+    tempSocket.on('room_status', ({ users, musicQueue }) => {
+        const statusEl = document.getElementById('lobby-room-status');
+        if (!statusEl) return;
+        
+        if (users.length === 0) {
+            statusEl.innerHTML = `
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-white/5 flex items-center justify-center text-white/20">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    </div>
+                    <p class="text-sm font-bold text-white/50">La sala está vacía</p>
+                    <p class="text-xs text-zinc-500 mt-1">Sé el primero en entrar.</p>
+                </div>
+            `;
+        } else {
+            statusEl.innerHTML = `
+                <div class="w-full h-full flex flex-col justify-center">
+                    <p class="text-xs font-bold text-amber-500 mb-4 uppercase tracking-wider text-center">Conectados ahora (${users.length})</p>
+                    <div class="flex flex-wrap gap-4 justify-center">
+                        ${users.map(u => `
+                            <div class="flex flex-col items-center gap-2">
+                                <img src="${u.photoURL || ''}" class="w-14 h-14 rounded-full border-2 border-white/20 object-cover shadow-lg" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgMThoLjAxIi8+PC9zdmc+'" />
+                                <span class="text-[10px] font-bold text-white">${u.displayName ? u.displayName.split(' ')[0] : 'Alguien'}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    ${musicQueue && musicQueue.length > 0 ? `
+                        <div class="mt-6 p-3 bg-white/5 rounded-xl border border-white/10 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-pink-500/20 text-pink-500 flex items-center justify-center shrink-0">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-[10px] text-pink-500 font-bold uppercase tracking-wider mb-0.5">Rave Activo</p>
+                                <p class="text-xs text-white truncate">${musicQueue[0].title}</p>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+        
+        // Disconnect temp socket to save resources
+        tempSocket.disconnect();
+    });
+    
     // Bind the join button in the lobby
     const btnJoin = document.getElementById('btn-join-room');
     if (btnJoin) {

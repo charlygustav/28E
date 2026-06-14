@@ -76,6 +76,13 @@ io.on('connection', (socket) => {
   console.log(`[~] New socket: ${socket.id}`);
 
   // ── JOIN ──────────────────────────────────────────────────────────────────
+  socket.on('get_room_status', () => {
+    socket.emit('room_status', { 
+      users: Array.from(users.values()), 
+      musicQueue: musicQueue 
+    });
+  });
+
   socket.on('join_channel', ({ password, displayName, photoURL }) => {
     // if (password !== CHANNEL_PASSWORD) {
     //   return socket.emit('join_error', { message: 'Contraseña incorrecta.' });
