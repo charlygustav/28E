@@ -196,38 +196,130 @@
     </div>
 
     <!-- Auth / Login Overlay -->
-    <div id="auth-overlay" class="fixed inset-0 z-[100] bg-zinc-950 flex items-center justify-center transition-opacity duration-500 overflow-hidden">
-        <!-- Ambient Background Glows -->
-        <div class="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none animate-pulse"></div>
-        <div class="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-pink-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+    <div id="auth-overlay" class="fixed inset-0 z-[100] bg-[#050505] transition-opacity duration-500 overflow-hidden">
+        
+        <!-- Abstract Animated Background -->
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-amber-500/5 rounded-full blur-[120px] animate-[spin_20s_linear_infinite] origin-center"></div>
+            <div class="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-pink-500/5 rounded-full blur-[100px] animate-[spin_15s_linear_infinite_reverse] origin-center"></div>
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+CjxwYXRoIGQ9Ik0wIDE5LjVMMTkuNSAwIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4wMikiIHN0cm9rZS13aWR0aD0iMSIvPgo8L3N2Zz4=')] bg-repeat opacity-50"></div>
+            <!-- Vignette -->
+            <div class="absolute inset-0 bg-radial-gradient from-transparent to-black/80"></div>
+        </div>
 
-        <!-- Glassmorphism Card -->
-        <div class="relative z-10 w-full max-w-md bg-black/40 backdrop-blur-2xl border border-white/10 rounded-[2rem] shadow-[0_0_50px_rgba(0,0,0,0.5)] p-10 flex flex-col items-center text-center transform transition-transform duration-700 ease-out translate-y-4 opacity-0" id="auth-card" style="animation: ldFadeUp 0.8s ease forwards;">
+        <div class="relative z-10 w-full h-full flex flex-col lg:flex-row">
             
-            <!-- Oracle Icon -->
-            <div class="relative w-32 h-32 mb-8 group">
-                <div class="absolute inset-0 bg-amber-500/30 blur-2xl rounded-full group-hover:bg-amber-500/40 transition-colors duration-500 animate-pulse"></div>
-                <div class="absolute inset-0 flex items-center justify-center text-amber-500 transform group-hover:scale-110 transition-transform duration-500">
-                    <svg class="w-20 h-20 drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3a9 9 0 0 1 9 9H3a9 9 0 0 1 9-9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18"/></svg>
+            <!-- LEFT: Showcase Presentation -->
+            <div class="hidden lg:flex flex-1 flex-col justify-center px-16 xl:px-24 border-r border-white/5 bg-black/40 backdrop-blur-md relative">
+                <!-- Inner glow -->
+                <div class="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-pink-500/5 pointer-events-none"></div>
+                
+                <div class="relative z-10 max-w-2xl">
+                    <div class="auth-stagger mb-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-bold text-amber-500 uppercase tracking-widest">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>
+                        Acceso Restringido
+                    </div>
+                    <h2 class="text-6xl xl:text-7xl font-black text-white tracking-tighter mb-4 auth-stagger leading-tight">
+                        Descubre <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-pink-500">Oracle</span>
+                    </h2>
+                    <p class="text-xl text-zinc-400 mb-12 auth-stagger leading-relaxed">
+                        El santuario interactivo de 28E. Un espacio virtual en tiempo real diseñado para la inmersión total y la conexión genuina.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Feature 1 -->
+                        <div class="flex items-start gap-4 auth-stagger">
+                            <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0 border border-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.15)]">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-white font-bold mb-1">Voz Inmersiva</h3>
+                                <p class="text-zinc-500 text-sm leading-relaxed">Comunícate con claridad cristalina. Latencia ultrabaja y cancelación de ruido.</p>
+                            </div>
+                        </div>
+                        <!-- Feature 2 -->
+                        <div class="flex items-start gap-4 auth-stagger">
+                            <div class="w-12 h-12 rounded-2xl bg-pink-500/10 text-pink-500 flex items-center justify-center shrink-0 border border-pink-500/20 shadow-[0_0_15px_rgba(236,72,153,0.15)]">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-white font-bold mb-1">Rave Sincronizado</h3>
+                                <p class="text-zinc-500 text-sm leading-relaxed">Escucha la misma música al mismo tiempo que todos los demás en la sala.</p>
+                            </div>
+                        </div>
+                        <!-- Feature 3 -->
+                        <div class="flex items-start gap-4 auth-stagger">
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-white font-bold mb-1">Identidad Única</h3>
+                                <p class="text-zinc-500 text-sm leading-relaxed">Reclama tu propio @usuario exclusivo y destaca en el muro de actividades.</p>
+                            </div>
+                        </div>
+                        <!-- Feature 4 -->
+                        <div class="flex items-start gap-4 auth-stagger">
+                            <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0 border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.15)]">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-white font-bold mb-1">Reacciones en Vivo</h3>
+                                <p class="text-zinc-500 text-sm leading-relaxed">Interactúa con emojis flotantes que brotan en tiempo real desde tu video.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <h1 class="text-4xl font-black text-white tracking-tight mb-2">28E Oracle</h1>
-            <p id="auth-status-text" class="text-amber-500/80 font-medium text-sm tracking-widest uppercase mb-8">Iniciando conexión...</p>
-            
-            <div id="auth-actions" class="hidden w-full flex-col items-center gap-5 w-full">
-                <div class="w-full h-px bg-white/10 mb-2"></div>
-                <p class="text-zinc-400 text-sm font-medium">Debes iniciar sesión para entrar al Santuario.</p>
-                <button id="btn-login-google" class="w-full flex items-center justify-center gap-3 bg-white/5 border border-white/10 px-6 py-4 rounded-2xl hover:bg-white/10 hover:border-white/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group shadow-xl">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6 h-6 group-hover:animate-bounce" />
-                    <span class="text-white font-bold tracking-wide">Continuar con Google</span>
-                </button>
-                <a href="index.html" class="text-sm text-zinc-500 hover:text-white font-medium transition-colors mt-2 flex items-center gap-2 group">
-                    <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                    Volver al inicio
-                </a>
+            <!-- RIGHT: Login Area -->
+            <div class="flex-1 flex flex-col items-center justify-center p-8 relative">
+                
+                <!-- Glassmorphism Card -->
+                <div class="w-full max-w-[400px] bg-black/50 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.8)] p-10 flex flex-col items-center text-center transform transition-transform duration-700 ease-out" id="auth-card">
+                    
+                    <!-- Oracle Icon -->
+                    <div class="relative w-28 h-28 mb-8 group">
+                        <div class="absolute inset-0 bg-amber-500/30 blur-2xl rounded-full group-hover:bg-amber-500/50 transition-colors duration-500 animate-pulse"></div>
+                        <div class="absolute inset-0 flex items-center justify-center text-amber-500 transform group-hover:scale-110 transition-transform duration-500">
+                            <svg class="w-20 h-20 drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3a9 9 0 0 1 9 9H3a9 9 0 0 1 9-9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18"/></svg>
+                        </div>
+                    </div>
+
+                    <h1 class="text-3xl font-black text-white tracking-tight mb-2">28E Oracle</h1>
+                    <p id="auth-status-text" class="text-amber-500/80 font-bold text-[10px] tracking-[0.2em] uppercase mb-8">Iniciando conexión...</p>
+                    
+                    <div id="auth-actions" class="hidden w-full flex-col items-center gap-5">
+                        <div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-2"></div>
+                        <p class="text-zinc-400 text-sm font-medium">Debes iniciar sesión para entrar.</p>
+                        <button id="btn-login-google" class="w-full flex items-center justify-center gap-3 bg-white/5 border border-white/10 px-6 py-4 rounded-2xl hover:bg-white/10 hover:border-white/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group shadow-xl">
+                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5 group-hover:animate-bounce" />
+                            <span class="text-white font-bold tracking-wide">Continuar con Google</span>
+                        </button>
+                        <a href="index.html" class="text-sm text-zinc-500 hover:text-white font-medium transition-colors mt-2 flex items-center gap-2 group">
+                            <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                            Volver al inicio
+                        </a>
+                    </div>
+                </div>
+
             </div>
         </div>
+
+        <script>
+            // Run initial GSAP animation for the landing page
+            document.addEventListener('DOMContentLoaded', () => {
+                if (window.gsap) {
+                    gsap.fromTo(".auth-stagger", 
+                        { opacity: 0, y: 30, scale: 0.95 },
+                        { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.1, ease: "back.out(1.2)", delay: 0.5 }
+                    );
+                    gsap.fromTo("#auth-card",
+                        { opacity: 0, scale: 0.9 },
+                        { opacity: 1, scale: 1, duration: 1, ease: "power3.out", delay: 0.3 }
+                    );
+                }
+            });
+        </script>
     </div>
 
     <!-- Main Layout -->
