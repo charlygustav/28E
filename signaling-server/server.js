@@ -152,6 +152,11 @@ io.on('connection', (socket) => {
     socket.to(CHANNEL).emit('speaking_state', { from: socket.id, speaking });
   });
 
+  // ── REACTIONS ─────────────────────────────────────────────────────────────
+  socket.on('reaction', ({ emoji }) => {
+    socket.to(CHANNEL).emit('reaction', { from: socket.id, emoji });
+  });
+
   // ── CHAT MESSAGE ─────────────────────────────────────────────────────────
   socket.on('chat_message', ({ text }) => {
     const user = users.get(socket.id);

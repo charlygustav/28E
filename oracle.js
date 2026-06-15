@@ -117,9 +117,14 @@ class OracleRoom {
                     <img src="${userObj?.photoURL || ''}" class="w-20 h-20 rounded-full mb-3 shadow-lg border-2 border-white/10" onerror="this.style.display='none'" />
                     <span class="font-bold text-sm tracking-wide text-white/80">${userObj?.displayName || 'Usuario'} ${id==='local'?'(Tú)':''}</span>
                 </div>
+                <div id="reactions-${id}" class="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl z-10"></div>
             `;
             grid.appendChild(container);
             this.updateGridLayout();
+
+            if (window.gsap) {
+                gsap.from(container, { scale: 0.8, opacity: 0, y: 20, duration: 0.6, ease: "back.out(1.5)" });
+            }
         }
 
         const vid = container.querySelector('video');
@@ -165,7 +170,7 @@ class OracleRoom {
             this.socket.emit('music_sync_request');
             
             // Show toast
-            this.appendChatMsg('system', 'Oracle', 'Te has conectado al sistema.', Date.now());
+            this.showToast('Te has conectado a Oracle.');
         });
 
         this.socket.on('channel_users', ({ users }) => {
@@ -175,10 +180,12 @@ class OracleRoom {
         this.socket.on('user_joined', ({ userId, displayName, photoURL }) => {
             this.users.push({ id: userId, displayName, photoURL });
             this.updateVideoElement(userId, null, { displayName, photoURL });
-            this.appendChatMsg('system', 'Oracle', `${displayName} se ha unido.`, Date.now());
+            this.showToast(`${displayName} se ha unido.`);
         });
 
         this.socket.on('user_left', ({ userId }) => {
+            const u = this.users.find(x => x.id === userId);
+            if (u) this.showToast(`${u.displayName} se ha ido.`);
             this.closePeer(userId);
             this.removeVideoElement(userId);
         });
@@ -200,6 +207,11 @@ class OracleRoom {
                 if (!this.pendingIce.has(from)) this.pendingIce.set(from, []);
                 this.pendingIce.get(from).push(candidate);
             }
+        });
+
+        // Reactions
+        this.socket.on('reaction', ({ from, emoji }) => {
+            this.showReaction(emoji, from);
         });
 
         // Chat
@@ -380,17 +392,96 @@ class OracleRoom {
             div.className = 'text-center text-[10px] text-amber-500/50 my-1 font-bold tracking-wider uppercase';
             div.textContent = text;
         } else {
-            div.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'}`;
+            const userObj = isMe ? window.yaireCurrentUser : this.users.find(u => u.id === from);
+            const avatarUrl = userObj?.photoURL || 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgMThoLjAxIi8+PC9zdmc+';
+            
+            div.className = `flex gap-2 w-full ${isMe ? 'flex-row-reverse' : 'flex-row'}`;
             div.innerHTML = `
-                <span class="text-[9px] text-white/40 mb-1 px-1 font-bold">${name}</span>
-                <div class="px-3 py-2 text-xs rounded-xl shadow-sm ${isMe ? 'bg-amber-500 text-black rounded-tr-sm' : 'bg-white/10 text-white rounded-tl-sm'}">
-                    ${text}
+                <img src="${avatarUrl}" class="w-8 h-8 rounded-full border border-white/10 shrink-0 object-cover mt-1 shadow-md" onerror="this.style.display='none'" />
+                <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} max-w-[85%]">
+                    <span class="text-[9px] text-white/50 mb-1 px-1 font-bold tracking-wider uppercase">${name}</span>
+                    <div class="px-3 py-2 text-xs shadow-lg backdrop-blur-md ${isMe ? 'bg-amber-500 text-black rounded-2xl rounded-tr-sm' : 'bg-white/10 text-white border border-white/5 rounded-2xl rounded-tl-sm'}">
+                        ${text}
+                    </div>
                 </div>
             `;
         }
         
         container.appendChild(div);
+        
+        if (window.gsap && !isSystem) {
+            gsap.from(div, { opacity: 0, y: 15, scale: 0.95, duration: 0.4, ease: "back.out(1.5)", transformOrigin: isMe ? "right bottom" : "left bottom" });
+        }
+        
         container.scrollTop = container.scrollHeight;
+    }
+
+    // --- SOCIAL FEATURES ---
+    sendReaction(emoji) {
+        if (!this.socket) return;
+        this.socket.emit('reaction', { emoji });
+        this.showReaction(emoji, 'local');
+    }
+
+    showReaction(emoji, fromId) {
+        const anchorId = fromId === 'local' ? 'local' : fromId;
+        const container = document.getElementById(`reactions-${anchorId}`);
+        
+        const el = document.createElement('div');
+        el.className = 'floating-reaction';
+        el.textContent = emoji;
+        
+        if (container) {
+            el.style.left = `${Math.random() * 60 + 20}%`;
+            el.style.bottom = '10px';
+            container.appendChild(el);
+            
+            if (window.gsap) {
+                gsap.to(el, {
+                    y: -150 - Math.random() * 100,
+                    x: (Math.random() - 0.5) * 50,
+                    opacity: 0,
+                    rotation: (Math.random() - 0.5) * 60,
+                    duration: 1.5 + Math.random(),
+                    ease: "power1.out",
+                    onComplete: () => el.remove()
+                });
+            } else {
+                setTimeout(() => el.remove(), 2000);
+            }
+        } else {
+            el.style.left = `${Math.random() * 20 + 40}%`;
+            el.style.bottom = '100px';
+            document.body.appendChild(el);
+            if (window.gsap) {
+                gsap.to(el, { y: -200, opacity: 0, duration: 2, onComplete: () => el.remove() });
+            } else {
+                setTimeout(() => el.remove(), 2000);
+            }
+        }
+    }
+
+    showToast(msg) {
+        const tContainer = document.getElementById('toast-container');
+        if (!tContainer) return;
+        
+        const el = document.createElement('div');
+        el.className = 'toast-msg';
+        el.innerHTML = `<svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> <span>${msg}</span>`;
+        tContainer.appendChild(el);
+        
+        if (window.gsap) {
+            gsap.fromTo(el, 
+                { opacity: 0, y: -20, scale: 0.9 },
+                { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: "back.out(1.5)" }
+            );
+            gsap.to(el, {
+                opacity: 0, y: -20, scale: 0.9, duration: 0.4, delay: 3, ease: "power2.in",
+                onComplete: () => el.remove()
+            });
+        } else {
+            setTimeout(() => el.remove(), 3000);
+        }
     }
 
     // --- YOUTUBE RAVE ---
