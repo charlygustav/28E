@@ -603,7 +603,7 @@ window.OracleSetup = () => {
                         <div class="flex items-center gap-3 p-3 rounded-2xl hover:bg-white/5 transition-colors cursor-default story-item opacity-0">
                             <div class="relative">
                                 <div class="absolute inset-0 rounded-full border-2 border-green-500 animate-ping opacity-50"></div>
-                                <img src="${u.photoURL || 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgMThoLjAxIi8+PC9zdmc+'}" class="w-12 h-12 rounded-full border-2 border-green-500 object-cover relative z-10" />
+                                <img src="${u.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(u.displayName || 'U')}&background=random`}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(u.displayName || 'U')}&background=random'" class="w-12 h-12 rounded-full border-2 border-green-500 object-cover relative z-10" />
                             </div>
                             <div class="flex-1 min-w-0">
                                 <p class="text-sm font-bold text-white truncate">${u.displayName ? u.displayName : 'Usuario'}</p>

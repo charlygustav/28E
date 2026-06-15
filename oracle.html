@@ -462,6 +462,11 @@
                     
                     if (user.photoURL) {
                         lobbyAvatar.src = user.photoURL;
+                        lobbyAvatar.onerror = function() { this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=random`; };
+                        lobbyAvatar.classList.remove('hidden');
+                        lobbyIcon.classList.add('hidden');
+                    } else {
+                        lobbyAvatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=random`;
                         lobbyAvatar.classList.remove('hidden');
                         lobbyIcon.classList.add('hidden');
                     }
@@ -482,7 +487,7 @@
                                 
                                 return `
                                 <div class="post-card p-5 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-colors flex gap-4 opacity-0">
-                                    <img src="${user.photoURL || 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgMThoLjAxIi8+PC9zdmc+'}" class="w-12 h-12 rounded-full border border-white/20 object-cover shrink-0" />
+                                    <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=random`}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=random'" class="w-12 h-12 rounded-full border border-white/20 object-cover shrink-0" />
                                     <div class="flex-1">
                                         <div class="flex items-center justify-between mb-1">
                                             <div class="flex items-center gap-2">
