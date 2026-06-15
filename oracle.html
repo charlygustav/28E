@@ -196,23 +196,37 @@
     </div>
 
     <!-- Auth / Login Overlay -->
-    <div id="auth-overlay" class="fixed inset-0 z-[100] bg-zinc-950 flex flex-col items-center justify-center transition-opacity duration-500">
-        <div class="relative w-64 h-64 mb-8">
-            <div class="absolute inset-0 bg-amber-500/20 blur-[50px] rounded-full animate-pulse"></div>
-            <div class="absolute inset-0 flex items-center justify-center text-amber-500">
-                <svg class="w-20 h-20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3a9 9 0 0 1 9 9H3a9 9 0 0 1 9-9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18"/></svg>
+    <div id="auth-overlay" class="fixed inset-0 z-[100] bg-zinc-950 flex items-center justify-center transition-opacity duration-500 overflow-hidden">
+        <!-- Ambient Background Glows -->
+        <div class="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none animate-pulse"></div>
+        <div class="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-pink-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <!-- Glassmorphism Card -->
+        <div class="relative z-10 w-full max-w-md bg-black/40 backdrop-blur-2xl border border-white/10 rounded-[2rem] shadow-[0_0_50px_rgba(0,0,0,0.5)] p-10 flex flex-col items-center text-center transform transition-transform duration-700 ease-out translate-y-4 opacity-0" id="auth-card" style="animation: ldFadeUp 0.8s ease forwards;">
+            
+            <!-- Oracle Icon -->
+            <div class="relative w-32 h-32 mb-8 group">
+                <div class="absolute inset-0 bg-amber-500/30 blur-2xl rounded-full group-hover:bg-amber-500/40 transition-colors duration-500 animate-pulse"></div>
+                <div class="absolute inset-0 flex items-center justify-center text-amber-500 transform group-hover:scale-110 transition-transform duration-500">
+                    <svg class="w-20 h-20 drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3a9 9 0 0 1 9 9H3a9 9 0 0 1 9-9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18"/></svg>
+                </div>
             </div>
-        </div>
-        <h1 class="text-3xl font-extrabold tracking-tight mb-2">28E Oracle</h1>
-        <p class="text-zinc-500 text-sm mb-8">Iniciando conexión segura...</p>
-        
-        <div id="auth-actions" class="hidden flex-col items-center gap-4">
-            <p class="text-zinc-400 text-sm">Debes iniciar sesión para entrar a Oracle.</p>
-            <button id="btn-login-google" class="flex items-center gap-3 bg-white/5 border border-white/10 px-6 py-3 rounded-xl hover:bg-white/10 transition-colors">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5" />
-                Continuar con Google
-            </button>
-            <a href="index.html" class="text-xs text-zinc-600 hover:text-zinc-400 transition-colors mt-2">Volver al inicio</a>
+
+            <h1 class="text-4xl font-black text-white tracking-tight mb-2">28E Oracle</h1>
+            <p id="auth-status-text" class="text-amber-500/80 font-medium text-sm tracking-widest uppercase mb-8">Iniciando conexión...</p>
+            
+            <div id="auth-actions" class="hidden w-full flex-col items-center gap-5 w-full">
+                <div class="w-full h-px bg-white/10 mb-2"></div>
+                <p class="text-zinc-400 text-sm font-medium">Debes iniciar sesión para entrar al Santuario.</p>
+                <button id="btn-login-google" class="w-full flex items-center justify-center gap-3 bg-white/5 border border-white/10 px-6 py-4 rounded-2xl hover:bg-white/10 hover:border-white/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group shadow-xl">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6 h-6 group-hover:animate-bounce" />
+                    <span class="text-white font-bold tracking-wide">Continuar con Google</span>
+                </button>
+                <a href="index.html" class="text-sm text-zinc-500 hover:text-white font-medium transition-colors mt-2 flex items-center gap-2 group">
+                    <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                    Volver al inicio
+                </a>
+            </div>
         </div>
     </div>
 
