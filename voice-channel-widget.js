@@ -828,7 +828,7 @@
               ${avatarHtml}
             </div>
             <div class="flex-1 min-w-0">
-              <div class="text-white text-sm font-medium truncate">${u.displayName} ${isMe ? `<span class="text-white/30 text-[10px] ml-1 px-1.5 py-0.5 rounded-md bg-white/10">${_t('tag_you')}</span>` : ''}</div>
+              <div class="text-white text-sm font-medium truncate">${u.displayName} ${u.oracleHandle ? `<span class="text-amber-500/80 text-[10px] ml-1">@${u.oracleHandle}</span>` : ''} ${isMe ? `<span class="text-white/30 text-[10px] ml-1 px-1.5 py-0.5 rounded-md bg-white/10">${_t('tag_you')}</span>` : ''}</div>
             </div>
             <div class="flex items-center gap-2 pr-1 opacity-100 vc-icons-container">
                ${bellIcon}${micIcon}
@@ -977,7 +977,7 @@
               ${avatarHtml}
             </div>
             <div class="flex-1 min-w-0">
-              <div class="text-white text-sm font-medium truncate">${u.displayName} ${isMe ? `<span class="text-white/30 text-[10px] ml-1 px-1.5 py-0.5 rounded-md bg-white/10">${_t('tag_you')}</span>` : ''}</div>
+              <div class="text-white text-sm font-medium truncate">${u.displayName} ${u.oracleHandle ? `<span class="text-amber-500/80 text-[10px] ml-1">@${u.oracleHandle}</span>` : ''} ${isMe ? `<span class="text-white/30 text-[10px] ml-1 px-1.5 py-0.5 rounded-md bg-white/10">${_t('tag_you')}</span>` : ''}</div>
             </div>
             <div class="flex items-center gap-2 pr-1 opacity-100 vc-icons-container">
             </div>
@@ -1310,7 +1310,7 @@
         });
 
         this.socket.on('connect', () => {
-          this.socket.emit('join_channel', { password: pass, displayName: name, photoURL: window.yaireCurrentUser?.photoURL || null });
+          this.socket.emit('join_channel', { password: pass, displayName: name, photoURL: window.yaireCurrentUser?.photoURL || null, oracleHandle: window.yaireCurrentUser?.oracleHandle || null });
         });
 
         this.socket.on('join_error', ({ message }) => {
@@ -1521,7 +1521,7 @@
         // Re-join channel silently after background reconnect
         this.socket.io.on('reconnect', () => {
           if (this._savedName && this._savedPass) {
-            this.socket.emit('join_channel', { password: this._savedPass, displayName: this._savedName, photoURL: window.yaireCurrentUser?.photoURL || null });
+            this.socket.emit('join_channel', { password: this._savedPass, displayName: this._savedName, photoURL: window.yaireCurrentUser?.photoURL || null, oracleHandle: window.yaireCurrentUser?.oracleHandle || null });
           }
         });
       };
