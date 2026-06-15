@@ -343,7 +343,9 @@
                         </div>
                         <div class="pt-14">
                             <h2 class="text-xl font-extrabold text-white leading-tight" id="lobby-title">Cargando...</h2>
-                            <p class="text-zinc-500 text-sm mb-4" id="lobby-handle">@oracle_user</p>
+                            <p class="text-zinc-500 text-sm mb-4 flex items-center gap-2 group cursor-pointer w-fit" id="lobby-handle" title="Cambiar usuario">
+                                @...
+                            </p>
                             
                             <button id="btn-join-room" class="w-full py-3 bg-white text-black font-extrabold rounded-2xl transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] hover:scale-[1.02] transform flex items-center justify-center gap-2 text-md">
                                 <span class="relative flex h-3 w-3">
@@ -411,11 +413,39 @@
         </div>
     </div>
 
+    <!-- Handle Assignment Modal -->
+    <div id="handle-modal" class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md hidden items-center justify-center">
+        <div class="w-full max-w-sm bg-zinc-950 border border-white/10 p-8 rounded-3xl shadow-2xl relative overflow-hidden transform transition-all scale-95 opacity-0" id="handle-card">
+            <!-- Glows -->
+            <div class="absolute -top-[50%] -left-[50%] w-full h-full bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-[50%] -right-[50%] w-full h-full bg-pink-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="relative z-10">
+                <h3 class="text-2xl font-extrabold text-white mb-2">Tu Identidad</h3>
+                <p class="text-zinc-400 text-sm mb-6">Elige un nombre de usuario único para Oracle. Así te verán los demás.</p>
+                
+                <form id="handle-form" class="flex flex-col gap-4">
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 font-bold">@</span>
+                        <input type="text" id="handle-input" class="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-white font-bold outline-none focus:border-amber-500/50 focus:bg-white/10 transition-colors placeholder:text-zinc-600 placeholder:font-normal" placeholder="usuario" required pattern="[a-zA-Z0-9_]{3,15}" title="3-15 letras, números o guión bajo">
+                    </div>
+                    <p id="handle-error" class="text-red-400 text-xs font-bold hidden"></p>
+                    <button type="submit" id="btn-save-handle" class="w-full py-3 bg-amber-500 hover:bg-amber-400 text-black font-extrabold rounded-xl transition-all shadow-[0_0_15px_rgba(245,158,11,0.2)] disabled:opacity-50 disabled:cursor-not-allowed">
+                        Guardar
+                    </button>
+                    <button type="button" id="btn-cancel-handle" class="w-full py-2 bg-transparent text-zinc-500 hover:text-white font-bold rounded-xl transition-colors hidden">
+                        Cancelar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Firebase Auth -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
-        import { getDatabase, ref, get } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js';
+        import { getDatabase, ref, get, set, remove } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyDFkuktrXnsV9-jg2bv5dpJQRR-he8PT3g",
@@ -471,61 +501,157 @@
                         lobbyIcon.classList.add('hidden');
                     }
                     lobbyTitle.textContent = user.displayName;
-                    if (lobbyHandle) lobbyHandle.textContent = `@${user.displayName.split(' ')[0].toLowerCase()}_28e`;
                     
-                    // Fetch History
                     const db = getDatabase(app);
-                    get(ref(db, `users/${user.uid}/vc_history`)).then(snap => {
-                        const historyEl = document.getElementById('lobby-history');
-                        if (snap.exists() && snap.val().length > 0) {
-                            const data = snap.val().slice(0, 20); // More posts
-                            historyEl.innerHTML = data.map(h => {
-                                const dateStr = h.date || h.ts;
-                                const isValidDate = dateStr ? new Date(dateStr) : null;
-                                const displayDate = isValidDate && !isNaN(isValidDate) ? isValidDate.toLocaleDateString(undefined, {month:'short', day:'numeric'}) : '';
-                                const timeStr = isValidDate && !isNaN(isValidDate) ? isValidDate.toLocaleTimeString(undefined, {hour:'2-digit', minute:'2-digit'}) : '';
-                                
-                                return `
-                                <div class="post-card p-5 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-colors flex gap-4 opacity-0">
-                                    <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=random`}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=random'" class="w-12 h-12 rounded-full border border-white/20 object-cover shrink-0" />
-                                    <div class="flex-1">
-                                        <div class="flex items-center justify-between mb-1">
-                                            <div class="flex items-center gap-2">
-                                                <span class="font-bold text-white">${user.displayName}</span>
-                                                <span class="text-zinc-500 text-xs">@${user.displayName.split(' ')[0].toLowerCase()} &middot; ${displayDate}</span>
+                    const handleModal = document.getElementById('handle-modal');
+                    const handleCard = document.getElementById('handle-card');
+                    const handleInput = document.getElementById('handle-input');
+                    const handleError = document.getElementById('handle-error');
+                    const handleForm = document.getElementById('handle-form');
+                    const btnCancelHandle = document.getElementById('btn-cancel-handle');
+
+                    let currentHandle = null;
+
+                    async function checkAndSetHandle() {
+                        try {
+                            const snap = await get(ref(db, `users/${user.uid}/oracle_handle`));
+                            if (snap.exists()) {
+                                currentHandle = snap.val();
+                                window.yaireCurrentUser.oracleHandle = currentHandle;
+                                if (lobbyHandle) {
+                                    lobbyHandle.innerHTML = `@${currentHandle} <svg class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>`;
+                                }
+                                fetchHistory();
+                            } else {
+                                showHandleModal(false);
+                            }
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    }
+
+                    function showHandleModal(isCancelable) {
+                        handleModal.style.display = 'flex';
+                        handleInput.value = currentHandle || '';
+                        handleError.classList.add('hidden');
+                        if (isCancelable) {
+                            btnCancelHandle.classList.remove('hidden');
+                        } else {
+                            btnCancelHandle.classList.add('hidden');
+                        }
+                        setTimeout(() => {
+                            handleCard.classList.remove('scale-95', 'opacity-0');
+                            handleCard.classList.add('scale-100', 'opacity-100');
+                        }, 10);
+                    }
+
+                    function hideHandleModal() {
+                        handleCard.classList.remove('scale-100', 'opacity-100');
+                        handleCard.classList.add('scale-95', 'opacity-0');
+                        setTimeout(() => {
+                            handleModal.style.display = 'none';
+                        }, 300);
+                    }
+
+                    handleForm.onsubmit = async (e) => {
+                        e.preventDefault();
+                        const newHandle = handleInput.value.trim().toLowerCase();
+                        if (newHandle === currentHandle) {
+                            hideHandleModal();
+                            return;
+                        }
+                        
+                        const btnSave = document.getElementById('btn-save-handle');
+                        btnSave.disabled = true;
+                        btnSave.textContent = 'Verificando...';
+                        
+                        try {
+                            const snap = await get(ref(db, `oracle_handles/${newHandle}`));
+                            if (snap.exists() && snap.val() !== user.uid) {
+                                handleError.textContent = "Este usuario ya está en uso.";
+                                handleError.classList.remove('hidden');
+                                btnSave.disabled = false;
+                                btnSave.textContent = 'Guardar';
+                                return;
+                            }
+                            
+                            if (currentHandle) await remove(ref(db, `oracle_handles/${currentHandle}`));
+                            await set(ref(db, `oracle_handles/${newHandle}`), user.uid);
+                            await set(ref(db, `users/${user.uid}/oracle_handle`), newHandle);
+                            
+                            currentHandle = newHandle;
+                            window.yaireCurrentUser.oracleHandle = newHandle;
+                            if (lobbyHandle) {
+                                lobbyHandle.innerHTML = `@${currentHandle} <svg class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>`;
+                            }
+                            hideHandleModal();
+                            fetchHistory();
+                        } catch(err) {
+                            handleError.textContent = "Error al guardar. Intenta de nuevo.";
+                            handleError.classList.remove('hidden');
+                        }
+                        btnSave.disabled = false;
+                        btnSave.textContent = 'Guardar';
+                    };
+
+                    btnCancelHandle.onclick = hideHandleModal;
+                    if (lobbyHandle) lobbyHandle.onclick = () => showHandleModal(true);
+
+                    checkAndSetHandle();
+
+                    function fetchHistory() {
+                        get(ref(db, `users/${user.uid}/vc_history`)).then(snap => {
+                            const historyEl = document.getElementById('lobby-history');
+                            if (snap.exists() && snap.val().length > 0) {
+                                const data = snap.val().slice(0, 20); // More posts
+                                historyEl.innerHTML = data.map(h => {
+                                    const dateStr = h.date || h.ts;
+                                    const isValidDate = dateStr ? new Date(dateStr) : null;
+                                    const displayDate = isValidDate && !isNaN(isValidDate) ? isValidDate.toLocaleDateString(undefined, {month:'short', day:'numeric'}) : '';
+                                    const timeStr = isValidDate && !isNaN(isValidDate) ? isValidDate.toLocaleTimeString(undefined, {hour:'2-digit', minute:'2-digit'}) : '';
+                                    
+                                    return `
+                                    <div class="post-card p-5 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-colors flex gap-4 opacity-0">
+                                        <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=random`}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=random'" class="w-12 h-12 rounded-full border border-white/20 object-cover shrink-0" />
+                                        <div class="flex-1">
+                                            <div class="flex items-center justify-between mb-1">
+                                                <div class="flex items-center gap-2">
+                                                    <span class="font-bold text-white">${user.displayName}</span>
+                                                    <span class="text-zinc-500 text-xs">@${currentHandle || user.displayName.split(' ')[0].toLowerCase()} &middot; ${displayDate}</span>
+                                                </div>
+                                            </div>
+                                            <p class="text-zinc-300 text-sm mb-3">Se unió a una sesión segura en Oracle Room. 🎙️✨</p>
+                                            <div class="flex items-center gap-4 text-xs font-semibold">
+                                                <span class="text-amber-500 bg-amber-500/10 px-3 py-1 rounded-full flex items-center gap-1">
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                    ${h.duration || '0s'}
+                                                </span>
+                                                <span class="text-zinc-500 flex items-center gap-1">
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                    ${timeStr}
+                                                </span>
                                             </div>
                                         </div>
-                                        <p class="text-zinc-300 text-sm mb-3">Se unió a una sesión segura en Oracle Room. 🎙️✨</p>
-                                        <div class="flex items-center gap-4 text-xs font-semibold">
-                                            <span class="text-amber-500 bg-amber-500/10 px-3 py-1 rounded-full flex items-center gap-1">
-                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                                ${h.duration || '0s'}
-                                            </span>
-                                            <span class="text-zinc-500 flex items-center gap-1">
-                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                                ${timeStr}
-                                            </span>
-                                        </div>
                                     </div>
-                                </div>
-                                `;
-                            }).join('');
-                            
-                            // GSAP Stagger animation for posts
-                            if (window.gsap) {
-                                gsap.fromTo(".post-card", 
-                                    { opacity: 0, y: 30 },
-                                    { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: "power2.out", delay: 0.2 }
-                                );
+                                    `;
+                                }).join('');
+                                
+                                // GSAP Stagger animation for posts
+                                if (window.gsap) {
+                                    gsap.fromTo(".post-card", 
+                                        { opacity: 0, y: 30 },
+                                        { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: "power2.out", delay: 0.2 }
+                                    );
+                                } else {
+                                    document.querySelectorAll('.post-card').forEach(el => el.style.opacity = '1');
+                                }
                             } else {
-                                document.querySelectorAll('.post-card').forEach(el => el.style.opacity = '1');
+                                historyEl.innerHTML = '<div class="text-sm text-zinc-500 text-center mt-10 p-8 bg-white/5 rounded-3xl border border-white/5">No hay actividad reciente. Empieza a crear tu historial uniéndote a Oracle.</div>';
                             }
-                        } else {
-                            historyEl.innerHTML = '<div class="text-sm text-zinc-500 text-center mt-10 p-8 bg-white/5 rounded-3xl border border-white/5">No hay actividad reciente. Empieza a crear tu historial uniéndote a Oracle.</div>';
-                        }
-                    }).catch(err => {
-                        document.getElementById('lobby-history').innerHTML = '<div class="text-xs text-zinc-500 text-center mt-10">Error cargando historial.</div>';
-                    });
+                        }).catch(err => {
+                            document.getElementById('lobby-history').innerHTML = '<div class="text-xs text-zinc-500 text-center mt-10">Error cargando historial.</div>';
+                        });
+                    }
                     
                     // Expose globally and trigger oracle logic
                     if (window.OracleSetup) window.OracleSetup();

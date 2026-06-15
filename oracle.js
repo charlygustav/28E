@@ -41,7 +41,7 @@ class OracleRoom {
             pass = await res.json();
         } catch(e) {}
 
-        this.connectSocket(user.displayName, pass, user.photoURL);
+        this.connectSocket(user.displayName, pass, user.photoURL, user.oracleHandle);
         this.acquireMedia();
     }
 
@@ -156,11 +156,11 @@ class OracleRoom {
     }
 
     // --- SOCKET LOGIC ---
-    connectSocket(name, pass, photoURL) {
+    connectSocket(name, pass, photoURL, oracleHandle) {
         this.socket = io('https://28e-production.up.railway.app', { transports: ['websocket'] });
 
         this.socket.on('connect', () => {
-            this.socket.emit('join_channel', { password: pass, displayName: name, photoURL });
+            this.socket.emit('join_channel', { password: pass, displayName: name, photoURL, oracleHandle });
         });
 
         this.socket.on('joined', ({ userId, existingUsers }) => {
@@ -177,9 +177,9 @@ class OracleRoom {
             this.users = users.filter(u => u.id !== this.myId);
         });
 
-        this.socket.on('user_joined', ({ userId, displayName, photoURL }) => {
-            this.users.push({ id: userId, displayName, photoURL });
-            this.updateVideoElement(userId, null, { displayName, photoURL });
+        this.socket.on('user_joined', ({ userId, displayName, photoURL, oracleHandle }) => {
+            this.users.push({ id: userId, displayName, photoURL, oracleHandle });
+            this.updateVideoElement(userId, null, { displayName, photoURL, oracleHandle });
             this.showToast(`${displayName} se ha unido.`);
         });
 
@@ -607,7 +607,7 @@ window.OracleSetup = () => {
                             </div>
                             <div class="flex-1 min-w-0">
                                 <p class="text-sm font-bold text-white truncate">${u.displayName ? u.displayName : 'Usuario'}</p>
-                                <p class="text-[10px] text-green-400 font-bold uppercase tracking-widest mt-0.5">Transmitiendo</p>
+                                <p class="text-[10px] text-green-400 font-bold uppercase tracking-widest mt-0.5">${u.oracleHandle ? '@' + u.oracleHandle : 'Transmitiendo'}</p>
                             </div>
                         </div>
                     `).join('')}
