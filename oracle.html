@@ -317,64 +317,94 @@
     </div>
 
     <!-- Pre-Join / Lobby Overlay -->
-    <div id="lobby-overlay" class="fixed inset-0 z-[60] bg-zinc-950 flex transition-opacity duration-500 overflow-hidden">
+    <div id="lobby-overlay" class="fixed inset-0 z-[60] bg-zinc-950 flex transition-opacity duration-500 overflow-hidden overflow-y-auto">
         <!-- Ambient Background -->
-        <div class="absolute inset-0 z-0">
+        <div class="fixed inset-0 z-0">
             <div class="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none"></div>
             <div class="absolute bottom-[0%] -right-[10%] w-[50%] h-[50%] bg-purple-500/10 rounded-full blur-[120px] pointer-events-none"></div>
             <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDIiLz4KPC9zdmc+')] opacity-20 pointer-events-none"></div>
         </div>
 
-        <div class="relative z-10 w-full max-w-7xl mx-auto p-8 flex flex-col md:flex-row gap-8 items-stretch justify-center">
+        <div class="relative z-10 w-full max-w-6xl mx-auto pt-10 px-4 md:px-8 pb-20 flex flex-col md:flex-row gap-6 items-start justify-center min-h-screen">
             
-            <!-- Column 1: Profile & Action -->
-            <div class="flex-1 flex flex-col justify-center items-start gap-6 max-w-sm">
-                <div class="w-full bg-white/5 border border-white/10 p-6 rounded-3xl backdrop-blur-md shadow-2xl">
-                    <div class="w-24 h-24 mb-4 rounded-full bg-white/5 border-2 border-amber-500/50 flex items-center justify-center p-1 relative overflow-hidden shadow-[0_0_20px_rgba(245,158,11,0.2)]">
-                        <img id="lobby-avatar" src="" class="w-full h-full rounded-full object-cover hidden" />
-                        <svg id="lobby-icon" class="w-10 h-10 text-amber-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3a9 9 0 0 1 9 9H3a9 9 0 0 1 9-9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18"/></svg>
+            <!-- Left Column: Profile (250px) -->
+            <div class="lobby-col w-full md:w-[280px] shrink-0 flex flex-col gap-6 sticky top-10">
+                <!-- Profile Card -->
+                <div class="w-full bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl shadow-2xl overflow-hidden relative group">
+                    <!-- Cover Photo -->
+                    <div class="h-24 bg-gradient-to-r from-amber-500/40 to-pink-500/40 relative">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
                     </div>
-                    <p class="text-xs font-bold text-amber-500 uppercase tracking-widest mb-1">Identidad Oracle</p>
-                    <h2 class="text-3xl font-extrabold text-white mb-2" id="lobby-title">Cargando...</h2>
-                    <p class="text-zinc-400 text-sm mb-6">Tu conexión segura está lista. Configura tus dispositivos antes de entrar.</p>
-                    
-                    <button id="btn-join-room" class="w-full py-4 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_30px_rgba(245,158,11,0.6)] hover:-translate-y-1 transform flex items-center justify-center gap-2 text-lg">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        Entrar a la Sala
-                    </button>
-                    <a href="index.html" class="block text-center mt-4 text-xs font-bold text-zinc-500 hover:text-white transition-colors uppercase tracking-wider">Volver al inicio</a>
-                </div>
-            </div>
-
-            <!-- Column 2: Room Status -->
-            <div class="flex-[1.5] flex flex-col justify-center gap-6">
-                <div class="w-full bg-white/5 border border-white/10 p-6 rounded-3xl backdrop-blur-md flex-1 flex flex-col">
-                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                        En vivo ahora
-                    </h3>
-                    
-                    <div id="lobby-room-status" class="flex-1 flex flex-col justify-center items-center p-6 border border-white/5 bg-black/20 rounded-2xl">
-                        <div class="w-10 h-10 border-2 border-amber-500/50 border-t-amber-500 rounded-full animate-spin mb-4"></div>
-                        <p class="text-sm text-zinc-400">Consultando estado de Oracle...</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Column 3: History -->
-            <div class="flex-1 flex flex-col justify-center gap-6 max-w-sm">
-                <div class="w-full h-[400px] bg-white/5 border border-white/10 p-6 rounded-3xl backdrop-blur-md flex flex-col">
-                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Tus Sesiones
-                    </h3>
-                    <div id="lobby-history" class="flex-1 overflow-y-auto pr-2 space-y-3">
-                        <div class="animate-pulse flex flex-col gap-3">
-                            <div class="h-16 bg-white/5 rounded-xl"></div>
-                            <div class="h-16 bg-white/5 rounded-xl"></div>
-                            <div class="h-16 bg-white/5 rounded-xl"></div>
+                    <!-- Avatar & Info -->
+                    <div class="px-6 pb-6 pt-0 relative">
+                        <div class="w-20 h-20 rounded-full bg-zinc-900 border-4 border-zinc-900 absolute -top-10 left-6 flex items-center justify-center overflow-hidden shadow-xl">
+                            <img id="lobby-avatar" src="" class="w-full h-full object-cover hidden" />
+                            <svg id="lobby-icon" class="w-8 h-8 text-amber-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3a9 9 0 0 1 9 9H3a9 9 0 0 1 9-9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18"/></svg>
+                        </div>
+                        <div class="mt-12">
+                            <h2 class="text-xl font-extrabold text-white leading-tight" id="lobby-title">Cargando...</h2>
+                            <p class="text-zinc-500 text-sm mb-4" id="lobby-handle">@oracle_user</p>
+                            
+                            <button id="btn-join-room" class="w-full py-3 bg-white text-black font-extrabold rounded-2xl transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] hover:scale-[1.02] transform flex items-center justify-center gap-2 text-md">
+                                <span class="relative flex h-3 w-3">
+                                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                  <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                                </span>
+                                Go Live
+                            </button>
                         </div>
                     </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="w-full bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl p-4 flex flex-col gap-2">
+                    <a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-zinc-400 hover:text-white hover:bg-white/10 transition-colors font-semibold text-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                        Volver al Inicio
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-amber-500 bg-amber-500/10 font-semibold text-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+                        Oracle Hub
+                    </a>
+                </div>
+            </div>
+
+            <!-- Center Column: Activity Feed -->
+            <div class="lobby-col flex-1 w-full max-w-2xl flex flex-col gap-4">
+                <div class="border-b border-white/10 pb-4 mb-2 sticky top-0 bg-zinc-950/80 backdrop-blur-xl z-20 pt-4">
+                    <h3 class="text-xl font-bold text-white px-2">Feed de Actividad</h3>
+                </div>
+                
+                <!-- Posts Container -->
+                <div id="lobby-history" class="flex flex-col gap-4">
+                    <div class="animate-pulse flex gap-4 p-4 bg-white/5 border border-white/10 rounded-3xl">
+                        <div class="w-12 h-12 rounded-full bg-white/10 shrink-0"></div>
+                        <div class="flex-1 space-y-3 py-1">
+                            <div class="h-4 bg-white/10 rounded w-1/4"></div>
+                            <div class="h-4 bg-white/10 rounded w-3/4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Trending / Live Now -->
+            <div class="lobby-col w-full md:w-[300px] shrink-0 flex flex-col gap-6 sticky top-10 hidden md:flex">
+                <div class="w-full bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <span class="relative flex h-3 w-3">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                        </span>
+                        En Vivo Ahora
+                    </h3>
+                    
+                    <div id="lobby-room-status" class="flex flex-col gap-4">
+                        <div class="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin mx-auto my-4"></div>
+                    </div>
+                </div>
+                
+                <div class="text-xs text-zinc-600 px-4 text-center">
+                    28E Oracle &copy; 2026<br>Conexiones cifradas end-to-end.
                 </div>
             </div>
 
@@ -428,37 +458,65 @@
                     const lobbyAvatar = document.getElementById('lobby-avatar');
                     const lobbyIcon = document.getElementById('lobby-icon');
                     const lobbyTitle = document.getElementById('lobby-title');
+                    const lobbyHandle = document.getElementById('lobby-handle');
                     
                     if (user.photoURL) {
                         lobbyAvatar.src = user.photoURL;
                         lobbyAvatar.classList.remove('hidden');
                         lobbyIcon.classList.add('hidden');
                     }
-                    lobbyTitle.textContent = `Hola, ${user.displayName.split(' ')[0]}`;
+                    lobbyTitle.textContent = user.displayName;
+                    if (lobbyHandle) lobbyHandle.textContent = `@${user.displayName.split(' ')[0].toLowerCase()}_28e`;
                     
                     // Fetch History
                     const db = getDatabase(app);
                     get(ref(db, `users/${user.uid}/vc_history`)).then(snap => {
                         const historyEl = document.getElementById('lobby-history');
                         if (snap.exists() && snap.val().length > 0) {
-                            const data = snap.val().slice(0, 15);
+                            const data = snap.val().slice(0, 20); // More posts
                             historyEl.innerHTML = data.map(h => {
                                 const dateStr = h.date || h.ts;
                                 const isValidDate = dateStr ? new Date(dateStr) : null;
-                                const displayDate = isValidDate && !isNaN(isValidDate) ? isValidDate.toLocaleDateString() : 'Fecha desconocida';
+                                const displayDate = isValidDate && !isNaN(isValidDate) ? isValidDate.toLocaleDateString(undefined, {month:'short', day:'numeric'}) : '';
+                                const timeStr = isValidDate && !isNaN(isValidDate) ? isValidDate.toLocaleTimeString(undefined, {hour:'2-digit', minute:'2-digit'}) : '';
                                 
                                 return `
-                                <div class="p-3 bg-white/5 border border-white/5 rounded-xl hover:bg-white/10 transition-colors">
-                                    <div class="flex justify-between items-start mb-1">
-                                        <span class="text-xs font-bold text-white">${displayDate}</span>
-                                        <span class="text-[10px] text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-full">${h.duration || '0s'}</span>
+                                <div class="post-card p-5 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-colors flex gap-4 opacity-0">
+                                    <img src="${user.photoURL || 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgMThoLjAxIi8+PC9zdmc+'}" class="w-12 h-12 rounded-full border border-white/20 object-cover shrink-0" />
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <div class="flex items-center gap-2">
+                                                <span class="font-bold text-white">${user.displayName}</span>
+                                                <span class="text-zinc-500 text-xs">@${user.displayName.split(' ')[0].toLowerCase()} &middot; ${displayDate}</span>
+                                            </div>
+                                        </div>
+                                        <p class="text-zinc-300 text-sm mb-3">Se unió a una sesión segura en Oracle Room. 🎙️✨</p>
+                                        <div class="flex items-center gap-4 text-xs font-semibold">
+                                            <span class="text-amber-500 bg-amber-500/10 px-3 py-1 rounded-full flex items-center gap-1">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                ${h.duration || '0s'}
+                                            </span>
+                                            <span class="text-zinc-500 flex items-center gap-1">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                ${timeStr}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div class="text-[10px] text-zinc-400">Nombre registrado: ${h.name || 'Desconocido'}</div>
                                 </div>
                                 `;
                             }).join('');
+                            
+                            // GSAP Stagger animation for posts
+                            if (window.gsap) {
+                                gsap.fromTo(".post-card", 
+                                    { opacity: 0, y: 30 },
+                                    { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: "power2.out", delay: 0.2 }
+                                );
+                            } else {
+                                document.querySelectorAll('.post-card').forEach(el => el.style.opacity = '1');
+                            }
                         } else {
-                            historyEl.innerHTML = '<div class="text-xs text-zinc-500 text-center mt-10">No hay sesiones pasadas.</div>';
+                            historyEl.innerHTML = '<div class="text-sm text-zinc-500 text-center mt-10 p-8 bg-white/5 rounded-3xl border border-white/5">No hay actividad reciente. Empieza a crear tu historial uniéndote a Oracle.</div>';
                         }
                     }).catch(err => {
                         document.getElementById('lobby-history').innerHTML = '<div class="text-xs text-zinc-500 text-center mt-10">Error cargando historial.</div>';

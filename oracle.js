@@ -588,39 +588,50 @@ window.OracleSetup = () => {
         
         if (users.length === 0) {
             statusEl.innerHTML = `
-                <div class="text-center">
-                    <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-white/5 flex items-center justify-center text-white/20">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                <div class="flex flex-col items-center justify-center p-6 text-center bg-white/5 rounded-2xl border border-white/5">
+                    <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-white/20 mb-3">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                     </div>
-                    <p class="text-sm font-bold text-white/50">La sala está vacía</p>
-                    <p class="text-xs text-zinc-500 mt-1">Sé el primero en entrar.</p>
+                    <p class="text-sm font-bold text-white/50">Sala vacía</p>
+                    <p class="text-xs text-zinc-500 mt-1">Nadie está transmitiendo.</p>
                 </div>
             `;
         } else {
             statusEl.innerHTML = `
-                <div class="w-full h-full flex flex-col justify-center">
-                    <p class="text-xs font-bold text-amber-500 mb-4 uppercase tracking-wider text-center">Conectados ahora (${users.length})</p>
-                    <div class="flex flex-wrap gap-4 justify-center">
-                        ${users.map(u => `
-                            <div class="flex flex-col items-center gap-2">
-                                <img src="${u.photoURL || ''}" class="w-14 h-14 rounded-full border-2 border-white/20 object-cover shadow-lg" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgMThoLjAxIi8+PC9zdmc+'" />
-                                <span class="text-[10px] font-bold text-white">${u.displayName ? u.displayName.split(' ')[0] : 'Alguien'}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                    ${musicQueue && musicQueue.length > 0 ? `
-                        <div class="mt-6 p-3 bg-white/5 rounded-xl border border-white/10 flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-pink-500/20 text-pink-500 flex items-center justify-center shrink-0">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <div class="flex flex-col gap-3">
+                    ${users.map((u, i) => `
+                        <div class="flex items-center gap-3 p-3 rounded-2xl hover:bg-white/5 transition-colors cursor-default story-item opacity-0">
+                            <div class="relative">
+                                <div class="absolute inset-0 rounded-full border-2 border-green-500 animate-ping opacity-50"></div>
+                                <img src="${u.photoURL || 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgMThoLjAxIi8+PC9zdmc+'}" class="w-12 h-12 rounded-full border-2 border-green-500 object-cover relative z-10" />
                             </div>
                             <div class="flex-1 min-w-0">
-                                <p class="text-[10px] text-pink-500 font-bold uppercase tracking-wider mb-0.5">Rave Activo</p>
-                                <p class="text-xs text-white truncate">${musicQueue[0].title}</p>
+                                <p class="text-sm font-bold text-white truncate">${u.displayName ? u.displayName : 'Usuario'}</p>
+                                <p class="text-[10px] text-green-400 font-bold uppercase tracking-widest mt-0.5">Transmitiendo</p>
                             </div>
+                        </div>
+                    `).join('')}
+                    
+                    ${musicQueue && musicQueue.length > 0 ? `
+                        <div class="mt-4 p-4 bg-gradient-to-br from-pink-500/10 to-purple-500/10 rounded-2xl border border-pink-500/20 flex flex-col gap-2 relative overflow-hidden group">
+                            <div class="absolute inset-0 bg-pink-500/5 group-hover:bg-pink-500/10 transition-colors"></div>
+                            <div class="flex items-center gap-2 relative z-10">
+                                <div class="w-6 h-6 rounded-full bg-pink-500 text-black flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(236,72,153,0.5)]">
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                </div>
+                                <span class="text-[10px] text-pink-400 font-bold uppercase tracking-wider">Oracle Rave Activo</span>
+                            </div>
+                            <p class="text-xs text-white font-medium truncate relative z-10 pl-8">${musicQueue[0].title}</p>
                         </div>
                     ` : ''}
                 </div>
             `;
+            
+            if (window.gsap) {
+                gsap.fromTo(".story-item", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.5, stagger: 0.1, ease: "power2.out", clearProps: "all" });
+            } else {
+                document.querySelectorAll('.story-item').forEach(el => el.style.opacity = '1');
+            }
         }
         
         // Disconnect temp socket to save resources
