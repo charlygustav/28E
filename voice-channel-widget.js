@@ -438,7 +438,7 @@
         
         // New Siri JBL Sounds
         load('jbl_begin', 'siriSounds18Separate/jbl_begin_sae.wav');
-        load('jbl_latency', 'siriSounds18Separate/jbl_latency_sae.wav');
+        load('jbl_latency', 'siriSounds18Separate/jbl_latency_sae_v2.wav');
         load('jbl_success', 'siriSounds18Separate/jbl_success_sae.wav');
         load('siri_end', 'siriSounds18Separate/siri-begin-improved.wav');
       } catch(e) {}
@@ -1274,16 +1274,16 @@
       }
 
       this._render(this._tplLoading());
-      if (this.progNode) { this._stopSfx(this.progNode); this.progNode = null; }
-      this.progNode = this._playSfx('jbl_latency', 0.3, true);
-
+      
       try {
         this.stream = await navigator.mediaDevices.getUserMedia({ audio: this._audioConstraints, video: false });
       } catch {
-        this._stopSfx(this.progNode); this.progNode = null;
         this._render(this._tplLogin(_t('err_mic')));
         return;
       }
+
+      if (this.progNode) { this._stopSfx(this.progNode); this.progNode = null; }
+      this.progNode = this._playSfx('jbl_latency', 0.3, true);
 
       // Create noise-cancelled processed stream
       this._processedStream = this._createProcessedStream();

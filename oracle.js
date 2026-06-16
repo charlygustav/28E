@@ -6,7 +6,7 @@ class OracleAudio {
         hover: 'SND01_sine/tap_01.wav',
         click: 'SND01_sine/select.wav',
         connect: 'siriSounds18Separate/jbl_success_sae.wav',
-        latency: 'siriSounds18Separate/jbl_latency_sae.wav',
+        latency: 'siriSounds18Separate/jbl_latency_sae_v2.wav',
         join: 'sounds/activity_user_join.mp3',
         left: 'sounds/activity_user_left.mp3',
         toggleOn: 'SND01_sine/toggle_on.wav',
