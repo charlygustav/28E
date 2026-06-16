@@ -1324,7 +1324,7 @@
 
         this.socket.on('joined', async ({ userId, existingUsers }) => {
           this._stopSfx(this.progNode); this.progNode = null;
-          this._playSfx('jbl_success', 0.5);
+          this._playSfx('jbl_latency', 0.5);
 
           // Clean up old peers from previous session (reconnect scenario)
           this.peers.forEach((_, id) => this._closePeer(id));
