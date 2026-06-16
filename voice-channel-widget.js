@@ -437,6 +437,11 @@
         load('music_start', 'sounds/lamusicadelvoz.wav');
         load('vc_chat_msg', 'sounds/nuevomensajeenelchatdevoz.wav');
         load('music_end_all', 'sounds/yanomasmusica.wav');
+        
+        // New Siri JBL Sounds
+        load('jbl_begin', 'siriSounds18Separate/jbl_begin_sae.wav');
+        load('jbl_latency', 'siriSounds18Separate/jbl_latency_sae.wav');
+        load('jbl_success', 'siriSounds18Separate/jbl_success_sae.wav');
       } catch(e) {}
     }
 
@@ -592,6 +597,7 @@
       const willOpen = !this.panel.classList.contains('scale-100');
       
       if (willOpen) {
+        this._playSfx('jbl_begin', 0.5);
         this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
         this.panel.classList.add('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
         if (this.connected) {
@@ -1140,7 +1146,7 @@
       if (reconnectBtn) reconnectBtn.addEventListener('click', () => {
         if (this._savedName && this._savedPass) {
           this._render(this._tplLoading());
-          this.progNode = this._playSfx('progress', 0.3, true);
+          this.progNode = this._playSfx('jbl_latency', 0.3, true);
           this._connectSocket(this._savedName, this._savedPass);
         } else {
           this._render(this._tplLogin());
@@ -1269,7 +1275,7 @@
       }
 
       this._render(this._tplLoading());
-      this.progNode = this._playSfx('progress', 0.3, true);
+      this.progNode = this._playSfx('jbl_latency', 0.3, true);
 
       try {
         this.stream = await navigator.mediaDevices.getUserMedia({ audio: this._audioConstraints, video: false });
@@ -1321,7 +1327,7 @@
 
         this.socket.on('joined', async ({ userId, existingUsers }) => {
           this._stopSfx(this.progNode); this.progNode = null;
-          this._playSfx('act_launch', 0.5);
+          this._playSfx('jbl_success', 0.5);
 
           // Clean up old peers from previous session (reconnect scenario)
           this.peers.forEach((_, id) => this._closePeer(id));

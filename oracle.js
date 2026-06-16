@@ -5,7 +5,8 @@ class OracleAudio {
     static sounds = {
         hover: 'SND01_sine/tap_01.wav',
         click: 'SND01_sine/select.wav',
-        connect: 'sounds/activity_launch.mp3',
+        connect: 'siriSounds18Separate/jbl_success_sae.wav',
+        latency: 'siriSounds18Separate/jbl_latency_sae.wav',
         join: 'sounds/activity_user_join.mp3',
         left: 'sounds/activity_user_left.mp3',
         toggleOn: 'SND01_sine/toggle_on.wav',
@@ -31,12 +32,14 @@ class OracleAudio {
         audio.play().catch(()=>{});
     }
 
-    static play(soundName) {
+    static play(soundName, loop = false) {
         if (!this.sounds[soundName]) return;
         const audio = new Audio(this.sounds[soundName]);
+        audio.loop = loop;
         audio.play().catch(() => {
             // Ignore errors (usually due to lack of user interaction)
         });
+        return audio;
     }
 
     static initUIListeners() {
@@ -102,6 +105,8 @@ class OracleRoom {
     async init() {
         const user = window.yaireCurrentUser;
         if (!user) return alert("Debes iniciar sesión.");
+
+        this.latencyAudio = OracleAudio.play('latency', true);
 
         let pass = 'nopass';
         try {
@@ -232,6 +237,12 @@ class OracleRoom {
         });
 
         this.socket.on('joined', ({ userId, existingUsers }) => {
+            if (this.latencyAudio) {
+                this.latencyAudio.pause();
+                this.latencyAudio.currentTime = 0;
+                this.latencyAudio = null;
+            }
+            
             this.myId = userId;
             this.users = existingUsers;
             existingUsers.forEach(u => this.createOffer(u.id));
