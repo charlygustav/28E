@@ -1,5 +1,47 @@
 // 28E Oracle - Immersive Voice & Video Room
 
+// OracleAudio - Sound Manager for the immersive experience
+class OracleAudio {
+    static sounds = {
+        hover: 'sounds/tap_01.wav',
+        click: 'sounds/select.wav',
+        connect: 'sounds/activity_launch.mp3',
+        join: 'sounds/activity_user_join.mp3',
+        left: 'sounds/activity_user_left.mp3',
+        toggleOn: 'sounds/toggle_on.wav',
+        toggleOff: 'sounds/toggle_off.wav',
+        messageReceived: 'sounds/nuevomensajeenelchatdevoz.wav',
+        messageSent: 'sounds/type_01.wav',
+        transitionDown: 'sounds/transition_down.wav',
+        reaction: 'sounds/tap_03.wav'
+    };
+
+    static play(soundName) {
+        if (!this.sounds[soundName]) return;
+        const audio = new Audio(this.sounds[soundName]);
+        audio.play().catch(() => {
+            // Ignore errors (usually due to lack of user interaction)
+        });
+    }
+
+    static initUIListeners() {
+        // Automatically bind to buttons and links
+        document.querySelectorAll('button, a').forEach(el => {
+            if (el.classList.contains('no-sound')) return;
+            
+            el.addEventListener('mouseenter', () => {
+                const sound = el.getAttribute('data-sound-hover') || 'hover';
+                OracleAudio.play(sound);
+            });
+            
+            el.addEventListener('mousedown', () => {
+                const sound = el.getAttribute('data-sound-click') || 'click';
+                OracleAudio.play(sound);
+            });
+        });
+    }
+}
+
 class OracleRoom {
     constructor() {
         this.socket = null;
@@ -171,6 +213,7 @@ class OracleRoom {
             
             // Show toast
             this.showToast('Te has conectado a Oracle.');
+            OracleAudio.play('connect');
         });
 
         this.socket.on('channel_users', ({ users }) => {
@@ -181,11 +224,13 @@ class OracleRoom {
             this.users.push({ id: userId, displayName, photoURL, oracleHandle });
             this.updateVideoElement(userId, null, { displayName, photoURL, oracleHandle });
             this.showToast(`${displayName} se ha unido.`);
+            OracleAudio.play('join');
         });
 
         this.socket.on('user_left', ({ userId }) => {
             const u = this.users.find(x => x.id === userId);
             if (u) this.showToast(`${u.displayName} se ha ido.`);
+            OracleAudio.play('left');
             this.closePeer(userId);
             this.removeVideoElement(userId);
         });
@@ -212,11 +257,15 @@ class OracleRoom {
         // Reactions
         this.socket.on('reaction', ({ from, emoji }) => {
             this.showReaction(emoji, from);
+            OracleAudio.play('reaction');
         });
 
         // Chat
         this.socket.on('chat_message', ({ from, name, text, ts }) => {
-            if (from !== this.myId) this.appendChatMsg(from, name, text, ts);
+            if (from !== this.myId) {
+                this.appendChatMsg(from, name, text, ts);
+                OracleAudio.play('messageReceived');
+            }
         });
 
         // Music/Rave Events
@@ -310,6 +359,7 @@ class OracleRoom {
     // --- CONTROLS ---
     toggleMic() {
         this.micEnabled = !this.micEnabled;
+        OracleAudio.play(this.micEnabled ? 'toggleOn' : 'toggleOff');
         if (this.stream) this.stream.getAudioTracks().forEach(t => t.enabled = this.micEnabled);
         
         const btn = document.getElementById('btn-mic');
@@ -326,6 +376,7 @@ class OracleRoom {
 
     toggleCam() {
         this.cameraEnabled = !this.cameraEnabled;
+        OracleAudio.play(this.cameraEnabled ? 'toggleOn' : 'toggleOff');
         this.updateCamBtnUI();
         this.acquireMedia(); // re-acquire media to add/remove video track
     }
@@ -340,6 +391,7 @@ class OracleRoom {
     }
 
     leaveRoom() {
+        OracleAudio.play('transitionDown');
         if (this.socket) {
             this.socket.emit('leave_channel');
             this.socket.disconnect();
@@ -376,6 +428,7 @@ class OracleRoom {
         const text = input.value.trim();
         if (!text) return;
         
+        OracleAudio.play('messageSent');
         this.socket.emit('chat_message', { text });
         this.appendChatMsg(this.myId, window.yaireCurrentUser.displayName, text, Date.now());
         input.value = '';
@@ -651,3 +704,8 @@ window.OracleSetup = () => {
         });
     }
 };
+
+// Initialize UI audio listeners
+document.addEventListener('DOMContentLoaded', () => {
+    OracleAudio.initUIListeners();
+});
