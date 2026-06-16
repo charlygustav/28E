@@ -427,10 +427,8 @@
         load('flyin', 'sounds/flyin.wav');
         load('flyout', 'sounds/flyout.wav');
         load('typing', 'sounds/typing.wav');
-        load('progress', 'SND01_sine/progress_loop.wav');
         load('toggleOn', 'SND01_sine/toggle_on.wav');
         load('toggleOff', 'SND01_sine/toggle_off.wav');
-        load('act_launch', 'sounds/activity_launch.mp3');
         load('act_end', 'sounds/activity_end.mp3');
         load('act_join', 'sounds/activity_user_join.mp3');
         load('act_left', 'sounds/activity_user_left.mp3');
@@ -608,7 +606,6 @@
           else if (this.panel.querySelector('.animate-spin')) this._render(this._tplLoading());
           else this._render(this._tplLogin());
         }
-        this._playSfx('flyin', 0.4, false, 'fly');
       } else {
         if (this._loginPollInt) { clearInterval(this._loginPollInt); this._loginPollInt = null; }
         this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
