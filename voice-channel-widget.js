@@ -432,9 +432,9 @@
         load('act_end', 'sounds/activity_end.mp3');
         load('act_join', 'sounds/activity_user_join.mp3');
         load('act_left', 'sounds/activity_user_left.mp3');
-        load('music_start', 'sounds/lamusicadelvoz.wav');
+        load('music_start', 'siriSounds18Separate/VoiceTriggerTraining_FX_5.wav');
         load('vc_chat_msg', 'sounds/nuevomensajeenelchatdevoz.wav');
-        load('music_end_all', 'sounds/yanomasmusica.wav');
+        load('music_end_all', 'siriSounds18Separate/VoiceTriggerTraining_FX_0.wav');
         
         // New Siri JBL Sounds
         load('jbl_begin', 'siriSounds18Separate/jbl_begin_sae.wav');
