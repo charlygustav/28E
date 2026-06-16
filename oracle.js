@@ -11,10 +11,25 @@ class OracleAudio {
         toggleOn: 'SND01_sine/toggle_on.wav',
         toggleOff: 'SND01_sine/toggle_off.wav',
         messageReceived: 'sounds/nuevomensajeenelchatdevoz.wav',
-        messageSent: 'SND01_sine/type_01.wav',
+        messageSent: 'SND01_sine/transition_up.wav',
         transitionDown: 'SND01_sine/transition_down.wav',
         reaction: 'SND01_sine/tap_03.wav'
     };
+
+    static typeSounds = [
+        'SND01_sine/type_01.wav',
+        'SND01_sine/type_02.wav',
+        'SND01_sine/type_03.wav',
+        'SND01_sine/type_04.wav',
+        'SND01_sine/type_05.wav'
+    ];
+
+    static playTyping() {
+        const rnd = this.typeSounds[Math.floor(Math.random() * this.typeSounds.length)];
+        const audio = new Audio(rnd);
+        audio.volume = 0.3; // softer typing sound
+        audio.play().catch(()=>{});
+    }
 
     static play(soundName) {
         if (!this.sounds[soundName]) return;
@@ -39,6 +54,17 @@ class OracleAudio {
                 OracleAudio.play(sound);
             });
         });
+        
+        // Add typing sound to chat input
+        const chatInput = document.getElementById('chat-input');
+        if (chatInput) {
+            chatInput.addEventListener('keydown', (e) => {
+                // Don't play typing sound on enter, let messageSent handle it
+                if (e.key !== 'Enter') {
+                    OracleAudio.playTyping();
+                }
+            });
+        }
     }
 }
 
