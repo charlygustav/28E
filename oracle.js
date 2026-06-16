@@ -106,6 +106,10 @@ class OracleRoom {
         const user = window.yaireCurrentUser;
         if (!user) return alert("Debes iniciar sesión.");
 
+        if (this.latencyAudio) {
+            this.latencyAudio.pause();
+            this.latencyAudio = null;
+        }
         this.latencyAudio = OracleAudio.play('latency', true);
 
         let pass = 'nopass';

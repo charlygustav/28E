@@ -474,9 +474,9 @@
       try {
         const t = this.actx.currentTime;
         node.gain.gain.cancelScheduledValues(t);
-        node.gain.gain.setValueAtTime(node.gain.gain.value, t);
-        node.gain.gain.linearRampToValueAtTime(0, t + 0.04);
-        node.src.stop(t + 0.04);
+        // Exponential decay prevents pops better than linear ramp from current value
+        node.gain.gain.setTargetAtTime(0, t, 0.015);
+        node.src.stop(t + 0.1);
       } catch(e){}
     }
 
@@ -1143,6 +1143,7 @@
       const reconnectBtn = document.getElementById('vc-reconnect');
       if (reconnectBtn) reconnectBtn.addEventListener('click', () => {
         if (this._savedName && this._savedPass) {
+          if (this.progNode) { this._stopSfx(this.progNode); this.progNode = null; }
           this._render(this._tplLoading());
           this.progNode = this._playSfx('jbl_latency', 0.3, true);
           this._connectSocket(this._savedName, this._savedPass);
@@ -1273,6 +1274,7 @@
       }
 
       this._render(this._tplLoading());
+      if (this.progNode) { this._stopSfx(this.progNode); this.progNode = null; }
       this.progNode = this._playSfx('jbl_latency', 0.3, true);
 
       try {
