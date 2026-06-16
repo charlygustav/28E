@@ -5,7 +5,7 @@ class OracleAudio {
     static sounds = {
         hover: 'SND01_sine/tap_01.wav',
         click: 'SND01_sine/select.wav',
-        connect: 'siriSounds18Separate/jbl_latency_sae.wav',
+        connect: 'siriSounds18Separate/jbl_success_sae.wav',
         latency: 'siriSounds18Separate/jbl_latency_sae.wav',
         join: 'sounds/activity_user_join.mp3',
         left: 'sounds/activity_user_left.mp3',
@@ -13,7 +13,7 @@ class OracleAudio {
         toggleOff: 'SND01_sine/toggle_off.wav',
         messageReceived: 'sounds/nuevomensajeenelchatdevoz.wav',
         messageSent: 'SND01_sine/transition_up.wav',
-        transitionDown: 'SND01_sine/transition_down.wav',
+        transitionDown: 'siriSounds18Separate/siri-begin-improved.wav',
         reaction: 'SND01_sine/tap_03.wav'
     };
 

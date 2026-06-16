@@ -440,6 +440,7 @@
         load('jbl_begin', 'siriSounds18Separate/jbl_begin_sae.wav');
         load('jbl_latency', 'siriSounds18Separate/jbl_latency_sae.wav');
         load('jbl_success', 'siriSounds18Separate/jbl_success_sae.wav');
+        load('siri_end', 'siriSounds18Separate/siri-begin-improved.wav');
       } catch(e) {}
     }
 
@@ -1324,7 +1325,7 @@
 
         this.socket.on('joined', async ({ userId, existingUsers }) => {
           this._stopSfx(this.progNode); this.progNode = null;
-          this._playSfx('jbl_latency', 0.5);
+          this._playSfx('jbl_success', 0.5);
 
           // Clean up old peers from previous session (reconnect scenario)
           this.peers.forEach((_, id) => this._closePeer(id));
@@ -1690,7 +1691,7 @@
 
     // ── LEAVE ─────────────────────────────────────────────────────────────
     _leave() {
-      this._playSfx('act_end', 0.5);
+      this._playSfx('siri_end', 0.5);
       if (this.socket) { this.socket.emit('leave_channel'); this.socket.disconnect(); this.socket = null; }
       this._cleanup();
       this._bar.classList.remove('show');
