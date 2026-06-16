@@ -3,17 +3,17 @@
 // OracleAudio - Sound Manager for the immersive experience
 class OracleAudio {
     static sounds = {
-        hover: 'sounds/tap_01.wav',
-        click: 'sounds/select.wav',
+        hover: 'SND01_sine/tap_01.wav',
+        click: 'SND01_sine/select.wav',
         connect: 'sounds/activity_launch.mp3',
         join: 'sounds/activity_user_join.mp3',
         left: 'sounds/activity_user_left.mp3',
-        toggleOn: 'sounds/toggle_on.wav',
-        toggleOff: 'sounds/toggle_off.wav',
+        toggleOn: 'SND01_sine/toggle_on.wav',
+        toggleOff: 'SND01_sine/toggle_off.wav',
         messageReceived: 'sounds/nuevomensajeenelchatdevoz.wav',
-        messageSent: 'sounds/type_01.wav',
-        transitionDown: 'sounds/transition_down.wav',
-        reaction: 'sounds/tap_03.wav'
+        messageSent: 'SND01_sine/type_01.wav',
+        transitionDown: 'SND01_sine/transition_down.wav',
+        reaction: 'SND01_sine/tap_03.wav'
     };
 
     static play(soundName) {
