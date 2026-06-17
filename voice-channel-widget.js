@@ -891,6 +891,12 @@
               <div class="text-[10px] text-white/30 font-bold uppercase tracking-wider mb-2 px-2 mt-2 vc-sect-lbl">${_t('sect_in')}</div>
               ${userRows || `<div class="text-center text-white/20 text-xs py-8 vc-empty">${_t('empty_chan')}</div>`}
             </div>
+            <div class="p-3 border-t border-white/5">
+              <button id="vc-btn-oracle-redirect" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-500 hover:from-amber-500 hover:to-orange-500 hover:text-black font-bold text-xs transition-all flex items-center justify-center gap-2 border border-amber-500/30 shadow-[0_0_10px_rgba(245,158,11,0.1)]">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                Seguir en Oracle
+              </button>
+            </div>
           </div>
 
           <!-- CHAT TAB -->

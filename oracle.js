@@ -1446,6 +1446,12 @@ window.OracleSetup = () => {
             window.oracleRoom.stopLobbyPreview();
             window.oracleRoom.init();
         });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('autojoin') === 'true') {
+            setTimeout(() => btnJoin.click(), 500);
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
     }
 };
 
