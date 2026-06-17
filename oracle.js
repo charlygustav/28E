@@ -89,8 +89,8 @@ class OracleRoom {
         this._typingTimeout = null;
         this._isTyping = false;
 
-        // Rave progress
-        this._raveProgressInterval = null;
+        // Music progress
+        this._musicProgressInterval = null;
 
         this.iceConfig = {
             iceServers: [
@@ -136,16 +136,7 @@ class OracleRoom {
             this.sendChat();
         });
 
-        document.getElementById('rave-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.addRaveVideo();
-        });
-
-        // Rave controls
-        const btnPlayPause = document.getElementById('btn-rave-playpause');
-        if (btnPlayPause) btnPlayPause.addEventListener('click', () => this.toggleRavePlayPause());
-        const btnSkip = document.getElementById('btn-rave-skip');
-        if (btnSkip) btnSkip.addEventListener('click', () => this.skipRaveTrack());
+        // Music UI is bound dynamically in updateMusicUI()
 
         // Typing indicator for chat
         const chatInput = document.getElementById('chat-input');
@@ -991,6 +982,17 @@ class OracleRoom {
     }
 
     // ═══ MUSIC LISTENER ═══
+    escapeHTML(str) {
+        if (!str) return '';
+        return str.replace(/[&<>'"]/g, tag => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+        }[tag] || tag));
+    }
+
     cleanMusicTitle(t) {
         if (!t) return t;
         let c = t.replace(/\s*[\[\(](official.*|video oficial|audio oficial|audio|video|music video|lyric.*|visualizer|hd)[\]\)]/gi, '');
