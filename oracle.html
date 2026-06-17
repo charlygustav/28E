@@ -167,24 +167,7 @@
             100% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 8px rgba(34, 197, 94, 0.8); }
         }
 
-        /* ═══ YOUTUBE RAVE ═══ */
-        .youtube-stage {
-            display: none; width: 100%; height: 100%;
-            background: black; border-radius: 1.25rem; overflow: hidden;
-            position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-        }
-        .youtube-stage.active { display: block; }
-        .mode-video .youtube-stage { display: none; }
-        .mode-youtube .youtube-stage { display: block; }
-        .mode-youtube .video-grid {
-            position: absolute; top: 1rem; right: 1rem;
-            width: 220px; display: flex; flex-direction: column; gap: 0.5rem; z-index: 50;
-        }
-        .mode-youtube .video-grid .video-container {
-            aspect-ratio: 16/9; border-radius: 0.75rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px); background: rgba(0,0,0,0.6);
-        }
+
 
         /* ═══ FLOATING REACTIONS ═══ */
         .floating-reaction {
@@ -554,15 +537,7 @@
                 </button>
             </div>
 
-            <!-- YouTube Stage -->
-            <div id="youtube-stage" class="youtube-stage flex-1 mb-3">
-                <div id="yt-player-container" class="w-full h-full"></div>
-                <div class="absolute top-4 left-4 glass-heavy px-4 py-2 rounded-xl flex items-center gap-3 opacity-0 hover:opacity-100 transition-opacity">
-                    <span class="text-pink-500 font-bold text-xs uppercase tracking-wider">Rave</span>
-                    <div class="w-px h-4 bg-white/10"></div>
-                    <span id="yt-now-playing" class="text-sm font-medium text-white/80">Esperando video...</span>
-                </div>
-            </div>
+
 
             <!-- Video Grid -->
             <div id="video-grid" class="video-grid grid-1 flex-1"></div>
@@ -624,7 +599,7 @@
                 <!-- Tabs -->
                 <div class="flex items-center px-3 pt-3 gap-1.5">
                     <button id="tab-chat" class="sidebar-tab active" data-tab="chat">Chat</button>
-                    <button id="tab-rave" class="sidebar-tab" data-tab="rave">Rave</button>
+                    <button id="tab-music" class="sidebar-tab" data-tab="music">Música</button>
                     <button id="tab-people" class="sidebar-tab" data-tab="people">Personas</button>
                 </div>
 
@@ -655,55 +630,10 @@
                     </div>
                 </div>
 
-                <!-- ═══ TAB: RAVE ═══ -->
-                <div id="pane-rave" class="flex-1 flex flex-col min-h-0 hidden" data-pane="rave">
-                    <!-- Now Playing -->
-                    <div id="rave-now-playing" class="p-4 border-b border-white/[0.04] hidden">
-                        <div class="glass-card rounded-xl p-4 relative overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-r from-pink-500/5 to-purple-500/5"></div>
-                            <div class="relative z-10">
-                                <div class="flex items-center gap-2 mb-2">
-                                    <div class="w-5 h-5 rounded-full bg-pink-500 flex items-center justify-center shadow-[0_0_10px_rgba(236,72,153,0.4)]">
-                                        <svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                    </div>
-                                    <span class="text-[9px] font-bold text-pink-400 uppercase tracking-[0.15em]">Reproduciendo</span>
-                                </div>
-                                <p id="rave-current-title" class="text-sm font-bold text-white truncate mb-3">-</p>
-                                <div class="rave-progress-bar" id="rave-progress-bar">
-                                    <div class="rave-progress-fill" id="rave-progress-fill" style="width: 0%"></div>
-                                </div>
-                                <div class="flex justify-between mt-2 text-[10px] text-zinc-500 font-mono">
-                                    <span id="rave-time-current">0:00</span>
-                                    <span id="rave-time-total">0:00</span>
-                                </div>
-                                <!-- Rave Controls -->
-                                <div class="flex items-center justify-center gap-3 mt-3">
-                                    <button id="btn-rave-playpause" class="w-9 h-9 rounded-full glass-light flex items-center justify-center text-white hover:bg-white/10 transition-all cursor-pointer" title="Play/Pause">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/></svg>
-                                    </button>
-                                    <button id="btn-rave-skip" class="w-9 h-9 rounded-full glass-light flex items-center justify-center text-white hover:bg-white/10 transition-all cursor-pointer" title="Siguiente">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M5 4l10 8-10 8V4zm14 0v16h-2V4h2z"/></svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Add Track -->
-                    <div class="p-4 border-b border-white/[0.04]">
-                        <form id="rave-form" class="flex flex-col gap-2">
-                            <label class="text-[9px] uppercase font-bold text-white/30 tracking-[0.15em]">Añadir a la Cola</label>
-                            <div class="flex gap-2">
-                                <input type="url" id="rave-input" class="flex-1 glass-input rounded-xl px-3 py-2.5 text-xs text-white outline-none transition-all placeholder:text-zinc-600" placeholder="YouTube o Spotify URL..." required>
-                                <button type="submit" class="px-4 rounded-xl bg-gradient-to-br from-pink-500 to-purple-600 text-white font-bold text-[11px] hover:from-pink-400 hover:to-purple-500 transition-all shadow-[0_4px_15px_rgba(236,72,153,0.2)] cursor-pointer active:scale-95">Añadir</button>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- Queue -->
-                    <div class="p-4 flex-1 overflow-y-auto">
-                        <div class="text-[9px] uppercase font-bold text-white/30 tracking-[0.15em] mb-3">Cola de Reproducción</div>
-                        <div id="rave-queue" class="flex flex-col gap-2">
-                            <div class="text-xs text-white/20 text-center py-8">La cola está vacía.</div>
-                        </div>
+                <!-- ═══ TAB: MUSIC ═══ -->
+                <div id="pane-music" class="flex-1 flex flex-col min-h-0 hidden" data-pane="music">
+                    <div id="music-inner" class="flex-1 flex flex-col overflow-y-auto">
+                        <!-- Music UI will be rendered dynamically by JS -->
                     </div>
                 </div>
 

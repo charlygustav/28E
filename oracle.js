@@ -549,16 +549,16 @@ class OracleRoom {
             this.updatePeopleList();
         });
 
-        // Music/Rave Events
+        // Music Events
         this.socket.on('music_queue_update', ({ queue, state }) => {
             this.musicQueue = queue;
             this.musicState = state;
-            this.updateRaveUI();
+            this.updateMusicUI();
         });
 
         this.socket.on('music_play', ({ track, state }) => {
             this.musicState = state;
-            this.playRaveTrack(track, 0);
+            this.playMusicTrack(track, 0);
         });
 
         this.socket.on('music_state_update', ({ state }) => {
@@ -567,7 +567,7 @@ class OracleRoom {
                 if (state.isPlaying) this.ytPlayer.playVideo();
                 else this.ytPlayer.pauseVideo();
             }
-            this.updateRavePlayPauseBtn();
+            this.updateMusicUI();
         });
 
         this.socket.on('music_seek', ({ time }) => {
@@ -579,20 +579,16 @@ class OracleRoom {
         this.socket.on('music_stop', () => {
             this.musicQueue = [];
             this.musicState = { currentIndex: -1, isPlaying: false };
-            document.body.classList.remove('mode-youtube');
-            document.body.classList.add('mode-video');
-            if (this.ytPlayer && this.isYtReady) this.ytPlayer.stopVideo();
-            this.updateRaveUI();
-            this.stopRaveProgress();
+            this.stopMusic();
         });
 
         this.socket.on('music_sync', ({ queue, state, currentTrack, currentTime }) => {
             this.musicQueue = queue;
             this.musicState = state;
             if (currentTrack && state.isPlaying) {
-                this.playRaveTrack(currentTrack, currentTime || 0);
+                this.playMusicTrack(currentTrack, currentTime || 0);
             } else if (currentTrack) {
-                this.playRaveTrack(currentTrack, currentTime || 0, false);
+                this.playMusicTrack(currentTrack, currentTime || 0, false);
             }
         });
     }
@@ -865,35 +861,57 @@ class OracleRoom {
         if (isSystem) {
             div.className = 'text-center text-[10px] text-amber-500/40 my-1 font-bold tracking-wider uppercase';
             div.textContent = text;
+            container.appendChild(div);
         } else {
-            const userObj = isMe ? window.yaireCurrentUser : this.users.find(u => u.id === from);
-            const avatarUrl = userObj?.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
-
             const time = ts ? new Date(ts).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' }) : '';
+            const escText = this.escapeHTML(text);
+            const isEmojiOnly = /^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F|\s)+$/u.test(text) && text.trim().length > 0;
+            
+            const bubbleClass = isEmojiOnly 
+              ? 'text-4xl py-1' 
+              : (isMe ? 'bg-[#101014] text-white rounded-2xl px-3.5 py-2 text-sm shadow-md font-medium border border-white/10' : 'bg-white text-black rounded-2xl px-3.5 py-2 text-sm shadow-md font-medium');
 
-            div.className = `flex gap-2.5 w-full ${isMe ? 'flex-row-reverse' : 'flex-row'}`;
-            div.innerHTML = `
-                <img src="${avatarUrl}" class="w-7 h-7 rounded-full border border-white/5 shrink-0 object-cover mt-1 shadow-md" onerror="this.style.display='none'" />
-                <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} max-w-[80%]">
-                    <div class="flex items-center gap-2 mb-1">
-                        <span class="text-[9px] text-white/40 font-bold tracking-wider uppercase">${name}</span>
-                        <span class="text-[8px] text-white/15 font-mono">${time}</span>
+            const lastMsgEl = container.lastElementChild;
+            const lastFrom = lastMsgEl ? lastMsgEl.getAttribute('data-from') : null;
+            let newBubbleEl;
+
+            if (lastFrom === from) {
+                // Group message
+                const bubblesContainer = lastMsgEl.querySelector('.chat-bubbles');
+                if (bubblesContainer) {
+                    bubblesContainer.insertAdjacentHTML('beforeend', `<div class="${bubbleClass}">${escText}</div>`);
+                    newBubbleEl = bubblesContainer.lastElementChild;
+                }
+            } else {
+                // New message group
+                const userObj = isMe ? window.yaireCurrentUser : this.users.find(u => u.id === from);
+                const avatarUrl = userObj?.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
+
+                div.className = `flex gap-2.5 w-full ${isMe ? 'flex-row-reverse' : 'flex-row'} mb-3 chat-msg`;
+                div.setAttribute('data-from', from);
+                div.innerHTML = `
+                    <img src="${avatarUrl}" class="w-7 h-7 rounded-full border border-white/5 shrink-0 object-cover mt-1 shadow-md" onerror="this.style.display='none'" />
+                    <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} max-w-[80%]">
+                        <div class="flex items-center gap-2 mb-1 px-1">
+                            <span class="text-[9px] text-white/40 font-bold tracking-wider uppercase">${name}</span>
+                            <span class="text-[8px] text-white/15 font-mono">${time}</span>
+                        </div>
+                        <div class="flex flex-col gap-1 w-full ${isMe ? 'items-end' : 'items-start'} chat-bubbles">
+                            <div class="${bubbleClass}">${escText}</div>
+                        </div>
                     </div>
-                    <div class="px-3.5 py-2 text-xs shadow-lg ${isMe ? 'chat-bubble-me font-medium' : 'chat-bubble-other'}">
-                        ${this.escapeHTML(text)}
-                    </div>
-                </div>
-            `;
-        }
+                `;
+                container.appendChild(div);
+                newBubbleEl = div.querySelector('.chat-bubbles').lastElementChild;
+            }
 
-        container.appendChild(div);
-
-        if (window.gsap && !isSystem) {
-            gsap.from(div, {
-                opacity: 0, y: 12, scale: 0.95, duration: 0.35,
-                ease: "back.out(1.5)",
-                transformOrigin: isMe ? "right bottom" : "left bottom"
-            });
+            if (window.gsap && newBubbleEl && !isSystem) {
+                gsap.from(newBubbleEl, {
+                    opacity: 0, y: 12, scale: 0.95, duration: 0.35,
+                    ease: "back.out(1.5)",
+                    transformOrigin: isMe ? "right bottom" : "left bottom"
+                });
+            }
         }
 
         container.scrollTop = container.scrollHeight;
@@ -972,152 +990,339 @@ class OracleRoom {
         }
     }
 
-    // ═══ YOUTUBE RAVE ═══
-    addRaveVideo() {
-        const input = document.getElementById('rave-input');
+    // ═══ MUSIC LISTENER ═══
+    cleanMusicTitle(t) {
+        if (!t) return t;
+        let c = t.replace(/\s*[\[\(](official.*|video oficial|audio oficial|audio|video|music video|lyric.*|visualizer|hd)[\]\)]/gi, '');
+        c = c.replace(/\s*[\[\(]?(Spotify|YouTube)[\]\)]?/gi, '');
+        c = c.replace(/\s*[-|]\s*$/g, '');
+        return c.trim();
+    }
+
+    renderMusicPanel() {
+        const track = this.musicQueue[this.musicState.currentIndex];
+        const isPlaying = this.musicState.isPlaying;
+        let nowPlaying = '';
+        if (track) {
+            let currentPct = 0;
+            let cTimeFmt = '0:00';
+            let tTimeFmt = '0:00';
+            
+            if (track.type === 'youtube' && this.ytPlayer && this.isYtReady) {
+                const cur = this.ytPlayer.getCurrentTime() || 0;
+                const tot = this.ytPlayer.getDuration() || 0;
+                if (tot > 0) currentPct = (cur / tot) * 100;
+                
+                const fmt = (secs) => {
+                    if (!secs || isNaN(secs)) return '0:00';
+                    const m = Math.floor(secs / 60);
+                    const s = Math.floor(secs % 60);
+                    return `${m}:${s < 10 ? '0'+s : s}`;
+                };
+                cTimeFmt = fmt(cur);
+                tTimeFmt = fmt(tot);
+            }
+
+            const eqBars = isPlaying
+                ? `<div class="flex items-end gap-0.5 h-3"><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite]"></div><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite_0.2s]"></div><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite_0.4s]"></div></div>`
+                : `<span class="w-4 h-4 text-white/40 [&>svg]:w-4 [&>svg]:h-4 flex items-center justify-center"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg></span>`;
+            
+            nowPlaying = `
+                <div class="bg-white/5 border border-white/10 rounded-xl p-3 mb-2 relative overflow-hidden">
+                    <div class="flex items-center gap-3 relative z-10 mb-2">
+                        <div class="w-10 h-10 rounded-lg bg-black/40 flex items-center justify-center flex-shrink-0">
+                            ${eqBars}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-[9px] text-amber-500 font-bold uppercase tracking-wider mb-0.5">Reproduciendo</div>
+                            ${this.cleanMusicTitle(track.title).length > 25 
+                                ? `<div class="vc-marquee-container text-sm font-bold text-white">
+                                     <div class="vc-marquee-content">${this.escapeHTML(this.cleanMusicTitle(track.title))}</div>
+                                     <div class="vc-marquee-content" aria-hidden="true">${this.escapeHTML(this.cleanMusicTitle(track.title))}</div>
+                                   </div>` 
+                                : `<div class="text-sm font-bold text-white truncate">${this.escapeHTML(this.cleanMusicTitle(track.title))}</div>`
+                            }
+                            <div class="text-[10px] text-white/40 truncate">${track.addedByName ? `por ${track.addedByName}` : ''}</div>
+                        </div>
+                        <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-white/50">${(track.source || track.type) === 'youtube' ? 'YT' : 'SP'}</span>
+                    </div>
+                    
+                    ${track.type === 'youtube' ? `
+                        <div class="relative z-10 mb-3">
+                            <div class="h-1 bg-black/50 rounded-full overflow-hidden relative" id="vc-music-progress">
+                                <div class="absolute top-0 left-0 h-full bg-amber-500 transition-all duration-200" id="vc-music-progress-fill" style="width: ${currentPct}%"></div>
+                            </div>
+                            <div class="flex justify-between text-[9px] text-white/40 mt-1 font-mono">
+                                <span id="vc-music-time-current">${cTimeFmt}</span>
+                                <span id="vc-music-time-total">${tTimeFmt}</span>
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    ${track.type === 'spotify' ? `<div class="mt-2 w-full" id="vc-spotify-embed"></div>` : ''}
+                    
+                    <div class="flex justify-between items-center relative z-10">
+                        <div class="flex items-center gap-2">
+                            <button class="w-9 h-9 rounded-full bg-white text-black flex items-center justify-center hover:scale-105 transition-transform [&>svg]:w-4 [&>svg]:h-4 shadow-md" id="vc-music-playpause">
+                                ${isPlaying ? '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>' : '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'}
+                            </button>
+                            <button class="w-9 h-9 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors [&>svg]:w-4 [&>svg]:h-4" id="vc-music-skip">
+                                <svg fill="currentColor" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+                            </button>
+                        </div>
+                        <div class="w-[45%] flex items-center gap-2 pr-1">
+                            <span class="text-white/40 [&>svg]:w-3.5 [&>svg]:h-3.5"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25-2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></span>
+                            <input type="range" id="vc-music-vol-slider" min="0" max="100" value="${this.musicVolume || 50}" class="w-full h-1 bg-black/50 rounded-lg appearance-none cursor-pointer accent-amber-500" />
+                        </div>
+                    </div>
+                </div>`;
+        } else {
+            nowPlaying = `<div class="text-center text-white/20 text-xs py-3 mb-2 bg-white/5 rounded-xl border border-white/5">No hay pista activa</div>`;
+        }
+        
+        const queueItems = this.musicQueue.length > 0
+            ? this.musicQueue.map((t, i) => {
+                    const isCur = i === this.musicState.currentIndex;
+                    return `
+                    <div class="flex items-center gap-3 p-2 rounded-lg transition-colors ${isCur ? 'bg-amber-500/10 border border-amber-500/20' : 'hover:bg-white/5'}">
+                        <span class="w-4 text-center text-[10px] font-bold ${isCur ? 'text-amber-500' : 'text-white/30'}">${isCur && isPlaying ? '♪' : (i + 1)}</span>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-xs font-medium text-white truncate ${isCur ? 'text-amber-500' : ''}">${this.escapeHTML(this.cleanMusicTitle(t.title))}</div>
+                            <div class="text-[10px] text-white/30 truncate">${t.addedByName || ''}</div>
+                        </div>
+                        <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-white/30">${(t.source || t.type) === 'youtube' ? 'YT' : 'SP'}</span>
+                        ${!isCur ? `<button class="vc-music-track-rm w-6 h-6 flex items-center justify-center text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded transition-colors [&>svg]:w-3 [&>svg]:h-3" data-track-id="${t.id}"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>` : ''}
+                    </div>`;
+                }).join('')
+            : `<div class="text-center text-white/20 text-xs py-4">Cola vacía</div>`;
+            
+        return `
+            <div class="p-3 flex-1 flex flex-col">
+                ${nowPlaying}
+                <div class="text-[10px] text-white/30 font-bold uppercase tracking-wider mb-1 px-1">Cola ${this.musicQueue.length > 0 ? `(${this.musicQueue.length})` : ''}</div>
+                <div class="flex flex-col gap-1 mb-2" id="vc-music-queue">${queueItems}</div>
+                <div class="mt-auto pt-2">
+                    <div class="text-red-500 text-xs text-center mb-1 min-h-[16px]" id="vc-music-err"></div>
+                    <div class="flex gap-2">
+                        <input class="flex-1 glass-input rounded-xl px-3 py-2.5 text-white text-xs outline-none transition-colors" id="vc-music-url" type="text" placeholder="YouTube o Spotify URL..." autocomplete="off"/>
+                        <button class="bg-gradient-to-br from-amber-500 to-orange-600 text-black px-4 font-bold text-xs rounded-xl hover:from-amber-400 hover:to-orange-500 transition-colors whitespace-nowrap" id="vc-music-add">+ Añadir</button>
+                    </div>
+                </div>
+            </div>`;
+    }
+
+    updateMusicUI() {
+        const body = document.getElementById('music-inner');
+        if (body) {
+            body.innerHTML = this.renderMusicPanel();
+            this.bindMusicEvents();
+            const track = this.musicQueue[this.musicState.currentIndex];
+            if (track && track.type === 'spotify') {
+                this.createSpotifyEmbed(track);
+            }
+            if (this.musicState.isPlaying && track && track.type === 'youtube') {
+                this.startMusicProgress();
+            }
+        }
+    }
+
+    bindMusicEvents() {
+        const playPause = document.getElementById('vc-music-playpause');
+        if (playPause) playPause.addEventListener('click', () => this.musicTogglePlayPause());
+        const skip = document.getElementById('vc-music-skip');
+        if (skip) skip.addEventListener('click', () => { if (this.socket) this.socket.emit('music_skip'); });
+        const addBtn = document.getElementById('vc-music-add');
+        const urlInput = document.getElementById('vc-music-url');
+        if (addBtn) addBtn.addEventListener('click', () => this.addMusicFromInput());
+        if (urlInput) urlInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') this.addMusicFromInput(); });
+        document.querySelectorAll('.vc-music-track-rm').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const trackId = btn.dataset.trackId;
+                if (trackId && this.socket) this.socket.emit('music_remove', { trackId });
+            });
+        });
+        const volSlider = document.getElementById('vc-music-vol-slider');
+        if (volSlider) {
+            volSlider.addEventListener('input', (e) => {
+                this.setMusicVolume(e.target.value);
+            });
+        }
+    }
+
+    async addMusicFromInput() {
+        const input = document.getElementById('vc-music-url');
+        const addBtn = document.getElementById('vc-music-add');
+        if (!input || !addBtn) return;
         const url = input.value.trim();
         if (!url) return;
-
-        const type = url.includes('spotify') ? 'spotify' : 'youtube';
-        this.socket.emit('music_add', { url, type });
-        input.value = '';
-    }
-
-    updateRaveUI() {
-        const qContainer = document.getElementById('rave-queue');
-        const nowPlaying = document.getElementById('rave-now-playing');
-
-        if (this.musicQueue.length === 0) {
-            qContainer.innerHTML = '<div class="text-xs text-white/20 text-center py-8">La cola está vacía.</div>';
-            if (nowPlaying) nowPlaying.classList.add('hidden');
-            document.body.classList.remove('mode-youtube');
-            document.body.classList.add('mode-video');
-            if (this.ytPlayer && this.isYtReady) this.ytPlayer.stopVideo();
-            this.stopRaveProgress();
+        const parsed = this.parseMusicUrl(url);
+        if (!parsed) {
+            const err = document.getElementById('vc-music-err');
+            if (err) { err.textContent = 'URL inválida.'; setTimeout(() => { err.textContent = ''; }, 3000); }
             return;
         }
-
-        // Update now playing
-        if (nowPlaying && this.musicState.currentIndex >= 0 && this.musicQueue[this.musicState.currentIndex]) {
-            nowPlaying.classList.remove('hidden');
-            const currentTitle = document.getElementById('rave-current-title');
-            if (currentTitle) currentTitle.textContent = this.musicQueue[this.musicState.currentIndex].title || 'Sin título';
-        }
-
-        // Update queue list
-        qContainer.innerHTML = this.musicQueue.map((t, idx) => `
-            <div class="rave-track-card p-3 flex gap-3 items-center ${idx === this.musicState.currentIndex ? 'playing' : ''}">
-                <div class="w-7 h-7 rounded-lg ${idx === this.musicState.currentIndex ? 'bg-pink-500/20 text-pink-500' : 'bg-white/5 text-white/30'} flex items-center justify-center text-xs font-bold shrink-0">
-                    ${idx === this.musicState.currentIndex ? '<svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>' : (idx + 1)}
-                </div>
-                <div class="flex-1 min-w-0">
-                    <p class="text-xs font-medium text-white truncate">${t.title || 'Video URL'}</p>
-                    <p class="text-[10px] text-zinc-600">${t.addedByName ? 'por ' + t.addedByName : ''}</p>
-                </div>
-            </div>
-        `).join('');
-
-        this.updateRavePlayPauseBtn();
-    }
-
-    updateRavePlayPauseBtn() {
-        const btn = document.getElementById('btn-rave-playpause');
-        if (!btn) return;
-        if (this.musicState.isPlaying) {
-            btn.innerHTML = '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/></svg>';
-        } else {
-            btn.innerHTML = '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+        
+        const originalText = addBtn.innerHTML;
+        addBtn.innerHTML = `<div class="w-3 h-3 rounded-full border-[2px] border-black border-t-transparent animate-spin inline-block align-middle"></div>`;
+        addBtn.disabled = true;
+        input.disabled = true;
+        
+        let title = parsed.type === 'youtube' ? 'YouTube Video' : 'Spotify Track';
+        try { title = await this.fetchMusicTitle(parsed.url, parsed.type); } catch(e) {}
+        
+        input.value = '';
+        input.disabled = false;
+        addBtn.disabled = false;
+        addBtn.innerHTML = originalText;
+        if (this.socket) {
+            this.socket.emit('music_add', { url: parsed.url, title, type: parsed.type });
         }
     }
 
-    toggleRavePlayPause() {
-        if (!this.socket || this.musicState.currentIndex === -1) return;
+    parseMusicUrl(url) {
+        const ytRegex = /(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/)|youtu\.be\/|music\.youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/;
+        const ytMatch = url.match(ytRegex);
+        if (ytMatch) return { type: 'youtube', id: ytMatch[1], url: `https://www.youtube.com/watch?v=${ytMatch[1]}` };
+        const spRegex = /open\.spotify\.com\/.*?(track|album|playlist)\/([a-zA-Z0-9]+)/;
+        const spMatch = url.match(spRegex);
+        if (spMatch) return { type: 'spotify', spotifyType: spMatch[1], id: spMatch[2], url: `https://open.spotify.com/${spMatch[1]}/${spMatch[2]}` };
+        return null;
+    }
+
+    async fetchMusicTitle(url, type) {
+        try {
+            if (type === 'youtube') {
+                const res = await fetch(`https://noembed.com/embed?url=${encodeURIComponent(url)}`);
+                const data = await res.json();
+                return this.cleanMusicTitle(data.title) || 'YouTube Video';
+            } else if (type === 'spotify') {
+                const res = await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`);
+                const data = await res.json();
+                const artist = data.author_name || '';
+                const title = this.cleanMusicTitle(data.title) || 'Spotify Track';
+                return artist ? `${title} - ${artist}` : title;
+            }
+        } catch(e) { return type === 'youtube' ? 'YouTube Video' : 'Spotify Track'; }
+    }
+
+    musicTogglePlayPause() {
+        const track = this.musicQueue[this.musicState.currentIndex];
+        if (!track || !this.socket) return;
         if (this.musicState.isPlaying) {
-            const currentTime = (this.ytPlayer && this.isYtReady) ? this.ytPlayer.getCurrentTime() : 0;
+            let currentTime = 0;
+            if (this.ytPlayer && this.isYtReady) currentTime = this.ytPlayer.getCurrentTime();
             this.socket.emit('music_pause', { currentTime });
         } else {
             this.socket.emit('music_resume');
         }
     }
 
-    skipRaveTrack() {
-        if (!this.socket) return;
-        this.socket.emit('music_skip');
+    playMusicTrack(track, timeOffset = 0, autoPlay = true) {
+        this.updateMusicUI();
+        if (track.type === 'youtube') {
+            const ytId = this.parseMusicUrl(track.url)?.id;
+            if (ytId) {
+                this.createYTPlayer(ytId, timeOffset, autoPlay);
+            }
+        } else {
+            this.destroyYTPlayer();
+        }
     }
 
-    // ═══ RAVE PROGRESS BAR ═══
-    startRaveProgress() {
-        this.stopRaveProgress();
-        this._raveProgressInterval = setInterval(() => {
-            if (this.ytPlayer && this.isYtReady && this.musicState.isPlaying) {
-                const current = this.ytPlayer.getCurrentTime();
-                const total = this.ytPlayer.getDuration();
-                if (total > 0) {
-                    const pct = (current / total) * 100;
-                    const fill = document.getElementById('rave-progress-fill');
-                    if (fill) fill.style.width = pct + '%';
+    stopMusic() {
+        this.destroyYTPlayer();
+        this.stopMusicProgress();
+        this.updateMusicUI();
+    }
 
-                    const timeCurrent = document.getElementById('rave-time-current');
-                    const timeTotal = document.getElementById('rave-time-total');
-                    if (timeCurrent) timeCurrent.textContent = this.formatTime(current);
-                    if (timeTotal) timeTotal.textContent = this.formatTime(total);
-                }
+    setMusicVolume(vol) {
+        const v = Number(vol);
+        this.musicVolume = v;
+        if (this.ytPlayer && this.isYtReady) {
+            this.ytPlayer.setVolume(v);
+            if (v > 0 && this.ytPlayer.isMuted()) {
+                this.ytPlayer.unMute();
             }
+        }
+    }
+
+    createSpotifyEmbed(track) {
+        const embedContainer = document.getElementById('vc-spotify-embed');
+        if (!embedContainer) return;
+        const spMatch = track.url.match(/open\.spotify\.com\/(track|album|playlist)\/([a-zA-Z0-9]+)/);
+        if (!spMatch) return;
+        const embedUrl = `https://open.spotify.com/embed/${spMatch[1]}/${spMatch[2]}?utm_source=generator&theme=0`;
+        const h = spMatch[1] === 'track' ? '80' : '152';
+        embedContainer.innerHTML = `<iframe src="${embedUrl}" width="100%" height="${h}" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="border-radius:8px;"></iframe>`;
+    }
+
+    createYTPlayer(videoId, seekTo = 0, autoPlay = true) {
+        if (!window.YT || !window.YT.Player) return;
+        
+        if (this.ytPlayer) { 
+            try { this.ytPlayer.destroy(); } catch(e) {} 
+            this.ytPlayer = null; 
+            this.isYtReady = false;
+        }
+        
+        let container = document.getElementById('oracle-yt-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'oracle-yt-container';
+            container.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;overflow:hidden;pointer-events:none;';
+            document.body.appendChild(container);
+        }
+        
+        const playerDiv = document.createElement('div');
+        playerDiv.id = 'oracle-yt-player-' + Date.now();
+        container.innerHTML = '';
+        container.appendChild(playerDiv);
+        
+        this.ytPlayer = new YT.Player(playerDiv.id, {
+            height: '1', width: '1', videoId,
+            playerVars: { autoplay: autoPlay ? 1 : 0, controls: 0, disablekb: 1, fs: 0, modestbranding: 1, rel: 0, start: Math.floor(seekTo) },
+            events: {
+                onReady: (e) => {
+                    this.isYtReady = true;
+                    e.target.setVolume(this.musicVolume || 50);
+                    if (seekTo > 0) e.target.seekTo(seekTo, true);
+                    if (autoPlay) e.target.playVideo();
+                    this.startMusicProgress();
+                },
+                onStateChange: (e) => this.onYtStateChange(e),
+                onError: () => this.socket.emit('music_ended')
+            }
+        });
+    }
+
+    destroyYTPlayer() {
+        if (this.ytPlayer) { 
+            try { this.ytPlayer.destroy(); } catch(e) {} 
+            this.ytPlayer = null; 
+            this.isYtReady = false;
+        }
+    }
+
+    startMusicProgress() {
+        this.stopMusicProgress();
+        this._musicProgressInterval = setInterval(() => {
+            if (!this.musicState.isPlaying || !this.ytPlayer || !this.isYtReady) return;
+            const current = this.ytPlayer.getCurrentTime();
+            const duration = this.ytPlayer.getDuration();
+            const fill = document.getElementById('vc-music-progress-fill');
+            const timeCurrent = document.getElementById('vc-music-time-current');
+            const timeTotal = document.getElementById('vc-music-time-total');
+            if (fill && duration > 0) fill.style.width = ((current / duration) * 100) + '%';
+            const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+            if (timeCurrent) timeCurrent.textContent = fmt(current);
+            if (timeTotal) timeTotal.textContent = fmt(duration);
         }, 500);
     }
 
-    stopRaveProgress() {
-        if (this._raveProgressInterval) {
-            clearInterval(this._raveProgressInterval);
-            this._raveProgressInterval = null;
-        }
-        const fill = document.getElementById('rave-progress-fill');
-        if (fill) fill.style.width = '0%';
-    }
-
-    formatTime(seconds) {
-        const m = Math.floor(seconds / 60);
-        const s = Math.floor(seconds % 60).toString().padStart(2, '0');
-        return `${m}:${s}`;
-    }
-
-    playRaveTrack(track, timeOffset = 0, autoPlay = true) {
-        if (!track) return;
-
-        document.body.classList.remove('mode-video');
-        document.body.classList.add('mode-youtube');
-
-        document.getElementById('yt-now-playing').textContent = track.title;
-
-        // Update rave UI
-        this.updateRaveUI();
-
-        let vidId = '';
-        try {
-            if (track.url.includes('v=')) vidId = track.url.split('v=')[1].split('&')[0];
-            else if (track.url.includes('youtu.be/')) vidId = track.url.split('youtu.be/')[1].split('?')[0];
-        } catch (e) {}
-
-        if (!vidId) return;
-
-        if (!this.ytPlayer) {
-            this.ytPlayer = new YT.Player('yt-player-container', {
-                videoId: vidId,
-                playerVars: { autoplay: autoPlay ? 1 : 0, controls: 1, disablekb: 0, rel: 0 },
-                events: {
-                    onReady: (e) => {
-                        this.isYtReady = true;
-                        if (timeOffset > 0) e.target.seekTo(timeOffset, true);
-                        if (autoPlay) e.target.playVideo();
-                        this.startRaveProgress();
-                    },
-                    onStateChange: (e) => this.onYtStateChange(e)
-                }
-            });
-        } else if (this.isYtReady) {
-            this.ytPlayer.loadVideoById({ videoId: vidId, startSeconds: timeOffset });
-            if (!autoPlay) setTimeout(() => this.ytPlayer.pauseVideo(), 500);
-            this.startRaveProgress();
+    stopMusicProgress() {
+        if (this._musicProgressInterval) { 
+            clearInterval(this._musicProgressInterval); 
+            this._musicProgressInterval = null; 
         }
     }
 
@@ -1129,7 +1334,7 @@ class OracleRoom {
                 this.socket.emit('music_resume');
                 this.socket.emit('music_seek', { time: this.ytPlayer.getCurrentTime() });
             }
-            this.startRaveProgress();
+            this.startMusicProgress();
         } else if (e.data === YT.PlayerState.ENDED) {
             this.socket.emit('music_ended');
         }
