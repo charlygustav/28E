@@ -1191,6 +1191,14 @@
       if (tabChat) tabChat.addEventListener('click', () => switchTab('chat'));
       if (tabMusic) tabMusic.addEventListener('click', () => switchTab('music'));
 
+      const btnOracleRedirect = document.getElementById('vc-btn-oracle-redirect');
+      if (btnOracleRedirect) {
+        btnOracleRedirect.addEventListener('click', () => {
+          this._leave();
+          window.location.href = '/oracle.html?autojoin=true';
+        });
+      }
+
       // Chat send & typing
       const chatSend = document.getElementById('vc-chat-send');
       const chatIn = document.getElementById('vc-chat-in');
