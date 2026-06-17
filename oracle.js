@@ -106,7 +106,7 @@ class OracleRoom {
         this.initUI();
     }
 
-    async init() {
+    init() {
         const user = window.yaireCurrentUser;
         if (!user) return alert("Debes iniciar sesión.");
 
@@ -116,13 +116,12 @@ class OracleRoom {
         }
         this.latencyAudio = OracleAudio.play('latency', true);
 
-        let pass = 'nopass';
-        try {
-            const res = await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config/voicePassword.json');
-            pass = await res.json();
-        } catch (e) {}
+        // Fetch password asynchronously while we establish connection
+        const passPromise = fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config/voicePassword.json')
+            .then(res => res.json())
+            .catch(() => 'nopass');
 
-        this.connectSocket(user.displayName, pass, user.photoURL, user.oracleHandle);
+        this.connectSocket(user.displayName, passPromise, user.photoURL, user.oracleHandle);
         this.acquireMedia();
     }
 
@@ -416,10 +415,11 @@ class OracleRoom {
     }
 
     // ═══ SOCKET LOGIC ═══
-    connectSocket(name, pass, photoURL, oracleHandle) {
+    connectSocket(name, passPromise, photoURL, oracleHandle) {
         this.socket = io('https://28e-production.up.railway.app', { transports: ['websocket'] });
 
-        this.socket.on('connect', () => {
+        this.socket.on('connect', async () => {
+            const pass = await Promise.resolve(passPromise);
             this.socket.emit('join_channel', { password: pass, displayName: name, photoURL, oracleHandle });
         });
 
