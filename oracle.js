@@ -235,6 +235,10 @@ class OracleRoom {
                 this.updateCamBtnUI();
                 alert("No se pudo acceder a la cámara.");
                 this.acquireMedia();
+            } else {
+                this.micEnabled = false;
+                this.updateMicBtnUI();
+                this.updateVideoElement('local', null, window.yaireCurrentUser);
             }
         }
     }
