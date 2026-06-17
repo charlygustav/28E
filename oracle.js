@@ -756,7 +756,7 @@ class OracleRoom {
         document.body.classList.add('mode-video');
 
         this.stopRoomTimer();
-        this.stopRaveProgress();
+        this.stopMusicProgress();
 
         const lobbyOverlay = document.getElementById('lobby-overlay');
         if (lobbyOverlay) {
@@ -1414,7 +1414,7 @@ window.OracleSetup = () => {
                                 <div class="w-5 h-5 rounded-full bg-pink-500 text-white flex items-center justify-center shadow-[0_0_10px_rgba(236,72,153,0.4)]">
                                     <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                 </div>
-                                <span class="text-[9px] text-pink-400 font-bold uppercase tracking-[0.1em]">Rave Activo</span>
+                                <span class="text-[9px] text-pink-400 font-bold uppercase tracking-[0.1em]">Música Activa</span>
                             </div>
                             <p class="text-xs text-white/80 font-medium truncate pl-7">${musicQueue[0].title}</p>
                         </div>
