@@ -580,6 +580,8 @@ class OracleRoom {
                 this.playMusicTrack(currentTrack, currentTime || 0);
             } else if (currentTrack) {
                 this.playMusicTrack(currentTrack, currentTime || 0, false);
+            } else {
+                this.updateMusicUI();
             }
         });
     }
