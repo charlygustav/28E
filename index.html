@@ -289,7 +289,46 @@
                 }
             })();
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js" crossorigin="anonymous" defer></script>
+    <script>
+        (function () {
+            var scriptPromises = {};
+            var ric = window.requestIdleCallback || function (cb) {
+                return setTimeout(function () {
+                    cb({ didTimeout: false, timeRemaining: function () { return 0; } });
+                }, 900);
+            };
+
+            window.__runWhenIdle = function (cb, timeout) {
+                return ric(cb, { timeout: timeout || 3500 });
+            };
+
+            window.__loadScriptOnce = function (src, attrs) {
+                if (scriptPromises[src]) return scriptPromises[src];
+                scriptPromises[src] = new Promise(function (resolve, reject) {
+                    var existing = document.querySelector('script[src="' + src + '"]');
+                    if (existing) {
+                        existing.addEventListener('load', resolve, { once: true });
+                        existing.addEventListener('error', reject, { once: true });
+                        if (existing.dataset.loaded === 'true') resolve();
+                        return;
+                    }
+                    var s = document.createElement('script');
+                    s.src = src;
+                    s.async = true;
+                    if (attrs) {
+                        Object.keys(attrs).forEach(function (key) {
+                            if (attrs[key] === true) s.setAttribute(key, '');
+                            else if (attrs[key] !== false && attrs[key] != null) s.setAttribute(key, attrs[key]);
+                        });
+                    }
+                    s.onload = function () { s.dataset.loaded = 'true'; resolve(); };
+                    s.onerror = reject;
+                    document.head.appendChild(s);
+                });
+                return scriptPromises[src];
+            };
+        })();
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
     <style>
@@ -16472,8 +16511,38 @@
         }
 
         function initChart() {
-            const ctxE = document.getElementById('timeChart'); if (!ctxE) return; const ctx = ctxE.getContext('2d'); const isD = document.documentElement.classList.contains('dark');
-            chartInstance = new Chart(ctx, { type: 'doughnut', data: { labels: dictionary['es'].chart_labels, datasets: [{ label: dictionary['es'].chart_dataset, data: [10, 15, 20, 55], backgroundColor: ['#e4e4e7', '#fbcfe8', '#f59e0b', '#ec4899'], borderColor: 'transparent', borderWidth: 0, hoverOffset: 8 }] }, options: { responsive: true, maintainAspectRatio: false, layout: { padding: 10 }, plugins: { legend: { position: 'bottom', labels: { color: isD ? '#a1a1aa' : '#52525b', font: { family: "'Inter', sans-serif", size: 12 }, padding: 15, usePointStyle: true, pointStyle: 'circle' } }, tooltip: { backgroundColor: 'rgba(24, 24, 27, 0.9)', titleFont: { family: "'Inter', sans-serif", size: 14, weight: 'bold' }, bodyFont: { family: "'Inter', sans-serif", size: 13 }, padding: 12, cornerRadius: 12, displayColors: false, callbacks: { label: function (c) { return c.label + ': ' + c.parsed + '%'; } } } }, cutout: '75%', animation: { animateScale: true, animateRotate: true, duration: 1500, easing: 'easeOutQuart' } } });
+            const ctxE = document.getElementById('timeChart');
+            if (!ctxE || chartInstance) return;
+
+            const renderChart = () => {
+                if (!window.Chart || chartInstance) return;
+                const ctx = ctxE.getContext('2d');
+                const isD = document.documentElement.classList.contains('dark');
+                const dict = dictionary[currentLang] || dictionary['es'];
+                chartInstance = new Chart(ctx, { type: 'doughnut', data: { labels: dict.chart_labels || dictionary['es'].chart_labels, datasets: [{ label: dict.chart_dataset || dictionary['es'].chart_dataset, data: [10, 15, 20, 55], backgroundColor: ['#e4e4e7', '#fbcfe8', '#f59e0b', '#ec4899'], borderColor: 'transparent', borderWidth: 0, hoverOffset: 8 }] }, options: { responsive: true, maintainAspectRatio: false, layout: { padding: 10 }, plugins: { legend: { position: 'bottom', labels: { color: isD ? '#a1a1aa' : '#52525b', font: { family: "'Inter', sans-serif", size: 12 }, padding: 15, usePointStyle: true, pointStyle: 'circle' } }, tooltip: { backgroundColor: 'rgba(24, 24, 27, 0.9)', titleFont: { family: "'Inter', sans-serif", size: 14, weight: 'bold' }, bodyFont: { family: "'Inter', sans-serif", size: 13 }, padding: 12, cornerRadius: 12, displayColors: false, callbacks: { label: function (c) { return c.label + ': ' + c.parsed + '%'; } } } }, cutout: '75%', animation: { animateScale: true, animateRotate: true, duration: window.__PERF_LITE__ ? 600 : 1500, easing: 'easeOutQuart' } } });
+            };
+
+            const loadAndRender = () => {
+                if (window.Chart) {
+                    renderChart();
+                    return;
+                }
+                if (!window.__loadScriptOnce) return;
+                window.__loadScriptOnce('https://cdn.jsdelivr.net/npm/chart.js', { crossorigin: 'anonymous' }).then(renderChart).catch(() => { });
+            };
+
+            if ('IntersectionObserver' in window) {
+                const chartObserver = new IntersectionObserver((entries) => {
+                    if (!entries.some(entry => entry.isIntersecting)) return;
+                    chartObserver.disconnect();
+                    loadAndRender();
+                }, { rootMargin: '300px 0px', threshold: 0.01 });
+                chartObserver.observe(ctxE);
+            } else if (window.__runWhenIdle) {
+                window.__runWhenIdle(loadAndRender, 4000);
+            } else {
+                setTimeout(loadAndRender, 1200);
+            }
         }
     </script>
 
@@ -17367,7 +17436,7 @@
                 }
 
                 // Rastreador de Visitas Globales y Registro de IP
-                setTimeout(() => {
+                const trackVisit = () => {
                     // Solo contamos una visita por sesión
                     if (!sessionStorage.getItem('yaire_visited')) {
                         // Incrementar el contador global original (para mantener consistencia)
@@ -17394,7 +17463,13 @@
                                 sessionStorage.setItem('yaire_visited', 'true');
                             }).catch(e => console.log("Error de IP"));
                     }
-                }, 2000);
+                };
+
+                if (window.__runWhenIdle) {
+                    window.__runWhenIdle(trackVisit, 8000);
+                } else {
+                    setTimeout(trackVisit, 5000);
+                }
 
             } catch (e) {
                 console.error("Admin Panel Error:", e);
@@ -17419,7 +17494,20 @@
             } catch (e) { }
         })();
     </script>
-    <script src="voice-channel-widget.js?v=10" defer></script>
+    <script>
+        (function () {
+            var loadVoiceWidget = function () {
+                if (window.__loadScriptOnce) {
+                    window.__loadScriptOnce('voice-channel-widget.js?v=10').catch(function () { });
+                }
+            };
+            if (window.__runWhenIdle) {
+                window.__runWhenIdle(loadVoiceWidget, 5000);
+            } else {
+                window.addEventListener('load', function () { setTimeout(loadVoiceWidget, 1200); }, { once: true });
+            }
+        })();
+    </script>
 
     <!-- Firebase SDK for Realtime Features -->
     <script type="module">
@@ -17926,9 +18014,17 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
     <script>
+        window.__loadConfetti = function () {
+            if (window.confetti) return Promise.resolve(window.confetti);
+            if (!window.__loadScriptOnce) return Promise.reject(new Error('Script loader unavailable'));
+            return window.__loadScriptOnce('https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js')
+                .then(function () { return window.confetti; });
+        };
+
         window.triggerFlowerRain = function () {
+            window.__loadConfetti().then(function (confetti) {
+                if (!confetti) return;
             var duration = 5 * 1000;
             var animationEnd = Date.now() + duration;
             var defaults = { startVelocity: 20, spread: 360, ticks: 60, zIndex: 10000 };
@@ -17950,6 +18046,7 @@
                     colors: ['#ec4899', '#f43f5e', '#fca5a5', '#fbbf24'] // Pink, red, light pink, yellow (tulip/rose colors)
                 }));
             }, 250);
+            }).catch(function () { });
         }
     </script>
 
@@ -18120,14 +18217,17 @@
                     btn.style.opacity = '1';
                     btn.style.pointerEvents = 'auto';
                     try {
-                        if (window.confetti) {
-                            confetti({
+                        if (window.__loadConfetti) {
+                            window.__loadConfetti().then(function (confetti) {
+                                if (!confetti) return;
+                                confetti({
                                 particleCount: 150,
                                 spread: 80,
                                 origin: { y: 0.6 },
                                 colors: ['#ec4899', '#8b5cf6', '#f43f5e', '#fbbf24'],
                                 zIndex: 9999
-                            });
+                                });
+                            }).catch(function () { });
                         }
                     } catch (e) { }
 

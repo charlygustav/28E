@@ -359,17 +359,21 @@
         channelCount: 1
       };
 
-      this._initAudio();
+      this.actx = null;
+      this.sfxBuf = {};
+      this.sfxNodes = {};
+      this._audioReady = false;
 
       // Auto-detect language changes
       this._lastLang = _getLang();
       setInterval(() => {
+        if (document.hidden) return;
         const current = _getLang();
         if (current !== this._lastLang) {
           this._lastLang = current;
           this.updateTranslations();
         }
-      }, 500);
+      }, 2000);
 
       this.ice = {
         iceServers: [
@@ -400,7 +404,6 @@
       };
 
       this._injectCSS();
-      this._injectCSS();
       this._buildUI();
     }
 
@@ -414,10 +417,10 @@
     }
 
     _initAudio() {
+      if (this._audioReady) return;
+      this._audioReady = true;
       try {
         this.actx = new (window.AudioContext || window.webkitAudioContext)();
-        this.sfxBuf = {};
-        this.sfxNodes = {};
         const load = async (k, u) => {
           try {
             const r = await fetch(u);
@@ -445,6 +448,7 @@
     }
 
     _playSfx(k, vol=0.4, loop=false, excl=null) {
+      this._initAudio();
       if (!this.actx || !this.sfxBuf[k]) return null;
       if (this.actx.state === 'suspended') this.actx.resume();
       if (excl && this.sfxNodes[excl]) this._stopSfx(this.sfxNodes[excl]);

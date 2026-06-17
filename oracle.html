@@ -2,9 +2,9 @@
 <html lang="es" class="scroll-smooth dark">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>28E Oracle</title>
-    <meta name="description" content="28E Oracle - Sala inmersiva de videollamadas y sincronización multimedia.">
+    <meta name="description" content="28E Oracle — Sala inmersiva de videollamadas y sincronización multimedia.">
     <link rel="icon" type="image/x-icon" href="tulip.ico?v=3">
 
     <!-- Tailwind -->
@@ -14,30 +14,93 @@
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+                    colors: {
+                        oracle: {
+                            50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a',
+                            400: '#fbbf24', 500: '#f59e0b', 600: '#d97706',
+                        }
+                    }
                 }
             }
         }
     </script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #09090b; overflow: hidden; }
-        ::-webkit-scrollbar { width: 6px; }
+        *, *::before, *::after { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #050507; overflow: hidden; -webkit-font-smoothing: antialiased; }
+        ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
-        
-        /* Grid transitions */
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+
+        /* ═══ GLASSMORPHISM SYSTEM ═══ */
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(40px) saturate(120%);
+            -webkit-backdrop-filter: blur(40px) saturate(120%);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .glass-light {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-heavy {
+            background: rgba(10, 10, 15, 0.6);
+            backdrop-filter: blur(60px) saturate(150%);
+            -webkit-backdrop-filter: blur(60px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+        }
+        .glass-input {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(245, 158, 11, 0.4);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        }
+
+        /* ═══ GRADIENT BORDERS ═══ */
+        .border-gradient {
+            position: relative;
+        }
+        .border-gradient::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(245,158,11,0.3), rgba(236,72,153,0.3), rgba(59,130,246,0.2));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        /* ═══ VIDEO GRID ═══ */
         .video-grid {
             display: grid;
-            gap: 1rem;
-            transition: all 0.5s ease-in-out;
+            gap: 0.75rem;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             place-items: center;
             align-content: center;
             width: 100%;
             height: 100%;
-            min-height: 0; /* Prevents grid from expanding indefinitely */
+            min-height: 0;
         }
         .grid-1 { grid-template-columns: 1fr; grid-template-rows: 1fr; }
         .grid-2 { grid-template-columns: 1fr 1fr; }
@@ -46,120 +109,277 @@
 
         .video-container {
             position: relative;
-            background: rgba(255,255,255,0.02);
+            background: rgba(255,255,255,0.015);
             border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 1.5rem;
+            border-radius: 1.25rem;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             aspect-ratio: 16/9;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             width: 100%;
             height: 100%;
-            max-height: calc(100vh - 12rem); /* Keep it from overflowing the viewport vertically */
+            max-height: calc(100vh - 10rem);
         }
-        /* Make sure the width scales down correctly when height is limited */
-        @media (min-aspect-ratio: 16/9) {
-            .grid-1 .video-container {
-                width: auto;
-                max-width: 100%;
-            }
+        .video-container:hover { border-color: rgba(255,255,255,0.1); }
+        .video-container.speaking {
+            border-color: rgba(34, 197, 94, 0.5);
+            box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2), 0 8px 32px rgba(0,0,0,0.5), 0 0 40px rgba(34, 197, 94, 0.1);
+        }
+        .video-container.screen-share-active {
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2), 0 8px 32px rgba(0,0,0,0.5);
         }
         .video-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 0.5s ease;
+            width: 100%; height: 100%; object-fit: cover;
+            opacity: 0; transition: opacity 0.5s ease;
         }
         .video-container.has-video video { opacity: 1; }
-        
+
         .avatar-fallback {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, rgba(15,15,20,0.9), rgba(20,20,30,0.9));
             transition: opacity 0.3s;
         }
         .video-container.has-video .avatar-fallback { opacity: 0; pointer-events: none; }
 
+        /* Video overlay info */
+        .video-overlay-info {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 1rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            display: flex; align-items: flex-end; justify-content: space-between;
+            pointer-events: none; z-index: 5;
+        }
+
+        /* Speaking indicator bars */
+        .speak-bars {
+            display: flex; align-items: flex-end; gap: 2px; height: 14px;
+        }
+        .speak-bars .bar {
+            width: 3px; background: #22c55e; border-radius: 3px;
+            transition: height 0.1s ease;
+        }
+        .speak-bars.active .bar { animation: eqBounce 0.6s ease-in-out infinite alternate; }
+        .speak-bars.active .bar:nth-child(1) { animation-delay: 0s; }
+        .speak-bars.active .bar:nth-child(2) { animation-delay: 0.15s; }
+        .speak-bars.active .bar:nth-child(3) { animation-delay: 0.3s; }
+        .speak-bars.active .bar:nth-child(4) { animation-delay: 0.1s; }
+        @keyframes eqBounce {
+            0% { height: 3px; } 100% { height: 14px; }
+        }
+
+        /* ═══ YOUTUBE RAVE ═══ */
         .youtube-stage {
-            display: none;
-            width: 100%;
-            height: 100%;
-            background: black;
-            border-radius: 1.5rem;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            display: none; width: 100%; height: 100%;
+            background: black; border-radius: 1.25rem; overflow: hidden;
+            position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
         }
         .youtube-stage.active { display: block; }
-        
-        /* Layout modes */
         .mode-video .youtube-stage { display: none; }
         .mode-youtube .youtube-stage { display: block; }
         .mode-youtube .video-grid {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            width: 250px;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            z-index: 50;
+            position: absolute; top: 1rem; right: 1rem;
+            width: 220px; display: flex; flex-direction: column; gap: 0.5rem; z-index: 50;
         }
         .mode-youtube .video-grid .video-container {
-            aspect-ratio: 16/9;
-            border-radius: 0.75rem;
+            aspect-ratio: 16/9; border-radius: 0.75rem;
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px); background: rgba(0,0,0,0.6);
         }
 
-        /* Floating Reactions */
+        /* ═══ FLOATING REACTIONS ═══ */
         .floating-reaction {
-            position: absolute;
-            font-size: 2rem;
-            pointer-events: none;
-            z-index: 100;
-            user-select: none;
+            position: absolute; font-size: 2rem; pointer-events: none;
+            z-index: 100; user-select: none;
             filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
         }
 
-        /* Toasts */
+        /* ═══ TOASTS ═══ */
         #toast-container {
-            position: fixed;
-            top: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 200;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
+            position: fixed; top: 1rem; left: 50%; transform: translateX(-50%);
+            z-index: 200; display: flex; flex-direction: column; gap: 0.5rem;
             pointer-events: none;
         }
         .toast-msg {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: rgba(10, 10, 15, 0.7);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: white; padding: 0.6rem 1.2rem; border-radius: 2rem;
+            font-size: 0.75rem; font-weight: 600;
+            display: flex; align-items: center; gap: 0.5rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
 
-        /* Reaction Buttons Hover */
-        .reaction-btn { transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        .reaction-btn:hover { transform: scale(1.3) translateY(-4px); }
+        /* ═══ CONTROL BAR ═══ */
+        .control-bar {
+            position: absolute;
+            bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: rgba(10, 10, 15, 0.65);
+            backdrop-filter: blur(50px) saturate(150%);
+            -webkit-backdrop-filter: blur(50px) saturate(150%);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 2rem;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04);
+            z-index: 50;
+        }
+        .ctrl-btn {
+            width: 2.75rem; height: 2.75rem;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: white; cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        .ctrl-btn:hover {
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .ctrl-btn:active { transform: scale(0.92); }
+        .ctrl-btn.active { background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.3); color: #f59e0b; }
+        .ctrl-btn.danger { background: rgba(239, 68, 68, 0.12); border-color: rgba(239, 68, 68, 0.3); color: #ef4444; }
+        .ctrl-btn.danger:hover { background: rgba(239, 68, 68, 0.25); }
+        .ctrl-btn.muted { background: rgba(239, 68, 68, 0.12); border-color: rgba(239, 68, 68, 0.3); color: #ef4444; }
+        .ctrl-divider { width: 1px; height: 1.5rem; background: rgba(255,255,255,0.06); margin: 0 0.25rem; }
+
+        /* Reaction buttons */
+        .reaction-btn {
+            width: 2rem; height: 2rem; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.04); border: none; cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .reaction-btn:hover { transform: scale(1.35) translateY(-4px); background: rgba(255,255,255,0.1); }
+
+        /* ═══ SIDEBAR ═══ */
+        .sidebar-tab {
+            flex: 1; padding: 0.5rem; font-size: 0.7rem; font-weight: 700;
+            border-radius: 0.5rem; cursor: pointer; text-align: center;
+            transition: all 0.25s ease; color: rgba(255,255,255,0.4);
+            text-transform: uppercase; letter-spacing: 0.05em;
+            border: 1px solid transparent;
+        }
+        .sidebar-tab:hover { color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.03); }
+        .sidebar-tab.active {
+            color: white;
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(255,255,255,0.08);
+        }
+
+        /* Chat bubbles */
+        .chat-bubble-me {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #000; border-radius: 1rem 1rem 0.25rem 1rem;
+        }
+        .chat-bubble-other {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.05);
+            color: white; border-radius: 1rem 1rem 1rem 0.25rem;
+        }
+        .typing-indicator span {
+            width: 5px; height: 5px; border-radius: 50%;
+            background: rgba(255,255,255,0.3); display: inline-block;
+            animation: typingDot 1.2s ease-in-out infinite;
+        }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.15s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes typingDot {
+            0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+            30% { opacity: 1; transform: translateY(-4px); }
+        }
+
+        /* ═══ RAVE PLAYER ═══ */
+        .rave-progress-bar {
+            height: 3px; background: rgba(255,255,255,0.06); border-radius: 3px;
+            overflow: hidden; cursor: pointer; position: relative;
+        }
+        .rave-progress-fill {
+            height: 100%; border-radius: 3px;
+            background: linear-gradient(90deg, #ec4899, #f59e0b);
+            transition: width 0.3s linear;
+        }
+        .rave-track-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        .rave-track-card:hover { background: rgba(255,255,255,0.06); }
+        .rave-track-card.playing {
+            border-color: rgba(236, 72, 153, 0.3);
+            background: rgba(236, 72, 153, 0.05);
+        }
+
+        /* ═══ PERSON CARD ═══ */
+        .person-card {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.625rem 0.75rem; border-radius: 0.75rem;
+            transition: all 0.2s ease; cursor: default;
+        }
+        .person-card:hover { background: rgba(255,255,255,0.04); }
+
+        /* ═══ LOADER KEYFRAMES ═══ */
+        @keyframes ldGlowPulse { from { opacity: 0.6; transform: translate(-50%, -50%) scale(0.9); } to { opacity: 1; transform: translate(-50%, -50%) scale(1.12); } }
+        @keyframes ldFadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes ldScaleIn { from { opacity: 0; transform: scale(0.82); } to { opacity: 1; transform: scale(1); } }
+        @keyframes ldFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes loader-rotate {
+            0% { transform: rotate(90deg); box-shadow: 0 10px 20px 0 #fff inset, 0 20px 30px 0 #f59e0b inset, 0 60px 60px 0 #ec4899 inset; }
+            50% { transform: rotate(270deg); box-shadow: 0 10px 20px 0 #fff inset, 0 20px 10px 0 #ec4899 inset, 0 40px 60px 0 #d97706 inset; }
+            100% { transform: rotate(450deg); box-shadow: 0 10px 20px 0 #fff inset, 0 20px 30px 0 #f59e0b inset, 0 60px 60px 0 #ec4899 inset; }
+        }
+
+        /* ═══ AMBIENT ORBS ═══ */
+        .ambient-orb {
+            position: absolute; border-radius: 50%; pointer-events: none;
+            filter: blur(80px); will-change: transform;
+        }
+
+        /* ═══ PULSE RING ═══ */
+        @keyframes pulseRing {
+            0% { transform: scale(1); opacity: 0.4; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+
+        /* ═══ LOBBY CAMERA PREVIEW ═══ */
+        .lobby-cam-preview {
+            position: relative; aspect-ratio: 16/9; border-radius: 1.5rem;
+            overflow: hidden; background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        }
+        .lobby-cam-preview video {
+            width: 100%; height: 100%; object-fit: cover;
+            transform: scaleX(-1);
+        }
+
+        /* ═══ CONSTELLATION BG ═══ */
+        @keyframes drift {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(30px, -20px); }
+            50% { transform: translate(-20px, 30px); }
+            75% { transform: translate(15px, 15px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        /* ═══ RESPONSIVE ═══ */
+        @media (max-width: 768px) {
+            .control-bar { bottom: 1rem; padding: 0.4rem 0.5rem; gap: 0.3rem; }
+            .ctrl-btn { width: 2.5rem; height: 2.5rem; }
+            .reaction-btn { width: 1.75rem; height: 1.75rem; font-size: 0.85rem; }
+            .video-container { border-radius: 1rem; max-height: calc(100vh - 8rem); }
+            .mode-youtube .video-grid { width: 150px; }
+        }
     </style>
 </head>
 <body class="text-white h-screen flex flex-col">
@@ -168,19 +388,15 @@
     <div id="toast-container"></div>
 
     <!-- ═══ LOADER ═══ -->
-    <div id="loader" style="position:fixed;inset:0;z-index:200;background:#050505;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;will-change:transform,opacity;transition:opacity 0.6s ease, transform 0.6s ease;">
-        <!-- Ambient glow -->
-        <div class="loader-glow loader-glow-1" style="position:absolute;width:380px;height:380px;background:radial-gradient(circle, rgba(245, 158, 11, 0.07) 0%, transparent 70%);border-radius:50%;top:50%;left:50%;transform:translate(-50%, -55%);animation:ldGlowPulse 4s ease-in-out infinite alternate;"></div>
-        <div class="loader-glow loader-glow-2" style="position:absolute;width:320px;height:320px;background:radial-gradient(circle, rgba(236, 72, 153, 0.05) 0%, transparent 70%);border-radius:50%;top:50%;left:50%;transform:translate(-48%, -45%);animation:ldGlowPulse 5s ease-in-out infinite alternate-reverse;"></div>
+    <div id="loader" style="position:fixed;inset:0;z-index:200;background:#050507;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;will-change:transform,opacity;transition:opacity 0.6s ease, transform 0.6s ease;">
+        <div class="ambient-orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(245,158,11,0.06) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-55%);animation:ldGlowPulse 4s ease-in-out infinite alternate;"></div>
+        <div class="ambient-orb" style="width:350px;height:350px;background:radial-gradient(circle,rgba(236,72,153,0.04) 0%,transparent 70%);top:50%;left:50%;transform:translate(-48%,-45%);animation:ldGlowPulse 5s ease-in-out infinite alternate-reverse;"></div>
 
-        <!-- Logo -->
         <div id="loader-logo" style="position:relative;z-index:10;opacity:0;margin-bottom:2rem;text-align:center;animation:ldFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.15s forwards;">
-            <span style="font-family:'Inter',sans-serif;font-weight:900;font-size:2.6rem;letter-spacing:-0.06em;color:#fff;line-height:1;">28E</span>
+            <span style="font-weight:900;font-size:2.6rem;letter-spacing:-0.06em;color:#fff;line-height:1;">28E</span>
         </div>
 
-        <!-- Sphere -->
         <div id="custom-loader-wrapper" style="position:relative;z-index:10;display:flex;align-items:center;justify-content:center;width:220px;height:220px;opacity:0;animation:ldScaleIn 0.8s cubic-bezier(0.22,1,0.36,1) 0.3s forwards;">
-            <!-- SVG Progress Ring -->
             <svg width="220" height="220" viewBox="0 0 220 220" style="position:absolute;inset:0;z-index:2;">
                 <circle cx="110" cy="110" r="104" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
                 <circle id="loader-ring-fill" cx="110" cy="110" r="104" fill="none" stroke="url(#ld-ring-grad)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="653.45" stroke-dashoffset="653.45" transform="rotate(-90 110 110)" style="transition:stroke-dashoffset 0.5s cubic-bezier(0.4,0,0.2,1);" />
@@ -192,95 +408,79 @@
                 </defs>
             </svg>
             <div style="position:relative;width:180px;height:180px;border-radius:50%;user-select:none;">
-                <div class="loader-circle-bg" style="position:absolute;inset:0;border-radius:50%;animation:loader-rotate 2.5s linear infinite;"></div>
+                <div style="position:absolute;inset:0;border-radius:50%;animation:loader-rotate 2.5s linear infinite;"></div>
             </div>
         </div>
 
-        <div id="loader-percent" style="position:relative;z-index:10;opacity:0;animation:ldFadeUp 0.5s ease 0.55s forwards;margin-top:2rem;font-family:'Inter',sans-serif;font-weight:300;font-size:0.8rem;color:rgba(255,255,255,0.3);letter-spacing:0.12em;">Conectando a Oracle...</div>
-
-        <style>
-            @keyframes ldGlowPulse { from { opacity: 0.6; transform: translate(-50%, -50%) scale(0.9); } to { opacity: 1; transform: translate(-50%, -50%) scale(1.12); } }
-            @keyframes ldFadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-            @keyframes ldScaleIn { from { opacity: 0; transform: scale(0.82); } to { opacity: 1; transform: scale(1); } }
-            @keyframes loader-rotate {
-                0% { transform: rotate(90deg); box-shadow: 0 10px 20px 0 #fff inset, 0 20px 30px 0 #f59e0b inset, 0 60px 60px 0 #ec4899 inset; }
-                50% { transform: rotate(270deg); box-shadow: 0 10px 20px 0 #fff inset, 0 20px 10px 0 #ec4899 inset, 0 40px 60px 0 #d97706 inset; }
-                100% { transform: rotate(450deg); box-shadow: 0 10px 20px 0 #fff inset, 0 20px 30px 0 #f59e0b inset, 0 60px 60px 0 #ec4899 inset; }
-            }
-        </style>
+        <div id="loader-percent" style="position:relative;z-index:10;opacity:0;animation:ldFadeUp 0.5s ease 0.55s forwards;margin-top:2rem;font-weight:300;font-size:0.8rem;color:rgba(255,255,255,0.3);letter-spacing:0.12em;">Conectando a Oracle...</div>
     </div>
 
-    <!-- Auth / Login Overlay -->
-    <div id="auth-overlay" class="fixed inset-0 z-[100] bg-[#050505] transition-opacity duration-500 overflow-hidden">
-        
-        <!-- Abstract Animated Background -->
+    <!-- ═══ AUTH / LOGIN OVERLAY ═══ -->
+    <div id="auth-overlay" class="fixed inset-0 z-[100] bg-[#050507] transition-opacity duration-500 overflow-hidden">
+
+        <!-- Ambient Background -->
         <div class="absolute inset-0 pointer-events-none">
-            <div class="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-amber-500/5 rounded-full blur-[120px] animate-[spin_20s_linear_infinite] origin-center"></div>
-            <div class="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-pink-500/5 rounded-full blur-[100px] animate-[spin_15s_linear_infinite_reverse] origin-center"></div>
-            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+CjxwYXRoIGQ9Ik0wIDE5LjVMMTkuNSAwIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4wMikiIHN0cm9rZS13aWR0aD0iMSIvPgo8L3N2Zz4=')] bg-repeat opacity-50"></div>
-            <!-- Vignette -->
-            <div class="absolute inset-0 bg-radial-gradient from-transparent to-black/80"></div>
+            <div class="ambient-orb" style="width:700px;height:700px;background:radial-gradient(circle,rgba(245,158,11,0.04),transparent 70%);top:-15%;left:-10%;animation:drift 25s ease-in-out infinite;"></div>
+            <div class="ambient-orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(236,72,153,0.04),transparent 70%);bottom:-15%;right:-10%;animation:drift 20s ease-in-out infinite reverse;"></div>
+            <div class="ambient-orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(59,130,246,0.03),transparent 70%);top:40%;left:50%;animation:drift 30s ease-in-out infinite 5s;"></div>
+            <!-- Noise texture -->
+            <div class="absolute inset-0 opacity-30" style="background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMiIvPjwvc3ZnPg==');"></div>
         </div>
 
         <div class="relative z-10 w-full h-full flex flex-col lg:flex-row">
-            
-            <!-- LEFT: Showcase Presentation -->
-            <div class="hidden lg:flex flex-1 flex-col justify-center px-16 xl:px-24 border-r border-white/5 bg-black/40 backdrop-blur-md relative">
-                <!-- Inner glow -->
-                <div class="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-pink-500/5 pointer-events-none"></div>
-                
-                <div class="relative z-10 max-w-2xl">
-                    <div class="auth-stagger mb-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-bold text-amber-500 uppercase tracking-widest">
-                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>
+
+            <!-- LEFT: Feature Showcase -->
+            <div class="hidden lg:flex flex-1 flex-col justify-center px-16 xl:px-20 relative">
+                <!-- Inner gradient -->
+                <div class="absolute inset-0 bg-gradient-to-br from-amber-500/[0.03] via-transparent to-pink-500/[0.02] pointer-events-none"></div>
+
+                <div class="relative z-10 max-w-xl">
+                    <div class="auth-stagger mb-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-light text-[10px] font-bold text-amber-500 uppercase tracking-[0.15em]">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-500 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                        </span>
                         Acceso Restringido
                     </div>
-                    <h2 class="text-6xl xl:text-7xl font-black text-white tracking-tighter mb-4 auth-stagger leading-tight">
-                        Descubre <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-pink-500">Oracle</span>
+
+                    <h2 class="text-5xl xl:text-6xl font-black text-white tracking-tight mb-5 auth-stagger leading-[1.1]">
+                        Bienvenido a<br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-500 to-pink-500">Oracle</span>
                     </h2>
-                    <p class="text-xl text-zinc-400 mb-12 auth-stagger leading-relaxed">
-                        El santuario interactivo de 28E. Un espacio virtual en tiempo real diseñado para la inmersión total y la conexión genuina.
+
+                    <p class="text-lg text-zinc-400 mb-14 auth-stagger leading-relaxed max-w-md">
+                        Tu santuario digital. Videollamadas inmersivas, música sincronizada y conexión genuina en tiempo real.
                     </p>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <!-- Feature 1 -->
-                        <div class="flex items-start gap-4 auth-stagger">
-                            <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0 border border-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.15)]">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+                    <!-- Feature Grid -->
+                    <div class="grid grid-cols-2 gap-5">
+                        <div class="glass-card rounded-2xl p-5 auth-stagger group hover:border-amber-500/20 transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z"/></svg>
                             </div>
-                            <div>
-                                <h3 class="text-white font-bold mb-1">Voz Inmersiva</h3>
-                                <p class="text-zinc-500 text-sm leading-relaxed">Comunícate con claridad cristalina. Latencia ultrabaja y cancelación de ruido.</p>
-                            </div>
+                            <h3 class="text-white font-bold text-sm mb-1">Video HD</h3>
+                            <p class="text-zinc-500 text-xs leading-relaxed">Videollamadas con calidad cristalina y latencia ultrabaja.</p>
                         </div>
-                        <!-- Feature 2 -->
-                        <div class="flex items-start gap-4 auth-stagger">
-                            <div class="w-12 h-12 rounded-2xl bg-pink-500/10 text-pink-500 flex items-center justify-center shrink-0 border border-pink-500/20 shadow-[0_0_15px_rgba(236,72,153,0.15)]">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+                        <div class="glass-card rounded-2xl p-5 auth-stagger group hover:border-pink-500/20 transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-pink-500/10 text-pink-500 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z"/></svg>
                             </div>
-                            <div>
-                                <h3 class="text-white font-bold mb-1">Rave Sincronizado</h3>
-                                <p class="text-zinc-500 text-sm leading-relaxed">Escucha la misma música al mismo tiempo que todos los demás en la sala.</p>
-                            </div>
+                            <h3 class="text-white font-bold text-sm mb-1">Rave Sync</h3>
+                            <p class="text-zinc-500 text-xs leading-relaxed">Música sincronizada en tiempo real con todos los participantes.</p>
                         </div>
-                        <!-- Feature 3 -->
-                        <div class="flex items-start gap-4 auth-stagger">
-                            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        <div class="glass-card rounded-2xl p-5 auth-stagger group hover:border-emerald-500/20 transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
                             </div>
-                            <div>
-                                <h3 class="text-white font-bold mb-1">Identidad Única</h3>
-                                <p class="text-zinc-500 text-sm leading-relaxed">Reclama tu propio @usuario exclusivo y destaca en el muro de actividades.</p>
-                            </div>
+                            <h3 class="text-white font-bold text-sm mb-1">Cifrado E2E</h3>
+                            <p class="text-zinc-500 text-xs leading-relaxed">Conexiones seguras peer-to-peer con cifrado de extremo a extremo.</p>
                         </div>
-                        <!-- Feature 4 -->
-                        <div class="flex items-start gap-4 auth-stagger">
-                            <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0 border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.15)]">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <div class="glass-card rounded-2xl p-5 auth-stagger group hover:border-blue-500/20 transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"/></svg>
                             </div>
-                            <div>
-                                <h3 class="text-white font-bold mb-1">Reacciones en Vivo</h3>
-                                <p class="text-zinc-500 text-sm leading-relaxed">Interactúa con emojis flotantes que brotan en tiempo real desde tu video.</p>
-                            </div>
+                            <h3 class="text-white font-bold text-sm mb-1">Chat en Vivo</h3>
+                            <p class="text-zinc-500 text-xs leading-relaxed">Mensajes instantáneos con reacciones flotantes y emojis.</p>
                         </div>
                     </div>
                 </div>
@@ -288,25 +488,29 @@
 
             <!-- RIGHT: Login Area -->
             <div class="flex-1 flex flex-col items-center justify-center p-8 relative">
-                
-                <!-- Glassmorphism Card -->
-                <div class="w-full max-w-[400px] bg-black/50 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.8)] p-10 flex flex-col items-center text-center transform transition-transform duration-700 ease-out" id="auth-card">
-                    
+                <!-- Mobile-only subtle bg -->
+                <div class="lg:hidden absolute inset-0 bg-gradient-to-b from-amber-500/[0.02] to-transparent pointer-events-none"></div>
+
+                <!-- Glassmorphism Login Card -->
+                <div class="relative w-full max-w-[380px] glass-heavy rounded-[2rem] shadow-[0_30px_80px_rgba(0,0,0,0.6)] p-10 flex flex-col items-center text-center border-gradient" id="auth-card">
+
                     <!-- Oracle Icon -->
-                    <div class="relative w-28 h-28 mb-8 group">
-                        <div class="absolute inset-0 bg-amber-500/30 blur-2xl rounded-full group-hover:bg-amber-500/50 transition-colors duration-500 animate-pulse"></div>
-                        <div class="absolute inset-0 flex items-center justify-center text-amber-500 transform group-hover:scale-110 transition-transform duration-500">
-                            <svg class="w-20 h-20 drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3a9 9 0 0 1 9 9H3a9 9 0 0 1 9-9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18"/></svg>
+                    <div class="relative w-24 h-24 mb-8 group">
+                        <div class="absolute inset-0 bg-gradient-to-br from-amber-500/25 to-pink-500/20 blur-2xl rounded-full group-hover:from-amber-500/40 group-hover:to-pink-500/30 transition-all duration-700 animate-pulse"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-20 h-20 rounded-2xl glass-light flex items-center justify-center text-amber-500 transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                                <svg class="w-10 h-10 drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3a9 9 0 0 1 9 9H3a9 9 0 0 1 9-9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18"/></svg>
+                            </div>
                         </div>
                     </div>
 
-                    <h1 class="text-3xl font-black text-white tracking-tight mb-2">28E Oracle</h1>
-                    <p id="auth-status-text" class="text-amber-500/80 font-bold text-[10px] tracking-[0.2em] uppercase mb-8">Iniciando conexión...</p>
-                    
+                    <h1 class="text-2xl font-black text-white tracking-tight mb-1">28E Oracle</h1>
+                    <p id="auth-status-text" class="text-amber-500/70 font-bold text-[10px] tracking-[0.2em] uppercase mb-8">Iniciando conexión...</p>
+
                     <div id="auth-actions" class="hidden w-full flex-col items-center gap-5">
-                        <div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-2"></div>
-                        <p class="text-zinc-400 text-sm font-medium">Debes iniciar sesión para entrar.</p>
-                        <button id="btn-login-google" class="w-full flex items-center justify-center gap-3 bg-white/5 border border-white/10 px-6 py-4 rounded-2xl hover:bg-white/10 hover:border-white/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group shadow-xl">
+                        <div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-1"></div>
+                        <p class="text-zinc-400 text-sm font-medium">Inicia sesión para continuar</p>
+                        <button id="btn-login-google" class="w-full flex items-center justify-center gap-3 glass-light px-6 py-4 rounded-2xl hover:bg-white/10 hover:border-white/15 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group shadow-xl cursor-pointer">
                             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5" />
                             <span class="text-white font-bold tracking-wide">Continuar con Google</span>
                         </button>
@@ -316,137 +520,213 @@
                         </a>
                     </div>
                 </div>
-
             </div>
         </div>
 
         <script>
-            // Run initial GSAP animation for the landing page
             document.addEventListener('DOMContentLoaded', () => {
                 if (window.gsap) {
-                    gsap.fromTo(".auth-stagger", 
+                    gsap.fromTo(".auth-stagger",
                         { opacity: 0, y: 30, scale: 0.95 },
-                        { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.1, ease: "back.out(1.2)", delay: 0.5 }
+                        { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.08, ease: "back.out(1.2)", delay: 0.5 }
                     );
                     gsap.fromTo("#auth-card",
-                        { opacity: 0, scale: 0.9 },
-                        { opacity: 1, scale: 1, duration: 1, ease: "power3.out", delay: 0.3 }
+                        { opacity: 0, scale: 0.9, y: 20 },
+                        { opacity: 1, scale: 1, y: 0, duration: 1, ease: "power3.out", delay: 0.3 }
                     );
                 }
             });
         </script>
     </div>
 
-    <!-- Main Layout -->
+    <!-- ═══ MAIN LAYOUT ═══ -->
     <div class="flex-1 flex overflow-hidden">
-        
-        <!-- Center Stage (Videos & YouTube) -->
-        <main class="flex-1 relative p-4 pb-28 flex flex-col transition-all duration-500" id="main-stage">
-            
-            <!-- Open Sidebar Button -->
-            <button id="btn-open-sidebar" class="absolute top-4 right-4 z-50 bg-black/60 backdrop-blur-md border border-white/10 text-white w-10 h-10 rounded-xl flex items-center justify-center hover:bg-white/20 transition-all duration-300 opacity-0 pointer-events-none scale-90" title="Abrir Conexión Oracle">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-            </button>
-            
+
+        <!-- Center Stage -->
+        <main class="flex-1 relative p-3 pb-24 flex flex-col transition-all duration-500" id="main-stage">
+
+            <!-- Header Bar -->
+            <div class="flex items-center justify-between mb-3 px-1">
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-amber-500/80">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        Oracle
+                    </div>
+                    <div class="w-px h-4 bg-white/10"></div>
+                    <div id="room-timer" class="text-[11px] font-mono text-zinc-500 tracking-wider">00:00</div>
+                </div>
+                <button id="btn-open-sidebar" class="glass-light text-white w-9 h-9 rounded-xl flex items-center justify-center hover:bg-white/10 transition-all duration-300 opacity-0 pointer-events-none scale-90 cursor-pointer" title="Abrir Panel">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+            </div>
+
             <!-- YouTube Stage -->
-            <div id="youtube-stage" class="youtube-stage flex-1 mb-4">
+            <div id="youtube-stage" class="youtube-stage flex-1 mb-3">
                 <div id="yt-player-container" class="w-full h-full"></div>
-                <!-- YouTube Overlay controls -->
-                <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-4 py-2 rounded-xl border border-white/10 flex items-center gap-3 opacity-0 hover:opacity-100 transition-opacity">
-                    <span class="text-amber-500 font-bold text-xs uppercase tracking-wider">Oracle Rave</span>
-                    <div class="w-1 h-4 bg-white/20"></div>
+                <div class="absolute top-4 left-4 glass-heavy px-4 py-2 rounded-xl flex items-center gap-3 opacity-0 hover:opacity-100 transition-opacity">
+                    <span class="text-pink-500 font-bold text-xs uppercase tracking-wider">Rave</span>
+                    <div class="w-px h-4 bg-white/10"></div>
                     <span id="yt-now-playing" class="text-sm font-medium text-white/80">Esperando video...</span>
                 </div>
             </div>
 
             <!-- Video Grid -->
-            <div id="video-grid" class="video-grid grid-1 flex-1">
-                <!-- User templates will be injected here -->
-            </div>
+            <div id="video-grid" class="video-grid grid-1 flex-1"></div>
 
-            <!-- Global Controls (Bottom Center) -->
-            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 px-6 py-3 bg-black/80 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl z-50">
-                <!-- Reactions -->
-                <div class="flex items-center gap-1 mr-2 pr-4 border-r border-white/10">
-                    <button class="reaction-btn w-8 h-8 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/20 text-lg" onclick="window.oracleRoom && window.oracleRoom.sendReaction('❤️')" title="Me encanta">❤️</button>
-                    <button class="reaction-btn w-8 h-8 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/20 text-lg" onclick="window.oracleRoom && window.oracleRoom.sendReaction('🔥')" title="Fuego">🔥</button>
-                    <button class="reaction-btn w-8 h-8 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/20 text-lg" onclick="window.oracleRoom && window.oracleRoom.sendReaction('😂')" title="Risa">😂</button>
-                    <button class="reaction-btn w-8 h-8 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/20 text-lg" onclick="window.oracleRoom && window.oracleRoom.sendReaction('👏')" title="Aplausos">👏</button>
-                </div>
-
-                <button id="btn-mic" class="w-12 h-12 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 text-white transition-all" title="Micrófono">
+            <!-- ═══ CONTROL BAR ═══ -->
+            <div class="control-bar">
+                <!-- Main Controls -->
+                <button id="btn-mic" class="ctrl-btn" title="Micrófono">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
                 </button>
-                <button id="btn-cam" class="w-12 h-12 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 text-white transition-all relative overflow-hidden" title="Cámara">
+                <button id="btn-cam" class="ctrl-btn" title="Cámara">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-                    <!-- Strike line for when disabled -->
-                    <div id="cam-strike" class="absolute w-[2px] h-8 bg-red-500 rotate-45 transform origin-center transition-transform scale-0"></div>
+                    <div id="cam-strike" class="absolute w-[2px] h-7 bg-red-500 rotate-45 transform origin-center transition-transform scale-0 rounded-full"></div>
                 </button>
-                <div class="w-[1px] h-8 bg-white/10 mx-2"></div>
-                <button id="btn-leave" class="w-16 h-12 rounded-xl flex items-center justify-center bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-500 transition-all" title="Salir de Oracle">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.42 19.42 0 0 1 4.26 9.6a2 2 0 0 1 1-2.2 12.84 12.84 0 0 0 .7-2.81 2 2 0 0 1 2-1.72h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"/></svg>
+                <button id="btn-screen" class="ctrl-btn" title="Compartir pantalla">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                </button>
+
+                <div class="ctrl-divider"></div>
+
+                <!-- Reactions -->
+                <div class="flex items-center gap-0.5">
+                    <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('❤️')" title="Love">❤️</button>
+                    <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('🔥')" title="Fire">🔥</button>
+                    <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('😂')" title="Laugh">😂</button>
+                    <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('👏')" title="Clap">👏</button>
+                    <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('😍')" title="Love eyes">😍</button>
+                    <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('🎉')" title="Party">🎉</button>
+                </div>
+
+                <div class="ctrl-divider"></div>
+
+                <!-- Leave -->
+                <button id="btn-leave" class="ctrl-btn danger" title="Salir">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"/></svg>
                 </button>
             </div>
 
         </main>
 
-        <!-- Right Sidebar (Chat & Music Queue) -->
-        <aside id="oracle-sidebar" class="w-80 border-l border-white/5 bg-zinc-950/80 backdrop-blur-xl flex flex-col z-40 transition-[width,margin] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] shrink-0 overflow-hidden">
-            <!-- Fixed width inner wrapper to prevent text wrapping during animation -->
+        <!-- ═══ RIGHT SIDEBAR ═══ -->
+        <aside id="oracle-sidebar" class="w-80 border-l border-white/[0.04] bg-[#0a0a0f]/80 backdrop-blur-xl flex flex-col z-40 transition-[width,margin] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] shrink-0 overflow-hidden">
             <div class="w-80 h-full flex flex-col">
-                <div class="p-4 border-b border-white/5 flex items-center justify-between">
-                    <div class="flex items-center gap-2 text-amber-500 font-bold tracking-widest text-xs uppercase">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+
+                <!-- Sidebar Header -->
+                <div class="p-4 border-b border-white/[0.04] flex items-center justify-between">
+                    <div class="flex items-center gap-2 text-amber-500 font-bold tracking-[0.1em] text-[10px] uppercase">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                         Conexión Oracle
                     </div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.8)]"></div>
-                        <button id="btn-close-sidebar" class="text-zinc-500 hover:text-white transition-colors p-1.5 bg-white/5 hover:bg-white/10 rounded-lg group" title="Ocultar Panel">
-                            <svg class="w-4 h-4 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                        </button>
-                    </div>
-                </div>
-
-            <!-- Tabs -->
-            <div class="flex items-center px-4 pt-4 gap-2">
-                <button id="tab-chat" class="flex-1 py-2 text-xs font-bold rounded-lg bg-white/10 text-white transition-all">Chat</button>
-                <button id="tab-rave" class="flex-1 py-2 text-xs font-bold rounded-lg text-white/50 hover:bg-white/5 hover:text-white transition-all">Rave</button>
-            </div>
-
-            <!-- Chat Content -->
-            <div id="pane-chat" class="flex-1 flex flex-col min-h-0">
-                <div id="chat-messages" class="flex-1 overflow-y-auto p-4 flex flex-col gap-4 relative">
-                    <div class="text-center text-xs text-white/30 my-4 bg-black/20 rounded-xl p-2 border border-white/5 backdrop-blur-sm mx-auto w-fit">Bienvenido a Oracle. Tus mensajes están cifrados.</div>
-                </div>
-                <div class="p-4 border-t border-white/5 bg-black/40">
-                    <form id="chat-form" class="flex gap-2">
-                        <input type="text" id="chat-input" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-amber-500/50 transition-colors" placeholder="Escribe un mensaje..." autocomplete="off">
-                        <button type="submit" class="w-10 h-10 rounded-xl bg-amber-500 text-black flex items-center justify-center hover:bg-amber-400 transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Rave Content (Hidden by default) -->
-            <div id="pane-rave" class="flex-1 flex flex-col min-h-0 hidden">
-                <div class="p-4 border-b border-white/5">
-                    <form id="rave-form" class="flex flex-col gap-2">
-                        <label class="text-[10px] uppercase font-bold text-white/40 tracking-wider">Añadir Video a Rave</label>
-                        <div class="flex gap-2">
-                            <input type="url" id="rave-input" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-pink-500/50 transition-colors" placeholder="Link de YouTube o Spotify..." required>
-                            <button type="submit" class="px-4 rounded-xl bg-pink-500 text-white font-bold text-xs hover:bg-pink-400 transition-colors shadow-[0_0_15px_rgba(236,72,153,0.3)]">Añadir</button>
+                    <div class="flex items-center gap-2.5">
+                        <div class="flex items-center gap-1.5">
+                            <div class="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></div>
+                            <span id="sidebar-user-count" class="text-[10px] font-bold text-green-400">0</span>
                         </div>
-                    </form>
-                </div>
-                <div class="p-4 flex-1 overflow-y-auto">
-                    <div class="text-[10px] uppercase font-bold text-white/40 tracking-wider mb-3">Cola de Reproducción</div>
-                    <div id="rave-queue" class="flex flex-col gap-2">
-                        <div class="text-xs text-white/30 text-center py-8">La cola está vacía.</div>
+                        <button id="btn-close-sidebar" class="text-zinc-500 hover:text-white transition-colors p-1.5 hover:bg-white/5 rounded-lg cursor-pointer" title="Ocultar Panel">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </button>
                     </div>
                 </div>
+
+                <!-- Tabs -->
+                <div class="flex items-center px-3 pt-3 gap-1.5">
+                    <button id="tab-chat" class="sidebar-tab active" data-tab="chat">💬 Chat</button>
+                    <button id="tab-rave" class="sidebar-tab" data-tab="rave">🎵 Rave</button>
+                    <button id="tab-people" class="sidebar-tab" data-tab="people">👥 Personas</button>
+                </div>
+
+                <!-- ═══ TAB: CHAT ═══ -->
+                <div id="pane-chat" class="flex-1 flex flex-col min-h-0" data-pane="chat">
+                    <div id="chat-messages" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3 relative">
+                        <div class="text-center text-[10px] text-white/20 my-4 glass-card rounded-xl p-3 mx-auto w-fit font-medium">
+                            Bienvenido a Oracle. Tus mensajes están cifrados de extremo a extremo.
+                        </div>
+                    </div>
+                    <!-- Typing Indicator -->
+                    <div id="typing-indicator" class="px-4 pb-1 hidden">
+                        <div class="flex items-center gap-2 text-[10px] text-zinc-500">
+                            <div class="typing-indicator flex gap-1">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <span id="typing-name">Alguien</span> está escribiendo...
+                        </div>
+                    </div>
+                    <!-- Chat Input -->
+                    <div class="p-3 border-t border-white/[0.04]">
+                        <form id="chat-form" class="flex gap-2">
+                            <input type="text" id="chat-input" class="flex-1 glass-input rounded-xl px-4 py-2.5 text-xs text-white outline-none transition-all placeholder:text-zinc-600" placeholder="Escribe un mensaje..." autocomplete="off">
+                            <button type="submit" class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 text-black flex items-center justify-center hover:from-amber-400 hover:to-orange-500 transition-all shadow-[0_4px_15px_rgba(245,158,11,0.2)] cursor-pointer active:scale-95">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ═══ TAB: RAVE ═══ -->
+                <div id="pane-rave" class="flex-1 flex flex-col min-h-0 hidden" data-pane="rave">
+                    <!-- Now Playing -->
+                    <div id="rave-now-playing" class="p-4 border-b border-white/[0.04] hidden">
+                        <div class="glass-card rounded-xl p-4 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-r from-pink-500/5 to-purple-500/5"></div>
+                            <div class="relative z-10">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <div class="w-5 h-5 rounded-full bg-pink-500 flex items-center justify-center shadow-[0_0_10px_rgba(236,72,153,0.4)]">
+                                        <svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    </div>
+                                    <span class="text-[9px] font-bold text-pink-400 uppercase tracking-[0.15em]">Reproduciendo</span>
+                                </div>
+                                <p id="rave-current-title" class="text-sm font-bold text-white truncate mb-3">-</p>
+                                <div class="rave-progress-bar" id="rave-progress-bar">
+                                    <div class="rave-progress-fill" id="rave-progress-fill" style="width: 0%"></div>
+                                </div>
+                                <div class="flex justify-between mt-2 text-[10px] text-zinc-500 font-mono">
+                                    <span id="rave-time-current">0:00</span>
+                                    <span id="rave-time-total">0:00</span>
+                                </div>
+                                <!-- Rave Controls -->
+                                <div class="flex items-center justify-center gap-3 mt-3">
+                                    <button id="btn-rave-playpause" class="w-9 h-9 rounded-full glass-light flex items-center justify-center text-white hover:bg-white/10 transition-all cursor-pointer" title="Play/Pause">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/></svg>
+                                    </button>
+                                    <button id="btn-rave-skip" class="w-9 h-9 rounded-full glass-light flex items-center justify-center text-white hover:bg-white/10 transition-all cursor-pointer" title="Siguiente">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M5 4l10 8-10 8V4zm14 0v16h-2V4h2z"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Add Track -->
+                    <div class="p-4 border-b border-white/[0.04]">
+                        <form id="rave-form" class="flex flex-col gap-2">
+                            <label class="text-[9px] uppercase font-bold text-white/30 tracking-[0.15em]">Añadir a la Cola</label>
+                            <div class="flex gap-2">
+                                <input type="url" id="rave-input" class="flex-1 glass-input rounded-xl px-3 py-2.5 text-xs text-white outline-none transition-all placeholder:text-zinc-600" placeholder="YouTube o Spotify URL..." required>
+                                <button type="submit" class="px-4 rounded-xl bg-gradient-to-br from-pink-500 to-purple-600 text-white font-bold text-[11px] hover:from-pink-400 hover:to-purple-500 transition-all shadow-[0_4px_15px_rgba(236,72,153,0.2)] cursor-pointer active:scale-95">Añadir</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Queue -->
+                    <div class="p-4 flex-1 overflow-y-auto">
+                        <div class="text-[9px] uppercase font-bold text-white/30 tracking-[0.15em] mb-3">Cola de Reproducción</div>
+                        <div id="rave-queue" class="flex flex-col gap-2">
+                            <div class="text-xs text-white/20 text-center py-8">La cola está vacía.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ TAB: PEOPLE ═══ -->
+                <div id="pane-people" class="flex-1 flex flex-col min-h-0 hidden" data-pane="people">
+                    <div class="p-4 border-b border-white/[0.04]">
+                        <div class="text-[9px] uppercase font-bold text-white/30 tracking-[0.15em]">Participantes</div>
+                    </div>
+                    <div id="people-list" class="flex-1 overflow-y-auto p-3 flex flex-col gap-1">
+                        <div class="text-xs text-white/20 text-center py-8">Nadie conectado aún.</div>
+                    </div>
+                </div>
+
             </div>
-            </div> <!-- End inner w-80 wrapper -->
         </aside>
     </div>
 
@@ -475,127 +755,160 @@
 
             btnClose.addEventListener('click', toggleSidebar);
             btnOpen.addEventListener('click', toggleSidebar);
+
+            // Tab Switching
+            const tabs = document.querySelectorAll('.sidebar-tab');
+            const panes = document.querySelectorAll('[data-pane]');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = tab.dataset.tab;
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    panes.forEach(p => {
+                        if (p.dataset.pane === target) p.classList.remove('hidden');
+                        else p.classList.add('hidden');
+                    });
+                });
+            });
         });
     </script>
 
-    <!-- Pre-Join / Lobby Overlay -->
-    <div id="lobby-overlay" class="fixed inset-0 z-[60] bg-zinc-950 flex transition-opacity duration-500 overflow-hidden overflow-y-auto">
+    <!-- ═══ PRE-JOIN LOBBY ═══ -->
+    <div id="lobby-overlay" class="fixed inset-0 z-[60] bg-[#050507] flex transition-opacity duration-500 overflow-hidden overflow-y-auto">
         <!-- Ambient Background -->
         <div class="fixed inset-0 z-0">
-            <div class="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none"></div>
-            <div class="absolute bottom-[0%] -right-[10%] w-[50%] h-[50%] bg-purple-500/10 rounded-full blur-[120px] pointer-events-none"></div>
-            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDIiLz4KPC9zdmc+')] opacity-20 pointer-events-none"></div>
+            <div class="ambient-orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(245,158,11,0.06),transparent 70%);top:-15%;left:-10%;animation:drift 20s ease-in-out infinite;"></div>
+            <div class="ambient-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(139,92,246,0.05),transparent 70%);bottom:-10%;right:-10%;animation:drift 25s ease-in-out infinite reverse;"></div>
+            <div class="absolute inset-0 opacity-20" style="background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMiIvPjwvc3ZnPg==');"></div>
         </div>
 
-        <div class="relative z-10 w-full max-w-6xl mx-auto pt-10 px-4 md:px-8 pb-20 flex flex-col md:flex-row gap-6 items-start justify-center min-h-screen">
-            
-            <!-- Left Column: Profile (250px) -->
-            <div class="lobby-col w-full md:w-[280px] shrink-0 flex flex-col gap-6 sticky top-10">
-                <!-- Profile Card -->
-                <div class="w-full bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl shadow-2xl overflow-hidden relative group">
-                    <!-- Cover Photo -->
-                    <div class="h-24 bg-gradient-to-r from-amber-500/40 to-pink-500/40 relative">
-                        <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
-                    </div>
-                    <!-- Avatar & Info -->
-                    <div class="px-6 pb-6 pt-0 relative">
-                        <div class="w-20 h-20 rounded-full bg-zinc-900 border-4 border-zinc-900 absolute -top-10 left-6 flex items-center justify-center overflow-hidden shadow-xl">
-                            <img id="lobby-avatar" src="" class="w-full h-full object-cover hidden" />
-                            <svg id="lobby-icon" class="w-8 h-8 text-amber-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3a9 9 0 0 1 9 9H3a9 9 0 0 1 9-9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18"/></svg>
+        <div class="relative z-10 w-full max-w-5xl mx-auto px-4 md:px-8 py-10 flex flex-col items-center justify-center min-h-screen">
+
+            <!-- Top Nav -->
+            <div class="w-full flex items-center justify-between mb-8">
+                <a href="index.html" class="flex items-center gap-2 text-zinc-500 hover:text-white transition-colors text-sm font-medium group">
+                    <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                    28E
+                </a>
+                <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-amber-500/60">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    Oracle
+                </div>
+            </div>
+
+            <!-- Main Lobby Content -->
+            <div class="w-full flex flex-col lg:flex-row gap-6 items-stretch">
+
+                <!-- Left: Camera Preview + Profile -->
+                <div class="flex-1 flex flex-col gap-5 lobby-col">
+                    <!-- Camera Preview -->
+                    <div class="lobby-cam-preview glass-card border-gradient">
+                        <video id="lobby-cam-video" autoplay playsinline muted class="w-full h-full object-cover" style="transform: scaleX(-1);"></video>
+                        <div id="lobby-cam-placeholder" class="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-zinc-900/90 to-zinc-950/90">
+                            <div class="w-20 h-20 rounded-full glass-light flex items-center justify-center mb-4">
+                                <img id="lobby-avatar" src="" class="w-full h-full rounded-full object-cover hidden" />
+                                <svg id="lobby-icon" class="w-8 h-8 text-amber-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+                            </div>
+                            <p class="text-zinc-500 text-sm">Tu cámara está apagada</p>
                         </div>
-                        <div class="pt-14">
-                            <h2 class="text-xl font-extrabold text-white leading-tight" id="lobby-title">Cargando...</h2>
-                            <p class="text-zinc-500 text-sm mb-4 flex items-center gap-2 group cursor-pointer w-fit" id="lobby-handle" title="Cambiar usuario">
-                                @...
-                            </p>
-                            
-                            <button id="btn-join-room" class="w-full py-3 bg-white text-black font-extrabold rounded-2xl transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] hover:scale-[1.02] transform flex items-center justify-center gap-2 text-md">
-                                <span class="relative flex h-3 w-3">
-                                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                  <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                                </span>
-                                Go Live
+                        <!-- Camera Preview Controls -->
+                        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
+                            <button id="lobby-btn-mic" class="ctrl-btn w-10 h-10" title="Micrófono" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(20px);">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                            </button>
+                            <button id="lobby-btn-cam" class="ctrl-btn w-10 h-10" title="Cámara" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(20px);">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
                             </button>
                         </div>
                     </div>
-                </div>
 
-                <!-- Navigation Links -->
-                <div class="w-full bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl p-4 flex flex-col gap-2">
-                    <a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-zinc-400 hover:text-white hover:bg-white/10 transition-colors font-semibold text-sm">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-                        Volver al Inicio
-                    </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-amber-500 bg-amber-500/10 font-semibold text-sm">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
-                        Oracle Hub
-                    </a>
-                </div>
-            </div>
-
-            <!-- Center Column: Activity Feed -->
-            <div class="lobby-col flex-1 w-full max-w-2xl flex flex-col gap-4">
-                <div class="border-b border-white/10 pb-4 mb-2 sticky top-0 bg-zinc-950/80 backdrop-blur-xl z-20 pt-4">
-                    <h3 class="text-xl font-bold text-white px-2">Feed de Actividad</h3>
-                </div>
-                
-                <!-- Posts Container -->
-                <div id="lobby-history" class="flex flex-col gap-4">
-                    <div class="animate-pulse flex gap-4 p-4 bg-white/5 border border-white/10 rounded-3xl">
-                        <div class="w-12 h-12 rounded-full bg-white/10 shrink-0"></div>
-                        <div class="flex-1 space-y-3 py-1">
-                            <div class="h-4 bg-white/10 rounded w-1/4"></div>
-                            <div class="h-4 bg-white/10 rounded w-3/4"></div>
+                    <!-- Profile Info -->
+                    <div class="glass-card rounded-2xl p-5 border-gradient">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-full glass-light overflow-hidden flex items-center justify-center shrink-0">
+                                <img id="lobby-avatar-small" src="" class="w-full h-full object-cover hidden" />
+                                <svg class="w-6 h-6 text-zinc-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h2 class="text-lg font-extrabold text-white truncate" id="lobby-title">Cargando...</h2>
+                                <p class="text-zinc-500 text-sm flex items-center gap-1 cursor-pointer hover:text-amber-500 transition-colors group w-fit" id="lobby-handle" title="Cambiar usuario">
+                                    @...
+                                    <svg class="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Right Column: Trending / Live Now -->
-            <div class="lobby-col w-full md:w-[300px] shrink-0 flex flex-col gap-6 sticky top-10 hidden md:flex">
-                <div class="w-full bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl p-6">
-                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                <!-- Right: Room Status + Join -->
+                <div class="w-full lg:w-[340px] flex flex-col gap-5 lobby-col">
+                    <!-- Room Status Card -->
+                    <div class="glass-card rounded-2xl p-6 border-gradient flex-1">
+                        <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2.5">
+                            <span class="relative flex h-2.5 w-2.5">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                            </span>
+                            Sala en Vivo
+                        </h3>
+
+                        <div id="lobby-room-status" class="flex flex-col gap-3">
+                            <div class="w-8 h-8 border-2 border-white/10 border-t-amber-500 rounded-full animate-spin mx-auto my-4"></div>
+                        </div>
+                    </div>
+
+                    <!-- Join Button -->
+                    <button id="btn-join-room" class="w-full py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-extrabold rounded-2xl transition-all shadow-[0_8px_30px_rgba(245,158,11,0.25)] hover:shadow-[0_8px_40px_rgba(245,158,11,0.4)] hover:scale-[1.02] transform flex items-center justify-center gap-3 text-base cursor-pointer active:scale-[0.98] relative overflow-hidden group">
+                        <!-- Pulse ring -->
+                        <div class="absolute inset-0 rounded-2xl border-2 border-amber-400/50" style="animation: pulseRing 2s ease-out infinite;"></div>
                         <span class="relative flex h-3 w-3">
-                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                          <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
                         </span>
-                        En Vivo Ahora
-                    </h3>
-                    
-                    <div id="lobby-room-status" class="flex flex-col gap-4">
-                        <div class="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin mx-auto my-4"></div>
+                        <span class="relative">Unirse a Oracle</span>
+                    </button>
+
+                    <!-- Activity Feed (Compact) -->
+                    <div class="glass-card rounded-2xl p-5 border-gradient">
+                        <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Actividad Reciente
+                        </h3>
+                        <div id="lobby-history" class="flex flex-col gap-2 max-h-48 overflow-y-auto">
+                            <div class="text-xs text-white/20 text-center py-4">Cargando...</div>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="text-[10px] text-zinc-700 text-center">
+                        28E Oracle &copy; 2026 — Conexiones cifradas E2E
                     </div>
                 </div>
-                
-                <div class="text-xs text-zinc-600 px-4 text-center">
-                    28E Oracle &copy; 2026<br>Conexiones cifradas end-to-end.
-                </div>
             </div>
-
         </div>
     </div>
 
-    <!-- Handle Assignment Modal -->
-    <div id="handle-modal" class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md hidden items-center justify-center">
-        <div class="w-full max-w-sm bg-zinc-950 border border-white/10 p-8 rounded-3xl shadow-2xl relative overflow-hidden transform transition-all scale-95 opacity-0" id="handle-card">
-            <!-- Glows -->
-            <div class="absolute -top-[50%] -left-[50%] w-full h-full bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="absolute -bottom-[50%] -right-[50%] w-full h-full bg-pink-500/10 rounded-full blur-3xl pointer-events-none"></div>
-            
+    <!-- ═══ HANDLE ASSIGNMENT MODAL ═══ -->
+    <div id="handle-modal" class="fixed inset-0 z-[100] bg-black/60 backdrop-blur-xl hidden items-center justify-center">
+        <div class="w-full max-w-sm glass-heavy p-8 rounded-3xl shadow-[0_30px_80px_rgba(0,0,0,0.6)] relative overflow-hidden transform transition-all scale-95 opacity-0 border-gradient" id="handle-card">
+            <div class="ambient-orb" style="width:200px;height:200px;background:radial-gradient(circle,rgba(245,158,11,0.08),transparent 70%);top:-30%;left:-30%;"></div>
+            <div class="ambient-orb" style="width:200px;height:200px;background:radial-gradient(circle,rgba(236,72,153,0.06),transparent 70%);bottom:-30%;right:-30%;"></div>
+
             <div class="relative z-10">
                 <h3 class="text-2xl font-extrabold text-white mb-2">Tu Identidad</h3>
-                <p class="text-zinc-400 text-sm mb-6">Elige un nombre de usuario único para Oracle. Así te verán los demás.</p>
-                
+                <p class="text-zinc-400 text-sm mb-6 leading-relaxed">Elige un nombre de usuario único para Oracle. Así te verán los demás.</p>
+
                 <form id="handle-form" class="flex flex-col gap-4">
                     <div class="relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 font-bold">@</span>
-                        <input type="text" id="handle-input" class="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-white font-bold outline-none focus:border-amber-500/50 focus:bg-white/10 transition-colors placeholder:text-zinc-600 placeholder:font-normal" placeholder="usuario" required pattern="[a-zA-Z0-9_]{3,15}" title="3-15 letras, números o guión bajo">
+                        <input type="text" id="handle-input" class="w-full glass-input rounded-xl pl-10 pr-4 py-3 text-white font-bold outline-none transition-all placeholder:text-zinc-600 placeholder:font-normal" placeholder="usuario" required pattern="[a-zA-Z0-9_]{3,15}" title="3-15 letras, números o guión bajo">
                     </div>
                     <p id="handle-error" class="text-red-400 text-xs font-bold hidden"></p>
-                    <button type="submit" id="btn-save-handle" class="w-full py-3 bg-amber-500 hover:bg-amber-400 text-black font-extrabold rounded-xl transition-all shadow-[0_0_15px_rgba(245,158,11,0.2)] disabled:opacity-50 disabled:cursor-not-allowed">
+                    <button type="submit" id="btn-save-handle" class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black font-extrabold rounded-xl transition-all shadow-[0_4px_15px_rgba(245,158,11,0.2)] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-[0.98]">
                         Guardar
                     </button>
-                    <button type="button" id="btn-cancel-handle" class="w-full py-2 bg-transparent text-zinc-500 hover:text-white font-bold rounded-xl transition-colors hidden">
+                    <button type="button" id="btn-cancel-handle" class="w-full py-2 bg-transparent text-zinc-500 hover:text-white font-bold rounded-xl transition-colors hidden cursor-pointer">
                         Cancelar
                     </button>
                 </form>
@@ -603,7 +916,7 @@
         </div>
     </div>
 
-    <!-- Firebase Auth -->
+    <!-- ═══ FIREBASE AUTH ═══ -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
@@ -632,7 +945,6 @@
         });
 
         onAuthStateChanged(auth, (user) => {
-            // Fake delay for the loader so it looks cool
             setTimeout(() => {
                 const ld = document.getElementById('loader');
                 if (ld) {
@@ -640,30 +952,37 @@
                     ld.style.transform = 'scale(1.06)';
                     setTimeout(() => ld.style.display = 'none', 600);
                 }
-                
+
                 if (user) {
                     window.yaireCurrentUser = user;
                     authOverlay.style.opacity = '0';
                     setTimeout(() => authOverlay.remove(), 500);
-                    
-                    // Show Lobby
+
+                    // Populate lobby
+                    const avatarUrl = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=random`;
+
+                    // Main camera preview area avatar
                     const lobbyAvatar = document.getElementById('lobby-avatar');
                     const lobbyIcon = document.getElementById('lobby-icon');
-                    const lobbyTitle = document.getElementById('lobby-title');
-                    const lobbyHandle = document.getElementById('lobby-handle');
-                    
-                    if (user.photoURL) {
-                        lobbyAvatar.src = user.photoURL;
+                    if (lobbyAvatar) {
+                        lobbyAvatar.src = avatarUrl;
                         lobbyAvatar.onerror = function() { this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=random`; };
                         lobbyAvatar.classList.remove('hidden');
-                        lobbyIcon.classList.add('hidden');
-                    } else {
-                        lobbyAvatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=random`;
-                        lobbyAvatar.classList.remove('hidden');
-                        lobbyIcon.classList.add('hidden');
+                        if (lobbyIcon) lobbyIcon.classList.add('hidden');
                     }
-                    lobbyTitle.textContent = user.displayName;
-                    
+
+                    // Small avatar in profile card
+                    const lobbyAvatarSmall = document.getElementById('lobby-avatar-small');
+                    if (lobbyAvatarSmall) {
+                        lobbyAvatarSmall.src = avatarUrl;
+                        lobbyAvatarSmall.onerror = function() { this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=random`; };
+                        lobbyAvatarSmall.classList.remove('hidden');
+                    }
+
+                    const lobbyTitle = document.getElementById('lobby-title');
+                    const lobbyHandle = document.getElementById('lobby-handle');
+                    if (lobbyTitle) lobbyTitle.textContent = user.displayName;
+
                     const db = getDatabase(app);
                     const handleModal = document.getElementById('handle-modal');
                     const handleCard = document.getElementById('handle-card');
@@ -681,181 +1000,143 @@
                                 currentHandle = snap.val();
                                 window.yaireCurrentUser.oracleHandle = currentHandle;
                                 if (lobbyHandle) {
-                                    lobbyHandle.innerHTML = `@${currentHandle} <svg class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>`;
+                                    lobbyHandle.innerHTML = `@${currentHandle} <svg class="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>`;
                                 }
-                                fetchHistory();
                             } else {
                                 showHandleModal(false);
                             }
-                        } catch (e) {
-                            console.error(e);
+                        } catch (err) {
+                            console.error("Handle check error:", err);
                         }
                     }
 
-                    function showHandleModal(isCancelable) {
-                        handleModal.style.display = 'flex';
-                        handleInput.value = currentHandle || '';
+                    function showHandleModal(canCancel = true) {
+                        handleModal.classList.remove('hidden');
+                        handleModal.classList.add('flex');
                         handleError.classList.add('hidden');
-                        if (isCancelable) {
+                        if (canCancel) {
                             btnCancelHandle.classList.remove('hidden');
                         } else {
                             btnCancelHandle.classList.add('hidden');
                         }
-                        setTimeout(() => {
-                            handleCard.classList.remove('scale-95', 'opacity-0');
-                            handleCard.classList.add('scale-100', 'opacity-100');
-                        }, 10);
+                        requestAnimationFrame(() => {
+                            if (handleCard) {
+                                handleCard.classList.remove('scale-95', 'opacity-0');
+                                handleCard.classList.add('scale-100', 'opacity-100');
+                            }
+                        });
+                        setTimeout(() => handleInput.focus(), 300);
                     }
 
                     function hideHandleModal() {
-                        handleCard.classList.remove('scale-100', 'opacity-100');
-                        handleCard.classList.add('scale-95', 'opacity-0');
+                        if (handleCard) {
+                            handleCard.classList.remove('scale-100', 'opacity-100');
+                            handleCard.classList.add('scale-95', 'opacity-0');
+                        }
                         setTimeout(() => {
-                            handleModal.style.display = 'none';
+                            handleModal.classList.add('hidden');
+                            handleModal.classList.remove('flex');
                         }, 300);
                     }
 
-                    handleForm.onsubmit = async (e) => {
+                    handleForm.addEventListener('submit', async (e) => {
                         e.preventDefault();
-                        const newHandle = handleInput.value.trim().toLowerCase();
-                        if (newHandle === currentHandle) {
-                            hideHandleModal();
+                        const val = handleInput.value.trim().toLowerCase();
+                        if (val.length < 3 || val.length > 15) {
+                            handleError.textContent = 'El handle debe tener entre 3 y 15 caracteres.';
+                            handleError.classList.remove('hidden');
                             return;
                         }
-                        
-                        const btnSave = document.getElementById('btn-save-handle');
-                        btnSave.disabled = true;
-                        btnSave.textContent = 'Verificando...';
-                        
+                        const btn = document.getElementById('btn-save-handle');
+                        btn.disabled = true;
+                        btn.textContent = 'Verificando...';
+
                         try {
-                            const snap = await get(ref(db, `oracle_handles/${newHandle}`));
-                            if (snap.exists() && snap.val() !== user.uid) {
-                                handleError.textContent = "Este usuario ya está en uso.";
+                            const existing = await get(ref(db, `handles/${val}`));
+                            if (existing.exists() && existing.val() !== user.uid) {
+                                handleError.textContent = `@${val} ya está en uso. Prueba otro.`;
                                 handleError.classList.remove('hidden');
-                                btnSave.disabled = false;
-                                btnSave.textContent = 'Guardar';
+                                btn.disabled = false;
+                                btn.textContent = 'Guardar';
                                 return;
                             }
-                            
-                            if (currentHandle) await remove(ref(db, `oracle_handles/${currentHandle}`));
-                            await set(ref(db, `oracle_handles/${newHandle}`), user.uid);
-                            await set(ref(db, `users/${user.uid}/oracle_handle`), newHandle);
-                            
-                            currentHandle = newHandle;
-                            window.yaireCurrentUser.oracleHandle = newHandle;
+                            if (currentHandle && currentHandle !== val) {
+                                await remove(ref(db, `handles/${currentHandle}`));
+                            }
+                            await set(ref(db, `handles/${val}`), user.uid);
+                            await set(ref(db, `users/${user.uid}/oracle_handle`), val);
+                            currentHandle = val;
+                            window.yaireCurrentUser.oracleHandle = val;
                             if (lobbyHandle) {
-                                lobbyHandle.innerHTML = `@${currentHandle} <svg class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>`;
+                                lobbyHandle.innerHTML = `@${val} <svg class="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>`;
                             }
                             hideHandleModal();
-                            fetchHistory();
-                        } catch(err) {
-                            handleError.textContent = "Error al guardar. Intenta de nuevo.";
+                        } catch (err) {
+                            handleError.textContent = 'Error al guardar. Intenta de nuevo.';
                             handleError.classList.remove('hidden');
                         }
-                        btnSave.disabled = false;
-                        btnSave.textContent = 'Guardar';
-                    };
+                        btn.disabled = false;
+                        btn.textContent = 'Guardar';
+                    });
 
-                    btnCancelHandle.onclick = hideHandleModal;
-                    if (lobbyHandle) lobbyHandle.onclick = () => showHandleModal(true);
+                    btnCancelHandle.addEventListener('click', hideHandleModal);
+
+                    if (lobbyHandle) {
+                        lobbyHandle.addEventListener('click', () => showHandleModal(true));
+                    }
 
                     checkAndSetHandle();
 
-                    function fetchHistory() {
-                        get(ref(db, `users/${user.uid}/vc_history`)).then(snap => {
-                            const historyEl = document.getElementById('lobby-history');
-                            if (snap.exists() && snap.val().length > 0) {
-                                const data = snap.val().slice(0, 20); // More posts
-                                historyEl.innerHTML = data.map(h => {
-                                    const dateStr = h.date || h.ts;
-                                    const isValidDate = dateStr ? new Date(dateStr) : null;
-                                    const displayDate = isValidDate && !isNaN(isValidDate) ? isValidDate.toLocaleDateString(undefined, {month:'short', day:'numeric'}) : '';
-                                    const timeStr = isValidDate && !isNaN(isValidDate) ? isValidDate.toLocaleTimeString(undefined, {hour:'2-digit', minute:'2-digit'}) : '';
-                                    
-                                    return `
-                                    <div class="post-card p-5 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-colors flex gap-4 opacity-0">
-                                        <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=random`}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=random'" class="w-12 h-12 rounded-full border border-white/20 object-cover shrink-0" />
-                                        <div class="flex-1">
-                                            <div class="flex items-center justify-between mb-1">
-                                                <div class="flex items-center gap-2">
-                                                    <span class="font-bold text-white">${user.displayName}</span>
-                                                    <span class="text-zinc-500 text-xs">@${currentHandle || user.displayName.split(' ')[0].toLowerCase()} &middot; ${displayDate}</span>
-                                                </div>
+                    // Load activity history
+                    const historyEl = document.getElementById('lobby-history');
+                    if (historyEl) {
+                        import('https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js').then(({ getDatabase, ref, get, query, orderByChild, limitToLast }) => {
+                            get(query(ref(db, `oracle_history`), limitToLast(5))).then(snap => {
+                                if (snap.exists()) {
+                                    const entries = [];
+                                    snap.forEach(child => entries.push(child.val()));
+                                    entries.reverse();
+                                    historyEl.innerHTML = entries.map(e => `
+                                        <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/[0.03] transition-colors post-card">
+                                            <img src="${e.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(e.displayName || 'U')}&background=random`}" class="w-8 h-8 rounded-full object-cover border border-white/5 shrink-0" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(e.displayName || 'U')}&background=random'" />
+                                            <div class="flex-1 min-w-0">
+                                                <span class="text-xs font-bold text-white">${e.displayName || 'Usuario'}</span>
+                                                <span class="text-[10px] text-zinc-500 ml-1">${e.action || 'se conectó'}</span>
                                             </div>
-                                            <p class="text-zinc-300 text-sm mb-3">Se unió a una sesión segura en Oracle Room. 🎙️✨</p>
-                                            <div class="flex items-center gap-4 text-xs font-semibold">
-                                                <span class="text-amber-500 bg-amber-500/10 px-3 py-1 rounded-full flex items-center gap-1">
-                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                                    ${h.duration || '0s'}
-                                                </span>
-                                                <span class="text-zinc-500 flex items-center gap-1">
-                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                                    ${timeStr}
-                                                </span>
-                                            </div>
+                                            <span class="text-[10px] text-zinc-600 shrink-0">${e.ts ? new Date(e.ts).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' }) : ''}</span>
                                         </div>
-                                    </div>
-                                    `;
-                                }).join('');
-                                
-                                // GSAP Stagger animation for posts
-                                if (window.gsap) {
-                                    gsap.fromTo(".post-card", 
-                                        { opacity: 0, y: 30 },
-                                        { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: "power2.out", delay: 0.2 }
-                                    );
+                                    `).join('');
+
+                                    if (window.gsap) {
+                                        gsap.fromTo(".post-card",
+                                            { opacity: 0, y: 15 },
+                                            { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: "power2.out", delay: 0.2 }
+                                        );
+                                    }
                                 } else {
-                                    document.querySelectorAll('.post-card').forEach(el => el.style.opacity = '1');
+                                    historyEl.innerHTML = '<div class="text-xs text-white/15 text-center py-4">Sin actividad reciente</div>';
                                 }
-                            } else {
-                                historyEl.innerHTML = '<div class="text-sm text-zinc-500 text-center mt-10 p-8 bg-white/5 rounded-3xl border border-white/5">No hay actividad reciente. Empieza a crear tu historial uniéndote a Oracle.</div>';
-                            }
-                        }).catch(err => {
-                            document.getElementById('lobby-history').innerHTML = '<div class="text-xs text-zinc-500 text-center mt-10">Error cargando historial.</div>';
+                            }).catch(() => {
+                                historyEl.innerHTML = '<div class="text-xs text-white/15 text-center py-4">Error cargando historial</div>';
+                            });
                         });
                     }
-                    
-                    // Expose globally and trigger oracle logic
+
                     if (window.OracleSetup) window.OracleSetup();
                 } else {
                     authActions.classList.remove('hidden');
                     authActions.classList.add('flex');
-                    authOverlay.querySelector('p').classList.add('hidden');
+                    const statusText = document.getElementById('auth-status-text');
+                    if (statusText) statusText.textContent = 'Sesión requerida';
                 }
-            }, 1500); // 1.5s delay to show off the loader
+            }, 1500);
         });
     </script>
 
     <!-- Socket.io & Oracle Logic -->
     <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
     <script src="https://www.youtube.com/iframe_api"></script>
-    <script src="oracle.js?v=2"></script>
+    <script src="oracle.js?v=3"></script>
 
-    <!-- UI Interactions Script -->
-    <script>
-        // Tab switching
-        const tabChat = document.getElementById('tab-chat');
-        const tabRave = document.getElementById('tab-rave');
-        const paneChat = document.getElementById('pane-chat');
-        const paneRave = document.getElementById('pane-rave');
-
-        tabChat.addEventListener('click', () => {
-            tabChat.classList.replace('text-white/50', 'text-white');
-            tabChat.classList.replace('hover:bg-white/5', 'bg-white/10');
-            tabRave.classList.replace('text-white', 'text-white/50');
-            tabRave.classList.replace('bg-white/10', 'hover:bg-white/5');
-            paneChat.classList.remove('hidden');
-            paneRave.classList.add('hidden');
-        });
-
-        tabRave.addEventListener('click', () => {
-            tabRave.classList.replace('text-white/50', 'text-white');
-            tabRave.classList.replace('hover:bg-white/5', 'bg-white/10');
-            tabChat.classList.replace('text-white', 'text-white/50');
-            tabChat.classList.replace('bg-white/10', 'hover:bg-white/5');
-            paneRave.classList.remove('hidden');
-            paneChat.classList.add('hidden');
-        });
-    </script>
 </body>
 </html>
