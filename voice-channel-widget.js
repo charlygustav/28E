@@ -862,7 +862,13 @@
               </div>
             </div>
           </div>
-          <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
+          <div class="flex items-center gap-2">
+            <button id="vc-btn-oracle-redirect" class="py-1 px-3 rounded-lg bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-black font-bold text-[10px] uppercase tracking-wider transition-all flex items-center gap-1.5" title="Seguir en Oracle">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              <span>Oracle</span>
+            </button>
+            <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">?</button>
+          </div>
         </div>
 
         <!-- Navigation Tabs -->
@@ -891,12 +897,7 @@
               <div class="text-[10px] text-white/30 font-bold uppercase tracking-wider mb-2 px-2 mt-2 vc-sect-lbl">${_t('sect_in')}</div>
               ${userRows || `<div class="text-center text-white/20 text-xs py-8 vc-empty">${_t('empty_chan')}</div>`}
             </div>
-            <div class="p-2 border-t border-white/5 flex justify-center">
-              <button id="vc-btn-oracle-redirect" class="py-1.5 px-4 rounded-lg bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-500 hover:from-amber-500 hover:to-orange-500 hover:text-black font-bold text-[10px] uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 border border-amber-500/30 shadow-[0_0_10px_rgba(245,158,11,0.1)]">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                Seguir en Oracle
-              </button>
-            </div>
+
           </div>
 
           <!-- CHAT TAB -->
