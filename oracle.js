@@ -63,7 +63,6 @@ class OracleRoom {
     constructor() {
         this.socket = null;
         this.stream = null;
-        this.screenStream = null;
         this.peers = new Map();
         this.pendingIce = new Map();
 
@@ -71,7 +70,6 @@ class OracleRoom {
         this.users = [];
         this.cameraEnabled = false;
         this.micEnabled = true;
-        this.screenSharing = false;
 
         this.ytPlayer = null;
         this.isYtReady = false;
@@ -131,7 +129,6 @@ class OracleRoom {
     initUI() {
         document.getElementById('btn-mic').addEventListener('click', () => this.toggleMic());
         document.getElementById('btn-cam').addEventListener('click', () => this.toggleCam());
-        document.getElementById('btn-screen').addEventListener('click', () => this.toggleScreenShare());
         document.getElementById('btn-leave').addEventListener('click', () => this.leaveRoom());
 
         document.getElementById('chat-form').addEventListener('submit', (e) => {
@@ -355,11 +352,9 @@ class OracleRoom {
             container.innerHTML = `
                 <video id="vid-${id}" autoplay playsinline ${isLocal ? 'muted' : ''} style="${isLocal ? 'transform:scaleX(-1);' : ''}"></video>
                 <div class="avatar-fallback">
-                    <div class="w-20 h-20 rounded-full glass-light flex items-center justify-center overflow-hidden mb-3 shadow-xl">
+                    <div class="w-20 h-20 rounded-full glass-light flex items-center justify-center overflow-hidden shadow-xl">
                         <img src="${avatarUrl}" class="w-full h-full object-cover" onerror="this.style.display='none'" />
                     </div>
-                    <span class="font-bold text-sm text-white/80">${displayName} ${isLocal ? '(Tú)' : ''}</span>
-                    ${handle ? `<span class="text-[10px] text-amber-500/60 font-bold mt-1">${handle}</span>` : ''}
                 </div>
                 <div class="video-overlay-info">
                     <div class="flex items-center gap-2">
@@ -699,66 +694,6 @@ class OracleRoom {
         }
     }
 
-    // ═══ SCREEN SHARING ═══
-    async toggleScreenShare() {
-        const btn = document.getElementById('btn-screen');
-        if (this.screenSharing) {
-            // Stop screen share
-            if (this.screenStream) {
-                this.screenStream.getTracks().forEach(t => t.stop());
-                this.screenStream = null;
-            }
-            this.screenSharing = false;
-            btn.classList.remove('active');
-
-            // Remove screen share video element
-            this.removeVideoElement('screen-local');
-
-            // Restore camera
-            this.acquireMedia();
-        } else {
-            try {
-                this.screenStream = await navigator.mediaDevices.getDisplayMedia({
-                    video: { cursor: "always" },
-                    audio: false
-                });
-
-                this.screenSharing = true;
-                btn.classList.add('active');
-
-                // Show screen share as a separate video element
-                this.updateVideoElement('screen-local', this.screenStream, {
-                    displayName: (window.yaireCurrentUser?.displayName || 'Tú') + ' (Pantalla)',
-                    photoURL: window.yaireCurrentUser?.photoURL
-                });
-
-                const screenContainer = document.getElementById('video-container-screen-local');
-                if (screenContainer) screenContainer.classList.add('screen-share-active');
-
-                // Replace video track in all peer connections
-                const videoTrack = this.screenStream.getVideoTracks()[0];
-                for (const [peerId, pc] of this.peers.entries()) {
-                    const senders = pc.getSenders();
-                    const videoSender = senders.find(s => s.track && s.track.kind === 'video');
-                    if (videoSender) {
-                        videoSender.replaceTrack(videoTrack);
-                    } else {
-                        pc.addTrack(videoTrack, this.screenStream);
-                        this.createOffer(peerId);
-                    }
-                }
-
-                // Handle when user clicks "Stop sharing" in browser UI
-                videoTrack.onended = () => {
-                    this.toggleScreenShare();
-                };
-            } catch (e) {
-                console.log('Screen share cancelled or failed:', e);
-                this.screenSharing = false;
-                btn.classList.remove('active');
-            }
-        }
-    }
 
     // ═══ ROOM TIMER ═══
     startRoomTimer() {
@@ -810,12 +745,6 @@ class OracleRoom {
             this.stream.getTracks().forEach(t => t.stop());
             this.stream = null;
         }
-        if (this.screenStream) {
-            this.screenStream.getTracks().forEach(t => t.stop());
-            this.screenStream = null;
-        }
-        this.screenSharing = false;
-
         // Clean up speaker detection
         if (this.localSpeakingDetector) {
             clearInterval(this.localSpeakingDetector._interval);
@@ -841,10 +770,6 @@ class OracleRoom {
 
         this.stopRoomTimer();
         this.stopRaveProgress();
-
-        // Reset screen share button
-        const btnScreen = document.getElementById('btn-screen');
-        if (btnScreen) btnScreen.classList.remove('active');
 
         const lobbyOverlay = document.getElementById('lobby-overlay');
         if (lobbyOverlay) {
