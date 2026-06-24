@@ -2065,6 +2065,19 @@
 <body
     class="bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors duration-500 overflow-x-hidden"
     id="top">
+    <div id="yaire-debug" style="position:fixed; top:10px; left:10px; z-index:999999; background:rgba(0,0,0,0.8); color:#0f0; font-family:monospace; padding:10px; font-size:12px; pointer-events:none; display:none; max-height: 90vh; overflow-y: auto;"></div>
+    <script>
+        const _debugMode = new URLSearchParams(window.location.search).get('debug') === '1';
+        if (_debugMode) document.getElementById('yaire-debug').style.display = 'block';
+        function logDebug(msg) {
+            if (_debugMode) {
+                const d = document.getElementById('yaire-debug');
+                if (d) d.innerHTML += `[${Math.round(performance.now())}ms] ${msg}<br>`;
+                console.log(`[DEBUG] ${msg}`);
+            }
+        }
+        logDebug('Body started');
+    </script>
 
 
 
@@ -12673,8 +12686,11 @@
         let loaderEscondido = false;
         let _loaderMinElapsed = false; // Blocks exit until min time passes
 
+        logDebug('Script loader principal ejecutando');
+
         // ── Real Resource Loader ──────────────────────────────────────────
         document.addEventListener('DOMContentLoaded', () => {
+            logDebug('DOMContentLoaded disparado');
 
             const percentText = document.getElementById('loader-percent');
             const progressBar = document.getElementById('loader-progress');
@@ -12956,13 +12972,15 @@
             }
 
             // Kick off — wait for all tracked resources
+            logDebug('Iniciando fake loader interval');
             // Min 1.5s - blocks exit until elapsed, then triggers final setProgress(100)
             setTimeout(() => {
+                logDebug('Min elapsed timeout (800ms) finalizado');
                 _loaderMinElapsed = true;
                 setProgress(100); // now allowed to exit
             }, 800);
             // Resources still update the bar visually (but can't exit before 1.5s)
-            Promise.all(resources).catch(() => { });
+            Promise.all(resources).then(() => logDebug('Promise.all(resources) finalizado')).catch(() => { logDebug('Promise.all error'); });
 
             // 2. Inicialización Básica
             initTheme();
