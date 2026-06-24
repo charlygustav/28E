@@ -12983,9 +12983,14 @@
             Promise.all(resources).then(() => logDebug('Promise.all(resources) finalizado')).catch(() => { logDebug('Promise.all error'); });
 
             // 2. Inicialización Básica
+            logDebug('Llamando a initTheme()');
             initTheme();
+            logDebug('Llamando a initLanguage()');
             initLanguage();
+            logDebug('Llamando a AudioManager.init()');
             AudioManager.init();
+            logDebug('Inicializaciones básicas terminadas. Configuracion defer ida...');
+            
             // Defer heavy inits until after loader exits to prevent CPU saturation
             if (window.__runWhenIdle) {
                 window.__runWhenIdle(() => { initChart(); initButterflyGame(); }, 5000);
@@ -12994,8 +12999,10 @@
             }
 
             // 3. Temporizadores
+            logDebug('Iniciando temporizadores');
             let countersInterval = setInterval(updateCounters, 1000);
             updateCounters();
+            logDebug('Fin del bloque DOMContentLoaded síncrono');
 
             document.addEventListener('visibilitychange', () => {
                 if (document.hidden) {
