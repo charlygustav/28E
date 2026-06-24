@@ -1,6 +1,8 @@
 {
   "name": "yaire",
   "dependencies": {
-    "node-id3": "^0.2.9"
+    "@tailwindcss/cli": "^4.3.1",
+    "node-id3": "^0.2.9",
+    "tailwindcss": "^3.4.1"
   }
 }
