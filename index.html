@@ -112,10 +112,12 @@
             }
 
             // Función que lee Firebase y actúa según el estado
+            let _isInitialCheck = true; // true solo en el primer checkState al cargar
             async function checkState() {
                 // If coming back from maintenance expiry, skip Firebase redirect
                 if (localStorage.getItem('yaire_restore') === '1') {
                     localStorage.removeItem('yaire_restore');
+                    _isInitialCheck = false;
                     return;
                 }
                 try {
@@ -151,9 +153,14 @@
                                     } else {
                                         window.location.replace(targetPage);
                                     }
-                                } else {
-                                    window.location.reload(); // Recargar la página si cambió cualquier otra cosa
+                                } else if (!_isInitialCheck && !sessionStorage.getItem('yaire_reloaded')) {
+                                    // Solo recargar durante polling (no al abrir la página)
+                                    // Máximo 1 reload por sesión para evitar loops infinitos
+                                    sessionStorage.setItem('yaire_reloaded', '1');
+                                    window.location.reload();
                                 }
+                                // En carga inicial: solo actualizar localStorage, sin reload
+                                _isInitialCheck = false;
                                 return;
                             } else if (!oldStr) {
                                 localStorage.setItem('yaire_config', newStr);
@@ -180,6 +187,7 @@
                 if (new Date() < unlockDate && urlParams.get('dev') !== '1') {
                     window.location.replace('mantenimiento');
                 }
+                _isInitialCheck = false;
             }
 
             // Chequeo inmediato al cargar
