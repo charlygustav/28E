@@ -3759,7 +3759,7 @@
                     ld.style.transform = 'scale(1.06)';
                     setTimeout(function () { ld.style.display = 'none'; document.body.classList.add('page-ready'); }, 650);
                 }
-            }, 4000);
+            }, 2500);
             window.__cancelLoaderSafety = function () { clearTimeout(_t); };
         })();
     </script>
@@ -9269,6 +9269,7 @@
 
                     // Physics blobs
                     var mixerCtx, mixerCanvas, mixerBalls = [], mixerRaf, mixerW, mixerH;
+                    var _mixerVisible = false;
                     function initMixerCanvas() {
                         mixerCanvas = document.getElementById('mixer-canvas');
                         if (!mixerCanvas) return;
@@ -9351,15 +9352,25 @@
                             mixerCtx.fill();
                         });
 
-                        mixerRaf = requestAnimationFrame(mixerLoop);
+                        if (_mixerVisible) mixerRaf = requestAnimationFrame(mixerLoop);
                     }
                     function hexAlpha(hex, a) {
                         var rv = h2r(hex); return 'rgba(' + rv[0] + ',' + rv[1] + ',' + rv[2] + ',' + a.toFixed(3) + ')';
                     }
                     function startMixerLoop() {
                         if (mixerRaf) cancelAnimationFrame(mixerRaf);
+                        _mixerVisible = true;
                         mixerLoop();
                     }
+
+                    // Pause mixer physics when not visible to save CPU
+                    var mixerVisObs = new IntersectionObserver(function (entries) {
+                        _mixerVisible = entries[0].isIntersecting;
+                        if (_mixerVisible && !mixerRaf && mixerBalls.length > 0) startMixerLoop();
+                        if (!_mixerVisible && mixerRaf) { cancelAnimationFrame(mixerRaf); mixerRaf = null; }
+                    }, { threshold: 0 });
+                    var _mixerEl = document.getElementById('view-mixer2');
+                    if (_mixerEl) mixerVisObs.observe(_mixerEl);
 
                     window.mixSelect = function (btn) {
                         var color = btn.dataset.color, name = btn.dataset.name, idx = parseInt(btn.dataset.idx);
@@ -12715,7 +12726,7 @@
             let _ldFakeVal = 0;
             const _ldFakeInterval = setInterval(() => {
                 if (_ldFakeVal < 90) {
-                    _ldFakeVal = Math.min(90, _ldFakeVal + 3);
+                    _ldFakeVal = Math.min(90, _ldFakeVal + 5);
                     if (percentText && !loaderEscondido) percentText.textContent = Math.floor(_ldFakeVal) + '%';
                     if (ringFill) ringFill.style.strokeDashoffset = ringCirc * (1 - _ldFakeVal / 100);
                 } else {
@@ -12988,7 +12999,7 @@
             setTimeout(() => {
                 _loaderMinElapsed = true;
                 setProgress(100); // now allowed to exit
-            }, 1500);
+            }, 800);
             // Resources still update the bar visually (but can't exit before 1.5s)
             Promise.all(resources).catch(() => { });
 
@@ -12996,8 +13007,12 @@
             initTheme();
             initLanguage();
             AudioManager.init();
-            initChart();
-            initButterflyGame();
+            // Defer heavy inits until after loader exits to prevent CPU saturation
+            if (window.__runWhenIdle) {
+                window.__runWhenIdle(() => { initChart(); initButterflyGame(); }, 5000);
+            } else {
+                setTimeout(() => { initChart(); initButterflyGame(); }, 2000);
+            }
 
             // 3. Temporizadores
             let countersInterval = setInterval(updateCounters, 1000);
@@ -18166,7 +18181,7 @@
             const slot = document.getElementById('roulette-slot');
             slot.innerHTML = '';
             const longList = [];
-            for (let i = 0; i < 30; i++) {
+            for (let i = 0; i < 10; i++) {
                 longList.push(...rouletteIdeas);
             }
 
