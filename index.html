@@ -17,6 +17,10 @@
             // Fecha de desbloqueo: 28 de Abril de 2026 a las 00:00:00 (Mes 3 = Abril)
             const unlockDate = new Date(2026, 3, 28, 0, 0, 0);
             const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('reset') === '1') {
+                localStorage.clear();
+                sessionStorage.clear();
+            }
             const _FB = 'https://yaire-591ca-default-rtdb.firebaseio.com/config.json';
 
             // Función para iniciar la cuenta regresiva e inyectar el Toast
@@ -12773,13 +12777,13 @@
 
             addResource(document.fonts.ready, 2);
 
-            // Absolute safety net — 3 seconds max after DOMContentLoaded
+            // Absolute safety net — 800ms max after DOMContentLoaded (prevents font hang)
             const fallback = setTimeout(() => {
                 if (!loaderEscondido) {
                     console.warn('Loader: tiempo límite alcanzado. Forzando entrada.');
                     setProgress(100);
                 }
-            }, 3000);
+            }, 800);
 
             // ── Progress setter ──
             function setProgress(pct) {
