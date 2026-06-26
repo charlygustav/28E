@@ -1711,6 +1711,13 @@
           setTimeout(() => { if (svg) svg.style.transform = ''; }, 150);
         }
       }
+      
+      const barMute = document.getElementById('vc-bar-mute');
+      if (barMute) {
+        barMute.className = `w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 [&>svg]:w-3.5 [&>svg]:h-3.5 ${this.muted ? 'bg-red-500/10 text-red-500 hover:bg-red-500/20' : 'hover:bg-white/[0.06] text-white/50 hover:text-white/90'}`;
+        barMute.innerHTML = this.muted ? ICONS.micOff : ICONS.mic;
+      }
+      
       this._updateUsersDOM();
       this._playSfx(this.muted ? 'toggleOff' : 'toggleOn', 0.4);
     }
@@ -1742,7 +1749,16 @@
       this._playSfx('siri_end', 0.5);
       if (this.socket) { this.socket.emit('leave_channel'); this.socket.disconnect(); this.socket = null; }
       this._cleanup();
-      this._bar.classList.remove('show');
+      
+      if (this._bar) {
+        this._bar.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+        this._bar.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+      }
+      if (this.panel) {
+        this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
+        this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
+      }
+      
       this._render(this._tplLogin());
     }
 
