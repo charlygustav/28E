@@ -421,13 +421,17 @@
     _initAudio() {
       if (this._audioReady) return;
       this._audioReady = true;
+      this._sfxPromises = {};
       try {
         this.actx = new (window.AudioContext || window.webkitAudioContext)();
-        const load = async (k, u) => {
-          try {
-            const r = await fetch(u);
-            this.sfxBuf[k] = await this.actx.decodeAudioData(await r.arrayBuffer());
-          } catch(e){}
+        const load = (k, u) => {
+          this._sfxPromises[k] = fetch(u)
+            .then(r => r.arrayBuffer())
+            .then(buf => this.actx.decodeAudioData(buf))
+            .then(decoded => {
+              this.sfxBuf[k] = decoded;
+            })
+            .catch(e => {});
         };
         load('flyin', 'sounds/flyin.wav');
         load('flyout', 'sounds/flyout.wav');
@@ -451,28 +455,43 @@
 
     _playSfx(k, vol=0.4, loop=false, excl=null) {
       this._initAudio();
-      if (!this.actx || !this.sfxBuf[k]) return null;
-      if (this.actx.state === 'suspended') this.actx.resume();
-      if (excl && this.sfxNodes[excl]) this._stopSfx(this.sfxNodes[excl]);
       
-      try {
-        const src = this.actx.createBufferSource();
-        src.buffer = this.sfxBuf[k];
-        src.loop = loop;
-        const gain = this.actx.createGain();
+      const play = () => {
+        if (!this.actx || !this.sfxBuf[k]) return null;
+        if (this.actx.state === 'suspended') this.actx.resume();
+        if (excl && this.sfxNodes[excl]) this._stopSfx(this.sfxNodes[excl]);
         
-        // Anti-pop fade in
-        const t = this.actx.currentTime;
-        gain.gain.setValueAtTime(0, t);
-        gain.gain.linearRampToValueAtTime(vol, t + 0.02);
-        
-        src.connect(gain);
-        gain.connect(this.actx.destination);
-        src.start(0);
-        const node = { src, gain };
-        if (excl) this.sfxNodes[excl] = node;
-        return node;
-      } catch(e) { return null; }
+        try {
+          const src = this.actx.createBufferSource();
+          src.buffer = this.sfxBuf[k];
+          src.loop = loop;
+          const gain = this.actx.createGain();
+          
+          const t = this.actx.currentTime;
+          gain.gain.setValueAtTime(0, t);
+          gain.gain.linearRampToValueAtTime(vol, t + 0.02);
+          
+          src.connect(gain);
+          gain.connect(this.actx.destination);
+          src.start(0);
+          const node = { src, gain };
+          if (excl) this.sfxNodes[excl] = node;
+          
+          if (k === 'jbl_latency' && loop) {
+              this.progNode = node;
+          }
+          
+          return node;
+        } catch(e) { return null; }
+      };
+
+      if (this.sfxBuf[k]) {
+        return play();
+      } else if (this._sfxPromises && this._sfxPromises[k]) {
+        this._sfxPromises[k].then(play);
+        return null;
+      }
+      return null;
     }
 
     _stopSfx(node) {
