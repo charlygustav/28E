@@ -554,6 +554,24 @@
       document.body.appendChild(this._bar);
 
       this.panel.addEventListener('click', (e) => e.stopPropagation());
+      
+      this._bar.addEventListener('click', () => this._toggle());
+      
+      const barMute = this._bar.querySelector('#vc-bar-mute');
+      if (barMute) {
+        barMute.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this._toggleMute();
+        });
+      }
+      
+      const barLeave = this._bar.querySelector('#vc-bar-leave');
+      if (barLeave) {
+        barLeave.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this._leave();
+        });
+      }
 
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
