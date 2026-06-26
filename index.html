@@ -236,21 +236,21 @@
         content="https://i.ibb.co/cc0BqS8Q/Gemini-Generated-Image-mx0a57mx0a57mx0a-1-Picsart-Ai-Image-Enhancer.png" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="stylesheet" href="styles.css?v=1.0.1">
+    <link rel="stylesheet" href="styles.css?v=1.0.3">
     <script>
-            (function () {
-                try {
-                    var hc = navigator.hardwareConcurrency || 8;
-                    var dm = navigator.deviceMemory || 8;
-                    var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-                    var isSmallScreen = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
-                    var perfLite = prefersReduced || hc <= 4 || dm <= 4 || isSmallScreen;
-                    if (perfLite) document.documentElement.classList.add('perf-lite');
-                    window.__PERF_LITE__ = !!perfLite;
-                } catch (e) {
-                    window.__PERF_LITE__ = false;
-                }
-            })();
+        (function () {
+            try {
+                var hc = navigator.hardwareConcurrency || 8;
+                var dm = navigator.deviceMemory || 8;
+                var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                var isSmallScreen = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+                var perfLite = prefersReduced || hc <= 4 || dm <= 4 || isSmallScreen;
+                if (perfLite) document.documentElement.classList.add('perf-lite');
+                window.__PERF_LITE__ = !!perfLite;
+            } catch (e) {
+                window.__PERF_LITE__ = false;
+            }
+        })();
     </script>
     <script>
         (function () {
@@ -2065,7 +2065,9 @@
 <body
     class="bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors duration-500 overflow-x-hidden"
     id="top">
-    <div id="yaire-debug" style="position:fixed; top:10px; left:10px; z-index:999999; background:rgba(0,0,0,0.8); color:#0f0; font-family:monospace; padding:10px; font-size:12px; pointer-events:none; display:none; max-height: 90vh; overflow-y: auto;"></div>
+    <div id="yaire-debug"
+        style="position:fixed; top:10px; left:10px; z-index:999999; background:rgba(0,0,0,0.8); color:#0f0; font-family:monospace; padding:10px; font-size:12px; pointer-events:none; display:none; max-height: 90vh; overflow-y: auto;">
+    </div>
     <script>
         const _debugMode = new URLSearchParams(window.location.search).get('debug') === '1';
         if (_debugMode) document.getElementById('yaire-debug').style.display = 'block';
@@ -3628,101 +3630,418 @@
     <!-- Loader Screen — Balanced Modern Elegance -->
     <!-- ═══ LOADER ═══ -->
     <div id="loader"
-        style="position:fixed;inset:0;z-index:200;background:#050505;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;will-change:transform,opacity;">
+        style="position:fixed;inset:0;z-index:200;background:#030304;overflow:hidden;will-change:transform,opacity;user-select:none;font-family:'Inter',sans-serif;">
 
-        <!-- Ambient glow -->
-        <div class="loader-glow loader-glow-1"></div>
-        <div class="loader-glow loader-glow-2"></div>
+        <!-- Delicate Background Atmosphere -->
+        <div
+            style="position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:600px;height:600px;background:radial-gradient(circle, rgba(245,158,11,0.03) 0%, transparent 70%);pointer-events:none;">
+        </div>
 
-        <!-- Logo -->
+        <!-- HUD Corner 1: Top Left -->
         <div id="loader-logo"
-            style="position:relative;z-index:10;opacity:0;margin-bottom:2rem;text-align:center;animation:ldFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.15s forwards;">
-            <span
-                style="font-family:'Inter',sans-serif;font-weight:900;font-size:2.6rem;letter-spacing:-0.06em;color:#fff;line-height:1;">28E</span>
-        </div>
-
-        <!-- Sphere + Progress Ring -->
-        <div id="custom-loader-wrapper"
-            style="position:relative;z-index:10;display:flex;align-items:center;justify-content:center;width:220px;height:220px;opacity:0;animation:ldScaleIn 0.8s cubic-bezier(0.22,1,0.36,1) 0.3s forwards;">
-
-            <!-- SVG Progress Ring -->
-            <svg width="220" height="220" viewBox="0 0 220 220" style="position:absolute;inset:0;z-index:2;">
-                <circle cx="110" cy="110" r="104" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
-                <circle id="loader-ring-fill" cx="110" cy="110" r="104" fill="none" stroke="url(#ld-ring-grad)"
-                    stroke-width="1.5" stroke-linecap="round" stroke-dasharray="653.45" stroke-dashoffset="653.45"
-                    transform="rotate(-90 110 110)"
-                    style="transition:stroke-dashoffset 0.5s cubic-bezier(0.4,0,0.2,1);" />
-                <defs>
-                    <linearGradient id="ld-ring-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.7" />
-                        <stop offset="100%" stop-color="#ec4899" stop-opacity="0.7" />
-                    </linearGradient>
-                </defs>
-            </svg>
-
-            <!-- The Sphere -->
-            <div style="position:relative;width:180px;height:180px;border-radius:50%;user-select:none;">
-                <div class="loader-circle-bg"></div>
-            </div>
-
-            <!-- Sphere shadow (ground reflection) -->
-            <div
-                style="position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:100px;height:14px;background:radial-gradient(ellipse,rgba(236,72,153,0.12) 0%,transparent 70%);border-radius:50%;pointer-events:none;z-index:0;">
+            style="position:absolute;top:2.5rem;left:2.5rem;z-index:10;opacity:0;animation:ldFadeIn 0.8s ease 0.1s forwards;">
+            <div style="display:flex;flex-direction:column;gap:3px;">
+                <span
+                    style="font-weight:900;font-size:1.2rem;letter-spacing:-0.05em;color:#fff;line-height:1;">28E</span>
+                <span
+                    style="font-size:0.62rem;letter-spacing:0.25em;color:#f59e0b;text-transform:uppercase;font-weight:600;">Cinemascope
+                    V</span>
+                <span
+                    style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.12em;color:rgba(255,255,255,0.35);margin-top:2px;">18.4861°
+                    N, 69.9312° W</span>
             </div>
         </div>
 
-        <!-- Percentage -->
-        <div id="loader-percent"
-            style="position:relative;z-index:10;opacity:0;animation:ldFadeUp 0.5s ease 0.55s forwards;margin-top:2rem;font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;font-weight:300;font-size:0.8rem;color:rgba(255,255,255,0.3);letter-spacing:0.12em;">
-            0%</div>
-
-        <!-- Footer -->
-        <div id="loader-footer"
-            style="position:absolute;bottom:2rem;left:0;right:0;z-index:15;text-align:center;opacity:0;animation:ldFadeIn 0.4s ease 0.7s forwards;color:rgba(255,255,255,0.12);font-family:'Inter',sans-serif;font-size:0.65rem;letter-spacing:0.05em;font-weight:300;pointer-events:none;">
-            © 2026 Charles Gustav
+        <!-- HUD Corner 2: Top Right -->
+        <div
+            style="position:absolute;top:2.5rem;right:2.5rem;z-index:10;text-align:right;opacity:0;animation:ldFadeIn 0.8s ease 0.2s forwards;">
+            <div style="display:flex;flex-direction:column;gap:3px;align-items:flex-end;">
+                <span
+                    style="font-size:0.68rem;letter-spacing:0.22em;color:rgba(255,255,255,0.65);text-transform:uppercase;font-weight:300;">28
+                    DE JUNIO • V ANIVERSARIO</span>
+                <div style="display:flex;align-items:center;gap:6px;">
+                    <span
+                        style="width:5px;height:5px;border-radius:50%;background:#10b981;display:inline-block;box-shadow:0 0 8px #10b981;"></span>
+                    <span
+                        style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.15em;color:rgba(255,255,255,0.45);text-transform:uppercase;">MEMORIA_ETERNAL.SYS</span>
+                </div>
+            </div>
         </div>
 
-        <!-- Hidden elements for JS compatibility -->
-        <div style="display:none;" id="loader-message"></div>
-        <div style="display:none;" id="loader-progress"></div>
+        <!-- Center: Chronometer Bezel, Rotating Sphere & Progress Ring -->
+        <div
+            style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+            <div id="custom-loader-wrapper"
+                style="position:relative;z-index:10;display:flex;align-items:center;justify-content:center;width:260px;height:260px;opacity:0;animation:ldScaleIn 1s cubic-bezier(0.16,1,0.3,1) 0.15s forwards;pointer-events:auto;">
 
-        <style>
-            /* ═══ SPHERE ═══ */
-            .loader-circle-bg {
-                position: absolute;
-                inset: 0;
-                border-radius: 50%;
-                background-color: transparent;
-                animation: loader-rotate 2.5s linear infinite;
-            }
+                <!-- High-Precision Chronometer SVG Ring -->
+                <svg width="260" height="260" viewBox="0 0 260 260"
+                    style="position:absolute;inset:0;z-index:2;filter:drop-shadow(0 0 30px rgba(245,158,11,0.15));">
+                    <!-- Outer Diamond Bezel -->
+                    <circle cx="130" cy="130" r="124" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
 
-            @keyframes loader-rotate {
-                0% {
-                    transform: rotate(90deg);
-                    box-shadow:
-                        0 10px 20px 0 #fff inset,
-                        0 20px 30px 0 #f59e0b inset,
-                        0 60px 60px 0 #ec4899 inset;
-                }
+                    <!-- Watch Chronometer Ticks -->
+                    <circle cx="130" cy="130" r="118" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"
+                        stroke-dasharray="1 11.36" />
 
-                50% {
-                    transform: rotate(270deg);
-                    box-shadow:
-                        0 10px 20px 0 #fff inset,
-                        0 20px 10px 0 #ec4899 inset,
-                        0 40px 60px 0 #d97706 inset;
-                }
+                    <!-- Progress Ring Track -->
+                    <circle cx="130" cy="130" r="110" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="2" />
 
-                100% {
-                    transform: rotate(450deg);
-                    box-shadow:
-                        0 10px 20px 0 #fff inset,
-                        0 20px 30px 0 #f59e0b inset,
-                        0 60px 60px 0 #ec4899 inset;
-                }
-            }
-        </style>
+                    <!-- Active Glowing Progress Ring -->
+                    <circle id="loader-ring-fill" cx="130" cy="130" r="110" fill="none" stroke="url(#ld-ring-grad)"
+                        stroke-width="2.5" stroke-linecap="round" stroke-dasharray="691.15" stroke-dashoffset="691.15"
+                        transform="rotate(-90 130 130)"
+                        style="transition:stroke-dashoffset 0.4s cubic-bezier(0.4,0,0.2,1);" />
+                    <defs>
+                        <linearGradient id="ld-ring-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#f59e0b" />
+                            <stop offset="50%" stop-color="#ef4444" />
+                            <stop offset="100%" stop-color="#ec4899" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+
+                <!-- Central Rotating Sphere -->
+                <div
+                    style="position:relative;width:196px;height:196px;border-radius:50%;overflow:hidden;box-shadow:0 0 90px rgba(0,0,0,0.95);border:1px solid rgba(255,255,255,0.06);">
+                    <div class="loader-circle-bg"></div>
+                    <div
+                        style="position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 35px rgba(0,0,0,0.85);pointer-events:none;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HUD Corner 3: Bottom Left (Rotating Status Messages) -->
+        <div style="position:absolute;bottom:2.5rem;left:2.5rem;z-index:10;max-width:340px;">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;opacity:0.8;">
+                <span
+                    style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.18em;color:#f59e0b;text-transform:uppercase;font-weight:600;">[ACTO
+                    V] INTENCIONES</span>
+            </div>
+            <div id="loader-message"
+                style="font-size:0.88rem;font-weight:300;color:rgba(255,255,255,0.8);letter-spacing:0.04em;line-height:1.4;min-height:2.8em;text-align:left;">
+                Preparando nuestro universo...</div>
+        </div>
+
+        <!-- HUD Corner 4: Bottom Right (Giant Editorial Percentage Counter) -->
+        <div style="position:absolute;bottom:2rem;right:2.5rem;z-index:10;text-align:right;">
+            <div id="loader-percent"
+                style="font-variant-numeric:tabular-nums;font-weight:200;font-size:4.2rem;line-height:0.9;color:#fff;letter-spacing:-0.06em;opacity:0;animation:ldFadeUp 0.6s ease 0.3s forwards;">
+                0%</div>
+            <div id="loader-footer"
+                style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.25em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-top:8px;font-weight:400;">
+                CARGANDO UNIVERSO // HI-RES</div>
+        </div>
+
+        <!-- Full-width Bottom Edge Laser Progress Bar -->
+        <div id="loader-progress"
+            style="position:absolute;bottom:0;left:0;height:2px;width:0%;background:linear-gradient(90deg, #f59e0b, #ef4444, #ec4899);z-index:50;transition:width 0.3s ease;box-shadow:0 -2px 10px rgba(245,158,11,0.5);">
+        </div>
+
     </div>
+
+    <style>
+        /* ═══ CINEMASCOPE V (5 MONTHS) MASTER STYLES ═══ */
+        .cs-wrapper {
+            position: relative;
+            background: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 2.5rem;
+            padding: 3rem 1.5rem;
+            margin: 4rem 0;
+            overflow: hidden;
+            box-sizing: border-box;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
+        }
+
+        @media (min-width: 768px) {
+            .cs-wrapper {
+                padding: 6rem 4rem;
+            }
+        }
+
+        .cs-header {
+            text-align: center;
+            margin-bottom: 5rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .cs-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1.2rem;
+            border-radius: 9999px;
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            color: #fbbf24;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1.5rem;
+        }
+
+        .cs-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            background: linear-gradient(135deg, #ffffff 0%, #e4e4e7 50%, #71717a 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .cs-title {
+                font-size: 4.5rem;
+            }
+        }
+
+        .cs-subtitle {
+            color: #a1a1aa;
+            font-size: 1rem;
+            max-width: 36rem;
+            margin: 0 auto;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .cs-timeline {
+            position: relative;
+            max-width: 48rem;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+
+        .cs-timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 1.5rem;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, #f59e0b, #ec4899, transparent);
+            opacity: 0.4;
+        }
+
+        @media (min-width: 768px) {
+            .cs-timeline::before {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        .cs-act {
+            position: relative;
+            margin-bottom: 4rem;
+            display: flex;
+            flex-direction: column;
+            padding-left: 3.5rem;
+            box-sizing: border-box;
+        }
+
+        @media (min-width: 768px) {
+            .cs-act {
+                flex-direction: row;
+                padding-left: 0;
+                align-items: center;
+            }
+
+            .cs-act:nth-child(odd) {
+                justify-content: flex-start;
+                text-align: left;
+            }
+
+            .cs-act:nth-child(even) {
+                justify-content: flex-end;
+                text-align: left;
+            }
+
+            .cs-act-card {
+                width: calc(50% - 3rem);
+            }
+        }
+
+        .cs-node {
+            position: absolute;
+            left: 1.5rem;
+            top: 1.5rem;
+            transform: translate(-50%, 0);
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 50%;
+            background: #09090b;
+            border: 3px solid #f59e0b;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
+            z-index: 5;
+        }
+
+        @media (min-width: 768px) {
+            .cs-node {
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .cs-act-card {
+            background: rgba(18, 18, 22, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            backdrop-filter: blur(16px);
+            transition: transform 0.4s ease, border-color 0.4s ease;
+            box-sizing: border-box;
+        }
+
+        .cs-act-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(245, 158, 11, 0.4);
+        }
+
+        .cs-act-tag {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: #f59e0b;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .cs-act-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.75rem;
+        }
+
+        .cs-act-desc {
+            font-size: 0.875rem;
+            color: #a1a1aa;
+            line-height: 1.6;
+        }
+
+        /* Hold Button Core */
+        .cs-hold-container {
+            text-align: center;
+            margin-top: 6rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .cs-hold-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: #09090b;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            user-select: none;
+            touch-action: none;
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+        }
+
+        .cs-hold-btn:active {
+            transform: scale(0.96);
+        }
+
+        .cs-hold-svg {
+            position: absolute;
+            inset: -6px;
+            width: calc(100% + 12px);
+            height: calc(100% + 12px);
+            transform: rotate(-90deg);
+            pointer-events: none;
+        }
+
+        .cs-hold-circle-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.05);
+            stroke-width: 6;
+        }
+
+        .cs-hold-circle-val {
+            fill: none;
+            stroke: #f59e0b;
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-dasharray: 691;
+            stroke-dashoffset: 691;
+            transition: stroke-dashoffset 0.1s linear;
+        }
+
+        .cs-hold-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+        }
+
+        .cs-hold-icon {
+            font-size: 2.5rem;
+        }
+
+        .cs-hold-label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        .cs-hold-sub {
+            font-size: 0.65rem;
+            color: #f59e0b;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+        }
+
+        /* ═══ SPHERE ═══ */
+        .loader-circle-bg {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background-color: transparent;
+            animation: loader-rotate 2.5s linear infinite;
+        }
+
+        @keyframes loader-rotate {
+            0% {
+                transform: rotate(90deg);
+                box-shadow:
+                    0 10px 20px 0 #fff inset,
+                    0 20px 30px 0 #f59e0b inset,
+                    0 60px 60px 0 #ec4899 inset;
+            }
+
+            50% {
+                transform: rotate(270deg);
+                box-shadow:
+                    0 10px 20px 0 #fff inset,
+                    0 20px 10px 0 #ec4899 inset,
+                    0 40px 60px 0 #d97706 inset;
+            }
+
+            100% {
+                transform: rotate(450deg);
+                box-shadow:
+                    0 10px 20px 0 #fff inset,
+                    0 20px 30px 0 #f59e0b inset,
+                    0 60px 60px 0 #ec4899 inset;
+            }
+        }
+    </style>
 
     <!-- Global safety net: dismiss loader even if DOMContentLoaded is delayed -->
     <script>
@@ -3735,7 +4054,7 @@
                     ld.style.transform = 'scale(1.06)';
                     setTimeout(function () { ld.style.display = 'none'; document.body.classList.add('page-ready'); }, 650);
                 }
-            }, 2500);
+            }, 6000);
             window.__cancelLoaderSafety = function () { clearTimeout(_t); };
         })();
     </script>
@@ -3899,8 +4218,10 @@
             <!-- Especial -->
             <p class="menu-category-label text-zinc-400 dark:text-zinc-500" data-i18n="menu_cat_special">✦ ESPECIAL</p>
             <div class="menu-grid">
-                <a href="oracle.html" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400 relative glow-effect">
-                    <span class="menu-link-icon bg-amber-500/20 text-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.5)]">🔮</span>
+                <a href="oracle.html"
+                    class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400 relative glow-effect">
+                    <span
+                        class="menu-link-icon bg-amber-500/20 text-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.5)]">🔮</span>
                     <span class="font-bold text-amber-500 dark:text-amber-400">28E Oracle</span>
                 </a>
                 <a href="#promesas" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
@@ -3932,8 +4253,20 @@
 
             </div>
 
-            <!-- Bóveda -->
+            <!-- Capítulo V: 5 Meses -->
             <div class="mt-3 mb-1">
+                <a href="#mes-cinco"
+                    class="menu-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-extrabold text-brand-500 bg-brand-500/10 dark:bg-brand-500/20 border border-brand-500/30 group shadow-md transition-all hover:scale-[1.02]">
+                    <span
+                        class="menu-link-icon bg-brand-500 text-black shadow-sm transition-transform duration-300 group-hover:rotate-12">🌷</span>
+                    <span data-i18n="menu_mes_cinco">Capítulo V: 5 Meses</span>
+                    <span
+                        class="ml-auto text-[10px] bg-brand-500 text-black px-1.5 py-0.5 rounded-full font-black tracking-wider uppercase animate-pulse">28E</span>
+                </a>
+            </div>
+
+            <!-- Bóveda -->
+            <div class="mt-2 mb-1">
                 <a href="#secreto"
                     class="menu-link vault-btn flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-brand-600 dark:text-brand-400 group">
                     <span
@@ -4030,7 +4363,7 @@
                             const expArtist = document.getElementById('spotlight-expanded-artist');
                             const compactArtist = document.getElementById('spotlight-artist');
 
-                            if (expTitle) expTitle.textContent = state.title || 'Spotlight Radio';
+                            if (expTitle) expTitle.textContent = state.title || 'Spotlight Music';
                             if (expArtist) expArtist.innerHTML = `<span class="text-red-500 font-bold tracking-widest uppercase animate-pulse">🔴 EN VIVO: ${state.artist || 'Transmisión'}</span>`;
                             if (compactArtist) compactArtist.innerHTML = `<span class="text-red-500 font-bold tracking-wider animate-pulse">🔴 ${state.artist || 'EN VIVO'}</span>`;
 
@@ -4048,7 +4381,7 @@
                                     let seekTime = (now - state.startTime) / 1000;
 
                                     if (seekTime < 5) {
-                                        const announcerText = `Estás escuchando ${state.title} de ${state.artist}, en Spotlight Radio.`;
+                                        const announcerText = `Estás escuchando ${state.title} de ${state.artist}, en Spotlight Music.`;
                                         const announcerAudio = new Audio(`/api/tts?text=${encodeURIComponent(announcerText)}`);
 
                                         // We use the Audio object directly to check if API is available
@@ -4517,7 +4850,7 @@
                             document.title = '28E FM (Live)';
                             if ('mediaSession' in navigator) {
                                 navigator.mediaSession.metadata = new MediaMetadata({
-                                    title: 'Spotlight Radio',
+                                    title: 'Spotlight Music',
                                     artist: 'Live Broadcast',
                                     album: '28E',
                                     artwork: [{ src: 'tulip.ico?v=3', sizes: '512x512', type: 'image/x-icon' }]
@@ -4693,9 +5026,9 @@
                         };
 
                         // Set live text
-                        if (compactTitle) compactTitle.textContent = 'Spotlight Radio';
+                        if (compactTitle) compactTitle.textContent = 'Spotlight Music';
                         if (compactArtist) compactArtist.innerHTML = `<span class="text-red-500 font-bold tracking-wider animate-pulse" data-i18n="radio_live_badge">${dict.radio_live_badge}</span>`;
-                        if (expTitle) expTitle.textContent = 'Spotlight Radio';
+                        if (expTitle) expTitle.textContent = 'Spotlight Music';
                         if (expArtist) expArtist.innerHTML = `<span class="text-red-500 font-bold tracking-widest uppercase animate-pulse" data-i18n="radio_live_title">${dict.radio_live_title}</span>`;
 
                         // Use default radio artwork
@@ -4975,7 +5308,8 @@
                             <p
                                 class="text-[11px] font-medium text-zinc-600 dark:text-zinc-400 text-center mb-1 leading-relaxed">
                                 <span data-i18n="auth_prompt">Inicia sesión para entrar al canal de voz y guardar
-                                    progreso.</span></p>
+                                    progreso.</span>
+                            </p>
                             <button id="auth-btn-login"
                                 class="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-bold text-zinc-900 dark:text-white bg-white/50 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10 border border-black/5 dark:border-white/10 hover:border-black/10 dark:hover:border-white/20 transition-all rounded-xl shadow-sm group active:scale-[0.98]">
                                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
@@ -11990,6 +12324,108 @@
                 })();
             </script>
         </section>
+        <!-- ══════════ CAPÍTULO V: CINEMASCOPE V (5 MESES) ══════════ -->
+        <section id="mes-cinco" class="cs-wrapper reveal scroll-mt-20">
+            <!-- Glow background decor -->
+            <div
+                class="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-b from-amber-500/15 via-pink-500/10 to-transparent blur-3xl pointer-events-none">
+            </div>
+
+            <div class="cs-header">
+                <div class="cs-badge">
+                    <span>✦ Est. 28 Junio 2026</span>
+                </div>
+                <h2 class="cs-title">Cinemascope V</h2>
+                <p class="cs-subtitle">Cinco meses oficiales amándonos. Un viaje que no se mide en kilómetros, sino en
+                    la intensidad de cada latido compartido a través de la pantalla.</p>
+            </div>
+
+            <!-- 5 Acts Timeline -->
+            <div class="cs-timeline">
+
+                <!-- Act I -->
+                <div class="cs-act">
+                    <div class="cs-node"></div>
+                    <div class="cs-act-card">
+                        <span class="cs-act-tag">Acto I • 28 de Enero 2026</span>
+                        <h3 class="cs-act-title">El Destello Inicial</h3>
+                        <p class="cs-act-desc">Todo comenzó con un cruce de palabras y una chispa digital. Dos
+                            coordenadas lejanas sintonizando exactamente la misma frecuencia por primera vez.</p>
+                    </div>
+                </div>
+
+                <!-- Act II -->
+                <div class="cs-act">
+                    <div class="cs-node"></div>
+                    <div class="cs-act-card">
+                        <span class="cs-act-tag">Acto II • 900 Kilómetros</span>
+                        <h3 class="cs-act-title">Desafiando la Distancia</h3>
+                        <p class="cs-act-desc">Construimos un refugio indestructible donde las notas de voz se
+                            convierten en abrazos y las madrugadas en conversaciones que no queremos que acaben nunca.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Act III -->
+                <div class="cs-act">
+                    <div class="cs-node"></div>
+                    <div class="cs-act-card">
+                        <span class="cs-act-tag">Acto III • Métricas Reales del Alma</span>
+                        <h3 class="cs-act-title">42,080 Mensajes Juntos</h3>
+                        <p class="cs-act-desc">Nuestro historial confirma una conexión mutua perfecta: 3,121 veces
+                            pronunciamos la palabra "Amor", compartimos 4,503 recuerdos visuales y nos dedicamos 1,034
+                            "Te amo".</p>
+                    </div>
+                </div>
+
+                <!-- Act IV -->
+                <div class="cs-act">
+                    <div class="cs-node"></div>
+                    <div class="cs-act-card">
+                        <span class="cs-act-tag">Acto IV • La Musa</span>
+                        <h3 class="cs-act-title">Inspiración Infinita</h3>
+                        <p class="cs-act-desc">Eres la luz detrás de cada línea de código, cada santuario diseñado y
+                            cada melodía guardada. Mi motor constante y mi paz absoluta.</p>
+                    </div>
+                </div>
+
+                <!-- Act V -->
+                <div class="cs-act">
+                    <div class="cs-node"></div>
+                    <div class="cs-act-card"
+                        style="border-color: rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.05);">
+                        <span class="cs-act-tag" style="color: #ec4899;">Acto V • 28 de Junio 2026</span>
+                        <h3 class="cs-act-title">El Quinto Mes Oficial</h3>
+                        <p class="cs-act-desc">Hoy precintamos el capítulo número cinco de nuestra historia. Mantén
+                            presionado el sello inferior para desbloquear el juramento de este mes.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Hold 3s to Unlock Oath -->
+            <div class="cs-hold-container">
+                <div id="cs-hold-btn" class="cs-hold-btn">
+                    <svg class="cs-hold-svg" viewBox="0 0 232 232">
+                        <defs>
+                            <linearGradient id="csGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#f59e0b" />
+                                <stop offset="50%" stop-color="#ec4899" />
+                                <stop offset="100%" stop-color="#fbbf24" />
+                            </linearGradient>
+                        </defs>
+                        <circle class="cs-hold-circle-bg" cx="116" cy="116" r="110" />
+                        <circle id="cs-hold-circle-val" class="cs-hold-circle-val" cx="116" cy="116" r="110" />
+                    </svg>
+                    <div class="cs-hold-content">
+                        <span id="cs-hold-icon" class="cs-hold-icon">🔒</span>
+                        <span id="cs-hold-label" class="cs-hold-label">Juramento V</span>
+                        <span id="cs-hold-sub" class="cs-hold-sub">Mantén 3s para revelar</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Secret Vault - Premium Redesign -->
         <section id="secreto"
             class="cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal-scale scroll-mt-20 relative overflow-hidden">
@@ -12571,8 +13007,21 @@
                 credits_sec_dir: "Concepto & Diseño", credits_lbl_dir: "Dirección Creativa", credits_lbl_insp: "Inspiración Absoluta", credits_lbl_dev: "Desarrollo UI/UX & Código", credits_lbl_thanks: "Agradecimiento Especial",
                 credits_sec_tech: "Tecnologías & Core", credits_lbl_lang: "Lenguaje Base", credits_lbl_struct: "Estructura & Semántica", credits_lbl_frame: "Framework de Estilos", credits_lbl_arch: "Arquitectura App", credits_lbl_store: "Almacenamiento", credits_lbl_pwa: "Compatibilidad PWA",
                 credits_sec_lib: "Librerías Visuales & Motores", credits_lbl_anim: "Animación Avanzada", credits_lbl_scroll: "Disparadores de Scroll", credits_lbl_data: "Visualización de Datos", credits_lbl_fonts: "Tipografías",
-                credits_sec_sys: "Sistemas Especiales (Custom)", credits_lbl_audio: "Motor de Sonido 0-Lag", credits_lbl_i18n: "Traducción Dinámica", credits_lbl_swipe: "Gestos Táctiles Móviles", credits_lbl_canvas: "Render de Partículas",
-                letter_next_btn: "Siguiente →", letter_fin_btn: "✓ Fin"
+                letter_next_btn: "Siguiente →", letter_fin_btn: "✓ Fin",
+                menu_mes_cinco: "Capítulo V: 5 Meses",
+                mes_cinco_badge: "✦ Hito Criptográfico", mes_cinco_title: "Cinco Meses de Magia",
+                mes_cinco_sub: "El 28 de Junio marca nuestro quinto mes oficial amándonos. Un viaje que sigue expandiéndose a la velocidad de la luz.",
+                m5_card1_title: "El Monolito 150 Días", m5_card1_desc: "Más de 3,600 horas compartiendo risas, secretos, llamadas infinitas y construyendo un hogar indestructible entre nuestras coordenadas.",
+                m5_card2_title: "Cápsula hacia nuestro 1º Año", m5_card2_desc: "Escribe un deseo o dedicatoria secreta. Quedará precintado criptográficamente en la base de datos hasta nuestro primer aniversario oficial (28 de Enero 2027).",
+                m5_capsule_ph: "Escribe tu mensaje hacia el futuro...", m5_capsule_btn: "🔒 Sellado Criptográfico", m5_capsule_success: "¡Precintado con éxito hacia 2027! ⏳",
+                m5_card3_title: "Constelación de 5 Puntas", m5_card3_desc: "Cinco estrellas brillantes iluminan nuestro cielo nocturno. Pasa el cursor o toca cada estrella para entrelazar nuestra frecuencia.",
+                m5_star_hint: "Conecta las 5 estrellas... ✨", m5_star_win: "¡Frecuencia entrelazada perfectamente! 🌌",
+                m5_card4_title: "Galería del Mes 5", m5_card4_desc: "Cinco instantes visuales inolvidables que capturan la esencia, la ternura y la complicidad de nuestras últimas semanas juntos.",
+                m5_card5_title: "Frecuencia V", m5_card5_desc: "Sintonizando la nota exacta de nuestro quinto mes. Pulsa el reproductor para escuchar nuestra atmósfera sonora.",
+                hunt_toast_prefix: "🌷 ¡Encontraste un Tulipán Dorado! (", hunt_toast_suffix: "/5)",
+                hunt_win_title: "¡Los 5 Tulipanes Dorados!", hunt_win_desc: "¡Felicidades mi hermosa manzanita! Has encontrado todos los tesoros ocultos de nuestro quinto mes. Aquí tienes tu carta secreta de recompensa.",
+                hunt_letter_p1: "Mi reina hermosa, si encontraste los 5 tulipanes dorados es porque exploras cada rincón de lo que construyo para ti con la misma curiosidad y amor con la que yo exploro tu corazón.",
+                hunt_letter_p2: "5 meses amándote se sienten como un suspiro y a la vez como toda una vida. Gracias por ser mi luz constante, mi paz en la distancia y la razón por la que todos mis códigos terminan llevando tu nombre. Te amo infinitamente, Yaire. Feliz Mes 5. 🌷💖"
             }
         };
 
@@ -12785,7 +13234,7 @@
                     existing.addEventListener('load', resolve, { once: true });
                     existing.addEventListener('error', resolve, { once: true });
                     // If already loaded (readyState), resolve immediately
-                    if (existing.readyState === 'complete' || existing.readyState === undefined && existing.src) {
+                    if (existing.readyState === 'complete' || (existing.readyState === undefined && existing.src && existing.dataset.loaded)) {
                         setTimeout(resolve, 0);
                     }
                 });
@@ -12793,13 +13242,13 @@
 
             addResource(document.fonts.ready, 2);
 
-            // Absolute safety net — 800ms max after DOMContentLoaded (prevents font hang)
+            // Absolute safety net — 9000ms max after DOMContentLoaded (prevents font hang)
             const fallback = setTimeout(() => {
                 if (!loaderEscondido) {
                     console.warn('Loader: tiempo límite alcanzado. Forzando entrada.');
                     setProgress(100);
                 }
-            }, 800);
+            }, 9000);
 
             // ── Progress setter ──
             function setProgress(pct) {
@@ -12816,10 +13265,9 @@
                     if (loaderMsgInterval) clearInterval(loaderMsgInterval);
                     loaderEscondido = true;
 
-                    const grads = document.getElementById('loader-gradients');
                     const heroSection = document.getElementById('hero');
 
-                    if (false) {
+                    if (typeof gsap !== 'undefined') {
                         // ── EXIT GSAP — Premium Minimal Transition ───────
                         loaderEl.style.willChange = 'opacity';
 
@@ -12859,31 +13307,49 @@
                                     }, 'start');
                                 }
 
-                                // ── 2. Foreground Elements Zoom-Through (Cinematic Warp Passage) ──
-                                // Symmetrical depth: the center logo and glowing ring scale UP dramatically
-                                // towards the camera, fading out as if the user is zooming right through them!
-                                const exitElements = [];
-                                if (loaderLogo) exitElements.push(loaderLogo);
-                                if (customLoader) exitElements.push(customLoader);
+                                // ── 2. Cinematic HUD Laser & Corner Dispersion ──
+                                const loaderPercent = document.getElementById('loader-percent');
+                                const loaderMessage = document.getElementById('loader-message');
+                                const loaderFooter = document.getElementById('loader-footer');
+                                const loaderProgress = document.getElementById('loader-progress');
 
-                                if (exitElements.length) {
-                                    exitTl.to(exitElements, {
-                                        opacity: 0,
-                                        scale: 1.45,
-                                        duration: 0.8,
-                                        ease: 'power3.out',
-                                        stagger: 0.04
-                                    }, 'start');
+                                // Flash and zip out bottom laser bar
+                                if (loaderProgress) {
+                                    exitTl.to(loaderProgress, {
+                                        width: '100%',
+                                        duration: 0.25,
+                                        ease: 'power2.out'
+                                    }, 'start')
+                                        .to(loaderProgress, {
+                                            opacity: 0,
+                                            scaleX: 0,
+                                            duration: 0.45,
+                                            ease: 'power3.inOut'
+                                        }, 'start+=0.25');
                                 }
 
-                                const loaderFooter = document.getElementById('loader-footer');
-                                if (loaderFooter) {
-                                    exitTl.to(loaderFooter, {
+                                // Float corner HUD elements outwards into deep space
+                                const hudCorners = [loaderLogo, loaderPercent, loaderMessage, loaderFooter].filter(Boolean);
+                                if (hudCorners.length) {
+                                    exitTl.to(hudCorners, {
                                         opacity: 0,
-                                        y: 20,
-                                        duration: 0.65,
-                                        ease: 'power2.out'
-                                    }, 'start');
+                                        scale: 0.9,
+                                        y: (i) => i % 2 === 0 ? -35 : 35,
+                                        duration: 0.75,
+                                        stagger: 0.04,
+                                        ease: 'power3.inOut'
+                                    }, 'start+=0.1');
+                                }
+
+                                // Central Sphere Majestic Hyper-Warp
+                                if (customLoader) {
+                                    exitTl.to(customLoader, {
+                                        scale: 3.4,
+                                        rotation: '+=60',
+                                        opacity: 0,
+                                        duration: 1.1,
+                                        ease: 'power4.inOut'
+                                    }, 'start+=0.15');
                                 }
 
                                 // ── 3. Main Background Scale & Dissolve (Guaranteed Zero Cuts) ──
@@ -12973,12 +13439,12 @@
 
             // Kick off — wait for all tracked resources
             logDebug('Iniciando fake loader interval');
-            // Min 1.5s - blocks exit until elapsed, then triggers final setProgress(100)
+            // Min 4500ms - blocks exit until elapsed, then triggers final setProgress(100)
             setTimeout(() => {
-                logDebug('Min elapsed timeout (800ms) finalizado');
+                logDebug('Min elapsed timeout (4500ms) finalizado');
                 _loaderMinElapsed = true;
                 setProgress(100); // now allowed to exit
-            }, 800);
+            }, 4500);
             // Resources still update the bar visually (but can't exit before 1.5s)
             Promise.all(resources).then(() => logDebug('Promise.all(resources) finalizado')).catch(() => { logDebug('Promise.all error'); });
 
@@ -12990,7 +13456,7 @@
             logDebug('Llamando a AudioManager.init()');
             AudioManager.init();
             logDebug('Inicializaciones básicas terminadas. Configuracion defer ida...');
-            
+
             // Defer heavy inits until after loader exits to prevent CPU saturation
             if (window.__runWhenIdle) {
                 window.__runWhenIdle(() => { initChart(); initButterflyGame(); }, 5000);
@@ -17619,7 +18085,7 @@
                 try {
                     const snap = await get(ref(db, `users/${user.uid}/oracle_handle`));
                     if (snap.exists()) window.yaireCurrentUser.oracleHandle = snap.val();
-                } catch(e) {}
+                } catch (e) { }
             } else {
                 window.yaireVcHistoryData = [];
             }
@@ -18009,7 +18475,7 @@
         </div>
         <div>
             <p class="text-[8px] flex items-center gap-1 font-bold text-zinc-400 uppercase tracking-widest mb-1"><i
-                    class="ph-bold ph-vinyl-record"></i> Spotlight Radio</p>
+                    class="ph-bold ph-vinyl-record"></i> Spotlight Music</p>
             <p class="text-[10px] font-bold text-brand-500 uppercase tracking-widest mb-0.5">Siguiente canción</p>
             <p id="next-song-toast-title" class="text-sm font-bold text-white leading-tight truncate max-w-[200px]"></p>
         </div>
@@ -18026,27 +18492,27 @@
         window.triggerFlowerRain = function () {
             window.__loadConfetti().then(function (confetti) {
                 if (!confetti) return;
-            var duration = 5 * 1000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 20, spread: 360, ticks: 60, zIndex: 10000 };
+                var duration = 5 * 1000;
+                var animationEnd = Date.now() + duration;
+                var defaults = { startVelocity: 20, spread: 360, ticks: 60, zIndex: 10000 };
 
-            var interval = setInterval(function () {
-                var timeLeft = animationEnd - Date.now();
+                var interval = setInterval(function () {
+                    var timeLeft = animationEnd - Date.now();
 
-                if (timeLeft <= 0) {
-                    return clearInterval(interval);
-                }
+                    if (timeLeft <= 0) {
+                        return clearInterval(interval);
+                    }
 
-                var particleCount = 20 * (timeLeft / duration);
+                    var particleCount = 20 * (timeLeft / duration);
 
-                confetti(Object.assign({}, defaults, {
-                    particleCount,
-                    origin: { x: Math.random(), y: Math.random() - 0.2 },
-                    shapes: ['circle'],
-                    scalar: 2.5,
-                    colors: ['#ec4899', '#f43f5e', '#fca5a5', '#fbbf24'] // Pink, red, light pink, yellow (tulip/rose colors)
-                }));
-            }, 250);
+                    confetti(Object.assign({}, defaults, {
+                        particleCount,
+                        origin: { x: Math.random(), y: Math.random() - 0.2 },
+                        shapes: ['circle'],
+                        scalar: 2.5,
+                        colors: ['#ec4899', '#f43f5e', '#fca5a5', '#fbbf24'] // Pink, red, light pink, yellow (tulip/rose colors)
+                    }));
+                }, 250);
             }).catch(function () { });
         }
     </script>
@@ -18060,6 +18526,24 @@
         window.showPremiumAlert = function (title, msg, type = 'error') {
             const container = document.getElementById('premium-toast-container');
             if (!container) return;
+
+            // ── Traductor Humanizado de Errores Técnicos ──
+            if (typeof msg === 'string') {
+                if (msg.includes('auth/unauthorized-domain')) {
+                    title = 'Modo de Prueba Local';
+                    msg = 'Google Auth restringe el acceso desde localhost/127.0.0.1 por seguridad. En tu web publicada funcionará perfecto.';
+                    type = 'info';
+                } else if (msg.includes('auth/popup-closed-by-user') || msg.includes('auth/cancelled-popup-request')) {
+                    title = 'Inicio Cancelado';
+                    msg = 'Cerraste la ventana de Google antes de terminar.';
+                    type = 'info';
+                } else if (msg.includes('auth/network-request-failed')) {
+                    title = 'Sin Conexión';
+                    msg = 'Verificá tu conexión a internet e intentalo de nuevo.';
+                } else if (msg.includes('Firebase:')) {
+                    msg = msg.replace(/^Firebase:\s*Error\s*\(.*?\)\.?\s*/i, '').trim() || 'No se pudo completar la operación.';
+                }
+            }
 
             const toast = document.createElement('div');
             // Using pointer-events-auto so the toast can be clicked/hovered
@@ -18222,11 +18706,11 @@
                             window.__loadConfetti().then(function (confetti) {
                                 if (!confetti) return;
                                 confetti({
-                                particleCount: 150,
-                                spread: 80,
-                                origin: { y: 0.6 },
-                                colors: ['#ec4899', '#8b5cf6', '#f43f5e', '#fbbf24'],
-                                zIndex: 9999
+                                    particleCount: 150,
+                                    spread: 80,
+                                    origin: { y: 0.6 },
+                                    colors: ['#ec4899', '#8b5cf6', '#f43f5e', '#fbbf24'],
+                                    zIndex: 9999
                                 });
                             }).catch(function () { });
                         }
@@ -18241,8 +18725,189 @@
         };
 
         document.addEventListener("DOMContentLoaded", () => {
-            initRouletteSlot();
+            if (typeof initRouletteSlot === 'function') initRouletteSlot();
+            initCinemascopeHold();
         });
+
+        function initCinemascopeHold() {
+            const btn = document.getElementById('cs-hold-btn');
+            const circle = document.getElementById('cs-hold-circle-val');
+            const icon = document.getElementById('cs-hold-icon');
+            const label = document.getElementById('cs-hold-label');
+            const sub = document.getElementById('cs-hold-sub');
+            if (!btn || !circle) return;
+
+            let holdTimer = null;
+            let startTime = 0;
+            const HOLD_DURATION = 3000;
+            const CIRCUMFERENCE = 691;
+            let unlocked = false;
+
+            window.__csResetHold = () => {
+                unlocked = false;
+                if (icon) icon.textContent = '🔒';
+                if (label) label.textContent = 'Juramento V';
+                if (sub) sub.textContent = 'Mantén 3s para revelar';
+                circle.style.strokeDashoffset = CIRCUMFERENCE;
+                btn.style.boxShadow = '0 0 40px rgba(0, 0, 0, 0.8)';
+                btn.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                btn.style.transform = 'scale(1)';
+            };
+
+            window.__csConfirmSeal = () => {
+                unlocked = true;
+                if (typeof AudioManager !== 'undefined' && AudioManager.play) AudioManager.play('gameopen.wav', 1);
+                if (icon) icon.textContent = '💖';
+                if (label) label.textContent = '¡Juramento Sellado!';
+                if (sub) sub.textContent = '28 de Junio 2026';
+                btn.style.boxShadow = '0 0 100px rgba(236, 72, 153, 0.6)';
+                btn.style.borderColor = '#ec4899';
+            };
+
+            function startHold(e) {
+                if (unlocked) return;
+                if (e.cancelable && e.type === 'touchstart') e.preventDefault();
+                startTime = performance.now();
+                if (typeof AudioManager !== 'undefined' && AudioManager.play) AudioManager.play('magic.wav', 0.5);
+                btn.style.boxShadow = '0 0 70px rgba(245, 158, 11, 0.4)';
+                btn.style.transform = 'scale(0.96)';
+
+                function loop(now) {
+                    const elapsed = now - startTime;
+                    const progress = Math.min(1, elapsed / HOLD_DURATION);
+                    circle.style.strokeDashoffset = CIRCUMFERENCE * (1 - progress);
+
+                    const secondsLeft = Math.ceil((HOLD_DURATION - elapsed) / 1000);
+                    if (sub && secondsLeft > 0) sub.textContent = secondsLeft + 's restantes...';
+
+                    if (progress < 1) {
+                        holdTimer = requestAnimationFrame(loop);
+                    } else {
+                        triggerUnlock();
+                    }
+                }
+                holdTimer = requestAnimationFrame(loop);
+            }
+
+            function cancelHold() {
+                if (unlocked) return;
+                if (holdTimer) cancelAnimationFrame(holdTimer);
+                holdTimer = null;
+                circle.style.strokeDashoffset = CIRCUMFERENCE;
+                if (sub) sub.textContent = 'Mantén 3s para revelar';
+                btn.style.boxShadow = '0 0 40px rgba(0, 0, 0, 0.8)';
+                btn.style.transform = 'scale(1)';
+            }
+
+            function triggerUnlock() {
+                unlocked = true; // Lock temporarily while modal is open
+                if (typeof AudioManager !== 'undefined' && AudioManager.play) AudioManager.play('magic.wav', 1);
+                btn.style.boxShadow = '0 0 80px rgba(245, 158, 11, 0.8)';
+                btn.style.borderColor = '#f59e0b';
+                if (sub) sub.textContent = 'Abriendo Bóveda...';
+
+                if (window.__loadConfetti) {
+                    window.__loadConfetti().then(confetti => {
+                        if (confetti) confetti({ particleCount: 250, spread: 120, origin: { y: 0.6 }, colors: ['#f59e0b', '#ec4899', '#fbbf24', '#ffffff'], zIndex: 99999 });
+                    });
+                }
+                showCinemascopeRewardModal();
+            }
+
+            btn.addEventListener('mousedown', startHold);
+            btn.addEventListener('touchstart', startHold, { passive: false });
+            window.addEventListener('mouseup', cancelHold);
+            btn.addEventListener('mouseleave', cancelHold);
+            window.addEventListener('touchend', cancelHold);
+            window.addEventListener('touchcancel', cancelHold);
+        }
+
+        function showCinemascopeRewardModal() {
+            if (document.getElementById('cs-reward-modal')) return;
+            const m = document.createElement('div');
+            m.id = 'cs-reward-modal';
+            m.className = 'fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-2xl overflow-y-auto';
+            m.style.opacity = '0';
+            m.innerHTML = `
+                <div id="cs-modal-card" class="bg-zinc-950/98 border border-amber-500/35 p-5 sm:p-6 md:p-7 rounded-[2rem] max-w-lg sm:max-w-xl w-full max-h-[72vh] flex flex-col justify-between my-auto text-center shadow-[0_0_80px_rgba(245,158,11,0.2)] relative overflow-hidden transform-gpu">
+                    <button onclick="closeCinemascopeModal(false)" class="absolute top-4 right-4 sm:top-5 sm:right-5 w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 hover:scale-105 active:scale-95 transition-all z-20 text-xs shadow-md" title="Cancelar y no sellar (Esc)">✕</button>
+
+                    <div class="absolute -right-20 -top-20 w-50 h-50 bg-pink-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -left-20 -bottom-20 w-50 h-50 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                    <div class="flex-shrink-0">
+                        <div class="inline-flex flex-wrap justify-center items-center gap-1 px-3 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-[8px] sm:text-[9px] uppercase font-bold tracking-widest text-amber-400 mb-2 pr-8 sm:pr-3">
+                            <span>✦ Pacto Sellado: 10 Feb 2026 (11:13 PM) • Te Amo #1,034</span>
+                        </div>
+                        <div class="text-2xl sm:text-3xl mb-1 select-none">🌷</div>
+                        <h3 class="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-amber-200 to-amber-500 mb-2 tracking-tight">El Juramento de 5 Meses</h3>
+                    </div>
+                    
+                    <div class="flex-1 overflow-y-auto text-left bg-gradient-to-b from-white/[0.04] to-black/80 border border-white/10 p-3.5 sm:p-5 rounded-xl my-1 space-y-2 font-light text-xs sm:text-sm text-zinc-200 leading-normal custom-scrollbar shadow-inner">
+                        <p class="font-serif italic text-amber-200 text-xs sm:text-sm tracking-wide">"Mi amada Yaire,</p>
+                        <p>Llegar a nuestro quinto mes oficial amándonos (este 28 de Junio) es la prueba viviente de que lo que compartimos está blindado contra los kilómetros, el tiempo y el ruido del mundo.</p>
+                        <p>Cada línea de código en esta plataforma, cada estrella en nuestra pantalla y cada segundo que marco en el reloj es un santuario dedicado exclusivamente a ti. Gracias por ser mi calma en las tormentas, mi compañera de madrugada y la musa absoluta de mi vida.</p>
+                        <p>Cinco meses se sienten como un suspiro, pero a tu lado quiero construir todos los siglos que nos quedan por delante. Te amo con cada latido de mi corazón."</p>
+                        <p class="text-right font-bold text-amber-400 pt-0.5 text-[11px] sm:text-xs tracking-wider">— Siempre tuyo, Charles Gustav 💖</p>
+                    </div>
+
+                    <div class="flex-shrink-0 mt-2.5">
+                        <button onclick="closeCinemascopeModal(true)" class="w-full py-3 sm:py-3.5 rounded-xl bg-gradient-to-r from-amber-500 via-pink-500 to-amber-400 text-black font-black text-xs sm:text-sm tracking-widest uppercase hover:brightness-110 active:scale-98 transition-all shadow-[0_0_25px_rgba(245,158,11,0.2)] hover:shadow-[0_0_40px_rgba(236,72,153,0.4)]">
+                            Guardar Juramento en mi Alma
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // Click outside backdrop to close WITHOUT sealing
+            m.addEventListener('click', (e) => {
+                if (e.target === m) closeCinemascopeModal(false);
+            });
+
+            document.body.appendChild(m);
+
+            // GSAP Jaw-Dropping 3D Entrance Animation
+            if (typeof gsap !== 'undefined') {
+                const card = document.getElementById('cs-modal-card');
+                gsap.set(card, { scale: 0.7, opacity: 0, y: 50, rotationX: 12 });
+                gsap.to(m, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+                gsap.to(card, { scale: 1, opacity: 1, y: 0, rotationX: 0, duration: 0.65, ease: 'back.out(1.6)', delay: 0.05 });
+            } else {
+                m.style.opacity = '1';
+            }
+
+            // Escape key listener (closes WITHOUT sealing)
+            window.__csEscHandler = (e) => {
+                if (e.key === 'Escape') closeCinemascopeModal(false);
+            };
+            window.addEventListener('keydown', window.__csEscHandler);
+        }
+
+        window.closeCinemascopeModal = function (confirmSeal) {
+            const m = document.getElementById('cs-reward-modal');
+            if (!m) return;
+            if (window.__csEscHandler) {
+                window.removeEventListener('keydown', window.__csEscHandler);
+                window.__csEscHandler = null;
+            }
+
+            function finish() {
+                m.remove();
+                if (confirmSeal === true) {
+                    if (window.__csConfirmSeal) window.__csConfirmSeal();
+                } else {
+                    if (window.__csResetHold) window.__csResetHold();
+                }
+            }
+
+            if (typeof gsap !== 'undefined') {
+                const card = document.getElementById('cs-modal-card');
+                gsap.to(card, { scale: 0.85, opacity: 0, y: 20, duration: 0.25, ease: 'power2.in' });
+                gsap.to(m, { opacity: 0, duration: 0.25, ease: 'power2.in', delay: 0.05, onComplete: finish });
+            } else {
+                finish();
+            }
+        };
     </script>
 </body>
 
