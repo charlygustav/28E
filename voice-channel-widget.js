@@ -1755,8 +1755,8 @@
         this._bar.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
       }
       if (this.panel) {
-        this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
-        this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
+        this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
+        this.panel.classList.add('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
       }
       
       this._render(this._tplLogin());
