@@ -266,7 +266,7 @@
   @keyframes vc-slideIn     { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:translateX(0)} }
   @keyframes vc-orb-drift   { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(8px,-12px) scale(1.08)} }
   @keyframes vc-orb-drift2  { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-10px,8px) scale(1.05)} }
-  @keyframes vc-fab-glow    { 0%,100%{box-shadow:0 0 0 0 rgba(124,58,237,.0),0 8px 32px rgba(0,0,0,.6)} 50%{box-shadow:0 0 0 8px rgba(124,58,237,.15),0 8px 32px rgba(0,0,0,.6)} }
+  @keyframes vc-fab-glow    { 0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.0),0 8px 32px rgba(0,0,0,.6)} 50%{box-shadow:0 0 0 8px rgba(245,158,11,.2),0 8px 32px rgba(0,0,0,.6)} }
   @keyframes vc-ring-wave   { 0%{transform:scale(1);opacity:.5} 100%{transform:scale(2.2);opacity:0} }
   @keyframes vc-ring-wave2  { 0%{transform:scale(1);opacity:.35} 100%{transform:scale(2.8);opacity:0} }
   @keyframes vc-ring-wave3  { 0%{transform:scale(1);opacity:.2} 100%{transform:scale(3.4);opacity:0} }
@@ -382,7 +382,7 @@
     cursor: pointer;
     transition: background .2s, color .2s, border-color .2s;
   }
-  .vc-btn-glass:hover { background: rgba(124,58,237,.15); border-color: rgba(124,58,237,.3); color: #fff; }
+  .vc-btn-glass:hover { background: rgba(124,58,237,.15); border-color: rgba(245,158,11,.3); color: #fff; }
 
   .vc-btn-danger {
     background: rgba(239,68,68,.08);
@@ -401,8 +401,8 @@
     color: #f87171 !important;
   }
   .vc-btn-dnd-active {
-    background: rgba(124,58,237,.12) !important;
-    border: 1px solid rgba(124,58,237,.3) !important;
+    background: rgba(245,158,11,.2) !important;
+    border: 1px solid rgba(245,158,11,.3) !important;
     color: #a78bfa !important;
   }
 
@@ -542,7 +542,7 @@
   /* ── Chat bubbles ────────────────────────────────────────── */
   .vc-bubble-me {
     background: rgba(124,58,237,.22);
-    border: 1px solid rgba(124,58,237,.3);
+    border: 1px solid rgba(245,158,11,.3);
     color: #e2d9fc;
     border-radius: 16px 16px 4px 16px;
     padding: 8px 12px;
@@ -823,18 +823,18 @@
         'position:fixed', 'bottom:24px', 'right:24px', 'z-index:9999',
         'width:56px', 'height:56px', 'border-radius:50%', 'cursor:pointer',
         'display:flex', 'align-items:center', 'justify-content:center',
-        'background:linear-gradient(135deg,#4c1d95 0%,#0e7490 100%)',
-        'border:1.5px solid rgba(124,58,237,.4)',
-        'box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 0 0 rgba(124,58,237,.3)',
+        'background:linear-gradient(135deg,rgba(245,158,11,1) 0%,rgba(236,72,153,1) 100%)',
+        'border:1.5px solid rgba(245,158,11,.4)',
+        'box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 0 0 rgba(245,158,11,.3)',
         'transition:transform .2s,box-shadow .2s,border-color .2s',
         'animation:vc-fab-glow 3s ease-in-out infinite'
       ].join(';');
       this.fab.innerHTML = `
-        <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(167,139,250,.2),transparent 70%);pointer-events:none"></div>
-        <span style="color:#fff;display:flex;align-items:center;justify-content:center;width:22px;height:22px;transition:transform .2s;filter:drop-shadow(0 0 6px rgba(167,139,250,.6))">${ICONS.mic}</span>
+        <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(255,255,255,.2),transparent 70%);pointer-events:none"></div>
+        <span style="color:#fff;display:flex;align-items:center;justify-content:center;width:22px;height:22px;transition:transform .2s;filter:drop-shadow(0 0 6px rgba(255,255,255,.6))">${ICONS.mic}</span>
       `;
-      this.fab.addEventListener('mouseenter', () => { this.fab.style.transform = 'scale(1.1)'; this.fab.style.boxShadow = '0 12px 40px rgba(0,0,0,.7),0 0 0 8px rgba(124,58,237,.12)'; });
-      this.fab.addEventListener('mouseleave', () => { this.fab.style.transform = ''; this.fab.style.boxShadow = '0 8px 32px rgba(0,0,0,.6),0 0 0 0 rgba(124,58,237,.3)'; });
+      this.fab.addEventListener('mouseenter', () => { this.fab.style.transform = 'scale(1.1)'; this.fab.style.boxShadow = '0 12px 40px rgba(0,0,0,.7),0 0 0 8px rgba(245,158,11,.2)'; });
+      this.fab.addEventListener('mouseleave', () => { this.fab.style.transform = ''; this.fab.style.boxShadow = '0 8px 32px rgba(0,0,0,.6),0 0 0 0 rgba(245,158,11,.3)'; });
       this.fab.addEventListener('click', () => this._toggle());
 
       this.panel = document.createElement('div');
@@ -843,10 +843,11 @@
         'position:fixed', 'bottom:96px', 'right:24px',
         'width:640px', 'max-width:calc(100vw - 32px)',
         'height:400px', 'max-height:calc(100vh - 120px)',
-        'background:#313338',
-        'border:1px solid #1e1f22',
-        'border-radius:12px',
-        'box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.02) inset',
+        'background:rgba(12,12,18,0.7)',
+        'backdrop-filter:blur(24px)', '-webkit-backdrop-filter:blur(24px)',
+        'border:1px solid rgba(255,255,255,0.08)',
+        'border-radius:18px',
+        'box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.05) inset,0 0 40px rgba(245,158,11,0.05)',
         'overflow:hidden', 'z-index:9998',
         'transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .25s,visibility .25s',
         'transform:scale(.92) translateY(10px)', 'opacity:0', 'pointer-events:none','visibility:hidden',
@@ -1012,9 +1013,9 @@
     _tplLogin(err = '') {
       const user = window.yaireCurrentUser;
       const _hdr = (sub = '', subColor = 'rgba(255,255,255,.35)') => `
-        <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(124,58,237,.12)">
+        <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(245,158,11,.2)">
           <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(6,182,212,.2));display:flex;align-items:center;justify-content:center;color:#a78bfa;box-shadow:0 0 12px rgba(124,58,237,.2)">
+            <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(245,158,11,.3),rgba(6,182,212,.2));display:flex;align-items:center;justify-content:center;color:#a78bfa;box-shadow:0 0 12px rgba(124,58,237,.2)">
               <span style="width:16px;height:16px;display:flex">${ICONS.sound}</span>
             </div>
             <div>
@@ -1027,7 +1028,7 @@
 
       if (!user) {
         return `
-          <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;background:#313338;height:100%;">
+          <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;background:transparent;height:100%;">
             ${_hdr(_t('vc_sub'))}
             <div style="position:relative;z-index:10;padding:32px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;flex:1;justify-content:center;">
               <div style="position:relative;margin-bottom:20px">
@@ -1046,7 +1047,7 @@
       }
 
       return `
-        <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;background:#313338;height:100%;">
+        <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;background:transparent;height:100%;">
           ${_hdr(_t('vc_sub'))}
           <div style="position:relative;z-index:10;padding:28px 22px;display:flex;flex-direction:column;align-items:center;gap:20px;flex:1;justify-content:center;">
             <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
@@ -1076,8 +1077,8 @@
 
     _tplLoading() {
       return `
-        <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;background:#313338;height:100%;">
-          <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid #1e1f22;background:#2b2d31;">
+        <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;background:transparent;height:100%;">
+          <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.2);">
             <div style="display:flex;align-items:center;gap:10px">
               <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(245,158,11,.2),rgba(236,72,153,.2));display:flex;align-items:center;justify-content:center;color:#f59e0b">
                 <span style="width:16px;height:16px;display:flex">${ICONS.sound}</span>
@@ -1101,8 +1102,8 @@
 
     _tplDisconnected() {
       return `
-        <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;background:#313338;height:100%;">
-          <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid #1e1f22;background:#2b2d31;">
+        <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;background:transparent;height:100%;">
+          <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.2);">
             <div style="display:flex;align-items:center;gap:10px">
               <div style="width:32px;height:32px;border-radius:10px;background:rgba(218,55,60,.15);display:flex;align-items:center;justify-content:center;color:#da373c">
                 <span style="width:16px;height:16px;display:flex">${ICONS.sound}</span>
@@ -1244,12 +1245,12 @@
            </span>` : '';
 
       return `
-        <div style="display:flex; height:100%; width:100%; overflow:hidden; background:#313338; color:#f2f3f5; font-family:'Inter',sans-serif;">
+        <div style="display:flex; height:100%; width:100%; overflow:hidden; background:transparent; color:#f2f3f5; font-family:'Inter',sans-serif;">
           
           <!-- Sidebar (Users) -->
-          <div style="width:240px; background:#2b2d31; display:flex; flex-direction:column; border-right:1px solid #1e1f22; flex-shrink:0;">
+          <div style="width:240px; background:rgba(0,0,0,0.25); display:flex; flex-direction:column; border-right:1px solid rgba(255,255,255,0.08); flex-shrink:0;">
             <!-- Server Header -->
-            <div style="padding:16px; border-bottom:1px solid #1e1f22; box-shadow:0 1px 2px rgba(0,0,0,.15); display:flex; align-items:center; justify-content:space-between; z-index:10;">
+            <div style="padding:16px; border-bottom:1px solid rgba(255,255,255,0.08); box-shadow:0 1px 2px rgba(0,0,0,.15); display:flex; align-items:center; justify-content:space-between; z-index:10;">
               <div style="display:flex; align-items:center; gap:8px;">
                 <div style="color:#f59e0b; display:flex; width:18px; height:18px;">${ICONS.sound}</div>
                 <div style="font-weight:700; font-size:14px;">#principal</div>
@@ -1272,7 +1273,7 @@
             </div>
 
             <!-- User Controls (Bottom Bar) -->
-            <div style="background:#232428; padding:12px 8px; display:flex; flex-direction:column; gap:8px; border-top:1px solid #1e1f22;">
+            <div style="background:rgba(0,0,0,0.4); padding:12px 8px; display:flex; flex-direction:column; gap:8px; border-top:1px solid rgba(255,255,255,0.08);">
               <div style="display:flex; gap:6px;">
                 <button id="vc-mute" style="flex:1; padding:8px; border-radius:6px; background:${this.muted ? '#da373c' : 'rgba(255,255,255,.05)'}; color:${this.muted ? '#fff' : '#dbdee1'}; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; font-size:12px; font-weight:500; transition:all .15s;" onmouseenter="if(!${this.muted}) this.style.background='rgba(255,255,255,.1)'" onmouseleave="if(!${this.muted}) this.style.background='rgba(255,255,255,.05)'">
                   <span style="width:16px;height:16px;display:flex;">${this.muted ? ICONS.micOff : ICONS.mic}</span>
@@ -1289,9 +1290,9 @@
           </div>
           
           <!-- Main Area (Chat / Music) -->
-          <div style="flex:1; display:flex; flex-direction:column; background:#313338; min-width:0;">
+          <div style="flex:1; display:flex; flex-direction:column; background:transparent; min-width:0;">
             <!-- Tabs Header -->
-            <div style="display:flex; padding:12px 16px; border-bottom:1px solid #1e1f22; box-shadow:0 1px 2px rgba(0,0,0,.15); z-index:10; background:#313338; gap:16px;">
+            <div style="display:flex; padding:12px 16px; border-bottom:1px solid rgba(255,255,255,0.08); box-shadow:0 1px 2px rgba(0,0,0,.15); z-index:10; background:rgba(0,0,0,0.1); gap:16px;">
               <button class="vc-tab-pill ${isChat ? 'active' : ''}" id="vc-tab-chat" style="background:transparent; border:none; color:${isChat ? '#f2f3f5' : '#949ba4'}; font-size:14px; font-weight:600; cursor:pointer; padding:4px 8px; border-radius:4px; transition:all .15s; position:relative;" onmouseenter="if(!${isChat}) this.style.color='#dbdee1'; this.style.background='rgba(255,255,255,.05)'" onmouseleave="if(!${isChat}) this.style.color='#949ba4'; this.style.background='transparent'">
                 <div style="display:flex;align-items:center;gap:6px;">
                   <span style="width:18px;height:18px;display:flex;">${ICONS.chat}</span>
@@ -1429,7 +1430,7 @@
               menu.style.top = e.clientY + 'px';
               
               menu.innerHTML = `
-                <div style="padding:8px 12px 8px;border-bottom:1px solid rgba(124,58,237,.12);margin-bottom:4px">
+                <div style="padding:8px 12px 8px;border-bottom:1px solid rgba(245,158,11,.2);margin-bottom:4px">
                   <div style="font-size:10px;text-transform:uppercase;font-weight:700;color:rgba(167,139,250,.5);letter-spacing:.12em">${u.displayName}</div>
                 </div>
                 <button style="width:100%;text-align:left;padding:9px 12px;border-radius:9px;font-size:13px;color:rgba(255,255,255,.85);background:transparent;border:none;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .15s" onmouseenter="this.style.background='rgba(124,58,237,.15)'" onmouseleave="this.style.background='transparent'">
@@ -2624,7 +2625,7 @@
         ? this._musicQueue.map((t, i) => {
             const isCur = i === this._musicState.currentIndex;
             return `
-            <div style="display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:10px;transition:background .15s;background:${isCur ? 'rgba(124,58,237,.12)' : 'transparent'};border:1px solid ${isCur ? 'rgba(124,58,237,.25)' : 'transparent'}" onmouseenter="if(!${isCur})this.style.background='rgba(255,255,255,.04)'" onmouseleave="if(!${isCur})this.style.background='transparent'">
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:10px;transition:background .15s;background:${isCur ? 'rgba(245,158,11,.2)' : 'transparent'};border:1px solid ${isCur ? 'rgba(124,58,237,.25)' : 'transparent'}" onmouseenter="if(!${isCur})this.style.background='rgba(255,255,255,.04)'" onmouseleave="if(!${isCur})this.style.background='transparent'">
               <span style="width:14px;text-align:center;font-size:10px;font-weight:700;color:${isCur ? '#a78bfa' : 'rgba(255,255,255,.25)'}">${isCur && this._musicPlaying ? '♪' : (i + 1)}</span>
               <div style="flex:1;min-width:0">
                 <div style="font-size:11.5px;font-weight:600;color:${isCur ? '#a78bfa' : '#fff'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(this._cleanMusicTitle(t.title))}</div>
@@ -3184,7 +3185,7 @@
         'padding:10px 16px',
         'background:rgba(8,8,16,.92)',
         'backdrop-filter:blur(20px)',
-        'border:1px solid ' + (type === 'join' ? 'rgba(6,182,212,.3)' : type === 'error' ? 'rgba(239,68,68,.3)' : 'rgba(124,58,237,.3)'),
+        'border:1px solid ' + (type === 'join' ? 'rgba(6,182,212,.3)' : type === 'error' ? 'rgba(239,68,68,.3)' : 'rgba(245,158,11,.3)'),
         'border-radius:12px',
         'color:#fff',
         'font-size:13px',
