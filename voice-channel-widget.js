@@ -405,6 +405,9 @@
 
       this._injectCSS();
       this._buildUI();
+
+      // Precargar los archivos de audio para que suenen a la primera
+      setTimeout(() => this._initAudio(), 500);
     }
 
     // ── CSS ────────────────────────────────────────────────────────────────
