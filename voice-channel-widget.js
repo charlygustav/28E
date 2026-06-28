@@ -266,7 +266,7 @@
   @keyframes vc-slideIn     { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:translateX(0)} }
   @keyframes vc-orb-drift   { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(8px,-12px) scale(1.08)} }
   @keyframes vc-orb-drift2  { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-10px,8px) scale(1.05)} }
-  @keyframes vc-fab-glow    { 0%,100%{box-shadow:0 0 0 0 rgba(124,58,237,.0),0 8px 32px rgba(0,0,0,.6)} 50%{box-shadow:0 0 0 8px rgba(124,58,237,.15),0 8px 32px rgba(0,0,0,.6)} }
+  @keyframes vc-fab-glow    { 0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.0),0 8px 32px rgba(0,0,0,.6)} 50%{box-shadow:0 0 0 8px rgba(245,158,11,.2),0 8px 32px rgba(0,0,0,.6)} }
   @keyframes vc-ring-wave   { 0%{transform:scale(1);opacity:.5} 100%{transform:scale(2.2);opacity:0} }
   @keyframes vc-ring-wave2  { 0%{transform:scale(1);opacity:.35} 100%{transform:scale(2.8);opacity:0} }
   @keyframes vc-ring-wave3  { 0%{transform:scale(1);opacity:.2} 100%{transform:scale(3.4);opacity:0} }
@@ -382,7 +382,7 @@
     cursor: pointer;
     transition: background .2s, color .2s, border-color .2s;
   }
-  .vc-btn-glass:hover { background: rgba(124,58,237,.15); border-color: rgba(124,58,237,.3); color: #fff; }
+  .vc-btn-glass:hover { background: rgba(124,58,237,.15); border-color: rgba(245,158,11,.3); color: #fff; }
 
   .vc-btn-danger {
     background: rgba(239,68,68,.08);
@@ -401,8 +401,8 @@
     color: #f87171 !important;
   }
   .vc-btn-dnd-active {
-    background: rgba(124,58,237,.12) !important;
-    border: 1px solid rgba(124,58,237,.3) !important;
+    background: rgba(245,158,11,.2) !important;
+    border: 1px solid rgba(245,158,11,.3) !important;
     color: #a78bfa !important;
   }
 
@@ -542,7 +542,7 @@
   /* ── Chat bubbles ────────────────────────────────────────── */
   .vc-bubble-me {
     background: rgba(124,58,237,.22);
-    border: 1px solid rgba(124,58,237,.3);
+    border: 1px solid rgba(245,158,11,.3);
     color: #e2d9fc;
     border-radius: 16px 16px 4px 16px;
     padding: 8px 12px;
@@ -823,18 +823,18 @@
         'position:fixed', 'bottom:24px', 'right:24px', 'z-index:9999',
         'width:56px', 'height:56px', 'border-radius:50%', 'cursor:pointer',
         'display:flex', 'align-items:center', 'justify-content:center',
-        'background:linear-gradient(135deg,#4c1d95 0%,#0e7490 100%)',
-        'border:1.5px solid rgba(124,58,237,.4)',
-        'box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 0 0 rgba(124,58,237,.3)',
+        'background:linear-gradient(135deg,rgba(245,158,11,1) 0%,rgba(236,72,153,1) 100%)',
+        'border:1.5px solid rgba(245,158,11,.4)',
+        'box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 0 0 rgba(245,158,11,.3)',
         'transition:transform .2s,box-shadow .2s,border-color .2s',
         'animation:vc-fab-glow 3s ease-in-out infinite'
       ].join(';');
       this.fab.innerHTML = `
-        <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(167,139,250,.2),transparent 70%);pointer-events:none"></div>
-        <span style="color:#fff;display:flex;align-items:center;justify-content:center;width:22px;height:22px;transition:transform .2s;filter:drop-shadow(0 0 6px rgba(167,139,250,.6))">${ICONS.mic}</span>
+        <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(255,255,255,.2),transparent 70%);pointer-events:none"></div>
+        <span style="color:#fff;display:flex;align-items:center;justify-content:center;width:22px;height:22px;transition:transform .2s;filter:drop-shadow(0 0 6px rgba(255,255,255,.6))">${ICONS.mic}</span>
       `;
-      this.fab.addEventListener('mouseenter', () => { this.fab.style.transform = 'scale(1.1)'; this.fab.style.boxShadow = '0 12px 40px rgba(0,0,0,.7),0 0 0 8px rgba(124,58,237,.12)'; });
-      this.fab.addEventListener('mouseleave', () => { this.fab.style.transform = ''; this.fab.style.boxShadow = '0 8px 32px rgba(0,0,0,.6),0 0 0 0 rgba(124,58,237,.3)'; });
+      this.fab.addEventListener('mouseenter', () => { this.fab.style.transform = 'scale(1.1)'; this.fab.style.boxShadow = '0 12px 40px rgba(0,0,0,.7),0 0 0 8px rgba(245,158,11,.2)'; });
+      this.fab.addEventListener('mouseleave', () => { this.fab.style.transform = ''; this.fab.style.boxShadow = '0 8px 32px rgba(0,0,0,.6),0 0 0 0 rgba(245,158,11,.3)'; });
       this.fab.addEventListener('click', () => this._toggle());
 
       this.panel = document.createElement('div');
@@ -842,7 +842,8 @@
       this.panel.style.cssText = [
         'position:fixed', 'bottom:96px', 'right:24px',
         'width:340px', 'max-width:calc(100vw - 32px)',
-        'background:#080810',
+        'background:rgba(8,8,16,0.65)',
+        'backdrop-filter:blur(24px)', '-webkit-backdrop-filter:blur(24px)',
         'border:1px solid rgba(124,58,237,.2)',
         'border-radius:24px',
         'box-shadow:0 24px 80px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.04) inset,0 0 60px rgba(124,58,237,.08)',
@@ -875,7 +876,7 @@
         </div>
         <div style="display:flex;flex-direction:column;gap:2px;min-width:60px">
           <div style="display:flex;align-items:center;gap:5px">
-            <span id="vc-bar-title" style="font-size:9px;font-weight:700;color:#a78bfa;text-transform:uppercase;letter-spacing:.14em;line-height:1">${_t('bar_conn').split(' · ')[0]}</span>
+            <span id="vc-bar-title" style="font-size:9px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.14em;line-height:1">${_t('bar_conn').split(' · ')[0]}</span>
             <div id="vc-bar-music-icon" class="hidden" style="color:#06b6d4">
               <svg style="width:10px;height:10px;animation:vc-pulse-slow 1.5s infinite" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
             </div>
@@ -1010,9 +1011,9 @@
     _tplLogin(err = '') {
       const user = window.yaireCurrentUser;
       const _hdr = (sub = '', subColor = 'rgba(255,255,255,.35)') => `
-        <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(124,58,237,.12)">
+        <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(245,158,11,.2)">
           <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(6,182,212,.2));display:flex;align-items:center;justify-content:center;color:#a78bfa;box-shadow:0 0 12px rgba(124,58,237,.2)">
+            <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(245,158,11,.3),rgba(6,182,212,.2));display:flex;align-items:center;justify-content:center;color:#f59e0b;box-shadow:0 0 12px rgba(124,58,237,.2)">
               <span style="width:16px;height:16px;display:flex">${ICONS.sound}</span>
             </div>
             <div>
@@ -1026,12 +1027,12 @@
       if (!user) {
         return `
           <div style="position:relative;overflow:hidden;display:flex;flex-direction:column">
-            <div class="vc-orb-v" style="top:-80px;right:-60px;width:220px;height:220px;background:rgba(124,58,237,.12)"></div>
+            <div class="vc-orb-v" style="top:-80px;right:-60px;width:220px;height:220px;background:rgba(245,158,11,.2)"></div>
             <div class="vc-orb-c" style="bottom:-60px;left:-40px;width:180px;height:180px;background:rgba(6,182,212,.07)"></div>
             ${_hdr(_t('vc_sub'))}
             <div style="position:relative;z-index:10;padding:32px 24px;display:flex;flex-direction:column;align-items:center;text-align:center">
               <div style="position:relative;margin-bottom:20px">
-                <div style="width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(6,182,212,.15));border:1px solid rgba(124,58,237,.3);display:flex;align-items:center;justify-content:center;color:#a78bfa;box-shadow:0 8px 32px rgba(124,58,237,.2)">
+                <div style="width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(6,182,212,.15));border:1px solid rgba(245,158,11,.3);display:flex;align-items:center;justify-content:center;color:#f59e0b;box-shadow:0 8px 32px rgba(124,58,237,.2)">
                   <svg style="width:28px;height:28px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                 </div>
               </div>
@@ -1080,10 +1081,10 @@
     _tplLoading() {
       return `
         <div style="position:relative;overflow:hidden;display:flex;flex-direction:column">
-          <div class="vc-orb-v" style="top:-60px;right:-40px;width:180px;height:180px;background:rgba(124,58,237,.1)"></div>
-          <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(124,58,237,.12)">
+          <div class="vc-orb-v" style="top:-60px;right:-40px;width:180px;height:180px;background:rgba(245,158,11,.1)"></div>
+          <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(245,158,11,.2)">
             <div style="display:flex;align-items:center;gap:10px">
-              <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(6,182,212,.2));display:flex;align-items:center;justify-content:center;color:#a78bfa">
+              <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(245,158,11,.3),rgba(6,182,212,.2));display:flex;align-items:center;justify-content:center;color:#f59e0b">
                 <span style="width:16px;height:16px;display:flex">${ICONS.sound}</span>
               </div>
               <div>
@@ -1175,7 +1176,7 @@
       modal.innerHTML = `
         <div style="position:absolute;inset:0;background:rgba(8,8,16,.85);backdrop-filter:blur(8px)" id="vc-det-bg"></div>
         <div style="position:relative;width:100%;max-width:512px;max-height:80vh;display:flex;flex-direction:column;background:rgba(12,10,26,.95);backdrop-filter:blur(24px);border:1px solid rgba(124,58,237,.2);border-radius:24px;box-shadow:0 24px 64px rgba(0,0,0,.6),inset 0 1px 1px rgba(255,255,255,.05);overflow:hidden;transform:scale(.95);transition:transform .3s cubic-bezier(.34,1.4,.64,1)" id="vc-det-card">
-          <div class="vc-orb-v" style="top:-80px;right:-80px;width:240px;height:240px;background:rgba(124,58,237,.1)"></div>
+          <div class="vc-orb-v" style="top:-80px;right:-80px;width:240px;height:240px;background:rgba(245,158,11,.1)"></div>
           <div class="vc-orb-c" style="bottom:-60px;left:-60px;width:200px;height:200px;background:rgba(6,182,212,.08)"></div>
           
           <div style="display:flex;align-items:center;justify-content:space-between;padding:24px;border-bottom:1px solid rgba(124,58,237,.15);position:relative;z-index:10;background:rgba(255,255,255,.02)">
@@ -1221,7 +1222,7 @@
 
         return `
           <div style="display:flex;align-items:center;gap:14px;padding:8px;border-radius:12px;transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.04)'" onmouseleave="this.style.background='transparent'" class="vc-user group" id="vc-u-${u.id}">
-            <div style="width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;transition:all .2s;position:relative;${isMe ? 'background:rgba(124,58,237,.1);color:#a78bfa;box-shadow:inset 0 0 0 1px rgba(124,58,237,.3)' : 'background:rgba(255,255,255,.03);color:rgba(255,255,255,.5);box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)'}" class="vc-av" id="vc-av-${u.id}">
+            <div style="width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;transition:all .2s;position:relative;${isMe ? 'background:rgba(245,158,11,.1);color:#f59e0b;box-shadow:inset 0 0 0 1px rgba(245,158,11,.3)' : 'background:rgba(255,255,255,.03);color:rgba(255,255,255,.5);box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)'}" class="vc-av" id="vc-av-${u.id}">
               ${avatarHtml}
             </div>
             <div style="flex:1;min-width:0">
@@ -1250,9 +1251,9 @@
         <div class="vc-orb-c" style="bottom:-40px;left:-40px;width:200px;height:200px;background:rgba(6,182,212,.1)"></div>
 
         <!-- Header -->
-        <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid rgba(124,58,237,.12);background:rgba(255,255,255,.01);backdrop-filter:blur(8px)">
+        <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid rgba(245,158,11,.2);background:rgba(255,255,255,.01);backdrop-filter:blur(8px)">
           <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(6,182,212,.2));display:flex;align-items:center;justify-content:center;color:#a78bfa">
+            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,rgba(245,158,11,.3),rgba(6,182,212,.2));display:flex;align-items:center;justify-content:center;color:#f59e0b">
               <span style="width:18px;height:18px;display:flex">${ICONS.sound}</span>
             </div>
             <div>
@@ -1266,7 +1267,7 @@
             </div>
           </div>
           <div style="display:flex;align-items:center;gap:6px">
-            <button id="vc-btn-oracle-redirect" style="padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.6);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background .15s,color .15s" onmouseenter="this.style.background='rgba(124,58,237,.15)';this.style.color='#fff';this.style.borderColor='rgba(124,58,237,.3)'" onmouseleave="this.style.background='rgba(255,255,255,.04)';this.style.color='rgba(255,255,255,.6)';this.style.borderColor='rgba(255,255,255,.07)'" title="Seguir en Oracle">
+            <button id="vc-btn-oracle-redirect" style="padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.6);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background .15s,color .15s" onmouseenter="this.style.background='rgba(124,58,237,.15)';this.style.color='#fff';this.style.borderColor='rgba(245,158,11,.3)'" onmouseleave="this.style.background='rgba(255,255,255,.04)';this.style.color='rgba(255,255,255,.6)';this.style.borderColor='rgba(255,255,255,.07)'" title="Seguir en Oracle">
               <svg style="width:11px;height:11px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
               <span>Oracle</span>
             </button>
@@ -1428,7 +1429,7 @@
               menu.style.top = e.clientY + 'px';
               
               menu.innerHTML = `
-                <div style="padding:8px 12px 8px;border-bottom:1px solid rgba(124,58,237,.12);margin-bottom:4px">
+                <div style="padding:8px 12px 8px;border-bottom:1px solid rgba(245,158,11,.2);margin-bottom:4px">
                   <div style="font-size:10px;text-transform:uppercase;font-weight:700;color:rgba(167,139,250,.5);letter-spacing:.12em">${u.displayName}</div>
                 </div>
                 <button style="width:100%;text-align:left;padding:9px 12px;border-radius:9px;font-size:13px;color:rgba(255,255,255,.85);background:transparent;border:none;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .15s" onmouseenter="this.style.background='rgba(124,58,237,.15)'" onmouseleave="this.style.background='transparent'">
@@ -2567,13 +2568,13 @@
           : `<span style="width:16px;height:16px;color:rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center">${ICONS.sound || '♪'}</span>`;
         nowPlaying = `
           <div style="background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.2);border-radius:14px;padding:12px;margin-bottom:10px;position:relative;overflow:hidden">
-            <div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(124,58,237,.1);filter:blur(20px)"></div>
+            <div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(245,158,11,.1);filter:blur(20px)"></div>
             <div style="display:flex;align-items:center;gap:10px;position:relative;z-index:1;margin-bottom:10px">
               <div style="width:36px;height:36px;border-radius:10px;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(124,58,237,.2)">
                 ${eqBars}
               </div>
               <div style="flex:1;min-width:0">
-                <div style="font-size:9px;color:#a78bfa;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-bottom:3px">${_t('vc_music_now')}</div>
+                <div style="font-size:9px;color:#f59e0b;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-bottom:3px">${_t('vc_music_now')}</div>
                 ${this._cleanMusicTitle(track.title).length > 25 
                   ? `<div class="vc-marquee-container" style="font-size:12.5px;font-weight:700;color:#fff">
                        <div class="vc-marquee-content">${this._escHtml(this._cleanMusicTitle(track.title))}</div>
@@ -2583,7 +2584,7 @@
                 }
                 <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:1px">${track.addedByName ? `${_t('vc_music_by')} ${track.addedByName}` : ''}</div>
               </div>
-              <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px;background:rgba(124,58,237,.2);color:#a78bfa;flex-shrink:0">${(track.source || track.type) === 'youtube' ? 'YT' : 'SP'}</span>
+              <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px;background:rgba(124,58,237,.2);color:#f59e0b;flex-shrink:0">${(track.source || track.type) === 'youtube' ? 'YT' : 'SP'}</span>
             </div>
             
             ${track.type === 'youtube' ? `
@@ -2623,7 +2624,7 @@
         ? this._musicQueue.map((t, i) => {
             const isCur = i === this._musicState.currentIndex;
             return `
-            <div style="display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:10px;transition:background .15s;background:${isCur ? 'rgba(124,58,237,.12)' : 'transparent'};border:1px solid ${isCur ? 'rgba(124,58,237,.25)' : 'transparent'}" onmouseenter="if(!${isCur})this.style.background='rgba(255,255,255,.04)'" onmouseleave="if(!${isCur})this.style.background='transparent'">
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:10px;transition:background .15s;background:${isCur ? 'rgba(245,158,11,.2)' : 'transparent'};border:1px solid ${isCur ? 'rgba(124,58,237,.25)' : 'transparent'}" onmouseenter="if(!${isCur})this.style.background='rgba(255,255,255,.04)'" onmouseleave="if(!${isCur})this.style.background='transparent'">
               <span style="width:14px;text-align:center;font-size:10px;font-weight:700;color:${isCur ? '#a78bfa' : 'rgba(255,255,255,.25)'}">${isCur && this._musicPlaying ? '♪' : (i + 1)}</span>
               <div style="flex:1;min-width:0">
                 <div style="font-size:11.5px;font-weight:600;color:${isCur ? '#a78bfa' : '#fff'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(this._cleanMusicTitle(t.title))}</div>
@@ -3183,7 +3184,7 @@
         'padding:10px 16px',
         'background:rgba(8,8,16,.92)',
         'backdrop-filter:blur(20px)',
-        'border:1px solid ' + (type === 'join' ? 'rgba(6,182,212,.3)' : type === 'error' ? 'rgba(239,68,68,.3)' : 'rgba(124,58,237,.3)'),
+        'border:1px solid ' + (type === 'join' ? 'rgba(6,182,212,.3)' : type === 'error' ? 'rgba(239,68,68,.3)' : 'rgba(245,158,11,.3)'),
         'border-radius:12px',
         'color:#fff',
         'font-size:13px',
