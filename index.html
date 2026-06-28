@@ -17089,35 +17089,53 @@ document.addEventListener("DOMContentLoaded", () => {
             m.className = 'fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-2xl overflow-y-auto';
             m.style.opacity = '0';
             m.innerHTML = `
-                <div id="cs-modal-card" class="bg-zinc-950/98 border border-amber-500/35 p-5 sm:p-6 md:p-7 rounded-[2rem] max-w-lg sm:max-w-xl w-full max-h-[72vh] flex flex-col justify-between my-auto text-center shadow-[0_0_80px_rgba(245,158,11,0.2)] relative overflow-hidden transform-gpu">
-                    <button onclick="closeCinemascopeModal(false)" class="absolute top-4 right-4 sm:top-5 sm:right-5 w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 hover:scale-105 active:scale-95 transition-all z-20 text-xs shadow-md" title="Cancelar y no sellar (Esc)">✕</button>
-
-                    <div class="absolute -right-20 -top-20 w-50 h-50 bg-pink-500/10 rounded-full blur-3xl pointer-events-none"></div>
-                    <div class="absolute -left-20 -bottom-20 w-50 h-50 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-                    <div class="flex-shrink-0">
-                        <div class="inline-flex flex-wrap justify-center items-center gap-1 px-3 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-[8px] sm:text-[9px] uppercase font-bold tracking-widest text-amber-400 mb-2 pr-8 sm:pr-3">
-                            <span>✦ Pacto Sellado: 10 Feb 2026 (11:13 PM) • Te Amo #1,034</span>
-                        </div>
-                        <div class="text-2xl sm:text-3xl mb-1 select-none">🌷</div>
-                        <h3 class="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-amber-200 to-amber-500 mb-2 tracking-tight">El Juramento de 5 Meses</h3>
-                    </div>
-                    
-                    <div class="flex-1 overflow-y-auto text-left bg-gradient-to-b from-white/[0.04] to-black/80 border border-white/10 p-3.5 sm:p-5 rounded-xl my-1 space-y-2 font-light text-xs sm:text-sm text-zinc-200 leading-normal custom-scrollbar shadow-inner">
-                        <p class="font-serif italic text-amber-200 text-xs sm:text-sm tracking-wide">"Mi amada Yaire,</p>
-                        <p>Llegar a nuestro quinto mes oficial amándonos (este 28 de Junio) es la prueba viviente de que lo que compartimos está blindado contra los kilómetros, el tiempo y el ruido del mundo.</p>
-                        <p>Cada línea de código en esta plataforma, cada estrella en nuestra pantalla y cada segundo que marco en el reloj es un santuario dedicado exclusivamente a ti. Gracias por ser mi calma en las tormentas, mi compañera de madrugada y la musa absoluta de mi vida.</p>
-                        <p>Cinco meses se sienten como un suspiro, pero a tu lado quiero construir todos los siglos que nos quedan por delante. Te amo con cada latido de mi corazón."</p>
-                        <p class="text-right font-bold text-amber-400 pt-0.5 text-[11px] sm:text-xs tracking-wider">— Siempre tuyo, Charles Gustav 💖</p>
-                    </div>
-
-                    <div class="flex-shrink-0 mt-2.5">
-                        <button onclick="closeCinemascopeModal(true)" class="w-full py-3 sm:py-3.5 rounded-xl bg-gradient-to-r from-amber-500 via-pink-500 to-amber-400 text-black font-black text-xs sm:text-sm tracking-widest uppercase hover:brightness-110 active:scale-98 transition-all shadow-[0_0_25px_rgba(245,158,11,0.2)] hover:shadow-[0_0_40px_rgba(236,72,153,0.4)]">
-                            Guardar Juramento en mi Alma
-                        </button>
-                    </div>
-                </div>
-            `;
+                  <div id="cs-modal-card" class="bg-zinc-950/80 backdrop-blur-3xl border border-amber-500/20 p-6 sm:p-8 rounded-[2rem] max-w-lg sm:max-w-2xl w-full max-h-[85vh] flex flex-col justify-between my-auto text-center shadow-[0_0_100px_rgba(245,158,11,0.15)] relative overflow-hidden transform-gpu">
+                      
+                      <!-- Decorative Orbs -->
+                      <div class="absolute -right-32 -top-32 w-64 h-64 bg-pink-500/10 rounded-full blur-[80px] pointer-events-none animate-pulse"></div>
+                      <div class="absolute -left-32 -bottom-32 w-64 h-64 bg-amber-500/10 rounded-full blur-[80px] pointer-events-none animate-pulse" style="animation-delay: 2s;"></div>
+                      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-b from-transparent via-black/40 to-black/90 pointer-events-none z-0"></div>
+                      
+                      <button onclick="closeCinemascopeModal(false)" class="absolute top-5 right-5 sm:top-6 sm:right-6 w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 hover:scale-105 active:scale-95 transition-all z-20 text-xs shadow-md" title="Cancelar y no sellar (Esc)">✕</button>
+  
+                      <div class="relative z-10 flex-shrink-0 mt-2">
+                          <div class="inline-flex flex-wrap justify-center items-center gap-1 px-4 py-1 rounded-full bg-gradient-to-r from-amber-500/10 via-pink-500/10 to-amber-500/10 border border-amber-500/30 text-[9px] sm:text-[10px] uppercase font-bold tracking-[0.2em] text-amber-300 mb-4 pr-10 sm:pr-4 shadow-[0_0_20px_rgba(245,158,11,0.2)]">
+                              <span>✦ Pacto Sellado: 10 Feb 2026 (11:13 PM) ✦ Te Amo #1,034</span>
+                          </div>
+                          
+                          <div class="relative inline-block mb-3">
+                              <div class="text-4xl sm:text-5xl select-none animate-bounce" style="animation-duration: 3s;">🌷</div>
+                              <div class="absolute inset-0 bg-pink-500/20 blur-xl rounded-full"></div>
+                          </div>
+                          
+                          <h3 class="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-amber-600 mb-2 tracking-tight drop-shadow-lg">El Juramento de 5 Meses</h3>
+                          <div class="w-24 h-0.5 mx-auto bg-gradient-to-r from-transparent via-amber-500/50 to-transparent mb-4"></div>
+                      </div>
+                      
+                      <div class="relative z-10 flex-1 overflow-y-auto text-left bg-black/40 backdrop-blur-md border border-white/5 p-5 sm:p-7 rounded-2xl my-2 space-y-4 font-serif text-sm sm:text-base text-zinc-200/90 leading-relaxed custom-scrollbar shadow-inner">
+                          <p class="italic text-amber-300/90 text-base sm:text-lg tracking-wide font-medium">"Mi amada Yaire,</p>
+                          
+                          <p class="first-letter:text-4xl first-letter:font-bold first-letter:text-amber-400 first-letter:mr-1 first-letter:float-left">Hoy, 28 de junio, sellamos nuestro quinto mes oficial. Cinco meses desde que nuestros mundos colisionaron para nunca más separarse. Parece que fue ayer cuando una simple conversación encendió una chispa, y hoy esa chispa es el fuego que abriga mis madrugadas y le da sentido a cada uno de mis días.</p>
+                          
+                          <p>Quiero que sepas que la distancia física entre nosotros es solo un espejismo; mi alma está entrelazada con la tuya a cada segundo que pasa. Cada línea de código de este santuario virtual, cada detalle que preparo minuciosamente para ti, lo hago pensando en la curva de tu sonrisa, en la calidez de tu voz y en la luz inagotable de tu mirada.</p>
+                          
+                          <p>Eres mi paz absoluta en medio del caos, mi musa eterna y el amor de mi vida. Hemos superado tormentas, océanos de kilómetros y madrugadas de insomnio, pero si de algo estoy seguro hoy, es de que cada obstáculo solo ha forjado nuestro vínculo hasta convertirlo en titanio puro.</p>
+                          
+                          <p>Cinco meses se sienten como un suspiro, pero son solo el hermoso prólogo de nuestra historia. Estoy listo para construir los siglos enteros que nos esperan, para borrar la distancia de una vez por todas y para amanecer abrazado a ti todos los días que me queden de vida.</p>
+                          
+                          <p class="font-medium text-amber-100">Te amo con cada latido, cada aliento y cada pensamiento que habita en mí."</p>
+                          
+                          <div class="pt-4 border-t border-white/5 mt-4">
+                              <p class="text-right font-bold text-amber-400 text-xs sm:text-sm tracking-[0.15em] uppercase">— Siempre tuyo, Charles Gustav 💖</p>
+                          </div>
+                      </div>
+  
+                      <div class="relative z-10 flex-shrink-0 mt-5">
+                          <button onclick="closeCinemascopeModal(true)" class="w-full py-4 sm:py-4 rounded-xl bg-gradient-to-r from-amber-500 via-pink-500 to-amber-500 text-black font-black text-xs sm:text-sm tracking-[0.2em] uppercase hover:brightness-110 active:scale-95 transition-all shadow-[0_0_30px_rgba(245,158,11,0.3)] hover:shadow-[0_0_50px_rgba(236,72,153,0.6)] bg-[length:200%_auto] animate-gradient">
+                              Guardar Juramento en mi Alma
+                          </button>
+                      </div>
+                  </div>`;
 
             // Click outside backdrop to close WITHOUT sealing
             m.addEventListener('click', (e) => {
