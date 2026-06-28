@@ -296,9 +296,8 @@
 
   /* ── Speaking avatar ─────────────────────────────────────── */
   .vc-av.speaking {
-    border-color: #ec4899 !important;
-    box-shadow: 0 0 0 2px rgba(236,72,153,.5), 0 0 16px rgba(236,72,153,.25);
-    animation: vc-speak-ring 1.6s ease-out infinite;
+    border-color: #23a559 !important;
+    box-shadow: 0 0 0 2px #23a559 !important;
   }
 
   /* ── Marquee ─────────────────────────────────────────────── */
