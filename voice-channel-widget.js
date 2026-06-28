@@ -266,7 +266,7 @@
   @keyframes vc-slideIn     { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:translateX(0)} }
   @keyframes vc-orb-drift   { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(8px,-12px) scale(1.08)} }
   @keyframes vc-orb-drift2  { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-10px,8px) scale(1.05)} }
-  @keyframes vc-fab-glow    { 0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.0),0 8px 32px rgba(0,0,0,.6)} 50%{box-shadow:0 0 0 8px rgba(245,158,11,.2),0 8px 32px rgba(0,0,0,.6)} }
+  @keyframes vc-fab-glow    { 0%,100%{box-shadow:0 8px 32px rgba(0,0,0,.6), inset 0 0 10px rgba(245,158,11,0.0)} 50%{box-shadow:0 8px 32px rgba(0,0,0,.6), inset 0 0 20px rgba(245,158,11,0.2), 0 0 0 4px rgba(255,255,255,0.03)} }
   @keyframes vc-ring-wave   { 0%{transform:scale(1);opacity:.5} 100%{transform:scale(2.2);opacity:0} }
   @keyframes vc-ring-wave2  { 0%{transform:scale(1);opacity:.35} 100%{transform:scale(2.8);opacity:0} }
   @keyframes vc-ring-wave3  { 0%{transform:scale(1);opacity:.2} 100%{transform:scale(3.4);opacity:0} }
@@ -823,18 +823,23 @@
         'position:fixed', 'bottom:24px', 'right:24px', 'z-index:9999',
         'width:56px', 'height:56px', 'border-radius:50%', 'cursor:pointer',
         'display:flex', 'align-items:center', 'justify-content:center',
-        'background:linear-gradient(135deg,rgba(245,158,11,1) 0%,rgba(236,72,153,1) 100%)',
-        'border:1.5px solid rgba(245,158,11,.4)',
-        'box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 0 0 rgba(245,158,11,.3)',
-        'transition:transform .2s,box-shadow .2s,border-color .2s',
+        'background:rgba(12,12,18,0.5)',
+        'backdrop-filter:blur(16px)', '-webkit-backdrop-filter:blur(16px)',
+        'border:1px solid rgba(255,255,255,0.1)',
+        'box-shadow:0 8px 32px rgba(0,0,0,.6)',
+        'transition:transform .2s,box-shadow .2s,border-color .2s,background .2s',
         'animation:vc-fab-glow 3s ease-in-out infinite'
       ].join(';');
+      
+      const micIcon = ICONS.mic.replace('currentColor', 'url(#fabGrad)');
+      
       this.fab.innerHTML = `
-        <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(255,255,255,.2),transparent 70%);pointer-events:none"></div>
-        <span style="color:#fff;display:flex;align-items:center;justify-content:center;width:22px;height:22px;transition:transform .2s;filter:drop-shadow(0 0 6px rgba(255,255,255,.6))">${ICONS.mic}</span>
+        <svg width="0" height="0" style="position:absolute"><defs><linearGradient id="fabGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f59e0b" /><stop offset="100%" stop-color="#ec4899" /></linearGradient></defs></svg>
+        <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(255,255,255,.15),transparent 70%);pointer-events:none"></div>
+        <span style="display:flex;align-items:center;justify-content:center;width:22px;height:22px;transition:transform .2s;filter:drop-shadow(0 0 8px rgba(245,158,11,.6))">${micIcon}</span>
       `;
-      this.fab.addEventListener('mouseenter', () => { this.fab.style.transform = 'scale(1.1)'; this.fab.style.boxShadow = '0 12px 40px rgba(0,0,0,.7),0 0 0 8px rgba(245,158,11,.2)'; });
-      this.fab.addEventListener('mouseleave', () => { this.fab.style.transform = ''; this.fab.style.boxShadow = '0 8px 32px rgba(0,0,0,.6),0 0 0 0 rgba(245,158,11,.3)'; });
+      this.fab.addEventListener('mouseenter', () => { this.fab.style.transform = 'scale(1.1)'; this.fab.style.boxShadow = '0 12px 40px rgba(0,0,0,.7),0 0 0 8px rgba(255,255,255,.05)'; this.fab.style.background = 'rgba(12,12,18,0.7)'; });
+      this.fab.addEventListener('mouseleave', () => { this.fab.style.transform = ''; this.fab.style.boxShadow = '0 8px 32px rgba(0,0,0,.6)'; this.fab.style.background = 'rgba(12,12,18,0.5)'; });
       this.fab.addEventListener('click', () => this._toggle());
 
       this.panel = document.createElement('div');
