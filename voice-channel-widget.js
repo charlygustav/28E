@@ -841,14 +841,16 @@
       this.panel.id = 'vc-panel';
       this.panel.style.cssText = [
         'position:fixed', 'bottom:96px', 'right:24px',
-        'width:340px', 'max-width:calc(100vw - 32px)',
-        'background:#080810',
-        'border:1px solid rgba(124,58,237,.2)',
-        'border-radius:24px',
-        'box-shadow:0 24px 80px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.04) inset,0 0 60px rgba(124,58,237,.08)',
+        'width:640px', 'max-width:calc(100vw - 32px)',
+        'height:400px', 'max-height:calc(100vh - 120px)',
+        'background:#313338',
+        'border:1px solid #1e1f22',
+        'border-radius:12px',
+        'box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.02) inset',
         'overflow:hidden', 'z-index:9998',
         'transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .25s,visibility .25s',
-        'transform:scale(.92) translateY(10px)', 'opacity:0', 'pointer-events:none','visibility:hidden'
+        'transform:scale(.92) translateY(10px)', 'opacity:0', 'pointer-events:none','visibility:hidden',
+        'display:flex', 'flex-direction:column'
       ].join(';');
       this.panel.innerHTML = this._tplLogin();
 
@@ -858,11 +860,11 @@
         'position:fixed', 'bottom:96px', 'right:24px', 'z-index:9997',
         'display:flex', 'align-items:center', 'gap:10px',
         'padding:10px 14px',
-        'background:rgba(8,8,16,.92)',
+        'background:rgba(43,45,49,.95)',
         'backdrop-filter:blur(24px)', '-webkit-backdrop-filter:blur(24px)',
-        'border:1px solid rgba(124,58,237,.15)',
-        'border-radius:18px',
-        'box-shadow:0 8px 40px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.03) inset',
+        'border:1px solid #1e1f22',
+        'border-radius:12px',
+        'box-shadow:0 8px 40px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.03) inset',
         'opacity:0', 'pointer-events:none', 'visibility:hidden',
         'transition:transform .35s cubic-bezier(.34,1.2,.64,1),opacity .25s,visibility .25s',
         'transform:translateY(10px) scale(.94)', 'cursor:pointer'
@@ -1025,19 +1027,17 @@
 
       if (!user) {
         return `
-          <div style="position:relative;overflow:hidden;display:flex;flex-direction:column">
-            <div class="vc-orb-v" style="top:-80px;right:-60px;width:220px;height:220px;background:rgba(124,58,237,.12)"></div>
-            <div class="vc-orb-c" style="bottom:-60px;left:-40px;width:180px;height:180px;background:rgba(6,182,212,.07)"></div>
+          <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;background:#313338;height:100%;">
             ${_hdr(_t('vc_sub'))}
-            <div style="position:relative;z-index:10;padding:32px 24px;display:flex;flex-direction:column;align-items:center;text-align:center">
+            <div style="position:relative;z-index:10;padding:32px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;flex:1;justify-content:center;">
               <div style="position:relative;margin-bottom:20px">
-                <div style="width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(6,182,212,.15));border:1px solid rgba(124,58,237,.3);display:flex;align-items:center;justify-content:center;color:#a78bfa;box-shadow:0 8px 32px rgba(124,58,237,.2)">
+                <div style="width:56px;height:56px;border-radius:18px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);display:flex;align-items:center;justify-content:center;color:#f59e0b;box-shadow:0 8px 32px rgba(245,158,11,.1)">
                   <svg style="width:28px;height:28px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                 </div>
               </div>
-              <h3 style="color:#fff;font-size:17px;font-weight:800;letter-spacing:-.02em;margin-bottom:8px">${_t('vc_restricted')}</h3>
-              <p style="color:rgba(255,255,255,.4);font-size:12px;line-height:1.6;margin-bottom:24px;max-width:240px">${_t('vc_req_login')}</p>
-              <button id="vc-google-login-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s,border-color .2s" onmouseenter="this.style.background='rgba(255,255,255,.09)';this.style.borderColor='rgba(255,255,255,.2)'" onmouseleave="this.style.background='rgba(255,255,255,.05)';this.style.borderColor='rgba(255,255,255,.1)'">
+              <h3 style="color:#f2f3f5;font-size:17px;font-weight:800;letter-spacing:-.02em;margin-bottom:8px">${_t('vc_restricted')}</h3>
+              <p style="color:#949ba4;font-size:12px;line-height:1.6;margin-bottom:24px;max-width:240px">${_t('vc_req_login')}</p>
+              <button id="vc-google-login-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 16px;background:#fff;border:none;border-radius:14px;color:#000;font-size:13px;font-weight:600;cursor:pointer;transition:transform .15s" onmouseenter="this.style.transform='scale(1.02)'" onmouseleave="this.style.transform='scale(1)'">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:16px;height:16px" />
                 ${_t('vc_login_google')}
               </button>
@@ -1046,34 +1046,31 @@
       }
 
       return `
-        <div style="position:relative;overflow:hidden;display:flex;flex-direction:column">
-          <div class="vc-orb-v" style="top:-80px;right:-60px;width:220px;height:220px;background:rgba(124,58,237,.13)"></div>
-          <div class="vc-orb-c" style="bottom:20px;left:-50px;width:200px;height:200px;background:rgba(6,182,212,.06)"></div>
+        <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;background:#313338;height:100%;">
           ${_hdr(_t('vc_sub'))}
-          <div style="position:relative;z-index:10;padding:28px 22px;display:flex;flex-direction:column;align-items:center;gap:20px">
+          <div style="position:relative;z-index:10;padding:28px 22px;display:flex;flex-direction:column;align-items:center;gap:20px;flex:1;justify-content:center;">
             <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
               <div style="position:relative">
-                <div style="position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(124,58,237,.5);animation:vc-ring-wave 2.8s ease-out infinite"></div>
-                <div style="position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(6,182,212,.35);animation:vc-ring-wave2 2.8s ease-out infinite .6s"></div>
-                <img src="${user.photoURL}" style="width:68px;height:68px;border-radius:50%;object-fit:cover;border:2.5px solid rgba(124,58,237,.6);box-shadow:0 0 0 4px rgba(124,58,237,.1),0 8px 32px rgba(0,0,0,.5);position:relative;z-index:1" draggable="false" />
+                <div style="position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(245,158,11,.5);animation:vc-ring-wave 2.8s ease-out infinite"></div>
+                <div style="position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(236,72,153,.35);animation:vc-ring-wave2 2.8s ease-out infinite .6s"></div>
+                <img src="${user.photoURL}" style="width:68px;height:68px;border-radius:50%;object-fit:cover;border:2.5px solid rgba(245,158,11,.6);box-shadow:0 0 0 4px rgba(245,158,11,.1),0 8px 32px rgba(0,0,0,.5);position:relative;z-index:1" draggable="false" />
               </div>
               <div style="text-align:center">
-                <div style="font-size:9.5px;font-weight:700;color:rgba(167,139,250,.8);text-transform:uppercase;letter-spacing:.18em;margin-bottom:5px">${_t('vc_session_as')}</div>
-                <div style="font-size:17px;font-weight:800;color:#fff;letter-spacing:-.02em">${user.displayName}</div>
+                <div style="font-size:9.5px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.18em;margin-bottom:5px">${_t('vc_session_as')}</div>
+                <div style="font-size:17px;font-weight:800;color:#f2f3f5;letter-spacing:-.02em">${user.displayName}</div>
               </div>
             </div>
             <input id="vc-name" type="hidden" value="${user.displayName}"/>
             <input id="vc-pass" type="hidden" value="nopass"/>
-            <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:10px">
-              <button id="vc-join" class="vc-btn-primary" style="width:100%;padding:14px;font-size:14px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;justify-content:center;gap:8px">
+            <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:10px;">
+              <button id="vc-join" class="vc-btn-primary" style="width:100%;padding:14px;font-size:14px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;justify-content:center;gap:8px;background:#f59e0b;color:#fff;border:none;border-radius:12px;cursor:pointer;transition:background .15s" onmouseenter="this.style.background='#d97706'" onmouseleave="this.style.background='#f59e0b'">
                 <span style="width:16px;height:16px;display:flex;align-items:center;justify-content:center">${ICONS.mic}</span>
                 ${_t('btn_join')}
               </button>
-              <div id="vc-conn-count" style="font-size:11px;font-weight:500;color:rgba(255,255,255,.35);min-height:16px;transition:opacity .3s"></div>
-              <div id="vc-err" style="color:#f87171;font-size:11px;text-align:center;font-weight:500;min-height:0">${err}</div>
+              <div id="vc-conn-count" style="font-size:11px;font-weight:500;color:#949ba4;min-height:16px;transition:opacity .3s"></div>
+              <div id="vc-err" style="color:#da373c;font-size:11px;text-align:center;font-weight:500;min-height:0">${err}</div>
             </div>
           </div>
-          ${this._tplHistory()}
         </div>`;
     }
 
