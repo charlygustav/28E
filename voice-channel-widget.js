@@ -266,7 +266,7 @@
   @keyframes vc-slideIn     { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:translateX(0)} }
   @keyframes vc-orb-drift   { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(8px,-12px) scale(1.08)} }
   @keyframes vc-orb-drift2  { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-10px,8px) scale(1.05)} }
-  @keyframes vc-fab-glow    { 0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.0),0 8px 32px rgba(0,0,0,.6)} 50%{box-shadow:0 0 0 8px rgba(245,158,11,.2),0 8px 32px rgba(0,0,0,.6)} }
+  @keyframes vc-fab-glow    { 0%,100%{box-shadow:0 0 0 0 rgba(124,58,237,.0),0 8px 32px rgba(0,0,0,.6)} 50%{box-shadow:0 0 0 8px rgba(124,58,237,.15),0 8px 32px rgba(0,0,0,.6)} }
   @keyframes vc-ring-wave   { 0%{transform:scale(1);opacity:.5} 100%{transform:scale(2.2);opacity:0} }
   @keyframes vc-ring-wave2  { 0%{transform:scale(1);opacity:.35} 100%{transform:scale(2.8);opacity:0} }
   @keyframes vc-ring-wave3  { 0%{transform:scale(1);opacity:.2} 100%{transform:scale(3.4);opacity:0} }
@@ -382,7 +382,7 @@
     cursor: pointer;
     transition: background .2s, color .2s, border-color .2s;
   }
-  .vc-btn-glass:hover { background: rgba(124,58,237,.15); border-color: rgba(245,158,11,.3); color: #fff; }
+  .vc-btn-glass:hover { background: rgba(124,58,237,.15); border-color: rgba(124,58,237,.3); color: #fff; }
 
   .vc-btn-danger {
     background: rgba(239,68,68,.08);
@@ -401,8 +401,8 @@
     color: #f87171 !important;
   }
   .vc-btn-dnd-active {
-    background: rgba(245,158,11,.2) !important;
-    border: 1px solid rgba(245,158,11,.3) !important;
+    background: rgba(124,58,237,.12) !important;
+    border: 1px solid rgba(124,58,237,.3) !important;
     color: #a78bfa !important;
   }
 
@@ -542,7 +542,7 @@
   /* ── Chat bubbles ────────────────────────────────────────── */
   .vc-bubble-me {
     background: rgba(124,58,237,.22);
-    border: 1px solid rgba(245,158,11,.3);
+    border: 1px solid rgba(124,58,237,.3);
     color: #e2d9fc;
     border-radius: 16px 16px 4px 16px;
     padding: 8px 12px;
@@ -823,35 +823,32 @@
         'position:fixed', 'bottom:24px', 'right:24px', 'z-index:9999',
         'width:56px', 'height:56px', 'border-radius:50%', 'cursor:pointer',
         'display:flex', 'align-items:center', 'justify-content:center',
-        'background:linear-gradient(135deg,rgba(245,158,11,1) 0%,rgba(236,72,153,1) 100%)',
-        'border:1.5px solid rgba(245,158,11,.4)',
-        'box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 0 0 rgba(245,158,11,.3)',
+        'background:linear-gradient(135deg,#4c1d95 0%,#0e7490 100%)',
+        'border:1.5px solid rgba(124,58,237,.4)',
+        'box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 0 0 rgba(124,58,237,.3)',
         'transition:transform .2s,box-shadow .2s,border-color .2s',
         'animation:vc-fab-glow 3s ease-in-out infinite'
       ].join(';');
       this.fab.innerHTML = `
-        <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(255,255,255,.2),transparent 70%);pointer-events:none"></div>
-        <span style="color:#fff;display:flex;align-items:center;justify-content:center;width:22px;height:22px;transition:transform .2s;filter:drop-shadow(0 0 6px rgba(255,255,255,.6))">${ICONS.mic}</span>
+        <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(167,139,250,.2),transparent 70%);pointer-events:none"></div>
+        <span style="color:#fff;display:flex;align-items:center;justify-content:center;width:22px;height:22px;transition:transform .2s;filter:drop-shadow(0 0 6px rgba(167,139,250,.6))">${ICONS.mic}</span>
       `;
-      this.fab.addEventListener('mouseenter', () => { this.fab.style.transform = 'scale(1.1)'; this.fab.style.boxShadow = '0 12px 40px rgba(0,0,0,.7),0 0 0 8px rgba(245,158,11,.2)'; });
-      this.fab.addEventListener('mouseleave', () => { this.fab.style.transform = ''; this.fab.style.boxShadow = '0 8px 32px rgba(0,0,0,.6),0 0 0 0 rgba(245,158,11,.3)'; });
+      this.fab.addEventListener('mouseenter', () => { this.fab.style.transform = 'scale(1.1)'; this.fab.style.boxShadow = '0 12px 40px rgba(0,0,0,.7),0 0 0 8px rgba(124,58,237,.12)'; });
+      this.fab.addEventListener('mouseleave', () => { this.fab.style.transform = ''; this.fab.style.boxShadow = '0 8px 32px rgba(0,0,0,.6),0 0 0 0 rgba(124,58,237,.3)'; });
       this.fab.addEventListener('click', () => this._toggle());
 
       this.panel = document.createElement('div');
       this.panel.id = 'vc-panel';
       this.panel.style.cssText = [
         'position:fixed', 'bottom:96px', 'right:24px',
-        'width:640px', 'max-width:calc(100vw - 32px)',
-        'height:400px', 'max-height:calc(100vh - 120px)',
-        'background:rgba(12,12,18,0.7)',
-        'backdrop-filter:blur(24px)', '-webkit-backdrop-filter:blur(24px)',
-        'border:1px solid rgba(255,255,255,0.08)',
-        'border-radius:18px',
-        'box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.05) inset,0 0 40px rgba(245,158,11,0.05)',
+        'width:340px', 'max-width:calc(100vw - 32px)',
+        'background:#080810',
+        'border:1px solid rgba(124,58,237,.2)',
+        'border-radius:24px',
+        'box-shadow:0 24px 80px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.04) inset,0 0 60px rgba(124,58,237,.08)',
         'overflow:hidden', 'z-index:9998',
         'transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .25s,visibility .25s',
-        'transform:scale(.92) translateY(10px)', 'opacity:0', 'pointer-events:none','visibility:hidden',
-        'display:flex', 'flex-direction:column'
+        'transform:scale(.92) translateY(10px)', 'opacity:0', 'pointer-events:none','visibility:hidden'
       ].join(';');
       this.panel.innerHTML = this._tplLogin();
 
@@ -861,11 +858,11 @@
         'position:fixed', 'bottom:96px', 'right:24px', 'z-index:9997',
         'display:flex', 'align-items:center', 'gap:10px',
         'padding:10px 14px',
-        'background:rgba(43,45,49,.95)',
+        'background:rgba(8,8,16,.92)',
         'backdrop-filter:blur(24px)', '-webkit-backdrop-filter:blur(24px)',
-        'border:1px solid #1e1f22',
-        'border-radius:12px',
-        'box-shadow:0 8px 40px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.03) inset',
+        'border:1px solid rgba(124,58,237,.15)',
+        'border-radius:18px',
+        'box-shadow:0 8px 40px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.03) inset',
         'opacity:0', 'pointer-events:none', 'visibility:hidden',
         'transition:transform .35s cubic-bezier(.34,1.2,.64,1),opacity .25s,visibility .25s',
         'transform:translateY(10px) scale(.94)', 'cursor:pointer'
@@ -1013,9 +1010,9 @@
     _tplLogin(err = '') {
       const user = window.yaireCurrentUser;
       const _hdr = (sub = '', subColor = 'rgba(255,255,255,.35)') => `
-        <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(245,158,11,.2)">
+        <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(124,58,237,.12)">
           <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(245,158,11,.3),rgba(6,182,212,.2));display:flex;align-items:center;justify-content:center;color:#a78bfa;box-shadow:0 0 12px rgba(124,58,237,.2)">
+            <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(6,182,212,.2));display:flex;align-items:center;justify-content:center;color:#a78bfa;box-shadow:0 0 12px rgba(124,58,237,.2)">
               <span style="width:16px;height:16px;display:flex">${ICONS.sound}</span>
             </div>
             <div>
@@ -1028,17 +1025,19 @@
 
       if (!user) {
         return `
-          <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;background:transparent;height:100%;">
+          <div style="position:relative;overflow:hidden;display:flex;flex-direction:column">
+            <div class="vc-orb-v" style="top:-80px;right:-60px;width:220px;height:220px;background:rgba(124,58,237,.12)"></div>
+            <div class="vc-orb-c" style="bottom:-60px;left:-40px;width:180px;height:180px;background:rgba(6,182,212,.07)"></div>
             ${_hdr(_t('vc_sub'))}
-            <div style="position:relative;z-index:10;padding:32px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;flex:1;justify-content:center;">
+            <div style="position:relative;z-index:10;padding:32px 24px;display:flex;flex-direction:column;align-items:center;text-align:center">
               <div style="position:relative;margin-bottom:20px">
-                <div style="width:56px;height:56px;border-radius:18px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);display:flex;align-items:center;justify-content:center;color:#f59e0b;box-shadow:0 8px 32px rgba(245,158,11,.1)">
+                <div style="width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(6,182,212,.15));border:1px solid rgba(124,58,237,.3);display:flex;align-items:center;justify-content:center;color:#a78bfa;box-shadow:0 8px 32px rgba(124,58,237,.2)">
                   <svg style="width:28px;height:28px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                 </div>
               </div>
-              <h3 style="color:#f2f3f5;font-size:17px;font-weight:800;letter-spacing:-.02em;margin-bottom:8px">${_t('vc_restricted')}</h3>
-              <p style="color:#949ba4;font-size:12px;line-height:1.6;margin-bottom:24px;max-width:240px">${_t('vc_req_login')}</p>
-              <button id="vc-google-login-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 16px;background:#fff;border:none;border-radius:14px;color:#000;font-size:13px;font-weight:600;cursor:pointer;transition:transform .15s" onmouseenter="this.style.transform='scale(1.02)'" onmouseleave="this.style.transform='scale(1)'">
+              <h3 style="color:#fff;font-size:17px;font-weight:800;letter-spacing:-.02em;margin-bottom:8px">${_t('vc_restricted')}</h3>
+              <p style="color:rgba(255,255,255,.4);font-size:12px;line-height:1.6;margin-bottom:24px;max-width:240px">${_t('vc_req_login')}</p>
+              <button id="vc-google-login-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s,border-color .2s" onmouseenter="this.style.background='rgba(255,255,255,.09)';this.style.borderColor='rgba(255,255,255,.2)'" onmouseleave="this.style.background='rgba(255,255,255,.05)';this.style.borderColor='rgba(255,255,255,.1)'">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:16px;height:16px" />
                 ${_t('vc_login_google')}
               </button>
@@ -1047,80 +1046,85 @@
       }
 
       return `
-        <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;background:transparent;height:100%;">
+        <div style="position:relative;overflow:hidden;display:flex;flex-direction:column">
+          <div class="vc-orb-v" style="top:-80px;right:-60px;width:220px;height:220px;background:rgba(124,58,237,.13)"></div>
+          <div class="vc-orb-c" style="bottom:20px;left:-50px;width:200px;height:200px;background:rgba(6,182,212,.06)"></div>
           ${_hdr(_t('vc_sub'))}
-          <div style="position:relative;z-index:10;padding:28px 22px;display:flex;flex-direction:column;align-items:center;gap:20px;flex:1;justify-content:center;">
+          <div style="position:relative;z-index:10;padding:28px 22px;display:flex;flex-direction:column;align-items:center;gap:20px">
             <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
               <div style="position:relative">
-                <div style="position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(245,158,11,.5);animation:vc-ring-wave 2.8s ease-out infinite"></div>
-                <div style="position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(236,72,153,.35);animation:vc-ring-wave2 2.8s ease-out infinite .6s"></div>
-                <img src="${user.photoURL}" style="width:68px;height:68px;border-radius:50%;object-fit:cover;border:2.5px solid rgba(245,158,11,.6);box-shadow:0 0 0 4px rgba(245,158,11,.1),0 8px 32px rgba(0,0,0,.5);position:relative;z-index:1" draggable="false" />
+                <div style="position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(124,58,237,.5);animation:vc-ring-wave 2.8s ease-out infinite"></div>
+                <div style="position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(6,182,212,.35);animation:vc-ring-wave2 2.8s ease-out infinite .6s"></div>
+                <img src="${user.photoURL}" style="width:68px;height:68px;border-radius:50%;object-fit:cover;border:2.5px solid rgba(124,58,237,.6);box-shadow:0 0 0 4px rgba(124,58,237,.1),0 8px 32px rgba(0,0,0,.5);position:relative;z-index:1" draggable="false" />
               </div>
               <div style="text-align:center">
-                <div style="font-size:9.5px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.18em;margin-bottom:5px">${_t('vc_session_as')}</div>
-                <div style="font-size:17px;font-weight:800;color:#f2f3f5;letter-spacing:-.02em">${user.displayName}</div>
+                <div style="font-size:9.5px;font-weight:700;color:rgba(167,139,250,.8);text-transform:uppercase;letter-spacing:.18em;margin-bottom:5px">${_t('vc_session_as')}</div>
+                <div style="font-size:17px;font-weight:800;color:#fff;letter-spacing:-.02em">${user.displayName}</div>
               </div>
             </div>
             <input id="vc-name" type="hidden" value="${user.displayName}"/>
             <input id="vc-pass" type="hidden" value="nopass"/>
-            <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:10px;">
-              <button id="vc-join" class="vc-btn-primary" style="width:100%;padding:14px;font-size:14px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;justify-content:center;gap:8px;background:#f59e0b;color:#fff;border:none;border-radius:12px;cursor:pointer;transition:background .15s" onmouseenter="this.style.background='#d97706'" onmouseleave="this.style.background='#f59e0b'">
+            <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:10px">
+              <button id="vc-join" class="vc-btn-primary" style="width:100%;padding:14px;font-size:14px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;justify-content:center;gap:8px">
                 <span style="width:16px;height:16px;display:flex;align-items:center;justify-content:center">${ICONS.mic}</span>
                 ${_t('btn_join')}
               </button>
-              <div id="vc-conn-count" style="font-size:11px;font-weight:500;color:#949ba4;min-height:16px;transition:opacity .3s"></div>
-              <div id="vc-err" style="color:#da373c;font-size:11px;text-align:center;font-weight:500;min-height:0">${err}</div>
+              <div id="vc-conn-count" style="font-size:11px;font-weight:500;color:rgba(255,255,255,.35);min-height:16px;transition:opacity .3s"></div>
+              <div id="vc-err" style="color:#f87171;font-size:11px;text-align:center;font-weight:500;min-height:0">${err}</div>
             </div>
           </div>
+          ${this._tplHistory()}
         </div>`;
     }
 
     _tplLoading() {
       return `
-        <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;background:transparent;height:100%;">
-          <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.2);">
+        <div style="position:relative;overflow:hidden;display:flex;flex-direction:column">
+          <div class="vc-orb-v" style="top:-60px;right:-40px;width:180px;height:180px;background:rgba(124,58,237,.1)"></div>
+          <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(124,58,237,.12)">
             <div style="display:flex;align-items:center;gap:10px">
-              <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(245,158,11,.2),rgba(236,72,153,.2));display:flex;align-items:center;justify-content:center;color:#f59e0b">
+              <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(6,182,212,.2));display:flex;align-items:center;justify-content:center;color:#a78bfa">
                 <span style="width:16px;height:16px;display:flex">${ICONS.sound}</span>
               </div>
               <div>
-                <div style="color:#f2f3f5;font-weight:700;font-size:13px">#principal</div>
-                <div style="color:#949ba4;font-size:10px;font-weight:500">${_t('st_conn')}</div>
+                <div style="color:#fff;font-weight:700;font-size:13px">#principal</div>
+                <div style="color:rgba(255,255,255,.35);font-size:10px;font-weight:500">${_t('st_conn')}</div>
               </div>
             </div>
-            <button id="vc-close" style="width:30px;height:30px;border-radius:8px;background:transparent;border:none;color:#949ba4;cursor:pointer;font-size:14px;transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.05)';this.style.color='#f2f3f5'" onmouseleave="this.style.background='transparent';this.style.color='#949ba4'">✕</button>
+            <button id="vc-close" style="width:30px;height:30px;border-radius:8px;background:transparent;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:14px;transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.07)'" onmouseleave="this.style.background='transparent'">✕</button>
           </div>
-          <div style="position:relative;z-index:10;padding:48px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;flex:1;">
+          <div style="position:relative;z-index:10;padding:48px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px">
             <div style="position:relative" id="vc-loading-spinner">
-              <div style="position:absolute;inset:-8px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.15),transparent 70%);animation:vc-pulse-slow 2s ease-in-out infinite"></div>
-              <div style="width:44px;height:44px;border-radius:50%;border:3px solid rgba(255,255,255,.05);border-top-color:#f59e0b;border-right-color:#ec4899;animation:vc-spin 1s linear infinite;position:relative;z-index:1"></div>
+              <div style="position:absolute;inset:-8px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.25),transparent 70%);animation:vc-pulse-slow 2s ease-in-out infinite"></div>
+              <div style="width:44px;height:44px;border-radius:50%;border:3px solid rgba(255,255,255,.06);border-top-color:#7c3aed;border-right-color:#06b6d4;animation:vc-spin 1s linear infinite;position:relative;z-index:1"></div>
             </div>
-            <div style="color:#949ba4;font-size:12px;font-weight:500;letter-spacing:.04em;animation:vc-pulse-slow 2s ease-in-out infinite">${_t('st_estab')}</div>
+            <div style="color:rgba(255,255,255,.4);font-size:12px;font-weight:500;letter-spacing:.04em;animation:vc-pulse-slow 2s ease-in-out infinite">${_t('st_estab')}</div>
           </div>
         </div>`;
     }
 
     _tplDisconnected() {
       return `
-        <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;background:transparent;height:100%;">
-          <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.2);">
+        <div style="position:relative;overflow:hidden;display:flex;flex-direction:column">
+          <div class="vc-orb-c" style="top:40%;left:50%;transform:translate(-50%,-50%);width:240px;height:240px;background:rgba(239,68,68,.1)"></div>
+          <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(239,68,68,.15)">
             <div style="display:flex;align-items:center;gap:10px">
-              <div style="width:32px;height:32px;border-radius:10px;background:rgba(218,55,60,.15);display:flex;align-items:center;justify-content:center;color:#da373c">
+              <div style="width:32px;height:32px;border-radius:10px;background:rgba(239,68,68,.15);display:flex;align-items:center;justify-content:center;color:#f87171">
                 <span style="width:16px;height:16px;display:flex">${ICONS.sound}</span>
               </div>
               <div>
-                <div style="color:#f2f3f5;font-weight:700;font-size:13px">#principal</div>
-                <div style="color:#da373c;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">${_t('st_disc')}</div>
+                <div style="color:#fff;font-weight:700;font-size:13px">#principal</div>
+                <div style="color:#f87171;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em">${_t('st_disc')}</div>
               </div>
             </div>
-            <button id="vc-close" style="width:30px;height:30px;border-radius:8px;background:transparent;border:none;color:#949ba4;cursor:pointer;font-size:14px;transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.05)';this.style.color='#f2f3f5'" onmouseleave="this.style.background='transparent';this.style.color='#949ba4'">✕</button>
+            <button id="vc-close" style="width:30px;height:30px;border-radius:8px;background:transparent;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:14px;transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.07)'" onmouseleave="this.style.background='transparent'">✕</button>
           </div>
-          <div style="position:relative;z-index:10;padding:36px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:16px;flex:1;">
-            <div style="width:64px;height:64px;border-radius:20px;background:rgba(218,55,60,.1);border:1px solid rgba(218,55,60,.2);display:flex;align-items:center;justify-content:center;color:#da373c;box-shadow:0 0 20px rgba(218,55,60,.1)">
+          <div style="position:relative;z-index:10;padding:36px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:16px">
+            <div style="width:64px;height:64px;border-radius:20px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);display:flex;align-items:center;justify-content:center;color:#f87171;box-shadow:0 0 40px rgba(239,68,68,.15)">
               <svg style="width:32px;height:32px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
             </div>
-            <p style="color:#949ba4;font-size:12px;line-height:1.7;max-width:220px">${_t('msg_disc')}</p>
-            <button id="vc-reconnect" class="vc-btn-danger" style="width:100%;padding:10px;border-radius:6px;background:#da373c;color:#fff;border:none;cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s" onmouseenter="this.style.background='#c93136'" onmouseleave="this.style.background='#da373c'">
+            <p style="color:rgba(255,255,255,.45);font-size:12px;line-height:1.7;max-width:220px">${_t('msg_disc')}</p>
+            <button id="vc-reconnect" class="vc-btn-danger" style="width:100%;padding:14px;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px">
               ${_t('btn_reconn')}
             </button>
           </div>
@@ -1212,126 +1216,120 @@
           ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover" draggable="false" />` 
           : initials;
 
-        const micIcon = isMuted ? `<span class="vc-mico" style="color:#da373c;width:14px;height:14px;display:flex" title="Silenciado">${ICONS.micOff}</span>` : '';
-        const bellIcon = isDnd ? `<span class="vc-dico" style="color:#ec4899;width:14px;height:14px;display:flex" title="DND">${ICONS.dnd}</span>` : '';
+        const micIcon = isMuted ? `<span class="vc-mico" style="color:#ef4444;width:16px;height:16px;display:flex">${ICONS.micOff}</span>` : '';
+        const bellIcon = isDnd ? `<span class="vc-dico" style="color:#a855f7;width:16px;height:16px;display:flex" title="DND">${ICONS.dnd}</span>` : '';
 
         return `
-          <div style="display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:4px;transition:background .1s;cursor:pointer;margin-bottom:2px" onmouseenter="this.style.background='rgba(255,255,255,.06)'" onmouseleave="this.style.background='transparent'" class="vc-user group" id="vc-u-${u.id}">
-            <div style="width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;position:relative;${isMe ? 'background:rgba(245,158,11,.15);color:#f59e0b;' : 'background:#1e1f22;color:#949ba4;'}" class="vc-av" id="vc-av-${u.id}">
+          <div style="display:flex;align-items:center;gap:14px;padding:8px;border-radius:12px;transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.04)'" onmouseleave="this.style.background='transparent'" class="vc-user group" id="vc-u-${u.id}">
+            <div style="width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;transition:all .2s;position:relative;${isMe ? 'background:rgba(124,58,237,.1);color:#a78bfa;box-shadow:inset 0 0 0 1px rgba(124,58,237,.3)' : 'background:rgba(255,255,255,.03);color:rgba(255,255,255,.5);box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)'}" class="vc-av" id="vc-av-${u.id}">
               ${avatarHtml}
             </div>
-            <div style="flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;">
-              <div style="display:flex;flex-direction:column;">
-                <div style="color:#f2f3f5;font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                  ${u.displayName}
-                </div>
-                ${u.oracleHandle ? `<div style="color:#949ba4;font-size:10px;font-weight:500;">@${u.oracleHandle}</div>` : ''}
-              </div>
-              <div style="display:flex;align-items:center;gap:6px" class="vc-icons-container">
-                 ${bellIcon}${micIcon}
-              </div>
+            <div style="flex:1;min-width:0">
+              <div style="color:rgba(255,255,255,.9);font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.01em">${u.displayName} ${u.oracleHandle ? `<span style="color:rgba(6,182,212,.7);font-size:10px;margin-left:6px;font-weight:500;letter-spacing:.02em">@${u.oracleHandle}</span>` : ''} ${isMe ? `<span style="color:rgba(255,255,255,.3);font-size:10px;margin-left:6px;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,.04);font-weight:500;border:1px solid rgba(255,255,255,.05)">${_t('tag_you')}</span>` : ''}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding-right:8px" class="vc-icons-container">
+               ${bellIcon}${micIcon}
             </div>
           </div>`;
       }).join('');
 
       // Render tab contents based on _activeTab state
-      const isChat = this._activeTab === 'chat' || this._activeTab === 'room'; // Merge room into chat or default to chat
+      const isRoom = this._activeTab === 'room';
+      const isChat = this._activeTab === 'chat';
       const isMusic = this._activeTab === 'music';
 
       const eqInd = this._musicPlaying ? `<span class="vc-music-ind" style="display:flex;align-items:flex-end;gap:2px;height:10px;margin-left:4px">
-             <span style="width:2px;background:#f59e0b;border-radius:99px;animation:vc-eq .8s ease-in-out infinite"></span>
-             <span style="width:2px;background:#f59e0b;border-radius:99px;animation:vc-eq .8s ease-in-out infinite .2s"></span>
-             <span style="width:2px;background:#f59e0b;border-radius:99px;animation:vc-eq .8s ease-in-out infinite .4s"></span>
+             <span style="width:2px;background:#06b6d4;border-radius:99px;animation:vc-eq .8s ease-in-out infinite"></span>
+             <span style="width:2px;background:#06b6d4;border-radius:99px;animation:vc-eq .8s ease-in-out infinite .2s"></span>
+             <span style="width:2px;background:#06b6d4;border-radius:99px;animation:vc-eq .8s ease-in-out infinite .4s"></span>
            </span>` : '';
 
       return `
-        <div style="display:flex; height:100%; width:100%; overflow:hidden; background:transparent; color:#f2f3f5; font-family:'Inter',sans-serif;">
+        <!-- Ambient Orbs -->
+        <div class="vc-orb-v" style="top:-80px;right:-80px;width:250px;height:250px;background:rgba(124,58,237,.15)"></div>
+        <div class="vc-orb-c" style="bottom:-40px;left:-40px;width:200px;height:200px;background:rgba(6,182,212,.1)"></div>
+
+        <!-- Header -->
+        <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid rgba(124,58,237,.12);background:rgba(255,255,255,.01);backdrop-filter:blur(8px)">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(6,182,212,.2));display:flex;align-items:center;justify-content:center;color:#a78bfa">
+              <span style="width:18px;height:18px;display:flex">${ICONS.sound}</span>
+            </div>
+            <div>
+              <div style="color:#fff;font-weight:700;font-size:13.5px;letter-spacing:-.01em">#principal</div>
+              <div style="display:flex;align-items:center;gap:6px;margin-top:2px" class="vc-sub">
+                <span style="width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:vc-blink 2.5s ease-in-out infinite"></span>
+                <span style="color:rgba(255,255,255,.4);font-size:10px;font-weight:500">${this.users.length}/4</span>
+                <span style="color:rgba(255,255,255,.2);font-size:10px">&middot;</span>
+                <span id="vc-timer" style="font-family:'SF Mono',Monaco,monospace;font-size:10px;color:#06b6d4;font-weight:600;letter-spacing:.04em" class="vc-timer">00:00</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <button id="vc-btn-oracle-redirect" style="padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.6);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background .15s,color .15s" onmouseenter="this.style.background='rgba(124,58,237,.15)';this.style.color='#fff';this.style.borderColor='rgba(124,58,237,.3)'" onmouseleave="this.style.background='rgba(255,255,255,.04)';this.style.color='rgba(255,255,255,.6)';this.style.borderColor='rgba(255,255,255,.07)'" title="Seguir en Oracle">
+              <svg style="width:11px;height:11px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              <span>Oracle</span>
+            </button>
+            <button id="vc-close" style="width:28px;height:28px;border-radius:8px;background:transparent;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:14px;transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.07)'" onmouseleave="this.style.background='transparent'">&times;</button>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div style="position:relative;z-index:10;display:flex;gap:4px;padding:8px 12px;background:rgba(0,0,0,.2)">
+          <button class="vc-tab-pill ${isRoom ? 'active' : ''}" id="vc-tab-room" style="position:relative">${_t('vc_tab_room')}</button>
+          <button class="vc-tab-pill ${isChat ? 'active' : ''}" id="vc-tab-chat" style="position:relative">
+            ${_t('vc_chat')}
+            ${this._chatUnread > 0 ? `<span style="position:absolute;top:4px;right:8px;width:6px;height:6px;background:#f87171;border-radius:50%;animation:vc-badge-pop .3s ease-out"></span>` : ''}
+          </button>
+          <button class="vc-tab-pill ${isMusic ? 'active' : ''}" id="vc-tab-music" style="display:flex;align-items:center;justify-content:center">
+            ${_t('vc_music')} ${eqInd}
+          </button>
+        </div>
+
+        <!-- Main Content Area -->
+        <div style="height:248px;position:relative;overflow:hidden">
           
-          <!-- Sidebar (Users) -->
-          <div style="width:240px; background:rgba(0,0,0,0.25); display:flex; flex-direction:column; border-right:1px solid rgba(255,255,255,0.08); flex-shrink:0;">
-            <!-- Server Header -->
-            <div style="padding:16px; border-bottom:1px solid rgba(255,255,255,0.08); box-shadow:0 1px 2px rgba(0,0,0,.15); display:flex; align-items:center; justify-content:space-between; z-index:10;">
-              <div style="display:flex; align-items:center; gap:8px;">
-                <div style="color:#f59e0b; display:flex; width:18px; height:18px;">${ICONS.sound}</div>
-                <div style="font-weight:700; font-size:14px;">#principal</div>
-              </div>
-              <button id="vc-close" style="width:24px;height:24px;background:transparent;border:none;color:#949ba4;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:4px;transition:all .15s;" onmouseenter="this.style.color='#f2f3f5';this.style.background='rgba(255,255,255,.05)'" onmouseleave="this.style.color='#949ba4';this.style.background='transparent'">&times;</button>
+          <!-- ROOM TAB -->
+          <div id="vc-content-room" style="position:absolute;inset:0;display:flex;flex-direction:column;transition:opacity .25s,transform .25s;${isRoom ? 'opacity:1;transform:translateX(0);pointer-events:auto' : 'opacity:0;transform:translateX(-12px);pointer-events:none'}">
+            <div style="flex:1;overflow-y:auto;padding:8px" class="vc-scroll vc-sect">
+              <div style="font-size:9px;color:rgba(255,255,255,.2);font-weight:700;text-transform:uppercase;letter-spacing:.16em;margin-bottom:8px;padding:0 6px" class="vc-sect-lbl">${_t('sect_in')}</div>
+              ${userRows || `<div style="text-align:center;color:rgba(255,255,255,.2);font-size:12px;padding:32px 16px" class="vc-empty">${_t('empty_chan')}</div>`}
             </div>
+          </div>
 
-            <!-- Voice Status & Timer -->
-            <div style="padding:12px 16px 4px; display:flex; align-items:center; gap:6px; font-size:11px; font-weight:600; color:#22c55e; text-transform:uppercase; letter-spacing:.05em;" class="vc-sub">
-              <span style="width:6px;height:6px;border-radius:50%;background:#22c55e;animation:vc-blink 2.5s ease-in-out infinite"></span>
-              Conectado
-              <span style="color:#949ba4;margin:0 2px">&middot;</span>
-              <span id="vc-timer" style="font-family:'SF Mono',Monaco,monospace;color:#949ba4;">00:00</span>
-            </div>
-
-            <!-- User List -->
-            <div style="flex:1; overflow-y:auto; padding:12px 8px;" class="vc-scroll vc-sect">
-              <div style="font-size:11px; font-weight:600; color:#949ba4; text-transform:uppercase; padding:0 8px; margin-bottom:8px;">Usuarios — ${this.users.length}/4</div>
-              ${userRows || `<div style="text-align:center;color:#949ba4;font-size:12px;padding:20px 0;">Vacío</div>`}
-            </div>
-
-            <!-- User Controls (Bottom Bar) -->
-            <div style="background:rgba(0,0,0,0.4); padding:12px 8px; display:flex; flex-direction:column; gap:8px; border-top:1px solid rgba(255,255,255,0.08);">
-              <div style="display:flex; gap:6px;">
-                <button id="vc-mute" style="flex:1; padding:8px; border-radius:6px; background:${this.muted ? '#da373c' : 'rgba(255,255,255,.05)'}; color:${this.muted ? '#fff' : '#dbdee1'}; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; font-size:12px; font-weight:500; transition:all .15s;" onmouseenter="if(!${this.muted}) this.style.background='rgba(255,255,255,.1)'" onmouseleave="if(!${this.muted}) this.style.background='rgba(255,255,255,.05)'">
-                  <span style="width:16px;height:16px;display:flex;">${this.muted ? ICONS.micOff : ICONS.mic}</span>
-                </button>
-                <button id="vc-dnd" style="flex:1; padding:8px; border-radius:6px; background:${this.dnd ? '#ec4899' : 'rgba(255,255,255,.05)'}; color:${this.dnd ? '#fff' : '#dbdee1'}; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; font-size:12px; font-weight:500; transition:all .15s;" onmouseenter="if(!${this.dnd}) this.style.background='rgba(255,255,255,.1)'" onmouseleave="if(!${this.dnd}) this.style.background='rgba(255,255,255,.05)'" title="No Molestar">
-                  <span style="width:16px;height:16px;display:flex;">${ICONS.bell}</span>
-                </button>
-              </div>
-              <button id="vc-leave" style="width:100%; padding:10px; border-radius:6px; background:#da373c; color:#fff; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; font-size:13px; font-weight:600; transition:background .15s;" onmouseenter="this.style.background='#c93136'" onmouseleave="this.style.background='#da373c'">
-                <span style="width:16px;height:16px;display:flex;">${ICONS.phone}</span>
-                Desconectar
+          <!-- CHAT TAB -->
+          <div id="vc-content-chat" style="position:absolute;inset:0;display:flex;flex-direction:column;transition:opacity .25s,transform .25s;${isChat ? 'opacity:1;transform:translateX(0);pointer-events:auto' : (isRoom ? 'opacity:0;transform:translateX(12px);pointer-events:none' : 'opacity:0;transform:translateX(-12px);pointer-events:none')}">
+            <div style="flex:1;overflow-y:auto;padding:12px 16px 4px 16px" class="vc-scroll" id="vc-msgs">${this._renderChatMsgs()}</div>
+            <div style="padding:0 16px 8px;color:rgba(255,255,255,.4);font-size:10px;display:none" id="vc-chat-typing"></div>
+            <div style="padding:12px;border-top:1px solid rgba(255,255,255,.03);display:flex;gap:8px">
+              <input id="vc-chat-in" type="text" placeholder="${_t('vc_chat_ph')}" autocomplete="off" class="vc-input" style="flex:1;padding:8px 14px;border-radius:10px" />
+              <button id="vc-chat-send" class="vc-btn-primary" style="width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0">
+                <svg style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
               </button>
             </div>
           </div>
-          
-          <!-- Main Area (Chat / Music) -->
-          <div style="flex:1; display:flex; flex-direction:column; background:transparent; min-width:0;">
-            <!-- Tabs Header -->
-            <div style="display:flex; padding:12px 16px; border-bottom:1px solid rgba(255,255,255,0.08); box-shadow:0 1px 2px rgba(0,0,0,.15); z-index:10; background:rgba(0,0,0,0.1); gap:16px;">
-              <button class="vc-tab-pill ${isChat ? 'active' : ''}" id="vc-tab-chat" style="background:transparent; border:none; color:${isChat ? '#f2f3f5' : '#949ba4'}; font-size:14px; font-weight:600; cursor:pointer; padding:4px 8px; border-radius:4px; transition:all .15s; position:relative;" onmouseenter="if(!${isChat}) this.style.color='#dbdee1'; this.style.background='rgba(255,255,255,.05)'" onmouseleave="if(!${isChat}) this.style.color='#949ba4'; this.style.background='transparent'">
-                <div style="display:flex;align-items:center;gap:6px;">
-                  <span style="width:18px;height:18px;display:flex;">${ICONS.chat}</span>
-                  Chat
-                </div>
-                ${this._chatUnread > 0 ? `<span style="position:absolute;top:-2px;right:-4px;width:8px;height:8px;background:#da373c;border-radius:50%;border:2px solid #313338;"></span>` : ''}
-              </button>
-              <button class="vc-tab-pill ${isMusic ? 'active' : ''}" id="vc-tab-music" style="background:transparent; border:none; color:${isMusic ? '#f2f3f5' : '#949ba4'}; font-size:14px; font-weight:600; cursor:pointer; padding:4px 8px; border-radius:4px; transition:all .15s; display:flex; align-items:center; gap:6px;" onmouseenter="if(!${isMusic}) this.style.color='#dbdee1'; this.style.background='rgba(255,255,255,.05)'" onmouseleave="if(!${isMusic}) this.style.color='#949ba4'; this.style.background='transparent'">
-                <span style="width:18px;height:18px;display:flex;">${ICONS.music}</span>
-                Música ${eqInd}
-              </button>
-            </div>
 
-            <!-- Content Area -->
-            <div style="flex:1; position:relative; overflow:hidden;">
-              
-              <!-- CHAT TAB -->
-              <div id="vc-content-chat" style="position:absolute;inset:0;display:flex;flex-direction:column;transition:opacity .2s;${isChat ? 'opacity:1;pointer-events:auto;z-index:5;' : 'opacity:0;pointer-events:none;z-index:0;'}">
-                <div style="flex:1; overflow-y:auto; padding:16px;" class="vc-scroll" id="vc-msgs">${this._renderChatMsgs()}</div>
-                <div style="padding:0 16px 8px; color:#949ba4; font-size:11px; display:none;" id="vc-chat-typing"></div>
-                <div style="padding:0 16px 16px;">
-                  <div style="background:#383a40; border-radius:8px; display:flex; padding:8px 12px; gap:8px;">
-                    <input id="vc-chat-in" type="text" placeholder="Enviar mensaje a #principal" autocomplete="off" class="vc-input" style="flex:1; background:transparent; border:none; color:#dbdee1; font-size:14px; outline:none;" />
-                    <button id="vc-chat-send" style="background:transparent; border:none; color:#949ba4; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:color .15s;" onmouseenter="this.style.color='#f2f3f5'" onmouseleave="this.style.color='#949ba4'">
-                      <svg style="width:20px;height:20px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- MUSIC TAB -->
-              <div id="vc-content-music" style="position:absolute;inset:0;display:flex;flex-direction:column;transition:opacity .2s;${isMusic ? 'opacity:1;pointer-events:auto;z-index:5;' : 'opacity:0;pointer-events:none;z-index:0;'}">
-                <div style="flex:1; overflow-y:auto; display:flex; flex-direction:column; background:#2b2d31;" class="vc-scroll" id="vc-music-inner">
-                   ${this._renderMusicPanel()}
-                </div>
-              </div>
-
+          <!-- MUSIC TAB -->
+          <div id="vc-content-music" style="position:absolute;inset:0;display:flex;flex-direction:column;transition:opacity .25s,transform .25s;${isMusic ? 'opacity:1;transform:translateX(0);pointer-events:auto' : 'opacity:0;transform:translateX(12px);pointer-events:none'}">
+            <div style="flex:1;overflow-y:auto;display:flex;flex-direction:column" class="vc-scroll" id="vc-music-inner">
+               ${this._renderMusicPanel()}
             </div>
           </div>
+
+        </div>
+
+        <!-- Global Controls -->
+        <div style="position:relative;z-index:10;display:flex;gap:10px;padding:16px;border-top:1px solid rgba(255,255,255,.03);background:rgba(0,0,0,.2);backdrop-filter:blur(8px)">
+          <button id="vc-mute" style="flex:1;padding:12px;border-radius:12px;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s;border:1px solid ${this.muted ? 'rgba(239,68,68,.2)' : 'rgba(255,255,255,.05)'};background:${this.muted ? 'rgba(239,68,68,.1)' : 'rgba(255,255,255,.03)'};color:${this.muted ? '#ef4444' : 'rgba(255,255,255,.7)'};cursor:pointer" onmouseenter="if(!${this.muted}) { this.style.background='rgba(255,255,255,.06)'; this.style.color='#fff'; }">
+            <span style="width:16px;height:16px;display:flex">${this.muted ? ICONS.micOff : ICONS.mic}</span>
+            ${this.muted ? _t('btn_muted') : _t('btn_mic')}
+          </button>
+          <button id="vc-dnd" style="flex:1;padding:12px;border-radius:12px;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s;border:1px solid ${this.dnd ? 'rgba(168,85,247,.2)' : 'rgba(255,255,255,.05)'};background:${this.dnd ? 'rgba(168,85,247,.1)' : 'rgba(255,255,255,.03)'};color:${this.dnd ? '#a855f7' : 'rgba(255,255,255,.7)'};cursor:pointer" onmouseenter="if(!${this.dnd}) { this.style.background='rgba(255,255,255,.06)'; this.style.color='#fff'; }">
+            <span style="width:16px;height:16px;display:flex">${ICONS.bell}</span> DND
+          </button>
+          <button id="vc-leave" style="width:48px;flex-shrink:0;border-radius:12px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.15);color:#ef4444;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s" onmouseenter="this.style.background='rgba(239,68,68,.2)'" onmouseleave="this.style.background='rgba(239,68,68,.1)'" title="Salir">
+            <span style="width:16px;height:16px;display:flex">${ICONS.phone}</span>
+          </button>
         </div>`;
     }
 
@@ -1430,7 +1428,7 @@
               menu.style.top = e.clientY + 'px';
               
               menu.innerHTML = `
-                <div style="padding:8px 12px 8px;border-bottom:1px solid rgba(245,158,11,.2);margin-bottom:4px">
+                <div style="padding:8px 12px 8px;border-bottom:1px solid rgba(124,58,237,.12);margin-bottom:4px">
                   <div style="font-size:10px;text-transform:uppercase;font-weight:700;color:rgba(167,139,250,.5);letter-spacing:.12em">${u.displayName}</div>
                 </div>
                 <button style="width:100%;text-align:left;padding:9px 12px;border-radius:9px;font-size:13px;color:rgba(255,255,255,.85);background:transparent;border:none;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .15s" onmouseenter="this.style.background='rgba(124,58,237,.15)'" onmouseleave="this.style.background='transparent'">
@@ -2625,7 +2623,7 @@
         ? this._musicQueue.map((t, i) => {
             const isCur = i === this._musicState.currentIndex;
             return `
-            <div style="display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:10px;transition:background .15s;background:${isCur ? 'rgba(245,158,11,.2)' : 'transparent'};border:1px solid ${isCur ? 'rgba(124,58,237,.25)' : 'transparent'}" onmouseenter="if(!${isCur})this.style.background='rgba(255,255,255,.04)'" onmouseleave="if(!${isCur})this.style.background='transparent'">
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:10px;transition:background .15s;background:${isCur ? 'rgba(124,58,237,.12)' : 'transparent'};border:1px solid ${isCur ? 'rgba(124,58,237,.25)' : 'transparent'}" onmouseenter="if(!${isCur})this.style.background='rgba(255,255,255,.04)'" onmouseleave="if(!${isCur})this.style.background='transparent'">
               <span style="width:14px;text-align:center;font-size:10px;font-weight:700;color:${isCur ? '#a78bfa' : 'rgba(255,255,255,.25)'}">${isCur && this._musicPlaying ? '♪' : (i + 1)}</span>
               <div style="flex:1;min-width:0">
                 <div style="font-size:11.5px;font-weight:600;color:${isCur ? '#a78bfa' : '#fff'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(this._cleanMusicTitle(t.title))}</div>
@@ -3185,7 +3183,7 @@
         'padding:10px 16px',
         'background:rgba(8,8,16,.92)',
         'backdrop-filter:blur(20px)',
-        'border:1px solid ' + (type === 'join' ? 'rgba(6,182,212,.3)' : type === 'error' ? 'rgba(239,68,68,.3)' : 'rgba(245,158,11,.3)'),
+        'border:1px solid ' + (type === 'join' ? 'rgba(6,182,212,.3)' : type === 'error' ? 'rgba(239,68,68,.3)' : 'rgba(124,58,237,.3)'),
         'border-radius:12px',
         'color:#fff',
         'font-size:13px',
