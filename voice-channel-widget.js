@@ -1238,6 +1238,12 @@
       const isChat = this._activeTab === 'chat';
       const isMusic = this._activeTab === 'music';
 
+      const eqInd = this._musicPlaying ? `<span class="vc-music-ind" style="display:flex;align-items:flex-end;gap:2px;height:10px;margin-left:4px">
+             <span style="width:2px;background:#06b6d4;border-radius:99px;animation:vc-eq .8s ease-in-out infinite"></span>
+             <span style="width:2px;background:#06b6d4;border-radius:99px;animation:vc-eq .8s ease-in-out infinite .2s"></span>
+             <span style="width:2px;background:#06b6d4;border-radius:99px;animation:vc-eq .8s ease-in-out infinite .4s"></span>
+           </span>` : '';
+
       return `
         <!-- Ambient Orbs -->
         <div class="vc-orb-v" style="top:-80px;right:-80px;width:250px;height:250px;background:rgba(124,58,237,.15)"></div>
