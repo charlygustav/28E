@@ -708,6 +708,10 @@
             if (window.innerWidth >= 1024) {
                 isSidebarOpen = true;
                 sidebar.classList.remove('sidebar-closed');
+            } else {
+                // Show the open button on mobile since sidebar starts closed
+                btnOpen.classList.remove('opacity-0', 'pointer-events-none', 'scale-90');
+                btnOpen.classList.add('opacity-100', 'scale-100');
             }
 
             function toggleSidebar() {
