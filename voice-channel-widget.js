@@ -270,7 +270,7 @@
   @keyframes vc-ring-wave   { 0%{transform:scale(1);opacity:.5} 100%{transform:scale(2.2);opacity:0} }
   @keyframes vc-ring-wave2  { 0%{transform:scale(1);opacity:.35} 100%{transform:scale(2.8);opacity:0} }
   @keyframes vc-ring-wave3  { 0%{transform:scale(1);opacity:.2} 100%{transform:scale(3.4);opacity:0} }
-  @keyframes vc-speak-ring  { 0%{transform:scale(1);opacity:.6;box-shadow:0 0 0 0 rgba(6,182,212,.5)} 70%{transform:scale(1);opacity:0;box-shadow:0 0 0 10px rgba(6,182,212,0)} 100%{box-shadow:0 0 0 0 rgba(6,182,212,0)} }
+  @keyframes vc-speak-ring  { 0%{transform:scale(1);opacity:.6;box-shadow:0 0 0 0 rgba(236,72,153,.5)} 70%{transform:scale(1);opacity:0;box-shadow:0 0 0 10px rgba(236,72,153,0)} 100%{box-shadow:0 0 0 0 rgba(236,72,153,0)} }
   @keyframes vc-shimmer     { 0%{background-position:-200% center} 100%{background-position:200% center} }
   @keyframes vc-badge-pop   { 0%{transform:scale(0)} 60%{transform:scale(1.2)} 100%{transform:scale(1)} }
   @keyframes vc-bar-breathe { 0%,100%{opacity:.7;transform:scaleY(0.6)} 50%{opacity:1;transform:scaleY(1)} }
@@ -291,13 +291,13 @@
   /* ── Scrollbar ───────────────────────────────────────────── */
   .vc-scroll::-webkit-scrollbar       { width: 3px; }
   .vc-scroll::-webkit-scrollbar-track { background: transparent; }
-  .vc-scroll::-webkit-scrollbar-thumb { background: rgba(124,58,237,.25); border-radius: 99px; }
-  .vc-scroll::-webkit-scrollbar-thumb:hover { background: rgba(124,58,237,.45); }
+  .vc-scroll::-webkit-scrollbar-thumb { background: rgba(245,158,11,.15); border-radius: 99px; }
+  .vc-scroll::-webkit-scrollbar-thumb:hover { background: rgba(245,158,11,.45); }
 
   /* ── Speaking avatar ─────────────────────────────────────── */
   .vc-av.speaking {
-    border-color: #06b6d4 !important;
-    box-shadow: 0 0 0 2px rgba(6,182,212,.5), 0 0 16px rgba(6,182,212,.25);
+    border-color: #ec4899 !important;
+    box-shadow: 0 0 0 2px rgba(236,72,153,.5), 0 0 16px rgba(236,72,153,.25);
     animation: vc-speak-ring 1.6s ease-out infinite;
   }
 
@@ -330,8 +330,8 @@
   }
   .vc-tab-pill.active {
     color: #fff;
-    background: rgba(124,58,237,.25);
-    box-shadow: 0 1px 8px rgba(124,58,237,.2);
+    background: rgba(245,158,11,.15);
+    box-shadow: 0 1px 8px rgba(245,158,11,.1);
   }
   .vc-tab-pill:hover:not(.active) { color: rgba(255,255,255,.7); }
 
@@ -345,7 +345,7 @@
     transition: background .2s;
     cursor: default;
   }
-  .vc-user-card:hover { background: rgba(124,58,237,.07); }
+  .vc-user-card:hover { background: rgba(245,158,11,.07); }
 
   /* ── History rows ────────────────────────────────────────── */
   .vc-hist-row {
@@ -357,20 +357,20 @@
     transition: background .15s;
     font-size: 11px;
   }
-  .vc-hist-row:hover { background: rgba(124,58,237,.07); }
+  .vc-hist-row:hover { background: rgba(245,158,11,.07); }
 
   /* ── Buttons ─────────────────────────────────────────────── */
   .vc-btn-primary {
-    background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
+    background: linear-gradient(135deg, #f59e0b 0%, #ec4899 100%);
     color: #fff;
     font-weight: 700;
     border: none;
     border-radius: 14px;
     cursor: pointer;
     transition: opacity .2s, transform .15s, box-shadow .2s;
-    box-shadow: 0 4px 20px rgba(124,58,237,.35);
+    box-shadow: 0 4px 20px rgba(245,158,11,.25);
   }
-  .vc-btn-primary:hover { opacity: .9; transform: translateY(-1px); box-shadow: 0 6px 28px rgba(124,58,237,.45); }
+  .vc-btn-primary:hover { opacity: .92; transform: translateY(-1px); box-shadow: 0 6px 28px rgba(245,158,11,.25); }
   .vc-btn-primary:active { transform: scale(.97); opacity: 1; }
 
   .vc-btn-glass {
@@ -382,7 +382,7 @@
     cursor: pointer;
     transition: background .2s, color .2s, border-color .2s;
   }
-  .vc-btn-glass:hover { background: rgba(124,58,237,.15); border-color: rgba(245,158,11,.3); color: #fff; }
+  .vc-btn-glass:hover { background: rgba(255,255,255,.08); border-color: rgba(245,158,11,.25); color: #fff; }
 
   .vc-btn-danger {
     background: rgba(239,68,68,.08);
@@ -402,8 +402,8 @@
   }
   .vc-btn-dnd-active {
     background: rgba(245,158,11,.2) !important;
-    border: 1px solid rgba(245,158,11,.3) !important;
-    color: #a78bfa !important;
+    border: 1px solid rgba(245,158,11,.15) !important;
+    color: #f59e0b !important;
   }
 
   /* ── Ring overlay ────────────────────────────────────────── */
@@ -415,7 +415,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: radial-gradient(ellipse at center, rgba(124,58,237,.18) 0%, rgba(8,8,16,.97) 70%);
+    background: radial-gradient(ellipse at center, rgba(245,158,11,.12) 0%, rgba(8,8,16,.97) 70%);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     animation: vc-fadein .4s ease-out;
@@ -433,7 +433,7 @@
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    border: 1.5px solid rgba(124,58,237,.5);
+    border: 1.5px solid rgba(245,158,11,.5);
   }
   .vc-ring-wave-el:nth-child(1) { animation: vc-ring-wave  2.4s ease-out infinite; }
   .vc-ring-wave-el:nth-child(2) { animation: vc-ring-wave2 2.4s ease-out infinite .5s; }
@@ -444,7 +444,7 @@
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #7c3aed, #06b6d4);
+    background: linear-gradient(135deg, #f59e0b, #ec4899);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -452,7 +452,7 @@
     font-weight: 800;
     color: #fff;
     border: 3px solid rgba(255,255,255,.15);
-    box-shadow: 0 0 40px rgba(124,58,237,.4);
+    box-shadow: 0 0 40px rgba(245,158,11,.25);
     overflow: hidden;
   }
   .vc-ring-avatar-el img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
@@ -483,13 +483,13 @@
   .vc-ring-btn-join {
     padding: 14px 36px;
     border-radius: 99px;
-    background: linear-gradient(135deg, #7c3aed, #06b6d4);
+    background: linear-gradient(135deg, #f59e0b, #ec4899);
     color: #fff;
     font-size: 14px;
     font-weight: 700;
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 24px rgba(124,58,237,.4);
+    box-shadow: 0 4px 24px rgba(245,158,11,.25);
     transition: opacity .2s, transform .15s;
   }
   .vc-ring-btn-join:hover { opacity: .9; transform: translateY(-2px); }
@@ -517,7 +517,7 @@
   }
   .vc-progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #7c3aed, #06b6d4);
+    background: linear-gradient(90deg, #f59e0b, #ec4899);
     border-radius: 99px;
     transition: width .5s linear;
   }
@@ -533,16 +533,16 @@
     transition: border-color .2s, background .2s, box-shadow .2s;
   }
   .vc-input:focus {
-    border-color: rgba(124,58,237,.5);
-    background: rgba(124,58,237,.06);
-    box-shadow: 0 0 0 3px rgba(124,58,237,.1);
+    border-color: rgba(245,158,11,.5);
+    background: rgba(245,158,11,.06);
+    box-shadow: 0 0 0 3px rgba(245,158,11,.08);
   }
   .vc-input::placeholder { color: rgba(255,255,255,.2); }
 
   /* ── Chat bubbles ────────────────────────────────────────── */
   .vc-bubble-me {
-    background: rgba(124,58,237,.22);
-    border: 1px solid rgba(245,158,11,.3);
+    background: rgba(245,158,11,.12);
+    border: 1px solid rgba(245,158,11,.15);
     color: #e2d9fc;
     border-radius: 16px 16px 4px 16px;
     padding: 8px 12px;
@@ -857,9 +857,9 @@
         'width:340px', 'max-width:calc(100vw - 32px)',
         'background:rgba(8,8,16,0.65)',
         'backdrop-filter:blur(24px)', '-webkit-backdrop-filter:blur(24px)',
-        'border:1px solid rgba(124,58,237,.2)',
+        'border:1px solid rgba(255,255,255,.08)',
         'border-radius:24px',
-        'box-shadow:0 24px 80px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.04) inset,0 0 60px rgba(124,58,237,.08)',
+        'box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.05) inset,',
         'overflow:hidden', 'z-index:9998',
         'transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .25s,visibility .25s',
         'transform:scale(.92) translateY(10px)', 'opacity:0', 'pointer-events:none','visibility:hidden'
@@ -874,7 +874,7 @@
         'padding:10px 14px',
         'background:rgba(8,8,16,.92)',
         'backdrop-filter:blur(24px)', '-webkit-backdrop-filter:blur(24px)',
-        'border:1px solid rgba(124,58,237,.15)',
+        'border:1px solid rgba(245,158,11,.15)',
         'border-radius:18px',
         'box-shadow:0 8px 40px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.03) inset',
         'opacity:0', 'pointer-events:none', 'visibility:hidden',
@@ -883,14 +883,14 @@
       ].join(';');
       this._bar.innerHTML = `
         <div style="display:flex;align-items:center;gap:5px;flex-shrink:0" id="vc-bar-eq">
-          <div style="width:3px;background:linear-gradient(to top,#7c3aed,#06b6d4);border-radius:99px;animation:vc-eq .6s ease-in-out infinite" id="vc-bar-eq1"></div>
-          <div style="width:3px;background:linear-gradient(to top,#7c3aed,#06b6d4);border-radius:99px;animation:vc-eq .6s ease-in-out infinite .15s" id="vc-bar-eq2"></div>
-          <div style="width:3px;background:linear-gradient(to top,#7c3aed,#06b6d4);border-radius:99px;animation:vc-eq .6s ease-in-out infinite .3s" id="vc-bar-eq3"></div>
+          <div style="width:3px;background:linear-gradient(to top,#f59e0b,#ec4899);border-radius:99px;animation:vc-eq .6s ease-in-out infinite" id="vc-bar-eq1"></div>
+          <div style="width:3px;background:linear-gradient(to top,#f59e0b,#ec4899);border-radius:99px;animation:vc-eq .6s ease-in-out infinite .15s" id="vc-bar-eq2"></div>
+          <div style="width:3px;background:linear-gradient(to top,#f59e0b,#ec4899);border-radius:99px;animation:vc-eq .6s ease-in-out infinite .3s" id="vc-bar-eq3"></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:2px;min-width:60px">
           <div style="display:flex;align-items:center;gap:5px">
             <span id="vc-bar-title" style="font-size:9px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.14em;line-height:1">${_t('bar_conn').split(' · ')[0]}</span>
-            <div id="vc-bar-music-icon" class="hidden" style="color:#06b6d4">
+            <div id="vc-bar-music-icon" class="hidden" style="color:#ec4899">
               <svg style="width:10px;height:10px;animation:vc-pulse-slow 1.5s infinite" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
             </div>
             <div id="vc-bar-chat-icon" class="hidden" style="position:relative;color:#f87171">
@@ -901,9 +901,9 @@
           <span id="vc-bar-sub" style="font-size:10px;color:rgba(255,255,255,.3);font-weight:500;line-height:1">${_t('bar_conn').split(' · ')[1]}</span>
         </div>
         <div style="width:1px;height:20px;background:rgba(255,255,255,.06);flex-shrink:0"></div>
-        <span id="vc-bar-timer" style="font-family:'SF Mono',Monaco,monospace;font-size:13px;font-weight:600;color:#06b6d4;letter-spacing:.04em;tab-size:4">00:00</span>
+        <span id="vc-bar-timer" style="font-family:'SF Mono',Monaco,monospace;font-size:13px;font-weight:600;color:#ec4899;letter-spacing:.04em;tab-size:4">00:00</span>
         <div style="width:1px;height:20px;background:rgba(255,255,255,.06);flex-shrink:0"></div>
-        <button id="vc-bar-mute" title="Mic" style="width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;color:rgba(255,255,255,.45);cursor:pointer;transition:background .15s,color .15s;flex-shrink:0" onmouseenter="this.style.background='rgba(124,58,237,.15)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='rgba(255,255,255,.45)'">
+        <button id="vc-bar-mute" title="Mic" style="width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;color:rgba(255,255,255,.45);cursor:pointer;transition:background .15s,color .15s;flex-shrink:0" onmouseenter="this.style.background='rgba(255,255,255,.08)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='rgba(255,255,255,.45)'">
           <span style="width:14px;height:14px;display:flex;align-items:center;justify-content:center">${ICONS.mic}</span>
         </button>
         <button id="vc-bar-leave" title="Salir" style="width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#f87171;cursor:pointer;transition:background .15s;flex-shrink:0" onmouseenter="this.style.background='rgba(239,68,68,.22)'" onmouseleave="this.style.background='rgba(239,68,68,.1)'">
@@ -1024,9 +1024,9 @@
     _tplLogin(err = '') {
       const user = window.yaireCurrentUser;
       const _hdr = (sub = '', subColor = 'rgba(255,255,255,.35)') => `
-        <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(245,158,11,.2)">
+        <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06)">
           <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(245,158,11,.3),rgba(6,182,212,.2));display:flex;align-items:center;justify-content:center;color:#f59e0b;box-shadow:0 0 12px rgba(124,58,237,.2)">
+            <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(236,72,153,.1));display:flex;align-items:center;justify-content:center;color:#f59e0b;box-shadow:0 0 12px rgba(245,158,11,.1)">
               <span style="width:16px;height:16px;display:flex">${ICONS.sound}</span>
             </div>
             <div>
@@ -1040,12 +1040,12 @@
       if (!user) {
         return `
           <div style="position:relative;overflow:hidden;display:flex;flex-direction:column">
-            <div class="vc-orb-v" style="top:-80px;right:-60px;width:220px;height:220px;background:rgba(245,158,11,.2)"></div>
-            <div class="vc-orb-c" style="bottom:-60px;left:-40px;width:180px;height:180px;background:rgba(6,182,212,.07)"></div>
+            <div class="vc-orb-v" style="top:-80px;right:-60px;width:220px;height:220px;background:rgba(245,158,11,.1)"></div>
+            <div class="vc-orb-c" style="bottom:-60px;left:-40px;width:180px;height:180px;background:rgba(236,72,153,.07)"></div>
             ${_hdr(_t('vc_sub'))}
             <div style="position:relative;z-index:10;padding:32px 24px;display:flex;flex-direction:column;align-items:center;text-align:center">
               <div style="position:relative;margin-bottom:20px">
-                <div style="width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(6,182,212,.15));border:1px solid rgba(245,158,11,.3);display:flex;align-items:center;justify-content:center;color:#f59e0b;box-shadow:0 8px 32px rgba(124,58,237,.2)">
+                <div style="width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,rgba(245,158,11,.2),rgba(236,72,153,.15));border:1px solid rgba(245,158,11,.3);display:flex;align-items:center;justify-content:center;color:#f59e0b;box-shadow:0 8px 32px rgba(245,158,11,.12)">
                   <svg style="width:28px;height:28px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                 </div>
               </div>
@@ -1061,18 +1061,18 @@
 
       return `
         <div style="position:relative;overflow:hidden;display:flex;flex-direction:column">
-          <div class="vc-orb-v" style="top:-80px;right:-60px;width:220px;height:220px;background:rgba(124,58,237,.13)"></div>
-          <div class="vc-orb-c" style="bottom:20px;left:-50px;width:200px;height:200px;background:rgba(6,182,212,.06)"></div>
+          <div class="vc-orb-v" style="top:-80px;right:-60px;width:220px;height:220px;background:rgba(245,158,11,.13)"></div>
+          <div class="vc-orb-c" style="bottom:20px;left:-50px;width:200px;height:200px;background:rgba(236,72,153,.06)"></div>
           ${_hdr(_t('vc_sub'))}
           <div style="position:relative;z-index:10;padding:28px 22px;display:flex;flex-direction:column;align-items:center;gap:20px">
             <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
               <div style="position:relative">
-                <div style="position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(124,58,237,.5);animation:vc-ring-wave 2.8s ease-out infinite"></div>
-                <div style="position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(6,182,212,.35);animation:vc-ring-wave2 2.8s ease-out infinite .6s"></div>
-                <img src="${user.photoURL}" style="width:68px;height:68px;border-radius:50%;object-fit:cover;border:2.5px solid rgba(124,58,237,.6);box-shadow:0 0 0 4px rgba(124,58,237,.1),0 8px 32px rgba(0,0,0,.5);position:relative;z-index:1" draggable="false" />
+                <div style="position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(245,158,11,.3);animation:vc-ring-wave 2.8s ease-out infinite"></div>
+                <div style="position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(236,72,153,.2);animation:vc-ring-wave2 2.8s ease-out infinite .6s"></div>
+                <img src="${user.photoURL}" style="width:68px;height:68px;border-radius:50%;object-fit:cover;border:2.5px solid rgba(245,158,11,.35);box-shadow:0 0 0 4px rgba(245,158,11,.08),0 8px 32px rgba(0,0,0,.5);position:relative;z-index:1" draggable="false" />
               </div>
               <div style="text-align:center">
-                <div style="font-size:9.5px;font-weight:700;color:rgba(167,139,250,.8);text-transform:uppercase;letter-spacing:.18em;margin-bottom:5px">${_t('vc_session_as')}</div>
+                <div style="font-size:9.5px;font-weight:700;color:rgba(245,158,11,.7);text-transform:uppercase;letter-spacing:.18em;margin-bottom:5px">${_t('vc_session_as')}</div>
                 <div style="font-size:17px;font-weight:800;color:#fff;letter-spacing:-.02em">${user.displayName}</div>
               </div>
             </div>
@@ -1095,9 +1095,9 @@
       return `
         <div style="position:relative;overflow:hidden;display:flex;flex-direction:column">
           <div class="vc-orb-v" style="top:-60px;right:-40px;width:180px;height:180px;background:rgba(245,158,11,.1)"></div>
-          <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(245,158,11,.2)">
+          <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06)">
             <div style="display:flex;align-items:center;gap:10px">
-              <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(245,158,11,.3),rgba(6,182,212,.2));display:flex;align-items:center;justify-content:center;color:#f59e0b">
+              <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(236,72,153,.1));display:flex;align-items:center;justify-content:center;color:#f59e0b">
                 <span style="width:16px;height:16px;display:flex">${ICONS.sound}</span>
               </div>
               <div>
@@ -1109,8 +1109,8 @@
           </div>
           <div style="position:relative;z-index:10;padding:48px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px">
             <div style="position:relative" id="vc-loading-spinner">
-              <div style="position:absolute;inset:-8px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.25),transparent 70%);animation:vc-pulse-slow 2s ease-in-out infinite"></div>
-              <div style="width:44px;height:44px;border-radius:50%;border:3px solid rgba(255,255,255,.06);border-top-color:#7c3aed;border-right-color:#06b6d4;animation:vc-spin 1s linear infinite;position:relative;z-index:1"></div>
+              <div style="position:absolute;inset:-8px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.15),transparent 70%);animation:vc-pulse-slow 2s ease-in-out infinite"></div>
+              <div style="width:44px;height:44px;border-radius:50%;border:3px solid rgba(255,255,255,.06);border-top-color:#f59e0b;border-right-color:#ec4899;animation:vc-spin 1s linear infinite;position:relative;z-index:1"></div>
             </div>
             <div style="color:rgba(255,255,255,.4);font-size:12px;font-weight:500;letter-spacing:.04em;animation:vc-pulse-slow 2s ease-in-out infinite">${_t('st_estab')}</div>
           </div>
@@ -1155,9 +1155,9 @@
         const m = Math.floor(s.duration/60), sec = s.duration%60;
         return `<div class="vc-hist-row"><span style="color:rgba(255,255,255,.7);font-weight:600">${s.name}</span><span style="color:rgba(255,255,255,.3);font-size:10px">${label} &middot; ${m}m${sec}s</span></div>`;
       }).join('');
-      const moreBtn = h.length > 3 ? `<button id="vc-btn-ver-mas" style="width:100%;margin-top:8px;padding:7px;border-radius:9px;background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.15);color:rgba(167,139,250,.8);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;transition:background .15s" onmouseenter="this.style.background='rgba(124,58,237,.15)'" onmouseleave="this.style.background='rgba(124,58,237,.08)'">${_t('vc_hist_more')}</button>` : '';
-      return `<div style="padding:12px 16px 16px;border-top:1px solid rgba(124,58,237,.1);background:rgba(124,58,237,.04)">
-        <div style="font-size:9px;font-weight:700;color:rgba(167,139,250,.5);text-transform:uppercase;letter-spacing:.15em;margin-bottom:6px">${_t('hist_title')}</div>
+      const moreBtn = h.length > 3 ? `<button id="vc-btn-ver-mas" style="width:100%;margin-top:8px;padding:7px;border-radius:9px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:rgba(245,158,11,.8);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.08)'" onmouseleave="this.style.background='rgba(245,158,11,.08)'">${_t('vc_hist_more')}</button>` : '';
+      return `<div style="padding:12px 16px 16px;border-top:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.02)">
+        <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.15em;margin-bottom:6px">${_t('hist_title')}</div>
         ${rows}${moreBtn}
       </div>`;
     }
@@ -1176,7 +1176,7 @@
               <div style="color:#fff;font-weight:700;font-size:14px;margin-bottom:4px">${s.name}</div>
               <div style="color:rgba(255,255,255,.4);font-size:11px;text-transform:capitalize">${label}</div>
             </div>
-            <div style="color:#06b6d4;font-weight:600;font-size:12px;background:rgba(6,182,212,.1);padding:6px 12px;border-radius:8px;border:1px solid rgba(6,182,212,.2);font-family:'SF Mono',Monaco,monospace">
+            <div style="color:#ec4899;font-weight:600;font-size:12px;background:rgba(236,72,153,.1);padding:6px 12px;border-radius:8px;border:1px solid rgba(236,72,153,.2);font-family:'SF Mono',Monaco,monospace">
               ${m}m ${sec}s
             </div>
           </div>
@@ -1188,11 +1188,11 @@
       modal.style.cssText = 'position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;transition:opacity .3s ease-out';
       modal.innerHTML = `
         <div style="position:absolute;inset:0;background:rgba(8,8,16,.85);backdrop-filter:blur(8px)" id="vc-det-bg"></div>
-        <div style="position:relative;width:100%;max-width:512px;max-height:80vh;display:flex;flex-direction:column;background:rgba(12,10,26,.95);backdrop-filter:blur(24px);border:1px solid rgba(124,58,237,.2);border-radius:24px;box-shadow:0 24px 64px rgba(0,0,0,.6),inset 0 1px 1px rgba(255,255,255,.05);overflow:hidden;transform:scale(.95);transition:transform .3s cubic-bezier(.34,1.4,.64,1)" id="vc-det-card">
+        <div style="position:relative;width:100%;max-width:512px;max-height:80vh;display:flex;flex-direction:column;background:rgba(12,10,26,.95);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.08);border-radius:24px;box-shadow:0 24px 64px rgba(0,0,0,.6),inset 0 1px 1px rgba(255,255,255,.05);overflow:hidden;transform:scale(.95);transition:transform .3s cubic-bezier(.34,1.4,.64,1)" id="vc-det-card">
           <div class="vc-orb-v" style="top:-80px;right:-80px;width:240px;height:240px;background:rgba(245,158,11,.1)"></div>
-          <div class="vc-orb-c" style="bottom:-60px;left:-60px;width:200px;height:200px;background:rgba(6,182,212,.08)"></div>
+          <div class="vc-orb-c" style="bottom:-60px;left:-60px;width:200px;height:200px;background:rgba(236,72,153,.08)"></div>
           
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:24px;border-bottom:1px solid rgba(124,58,237,.15);position:relative;z-index:10;background:rgba(255,255,255,.02)">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:24px;border-bottom:1px solid rgba(255,255,255,.06);position:relative;z-index:10;background:rgba(255,255,255,.02)">
             <h2 style="color:#fff;font-weight:800;font-size:20px;letter-spacing:-.02em;margin:0">${_t('vc_hist_full')}</h2>
             <button style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);border:none;cursor:pointer;transition:background .15s,color .15s;font-size:16px" onmouseenter="this.style.background='rgba(255,255,255,.1)';this.style.color='#fff'" onmouseleave="this.style.background='rgba(255,255,255,.05)';this.style.color='rgba(255,255,255,.5)'" id="vc-det-close">&times;</button>
           </div>
@@ -1231,15 +1231,15 @@
           : initials;
 
         const micIcon = isMuted ? `<span class="vc-mico" style="color:#ef4444;width:16px;height:16px;display:flex">${ICONS.micOff}</span>` : '';
-        const bellIcon = isDnd ? `<span class="vc-dico" style="color:#a855f7;width:16px;height:16px;display:flex" title="DND">${ICONS.dnd}</span>` : '';
+        const bellIcon = isDnd ? `<span class="vc-dico" style="color:#f59e0b;width:16px;height:16px;display:flex" title="DND">${ICONS.dnd}</span>` : '';
 
         return `
           <div style="display:flex;align-items:center;gap:14px;padding:8px;border-radius:12px;transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.04)'" onmouseleave="this.style.background='transparent'" class="vc-user group" id="vc-u-${u.id}">
-            <div style="width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;transition:all .2s;position:relative;${isMe ? 'background:rgba(245,158,11,.1);color:#f59e0b;box-shadow:inset 0 0 0 1px rgba(245,158,11,.3)' : 'background:rgba(255,255,255,.03);color:rgba(255,255,255,.5);box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)'}" class="vc-av" id="vc-av-${u.id}">
+            <div style="width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;transition:all .2s;position:relative;${isMe ? 'background:rgba(245,158,11,.08);color:#f59e0b;box-shadow:inset 0 0 0 1px rgba(245,158,11,.2)' : 'background:rgba(255,255,255,.03);color:rgba(255,255,255,.5);box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)'}" class="vc-av" id="vc-av-${u.id}">
               ${avatarHtml}
             </div>
             <div style="flex:1;min-width:0">
-              <div style="color:rgba(255,255,255,.9);font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.01em">${u.displayName} ${u.oracleHandle ? `<span style="color:rgba(6,182,212,.7);font-size:10px;margin-left:6px;font-weight:500;letter-spacing:.02em">@${u.oracleHandle}</span>` : ''} ${isMe ? `<span style="color:rgba(255,255,255,.3);font-size:10px;margin-left:6px;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,.04);font-weight:500;border:1px solid rgba(255,255,255,.05)">${_t('tag_you')}</span>` : ''}</div>
+              <div style="color:rgba(255,255,255,.9);font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.01em">${u.displayName} ${u.oracleHandle ? `<span style="color:rgba(236,72,153,.7);font-size:10px;margin-left:6px;font-weight:500;letter-spacing:.02em">@${u.oracleHandle}</span>` : ''} ${isMe ? `<span style="color:rgba(255,255,255,.3);font-size:10px;margin-left:6px;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,.04);font-weight:500;border:1px solid rgba(255,255,255,.05)">${_t('tag_you')}</span>` : ''}</div>
             </div>
             <div style="display:flex;align-items:center;gap:8px;padding-right:8px" class="vc-icons-container">
                ${bellIcon}${micIcon}
@@ -1253,20 +1253,20 @@
       const isMusic = this._activeTab === 'music';
 
       const eqInd = this._musicPlaying ? `<span class="vc-music-ind" style="display:flex;align-items:flex-end;gap:2px;height:10px;margin-left:4px">
-             <span style="width:2px;background:#06b6d4;border-radius:99px;animation:vc-eq .8s ease-in-out infinite"></span>
-             <span style="width:2px;background:#06b6d4;border-radius:99px;animation:vc-eq .8s ease-in-out infinite .2s"></span>
-             <span style="width:2px;background:#06b6d4;border-radius:99px;animation:vc-eq .8s ease-in-out infinite .4s"></span>
+             <span style="width:2px;background:#ec4899;border-radius:99px;animation:vc-eq .8s ease-in-out infinite"></span>
+             <span style="width:2px;background:#ec4899;border-radius:99px;animation:vc-eq .8s ease-in-out infinite .2s"></span>
+             <span style="width:2px;background:#ec4899;border-radius:99px;animation:vc-eq .8s ease-in-out infinite .4s"></span>
            </span>` : '';
 
       return `
         <!-- Ambient Orbs -->
-        <div class="vc-orb-v" style="top:-80px;right:-80px;width:250px;height:250px;background:rgba(124,58,237,.15)"></div>
-        <div class="vc-orb-c" style="bottom:-40px;left:-40px;width:200px;height:200px;background:rgba(6,182,212,.1)"></div>
+        <div class="vc-orb-v" style="top:-80px;right:-80px;width:250px;height:250px;background:rgba(245,158,11,.08)"></div>
+        <div class="vc-orb-c" style="bottom:-40px;left:-40px;width:200px;height:200px;background:rgba(236,72,153,.06)"></div>
 
         <!-- Header -->
-        <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid rgba(245,158,11,.2);background:rgba(255,255,255,.01);backdrop-filter:blur(8px)">
+        <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);backdrop-filter:blur(8px)">
           <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,rgba(245,158,11,.3),rgba(6,182,212,.2));display:flex;align-items:center;justify-content:center;color:#f59e0b">
+            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(236,72,153,.1));display:flex;align-items:center;justify-content:center;color:#f59e0b">
               <span style="width:18px;height:18px;display:flex">${ICONS.sound}</span>
             </div>
             <div>
@@ -1275,12 +1275,12 @@
                 <span style="width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:vc-blink 2.5s ease-in-out infinite"></span>
                 <span style="color:rgba(255,255,255,.4);font-size:10px;font-weight:500">${this.users.length}/4</span>
                 <span style="color:rgba(255,255,255,.2);font-size:10px">&middot;</span>
-                <span id="vc-timer" style="font-family:'SF Mono',Monaco,monospace;font-size:10px;color:#06b6d4;font-weight:600;letter-spacing:.04em" class="vc-timer">00:00</span>
+                <span id="vc-timer" style="font-family:'SF Mono',Monaco,monospace;font-size:10px;color:#ec4899;font-weight:600;letter-spacing:.04em" class="vc-timer">00:00</span>
               </div>
             </div>
           </div>
           <div style="display:flex;align-items:center;gap:6px">
-            <button id="vc-btn-oracle-redirect" style="padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.6);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background .15s,color .15s" onmouseenter="this.style.background='rgba(124,58,237,.15)';this.style.color='#fff';this.style.borderColor='rgba(245,158,11,.3)'" onmouseleave="this.style.background='rgba(255,255,255,.04)';this.style.color='rgba(255,255,255,.6)';this.style.borderColor='rgba(255,255,255,.07)'" title="Seguir en Oracle">
+            <button id="vc-btn-oracle-redirect" style="padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.6);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background .15s,color .15s" onmouseenter="this.style.background='rgba(255,255,255,.08)';this.style.color='#fff';this.style.borderColor='rgba(245,158,11,.25)'" onmouseleave="this.style.background='rgba(255,255,255,.04)';this.style.color='rgba(255,255,255,.6)';this.style.borderColor='rgba(255,255,255,.07)'" title="Seguir en Oracle">
               <svg style="width:11px;height:11px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
               <span>Oracle</span>
             </button>
@@ -1338,7 +1338,7 @@
             <span style="width:16px;height:16px;display:flex">${this.muted ? ICONS.micOff : ICONS.mic}</span>
             ${this.muted ? _t('btn_muted') : _t('btn_mic')}
           </button>
-          <button id="vc-dnd" style="flex:1;padding:12px;border-radius:12px;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s;border:1px solid ${this.dnd ? 'rgba(168,85,247,.2)' : 'rgba(255,255,255,.05)'};background:${this.dnd ? 'rgba(168,85,247,.1)' : 'rgba(255,255,255,.03)'};color:${this.dnd ? '#a855f7' : 'rgba(255,255,255,.7)'};cursor:pointer" onmouseenter="if(!${this.dnd}) { this.style.background='rgba(255,255,255,.06)'; this.style.color='#fff'; }">
+          <button id="vc-dnd" style="flex:1;padding:12px;border-radius:12px;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s;border:1px solid ${this.dnd ? 'rgba(245,158,11,.2)' : 'rgba(255,255,255,.05)'};background:${this.dnd ? 'rgba(245,158,11,.1)' : 'rgba(255,255,255,.03)'};color:${this.dnd ? '#f59e0b' : 'rgba(255,255,255,.7)'};cursor:pointer" onmouseenter="if(!${this.dnd}) { this.style.background='rgba(255,255,255,.06)'; this.style.color='#fff'; }">
             <span style="width:16px;height:16px;display:flex">${ICONS.bell}</span> DND
           </button>
           <button id="vc-leave" style="width:48px;flex-shrink:0;border-radius:12px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.15);color:#ef4444;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s" onmouseenter="this.style.background='rgba(239,68,68,.2)'" onmouseleave="this.style.background='rgba(239,68,68,.1)'" title="Salir">
@@ -1352,7 +1352,7 @@
       const sub = document.querySelector('.vc-sub');
       if (sub && sub.textContent.includes('/4')) {
         const timerTxt = document.getElementById('vc-timer')?.textContent || '00:00';
-        sub.innerHTML = `<span style="width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:vc-blink 2.5s ease-in-out infinite"></span><span style="color:rgba(255,255,255,.4);font-size:10px;font-weight:500">${this.users.length}/4</span><span style="color:rgba(255,255,255,.2);font-size:10px">&middot;</span><span id="vc-timer" style="font-family:'SF Mono',Monaco,monospace;font-size:10px;color:#06b6d4;font-weight:600;letter-spacing:.04em" class="vc-timer">${timerTxt}</span>`;
+        sub.innerHTML = `<span style="width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:vc-blink 2.5s ease-in-out infinite"></span><span style="color:rgba(255,255,255,.4);font-size:10px;font-weight:500">${this.users.length}/4</span><span style="color:rgba(255,255,255,.2);font-size:10px">&middot;</span><span id="vc-timer" style="font-family:'SF Mono',Monaco,monospace;font-size:10px;color:#ec4899;font-weight:600;letter-spacing:.04em" class="vc-timer">${timerTxt}</span>`;
       }
       
       const container = document.querySelector('.vc-sect');
@@ -1396,10 +1396,10 @@
           
           const avatarHtml = (u.photoURL || (isMe && window.yaireCurrentUser?.photoURL)) 
             ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover" draggable="false" />` 
-            : `<span style="font-size:12px;font-weight:800;color:${isMe?'#a78bfa':'rgba(255,255,255,.6)'}">${u.displayName.slice(0,2).toUpperCase()}</span>`;
+            : `<span style="font-size:12px;font-weight:800;color:${isMe?'#f59e0b':'rgba(255,255,255,.6)'}">${u.displayName.slice(0,2).toUpperCase()}</span>`;
 
           const avatarBg = isMe
-            ? 'background:rgba(124,58,237,.15);border:1.5px solid rgba(124,58,237,.4);box-shadow:0 0 12px rgba(124,58,237,.15)'
+            ? 'background:rgba(245,158,11,.1);border:1.5px solid rgba(245,158,11,.3);box-shadow:0 0 12px rgba(245,158,11,.1)'
             : 'background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.07)';
 
           node.innerHTML = `
@@ -1409,7 +1409,7 @@
             <div style="flex:1;min-width:0">
               <div style="color:rgba(255,255,255,.9);font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.01em">
                 ${u.displayName}
-                ${u.oracleHandle ? `<span style="color:rgba(167,139,250,.7);font-size:10px;margin-left:5px;font-weight:500">@${u.oracleHandle}</span>` : ''}
+                ${u.oracleHandle ? `<span style="color:rgba(245,158,11,.7);font-size:10px;margin-left:5px;font-weight:500">@${u.oracleHandle}</span>` : ''}
                 ${isMe ? `<span style="color:rgba(255,255,255,.25);font-size:9px;margin-left:5px;padding:1px 5px;border-radius:4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);font-weight:500">${_t('tag_you')}</span>` : ''}
               </div>
             </div>
@@ -1436,16 +1436,16 @@
               const isLocallyMuted = u.localMuted;
               const menu = document.createElement('div');
               menu.id = 'vc-user-ctx-menu';
-              menu.style.cssText = 'position:fixed;z-index:9999;background:rgba(12,10,26,.95);border:1px solid rgba(124,58,237,.2);box-shadow:0 16px 48px rgba(0,0,0,.8);border-radius:14px;padding:6px;display:flex;flex-direction:column;min-width:190px;backdrop-filter:blur(20px)';
+              menu.style.cssText = 'position:fixed;z-index:9999;background:rgba(12,10,26,.95);border:1px solid rgba(255,255,255,.1);box-shadow:0 16px 48px rgba(0,0,0,.8);border-radius:14px;padding:6px;display:flex;flex-direction:column;min-width:190px;backdrop-filter:blur(20px)';
               
               menu.style.left = e.clientX + 'px';
               menu.style.top = e.clientY + 'px';
               
               menu.innerHTML = `
                 <div style="padding:8px 12px 8px;border-bottom:1px solid rgba(245,158,11,.2);margin-bottom:4px">
-                  <div style="font-size:10px;text-transform:uppercase;font-weight:700;color:rgba(167,139,250,.5);letter-spacing:.12em">${u.displayName}</div>
+                  <div style="font-size:10px;text-transform:uppercase;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:.12em">${u.displayName}</div>
                 </div>
-                <button style="width:100%;text-align:left;padding:9px 12px;border-radius:9px;font-size:13px;color:rgba(255,255,255,.85);background:transparent;border:none;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .15s" onmouseenter="this.style.background='rgba(124,58,237,.15)'" onmouseleave="this.style.background='transparent'">
+                <button style="width:100%;text-align:left;padding:9px 12px;border-radius:9px;font-size:13px;color:rgba(255,255,255,.85);background:transparent;border:none;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.08)'" onmouseleave="this.style.background='transparent'">
                   <span style="width:15px;height:15px;display:flex;align-items:center;justify-content:center;color:${isLocallyMuted ? '#4ade80' : '#f87171'}">${isLocallyMuted ? ICONS.mic : ICONS.micOff}</span>
                   ${isLocallyMuted ? 'Desmutear localmente' : 'Silenciar localmente'}
                 </button>
@@ -1496,8 +1496,8 @@
       
       if (u.dnd) {
         if (!dico) {
-          if (mico) mico.insertAdjacentHTML('beforebegin', `<span class="vc-dico" style="color:#a855f7;width:16px;height:16px;display:flex" title="${_t('btn_dnd')}">${ICONS.dnd}</span>`);
-          else iconContainer.insertAdjacentHTML('beforeend', `<span class="vc-dico" style="color:#a855f7;width:16px;height:16px;display:flex" title="${_t('btn_dnd')}">${ICONS.dnd}</span>`);
+          if (mico) mico.insertAdjacentHTML('beforebegin', `<span class="vc-dico" style="color:#f59e0b;width:16px;height:16px;display:flex" title="${_t('btn_dnd')}">${ICONS.dnd}</span>`);
+          else iconContainer.insertAdjacentHTML('beforeend', `<span class="vc-dico" style="color:#f59e0b;width:16px;height:16px;display:flex" title="${_t('btn_dnd')}">${ICONS.dnd}</span>`);
         }
       } else if (dico) {
         dico.remove();
@@ -1525,7 +1525,7 @@
               if (data.users === 0) {
                 cnt.innerHTML = `<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.2);margin-right:5px"></span><span style="color:rgba(255,255,255,.3)">${_t('vc_nobody')}</span>`;
               } else {
-                cnt.innerHTML = `<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:#06b6d4;margin-right:5px;animation:vc-pulse-slow 1.5s infinite;box-shadow:0 0 6px rgba(6,182,212,.6)"></span><span style="color:rgba(6,182,212,.9)">${data.users} ${data.users === 1 ? _t('vc_person') : _t('vc_persons')}</span>`;
+                cnt.innerHTML = `<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:#ec4899;margin-right:5px;animation:vc-pulse-slow 1.5s infinite;box-shadow:0 0 6px rgba(236,72,153,.6)"></span><span style="color:rgba(236,72,153,.9)">${data.users} ${data.users === 1 ? _t('vc_person') : _t('vc_persons')}</span>`;
               }
               cnt.style.opacity = '1';
             }
@@ -2175,7 +2175,7 @@
           html += `
           <div style="display:flex;flex-direction:column;margin-bottom:10px;align-items:${isMe ? 'flex-end' : 'flex-start'}" class="vc-chat-msg" data-from="${m.from}">
             <div style="display:flex;align-items:baseline;gap:5px;margin-bottom:4px;padding:0 2px">
-              <span style="font-size:10px;font-weight:700;color:${isMe ? '#a78bfa' : 'rgba(255,255,255,.5)'}">${m.name}</span>
+              <span style="font-size:10px;font-weight:700;color:${isMe ? '#f59e0b' : 'rgba(255,255,255,.5)'}">${m.name}</span>
               <span style="font-size:9px;color:rgba(255,255,255,.25)">${time}</span>
             </div>
             <div style="display:flex;flex-direction:column;gap:4px;width:100%;align-items:${isMe ? 'flex-end' : 'flex-start'}" class="vc-chat-bubbles">
@@ -2265,7 +2265,7 @@
           msgsEl.insertAdjacentHTML('beforeend', `
             <div style="display:flex;flex-direction:column;margin-bottom:10px;align-items:${isMe ? 'flex-end' : 'flex-start'}" class="vc-chat-msg" data-from="${from}">
               <div style="display:flex;align-items:baseline;gap:5px;margin-bottom:4px;padding:0 2px">
-                <span style="font-size:10px;font-weight:700;color:${isMe ? '#a78bfa' : 'rgba(255,255,255,.5)'}">${name}</span>
+                <span style="font-size:10px;font-weight:700;color:${isMe ? '#f59e0b' : 'rgba(255,255,255,.5)'}">${name}</span>
                 <span style="font-size:9px;color:rgba(255,255,255,.25)">${time}</span>
               </div>
               <div style="display:flex;flex-direction:column;gap:4px;width:100%;align-items:${isMe ? 'flex-end' : 'flex-start'}" class="vc-chat-bubbles">
@@ -2574,16 +2574,16 @@
 
         const eqBars = isPlaying
           ? `<span style="display:flex;align-items:flex-end;gap:2px;height:12px">
-               <span style="width:2.5px;background:linear-gradient(to top,#7c3aed,#06b6d4);border-radius:99px;animation:vc-eq .8s ease-in-out infinite"></span>
-               <span style="width:2.5px;background:linear-gradient(to top,#7c3aed,#06b6d4);border-radius:99px;animation:vc-eq .8s ease-in-out infinite .2s"></span>
-               <span style="width:2.5px;background:linear-gradient(to top,#7c3aed,#06b6d4);border-radius:99px;animation:vc-eq .8s ease-in-out infinite .4s"></span>
+               <span style="width:2.5px;background:linear-gradient(to top,#f59e0b,#ec4899);border-radius:99px;animation:vc-eq .8s ease-in-out infinite"></span>
+               <span style="width:2.5px;background:linear-gradient(to top,#f59e0b,#ec4899);border-radius:99px;animation:vc-eq .8s ease-in-out infinite .2s"></span>
+               <span style="width:2.5px;background:linear-gradient(to top,#f59e0b,#ec4899);border-radius:99px;animation:vc-eq .8s ease-in-out infinite .4s"></span>
              </span>`
           : `<span style="width:16px;height:16px;color:rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center">${ICONS.sound || '♪'}</span>`;
         nowPlaying = `
-          <div style="background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.2);border-radius:14px;padding:12px;margin-bottom:10px;position:relative;overflow:hidden">
+          <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:14px;padding:12px;margin-bottom:10px;position:relative;overflow:hidden">
             <div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(245,158,11,.1);filter:blur(20px)"></div>
             <div style="display:flex;align-items:center;gap:10px;position:relative;z-index:1;margin-bottom:10px">
-              <div style="width:36px;height:36px;border-radius:10px;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(124,58,237,.2)">
+              <div style="width:36px;height:36px;border-radius:10px;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(245,158,11,.2)">
                 ${eqBars}
               </div>
               <div style="flex:1;min-width:0">
@@ -2597,7 +2597,7 @@
                 }
                 <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:1px">${track.addedByName ? `${_t('vc_music_by')} ${track.addedByName}` : ''}</div>
               </div>
-              <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px;background:rgba(124,58,237,.2);color:#f59e0b;flex-shrink:0">${(track.source || track.type) === 'youtube' ? 'YT' : 'SP'}</span>
+              <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px;background:rgba(245,158,11,.2);color:#f59e0b;flex-shrink:0">${(track.source || track.type) === 'youtube' ? 'YT' : 'SP'}</span>
             </div>
             
             ${track.type === 'youtube' ? `
@@ -2616,34 +2616,34 @@
             
             <div style="display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1">
               <div style="display:flex;align-items:center;gap:8px">
-                <button id="vc-music-playpause" style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#06b6d4);display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;color:#fff;box-shadow:0 4px 16px rgba(124,58,237,.4);transition:opacity .15s" onmouseenter="this.style.opacity='.85'" onmouseleave="this.style.opacity='1'">
+                <button id="vc-music-playpause" style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#f59e0b,#ec4899);display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;color:#fff;box-shadow:0 4px 16px rgba(245,158,11,.4);transition:opacity .15s" onmouseenter="this.style.opacity='.85'" onmouseleave="this.style.opacity='1'">
                   <span style="width:14px;height:14px;display:flex;align-items:center;justify-content:center">${isPlaying ? ICONS.pause : ICONS.play}</span>
                 </button>
-                <button id="vc-music-skip" style="width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);cursor:pointer;transition:background .15s" onmouseenter="this.style.background='rgba(124,58,237,.2)'" onmouseleave="this.style.background='rgba(255,255,255,.06)'">
+                <button id="vc-music-skip" style="width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);cursor:pointer;transition:background .15s" onmouseenter="this.style.background='rgba(245,158,11,.2)'" onmouseleave="this.style.background='rgba(255,255,255,.06)'">
                   <span style="width:13px;height:13px;display:flex">${ICONS.skipFwd}</span>
                 </button>
               </div>
               <div style="width:42%;display:flex;align-items:center;gap:6px">
                 <span style="color:rgba(255,255,255,.3);width:13px;height:13px;display:flex">${ICONS.volumeUp}</span>
-                <input type="range" id="vc-music-vol-slider" min="0" max="100" value="${this._musicVolume}" style="width:100%;height:3px;border-radius:99px;appearance:none;cursor:pointer;accent-color:#7c3aed;background:rgba(255,255,255,.08)" />
+                <input type="range" id="vc-music-vol-slider" min="0" max="100" value="${this._musicVolume}" style="width:100%;height:3px;border-radius:99px;appearance:none;cursor:pointer;accent-color:#f59e0b;background:rgba(255,255,255,.08)" />
               </div>
             </div>
           </div>`;
       } else {
-        nowPlaying = `<div style="text-align:center;color:rgba(255,255,255,.2);font-size:12px;padding:14px;margin-bottom:10px;background:rgba(124,58,237,.04);border-radius:12px;border:1px solid rgba(124,58,237,.1)">${_t('vc_music_no_track')}</div>`;
+        nowPlaying = `<div style="text-align:center;color:rgba(255,255,255,.2);font-size:12px;padding:14px;margin-bottom:10px;background:rgba(245,158,11,.04);border-radius:12px;border:1px solid rgba(245,158,11,.1)">${_t('vc_music_no_track')}</div>`;
       }
       
       const queueItems = this._musicQueue.length > 0
         ? this._musicQueue.map((t, i) => {
             const isCur = i === this._musicState.currentIndex;
             return `
-            <div style="display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:10px;transition:background .15s;background:${isCur ? 'rgba(245,158,11,.2)' : 'transparent'};border:1px solid ${isCur ? 'rgba(124,58,237,.25)' : 'transparent'}" onmouseenter="if(!${isCur})this.style.background='rgba(255,255,255,.04)'" onmouseleave="if(!${isCur})this.style.background='transparent'">
-              <span style="width:14px;text-align:center;font-size:10px;font-weight:700;color:${isCur ? '#a78bfa' : 'rgba(255,255,255,.25)'}">${isCur && this._musicPlaying ? '♪' : (i + 1)}</span>
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:10px;transition:background .15s;background:${isCur ? 'rgba(245,158,11,.2)' : 'transparent'};border:1px solid ${isCur ? 'rgba(245,158,11,.25)' : 'transparent'}" onmouseenter="if(!${isCur})this.style.background='rgba(255,255,255,.04)'" onmouseleave="if(!${isCur})this.style.background='transparent'">
+              <span style="width:14px;text-align:center;font-size:10px;font-weight:700;color:${isCur ? '#f59e0b' : 'rgba(255,255,255,.25)'}">${isCur && this._musicPlaying ? '♪' : (i + 1)}</span>
               <div style="flex:1;min-width:0">
-                <div style="font-size:11.5px;font-weight:600;color:${isCur ? '#a78bfa' : '#fff'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(this._cleanMusicTitle(t.title))}</div>
+                <div style="font-size:11.5px;font-weight:600;color:${isCur ? '#f59e0b' : '#fff'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(this._cleanMusicTitle(t.title))}</div>
                 <div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:1px">${t.addedByName || ''}</div>
               </div>
-              <span style="font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;background:${isCur ? 'rgba(124,58,237,.2)' : 'rgba(255,255,255,.06)'};color:${isCur ? '#a78bfa' : 'rgba(255,255,255,.3)'}">${(t.source || t.type) === 'youtube' ? 'YT' : 'SP'}</span>
+              <span style="font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;background:${isCur ? 'rgba(245,158,11,.2)' : 'rgba(255,255,255,.06)'};color:${isCur ? '#f59e0b' : 'rgba(255,255,255,.3)'}">${(t.source || t.type) === 'youtube' ? 'YT' : 'SP'}</span>
               ${!isCur ? `<button class="vc-music-track-rm" data-track-id="${t.id}" style="width:22px;height:22px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;color:rgba(255,255,255,.2);cursor:pointer;border-radius:6px;transition:all .15s" onmouseenter="this.style.background='rgba(239,68,68,.15)';this.style.color='#f87171'" onmouseleave="this.style.background='transparent';this.style.color='rgba(255,255,255,.2)'">
                 <span style="width:11px;height:11px;display:flex">${ICONS.trash}</span>
               </button>` : ''}
@@ -2654,7 +2654,7 @@
       return `
         <div style="padding:12px;flex:1;display:flex;flex-direction:column">
           ${nowPlaying}
-          <div style="font-size:9px;color:rgba(167,139,250,.4);font-weight:700;text-transform:uppercase;letter-spacing:.14em;margin-bottom:6px;padding:0 2px">${_t('vc_music_queue')} ${this._musicQueue.length > 0 ? `(${this._musicQueue.length})` : ''}</div>
+          <div style="font-size:9px;color:rgba(245,158,11,.4);font-weight:700;text-transform:uppercase;letter-spacing:.14em;margin-bottom:6px;padding:0 2px">${_t('vc_music_queue')} ${this._musicQueue.length > 0 ? `(${this._musicQueue.length})` : ''}</div>
           <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:10px" id="vc-music-queue">${queueItems}</div>
           <div style="margin-top:auto;padding-top:8px">
             <div style="color:#f87171;font-size:11px;text-align:center;margin-bottom:5px;min-height:15px" id="vc-music-err"></div>
@@ -2688,9 +2688,9 @@
       if (this._musicPlaying) {
         if (!ind) {
           tab.insertAdjacentHTML('beforeend', `<span class="vc-music-ind" style="display:flex;align-items:flex-end;gap:2px;height:10px;margin-left:4px">
-             <span style="width:2px;background:#06b6d4;border-radius:99px;animation:vc-eq .8s ease-in-out infinite"></span>
-             <span style="width:2px;background:#06b6d4;border-radius:99px;animation:vc-eq .8s ease-in-out infinite .2s"></span>
-             <span style="width:2px;background:#06b6d4;border-radius:99px;animation:vc-eq .8s ease-in-out infinite .4s"></span>
+             <span style="width:2px;background:#ec4899;border-radius:99px;animation:vc-eq .8s ease-in-out infinite"></span>
+             <span style="width:2px;background:#ec4899;border-radius:99px;animation:vc-eq .8s ease-in-out infinite .2s"></span>
+             <span style="width:2px;background:#ec4899;border-radius:99px;animation:vc-eq .8s ease-in-out infinite .4s"></span>
            </span>`);
         }
       } else if (ind) {
@@ -3145,7 +3145,7 @@
       if (eq1) eq1.style.animationPlayState = isAnyoneSpeaking ? 'running' : 'paused';
       if (eq2) eq2.style.animationPlayState = isAnyoneSpeaking ? 'running' : 'paused';
       if (eq3) eq3.style.animationPlayState = isAnyoneSpeaking ? 'running' : 'paused';
-      if (title) title.style.color = isAnyoneSpeaking ? '#06b6d4' : '#a78bfa';
+      if (title) title.style.color = isAnyoneSpeaking ? '#ec4899' : '#f59e0b';
     }
 
     _updateBarMusicState() {
@@ -3179,8 +3179,8 @@
           const h = v * canvas.height;
           // gradient: violet at bottom, cyan at top
           const gradient = ctx.createLinearGradient(0, canvas.height, 0, 0);
-          gradient.addColorStop(0, `rgba(124,58,237,${0.3 + v * 0.7})`);
-          gradient.addColorStop(1, `rgba(6,182,212,${0.2 + v * 0.8})`);
+          gradient.addColorStop(0, `rgba(245,158,11,${0.3 + v * 0.7})`);
+          gradient.addColorStop(1, `rgba(236,72,153,${0.2 + v * 0.8})`);
           ctx.fillStyle = gradient;
           ctx.fillRect(i * (barW + 1), canvas.height - h, barW, h);
         }
@@ -3197,7 +3197,7 @@
         'padding:10px 16px',
         'background:rgba(8,8,16,.92)',
         'backdrop-filter:blur(20px)',
-        'border:1px solid ' + (type === 'join' ? 'rgba(6,182,212,.3)' : type === 'error' ? 'rgba(239,68,68,.3)' : 'rgba(245,158,11,.3)'),
+        'border:1px solid ' + (type === 'join' ? 'rgba(236,72,153,.3)' : type === 'error' ? 'rgba(239,68,68,.3)' : 'rgba(245,158,11,.3)'),
         'border-radius:12px',
         'color:#fff',
         'font-size:13px',
