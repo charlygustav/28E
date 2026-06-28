@@ -1295,7 +1295,7 @@
         </div>
 
         <!-- Navigation Tabs -->
-        <div style="position:relative;z-index:10;padding:0 20px 16px;display:flex">
+        <div style="position:relative;z-index:10;padding:16px 20px;display:flex">
           <div style="display:flex;flex:1;gap:4px;padding:3px;background:rgba(0,0,0,.25);border-radius:10px;box-shadow:inset 0 1px 3px rgba(0,0,0,.3)">
             <button class="vc-tab-pill ${isRoom ? 'active' : ''}" id="vc-tab-room" style="position:relative">${_t('vc_tab_room')}</button>
             <button class="vc-tab-pill ${isChat ? 'active' : ''}" id="vc-tab-chat" style="position:relative">
