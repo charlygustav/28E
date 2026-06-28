@@ -2775,8 +2775,11 @@
     }
 
     _playNotif(type) {
+      this._initAudio();
+      if (!this.actx) return;
       try {
-        const ctx  = new (window.AudioContext || window.webkitAudioContext)();
+        const ctx = this.actx;
+        if (ctx.state === 'suspended') ctx.resume().catch(() => {});
         const osc  = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.connect(gain); gain.connect(ctx.destination);
@@ -2784,7 +2787,7 @@
         osc.frequency.exponentialRampToValueAtTime(type === 'join' ? 1320 : 220, ctx.currentTime + 0.15);
         gain.gain.setValueAtTime(0.12, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
-        osc.start(); osc.stop(ctx.currentTime + 0.3);
+        osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.3);
       } catch(e) {}
     }
 
