@@ -318,22 +318,28 @@
   .vc-tab-pill {
     position: relative;
     flex: 1;
-    padding: 7px 0;
+    padding: 6px 0;
     font-size: 11px;
     font-weight: 600;
     border-radius: 8px;
-    transition: color .25s, background .25s;
+    transition: all .25s cubic-bezier(.34,1.56,.64,1);
     text-align: center;
-    color: rgba(255,255,255,.35);
+    color: rgba(255,255,255,.4);
     cursor: pointer;
     letter-spacing: .01em;
+    background: transparent;
+    border: 1px solid transparent;
   }
   .vc-tab-pill.active {
     color: #fff;
-    background: rgba(245,158,11,.15);
-    box-shadow: 0 1px 8px rgba(245,158,11,.1);
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.05);
+    box-shadow: 0 2px 8px rgba(0,0,0,.4), inset 0 1px 1px rgba(255,255,255,.05);
   }
-  .vc-tab-pill:hover:not(.active) { color: rgba(255,255,255,.7); }
+  .vc-tab-pill:hover:not(.active) { 
+    color: rgba(255,255,255,.8); 
+    background: rgba(255,255,255,.03);
+  }
 
   /* ── User row ────────────────────────────────────────────── */
   .vc-user-card {
@@ -1289,15 +1295,17 @@
         </div>
 
         <!-- Navigation Tabs -->
-        <div style="position:relative;z-index:10;display:flex;gap:4px;padding:8px 12px;background:rgba(0,0,0,.2)">
-          <button class="vc-tab-pill ${isRoom ? 'active' : ''}" id="vc-tab-room" style="position:relative">${_t('vc_tab_room')}</button>
-          <button class="vc-tab-pill ${isChat ? 'active' : ''}" id="vc-tab-chat" style="position:relative">
-            ${_t('vc_chat')}
-            ${this._chatUnread > 0 ? `<span style="position:absolute;top:4px;right:8px;width:6px;height:6px;background:#f87171;border-radius:50%;animation:vc-badge-pop .3s ease-out"></span>` : ''}
-          </button>
-          <button class="vc-tab-pill ${isMusic ? 'active' : ''}" id="vc-tab-music" style="display:flex;align-items:center;justify-content:center">
-            ${_t('vc_music')} ${eqInd}
-          </button>
+        <div style="position:relative;z-index:10;padding:0 20px 16px;display:flex">
+          <div style="display:flex;flex:1;gap:4px;padding:3px;background:rgba(0,0,0,.25);border-radius:10px;box-shadow:inset 0 1px 3px rgba(0,0,0,.3)">
+            <button class="vc-tab-pill ${isRoom ? 'active' : ''}" id="vc-tab-room" style="position:relative">${_t('vc_tab_room')}</button>
+            <button class="vc-tab-pill ${isChat ? 'active' : ''}" id="vc-tab-chat" style="position:relative">
+              ${_t('vc_chat')}
+              ${this._chatUnread > 0 ? `<span style="position:absolute;top:4px;right:8px;width:6px;height:6px;background:#f87171;border-radius:50%;animation:vc-badge-pop .3s ease-out"></span>` : ''}
+            </button>
+            <button class="vc-tab-pill ${isMusic ? 'active' : ''}" id="vc-tab-music" style="display:flex;align-items:center;justify-content:center">
+              ${_t('vc_music')} ${eqInd}
+            </button>
+          </div>
         </div>
 
         <!-- Main Content Area -->
