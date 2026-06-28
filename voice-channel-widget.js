@@ -821,25 +821,33 @@
       this.fab.title = _t('vc_title');
       this.fab.style.cssText = [
         'position:fixed', 'bottom:24px', 'right:24px', 'z-index:9999',
-        'width:56px', 'height:56px', 'border-radius:50%', 'cursor:pointer',
+        'width:52px', 'height:52px', 'border-radius:16px', 'cursor:pointer',
         'display:flex', 'align-items:center', 'justify-content:center',
-        'background:rgba(12,12,18,0.5)',
+        'background:rgba(255,255,255,.05)',
         'backdrop-filter:blur(16px)', '-webkit-backdrop-filter:blur(16px)',
-        'border:1px solid rgba(255,255,255,0.1)',
-        'box-shadow:0 8px 32px rgba(0,0,0,.6)',
-        'transition:transform .2s,box-shadow .2s,border-color .2s,background .2s',
-        'animation:vc-fab-glow 3s ease-in-out infinite'
+        'border:1px solid rgba(255,255,255,.1)',
+        'box-shadow:0 8px 32px rgba(0,0,0,.4)',
+        'transition:all .2s'
       ].join(';');
       
       const micIcon = ICONS.mic.replace('currentColor', 'url(#fabGrad)');
       
       this.fab.innerHTML = `
         <svg width="0" height="0" style="position:absolute"><defs><linearGradient id="fabGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f59e0b" /><stop offset="100%" stop-color="#ec4899" /></linearGradient></defs></svg>
-        <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(255,255,255,.15),transparent 70%);pointer-events:none"></div>
-        <span style="display:flex;align-items:center;justify-content:center;width:22px;height:22px;transition:transform .2s;filter:drop-shadow(0 0 8px rgba(245,158,11,.6))">${micIcon}</span>
+        <span style="display:flex;align-items:center;justify-content:center;width:24px;height:24px;transition:transform .2s;filter:drop-shadow(0 0 8px rgba(245,158,11,.4))">${micIcon}</span>
       `;
-      this.fab.addEventListener('mouseenter', () => { this.fab.style.transform = 'scale(1.1)'; this.fab.style.boxShadow = '0 12px 40px rgba(0,0,0,.7),0 0 0 8px rgba(255,255,255,.05)'; this.fab.style.background = 'rgba(12,12,18,0.7)'; });
-      this.fab.addEventListener('mouseleave', () => { this.fab.style.transform = ''; this.fab.style.boxShadow = '0 8px 32px rgba(0,0,0,.6)'; this.fab.style.background = 'rgba(12,12,18,0.5)'; });
+      this.fab.addEventListener('mouseenter', () => { 
+        this.fab.style.transform = 'translateY(-2px)'; 
+        this.fab.style.boxShadow = '0 12px 40px rgba(0,0,0,.5)'; 
+        this.fab.style.background = 'rgba(255,255,255,.09)'; 
+        this.fab.style.borderColor = 'rgba(255,255,255,.2)';
+      });
+      this.fab.addEventListener('mouseleave', () => { 
+        this.fab.style.transform = ''; 
+        this.fab.style.boxShadow = '0 8px 32px rgba(0,0,0,.4)'; 
+        this.fab.style.background = 'rgba(255,255,255,.05)'; 
+        this.fab.style.borderColor = 'rgba(255,255,255,.1)';
+      });
       this.fab.addEventListener('click', () => this._toggle());
 
       this.panel = document.createElement('div');
