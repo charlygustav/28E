@@ -254,336 +254,25 @@
 
   // ── CSS ──────────────────────────────────────────────────────────────────
   const CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
-  /* ── Keyframes ───────────────────────────────────────────── */
-  @keyframes vc-spin        { to { transform: rotate(360deg); } }
-  @keyframes vc-blink       { 0%,100%{opacity:1} 50%{opacity:.3} }
-  @keyframes vc-eq          { 0%,100%{height:3px} 50%{height:14px} }
-  @keyframes vc-marquee     { 0%{transform:translateX(0)} 100%{transform:translateX(-100%)} }
-  @keyframes vc-pop         { from{transform:scale(0.7);opacity:0} to{transform:scale(1);opacity:1} }
-  @keyframes vc-fadein      { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes vc-slideIn     { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:translateX(0)} }
-  @keyframes vc-orb-drift   { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(8px,-12px) scale(1.08)} }
-  @keyframes vc-orb-drift2  { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-10px,8px) scale(1.05)} }
-  @keyframes vc-fab-glow    { 0%,100%{box-shadow:0 8px 32px rgba(0,0,0,.6), inset 0 0 10px rgba(245,158,11,0.0)} 50%{box-shadow:0 8px 32px rgba(0,0,0,.6), inset 0 0 20px rgba(245,158,11,0.2), 0 0 0 4px rgba(255,255,255,0.03)} }
-  @keyframes vc-ring-wave   { 0%{transform:scale(1);opacity:.5} 100%{transform:scale(2.2);opacity:0} }
-  @keyframes vc-ring-wave2  { 0%{transform:scale(1);opacity:.35} 100%{transform:scale(2.8);opacity:0} }
-  @keyframes vc-ring-wave3  { 0%{transform:scale(1);opacity:.2} 100%{transform:scale(3.4);opacity:0} }
-  @keyframes vc-speak-ring  { 0%{transform:scale(1);opacity:.6;box-shadow:0 0 0 0 rgba(236,72,153,.5)} 70%{transform:scale(1);opacity:0;box-shadow:0 0 0 10px rgba(236,72,153,0)} 100%{box-shadow:0 0 0 0 rgba(236,72,153,0)} }
-  @keyframes vc-shimmer     { 0%{background-position:-200% center} 100%{background-position:200% center} }
-  @keyframes vc-badge-pop   { 0%{transform:scale(0)} 60%{transform:scale(1.2)} 100%{transform:scale(1)} }
-  @keyframes vc-bar-breathe { 0%,100%{opacity:.7;transform:scaleY(0.6)} 50%{opacity:1;transform:scaleY(1)} }
-  @keyframes vc-slide-up    { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
-  @keyframes vc-pulse-slow  { 0%,100%{opacity:.6} 50%{opacity:1} }
-
-  /* ── Panel shell ─────────────────────────────────────────── */
-  #vc-panel {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  }
-  #vc-fab {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  }
-  #vc-bar {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  }
-
-  /* ── Scrollbar ───────────────────────────────────────────── */
-  .vc-scroll::-webkit-scrollbar       { width: 3px; }
-  .vc-scroll::-webkit-scrollbar-track { background: transparent; }
-  .vc-scroll::-webkit-scrollbar-thumb { background: rgba(245,158,11,.15); border-radius: 99px; }
-  .vc-scroll::-webkit-scrollbar-thumb:hover { background: rgba(245,158,11,.45); }
-
-  /* ── Speaking avatar ─────────────────────────────────────── */
-  .vc-av.speaking {
-    border-color: #23a559 !important;
-    box-shadow: 0 0 0 2px #23a559 !important;
-  }
-
-  /* ── Marquee ─────────────────────────────────────────────── */
-  .vc-marquee-container {
-    display: flex; overflow: hidden; white-space: nowrap;
-    mask-image: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent);
-    width: 100%;
-  }
-  .vc-marquee-content {
-    flex-shrink: 0;
-    animation: vc-marquee 12s linear infinite;
-    padding-right: 2.5rem;
-  }
-
-  /* ── Tab sliding indicator ───────────────────────────────── */
-  .vc-tab-pill {
-    position: relative;
-    flex: 1;
-    padding: 6px 0;
-    font-size: 11px;
-    font-weight: 600;
-    border-radius: 8px;
-    transition: all .25s cubic-bezier(.34,1.56,.64,1);
-    text-align: center;
-    color: rgba(255,255,255,.4);
-    cursor: pointer;
-    letter-spacing: .01em;
-    background: transparent;
-    border: 1px solid transparent;
-  }
-  .vc-tab-pill.active {
-    color: #fff;
-    background: rgba(255,255,255,.12);
-    border: 1px solid rgba(255,255,255,.05);
-    box-shadow: 0 2px 8px rgba(0,0,0,.4), inset 0 1px 1px rgba(255,255,255,.05);
-  }
-  .vc-tab-pill:hover:not(.active) { 
-    color: rgba(255,255,255,.8); 
-    background: rgba(255,255,255,.03);
-  }
-
-  /* ── User row ────────────────────────────────────────────── */
-  .vc-user-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 8px 12px;
-    border-radius: 14px;
-    transition: background .2s;
-    cursor: default;
-  }
-  .vc-user-card:hover { background: rgba(245,158,11,.07); }
-
-  /* ── History rows ────────────────────────────────────────── */
-  .vc-hist-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 7px 10px;
-    border-radius: 10px;
-    transition: background .15s;
-    font-size: 11px;
-  }
-  .vc-hist-row:hover { background: rgba(245,158,11,.07); }
-
-  /* ── Buttons ─────────────────────────────────────────────── */
-  .vc-btn-primary {
-    background: linear-gradient(135deg, #f59e0b 0%, #ec4899 100%);
-    color: #fff;
-    font-weight: 700;
-    border: none;
-    border-radius: 14px;
-    cursor: pointer;
-    transition: opacity .2s, transform .15s, box-shadow .2s;
-    box-shadow: 0 4px 20px rgba(245,158,11,.25);
-  }
-  .vc-btn-primary:hover { opacity: .92; transform: translateY(-1px); box-shadow: 0 6px 28px rgba(245,158,11,.25); }
-  .vc-btn-primary:active { transform: scale(.97); opacity: 1; }
-
-  .vc-btn-glass {
-    background: rgba(255,255,255,.04);
-    border: 1px solid rgba(255,255,255,.08);
-    color: rgba(255,255,255,.65);
-    font-weight: 600;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: background .2s, color .2s, border-color .2s;
-  }
-  .vc-btn-glass:hover { background: rgba(255,255,255,.08); border-color: rgba(245,158,11,.25); color: #fff; }
-
-  .vc-btn-danger {
-    background: rgba(239,68,68,.08);
-    border: 1px solid rgba(239,68,68,.15);
-    color: #f87171;
-    border-radius: 12px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background .2s, border-color .2s;
-  }
-  .vc-btn-danger:hover { background: rgba(239,68,68,.18); border-color: rgba(239,68,68,.3); }
-
-  .vc-btn-muted-active {
-    background: rgba(239,68,68,.1) !important;
-    border: 1px solid rgba(239,68,68,.25) !important;
-    color: #f87171 !important;
-  }
-  .vc-btn-dnd-active {
-    background: rgba(245,158,11,.2) !important;
-    border: 1px solid rgba(245,158,11,.15) !important;
-    color: #f59e0b !important;
-  }
-
-  /* ── Ring overlay ────────────────────────────────────────── */
-  #vc-ring-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 999999;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: radial-gradient(ellipse at center, rgba(245,158,11,.12) 0%, rgba(8,8,16,.97) 70%);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    animation: vc-fadein .4s ease-out;
-  }
-  .vc-ring-waves {
-    position: relative;
-    width: 96px;
-    height: 96px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 24px;
-  }
-  .vc-ring-wave-el {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    border: 1.5px solid rgba(245,158,11,.5);
-  }
-  .vc-ring-wave-el:nth-child(1) { animation: vc-ring-wave  2.4s ease-out infinite; }
-  .vc-ring-wave-el:nth-child(2) { animation: vc-ring-wave2 2.4s ease-out infinite .5s; }
-  .vc-ring-wave-el:nth-child(3) { animation: vc-ring-wave3 2.4s ease-out infinite 1s; }
-  .vc-ring-avatar-el {
-    position: relative;
-    z-index: 2;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #f59e0b, #ec4899);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    font-weight: 800;
-    color: #fff;
-    border: 3px solid rgba(255,255,255,.15);
-    box-shadow: 0 0 40px rgba(245,158,11,.25);
-    overflow: hidden;
-  }
-  .vc-ring-avatar-el img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
-  .vc-ring-label-el {
-    font-size: 11px;
-    font-weight: 700;
-    color: rgba(255,255,255,.4);
-    text-transform: uppercase;
-    letter-spacing: .15em;
-    margin-bottom: 6px;
-  }
-  .vc-ring-name-el {
-    font-size: 24px;
-    font-weight: 800;
-    color: #fff;
-    margin-bottom: 4px;
-    letter-spacing: -.02em;
-  }
-  .vc-ring-sub-el {
-    font-size: 13px;
-    color: rgba(255,255,255,.4);
-    margin-bottom: 36px;
-  }
-  .vc-ring-btns-el {
-    display: flex;
-    gap: 16px;
-  }
-  .vc-ring-btn-join {
-    padding: 14px 36px;
-    border-radius: 99px;
-    background: linear-gradient(135deg, #f59e0b, #ec4899);
-    color: #fff;
-    font-size: 14px;
-    font-weight: 700;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 4px 24px rgba(245,158,11,.25);
-    transition: opacity .2s, transform .15s;
-  }
-  .vc-ring-btn-join:hover { opacity: .9; transform: translateY(-2px); }
-  .vc-ring-btn-ignore {
-    padding: 14px 36px;
-    border-radius: 99px;
-    background: rgba(255,255,255,.06);
-    border: 1px solid rgba(255,255,255,.1);
-    color: rgba(255,255,255,.6);
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background .2s;
-  }
-  .vc-ring-btn-ignore:hover { background: rgba(255,255,255,.1); color: #fff; }
-
-  /* ── Music progress track ────────────────────────────────── */
-  .vc-progress-track {
-    height: 4px;
-    background: rgba(255,255,255,.08);
-    border-radius: 99px;
-    overflow: hidden;
-    position: relative;
-    cursor: pointer;
-  }
-  .vc-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #f59e0b, #ec4899);
-    border-radius: 99px;
-    transition: width .5s linear;
-  }
-
-  /* ── Input glow ──────────────────────────────────────────── */
-  .vc-input {
-    background: rgba(255,255,255,.03);
-    border: 1px solid rgba(255,255,255,.07);
-    border-radius: 12px;
-    color: #fff;
-    outline: none;
-    font-family: inherit;
-    transition: border-color .2s, background .2s, box-shadow .2s;
-  }
-  .vc-input:focus {
-    border-color: rgba(245,158,11,.5);
-    background: rgba(245,158,11,.06);
-    box-shadow: 0 0 0 3px rgba(245,158,11,.08);
-  }
-  .vc-input::placeholder { color: rgba(255,255,255,.2); }
-
-  /* ── Chat bubbles ────────────────────────────────────────── */
-  .vc-bubble-me {
-    background: rgba(245,158,11,.12);
-    border: 1px solid rgba(245,158,11,.15);
-    color: #e2d9fc;
-    border-radius: 16px 16px 4px 16px;
-    padding: 8px 12px;
-    font-size: 12.5px;
-    line-height: 1.5;
-    max-width: 82%;
-    word-break: break-word;
-  }
-  .vc-bubble-them {
-    background: rgba(255,255,255,.05);
-    border: 1px solid rgba(255,255,255,.08);
-    color: rgba(255,255,255,.88);
-    border-radius: 16px 16px 16px 4px;
-    padding: 8px 12px;
-    font-size: 12.5px;
-    line-height: 1.5;
-    max-width: 82%;
-    word-break: break-word;
-  }
-  .vc-bubble-emoji { font-size: 36px; padding: 2px 0; line-height: 1.2; }
-
-  /* ── Orb glows ───────────────────────────────────────────── */
-  .vc-orb-v {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(60px);
-    pointer-events: none;
-    animation: vc-orb-drift 8s ease-in-out infinite;
-  }
-  .vc-orb-c {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(50px);
-    pointer-events: none;
-    animation: vc-orb-drift2 10s ease-in-out infinite;
-  }
+  @keyframes vc-pulse { 0%,100%{box-shadow:0 4px 24px rgba(245,158,11,.15)} 50%{box-shadow:0 4px 32px rgba(245,158,11,.3)} }
+  @keyframes vc-shine { 0% { transform:rotate(45deg) translateY(-100%); } 20%, 100% { transform:rotate(45deg) translateY(100%); } }
+  @keyframes vc-spin { to{transform:rotate(360deg)} }
+  @keyframes vc-slideIn { from { opacity:0; transform:translateX(-8px); } to { opacity:1; transform:translateX(0); } }
+  @keyframes vc-speak-pulse { 0% { box-shadow:0 0 0 0 rgba(245,158,11,.4); } 70% { box-shadow:0 0 0 6px rgba(245,158,11,0); } 100% { box-shadow:0 0 0 0 rgba(245,158,11,0); } }
+  @keyframes vc-pop { from { transform:scale(0); opacity:0; } to { transform:scale(1); opacity:1; } }
+  @keyframes vc-blink { 0%,100%{opacity:1} 50%{opacity:.35} }
+  @keyframes vc-ring-in { from { opacity:0; } to { opacity:1; } }
+  @keyframes vc-ring-pulse { 0%,100% { box-shadow:0 0 0 0 rgba(245,158,11,.2); } 50% { box-shadow:0 0 0 14px rgba(245,158,11,0); } }
+  @keyframes vc-music-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+  @keyframes vc-eq { 0%,100%{height:3px} 50%{height:12px} }
+  @keyframes vc-glow { 0%,100%{opacity:.7} 50%{opacity:1} }
+  .vc-scroll::-webkit-scrollbar { width:4px; }
+  .vc-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.08); border-radius:2px; }
+  .vc-scroll::-webkit-scrollbar-thumb:hover { background:rgba(255,255,255,.15); }
+  .vc-av.speaking { border-color: #f59e0b !important; box-shadow: 0 0 8px rgba(245, 158, 11, 0.3); animation: vc-speak-pulse 1.5s infinite; }
+  @keyframes vc-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+  .vc-marquee-container { display: flex; overflow: hidden; white-space: nowrap; mask-image: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent); width: 100%; }
+  .vc-marquee-content { flex-shrink: 0; animation: vc-marquee 12s linear infinite; padding-right: 2rem; }
   `;
 
   // ── ICONS ─────────────────────────────────────────────────────────────────
@@ -732,17 +421,13 @@
     _initAudio() {
       if (this._audioReady) return;
       this._audioReady = true;
-      this._sfxPromises = {};
       try {
         this.actx = new (window.AudioContext || window.webkitAudioContext)();
-        const load = (k, u) => {
-          this._sfxPromises[k] = fetch(u)
-            .then(r => r.arrayBuffer())
-            .then(buf => this.actx.decodeAudioData(buf))
-            .then(decoded => {
-              this.sfxBuf[k] = decoded;
-            })
-            .catch(e => {});
+        const load = async (k, u) => {
+          try {
+            const r = await fetch(u);
+            this.sfxBuf[k] = await this.actx.decodeAudioData(await r.arrayBuffer());
+          } catch(e){}
         };
         load('flyin', 'sounds/flyin.wav');
         load('flyout', 'sounds/flyout.wav');
@@ -766,43 +451,28 @@
 
     _playSfx(k, vol=0.4, loop=false, excl=null) {
       this._initAudio();
+      if (!this.actx || !this.sfxBuf[k]) return null;
+      if (this.actx.state === 'suspended') this.actx.resume();
+      if (excl && this.sfxNodes[excl]) this._stopSfx(this.sfxNodes[excl]);
       
-      const play = () => {
-        if (!this.actx || !this.sfxBuf[k]) return null;
-        if (this.actx.state === 'suspended') this.actx.resume();
-        if (excl && this.sfxNodes[excl]) this._stopSfx(this.sfxNodes[excl]);
+      try {
+        const src = this.actx.createBufferSource();
+        src.buffer = this.sfxBuf[k];
+        src.loop = loop;
+        const gain = this.actx.createGain();
         
-        try {
-          const src = this.actx.createBufferSource();
-          src.buffer = this.sfxBuf[k];
-          src.loop = loop;
-          const gain = this.actx.createGain();
-          
-          const t = this.actx.currentTime;
-          gain.gain.setValueAtTime(0, t);
-          gain.gain.linearRampToValueAtTime(vol, t + 0.02);
-          
-          src.connect(gain);
-          gain.connect(this.actx.destination);
-          src.start(0);
-          const node = { src, gain };
-          if (excl) this.sfxNodes[excl] = node;
-          
-          if (k === 'jbl_latency' && loop) {
-              this.progNode = node;
-          }
-          
-          return node;
-        } catch(e) { return null; }
-      };
-
-      if (this.sfxBuf[k]) {
-        return play();
-      } else if (this._sfxPromises && this._sfxPromises[k]) {
-        this._sfxPromises[k].then(play);
-        return null;
-      }
-      return null;
+        // Anti-pop fade in
+        const t = this.actx.currentTime;
+        gain.gain.setValueAtTime(0, t);
+        gain.gain.linearRampToValueAtTime(vol, t + 0.02);
+        
+        src.connect(gain);
+        gain.connect(this.actx.destination);
+        src.start(0);
+        const node = { src, gain };
+        if (excl) this.sfxNodes[excl] = node;
+        return node;
+      } catch(e) { return null; }
     }
 
     _stopSfx(node) {
@@ -824,96 +494,58 @@
       this.fab = document.createElement('div');
       this.fab.id = 'vc-fab';
       this.fab.title = _t('vc_title');
-      this.fab.style.cssText = [
-        'position:fixed', 'bottom:24px', 'right:24px', 'z-index:9999',
-        'width:52px', 'height:52px', 'border-radius:16px', 'cursor:pointer',
-        'display:flex', 'align-items:center', 'justify-content:center',
-        'background:rgba(255,255,255,.05)',
-        'backdrop-filter:blur(16px)', '-webkit-backdrop-filter:blur(16px)',
-        'border:1px solid rgba(255,255,255,.1)',
-        'box-shadow:0 8px 32px rgba(0,0,0,.4)',
-        'transition:all .2s'
-      ].join(';');
-      
-      const micIcon = ICONS.mic.replace('currentColor', 'url(#fabGrad)');
-      
+      this.fab.className = 'fixed bottom-6 right-6 z-[9999] flex items-center justify-center cursor-pointer transition-all duration-500 ease-out rounded-full bg-zinc-900 border border-white/10 shadow-2xl hover:border-amber-500/50 w-14 h-14 group';
       this.fab.innerHTML = `
-        <svg width="0" height="0" style="position:absolute"><defs><linearGradient id="fabGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f59e0b" /><stop offset="100%" stop-color="#ec4899" /></linearGradient></defs></svg>
-        <span style="display:flex;align-items:center;justify-content:center;width:24px;height:24px;transition:transform .2s;filter:drop-shadow(0 0 8px rgba(245,158,11,.4))">${micIcon}</span>
+        <div class="absolute inset-0 rounded-full bg-amber-500/20 blur-xl opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-opacity duration-500 ease-out"></div>
+        <div class="absolute inset-0 rounded-full shadow-[0_0_0_0_rgba(245,158,11,0)] group-hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] transition-shadow duration-500 ease-out"></div>
+        <span class="relative z-10 text-amber-500 transition-all duration-500 ease-out group-hover:scale-125 group-hover:drop-shadow-[0_0_10px_rgba(245,158,11,0.8)] flex items-center justify-center w-6 h-6">${ICONS.mic}</span>
       `;
-      this.fab.addEventListener('mouseenter', () => { 
-        this.fab.style.transform = 'translateY(-2px)'; 
-        this.fab.style.boxShadow = '0 12px 40px rgba(0,0,0,.5)'; 
-        this.fab.style.background = 'rgba(255,255,255,.09)'; 
-        this.fab.style.borderColor = 'rgba(255,255,255,.2)';
-      });
-      this.fab.addEventListener('mouseleave', () => { 
-        this.fab.style.transform = ''; 
-        this.fab.style.boxShadow = '0 8px 32px rgba(0,0,0,.4)'; 
-        this.fab.style.background = 'rgba(255,255,255,.05)'; 
-        this.fab.style.borderColor = 'rgba(255,255,255,.1)';
-      });
       this.fab.addEventListener('click', () => this._toggle());
 
       this.panel = document.createElement('div');
       this.panel.id = 'vc-panel';
-      this.panel.style.cssText = [
-        'position:fixed', 'bottom:96px', 'right:24px',
-        'width:340px', 'max-width:calc(100vw - 32px)',
-        'max-height:calc(100vh - 140px)',
-        'background:rgba(8,8,16,0.65)',
-        'backdrop-filter:blur(24px)', '-webkit-backdrop-filter:blur(24px)',
-        'border:1px solid rgba(255,255,255,.08)',
-        'border-radius:24px',
-        'box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.05) inset,',
-        'overflow:hidden', 'z-index:9998',
-        'transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .25s,visibility .25s',
-        'transform:scale(.92) translateY(10px)', 'opacity:0', 'pointer-events:none','visibility:hidden'
-      ].join(';');
+      this.panel.className = 'fixed bottom-24 right-6 w-full max-w-[315px] bg-zinc-950/85 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] overflow-hidden z-[9998] transition-all duration-300 transform scale-95 opacity-0 pointer-events-none translate-y-4 font-sans';
       this.panel.innerHTML = this._tplLogin();
 
       this._bar = document.createElement('div');
       this._bar.id = 'vc-bar';
-      this._bar.style.cssText = [
-        'position:fixed', 'bottom:96px', 'right:24px', 'z-index:9997',
-        'display:flex', 'align-items:center', 'gap:10px',
-        'padding:10px 14px',
-        'background:rgba(8,8,16,.92)',
-        'backdrop-filter:blur(24px)', '-webkit-backdrop-filter:blur(24px)',
-        'border:1px solid rgba(245,158,11,.15)',
-        'border-radius:18px',
-        'box-shadow:0 8px 40px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.03) inset',
-        'opacity:0', 'pointer-events:none', 'visibility:hidden',
-        'transition:transform .35s cubic-bezier(.34,1.2,.64,1),opacity .25s,visibility .25s',
-        'transform:translateY(10px) scale(.94)', 'cursor:pointer'
-      ].join(';');
+      this._bar.className = 'fixed bottom-24 right-6 z-[9997] flex items-center gap-2.5 px-3.5 py-2.5 bg-[#0a0a0a]/90 backdrop-blur-2xl border border-white/[0.04] rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.6)] opacity-0 pointer-events-none transition-all duration-500 translate-y-4 scale-95 origin-bottom-right';
       this._bar.innerHTML = `
-        <div style="display:flex;align-items:center;gap:5px;flex-shrink:0" id="vc-bar-eq">
-          <div style="width:3px;background:linear-gradient(to top,#f59e0b,#ec4899);border-radius:99px;animation:vc-eq .6s ease-in-out infinite" id="vc-bar-eq1"></div>
-          <div style="width:3px;background:linear-gradient(to top,#f59e0b,#ec4899);border-radius:99px;animation:vc-eq .6s ease-in-out infinite .15s" id="vc-bar-eq2"></div>
-          <div style="width:3px;background:linear-gradient(to top,#f59e0b,#ec4899);border-radius:99px;animation:vc-eq .6s ease-in-out infinite .3s" id="vc-bar-eq3"></div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:2px;min-width:60px">
-          <div style="display:flex;align-items:center;gap:5px">
-            <span id="vc-bar-title" style="font-size:9px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.14em;line-height:1">${_t('bar_conn').split(' · ')[0]}</span>
-            <div id="vc-bar-music-icon" class="hidden" style="color:#ec4899">
-              <svg style="width:10px;height:10px;animation:vc-pulse-slow 1.5s infinite" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
-            </div>
-            <div id="vc-bar-chat-icon" class="hidden" style="position:relative;color:#f87171">
-              <svg style="width:10px;height:10px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-              <span style="position:absolute;top:-2px;right:-2px;width:5px;height:5px;background:#f87171;border-radius:50%;animation:vc-pulse-slow 1s infinite"></span>
-            </div>
+        <div class="flex items-center justify-center w-7 h-7 rounded-full bg-amber-500/10 border border-amber-500/20 relative shrink-0 transition-colors duration-300" id="vc-bar-indicator-bg">
+          <div class="absolute inset-0 rounded-full bg-amber-500/15 animate-ping opacity-50 transition-all duration-300" id="vc-bar-indicator-ping"></div>
+          <div class="w-1.5 h-1.5 bg-amber-500 rounded-full shadow-[0_0_8px_rgba(245,158,11,0.8)] transition-colors duration-300" id="vc-bar-indicator-dot"></div>
+          
+          <div id="vc-bar-waveform" class="absolute inset-0 flex items-center justify-center gap-[2px] opacity-0 transition-opacity duration-300">
+             <div class="w-1 bg-amber-500 rounded-full animate-[vc-eq_0.5s_ease-in-out_infinite]"></div>
+             <div class="w-1 bg-amber-500 rounded-full animate-[vc-eq_0.5s_ease-in-out_infinite_0.1s]"></div>
+             <div class="w-1 bg-amber-500 rounded-full animate-[vc-eq_0.5s_ease-in-out_infinite_0.2s]"></div>
           </div>
-          <span id="vc-bar-sub" style="font-size:10px;color:rgba(255,255,255,.3);font-weight:500;line-height:1">${_t('bar_conn').split(' · ')[1]}</span>
         </div>
-        <div style="width:1px;height:20px;background:rgba(255,255,255,.06);flex-shrink:0"></div>
-        <span id="vc-bar-timer" style="font-family:'SF Mono',Monaco,monospace;font-size:13px;font-weight:600;color:#ec4899;letter-spacing:.04em;tab-size:4">00:00</span>
-        <div style="width:1px;height:20px;background:rgba(255,255,255,.06);flex-shrink:0"></div>
-        <button id="vc-bar-mute" title="Mic" style="width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;color:rgba(255,255,255,.45);cursor:pointer;transition:background .15s,color .15s;flex-shrink:0" onmouseenter="this.style.background='rgba(255,255,255,.08)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='rgba(255,255,255,.45)'">
-          <span style="width:14px;height:14px;display:flex;align-items:center;justify-content:center">${ICONS.mic}</span>
+        <div class="flex flex-col justify-center min-w-[65px]">
+          <div class="flex items-center gap-1.5 mb-1">
+             <span class="text-[9px] font-bold text-amber-500 uppercase tracking-[0.15em] leading-none transition-colors duration-300" id="vc-bar-title">${_t('bar_conn').split(' · ')[0]}</span>
+             <div class="flex items-center gap-1" id="vc-bar-icons">
+               <div id="vc-bar-music-icon" class="hidden text-amber-500 transition-opacity">
+                 <svg class="w-3 h-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
+               </div>
+               <div id="vc-bar-chat-icon" class="hidden text-red-400 relative transition-opacity">
+                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                 <span class="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-red-500 rounded-full shadow-[0_0_5px_rgba(239,68,68,0.8)] animate-pulse"></span>
+               </div>
+             </div>
+          </div>
+          <span id="vc-bar-sub" class="text-[10px] text-white/40 font-medium leading-none">${_t('bar_conn').split(' · ')[1]}</span>
+        </div>
+        <div class="w-[1px] h-6 bg-white/[0.04] mx-0.5"></div>
+        <div class="flex items-center px-1">
+          <span id="vc-bar-timer" class="text-white/90 font-mono text-[13px] font-semibold tabular-nums tracking-wide">00:00</span>
+        </div>
+        <div class="w-[1px] h-6 bg-white/[0.04] mx-0.5"></div>
+        <button class="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 hover:bg-white/[0.06] [&>svg]:w-3.5 [&>svg]:h-3.5 text-white/50 hover:text-white/90" id="vc-bar-mute" title="Mic">
+          ${ICONS.mic}
         </button>
-        <button id="vc-bar-leave" title="Salir" style="width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#f87171;cursor:pointer;transition:background .15s;flex-shrink:0" onmouseenter="this.style.background='rgba(239,68,68,.22)'" onmouseleave="this.style.background='rgba(239,68,68,.1)'">
-          <span style="width:14px;height:14px;display:flex;align-items:center;justify-content:center">${ICONS.phone}</span>
+        <button class="w-7 h-7 rounded-lg flex items-center justify-center bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-all duration-200 [&>svg]:w-3.5 [&>svg]:h-3.5" id="vc-bar-leave" title="Salir">
+          ${ICONS.phone}
         </button>
       `;
 
@@ -922,24 +554,6 @@
       document.body.appendChild(this._bar);
 
       this.panel.addEventListener('click', (e) => e.stopPropagation());
-      
-      this._bar.addEventListener('click', () => this._toggle());
-      
-      const barMute = this._bar.querySelector('#vc-bar-mute');
-      if (barMute) {
-        barMute.addEventListener('click', (e) => {
-          e.stopPropagation();
-          this._toggleMute();
-        });
-      }
-      
-      const barLeave = this._bar.querySelector('#vc-bar-leave');
-      if (barLeave) {
-        barLeave.addEventListener('click', (e) => {
-          e.stopPropagation();
-          this._leave();
-        });
-      }
 
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
@@ -992,35 +606,27 @@
     }
 
     _toggle() {
-      const isOpen = this.panel.style.opacity === '1';
+      const willOpen = !this.panel.classList.contains('scale-100');
       
-      if (!isOpen) {
+      if (willOpen) {
         this._playSfx('jbl_begin', 0.5);
-        this.panel.style.opacity = '1';
-        this.panel.style.transform = 'scale(1) translateY(0)';
-        this.panel.style.pointerEvents = 'auto';
-        this.panel.style.visibility = 'visible';
+        this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
+        this.panel.classList.add('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
         if (this.connected) {
-          this._bar.style.opacity = '0';
-          this._bar.style.transform = 'translateY(10px) scale(.94)';
-          this._bar.style.pointerEvents = 'none';
-          this._bar.style.visibility = 'hidden';
+          this._bar.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+          this._bar.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
         } else {
           if (document.getElementById('vc-reconnect')) this._render(this._tplDisconnected());
-          else if (document.getElementById('vc-loading-spinner')) this._render(this._tplLoading());
+          else if (this.panel.querySelector('.animate-spin')) this._render(this._tplLoading());
           else this._render(this._tplLogin());
         }
       } else {
         if (this._loginPollInt) { clearInterval(this._loginPollInt); this._loginPollInt = null; }
-        this.panel.style.opacity = '0';
-        this.panel.style.transform = 'scale(.92) translateY(10px)';
-        this.panel.style.pointerEvents = 'none';
-        this.panel.style.visibility = 'hidden';
+        this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
+        this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
         if (this.connected) {
-          this._bar.style.opacity = '1';
-          this._bar.style.transform = 'translateY(0) scale(1)';
-          this._bar.style.pointerEvents = 'auto';
-          this._bar.style.visibility = 'visible';
+          this._bar.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+          this._bar.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
         }
         this._playSfx('flyout', 0.4, false, 'fly');
       }
@@ -1029,67 +635,70 @@
     // ── TEMPLATES ──────────────────────────────────────────────────────────
     _tplLogin(err = '') {
       const user = window.yaireCurrentUser;
-      const _hdr = (sub = '', subColor = 'rgba(255,255,255,.35)') => `
-        <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06)">
-          <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(236,72,153,.1));display:flex;align-items:center;justify-content:center;color:#f59e0b">
-              <span style="width:15px;height:15px;display:flex">${ICONS.sound}</span>
-            </div>
-            <div>
-              <div style="color:#fff;font-weight:700;font-size:13px;letter-spacing:-.01em">#principal</div>
-              <div style="color:${subColor};font-size:10px;font-weight:500;letter-spacing:.01em">${sub}</div>
-            </div>
-          </div>
-          <button id="vc-close" style="width:28px;height:28px;border-radius:8px;background:transparent;border:none;color:rgba(255,255,255,.3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:background .15s,color .15s" onmouseenter="this.style.background='rgba(255,255,255,.07)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='rgba(255,255,255,.3)'">✕</button>
-        </div>`;
-
       if (!user) {
         return `
-          <div style="position:relative;overflow:hidden;display:flex;flex-direction:column">
-            <div class="vc-orb-v" style="top:-80px;right:-60px;width:220px;height:220px;background:rgba(245,158,11,.1)"></div>
-            <div class="vc-orb-c" style="bottom:-60px;left:-40px;width:180px;height:180px;background:rgba(236,72,153,.07)"></div>
-            ${_hdr(_t('vc_sub'))}
-            <div style="position:relative;z-index:10;padding:24px 22px;display:flex;flex-direction:column;align-items:center;text-align:center">
-              <div style="position:relative;margin-bottom:16px">
-                <div style="width:50px;height:50px;border-radius:16px;background:linear-gradient(135deg,rgba(245,158,11,.2),rgba(236,72,153,.15));border:1px solid rgba(245,158,11,.3);display:flex;align-items:center;justify-content:center;color:#f59e0b;box-shadow:0 8px 32px rgba(245,158,11,.12)">
-                  <svg style="width:24px;height:24px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+          <div class="relative overflow-hidden flex flex-col h-full bg-zinc-950/80 backdrop-blur-2xl">
+            <div class="absolute -top-20 -right-20 w-64 h-64 bg-amber-500/15 rounded-full blur-[60px] pointer-events-none"></div>
+            <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-pink-500/10 rounded-full blur-[60px] pointer-events-none"></div>
+
+            <div class="relative z-10 flex items-center justify-between px-5 py-4 border-b border-white/5 bg-black/20 backdrop-blur-sm">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-500 flex items-center justify-center shadow-[0_0_15px_rgba(245,158,11,0.2)] [&>svg]:w-4 [&>svg]:h-4">${ICONS.sound}</div>
+                <div><div class="text-white font-semibold text-[13px] tracking-wide">#principal</div><div class="text-white/40 text-[10px] font-medium tracking-wide">${_t('vc_sub')}</div></div>
+              </div>
+              <button class="text-white/30 hover:text-white hover:bg-white/10 w-8 h-8 rounded-lg transition-colors flex items-center justify-center text-sm" id="vc-close">✕</button>
+            </div>
+            
+            <div class="relative z-10 py-4 px-6 text-center flex-1 flex flex-col justify-center items-center">
+              <div class="relative mb-4 group">
+                <div class="absolute inset-0 bg-amber-500/30 blur-xl rounded-full group-hover:bg-amber-500/40 transition-colors duration-500"></div>
+                <div class="w-12 h-12 rounded-2xl bg-zinc-900/80 border border-amber-500/40 text-amber-500 flex items-center justify-center relative z-10 shadow-2xl backdrop-blur-md">
+                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                 </div>
               </div>
-              <h3 style="color:#fff;font-size:16px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px">${_t('vc_restricted')}</h3>
-              <p style="color:rgba(255,255,255,.4);font-size:11.5px;line-height:1.5;margin-bottom:20px;max-width:240px">${_t('vc_req_login')}</p>
-              <button id="vc-google-login-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:12px 16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:13px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s,border-color .2s" onmouseenter="this.style.background='rgba(255,255,255,.09)';this.style.borderColor='rgba(255,255,255,.2)'" onmouseleave="this.style.background='rgba(255,255,255,.05)';this.style.borderColor='rgba(255,255,255,.1)'">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:15px;height:15px" />
-                ${_t('vc_login_google')}
+              <h3 class="text-white font-bold text-base mb-1.5 tracking-tight">${_t('vc_restricted')}</h3>
+              <p class="text-white/40 text-[11px] mb-6 leading-relaxed max-w-[240px] mx-auto">${_t('vc_req_login')}</p>
+              
+              <button id="vc-google-login-btn" class="w-full flex items-center justify-center gap-3 bg-white/5 border border-white/10 text-white font-medium text-[13px] py-3 px-4 rounded-xl hover:bg-white/10 hover:border-white/20 transition-all shadow-lg backdrop-blur-md group">
+                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-4 h-4 group-hover:scale-110 transition-transform" />
+                  ${_t('vc_login_google')}
               </button>
             </div>
           </div>`;
       }
 
       return `
-        <div style="position:relative;overflow:hidden;display:flex;flex-direction:column">
-          <div class="vc-orb-v" style="top:-80px;right:-60px;width:220px;height:220px;background:rgba(245,158,11,.13)"></div>
-          <div class="vc-orb-c" style="bottom:20px;left:-50px;width:200px;height:200px;background:rgba(236,72,153,.06)"></div>
-          ${_hdr(_t('vc_sub'))}
-          <div style="position:relative;z-index:10;padding:20px 22px;display:flex;flex-direction:column;align-items:center;gap:14px">
-            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
-              <div style="position:relative">
-                <div style="position:absolute;inset:-5px;border-radius:50%;border:1.5px solid rgba(245,158,11,.3);animation:vc-ring-wave 2.8s ease-out infinite"></div>
-                <img src="${user.photoURL}" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid rgba(245,158,11,.3);box-shadow:0 0 0 3px rgba(245,158,11,.07),0 6px 24px rgba(0,0,0,.4);position:relative;z-index:1" draggable="false" />
-              </div>
-              <div style="text-align:center">
-                <div style="font-size:9px;font-weight:700;color:rgba(245,158,11,.7);text-transform:uppercase;letter-spacing:.16em;margin-bottom:4px">${_t('vc_session_as')}</div>
-                <div style="font-size:16px;font-weight:800;color:#fff;letter-spacing:-.02em">${user.displayName}</div>
-              </div>
+        <div class="relative overflow-hidden flex flex-col h-full bg-zinc-950/80 backdrop-blur-2xl">
+          <div class="absolute -top-20 -right-20 w-64 h-64 bg-amber-500/15 rounded-full blur-[60px] pointer-events-none"></div>
+          <div class="absolute bottom-10 -left-10 w-48 h-48 bg-pink-500/10 rounded-full blur-[50px] pointer-events-none"></div>
+
+          <div class="relative z-10 flex items-center justify-between px-5 py-4 border-b border-white/5 bg-black/20 backdrop-blur-sm">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-500 flex items-center justify-center shadow-[0_0_15px_rgba(245,158,11,0.2)] [&>svg]:w-4 [&>svg]:h-4">${ICONS.sound}</div>
+              <div><div class="text-white font-semibold text-[13px] tracking-wide">#principal</div><div class="text-white/40 text-[10px] font-medium tracking-wide">${_t('vc_sub')}</div></div>
             </div>
+            <button class="text-white/30 hover:text-white hover:bg-white/10 w-8 h-8 rounded-lg transition-colors flex items-center justify-center text-sm" id="vc-close">✕</button>
+          </div>
+          
+          <div class="relative z-10 py-6 px-6 flex-1 flex flex-col items-center justify-center gap-6">
+            <div class="flex flex-col items-center">
+                <div class="relative group mb-3">
+                    <div class="absolute inset-0 rounded-full bg-amber-500/30 blur-md group-hover:bg-amber-500/50 transition-colors duration-500 animate-pulse"></div>
+                    <img src="${user.photoURL}" class="w-16 h-16 rounded-full object-cover border-2 border-amber-500/50 relative z-10 shadow-xl" draggable="false" />
+                </div>
+                <div class="text-[9px] text-amber-500/80 font-bold uppercase tracking-[0.2em] mb-1.5">${_t('vc_session_as')}</div>
+                <div class="text-lg font-bold text-white tracking-tight">${user.displayName}</div>
+            </div>
+            
             <input id="vc-name" type="hidden" value="${user.displayName}"/>
             <input id="vc-pass" type="hidden" value="nopass"/>
-            <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:8px">
-              <button id="vc-join" class="vc-btn-primary" style="width:100%;padding:12px;font-size:13.5px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;justify-content:center;gap:8px">
-                <span style="width:15px;height:15px;display:flex;align-items:center;justify-content:center">${ICONS.mic}</span>
-                ${_t('btn_join')}
-              </button>
-              <div id="vc-conn-count" style="font-size:10.5px;font-weight:500;color:rgba(255,255,255,.35);min-height:15px;transition:opacity .3s"></div>
-              <div id="vc-err" style="color:#f87171;font-size:10.5px;text-align:center;font-weight:500;min-height:0">${err}</div>
+            
+            <div class="w-full flex flex-col items-center gap-3">
+                <button id="vc-join" class="relative w-full py-3 bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-[13px] rounded-xl shadow-[0_5px_20px_rgba(245,158,11,0.3)] transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
+                  ${_t('btn_join')}
+                </button>
+                <div id="vc-conn-count" class="text-[10px] font-medium text-center text-white/40 h-3"></div>
+                <div class="text-red-400 text-[11px] text-center font-medium empty:hidden" id="vc-err">${err}</div>
             </div>
           </div>
           ${this._tplHistory()}
@@ -1098,52 +707,46 @@
 
     _tplLoading() {
       return `
-        <div style="position:relative;overflow:hidden;display:flex;flex-direction:column">
-          <div class="vc-orb-v" style="top:-60px;right:-40px;width:180px;height:180px;background:rgba(245,158,11,.1)"></div>
-          <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06)">
-            <div style="display:flex;align-items:center;gap:10px">
-              <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(236,72,153,.1));display:flex;align-items:center;justify-content:center;color:#f59e0b">
-                <span style="width:16px;height:16px;display:flex">${ICONS.sound}</span>
-              </div>
-              <div>
-                <div style="color:#fff;font-weight:700;font-size:13px">#principal</div>
-                <div style="color:rgba(255,255,255,.35);font-size:10px;font-weight:500">${_t('st_conn')}</div>
-              </div>
+        <div class="relative overflow-hidden flex flex-col h-full bg-zinc-950/80 backdrop-blur-2xl">
+          <div class="absolute -top-10 -right-10 w-48 h-48 bg-amber-500/15 rounded-full blur-[50px] pointer-events-none animate-pulse"></div>
+
+          <div class="relative z-10 flex items-center justify-between px-5 py-4 border-b border-white/5 bg-black/20 backdrop-blur-sm">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-500 flex items-center justify-center shadow-[0_0_15px_rgba(245,158,11,0.2)] [&>svg]:w-4 [&>svg]:h-4">${ICONS.sound}</div>
+              <div><div class="text-white font-semibold text-[13px] tracking-wide">#principal</div><div class="text-white/40 text-[10px] font-medium tracking-wide">${_t('st_conn')}</div></div>
             </div>
-            <button id="vc-close" style="width:30px;height:30px;border-radius:8px;background:transparent;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:14px;transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.07)'" onmouseleave="this.style.background='transparent'">✕</button>
+            <button class="text-white/30 hover:text-white hover:bg-white/10 w-8 h-8 rounded-lg transition-colors flex items-center justify-center text-sm" id="vc-close">✕</button>
           </div>
-          <div style="position:relative;z-index:10;padding:48px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px">
-            <div style="position:relative" id="vc-loading-spinner">
-              <div style="position:absolute;inset:-8px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.15),transparent 70%);animation:vc-pulse-slow 2s ease-in-out infinite"></div>
-              <div style="width:44px;height:44px;border-radius:50%;border:3px solid rgba(255,255,255,.06);border-top-color:#f59e0b;border-right-color:#ec4899;animation:vc-spin 1s linear infinite;position:relative;z-index:1"></div>
+          
+          <div class="relative z-10 p-10 flex-1 flex flex-col items-center justify-center">
+            <div class="relative mb-6">
+               <div class="absolute inset-0 bg-amber-500/30 blur-xl rounded-full animate-pulse"></div>
+               <div class="w-10 h-10 rounded-full border-[3px] border-zinc-800 border-t-amber-500 animate-spin relative z-10"></div>
             </div>
-            <div style="color:rgba(255,255,255,.4);font-size:12px;font-weight:500;letter-spacing:.04em;animation:vc-pulse-slow 2s ease-in-out infinite">${_t('st_estab')}</div>
+            <div class="text-white/50 text-[11px] font-medium tracking-wide animate-pulse">${_t('st_estab')}</div>
           </div>
         </div>`;
     }
 
     _tplDisconnected() {
       return `
-        <div style="position:relative;overflow:hidden;display:flex;flex-direction:column">
-          <div class="vc-orb-c" style="top:40%;left:50%;transform:translate(-50%,-50%);width:240px;height:240px;background:rgba(239,68,68,.1)"></div>
-          <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(239,68,68,.15)">
-            <div style="display:flex;align-items:center;gap:10px">
-              <div style="width:32px;height:32px;border-radius:10px;background:rgba(239,68,68,.15);display:flex;align-items:center;justify-content:center;color:#f87171">
-                <span style="width:16px;height:16px;display:flex">${ICONS.sound}</span>
-              </div>
-              <div>
-                <div style="color:#fff;font-weight:700;font-size:13px">#principal</div>
-                <div style="color:#f87171;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em">${_t('st_disc')}</div>
-              </div>
+        <div class="relative overflow-hidden flex flex-col h-full bg-zinc-950/80 backdrop-blur-2xl">
+          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-red-500/15 rounded-full blur-[80px] pointer-events-none"></div>
+
+          <div class="relative z-10 flex items-center justify-between px-5 py-4 border-b border-white/5 bg-black/20 backdrop-blur-sm">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-red-500/20 text-red-500 flex items-center justify-center shadow-[0_0_15px_rgba(239,68,68,0.2)] [&>svg]:w-4 [&>svg]:h-4">${ICONS.sound}</div>
+              <div><div class="text-white font-semibold text-[13px] tracking-wide">#principal</div><div class="text-red-400/80 font-bold text-[10px] uppercase tracking-wider">${_t('st_disc')}</div></div>
             </div>
-            <button id="vc-close" style="width:30px;height:30px;border-radius:8px;background:transparent;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:14px;transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.07)'" onmouseleave="this.style.background='transparent'">✕</button>
+            <button class="text-white/30 hover:text-white hover:bg-white/10 w-8 h-8 rounded-lg transition-colors flex items-center justify-center text-sm" id="vc-close">✕</button>
           </div>
-          <div style="position:relative;z-index:10;padding:36px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:16px">
-            <div style="width:64px;height:64px;border-radius:20px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);display:flex;align-items:center;justify-content:center;color:#f87171;box-shadow:0 0 40px rgba(239,68,68,.15)">
-              <svg style="width:32px;height:32px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          
+          <div class="relative z-10 p-8 flex-1 flex flex-col justify-center items-center text-center">
+            <div class="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 flex items-center justify-center mb-4 backdrop-blur-sm shadow-[0_0_30px_rgba(239,68,68,0.2)]">
+               <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
             </div>
-            <p style="color:rgba(255,255,255,.45);font-size:12px;line-height:1.7;max-width:220px">${_t('msg_disc')}</p>
-            <button id="vc-reconnect" class="vc-btn-danger" style="width:100%;padding:14px;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px">
+            <p class="text-white/50 text-[11px] mb-8 leading-relaxed max-w-[220px] mx-auto">${_t('msg_disc')}</p>
+            <button id="vc-reconnect" class="w-full py-3.5 bg-red-500 hover:bg-red-400 text-white font-extrabold text-[13px] rounded-xl transition-all shadow-[0_4px_16px_rgba(239,68,68,0.3)] hover:-translate-y-0.5 active:translate-y-0">
               ${_t('btn_reconn')}
             </button>
           </div>
@@ -1154,17 +757,14 @@
       const h = window.yaireVcHistoryData || [];
       if (!window.yaireCurrentUser || !h.length) return '';
       const lang = _getLang();
-      const rows = h.slice(0,2).map(s => {
+      const rows = h.slice(0,3).map(s => {
         const d = new Date(s.date);
         const label = d.toLocaleDateString(lang, {month:'short',day:'numeric'}) + ' ' + d.toLocaleTimeString(lang, {hour:'2-digit',minute:'2-digit'});
         const m = Math.floor(s.duration/60), sec = s.duration%60;
-        return `<div class="vc-hist-row" style="padding:5px 8px"><span style="color:rgba(255,255,255,.6);font-weight:600;font-size:11px">${s.name}</span><span style="color:rgba(255,255,255,.25);font-size:9px">${label} &middot; ${m}m${sec}s</span></div>`;
+        return `<div class="flex justify-between text-[10px] py-1"><span class="text-white/70 font-medium">${s.name}</span><span class="text-white/30">${label} · ${m}m${sec}s</span></div>`;
       }).join('');
-      const moreBtn = h.length > 2 ? `<button id="vc-btn-ver-mas" style="width:100%;margin-top:4px;padding:5px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:rgba(245,158,11,.8);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.08)'" onmouseleave="this.style.background='rgba(255,255,255,.04)'">${_t('vc_hist_more')}</button>` : '';
-      return `<div style="padding:8px 14px 10px;border-top:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.02)">
-        <div style="font-size:8px;font-weight:700;color:rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:.15em;margin-bottom:4px">${_t('hist_title')}</div>
-        ${rows}${moreBtn}
-      </div>`;
+      const moreBtn = h.length > 3 ? `<button id="vc-btn-ver-mas" class="w-full mt-2 text-[9px] text-amber-500/80 hover:text-amber-400 font-bold uppercase tracking-wider py-1 border border-white/5 rounded-md bg-white/5 hover:bg-white/10 transition-colors">${_t('vc_hist_more')}</button>` : '';
+      return `<div class="relative z-10 px-5 pb-4 pt-2 bg-zinc-900/30 backdrop-blur-md border-t border-white/5"><div class="text-[9px] text-white/30 font-bold uppercase tracking-[0.15em] mb-1.5">${_t('hist_title')}</div>${rows}${moreBtn}</div>`;
     }
 
     _showDetailedHistory() {
@@ -1176,12 +776,12 @@
         const label = d.toLocaleDateString(lang, {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) + ' · ' + d.toLocaleTimeString(lang, {hour:'2-digit',minute:'2-digit'});
         const m = Math.floor(s.duration/60), sec = s.duration%60;
         return `
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.06)'" onmouseleave="this.style.background='rgba(255,255,255,.03)'">
+          <div class="flex justify-between items-center p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors">
             <div>
-              <div style="color:#fff;font-weight:700;font-size:14px;margin-bottom:4px">${s.name}</div>
-              <div style="color:rgba(255,255,255,.4);font-size:11px;text-transform:capitalize">${label}</div>
+              <div class="text-white font-bold text-sm mb-1">${s.name}</div>
+              <div class="text-white/40 text-[11px] capitalize">${label}</div>
             </div>
-            <div style="color:#ec4899;font-weight:600;font-size:12px;background:rgba(236,72,153,.1);padding:6px 12px;border-radius:8px;border:1px solid rgba(236,72,153,.2);font-family:'SF Mono',Monaco,monospace">
+            <div class="text-amber-400 font-medium text-xs bg-amber-400/10 px-3 py-1.5 rounded-lg border border-amber-400/20">
               ${m}m ${sec}s
             </div>
           </div>
@@ -1190,18 +790,15 @@
 
       const modal = document.createElement('div');
       modal.id = 'vc-detailed-history';
-      modal.style.cssText = 'position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;transition:opacity .3s ease-out';
+      modal.className = 'fixed inset-0 z-[100000] flex items-center justify-center p-4 opacity-0 transition-opacity duration-300';
       modal.innerHTML = `
-        <div style="position:absolute;inset:0;background:rgba(8,8,16,.85);backdrop-filter:blur(8px)" id="vc-det-bg"></div>
-        <div style="position:relative;width:100%;max-width:512px;max-height:80vh;display:flex;flex-direction:column;background:rgba(12,10,26,.95);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.08);border-radius:24px;box-shadow:0 24px 64px rgba(0,0,0,.6),inset 0 1px 1px rgba(255,255,255,.05);overflow:hidden;transform:scale(.95);transition:transform .3s cubic-bezier(.34,1.4,.64,1)" id="vc-det-card">
-          <div class="vc-orb-v" style="top:-80px;right:-80px;width:240px;height:240px;background:rgba(245,158,11,.1)"></div>
-          <div class="vc-orb-c" style="bottom:-60px;left:-60px;width:200px;height:200px;background:rgba(236,72,153,.08)"></div>
-          
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:24px;border-bottom:1px solid rgba(255,255,255,.06);position:relative;z-index:10;background:rgba(255,255,255,.02)">
-            <h2 style="color:#fff;font-weight:800;font-size:20px;letter-spacing:-.02em;margin:0">${_t('vc_hist_full')}</h2>
-            <button style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);border:none;cursor:pointer;transition:background .15s,color .15s;font-size:16px" onmouseenter="this.style.background='rgba(255,255,255,.1)';this.style.color='#fff'" onmouseleave="this.style.background='rgba(255,255,255,.05)';this.style.color='rgba(255,255,255,.5)'" id="vc-det-close">&times;</button>
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="vc-det-bg"></div>
+        <div class="relative w-full max-w-lg max-h-[80vh] flex flex-col bg-zinc-950/90 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden scale-95 transition-transform duration-300" id="vc-det-card">
+          <div class="flex items-center justify-between p-6 border-b border-white/5 bg-white/5">
+            <h2 class="text-white font-extrabold text-xl tracking-tight">${_t('vc_hist_full')}</h2>
+            <button class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white/50 hover:bg-white/20 hover:text-white transition-colors" id="vc-det-close">✕</button>
           </div>
-          <div style="flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:12px;position:relative;z-index:10" class="vc-scroll">
+          <div class="flex-1 overflow-y-auto p-6 flex flex-col gap-3 vc-scroll">
             ${rows}
           </div>
         </div>
@@ -1210,13 +807,13 @@
 
       // Animate in
       requestAnimationFrame(() => {
-        modal.style.opacity = '1';
-        modal.querySelector('#vc-det-card').style.transform = 'scale(1)';
+        modal.classList.remove('opacity-0');
+        modal.querySelector('#vc-det-card').classList.remove('scale-95');
       });
 
       const closeFunc = () => {
-        modal.style.opacity = '0';
-        modal.querySelector('#vc-det-card').style.transform = 'scale(.95)';
+        modal.classList.add('opacity-0');
+        modal.querySelector('#vc-det-card').classList.add('scale-95');
         setTimeout(() => modal.remove(), 300);
       };
 
@@ -1232,21 +829,21 @@
         const isDnd   = isMe ? this.dnd   : u.dnd;
         
         const avatarHtml = (u.photoURL || (isMe && window.yaireCurrentUser?.photoURL)) 
-          ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover" draggable="false" />` 
+          ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" class="w-full h-full rounded-full object-cover" draggable="false" />` 
           : initials;
 
-        const micIcon = isMuted ? `<span class="vc-mico" style="color:#ef4444;width:16px;height:16px;display:flex">${ICONS.micOff}</span>` : '';
-        const bellIcon = isDnd ? `<span class="vc-dico" style="color:#f59e0b;width:16px;height:16px;display:flex" title="DND">${ICONS.dnd}</span>` : '';
+        const micIcon = isMuted ? `<span class="text-red-500 w-4 h-4 vc-mico">${ICONS.micOff}</span>` : '';
+        const bellIcon = isDnd ? `<span class="text-purple-400 w-4 h-4 vc-dico" title="DND">${ICONS.dnd}</span>` : '';
 
         return `
-          <div style="display:flex;align-items:center;gap:14px;padding:8px;border-radius:12px;transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.04)'" onmouseleave="this.style.background='transparent'" class="vc-user group" id="vc-u-${u.id}">
-            <div style="width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;transition:all .2s;position:relative;${isMe ? 'background:rgba(245,158,11,.08);color:#f59e0b;box-shadow:inset 0 0 0 1px rgba(245,158,11,.2)' : 'background:rgba(255,255,255,.03);color:rgba(255,255,255,.5);box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)'}" class="vc-av" id="vc-av-${u.id}">
+          <div class="flex items-center gap-3.5 p-2 hover:bg-white/[0.03] rounded-[12px] transition-colors vc-user group" id="vc-u-${u.id}">
+            <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold transition-all relative ${isMe ? 'bg-amber-500/10 text-amber-500 shadow-[inset_0_0_0_1px_rgba(245,158,11,0.2)]' : 'bg-white/[0.03] text-white/50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]'} vc-av" id="vc-av-${u.id}">
               ${avatarHtml}
             </div>
-            <div style="flex:1;min-width:0">
-              <div style="color:rgba(255,255,255,.9);font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.01em">${u.displayName} ${u.oracleHandle ? `<span style="color:rgba(236,72,153,.7);font-size:10px;margin-left:6px;font-weight:500;letter-spacing:.02em">@${u.oracleHandle}</span>` : ''} ${isMe ? `<span style="color:rgba(255,255,255,.3);font-size:10px;margin-left:6px;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,.04);font-weight:500;border:1px solid rgba(255,255,255,.05)">${_t('tag_you')}</span>` : ''}</div>
+            <div class="flex-1 min-w-0">
+              <div class="text-white/90 text-[13px] font-semibold truncate tracking-tight">${u.displayName} ${u.oracleHandle ? `<span class="text-amber-500/70 text-[10px] ml-1.5 font-medium tracking-wide">@${u.oracleHandle}</span>` : ''} ${isMe ? `<span class="text-white/30 text-[10px] ml-1.5 px-1.5 py-[1px] rounded bg-white/[0.04] font-medium border border-white/[0.05]">${_t('tag_you')}</span>` : ''}</div>
             </div>
-            <div style="display:flex;align-items:center;gap:8px;padding-right:8px" class="vc-icons-container">
+            <div class="flex items-center gap-2 pr-2 opacity-100 vc-icons-container">
                ${bellIcon}${micIcon}
             </div>
           </div>`;
@@ -1257,82 +854,76 @@
       const isChat = this._activeTab === 'chat';
       const isMusic = this._activeTab === 'music';
 
-      const eqInd = this._musicPlaying ? `<span class="vc-music-ind" style="display:flex;align-items:flex-end;gap:2px;height:10px;margin-left:4px">
-             <span style="width:2px;background:#ec4899;border-radius:99px;animation:vc-eq .8s ease-in-out infinite"></span>
-             <span style="width:2px;background:#ec4899;border-radius:99px;animation:vc-eq .8s ease-in-out infinite .2s"></span>
-             <span style="width:2px;background:#ec4899;border-radius:99px;animation:vc-eq .8s ease-in-out infinite .4s"></span>
-           </span>` : '';
-
       return `
         <!-- Ambient Orbs -->
-        <div class="vc-orb-v" style="top:-80px;right:-80px;width:250px;height:250px;background:rgba(245,158,11,.08)"></div>
-        <div class="vc-orb-c" style="bottom:-40px;left:-40px;width:200px;height:200px;background:rgba(236,72,153,.06)"></div>
+        <div class="absolute -top-20 -right-20 w-64 h-64 bg-amber-500/15 rounded-full blur-[60px] pointer-events-none"></div>
+        <div class="absolute -bottom-10 -left-10 w-48 h-48 bg-pink-500/10 rounded-full blur-[60px] pointer-events-none"></div>
 
         <!-- Header -->
-        <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);backdrop-filter:blur(8px)">
-          <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(236,72,153,.1));display:flex;align-items:center;justify-content:center;color:#f59e0b">
-              <span style="width:18px;height:18px;display:flex">${ICONS.sound}</span>
-            </div>
+        <div class="relative z-10 flex items-center justify-between px-5 py-4 bg-black/20 border-b border-white/[0.03] backdrop-blur-md">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5">${ICONS.sound}</div>
             <div>
-              <div style="color:#fff;font-weight:700;font-size:13.5px;letter-spacing:-.01em">#principal</div>
-              <div style="display:flex;align-items:center;gap:6px;margin-top:2px" class="vc-sub">
-                <span style="width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:vc-blink 2.5s ease-in-out infinite"></span>
-                <span style="color:rgba(255,255,255,.4);font-size:10px;font-weight:500">${this.users.length}/4</span>
-                <span style="color:rgba(255,255,255,.2);font-size:10px">&middot;</span>
-                <span id="vc-timer" style="font-family:'SF Mono',Monaco,monospace;font-size:10px;color:#ec4899;font-weight:600;letter-spacing:.04em" class="vc-timer">00:00</span>
+              <div class="text-white font-semibold text-[14px] tracking-wide">#principal</div>
+              <div class="text-white/40 text-[11px] font-medium flex items-center gap-1.5 vc-sub">
+                <div class="w-1.5 h-1.5 rounded-full bg-emerald-500" style="animation: vc-blink 2s infinite"></div>
+                ${this.users.length}/4 · <span id="vc-timer" class="tabular-nums font-mono vc-timer">00:00</span>
               </div>
             </div>
           </div>
-          <div style="display:flex;align-items:center;gap:6px">
-            <button id="vc-btn-oracle-redirect" style="padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.6);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background .15s,color .15s" onmouseenter="this.style.background='rgba(255,255,255,.08)';this.style.color='#fff';this.style.borderColor='rgba(245,158,11,.25)'" onmouseleave="this.style.background='rgba(255,255,255,.04)';this.style.color='rgba(255,255,255,.6)';this.style.borderColor='rgba(255,255,255,.07)'" title="Seguir en Oracle">
-              <svg style="width:11px;height:11px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+          <div class="flex items-center gap-2">
+            <button id="vc-btn-oracle-redirect" class="py-1.5 px-3 rounded-lg bg-white/[0.03] border border-white/[0.05] text-white/70 hover:bg-white/[0.08] hover:text-white font-semibold text-[10px] uppercase tracking-wider transition-all flex items-center gap-1.5" title="Seguir en Oracle">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
               <span>Oracle</span>
             </button>
-            <button id="vc-close" style="width:28px;height:28px;border-radius:8px;background:transparent;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:14px;transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.07)'" onmouseleave="this.style.background='transparent'">&times;</button>
+            <button class="text-white/30 hover:text-white hover:bg-white/5 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
           </div>
         </div>
 
         <!-- Navigation Tabs -->
-        <div style="position:relative;z-index:10;padding:16px 20px;display:flex">
-          <div style="display:flex;flex:1;gap:4px;padding:3px;background:rgba(0,0,0,.25);border-radius:10px;box-shadow:inset 0 1px 3px rgba(0,0,0,.3)">
-            <button class="vc-tab-pill ${isRoom ? 'active' : ''}" id="vc-tab-room" style="position:relative">${_t('vc_tab_room')}</button>
-            <button class="vc-tab-pill ${isChat ? 'active' : ''}" id="vc-tab-chat" style="position:relative">
-              ${_t('vc_chat')}
-              ${this._chatUnread > 0 ? `<span style="position:absolute;top:4px;right:8px;width:6px;height:6px;background:#f87171;border-radius:50%;animation:vc-badge-pop .3s ease-out"></span>` : ''}
-            </button>
-            <button class="vc-tab-pill ${isMusic ? 'active' : ''}" id="vc-tab-music" style="display:flex;align-items:center;justify-content:center">
-              ${_t('vc_music')} ${eqInd}
-            </button>
-          </div>
+        <div class="relative z-10 flex items-center px-1.5 py-1.5 mx-5 mt-4 bg-black/30 border border-white/[0.03] rounded-[10px] backdrop-blur-sm">
+          <button class="flex-1 py-1.5 text-xs font-semibold rounded-md transition-all ${isRoom ? 'bg-white/[0.08] text-white shadow-sm' : 'text-white/40 hover:text-white/80'}" id="vc-tab-room">
+             ${_t('vc_tab_room')}
+          </button>
+          <button class="flex-1 py-1.5 text-xs font-semibold rounded-md transition-all relative ${isChat ? 'bg-white/[0.08] text-white shadow-sm' : 'text-white/40 hover:text-white/80'}" id="vc-tab-chat">
+             ${_t('vc_chat')} ${this._chatUnread > 0 ? `<span class="absolute top-1 right-2.5 w-1.5 h-1.5 bg-red-500 rounded-full"></span>` : ''}
+          </button>
+          <button class="flex-1 py-1.5 text-xs font-semibold rounded-md transition-all flex items-center justify-center gap-1.5 ${isMusic ? 'bg-white/[0.08] text-white shadow-sm' : 'text-white/40 hover:text-white/80'}" id="vc-tab-music">
+             ${_t('vc_music')} ${this._musicPlaying ? `<div class="flex items-end gap-[1px] h-2.5 vc-music-ind">
+               <div class="w-[2px] bg-amber-500 animate-[vc-eq_0.8s_ease-in-out_infinite]"></div>
+               <div class="w-[2px] bg-amber-500 animate-[vc-eq_0.8s_ease-in-out_infinite_0.2s]"></div>
+               <div class="w-[2px] bg-amber-500 animate-[vc-eq_0.8s_ease-in-out_infinite_0.4s]"></div>
+             </div>` : ''}
+          </button>
         </div>
 
         <!-- Main Content Area -->
-        <div style="height:248px;position:relative;overflow:hidden">
+        <div class="h-[250px] relative overflow-hidden">
           
           <!-- ROOM TAB -->
-          <div id="vc-content-room" style="position:absolute;inset:0;display:flex;flex-direction:column;transition:opacity .25s,transform .25s;${isRoom ? 'opacity:1;transform:translateX(0);pointer-events:auto' : 'opacity:0;transform:translateX(-12px);pointer-events:none'}">
-            <div style="flex:1;overflow-y:auto;padding:8px" class="vc-scroll vc-sect">
-              <div style="font-size:9px;color:rgba(255,255,255,.2);font-weight:700;text-transform:uppercase;letter-spacing:.16em;margin-bottom:8px;padding:0 6px" class="vc-sect-lbl">${_t('sect_in')}</div>
-              ${userRows || `<div style="text-align:center;color:rgba(255,255,255,.2);font-size:12px;padding:32px 16px" class="vc-empty">${_t('empty_chan')}</div>`}
+          <div class="absolute inset-0 flex flex-col ${isRoom ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 -translate-x-8 pointer-events-none'}" id="vc-content-room">
+            <div class="flex-1 overflow-y-auto px-4 py-3 vc-scroll vc-sect">
+              <div class="text-[10px] text-white/20 font-bold uppercase tracking-widest mb-3 px-2 mt-1 vc-sect-lbl">${_t('sect_in')}</div>
+              ${userRows || `<div class="text-center text-white/20 text-xs py-8 vc-empty">${_t('empty_chan')}</div>`}
             </div>
+
           </div>
 
           <!-- CHAT TAB -->
-          <div id="vc-content-chat" style="position:absolute;inset:0;display:flex;flex-direction:column;transition:opacity .25s,transform .25s;${isChat ? 'opacity:1;transform:translateX(0);pointer-events:auto' : (isRoom ? 'opacity:0;transform:translateX(12px);pointer-events:none' : 'opacity:0;transform:translateX(-12px);pointer-events:none')}">
-            <div style="flex:1;overflow-y:auto;padding:12px 16px 4px 16px" class="vc-scroll" id="vc-msgs">${this._renderChatMsgs()}</div>
-            <div style="padding:0 16px 8px;color:rgba(255,255,255,.4);font-size:10px;display:none" id="vc-chat-typing"></div>
-            <div style="padding:12px;border-top:1px solid rgba(255,255,255,.03);display:flex;gap:8px">
-              <input id="vc-chat-in" type="text" placeholder="${_t('vc_chat_ph')}" autocomplete="off" class="vc-input" style="flex:1;padding:8px 14px;border-radius:10px" />
-              <button id="vc-chat-send" class="vc-btn-primary" style="width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0">
-                <svg style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          <div class="absolute inset-0 flex flex-col ${isChat ? 'opacity-100 translate-x-0 pointer-events-auto' : (isRoom ? 'opacity-0 translate-x-8 pointer-events-none' : 'opacity-0 -translate-x-8 pointer-events-none')}" id="vc-content-chat">
+            <div class="flex-1 overflow-y-auto px-4 pt-3 pb-1 vc-scroll" id="vc-msgs">${this._renderChatMsgs()}</div>
+            <div class="px-4 pb-2 text-white/40 text-[10px] hidden" id="vc-chat-typing"></div>
+            <div class="p-3 border-t border-white/[0.03] flex gap-2">
+              <input class="flex-1 bg-white/[0.03] border border-white/[0.05] rounded-[10px] px-3.5 py-2 text-white text-xs outline-none focus:border-amber-500/30 focus:bg-white/[0.05] transition-all" id="vc-chat-in" type="text" placeholder="${_t('vc_chat_ph')}" autocomplete="off"/>
+              <button class="bg-amber-500 text-black w-9 h-9 rounded-[10px] flex items-center justify-center hover:bg-amber-400 transition-colors shadow-[0_4px_15px_rgba(245,158,11,0.3)]" id="vc-chat-send">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
               </button>
             </div>
           </div>
 
           <!-- MUSIC TAB -->
-          <div id="vc-content-music" style="position:absolute;inset:0;display:flex;flex-direction:column;transition:opacity .25s,transform .25s;${isMusic ? 'opacity:1;transform:translateX(0);pointer-events:auto' : 'opacity:0;transform:translateX(12px);pointer-events:none'}">
-            <div style="flex:1;overflow-y:auto;display:flex;flex-direction:column" class="vc-scroll" id="vc-music-inner">
+          <div class="absolute inset-0 flex flex-col ${isMusic ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 translate-x-8 pointer-events-none'}" id="vc-content-music">
+            <div class="flex-1 overflow-y-auto vc-scroll flex flex-col" id="vc-music-inner">
                ${this._renderMusicPanel()}
             </div>
           </div>
@@ -1340,16 +931,16 @@
         </div>
 
         <!-- Global Controls -->
-        <div style="position:relative;z-index:10;display:flex;gap:10px;padding:16px;border-top:1px solid rgba(255,255,255,.03);background:rgba(0,0,0,.2);backdrop-filter:blur(8px)">
-          <button id="vc-mute" style="flex:1;padding:12px;border-radius:12px;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s;border:1px solid ${this.muted ? 'rgba(239,68,68,.2)' : 'rgba(255,255,255,.05)'};background:${this.muted ? 'rgba(239,68,68,.1)' : 'rgba(255,255,255,.03)'};color:${this.muted ? '#ef4444' : 'rgba(255,255,255,.7)'};cursor:pointer" onmouseenter="if(!${this.muted}) { this.style.background='rgba(255,255,255,.06)'; this.style.color='#fff'; }">
-            <span style="width:16px;height:16px;display:flex">${this.muted ? ICONS.micOff : ICONS.mic}</span>
+        <div class="relative z-10 flex gap-2.5 p-4 border-t border-white/[0.03] bg-black/20 backdrop-blur-md">
+          <button class="flex-1 py-3 rounded-[12px] text-[11px] font-semibold transition-all flex items-center justify-center gap-2 ${this.muted ? 'bg-red-500/10 text-red-500 border border-red-500/20' : 'bg-white/[0.03] text-white/70 border border-white/[0.05] hover:bg-white/[0.06] hover:text-white'}" id="vc-mute">
+            <span class="w-4 h-4 [&>svg]:w-4 [&>svg]:h-4 flex items-center justify-center">${this.muted ? ICONS.micOff : ICONS.mic}</span>
             ${this.muted ? _t('btn_muted') : _t('btn_mic')}
           </button>
-          <button id="vc-dnd" style="flex:1;padding:12px;border-radius:12px;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s;border:1px solid ${this.dnd ? 'rgba(245,158,11,.2)' : 'rgba(255,255,255,.05)'};background:${this.dnd ? 'rgba(245,158,11,.1)' : 'rgba(255,255,255,.03)'};color:${this.dnd ? '#f59e0b' : 'rgba(255,255,255,.7)'};cursor:pointer" onmouseenter="if(!${this.dnd}) { this.style.background='rgba(255,255,255,.06)'; this.style.color='#fff'; }">
-            <span style="width:16px;height:16px;display:flex">${ICONS.bell}</span> DND
+          <button class="flex-1 py-3 rounded-[12px] text-[11px] font-semibold transition-all flex items-center justify-center gap-2 ${this.dnd ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20' : 'bg-white/[0.03] text-white/70 border border-white/[0.05] hover:bg-white/[0.06] hover:text-white'}" id="vc-dnd">
+            <span class="w-4 h-4 [&>svg]:w-4 [&>svg]:h-4 flex items-center justify-center">${ICONS.bell}</span> DND
           </button>
-          <button id="vc-leave" style="width:48px;flex-shrink:0;border-radius:12px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.15);color:#ef4444;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s" onmouseenter="this.style.background='rgba(239,68,68,.2)'" onmouseleave="this.style.background='rgba(239,68,68,.1)'" title="Salir">
-            <span style="width:16px;height:16px;display:flex">${ICONS.phone}</span>
+          <button class="w-[48px] flex-shrink-0 rounded-[12px] bg-red-500/10 text-red-500 border border-red-500/15 flex items-center justify-center hover:bg-red-500/20 transition-all [&>svg]:w-4 [&>svg]:h-4" id="vc-leave" title="Salir">
+            ${ICONS.phone}
           </button>
         </div>`;
     }
@@ -1359,7 +950,7 @@
       const sub = document.querySelector('.vc-sub');
       if (sub && sub.textContent.includes('/4')) {
         const timerTxt = document.getElementById('vc-timer')?.textContent || '00:00';
-        sub.innerHTML = `<span style="width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:vc-blink 2.5s ease-in-out infinite"></span><span style="color:rgba(255,255,255,.4);font-size:10px;font-weight:500">${this.users.length}/4</span><span style="color:rgba(255,255,255,.2);font-size:10px">&middot;</span><span id="vc-timer" style="font-family:'SF Mono',Monaco,monospace;font-size:10px;color:#ec4899;font-weight:600;letter-spacing:.04em" class="vc-timer">${timerTxt}</span>`;
+        sub.innerHTML = `<div class="w-1.5 h-1.5 rounded-full bg-emerald-500" style="animation: vc-blink 2s infinite"></div>${this.users.length}/4 · <span id="vc-timer" class="tabular-nums font-mono vc-timer">${timerTxt}</span>`;
       }
       
       const container = document.querySelector('.vc-sect');
@@ -1382,7 +973,7 @@
       if (this.users.length === 0) {
         if (!container.querySelector('.vc-empty')) {
           const lbl = container.querySelector('.vc-sect-lbl');
-          if (lbl) lbl.insertAdjacentHTML('afterend', `<div style="text-align:center;color:rgba(255,255,255,.2);font-size:12px;padding:32px 16px" class="vc-empty">${_t('empty_chan')}</div>`);
+          if (lbl) lbl.insertAdjacentHTML('afterend', `<div class="text-center text-white/20 text-xs py-8 vc-empty">${_t('empty_chan')}</div>`);
         }
         return;
       }
@@ -1398,29 +989,21 @@
         let node = document.getElementById(`vc-u-${u.id}`);
         if (!node) {
           node = document.createElement('div');
-          node.className = 'vc-user-card vc-user';
+          node.className = 'flex items-center gap-3.5 p-2 hover:bg-white/[0.03] rounded-[12px] transition-colors vc-user group';
           node.id = `vc-u-${u.id}`;
           
           const avatarHtml = (u.photoURL || (isMe && window.yaireCurrentUser?.photoURL)) 
-            ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover" draggable="false" />` 
-            : `<span style="font-size:12px;font-weight:800;color:${isMe?'#f59e0b':'rgba(255,255,255,.6)'}">${u.displayName.slice(0,2).toUpperCase()}</span>`;
-
-          const avatarBg = isMe
-            ? 'background:rgba(245,158,11,.1);border:1.5px solid rgba(245,158,11,.3);box-shadow:0 0 12px rgba(245,158,11,.1)'
-            : 'background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.07)';
-
+            ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" class="w-full h-full rounded-full object-cover" draggable="false" />` 
+            : u.displayName.slice(0, 2).toUpperCase();
+            
           node.innerHTML = `
-            <div id="vc-av-${u.id}" class="vc-av" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:border-color .2s,box-shadow .2s;${avatarBg}">
+            <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold transition-all relative ${isMe ? 'bg-amber-500/10 text-amber-500 shadow-[inset_0_0_0_1px_rgba(245,158,11,0.2)]' : 'bg-white/[0.03] text-white/50 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]'} vc-av" id="vc-av-${u.id}">
               ${avatarHtml}
             </div>
-            <div style="flex:1;min-width:0">
-              <div style="color:rgba(255,255,255,.9);font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.01em">
-                ${u.displayName}
-                ${u.oracleHandle ? `<span style="color:rgba(245,158,11,.7);font-size:10px;margin-left:5px;font-weight:500">@${u.oracleHandle}</span>` : ''}
-                ${isMe ? `<span style="color:rgba(255,255,255,.25);font-size:9px;margin-left:5px;padding:1px 5px;border-radius:4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);font-weight:500">${_t('tag_you')}</span>` : ''}
-              </div>
+            <div class="flex-1 min-w-0">
+              <div class="text-white/90 text-[13px] font-semibold truncate tracking-tight">${u.displayName} ${u.oracleHandle ? `<span class="text-amber-500/70 text-[10px] ml-1.5 font-medium tracking-wide">@${u.oracleHandle}</span>` : ''} ${isMe ? `<span class="text-white/30 text-[10px] ml-1.5 px-1.5 py-[1px] rounded bg-white/[0.04] font-medium border border-white/[0.05]">${_t('tag_you')}</span>` : ''}</div>
             </div>
-            <div style="display:flex;align-items:center;gap:5px;padding-right:4px" class="vc-icons-container">
+            <div class="flex items-center gap-2 pr-1 opacity-100 vc-icons-container">
             </div>
           `;
           container.appendChild(node);
@@ -1443,17 +1026,17 @@
               const isLocallyMuted = u.localMuted;
               const menu = document.createElement('div');
               menu.id = 'vc-user-ctx-menu';
-              menu.style.cssText = 'position:fixed;z-index:9999;background:rgba(12,10,26,.95);border:1px solid rgba(255,255,255,.1);box-shadow:0 16px 48px rgba(0,0,0,.8);border-radius:14px;padding:6px;display:flex;flex-direction:column;min-width:190px;backdrop-filter:blur(20px)';
+              menu.className = 'fixed z-[9999] bg-zinc-900 border border-white/10 shadow-2xl shadow-black/50 rounded-xl py-1.5 px-1.5 flex flex-col min-w-[180px] transform-gpu backdrop-blur-xl';
               
               menu.style.left = e.clientX + 'px';
               menu.style.top = e.clientY + 'px';
               
               menu.innerHTML = `
-                <div style="padding:8px 12px 8px;border-bottom:1px solid rgba(245,158,11,.2);margin-bottom:4px">
-                  <div style="font-size:10px;text-transform:uppercase;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:.12em">${u.displayName}</div>
+                <div class="px-3 py-1.5 mb-1 border-b border-white/10">
+                  <div class="text-[10px] uppercase font-bold text-white/40 tracking-wider">${u.displayName}</div>
                 </div>
-                <button style="width:100%;text-align:left;padding:9px 12px;border-radius:9px;font-size:13px;color:rgba(255,255,255,.85);background:transparent;border:none;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.08)'" onmouseleave="this.style.background='transparent'">
-                  <span style="width:15px;height:15px;display:flex;align-items:center;justify-content:center;color:${isLocallyMuted ? '#4ade80' : '#f87171'}">${isLocallyMuted ? ICONS.mic : ICONS.micOff}</span>
+                <button class="w-full text-left px-3 py-2 rounded-lg text-sm text-white/90 hover:bg-white/10 hover:text-white transition-colors flex items-center gap-2">
+                  <span class="w-4 h-4 flex items-center justify-center ${isLocallyMuted ? 'text-green-400' : 'text-red-400'}">${isLocallyMuted ? ICONS.mic : ICONS.micOff}</span>
                   ${isLocallyMuted ? 'Desmutear localmente' : 'Silenciar localmente'}
                 </button>
               `;
@@ -1491,32 +1074,32 @@
           }
         }
         
-        this._syncIcons(u.id, u);
+        let iconContainer = node.querySelector('.vc-icons-container');
+        if (!iconContainer) {
+            // Fallback for nodes that somehow lack the container
+            iconContainer = document.createElement('div');
+            iconContainer.className = 'flex items-center gap-2 pr-1 opacity-100 vc-icons-container';
+            node.appendChild(iconContainer);
+        }
+        
+        const existingDnd = iconContainer.querySelector('.vc-dico');
+        if (isDnd && !existingDnd) {
+          const mico = iconContainer.querySelector('.vc-mico');
+          if (mico) mico.insertAdjacentHTML('beforebegin', `<span class="text-purple-400 w-4 h-4 vc-dico" title="${_t('btn_dnd')}">${ICONS.dnd}</span>`);
+          else iconContainer.insertAdjacentHTML('beforeend', `<span class="text-purple-400 w-4 h-4 vc-dico" title="${_t('btn_dnd')}">${ICONS.dnd}</span>`);
+        } else if (!isDnd && existingDnd) {
+          existingDnd.remove();
+        }
+        
+        const existingMic = iconContainer.querySelector('.vc-mico');
+        if ((isMuted || u.localMuted) && !existingMic) {
+          iconContainer.insertAdjacentHTML('beforeend', `<span class="text-red-500 w-4 h-4 vc-mico" title="${u.localMuted ? 'Silenciado localmente' : 'Silenciado'}">${ICONS.micOff}</span>`);
+        } else if (!isMuted && !u.localMuted && existingMic) {
+          existingMic.remove();
+        } else if ((isMuted || u.localMuted) && existingMic) {
+          existingMic.title = u.localMuted ? 'Silenciado localmente' : 'Silenciado';
+        }
       });
-    }
-
-    _syncIcons(userId, u) {
-      const iconContainer = document.querySelector(`#vc-u-${userId} .vc-icons-container`);
-      if (!iconContainer) return;
-      const mico = iconContainer.querySelector('.vc-mico');
-      const dico = iconContainer.querySelector('.vc-dico');
-      
-      if (u.dnd) {
-        if (!dico) {
-          if (mico) mico.insertAdjacentHTML('beforebegin', `<span class="vc-dico" style="color:#f59e0b;width:16px;height:16px;display:flex" title="${_t('btn_dnd')}">${ICONS.dnd}</span>`);
-          else iconContainer.insertAdjacentHTML('beforeend', `<span class="vc-dico" style="color:#f59e0b;width:16px;height:16px;display:flex" title="${_t('btn_dnd')}">${ICONS.dnd}</span>`);
-        }
-      } else if (dico) {
-        dico.remove();
-      }
-
-      if (u.muted || u.localMuted) {
-        if (!mico) {
-          iconContainer.insertAdjacentHTML('beforeend', `<span class="vc-mico" style="color:#ef4444;width:16px;height:16px;display:flex" title="${u.localMuted ? 'Silenciado localmente' : 'Silenciado'}">${ICONS.micOff}</span>`);
-        }
-      } else if (mico) {
-        mico.remove();
-      }
     }
 
     _render(tpl) {
@@ -1530,11 +1113,11 @@
             const cnt = document.getElementById('vc-conn-count');
             if (cnt) {
               if (data.users === 0) {
-                cnt.innerHTML = `<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.2);margin-right:5px"></span><span style="color:rgba(255,255,255,.3)">${_t('vc_nobody')}</span>`;
+                cnt.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-white/20 inline-block mr-1.5"></span><span class="text-white/30">${_t('vc_nobody')}</span>`;
               } else {
-                cnt.innerHTML = `<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:#ec4899;margin-right:5px;animation:vc-pulse-slow 1.5s infinite;box-shadow:0 0 6px rgba(236,72,153,.6)"></span><span style="color:rgba(236,72,153,.9)">${data.users} ${data.users === 1 ? _t('vc_person') : _t('vc_persons')}</span>`;
+                cnt.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block mr-1.5 animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.6)]"></span><span class="text-amber-500/90">${data.users} ${data.users === 1 ? _t('vc_person') : _t('vc_persons')}</span>`;
               }
-              cnt.style.opacity = '1';
+              cnt.classList.remove('opacity-0');
             }
           }).catch(()=>{});
         };
@@ -1572,7 +1155,7 @@
           joinBtn.addEventListener('click', () => {
              const name = document.getElementById('vc-name').value.trim();
              joinBtn.disabled = true;
-             joinBtn.innerHTML = '<div style="width:18px;height:18px;border-radius:50%;border:2.5px solid rgba(255,255,255,.2);border-top-color:#fff;animation:vc-spin .8s linear infinite;display:inline-block"></div>';
+             joinBtn.innerHTML = '<div class="vc-spin"></div>';
              this._doJoin(name);
           });
         }
@@ -1858,11 +1441,14 @@
           if (typingEl) {
             if (isTyping) {
               typingEl.textContent = `${name} ${_t('vc_typing')}`;
-              typingEl.style.display = 'block';
+              typingEl.classList.remove('hidden');
+              typingEl.classList.add('block');
+              // Auto-scroll to show typing indicator if at bottom
               const msgsEl = document.getElementById('vc-msgs');
               if (msgsEl) msgsEl.scrollTop = msgsEl.scrollHeight;
             } else {
-              typingEl.style.display = 'none';
+              typingEl.classList.add('hidden');
+              typingEl.classList.remove('block');
             }
           }
         });
@@ -2099,19 +1685,14 @@
       
       const btn = document.getElementById('vc-mute');
       if (btn) {
-        btn.className = `vc-btn-glass${this.muted ? ' vc-btn-muted-active' : ''}`;
-        btn.innerHTML = `<span style="width:15px;height:15px;display:flex;align-items:center;justify-content:center">${this.muted ? ICONS.micOff : ICONS.mic}</span> ${this.muted ? _t('btn_muted') : _t('btn_mic')}`;
+        btn.className = `flex-1 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${this.muted ? 'bg-red-500/10 text-red-500 border border-red-500/30' : 'bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white'}`;
+        btn.innerHTML = `<span class="w-4 h-4 [&>svg]:w-4 [&>svg]:h-4 flex items-center justify-center">${this.muted ? ICONS.micOff : ICONS.mic}</span> ${this.muted ? _t('btn_muted') : _t('btn_mic')}`;
         const svg = btn.querySelector('svg');
-        if (svg) { svg.style.transform = 'scale(1.3)'; setTimeout(() => { if (svg) svg.style.transform = ''; }, 150); }
+        if (svg) {
+          svg.style.transform = 'scale(1.3)';
+          setTimeout(() => { if (svg) svg.style.transform = ''; }, 150);
+        }
       }
-      
-      const barMute = document.getElementById('vc-bar-mute');
-      if (barMute) {
-        barMute.style.color = this.muted ? '#f87171' : 'rgba(255,255,255,.45)';
-        barMute.style.background = this.muted ? 'rgba(239,68,68,.12)' : 'transparent';
-        barMute.querySelector('span').innerHTML = this.muted ? ICONS.micOff : ICONS.mic;
-      }
-      
       this._updateUsersDOM();
       this._playSfx(this.muted ? 'toggleOff' : 'toggleOn', 0.4);
     }
@@ -2124,12 +1705,15 @@
       }
       this.socket && this.socket.emit('dnd_state', { dnd: this.dnd });
       
-      const btn2 = document.getElementById('vc-dnd');
-      if (btn2) {
-        btn2.className = `vc-btn-glass${this.dnd ? ' vc-btn-dnd-active' : ''}`;
-        btn2.innerHTML = `<span style="width:15px;height:15px;display:flex;align-items:center;justify-content:center">${ICONS.bell}</span> DND`;
-        const svg = btn2.querySelector('svg');
-        if (svg) { svg.style.transform = 'scale(1.2) rotate(-15deg)'; setTimeout(() => { if (svg) svg.style.transform = ''; }, 150); }
+      const btn = document.getElementById('vc-dnd');
+      if (btn) {
+        btn.className = `flex-1 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${this.dnd ? 'bg-purple-500/10 text-purple-400 border border-purple-500/30' : 'bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white'}`;
+        btn.innerHTML = `<span class="w-4 h-4 [&>svg]:w-4 [&>svg]:h-4 flex items-center justify-center">${ICONS.bell}</span> DND`;
+        const svg = btn.querySelector('svg');
+        if (svg) {
+          svg.style.transform = 'scale(1.2) rotate(-15deg)';
+          setTimeout(() => { if (svg) svg.style.transform = ''; }, 150);
+        }
       }
       this._updateUsersDOM();
       this._playSfx(this.dnd ? 'toggleOff' : 'toggleOn', 0.4);
@@ -2140,26 +1724,13 @@
       this._playSfx('siri_end', 0.5);
       if (this.socket) { this.socket.emit('leave_channel'); this.socket.disconnect(); this.socket = null; }
       this._cleanup();
-      
-      if (this._bar) {
-        this._bar.style.opacity = '0';
-        this._bar.style.transform = 'translateY(10px) scale(.94)';
-        this._bar.style.pointerEvents = 'none';
-        this._bar.style.visibility = 'hidden';
-      }
-      if (this.panel) {
-        this.panel.style.opacity = '1';
-        this.panel.style.transform = 'scale(1) translateY(0)';
-        this.panel.style.pointerEvents = 'auto';
-        this.panel.style.visibility = 'visible';
-      }
-      
+      this._bar.classList.remove('show');
       this._render(this._tplLogin());
     }
 
     // ── CHAT METHODS ────────────────────────────────────────────────────
     _renderChatMsgs() {
-      if (this._chatMsgs.length === 0) return `<div style="text-align:center;color:rgba(255,255,255,.2);font-size:12px;padding:28px 16px">${_t('vc_chat_empty')}</div>`;
+      if (this._chatMsgs.length === 0) return `<div class="text-center text-white/20 text-xs py-8">${_t('vc_chat_empty')}</div>`;
       
       let html = '';
       let lastFrom = null;
@@ -2172,23 +1743,23 @@
         const isEmojiOnly = /^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F|\s)+$/u.test(m.text) && m.text.trim().length > 0;
         
         const bubbleClass = isEmojiOnly 
-          ? 'vc-bubble-emoji' 
-          : (isMe ? 'vc-bubble-me' : 'vc-bubble-them');
+          ? 'text-4xl py-1' 
+          : (isMe ? 'bg-black text-white rounded-2xl px-3 py-2 text-sm shadow-sm font-medium border border-white/10' : 'bg-white text-zinc-900 rounded-2xl px-3 py-2 text-sm shadow-sm font-medium');
               
         const isGrouped = (lastFrom === m.from);
         
         if (!isGrouped) {
           if (i > 0) html += `</div></div>`; // close previous group
           html += `
-          <div style="display:flex;flex-direction:column;margin-bottom:10px;align-items:${isMe ? 'flex-end' : 'flex-start'}" class="vc-chat-msg" data-from="${m.from}">
-            <div style="display:flex;align-items:baseline;gap:5px;margin-bottom:4px;padding:0 2px">
-              <span style="font-size:10px;font-weight:700;color:${isMe ? '#f59e0b' : 'rgba(255,255,255,.5)'}">${m.name}</span>
-              <span style="font-size:9px;color:rgba(255,255,255,.25)">${time}</span>
+          <div class="flex flex-col mb-3 ${isMe ? 'items-end' : 'items-start'} vc-chat-msg" data-from="${m.from}">
+            <div class="flex items-baseline gap-2 mb-1 px-1">
+              <span class="text-[10px] font-bold ${isMe ? 'text-amber-500' : 'text-white/60'}">${m.name}</span>
+              <span class="text-[9px] text-white/30">${time}</span>
             </div>
-            <div style="display:flex;flex-direction:column;gap:4px;width:100%;align-items:${isMe ? 'flex-end' : 'flex-start'}" class="vc-chat-bubbles">
-              <div class="${bubbleClass}">${escText}</div>`;
+            <div class="flex flex-col gap-1 w-full ${isMe ? 'items-end' : 'items-start'} vc-chat-bubbles">
+              <div class="max-w-[85%] ${bubbleClass}">${escText}</div>`;
         } else {
-          html += `<div class="${bubbleClass}">${escText}</div>`;
+          html += `<div class="max-w-[85%] ${bubbleClass}">${escText}</div>`;
         }
         
         lastFrom = m.from;
@@ -2254,8 +1825,8 @@
         const isEmojiOnly = /^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F|\s)+$/u.test(text) && text.trim().length > 0;
         
         const bubbleClass = isEmojiOnly 
-          ? 'vc-bubble-emoji' 
-          : (isMe ? 'vc-bubble-me' : 'vc-bubble-them');
+          ? 'text-4xl py-1' 
+          : (isMe ? 'bg-black text-white rounded-2xl px-3 py-2 text-sm shadow-sm font-medium border border-white/10' : 'bg-white text-zinc-900 rounded-2xl px-3 py-2 text-sm shadow-sm font-medium');
               
         const lastMsgEl = msgsEl.lastElementChild;
         const lastFrom = lastMsgEl ? lastMsgEl.getAttribute('data-from') : null;
@@ -2265,18 +1836,18 @@
         if (lastFrom === from) {
           // append just the bubble
           const bubblesContainer = lastMsgEl.querySelector('.vc-chat-bubbles');
-          bubblesContainer.insertAdjacentHTML('beforeend', `<div class="${bubbleClass}">${escText}</div>`);
+          bubblesContainer.insertAdjacentHTML('beforeend', `<div class="max-w-[85%] ${bubbleClass}">${escText}</div>`);
           newBubbleEl = bubblesContainer.lastElementChild;
         } else {
           // append full group
           msgsEl.insertAdjacentHTML('beforeend', `
-            <div style="display:flex;flex-direction:column;margin-bottom:10px;align-items:${isMe ? 'flex-end' : 'flex-start'}" class="vc-chat-msg" data-from="${from}">
-              <div style="display:flex;align-items:baseline;gap:5px;margin-bottom:4px;padding:0 2px">
-                <span style="font-size:10px;font-weight:700;color:${isMe ? '#f59e0b' : 'rgba(255,255,255,.5)'}">${name}</span>
-                <span style="font-size:9px;color:rgba(255,255,255,.25)">${time}</span>
+            <div class="flex flex-col mb-3 ${isMe ? 'items-end' : 'items-start'} vc-chat-msg" data-from="${from}">
+              <div class="flex items-baseline gap-2 mb-1 px-1">
+                <span class="text-[10px] font-bold ${isMe ? 'text-amber-500' : 'text-white/60'}">${name}</span>
+                <span class="text-[9px] text-white/30">${time}</span>
               </div>
-              <div style="display:flex;flex-direction:column;gap:4px;width:100%;align-items:${isMe ? 'flex-end' : 'flex-start'}" class="vc-chat-bubbles">
-                <div class="${bubbleClass}">${escText}</div>
+              <div class="flex flex-col gap-1 w-full ${isMe ? 'items-end' : 'items-start'} vc-chat-bubbles">
+                <div class="max-w-[85%] ${bubbleClass}">${escText}</div>
               </div>
             </div>`);
           newBubbleEl = msgsEl.lastElementChild.querySelector('.vc-chat-bubbles').lastElementChild;
@@ -2315,18 +1886,13 @@
       const overlay = document.createElement('div');
       overlay.id = 'vc-ring-overlay';
       overlay.innerHTML = `
-        <div class="vc-ring-waves">
-          <div class="vc-ring-wave-el"></div>
-          <div class="vc-ring-wave-el"></div>
-          <div class="vc-ring-wave-el"></div>
-          <div class="vc-ring-avatar-el">${initials}</div>
-        </div>
-        <div class="vc-ring-label-el">${_t('vc_ring_title')}</div>
-        <div class="vc-ring-name-el">${callerName}</div>
-        <div class="vc-ring-sub-el">${_t('vc_ring_msg')}</div>
-        <div class="vc-ring-btns-el">
-          <button class="vc-ring-btn-join" id="vc-ring-join">${_t('vc_ring_join')}</button>
-          <button class="vc-ring-btn-ignore" id="vc-ring-ignore">${_t('vc_ring_ignore')}</button>
+        <div class="vc-ring-label">${_t('vc_ring_title')}</div>
+        <div class="vc-ring-avatar">${initials}</div>
+        <div class="vc-ring-name">${callerName}</div>
+        <div class="vc-ring-sub">${_t('vc_ring_msg')}</div>
+        <div class="vc-ring-btns">
+          <button class="vc-ring-btn join" id="vc-ring-join">${_t('vc_ring_join')}</button>
+          <button class="vc-ring-btn ignore" id="vc-ring-ignore">${_t('vc_ring_ignore')}</button>
         </div>`;
       document.body.appendChild(overlay);
 
@@ -2336,8 +1902,9 @@
       document.getElementById('vc-ring-join').addEventListener('click', () => {
         this._dismissRing();
         // Open the panel for the user to join
-        this._toggle();
+        this.panel.classList.add('open');
         this._playSfx('flyin', 0.4, false, 'fly');
+        // Focus on the password field
         setTimeout(() => {
           const passEl = document.getElementById('vc-pass');
           if (passEl) passEl.focus();
@@ -2569,6 +2136,7 @@
           const cur = this._ytPlayer.getCurrentTime() || 0;
           const tot = this._ytPlayer.getDuration() || 0;
           if (tot > 0) currentPct = (cur / tot) * 100;
+          
           const fmt = (secs) => {
             if (!secs || isNaN(secs)) return '0:00';
             const m = Math.floor(secs / 60);
@@ -2580,94 +2148,87 @@
         }
 
         const eqBars = isPlaying
-          ? `<span style="display:flex;align-items:flex-end;gap:2px;height:12px">
-               <span style="width:2.5px;background:linear-gradient(to top,#f59e0b,#ec4899);border-radius:99px;animation:vc-eq .8s ease-in-out infinite"></span>
-               <span style="width:2.5px;background:linear-gradient(to top,#f59e0b,#ec4899);border-radius:99px;animation:vc-eq .8s ease-in-out infinite .2s"></span>
-               <span style="width:2.5px;background:linear-gradient(to top,#f59e0b,#ec4899);border-radius:99px;animation:vc-eq .8s ease-in-out infinite .4s"></span>
-             </span>`
-          : `<span style="width:16px;height:16px;color:rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center">${ICONS.sound || '♪'}</span>`;
+          ? `<div class="flex items-end gap-0.5 h-3"><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite]"></div><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite_0.2s]"></div><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite_0.4s]"></div></div>`
+          : `<span class="w-4 h-4 text-white/40 [&>svg]:w-4 [&>svg]:h-4 flex items-center justify-center">${ICONS.sound || '♪'}</span>`;
         nowPlaying = `
-          <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:14px;padding:12px;margin-bottom:10px;position:relative;overflow:hidden">
-            <div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(245,158,11,.1);filter:blur(20px)"></div>
-            <div style="display:flex;align-items:center;gap:10px;position:relative;z-index:1;margin-bottom:10px">
-              <div style="width:36px;height:36px;border-radius:10px;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(245,158,11,.2)">
+          <div class="bg-white/5 border border-white/10 rounded-xl p-3 mb-2 relative overflow-hidden">
+            <div class="flex items-center gap-3 relative z-10 mb-2">
+              <div class="w-10 h-10 rounded-lg bg-black/40 flex items-center justify-center flex-shrink-0">
                 ${eqBars}
               </div>
-              <div style="flex:1;min-width:0">
-                <div style="font-size:9px;color:#f59e0b;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-bottom:3px">${_t('vc_music_now')}</div>
+              <div class="flex-1 min-w-0">
+                <div class="text-[9px] text-amber-500 font-bold uppercase tracking-wider mb-0.5">${_t('vc_music_now')}</div>
                 ${this._cleanMusicTitle(track.title).length > 25 
-                  ? `<div class="vc-marquee-container" style="font-size:12.5px;font-weight:700;color:#fff">
+                  ? `<div class="vc-marquee-container text-sm font-bold text-white">
                        <div class="vc-marquee-content">${this._escHtml(this._cleanMusicTitle(track.title))}</div>
                        <div class="vc-marquee-content" aria-hidden="true">${this._escHtml(this._cleanMusicTitle(track.title))}</div>
                      </div>` 
-                  : `<div style="font-size:12.5px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(this._cleanMusicTitle(track.title))}</div>`
+                  : `<div class="text-sm font-bold text-white truncate">${this._escHtml(this._cleanMusicTitle(track.title))}</div>`
                 }
-                <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:1px">${track.addedByName ? `${_t('vc_music_by')} ${track.addedByName}` : ''}</div>
+                <div class="text-[10px] text-white/40 truncate">${track.addedByName ? `${_t('vc_music_by')} ${track.addedByName}` : ''}</div>
               </div>
-              <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px;background:rgba(245,158,11,.2);color:#f59e0b;flex-shrink:0">${(track.source || track.type) === 'youtube' ? 'YT' : 'SP'}</span>
+              <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-white/50">${(track.source || track.type) === 'youtube' ? 'YT' : 'SP'}</span>
             </div>
             
             ${track.type === 'youtube' ? `
-              <div style="position:relative;z-index:1;margin-bottom:10px">
-                <div class="vc-progress-track" id="vc-music-progress">
-                  <div class="vc-progress-fill" id="vc-music-progress-fill" style="width:${currentPct}%"></div>
+              <div class="relative z-10 mb-3">
+                <div class="h-1 bg-black/50 rounded-full overflow-hidden relative" id="vc-music-progress">
+                  <div class="absolute top-0 left-0 h-full bg-amber-500 transition-all duration-200" id="vc-music-progress-fill" style="width: ${currentPct}%"></div>
                 </div>
-                <div style="display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,.35);margin-top:4px;font-family:'SF Mono',Monaco,monospace">
+                <div class="flex justify-between text-[9px] text-white/40 mt-1 font-mono">
                   <span id="vc-music-time-current">${cTimeFmt}</span>
                   <span id="vc-music-time-total">${tTimeFmt}</span>
                 </div>
               </div>
             ` : ''}
             
-            ${track.type === 'spotify' ? `<div style="margin-top:8px;width:100%" id="vc-spotify-embed"></div>` : ''}
+            ${track.type === 'spotify' ? `<div class="mt-2 w-full" id="vc-spotify-embed"></div>` : ''}
             
-            <div style="display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1">
-              <div style="display:flex;align-items:center;gap:8px">
-                <button id="vc-music-playpause" style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#f59e0b,#ec4899);display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;color:#fff;box-shadow:0 4px 16px rgba(245,158,11,.4);transition:opacity .15s" onmouseenter="this.style.opacity='.85'" onmouseleave="this.style.opacity='1'">
-                  <span style="width:14px;height:14px;display:flex;align-items:center;justify-content:center">${isPlaying ? ICONS.pause : ICONS.play}</span>
+            <div class="flex justify-between items-center relative z-10">
+              <div class="flex items-center gap-2">
+                <button class="w-9 h-9 rounded-full bg-white text-black flex items-center justify-center hover:scale-105 transition-transform [&>svg]:w-4 [&>svg]:h-4 shadow-md" id="vc-music-playpause">
+                  ${isPlaying ? ICONS.pause : ICONS.play}
                 </button>
-                <button id="vc-music-skip" style="width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);cursor:pointer;transition:background .15s" onmouseenter="this.style.background='rgba(245,158,11,.2)'" onmouseleave="this.style.background='rgba(255,255,255,.06)'">
-                  <span style="width:13px;height:13px;display:flex">${ICONS.skipFwd}</span>
+                <button class="w-9 h-9 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors [&>svg]:w-4 [&>svg]:h-4" id="vc-music-skip">
+                  ${ICONS.skipFwd}
                 </button>
               </div>
-              <div style="width:42%;display:flex;align-items:center;gap:6px">
-                <span style="color:rgba(255,255,255,.3);width:13px;height:13px;display:flex">${ICONS.volumeUp}</span>
-                <input type="range" id="vc-music-vol-slider" min="0" max="100" value="${this._musicVolume}" style="width:100%;height:3px;border-radius:99px;appearance:none;cursor:pointer;accent-color:#f59e0b;background:rgba(255,255,255,.08)" />
+              <div class="w-[45%] flex items-center gap-2 pr-1">
+                <span class="text-white/40 [&>svg]:w-3.5 [&>svg]:h-3.5">${ICONS.volumeUp}</span>
+                <input type="range" id="vc-music-vol-slider" min="0" max="100" value="${this._musicVolume}" class="w-full h-1 bg-black/50 rounded-lg appearance-none cursor-pointer accent-amber-500" />
               </div>
             </div>
           </div>`;
       } else {
-        nowPlaying = `<div style="text-align:center;color:rgba(255,255,255,.2);font-size:12px;padding:14px;margin-bottom:10px;background:rgba(245,158,11,.04);border-radius:12px;border:1px solid rgba(245,158,11,.1)">${_t('vc_music_no_track')}</div>`;
+        nowPlaying = `<div class="text-center text-white/20 text-xs py-3 mb-2 bg-white/5 rounded-xl border border-white/5">${_t('vc_music_no_track')}</div>`;
       }
       
       const queueItems = this._musicQueue.length > 0
         ? this._musicQueue.map((t, i) => {
             const isCur = i === this._musicState.currentIndex;
             return `
-            <div style="display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:10px;transition:background .15s;background:${isCur ? 'rgba(245,158,11,.2)' : 'transparent'};border:1px solid ${isCur ? 'rgba(245,158,11,.25)' : 'transparent'}" onmouseenter="if(!${isCur})this.style.background='rgba(255,255,255,.04)'" onmouseleave="if(!${isCur})this.style.background='transparent'">
-              <span style="width:14px;text-align:center;font-size:10px;font-weight:700;color:${isCur ? '#f59e0b' : 'rgba(255,255,255,.25)'}">${isCur && this._musicPlaying ? '♪' : (i + 1)}</span>
-              <div style="flex:1;min-width:0">
-                <div style="font-size:11.5px;font-weight:600;color:${isCur ? '#f59e0b' : '#fff'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(this._cleanMusicTitle(t.title))}</div>
-                <div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:1px">${t.addedByName || ''}</div>
+            <div class="flex items-center gap-3 p-2 rounded-lg transition-colors ${isCur ? 'bg-amber-500/10 border border-amber-500/20' : 'hover:bg-white/5'}">
+              <span class="w-4 text-center text-[10px] font-bold ${isCur ? 'text-amber-500' : 'text-white/30'}">${isCur && this._musicPlaying ? '♪' : (i + 1)}</span>
+              <div class="flex-1 min-w-0">
+                <div class="text-xs font-medium text-white truncate ${isCur ? 'text-amber-500' : ''}">${this._escHtml(this._cleanMusicTitle(t.title))}</div>
+                <div class="text-[10px] text-white/30 truncate">${t.addedByName || ''}</div>
               </div>
-              <span style="font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;background:${isCur ? 'rgba(245,158,11,.2)' : 'rgba(255,255,255,.06)'};color:${isCur ? '#f59e0b' : 'rgba(255,255,255,.3)'}">${(t.source || t.type) === 'youtube' ? 'YT' : 'SP'}</span>
-              ${!isCur ? `<button class="vc-music-track-rm" data-track-id="${t.id}" style="width:22px;height:22px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;color:rgba(255,255,255,.2);cursor:pointer;border-radius:6px;transition:all .15s" onmouseenter="this.style.background='rgba(239,68,68,.15)';this.style.color='#f87171'" onmouseleave="this.style.background='transparent';this.style.color='rgba(255,255,255,.2)'">
-                <span style="width:11px;height:11px;display:flex">${ICONS.trash}</span>
-              </button>` : ''}
+              <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-white/30">${(t.source || t.type) === 'youtube' ? 'YT' : 'SP'}</span>
+              ${!isCur ? `<button class="vc-music-track-rm w-6 h-6 flex items-center justify-center text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded transition-colors [&>svg]:w-3 [&>svg]:h-3" data-track-id="${t.id}">${ICONS.trash}</button>` : ''}
             </div>`;
           }).join('')
-        : `<div style="text-align:center;color:rgba(255,255,255,.2);font-size:11px;padding:16px">${_t('vc_music_empty_q')}</div>`;
+        : `<div class="text-center text-white/20 text-xs py-4">${_t('vc_music_empty_q')}</div>`;
         
       return `
-        <div style="padding:12px;flex:1;display:flex;flex-direction:column">
+        <div class="p-3 flex-1 flex flex-col">
           ${nowPlaying}
-          <div style="font-size:9px;color:rgba(245,158,11,.4);font-weight:700;text-transform:uppercase;letter-spacing:.14em;margin-bottom:6px;padding:0 2px">${_t('vc_music_queue')} ${this._musicQueue.length > 0 ? `(${this._musicQueue.length})` : ''}</div>
-          <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:10px" id="vc-music-queue">${queueItems}</div>
-          <div style="margin-top:auto;padding-top:8px">
-            <div style="color:#f87171;font-size:11px;text-align:center;margin-bottom:5px;min-height:15px" id="vc-music-err"></div>
-            <div style="display:flex;gap:7px">
-              <input id="vc-music-url" type="text" placeholder="${_t('vc_music_ph')}" autocomplete="off" class="vc-input" style="flex:1;padding:8px 11px;font-size:11.5px" />
-              <button id="vc-music-add" class="vc-btn-primary" style="padding:8px 12px;font-size:11.5px;font-weight:700;white-space:nowrap" onclick="const errEl=document.getElementById('vc-music-err');errEl.textContent='';this.disabled=true;this.innerHTML='<span style=\'width:12px;height:12px;border-radius:50%;border:2px solid #000;border-top-color:transparent;animation:vc-spin 1s linear infinite;display:inline-block;vertical-align:middle\'></span>';">+ ${_t('vc_music_add')}</button>
+          <div class="text-[10px] text-white/30 font-bold uppercase tracking-wider mb-1 px-1">${_t('vc_music_queue')} ${this._musicQueue.length > 0 ? `(${this._musicQueue.length})` : ''}</div>
+          <div class="flex flex-col gap-1 mb-2" id="vc-music-queue">${queueItems}</div>
+          <div class="mt-auto pt-2">
+            <div class="text-red-500 text-xs text-center mb-1 min-h-[16px]" id="vc-music-err"></div>
+            <div class="flex gap-2">
+              <input class="flex-1 bg-black/40 border border-white/10 rounded-xl px-3 py-2.5 text-white text-xs outline-none focus:border-amber-500/50 transition-colors" id="vc-music-url" type="text" placeholder="${_t('vc_music_ph')}" autocomplete="off"/>
+              <button class="bg-amber-500 text-black px-4 font-bold text-xs rounded-xl hover:bg-amber-400 transition-colors whitespace-nowrap" id="vc-music-add">+ ${_t('vc_music_add')}</button>
             </div>
           </div>
         </div>`;
@@ -2694,11 +2255,11 @@
       let ind = tab.querySelector('.vc-music-ind');
       if (this._musicPlaying) {
         if (!ind) {
-          tab.insertAdjacentHTML('beforeend', `<span class="vc-music-ind" style="display:flex;align-items:flex-end;gap:2px;height:10px;margin-left:4px">
-             <span style="width:2px;background:#ec4899;border-radius:99px;animation:vc-eq .8s ease-in-out infinite"></span>
-             <span style="width:2px;background:#ec4899;border-radius:99px;animation:vc-eq .8s ease-in-out infinite .2s"></span>
-             <span style="width:2px;background:#ec4899;border-radius:99px;animation:vc-eq .8s ease-in-out infinite .4s"></span>
-           </span>`);
+          tab.insertAdjacentHTML('beforeend', `<div class="flex items-end gap-[1px] h-2.5 vc-music-ind">
+             <div class="w-[2px] bg-amber-500 animate-[vc-eq_0.8s_ease-in-out_infinite]"></div>
+             <div class="w-[2px] bg-amber-500 animate-[vc-eq_0.8s_ease-in-out_infinite_0.2s]"></div>
+             <div class="w-[2px] bg-amber-500 animate-[vc-eq_0.8s_ease-in-out_infinite_0.4s]"></div>
+           </div>`);
         }
       } else if (ind) {
         ind.remove();
@@ -3145,27 +2706,43 @@
 
     _updateBarSpeakingState() {
       const isAnyoneSpeaking = document.querySelector('.vc-av.speaking') !== null;
-      const eq1 = document.getElementById('vc-bar-eq1');
-      const eq2 = document.getElementById('vc-bar-eq2');
-      const eq3 = document.getElementById('vc-bar-eq3');
+      const bg = document.getElementById('vc-bar-indicator-bg');
+      const ping = document.getElementById('vc-bar-indicator-ping');
+      const dot = document.getElementById('vc-bar-indicator-dot');
+      const wave = document.getElementById('vc-bar-waveform');
       const title = document.getElementById('vc-bar-title');
-      if (eq1) eq1.style.animationPlayState = isAnyoneSpeaking ? 'running' : 'paused';
-      if (eq2) eq2.style.animationPlayState = isAnyoneSpeaking ? 'running' : 'paused';
-      if (eq3) eq3.style.animationPlayState = isAnyoneSpeaking ? 'running' : 'paused';
-      if (title) title.style.color = isAnyoneSpeaking ? '#ec4899' : '#f59e0b';
+      if (!bg || !ping || !dot || !wave || !title) return;
+      
+      if (isAnyoneSpeaking) {
+        bg.classList.replace('bg-green-500/10', 'bg-amber-500/10');
+        bg.classList.replace('border-green-500/20', 'border-amber-500/20');
+        ping.classList.add('hidden');
+        dot.classList.add('hidden');
+        wave.classList.replace('opacity-0', 'opacity-100');
+        title.classList.replace('text-green-400', 'text-amber-400');
+      } else {
+        bg.classList.replace('bg-amber-500/10', 'bg-green-500/10');
+        bg.classList.replace('border-amber-500/20', 'border-green-500/20');
+        ping.classList.remove('hidden');
+        dot.classList.remove('hidden');
+        wave.classList.replace('opacity-100', 'opacity-0');
+        title.classList.replace('text-amber-400', 'text-green-400');
+      }
     }
 
     _updateBarMusicState() {
       const barMusicIcon = document.getElementById('vc-bar-music-icon');
       if (barMusicIcon) {
-        barMusicIcon.style.display = this._musicPlaying ? 'flex' : 'none';
+        if (this._musicPlaying) barMusicIcon.classList.remove('hidden');
+        else barMusicIcon.classList.add('hidden');
       }
     }
 
     _updateBarChatState() {
       const barChatIcon = document.getElementById('vc-bar-chat-icon');
       if (barChatIcon) {
-        barChatIcon.style.display = this._chatUnread > 0 ? 'block' : 'none';
+        if (this._chatUnread > 0) barChatIcon.classList.remove('hidden');
+        else barChatIcon.classList.add('hidden');
       }
     }
 
@@ -3184,11 +2761,7 @@
         for (let i = 0; i < 40; i++) {
           const v = this._analyserData[i * step] / 255;
           const h = v * canvas.height;
-          // gradient: violet at bottom, cyan at top
-          const gradient = ctx.createLinearGradient(0, canvas.height, 0, 0);
-          gradient.addColorStop(0, `rgba(245,158,11,${0.3 + v * 0.7})`);
-          gradient.addColorStop(1, `rgba(236,72,153,${0.2 + v * 0.8})`);
-          ctx.fillStyle = gradient;
+          ctx.fillStyle = `rgba(245,158,11,${0.2 + v * 0.8})`;
           ctx.fillRect(i * (barW + 1), canvas.height - h, barW, h);
         }
         this._vizRaf = requestAnimationFrame(draw);
@@ -3199,26 +2772,11 @@
     // ── TOAST + SOUND ─────────────────────────────────────────────────────
     _toast(msg, type = 'info') {
       const t = document.createElement('div');
-      t.style.cssText = [
-        'position:fixed', 'bottom:88px', 'right:24px', 'z-index:999998',
-        'padding:10px 16px',
-        'background:rgba(8,8,16,.92)',
-        'backdrop-filter:blur(20px)',
-        'border:1px solid ' + (type === 'join' ? 'rgba(236,72,153,.3)' : type === 'error' ? 'rgba(239,68,68,.3)' : 'rgba(245,158,11,.3)'),
-        'border-radius:12px',
-        'color:#fff',
-        'font-size:13px',
-        'font-weight:600',
-        'font-family:Inter,sans-serif',
-        'box-shadow:0 8px 32px rgba(0,0,0,.6)',
-        'animation:vc-slide-up .25s cubic-bezier(.34,1.4,.64,1)',
-        'max-width:280px',
-        'pointer-events:none',
-        'transition:opacity .4s'
-      ].join(';');
+      t.className = `vc-toast ${type}`;
       t.textContent = msg;
       document.body.appendChild(t);
-      setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 3000);
+      requestAnimationFrame(() => t.classList.add('show'));
+      setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, 3000);
       this._playNotif(type);
     }
 
@@ -3246,11 +2804,8 @@
         const barEl = document.getElementById('vc-bar-timer');
         if (el) el.textContent = str;
         if (barEl) barEl.textContent = str;
-        if (this.panel.style.opacity !== '1' && this.connected) {
-          this._bar.style.opacity = '1';
-          this._bar.style.transform = 'translateY(0) scale(1)';
-          this._bar.style.pointerEvents = 'auto';
-          this._bar.style.visibility = 'visible';
+        if (!this.panel.classList.contains('open') && this.connected) {
+          this._bar.classList.add('show');
         }
       }, 1000);
     }
