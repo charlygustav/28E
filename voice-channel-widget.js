@@ -855,12 +855,13 @@
       this.panel.style.cssText = [
         'position:fixed', 'bottom:96px', 'right:24px',
         'width:340px', 'max-width:calc(100vw - 32px)',
+        'max-height:calc(100vh - 160px)',
         'background:rgba(8,8,16,0.65)',
         'backdrop-filter:blur(24px)', '-webkit-backdrop-filter:blur(24px)',
         'border:1px solid rgba(255,255,255,.08)',
         'border-radius:24px',
         'box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.05) inset,',
-        'overflow:hidden', 'z-index:9998',
+        'overflow:hidden', 'overflow-y:auto', 'z-index:9998',
         'transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .25s,visibility .25s',
         'transform:scale(.92) translateY(10px)', 'opacity:0', 'pointer-events:none','visibility:hidden'
       ].join(';');
