@@ -351,11 +351,54 @@
 
         /* ═══ RESPONSIVE ═══ */
         @media (max-width: 768px) {
-            .control-bar { bottom: 1rem; padding: 0.4rem 0.5rem; gap: 0.3rem; }
-            .ctrl-btn { width: 2.5rem; height: 2.5rem; }
-            .reaction-btn { width: 1.75rem; height: 1.75rem; font-size: 0.85rem; }
-            .video-container { border-radius: 1rem; max-height: calc(100vh - 8rem); }
-            .mode-youtube .video-grid { width: 150px; }
+            .control-bar { 
+                bottom: 1rem; padding: 0.4rem; gap: 0.25rem; 
+                width: 95vw; max-width: 400px; overflow-x: auto; scrollbar-width: none;
+                justify-content: flex-start;
+            }
+            .control-bar::-webkit-scrollbar { display: none; }
+            .ctrl-btn { min-width: 2.5rem; height: 2.5rem; }
+            .reaction-btn { min-width: 1.75rem; height: 1.75rem; font-size: 0.85rem; }
+            .video-container { border-radius: 1rem; max-height: calc(100vh - 10rem); }
+            /* Mobile Video Grid optimizations */
+            .video-grid.grid-2 { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+            .video-grid.grid-3 { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr 1fr; }
+            .video-grid.grid-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+            .mode-youtube .video-grid { width: 100px; }
+        }
+
+        /* ═══ SIDEBAR RESPONSIVE ═══ */
+        #oracle-sidebar {
+            position: fixed; right: 0; top: 0; bottom: 0;
+            width: 85vw; max-width: 320px; z-index: 50;
+            transform: translateX(0);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(10, 10, 15, 0.95);
+        }
+        #oracle-sidebar.sidebar-closed {
+            transform: translateX(100%);
+        }
+        @media (min-width: 1024px) {
+            #oracle-sidebar {
+                position: relative; width: 20rem; transform: translateX(0);
+                background: rgba(10, 10, 15, 0.8);
+            }
+            #oracle-sidebar.sidebar-closed {
+                width: 0; transform: translateX(0);
+            }
+        }
+        
+        /* Dark backdrop for mobile sidebar */
+        #sidebar-backdrop {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 45;
+            opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+        }
+        #sidebar-backdrop.active {
+            opacity: 1; pointer-events: auto;
+        }
+        @media (min-width: 1024px) {
+            #sidebar-backdrop { display: none !important; }
         }
     </style>
 </head>
@@ -469,7 +512,7 @@
                 <div class="lg:hidden absolute inset-0 bg-gradient-to-b from-amber-500/[0.02] to-transparent pointer-events-none"></div>
 
                 <!-- Glassmorphism Login Card -->
-                <div class="relative w-full max-w-[340px] glass-heavy rounded-[2rem] shadow-[0_30px_80px_rgba(0,0,0,0.6)] p-8 flex flex-col items-center text-center border-gradient" id="auth-card">
+                <div class="relative w-full max-w-[340px] glass-heavy rounded-[2rem] shadow-[0_30px_80px_rgba(0,0,0,0.6)] p-6 sm:p-8 flex flex-col items-center text-center border-gradient" id="auth-card">
 
                     <!-- Oracle Icon -->
                     <div class="relative w-20 h-20 mb-6 group">
@@ -576,8 +619,9 @@
         </main>
 
         <!-- ═══ RIGHT SIDEBAR ═══ -->
-        <aside id="oracle-sidebar" class="w-80 border-l border-white/[0.04] bg-[#0a0a0f]/80 backdrop-blur-xl flex flex-col z-40 transition-[width,margin] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] shrink-0 overflow-hidden">
-            <div class="w-80 h-full flex flex-col">
+        <div id="sidebar-backdrop"></div>
+        <aside id="oracle-sidebar" class="border-l border-white/[0.04] backdrop-blur-xl flex flex-col shrink-0 overflow-hidden sidebar-closed">
+            <div class="w-full h-full flex flex-col min-w-[320px]">
 
                 <!-- Sidebar Header -->
                 <div class="p-4 border-b border-white/[0.04] flex items-center justify-between">
@@ -657,22 +701,33 @@
             const sidebar = document.getElementById('oracle-sidebar');
             const btnClose = document.getElementById('btn-close-sidebar');
             const btnOpen = document.getElementById('btn-open-sidebar');
-            let isSidebarOpen = true;
+            const backdrop = document.getElementById('sidebar-backdrop');
+            let isSidebarOpen = false; // Start closed to trigger animation initially if needed, wait, standard is open on desktop? Let's assume it should start closed on mobile but we'll set it to false and let the initial state dictate.
+
+            // Set initial state based on window width
+            if (window.innerWidth >= 1024) {
+                isSidebarOpen = true;
+                sidebar.classList.remove('sidebar-closed');
+            }
 
             function toggleSidebar() {
                 isSidebarOpen = !isSidebarOpen;
                 if (!isSidebarOpen) {
-                    sidebar.classList.remove('w-80');
-                    sidebar.classList.add('w-0');
+                    sidebar.classList.add('sidebar-closed');
+                    backdrop.classList.remove('active');
                     btnOpen.classList.remove('opacity-0', 'pointer-events-none', 'scale-90');
                     btnOpen.classList.add('opacity-100', 'scale-100');
                 } else {
-                    sidebar.classList.remove('w-0');
-                    sidebar.classList.add('w-80');
+                    sidebar.classList.remove('sidebar-closed');
+                    backdrop.classList.add('active');
                     btnOpen.classList.remove('opacity-100', 'scale-100');
                     btnOpen.classList.add('opacity-0', 'pointer-events-none', 'scale-90');
                 }
             }
+            
+            backdrop.addEventListener('click', () => {
+                if(isSidebarOpen) toggleSidebar();
+            });
 
             btnClose.addEventListener('click', toggleSidebar);
             btnOpen.addEventListener('click', toggleSidebar);
