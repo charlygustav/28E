@@ -855,13 +855,12 @@
       this.panel.style.cssText = [
         'position:fixed', 'bottom:96px', 'right:24px',
         'width:340px', 'max-width:calc(100vw - 32px)',
-        'max-height:calc(100vh - 160px)',
         'background:rgba(8,8,16,0.65)',
         'backdrop-filter:blur(24px)', '-webkit-backdrop-filter:blur(24px)',
         'border:1px solid rgba(255,255,255,.08)',
         'border-radius:24px',
         'box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.05) inset,',
-        'overflow:hidden', 'overflow-y:auto', 'z-index:9998',
+        'overflow:hidden', 'z-index:9998',
         'transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .25s,visibility .25s',
         'transform:scale(.92) translateY(10px)', 'opacity:0', 'pointer-events:none','visibility:hidden'
       ].join(';');
@@ -1025,17 +1024,17 @@
     _tplLogin(err = '') {
       const user = window.yaireCurrentUser;
       const _hdr = (sub = '', subColor = 'rgba(255,255,255,.35)') => `
-        <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06)">
-          <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(236,72,153,.1));display:flex;align-items:center;justify-content:center;color:#f59e0b;box-shadow:0 0 12px rgba(245,158,11,.1)">
-              <span style="width:16px;height:16px;display:flex">${ICONS.sound}</span>
+        <div style="position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.06)">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(236,72,153,.1));display:flex;align-items:center;justify-content:center;color:#f59e0b">
+              <span style="width:14px;height:14px;display:flex">${ICONS.sound}</span>
             </div>
             <div>
-              <div style="color:#fff;font-weight:700;font-size:13px;letter-spacing:-.01em">#principal</div>
-              <div style="color:${subColor};font-size:10px;font-weight:500;letter-spacing:.01em">${sub}</div>
+              <div style="color:#fff;font-weight:700;font-size:12px;letter-spacing:-.01em">#principal</div>
+              <div style="color:${subColor};font-size:9px;font-weight:500;letter-spacing:.01em">${sub}</div>
             </div>
           </div>
-          <button id="vc-close" style="width:30px;height:30px;border-radius:8px;background:transparent;border:none;color:rgba(255,255,255,.3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:background .15s,color .15s" onmouseenter="this.style.background='rgba(255,255,255,.07)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='rgba(255,255,255,.3)'">✕</button>
+          <button id="vc-close" style="width:26px;height:26px;border-radius:7px;background:transparent;border:none;color:rgba(255,255,255,.3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:background .15s,color .15s" onmouseenter="this.style.background='rgba(255,255,255,.07)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='rgba(255,255,255,.3)'">✕</button>
         </div>`;
 
       if (!user) {
@@ -1044,16 +1043,16 @@
             <div class="vc-orb-v" style="top:-80px;right:-60px;width:220px;height:220px;background:rgba(245,158,11,.1)"></div>
             <div class="vc-orb-c" style="bottom:-60px;left:-40px;width:180px;height:180px;background:rgba(236,72,153,.07)"></div>
             ${_hdr(_t('vc_sub'))}
-            <div style="position:relative;z-index:10;padding:32px 24px;display:flex;flex-direction:column;align-items:center;text-align:center">
-              <div style="position:relative;margin-bottom:20px">
-                <div style="width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,rgba(245,158,11,.2),rgba(236,72,153,.15));border:1px solid rgba(245,158,11,.3);display:flex;align-items:center;justify-content:center;color:#f59e0b;box-shadow:0 8px 32px rgba(245,158,11,.12)">
-                  <svg style="width:28px;height:28px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            <div style="position:relative;z-index:10;padding:20px 20px;display:flex;flex-direction:column;align-items:center;text-align:center">
+              <div style="position:relative;margin-bottom:14px">
+                <div style="width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,rgba(245,158,11,.2),rgba(236,72,153,.15));border:1px solid rgba(245,158,11,.3);display:flex;align-items:center;justify-content:center;color:#f59e0b;box-shadow:0 8px 32px rgba(245,158,11,.12)">
+                  <svg style="width:22px;height:22px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                 </div>
               </div>
-              <h3 style="color:#fff;font-size:17px;font-weight:800;letter-spacing:-.02em;margin-bottom:8px">${_t('vc_restricted')}</h3>
-              <p style="color:rgba(255,255,255,.4);font-size:12px;line-height:1.6;margin-bottom:24px;max-width:240px">${_t('vc_req_login')}</p>
-              <button id="vc-google-login-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s,border-color .2s" onmouseenter="this.style.background='rgba(255,255,255,.09)';this.style.borderColor='rgba(255,255,255,.2)'" onmouseleave="this.style.background='rgba(255,255,255,.05)';this.style.borderColor='rgba(255,255,255,.1)'">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:16px;height:16px" />
+              <h3 style="color:#fff;font-size:15px;font-weight:800;letter-spacing:-.02em;margin-bottom:5px">${_t('vc_restricted')}</h3>
+              <p style="color:rgba(255,255,255,.4);font-size:11px;line-height:1.5;margin-bottom:16px;max-width:230px">${_t('vc_req_login')}</p>
+              <button id="vc-google-login-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s,border-color .2s" onmouseenter="this.style.background='rgba(255,255,255,.09)';this.style.borderColor='rgba(255,255,255,.2)'" onmouseleave="this.style.background='rgba(255,255,255,.05)';this.style.borderColor='rgba(255,255,255,.1)'">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:14px;height:14px" />
                 ${_t('vc_login_google')}
               </button>
             </div>
@@ -1065,27 +1064,26 @@
           <div class="vc-orb-v" style="top:-80px;right:-60px;width:220px;height:220px;background:rgba(245,158,11,.13)"></div>
           <div class="vc-orb-c" style="bottom:20px;left:-50px;width:200px;height:200px;background:rgba(236,72,153,.06)"></div>
           ${_hdr(_t('vc_sub'))}
-          <div style="position:relative;z-index:10;padding:28px 22px;display:flex;flex-direction:column;align-items:center;gap:20px">
-            <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+          <div style="position:relative;z-index:10;padding:16px 20px;display:flex;flex-direction:column;align-items:center;gap:12px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
               <div style="position:relative">
-                <div style="position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(245,158,11,.3);animation:vc-ring-wave 2.8s ease-out infinite"></div>
-                <div style="position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(236,72,153,.2);animation:vc-ring-wave2 2.8s ease-out infinite .6s"></div>
-                <img src="${user.photoURL}" style="width:68px;height:68px;border-radius:50%;object-fit:cover;border:2.5px solid rgba(245,158,11,.35);box-shadow:0 0 0 4px rgba(245,158,11,.08),0 8px 32px rgba(0,0,0,.5);position:relative;z-index:1" draggable="false" />
+                <div style="position:absolute;inset:-4px;border-radius:50%;border:1.5px solid rgba(245,158,11,.3);animation:vc-ring-wave 2.8s ease-out infinite"></div>
+                <img src="${user.photoURL}" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid rgba(245,158,11,.3);box-shadow:0 0 0 3px rgba(245,158,11,.06),0 6px 20px rgba(0,0,0,.4);position:relative;z-index:1" draggable="false" />
               </div>
               <div style="text-align:center">
-                <div style="font-size:9.5px;font-weight:700;color:rgba(245,158,11,.7);text-transform:uppercase;letter-spacing:.18em;margin-bottom:5px">${_t('vc_session_as')}</div>
-                <div style="font-size:17px;font-weight:800;color:#fff;letter-spacing:-.02em">${user.displayName}</div>
+                <div style="font-size:8.5px;font-weight:700;color:rgba(245,158,11,.7);text-transform:uppercase;letter-spacing:.15em;margin-bottom:3px">${_t('vc_session_as')}</div>
+                <div style="font-size:15px;font-weight:800;color:#fff;letter-spacing:-.02em">${user.displayName}</div>
               </div>
             </div>
             <input id="vc-name" type="hidden" value="${user.displayName}"/>
             <input id="vc-pass" type="hidden" value="nopass"/>
-            <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:10px">
-              <button id="vc-join" class="vc-btn-primary" style="width:100%;padding:14px;font-size:14px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;justify-content:center;gap:8px">
-                <span style="width:16px;height:16px;display:flex;align-items:center;justify-content:center">${ICONS.mic}</span>
+            <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:6px">
+              <button id="vc-join" class="vc-btn-primary" style="width:100%;padding:11px;font-size:13px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;justify-content:center;gap:7px">
+                <span style="width:14px;height:14px;display:flex;align-items:center;justify-content:center">${ICONS.mic}</span>
                 ${_t('btn_join')}
               </button>
-              <div id="vc-conn-count" style="font-size:11px;font-weight:500;color:rgba(255,255,255,.35);min-height:16px;transition:opacity .3s"></div>
-              <div id="vc-err" style="color:#f87171;font-size:11px;text-align:center;font-weight:500;min-height:0">${err}</div>
+              <div id="vc-conn-count" style="font-size:10px;font-weight:500;color:rgba(255,255,255,.35);min-height:14px;transition:opacity .3s"></div>
+              <div id="vc-err" style="color:#f87171;font-size:10px;text-align:center;font-weight:500;min-height:0">${err}</div>
             </div>
           </div>
           ${this._tplHistory()}
@@ -1150,15 +1148,15 @@
       const h = window.yaireVcHistoryData || [];
       if (!window.yaireCurrentUser || !h.length) return '';
       const lang = _getLang();
-      const rows = h.slice(0,3).map(s => {
+      const rows = h.slice(0,2).map(s => {
         const d = new Date(s.date);
         const label = d.toLocaleDateString(lang, {month:'short',day:'numeric'}) + ' ' + d.toLocaleTimeString(lang, {hour:'2-digit',minute:'2-digit'});
         const m = Math.floor(s.duration/60), sec = s.duration%60;
-        return `<div class="vc-hist-row"><span style="color:rgba(255,255,255,.7);font-weight:600">${s.name}</span><span style="color:rgba(255,255,255,.3);font-size:10px">${label} &middot; ${m}m${sec}s</span></div>`;
+        return `<div class="vc-hist-row" style="padding:5px 8px"><span style="color:rgba(255,255,255,.6);font-weight:600;font-size:11px">${s.name}</span><span style="color:rgba(255,255,255,.25);font-size:9px">${label} &middot; ${m}m${sec}s</span></div>`;
       }).join('');
-      const moreBtn = h.length > 3 ? `<button id="vc-btn-ver-mas" style="width:100%;margin-top:8px;padding:7px;border-radius:9px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:rgba(245,158,11,.8);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.08)'" onmouseleave="this.style.background='rgba(245,158,11,.08)'">${_t('vc_hist_more')}</button>` : '';
-      return `<div style="padding:12px 16px 16px;border-top:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.02)">
-        <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.15em;margin-bottom:6px">${_t('hist_title')}</div>
+      const moreBtn = h.length > 2 ? `<button id="vc-btn-ver-mas" style="width:100%;margin-top:4px;padding:5px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:rgba(245,158,11,.8);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.08)'" onmouseleave="this.style.background='rgba(255,255,255,.04)'">${_t('vc_hist_more')}</button>` : '';
+      return `<div style="padding:8px 14px 10px;border-top:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.02)">
+        <div style="font-size:8px;font-weight:700;color:rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:.15em;margin-bottom:4px">${_t('hist_title')}</div>
         ${rows}${moreBtn}
       </div>`;
     }
