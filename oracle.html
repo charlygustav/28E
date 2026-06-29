@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth dark">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -25,16 +26,40 @@
             }
         }
     </script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 
     <style>
-        *, *::before, *::after { box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #050507; overflow: hidden; -webkit-font-smoothing: antialiased; }
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #050507;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
 
         /* ═══ GLASSMORPHISM SYSTEM ═══ */
         .glass {
@@ -43,31 +68,36 @@
             -webkit-backdrop-filter: blur(40px) saturate(120%);
             border: 1px solid rgba(255, 255, 255, 0.06);
         }
+
         .glass-light {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
+
         .glass-heavy {
             background: rgba(10, 10, 15, 0.6);
             backdrop-filter: blur(60px) saturate(150%);
             -webkit-backdrop-filter: blur(60px) saturate(150%);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
+
         .glass-card {
             background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.04);
         }
+
         .glass-input {
             background: rgba(255, 255, 255, 0.04);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
+
         .glass-input:focus {
             background: rgba(255, 255, 255, 0.07);
             border-color: rgba(245, 158, 11, 0.4);
@@ -78,14 +108,16 @@
         .border-gradient {
             position: relative;
         }
+
         .border-gradient::before {
             content: '';
             position: absolute;
             inset: 0;
             border-radius: inherit;
             padding: 1px;
-            background: linear-gradient(135deg, rgba(245,158,11,0.3), rgba(236,72,153,0.3), rgba(59,130,246,0.2));
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(236, 72, 153, 0.3), rgba(59, 130, 246, 0.2));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
             pointer-events: none;
@@ -102,196 +134,359 @@
             height: 100%;
             min-height: 0;
         }
-        .grid-1 { grid-template-columns: 1fr; grid-template-rows: 1fr; }
-        .grid-2 { grid-template-columns: 1fr 1fr; }
-        .grid-3 { grid-template-columns: 1fr 1fr; }
-        .grid-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+
+        .grid-1 {
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
+        }
+
+        .grid-2 {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .grid-3 {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .grid-4 {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+        }
 
         .video-container {
             position: relative;
-            background: rgba(255,255,255,0.015);
-            border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 1.25rem;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             aspect-ratio: 16/9;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.03);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             width: 100%;
             height: 100%;
             max-height: calc(100vh - 10rem);
         }
-        .video-container:hover { border-color: rgba(255,255,255,0.1); }
+
+        .video-container:hover {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
         .video-container.speaking {
             border-color: rgba(34, 197, 94, 0.5);
-            box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2), 0 8px 32px rgba(0,0,0,0.5), 0 0 40px rgba(34, 197, 94, 0.1);
+            box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2), 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 40px rgba(34, 197, 94, 0.1);
         }
+
         .video-container video {
-            width: 100%; height: 100%; object-fit: cover;
-            opacity: 0; transition: opacity 0.5s ease;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
-        .video-container.has-video video { opacity: 1; }
+
+        .video-container.has-video video {
+            opacity: 1;
+        }
 
         .avatar-fallback {
-            position: absolute; inset: 0;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background: linear-gradient(135deg, rgba(15,15,20,0.9), rgba(20,20,30,0.9));
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(15, 15, 20, 0.9), rgba(20, 20, 30, 0.9));
             transition: opacity 0.3s;
         }
-        .video-container.has-video .avatar-fallback { opacity: 0; pointer-events: none; }
+
+        .video-container.has-video .avatar-fallback {
+            opacity: 0;
+            pointer-events: none;
+        }
 
         /* Video overlay info */
         .video-overlay-info {
             position: absolute;
-            bottom: 0; left: 0; right: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
             padding: 1rem;
-            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
-            display: flex; align-items: flex-end; justify-content: space-between;
-            pointer-events: none; z-index: 5;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            pointer-events: none;
+            z-index: 5;
         }
 
         /* Speaking indicator */
         .speak-indicator {
-            width: 6px; height: 6px; background: #22c55e; border-radius: 50%;
-            opacity: 0; transition: opacity 0.3s;
+            width: 6px;
+            height: 6px;
+            background: #22c55e;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s;
             box-shadow: 0 0 5px rgba(34, 197, 94, 0.5);
         }
+
         .speak-indicator.active {
             opacity: 1;
             animation: gentle-pulse 1s ease-in-out infinite alternate;
         }
+
         @keyframes gentle-pulse {
-            0% { transform: scale(0.95); opacity: 0.7; }
-            100% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 8px rgba(34, 197, 94, 0.8); }
+            0% {
+                transform: scale(0.95);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: scale(1.2);
+                opacity: 1;
+                box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
+            }
         }
 
 
 
         /* ═══ FLOATING REACTIONS ═══ */
         .floating-reaction {
-            position: absolute; font-size: 2rem; pointer-events: none;
-            z-index: 100; user-select: none;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+            position: absolute;
+            font-size: 2rem;
+            pointer-events: none;
+            z-index: 100;
+            user-select: none;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
         }
 
         /* ═══ TOASTS ═══ */
         #toast-container {
-            position: fixed; top: 1rem; left: 50%; transform: translateX(-50%);
-            z-index: 200; display: flex; flex-direction: column; gap: 0.5rem;
+            position: fixed;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
             pointer-events: none;
         }
+
         .toast-msg {
             background: rgba(10, 10, 15, 0.7);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.08);
-            color: white; padding: 0.6rem 1.2rem; border-radius: 2rem;
-            font-size: 0.75rem; font-weight: 600;
-            display: flex; align-items: center; gap: 0.5rem;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
         }
 
         /* ═══ CONTROL BAR ═══ */
         .control-bar {
             position: absolute;
-            bottom: 1.5rem; left: 50%; transform: translateX(-50%);
-            display: flex; align-items: center; gap: 0.5rem;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             padding: 0.5rem 0.75rem;
             background: rgba(10, 10, 15, 0.65);
             backdrop-filter: blur(50px) saturate(150%);
             -webkit-backdrop-filter: blur(50px) saturate(150%);
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 2rem;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.04);
             z-index: 50;
         }
+
         .ctrl-btn {
-            width: 2.75rem; height: 2.75rem;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.08);
-            color: white; cursor: pointer;
+            width: 2.75rem;
+            height: 2.75rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: white;
+            cursor: pointer;
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
         }
+
         .ctrl-btn:hover {
-            background: rgba(255,255,255,0.12);
-            border-color: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.15);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
-        .ctrl-btn:active { transform: scale(0.92); }
-        .ctrl-btn.active { background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.3); color: #f59e0b; }
-        .ctrl-btn.danger { background: rgba(239, 68, 68, 0.12); border-color: rgba(239, 68, 68, 0.3); color: #ef4444; }
-        .ctrl-btn.danger:hover { background: rgba(239, 68, 68, 0.25); }
-        .ctrl-btn.muted { background: rgba(239, 68, 68, 0.12); border-color: rgba(239, 68, 68, 0.3); color: #ef4444; }
-        .ctrl-divider { width: 1px; height: 1.5rem; background: rgba(255,255,255,0.06); margin: 0 0.25rem; }
+
+        .ctrl-btn:active {
+            transform: scale(0.92);
+        }
+
+        .ctrl-btn.active {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: rgba(245, 158, 11, 0.3);
+            color: #f59e0b;
+        }
+
+        .ctrl-btn.danger {
+            background: rgba(239, 68, 68, 0.12);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .ctrl-btn.danger:hover {
+            background: rgba(239, 68, 68, 0.25);
+        }
+
+        .ctrl-btn.muted {
+            background: rgba(239, 68, 68, 0.12);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .ctrl-divider {
+            width: 1px;
+            height: 1.5rem;
+            background: rgba(255, 255, 255, 0.06);
+            margin: 0 0.25rem;
+        }
 
         /* Reaction buttons */
         .reaction-btn {
-            width: 2rem; height: 2rem; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            background: rgba(255,255,255,0.04); border: none; cursor: pointer;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.04);
+            border: none;
+            cursor: pointer;
             font-size: 1rem;
             transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .reaction-btn:hover { transform: scale(1.35) translateY(-4px); background: rgba(255,255,255,0.1); }
+
+        .reaction-btn:hover {
+            transform: scale(1.35) translateY(-4px);
+            background: rgba(255, 255, 255, 0.1);
+        }
 
         /* ═══ SIDEBAR ═══ */
         .sidebar-tab {
-            flex: 1; padding: 0.5rem; font-size: 0.7rem; font-weight: 700;
-            border-radius: 0.5rem; cursor: pointer; text-align: center;
-            transition: all 0.25s ease; color: rgba(255,255,255,0.4);
-            text-transform: uppercase; letter-spacing: 0.05em;
+            flex: 1;
+            padding: 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.25s ease;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             border: 1px solid transparent;
         }
-        .sidebar-tab:hover { color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.03); }
+
+        .sidebar-tab:hover {
+            color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
         .sidebar-tab.active {
             color: white;
-            background: rgba(255,255,255,0.06);
-            border-color: rgba(255,255,255,0.08);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.08);
         }
 
         /* Chat bubbles */
         .chat-bubble-me {
             background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: #000; border-radius: 1rem 1rem 0.25rem 1rem;
+            color: #000;
+            border-radius: 1rem 1rem 0.25rem 1rem;
         }
+
         .chat-bubble-other {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.05);
-            color: white; border-radius: 1rem 1rem 1rem 0.25rem;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: white;
+            border-radius: 1rem 1rem 1rem 0.25rem;
         }
+
         .typing-indicator span {
-            width: 5px; height: 5px; border-radius: 50%;
-            background: rgba(255,255,255,0.3); display: inline-block;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            display: inline-block;
             animation: typingDot 1.2s ease-in-out infinite;
         }
-        .typing-indicator span:nth-child(2) { animation-delay: 0.15s; }
-        .typing-indicator span:nth-child(3) { animation-delay: 0.3s; }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
         @keyframes typingDot {
-            0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
-            30% { opacity: 1; transform: translateY(-4px); }
+
+            0%,
+            60%,
+            100% {
+                opacity: 0.3;
+                transform: translateY(0);
+            }
+
+            30% {
+                opacity: 1;
+                transform: translateY(-4px);
+            }
         }
 
         /* ═══ RAVE PLAYER ═══ */
         .rave-progress-bar {
-            height: 3px; background: rgba(255,255,255,0.06); border-radius: 3px;
-            overflow: hidden; cursor: pointer; position: relative;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 3px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
         }
+
         .rave-progress-fill {
-            height: 100%; border-radius: 3px;
+            height: 100%;
+            border-radius: 3px;
             background: linear-gradient(90deg, #ec4899, #f59e0b);
             transition: width 0.3s linear;
         }
+
         .rave-track-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 0.75rem;
             transition: all 0.3s ease;
         }
-        .rave-track-card:hover { background: rgba(255,255,255,0.06); }
+
+        .rave-track-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
         .rave-track-card.playing {
             border-color: rgba(236, 72, 153, 0.3);
             background: rgba(236, 72, 153, 0.05);
@@ -299,127 +494,286 @@
 
         /* ═══ PERSON CARD ═══ */
         .person-card {
-            display: flex; align-items: center; gap: 0.75rem;
-            padding: 0.625rem 0.75rem; border-radius: 0.75rem;
-            transition: all 0.2s ease; cursor: default;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.625rem 0.75rem;
+            border-radius: 0.75rem;
+            transition: all 0.2s ease;
+            cursor: default;
         }
-        .person-card:hover { background: rgba(255,255,255,0.04); }
+
+        .person-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
 
         /* ═══ LOADER KEYFRAMES ═══ */
-        @keyframes ldGlowPulse { from { opacity: 0.6; transform: translate(-50%, -50%) scale(0.9); } to { opacity: 1; transform: translate(-50%, -50%) scale(1.12); } }
-        @keyframes ldFadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes ldScaleIn { from { opacity: 0; transform: scale(0.82); } to { opacity: 1; transform: scale(1); } }
-        @keyframes ldFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes ldGlowPulse {
+            from {
+                opacity: 0.6;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.12);
+            }
+        }
+
+        @keyframes ldFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes ldScaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.82);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes ldFadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
         @keyframes loader-rotate {
-            0% { transform: rotate(90deg); box-shadow: 0 10px 20px 0 #fff inset, 0 20px 30px 0 #f59e0b inset, 0 60px 60px 0 #ec4899 inset; }
-            50% { transform: rotate(270deg); box-shadow: 0 10px 20px 0 #fff inset, 0 20px 10px 0 #ec4899 inset, 0 40px 60px 0 #d97706 inset; }
-            100% { transform: rotate(450deg); box-shadow: 0 10px 20px 0 #fff inset, 0 20px 30px 0 #f59e0b inset, 0 60px 60px 0 #ec4899 inset; }
+            0% {
+                transform: rotate(90deg);
+                box-shadow: 0 10px 20px 0 #fff inset, 0 20px 30px 0 #f59e0b inset, 0 60px 60px 0 #ec4899 inset;
+            }
+
+            50% {
+                transform: rotate(270deg);
+                box-shadow: 0 10px 20px 0 #fff inset, 0 20px 10px 0 #ec4899 inset, 0 40px 60px 0 #d97706 inset;
+            }
+
+            100% {
+                transform: rotate(450deg);
+                box-shadow: 0 10px 20px 0 #fff inset, 0 20px 30px 0 #f59e0b inset, 0 60px 60px 0 #ec4899 inset;
+            }
         }
 
         /* ═══ AMBIENT ORBS ═══ */
         .ambient-orb {
-            position: absolute; border-radius: 50%; pointer-events: none;
-            filter: blur(80px); will-change: transform;
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(80px);
+            will-change: transform;
         }
 
         /* ═══ PULSE RING ═══ */
         @keyframes pulseRing {
-            0% { transform: scale(1); opacity: 0.4; }
-            100% { transform: scale(2.5); opacity: 0; }
+            0% {
+                transform: scale(1);
+                opacity: 0.4;
+            }
+
+            100% {
+                transform: scale(2.5);
+                opacity: 0;
+            }
         }
 
         /* ═══ LOBBY CAMERA PREVIEW ═══ */
         .lobby-cam-preview {
-            position: relative; aspect-ratio: 16/9; border-radius: 1.5rem;
-            overflow: hidden; background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.06);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            position: relative;
+            aspect-ratio: 16/9;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
         }
+
         .lobby-cam-preview video {
-            width: 100%; height: 100%; object-fit: cover;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
             transform: scaleX(-1);
         }
 
         /* ═══ CONSTELLATION BG ═══ */
         @keyframes drift {
-            0% { transform: translate(0, 0); }
-            25% { transform: translate(30px, -20px); }
-            50% { transform: translate(-20px, 30px); }
-            75% { transform: translate(15px, 15px); }
-            100% { transform: translate(0, 0); }
+            0% {
+                transform: translate(0, 0);
+            }
+
+            25% {
+                transform: translate(30px, -20px);
+            }
+
+            50% {
+                transform: translate(-20px, 30px);
+            }
+
+            75% {
+                transform: translate(15px, 15px);
+            }
+
+            100% {
+                transform: translate(0, 0);
+            }
         }
 
         /* ═══ RESPONSIVE ═══ */
         @media (max-width: 768px) {
-            .control-bar { 
-                bottom: 1rem; padding: 0.4rem; gap: 0.25rem; 
-                width: 95vw; max-width: 400px; overflow-x: auto; scrollbar-width: none;
+            .control-bar {
+                bottom: 1rem;
+                padding: 0.4rem;
+                gap: 0.25rem;
+                width: 95vw;
+                max-width: 400px;
+                overflow-x: auto;
+                scrollbar-width: none;
                 justify-content: flex-start;
             }
-            .control-bar::-webkit-scrollbar { display: none; }
-            .ctrl-btn { min-width: 2.5rem; height: 2.5rem; }
-            .reaction-btn { min-width: 1.75rem; height: 1.75rem; font-size: 0.85rem; }
-            .video-container { border-radius: 1rem; max-height: calc(100vh - 10rem); }
+
+            .control-bar::-webkit-scrollbar {
+                display: none;
+            }
+
+            .ctrl-btn {
+                min-width: 2.5rem;
+                height: 2.5rem;
+            }
+
+            .reaction-btn {
+                min-width: 1.75rem;
+                height: 1.75rem;
+                font-size: 0.85rem;
+            }
+
+            .video-container {
+                border-radius: 1rem;
+                max-height: calc(100vh - 10rem);
+            }
+
             /* Mobile Video Grid optimizations */
-            .video-grid.grid-2 { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
-            .video-grid.grid-3 { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr 1fr; }
-            .video-grid.grid-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
-            .mode-youtube .video-grid { width: 100px; }
+            .video-grid.grid-2 {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 1fr;
+            }
+
+            .video-grid.grid-3 {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 1fr 1fr;
+            }
+
+            .video-grid.grid-4 {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 1fr 1fr;
+            }
+
+            .mode-youtube .video-grid {
+                width: 100px;
+            }
         }
 
         /* ═══ SIDEBAR RESPONSIVE ═══ */
         #oracle-sidebar {
-            position: fixed; right: 0; top: 0; bottom: 0;
-            width: 85vw; max-width: 320px; z-index: 50;
+            position: fixed;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 85vw;
+            max-width: 320px;
+            z-index: 50;
             transform: translateX(0);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             background: rgba(10, 10, 15, 0.95);
         }
+
         #oracle-sidebar.sidebar-closed {
             transform: translateX(100%);
         }
+
         @media (min-width: 1024px) {
             #oracle-sidebar {
-                position: relative; width: 20rem; transform: translateX(0);
+                position: relative;
+                width: 20rem;
+                transform: translateX(0);
                 background: rgba(10, 10, 15, 0.8);
             }
+
             #oracle-sidebar.sidebar-closed {
-                width: 0; transform: translateX(0);
+                width: 0;
+                transform: translateX(0);
             }
         }
-        
+
         /* Dark backdrop for mobile sidebar */
         #sidebar-backdrop {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 45;
-            opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
-            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 45;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
         }
+
         #sidebar-backdrop.active {
-            opacity: 1; pointer-events: auto;
+            opacity: 1;
+            pointer-events: auto;
         }
+
         @media (min-width: 1024px) {
-            #sidebar-backdrop { display: none !important; }
+            #sidebar-backdrop {
+                display: none !important;
+            }
         }
     </style>
 </head>
+
 <body class="text-white h-[100dvh] flex flex-col">
 
     <!-- Toasts Container -->
     <div id="toast-container"></div>
 
     <!-- ═══ LOADER ═══ -->
-    <div id="loader" style="position:fixed;inset:0;z-index:200;background:#050507;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;will-change:transform,opacity;transition:opacity 0.6s ease, transform 0.6s ease;">
-        <div class="ambient-orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(245,158,11,0.06) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-55%);animation:ldGlowPulse 4s ease-in-out infinite alternate;"></div>
-        <div class="ambient-orb" style="width:350px;height:350px;background:radial-gradient(circle,rgba(236,72,153,0.04) 0%,transparent 70%);top:50%;left:50%;transform:translate(-48%,-45%);animation:ldGlowPulse 5s ease-in-out infinite alternate-reverse;"></div>
+    <div id="loader"
+        style="position:fixed;inset:0;z-index:200;background:#050507;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;will-change:transform,opacity;transition:opacity 0.6s ease, transform 0.6s ease;">
+        <div class="ambient-orb"
+            style="width:400px;height:400px;background:radial-gradient(circle,rgba(245,158,11,0.06) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-55%);animation:ldGlowPulse 4s ease-in-out infinite alternate;">
+        </div>
+        <div class="ambient-orb"
+            style="width:350px;height:350px;background:radial-gradient(circle,rgba(236,72,153,0.04) 0%,transparent 70%);top:50%;left:50%;transform:translate(-48%,-45%);animation:ldGlowPulse 5s ease-in-out infinite alternate-reverse;">
+        </div>
 
-        <div id="loader-logo" style="position:relative;z-index:10;opacity:0;margin-bottom:2rem;text-align:center;animation:ldFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.15s forwards;">
+        <div id="loader-logo"
+            style="position:relative;z-index:10;opacity:0;margin-bottom:2rem;text-align:center;animation:ldFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.15s forwards;">
             <span style="font-weight:900;font-size:2.6rem;letter-spacing:-0.06em;color:#fff;line-height:1;">28E</span>
         </div>
 
-        <div id="custom-loader-wrapper" style="position:relative;z-index:10;display:flex;align-items:center;justify-content:center;width:220px;height:220px;opacity:0;animation:ldScaleIn 0.8s cubic-bezier(0.22,1,0.36,1) 0.3s forwards;">
+        <div id="custom-loader-wrapper"
+            style="position:relative;z-index:10;display:flex;align-items:center;justify-content:center;width:220px;height:220px;opacity:0;animation:ldScaleIn 0.8s cubic-bezier(0.22,1,0.36,1) 0.3s forwards;">
             <svg width="220" height="220" viewBox="0 0 220 220" style="position:absolute;inset:0;z-index:2;">
                 <circle cx="110" cy="110" r="104" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
-                <circle id="loader-ring-fill" cx="110" cy="110" r="104" fill="none" stroke="url(#ld-ring-grad)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="653.45" stroke-dashoffset="653.45" transform="rotate(-90 110 110)" style="transition:stroke-dashoffset 0.5s cubic-bezier(0.4,0,0.2,1);" />
+                <circle id="loader-ring-fill" cx="110" cy="110" r="104" fill="none" stroke="url(#ld-ring-grad)"
+                    stroke-width="1.5" stroke-linecap="round" stroke-dasharray="653.45" stroke-dashoffset="653.45"
+                    transform="rotate(-90 110 110)"
+                    style="transition:stroke-dashoffset 0.5s cubic-bezier(0.4,0,0.2,1);" />
                 <defs>
                     <linearGradient id="ld-ring-grad" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.7" />
@@ -428,11 +782,14 @@
                 </defs>
             </svg>
             <div style="position:relative;width:180px;height:180px;border-radius:50%;user-select:none;">
-                <div style="position:absolute;inset:0;border-radius:50%;animation:loader-rotate 2.5s linear infinite;"></div>
+                <div style="position:absolute;inset:0;border-radius:50%;animation:loader-rotate 2.5s linear infinite;">
+                </div>
             </div>
         </div>
 
-        <div id="loader-percent" style="position:relative;z-index:10;opacity:0;animation:ldFadeUp 0.5s ease 0.55s forwards;margin-top:2rem;font-weight:300;font-size:0.8rem;color:rgba(255,255,255,0.3);letter-spacing:0.12em;">Conectando a Oracle...</div>
+        <div id="loader-percent"
+            style="position:relative;z-index:10;opacity:0;animation:ldFadeUp 0.5s ease 0.55s forwards;margin-top:2rem;font-weight:300;font-size:0.8rem;color:rgba(255,255,255,0.3);letter-spacing:0.12em;">
+            Conectando a Oracle...</div>
     </div>
 
     <!-- ═══ AUTH / LOGIN OVERLAY ═══ -->
@@ -440,11 +797,19 @@
 
         <!-- Ambient Background -->
         <div class="fixed inset-0 pointer-events-none">
-            <div class="ambient-orb" style="width:700px;height:700px;background:radial-gradient(circle,rgba(245,158,11,0.04),transparent 70%);top:-15%;left:-10%;animation:drift 25s ease-in-out infinite;"></div>
-            <div class="ambient-orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(236,72,153,0.04),transparent 70%);bottom:-15%;right:-10%;animation:drift 20s ease-in-out infinite reverse;"></div>
-            <div class="ambient-orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(59,130,246,0.03),transparent 70%);top:40%;left:50%;animation:drift 30s ease-in-out infinite 5s;"></div>
+            <div class="ambient-orb"
+                style="width:700px;height:700px;background:radial-gradient(circle,rgba(245,158,11,0.04),transparent 70%);top:-15%;left:-10%;animation:drift 25s ease-in-out infinite;">
+            </div>
+            <div class="ambient-orb"
+                style="width:600px;height:600px;background:radial-gradient(circle,rgba(236,72,153,0.04),transparent 70%);bottom:-15%;right:-10%;animation:drift 20s ease-in-out infinite reverse;">
+            </div>
+            <div class="ambient-orb"
+                style="width:400px;height:400px;background:radial-gradient(circle,rgba(59,130,246,0.03),transparent 70%);top:40%;left:50%;animation:drift 30s ease-in-out infinite 5s;">
+            </div>
             <!-- Noise texture -->
-            <div class="absolute inset-0 opacity-30" style="background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMiIvPjwvc3ZnPg==');"></div>
+            <div class="absolute inset-0 opacity-30"
+                style="background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMiIvPjwvc3ZnPg==');">
+            </div>
         </div>
 
         <div class="relative z-10 w-full min-h-[100dvh] flex flex-col lg:flex-row py-8">
@@ -452,20 +817,26 @@
             <!-- LEFT: Feature Showcase -->
             <div class="hidden lg:flex flex-1 flex-col justify-center px-10 xl:px-16 relative">
                 <!-- Inner gradient -->
-                <div class="absolute inset-0 bg-gradient-to-br from-amber-500/[0.03] via-transparent to-pink-500/[0.02] pointer-events-none"></div>
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-amber-500/[0.03] via-transparent to-pink-500/[0.02] pointer-events-none">
+                </div>
 
                 <div class="relative z-10 max-w-xl mx-auto w-full">
-                    <div class="auth-stagger mb-3 inline-flex items-center gap-2 px-3 py-1 rounded-full glass-light text-[9px] font-bold text-amber-500 uppercase tracking-[0.15em]">
+                    <div
+                        class="auth-stagger mb-3 inline-flex items-center gap-2 px-3 py-1 rounded-full glass-light text-[9px] font-bold text-amber-500 uppercase tracking-[0.15em]">
                         <span class="relative flex h-2 w-2">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-500 opacity-75"></span>
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-500 opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
                         </span>
                         Acceso Restringido
                     </div>
 
-                    <h2 class="text-4xl xl:text-5xl font-black text-white tracking-tight mb-3 auth-stagger leading-[1.1]">
+                    <h2
+                        class="text-4xl xl:text-5xl font-black text-white tracking-tight mb-3 auth-stagger leading-[1.1]">
                         Bienvenido a<br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-500 to-pink-500">Oracle</span>
+                        <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-500 to-pink-500">Oracle</span>
                     </h2>
 
                     <p class="text-sm text-zinc-400 mb-8 auth-stagger leading-relaxed max-w-sm">
@@ -474,33 +845,61 @@
 
                     <!-- Feature Grid -->
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="glass-card rounded-2xl p-4 auth-stagger group hover:border-amber-500/20 transition-colors">
-                            <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z"/></svg>
+                        <div
+                            class="glass-card rounded-2xl p-4 auth-stagger group hover:border-amber-500/20 transition-colors">
+                            <div
+                                class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
+                                </svg>
                             </div>
                             <h3 class="text-white font-bold text-xs mb-1">Video HD</h3>
-                            <p class="text-zinc-500 text-[10px] leading-relaxed">Videollamadas cristalinas con latencia ultrabaja.</p>
+                            <p class="text-zinc-500 text-[10px] leading-relaxed">Videollamadas cristalinas con latencia
+                                ultrabaja.</p>
                         </div>
-                        <div class="glass-card rounded-2xl p-4 auth-stagger group hover:border-pink-500/20 transition-colors">
-                            <div class="w-8 h-8 rounded-lg bg-pink-500/10 text-pink-500 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z"/></svg>
+                        <div
+                            class="glass-card rounded-2xl p-4 auth-stagger group hover:border-pink-500/20 transition-colors">
+                            <div
+                                class="w-8 h-8 rounded-lg bg-pink-500/10 text-pink-500 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z" />
+                                </svg>
                             </div>
                             <h3 class="text-white font-bold text-xs mb-1">Rave Sync</h3>
-                            <p class="text-zinc-500 text-[10px] leading-relaxed">Música sincronizada en tiempo real con todos.</p>
+                            <p class="text-zinc-500 text-[10px] leading-relaxed">Música sincronizada en tiempo real con
+                                todos.</p>
                         </div>
-                        <div class="glass-card rounded-2xl p-4 auth-stagger group hover:border-emerald-500/20 transition-colors">
-                            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+                        <div
+                            class="glass-card rounded-2xl p-4 auth-stagger group hover:border-emerald-500/20 transition-colors">
+                            <div
+                                class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                                </svg>
                             </div>
                             <h3 class="text-white font-bold text-xs mb-1">Cifrado E2E</h3>
-                            <p class="text-zinc-500 text-[10px] leading-relaxed">Conexiones seguras peer-to-peer cifradas.</p>
+                            <p class="text-zinc-500 text-[10px] leading-relaxed">Conexiones seguras peer-to-peer
+                                cifradas.</p>
                         </div>
-                        <div class="glass-card rounded-2xl p-4 auth-stagger group hover:border-blue-500/20 transition-colors">
-                            <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"/></svg>
+                        <div
+                            class="glass-card rounded-2xl p-4 auth-stagger group hover:border-blue-500/20 transition-colors">
+                            <div
+                                class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                                </svg>
                             </div>
                             <h3 class="text-white font-bold text-xs mb-1">Chat en Vivo</h3>
-                            <p class="text-zinc-500 text-[10px] leading-relaxed">Mensajes instantáneos con reacciones y emojis.</p>
+                            <p class="text-zinc-500 text-[10px] leading-relaxed">Mensajes instantáneos con reacciones y
+                                emojis.</p>
                         </div>
                     </div>
                 </div>
@@ -509,33 +908,57 @@
             <!-- RIGHT: Login Area -->
             <div class="flex-1 flex flex-col items-center justify-center p-6 relative">
                 <!-- Mobile-only subtle bg -->
-                <div class="lg:hidden absolute inset-0 bg-gradient-to-b from-amber-500/[0.02] to-transparent pointer-events-none"></div>
+                <div
+                    class="lg:hidden absolute inset-0 bg-gradient-to-b from-amber-500/[0.02] to-transparent pointer-events-none">
+                </div>
 
                 <!-- Glassmorphism Login Card -->
-                <div class="relative w-full max-w-[340px] glass-heavy rounded-[2rem] shadow-[0_30px_80px_rgba(0,0,0,0.6)] p-6 sm:p-8 flex flex-col items-center text-center border-gradient" id="auth-card">
+                <div class="relative w-full max-w-[340px] glass-heavy rounded-[2rem] shadow-[0_30px_80px_rgba(0,0,0,0.6)] p-6 sm:p-8 flex flex-col items-center text-center border-gradient"
+                    id="auth-card">
 
                     <!-- Oracle Icon -->
                     <div class="relative w-20 h-20 mb-6 group">
-                        <div class="absolute inset-0 bg-gradient-to-br from-amber-500/25 to-pink-500/20 blur-xl rounded-full group-hover:from-amber-500/40 group-hover:to-pink-500/30 transition-all duration-700 animate-pulse"></div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-br from-amber-500/25 to-pink-500/20 blur-xl rounded-full group-hover:from-amber-500/40 group-hover:to-pink-500/30 transition-all duration-700 animate-pulse">
+                        </div>
                         <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="w-16 h-16 rounded-2xl glass-light flex items-center justify-center text-amber-500 transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                                <svg class="w-8 h-8 drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3a9 9 0 0 1 9 9H3a9 9 0 0 1 9-9Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18"/></svg>
+                            <div
+                                class="w-16 h-16 rounded-2xl glass-light flex items-center justify-center text-amber-500 transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                                <svg class="w-8 h-8 drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]" fill="none"
+                                    stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12 3a9 9 0 0 1 9 9H3a9 9 0 0 1 9-9Z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18" />
+                                </svg>
                             </div>
                         </div>
                     </div>
 
                     <h1 class="text-xl font-black text-white tracking-tight mb-1">28E Oracle</h1>
-                    <p id="auth-status-text" class="text-amber-500/70 font-bold text-[9px] tracking-[0.2em] uppercase mb-6">Iniciando conexión...</p>
+                    <p id="auth-status-text"
+                        class="text-amber-500/70 font-bold text-[9px] tracking-[0.2em] uppercase mb-6">Iniciando
+                        conexión...</p>
 
                     <div id="auth-actions" class="hidden w-full flex-col items-center gap-5">
-                        <div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-1"></div>
+                        <div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-1">
+                        </div>
                         <p class="text-zinc-400 text-sm font-medium">Inicia sesión para continuar</p>
-                        <button id="btn-login-google" class="w-full flex items-center justify-center gap-3 glass-light px-6 py-4 rounded-2xl hover:bg-white/10 hover:border-white/15 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group shadow-xl cursor-pointer">
-                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5" />
+                        <button id="btn-login-google"
+                            class="w-full flex items-center justify-center gap-3 glass-light px-6 py-4 rounded-2xl hover:bg-white/10 hover:border-white/15 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group shadow-xl cursor-pointer">
+                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                                class="w-5 h-5" />
                             <span class="text-white font-bold tracking-wide">Continuar con Google</span>
                         </button>
-                        <a href="index.html" class="text-sm text-zinc-500 hover:text-white font-medium transition-colors mt-2 flex items-center gap-2 group">
-                            <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                        <a href="index.html"
+                            class="text-sm text-zinc-500 hover:text-white font-medium transition-colors mt-2 flex items-center gap-2 group">
+                            <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
                             Volver al inicio
                         </a>
                     </div>
@@ -568,15 +991,23 @@
             <!-- Header Bar -->
             <div class="flex items-center justify-between mb-3 px-1">
                 <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-amber-500/80">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    <div
+                        class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-amber-500/80">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
                         Oracle
                     </div>
                     <div class="w-px h-4 bg-white/10"></div>
                     <div id="room-timer" class="text-[11px] font-mono text-zinc-500 tracking-wider">00:00</div>
                 </div>
-                <button id="btn-open-sidebar" class="glass-light text-white w-9 h-9 rounded-xl flex items-center justify-center hover:bg-white/10 transition-all duration-300 opacity-0 pointer-events-none scale-90 cursor-pointer" title="Abrir Panel">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                <button id="btn-open-sidebar"
+                    class="glass-light text-white w-9 h-9 rounded-xl flex items-center justify-center hover:bg-white/10 transition-all duration-300 opacity-0 pointer-events-none scale-90 cursor-pointer"
+                    title="Abrir Panel">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
                 </button>
             </div>
 
@@ -589,30 +1020,49 @@
             <div class="control-bar">
                 <!-- Main Controls -->
                 <button id="btn-mic" class="ctrl-btn" title="Micrófono">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                        <line x1="12" y1="19" x2="12" y2="23" />
+                        <line x1="8" y1="23" x2="16" y2="23" />
+                    </svg>
                 </button>
                 <button id="btn-cam" class="ctrl-btn" title="Cámara">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-                    <div id="cam-strike" class="absolute w-[2px] h-7 bg-red-500 rotate-45 transform origin-center transition-transform scale-0 rounded-full"></div>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <polygon points="23 7 16 12 23 17 23 7" />
+                        <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+                    </svg>
+                    <div id="cam-strike"
+                        class="absolute w-[2px] h-7 bg-red-500 rotate-45 transform origin-center transition-transform scale-0 rounded-full">
+                    </div>
                 </button>
 
                 <div class="ctrl-divider"></div>
 
                 <!-- Reactions -->
                 <div class="flex items-center gap-0.5">
-                    <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('❤️')" title="Love">❤️</button>
-                    <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('🔥')" title="Fire">🔥</button>
-                    <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('😂')" title="Laugh">😂</button>
-                    <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('👏')" title="Clap">👏</button>
-                    <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('😍')" title="Love eyes">😍</button>
-                    <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('🎉')" title="Party">🎉</button>
+                    <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('❤️')"
+                        title="Love">❤️</button>
+                    <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('🔥')"
+                        title="Fire">🔥</button>
+                    <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('😂')"
+                        title="Laugh">😂</button>
+                    <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('👏')"
+                        title="Clap">👏</button>
+                    <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('😍')"
+                        title="Love eyes">😍</button>
+                    <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('🎉')"
+                        title="Party">🎉</button>
                 </div>
 
                 <div class="ctrl-divider"></div>
 
                 <!-- Leave -->
                 <button id="btn-leave" class="ctrl-btn danger" title="Salir">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"/></svg>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                    </svg>
                 </button>
             </div>
 
@@ -620,22 +1070,33 @@
 
         <!-- ═══ RIGHT SIDEBAR ═══ -->
         <div id="sidebar-backdrop"></div>
-        <aside id="oracle-sidebar" class="border-l border-white/[0.04] backdrop-blur-xl flex flex-col shrink-0 overflow-hidden sidebar-closed">
+        <aside id="oracle-sidebar"
+            class="border-l border-white/[0.04] backdrop-blur-xl flex flex-col shrink-0 overflow-hidden sidebar-closed">
             <div class="w-full h-full flex flex-col min-w-[320px]">
 
                 <!-- Sidebar Header -->
                 <div class="p-4 border-b border-white/[0.04] flex items-center justify-between">
-                    <div class="flex items-center gap-2 text-amber-500 font-bold tracking-[0.1em] text-[10px] uppercase">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    <div
+                        class="flex items-center gap-2 text-amber-500 font-bold tracking-[0.1em] text-[10px] uppercase">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
                         Conexión Oracle
                     </div>
                     <div class="flex items-center gap-2.5">
                         <div class="flex items-center gap-1.5">
-                            <div class="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></div>
+                            <div class="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]">
+                            </div>
                             <span id="sidebar-user-count" class="text-[10px] font-bold text-green-400">0</span>
                         </div>
-                        <button id="btn-close-sidebar" class="text-zinc-500 hover:text-white transition-colors p-1.5 hover:bg-white/5 rounded-lg cursor-pointer" title="Ocultar Panel">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        <button id="btn-close-sidebar"
+                            class="text-zinc-500 hover:text-white transition-colors p-1.5 hover:bg-white/5 rounded-lg cursor-pointer"
+                            title="Ocultar Panel">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7" />
+                            </svg>
                         </button>
                     </div>
                 </div>
@@ -650,7 +1111,8 @@
                 <!-- ═══ TAB: CHAT ═══ -->
                 <div id="pane-chat" class="flex-1 flex flex-col min-h-0" data-pane="chat">
                     <div id="chat-messages" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3 relative">
-                        <div class="text-center text-[10px] text-white/20 my-4 glass-card rounded-xl p-3 mx-auto w-fit font-medium">
+                        <div
+                            class="text-center text-[10px] text-white/20 my-4 glass-card rounded-xl p-3 mx-auto w-fit font-medium">
                             Bienvenido a Oracle. Tus mensajes están cifrados de extremo a extremo.
                         </div>
                     </div>
@@ -666,9 +1128,16 @@
                     <!-- Chat Input -->
                     <div class="p-3 border-t border-white/[0.04]">
                         <form id="chat-form" class="flex gap-2">
-                            <input type="text" id="chat-input" class="flex-1 glass-input rounded-xl px-4 py-2.5 text-xs text-white outline-none transition-all placeholder:text-zinc-600" placeholder="Escribe un mensaje..." autocomplete="off">
-                            <button type="submit" class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 text-black flex items-center justify-center hover:from-amber-400 hover:to-orange-500 transition-all shadow-[0_4px_15px_rgba(245,158,11,0.2)] cursor-pointer active:scale-95">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
+                            <input type="text" id="chat-input"
+                                class="flex-1 glass-input rounded-xl px-4 py-2.5 text-xs text-white outline-none transition-all placeholder:text-zinc-600"
+                                placeholder="Escribe un mensaje..." autocomplete="off">
+                            <button type="submit"
+                                class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 text-black flex items-center justify-center hover:from-amber-400 hover:to-orange-500 transition-all shadow-[0_4px_15px_rgba(245,158,11,0.2)] cursor-pointer active:scale-95">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                                </svg>
                             </button>
                         </form>
                     </div>
@@ -728,9 +1197,9 @@
                     btnOpen.classList.add('opacity-0', 'pointer-events-none', 'scale-90');
                 }
             }
-            
+
             backdrop.addEventListener('click', () => {
-                if(isSidebarOpen) toggleSidebar();
+                if (isSidebarOpen) toggleSidebar();
             });
 
             btnClose.addEventListener('click', toggleSidebar);
@@ -755,24 +1224,41 @@
     </script>
 
     <!-- ═══ PRE-JOIN LOBBY ═══ -->
-    <div id="lobby-overlay" class="fixed inset-0 z-[60] bg-[#050507] flex transition-opacity duration-500 overflow-hidden overflow-y-auto">
+    <div id="lobby-overlay"
+        class="fixed inset-0 z-[60] bg-[#050507] flex transition-opacity duration-500 overflow-hidden overflow-y-auto">
         <!-- Ambient Background -->
         <div class="fixed inset-0 z-0">
-            <div class="ambient-orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(245,158,11,0.06),transparent 70%);top:-15%;left:-10%;animation:drift 20s ease-in-out infinite;"></div>
-            <div class="ambient-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(139,92,246,0.05),transparent 70%);bottom:-10%;right:-10%;animation:drift 25s ease-in-out infinite reverse;"></div>
-            <div class="absolute inset-0 opacity-20" style="background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMiIvPjwvc3ZnPg==');"></div>
+            <div class="ambient-orb"
+                style="width:600px;height:600px;background:radial-gradient(circle,rgba(245,158,11,0.06),transparent 70%);top:-15%;left:-10%;animation:drift 20s ease-in-out infinite;">
+            </div>
+            <div class="ambient-orb"
+                style="width:500px;height:500px;background:radial-gradient(circle,rgba(139,92,246,0.05),transparent 70%);bottom:-10%;right:-10%;animation:drift 25s ease-in-out infinite reverse;">
+            </div>
+            <div class="absolute inset-0 opacity-20"
+                style="background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMiIvPjwvc3ZnPg==');">
+            </div>
         </div>
 
-        <div class="relative z-10 w-full max-w-5xl mx-auto px-4 md:px-8 py-4 md:py-10 flex flex-col lg:justify-center min-h-[100dvh]">
+        <div
+            class="relative z-10 w-full max-w-5xl mx-auto px-4 md:px-8 py-4 md:py-10 flex flex-col lg:justify-center min-h-[100dvh]">
 
             <!-- Top Nav -->
             <div class="w-full flex items-center justify-between mb-8">
-                <a href="index.html" class="flex items-center gap-2 text-zinc-500 hover:text-white transition-colors text-sm font-medium group">
-                    <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                <a href="index.html"
+                    class="flex items-center gap-2 text-zinc-500 hover:text-white transition-colors text-sm font-medium group">
+                    <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
                     28E
                 </a>
-                <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-amber-500/60">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                <div
+                    class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-amber-500/60">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
                     Oracle
                 </div>
             </div>
@@ -784,21 +1270,39 @@
                 <div class="flex-1 flex flex-col gap-3 md:gap-5 lobby-col">
                     <!-- Camera Preview -->
                     <div class="lobby-cam-preview glass-card border-gradient">
-                        <video id="lobby-cam-video" autoplay playsinline muted class="w-full h-full object-cover" style="transform: scaleX(-1);"></video>
-                        <div id="lobby-cam-placeholder" class="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-zinc-900/90 to-zinc-950/90">
+                        <video id="lobby-cam-video" autoplay playsinline muted class="w-full h-full object-cover"
+                            style="transform: scaleX(-1);"></video>
+                        <div id="lobby-cam-placeholder"
+                            class="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-zinc-900/90 to-zinc-950/90">
                             <div class="w-20 h-20 rounded-full glass-light flex items-center justify-center mb-4">
                                 <img id="lobby-avatar" src="" class="w-full h-full rounded-full object-cover hidden" />
-                                <svg id="lobby-icon" class="w-8 h-8 text-amber-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+                                <svg id="lobby-icon" class="w-8 h-8 text-amber-500" fill="none" stroke="currentColor"
+                                    stroke-width="1.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                </svg>
                             </div>
                             <p class="text-zinc-500 text-sm">Tu cámara está apagada</p>
                         </div>
                         <!-- Camera Preview Controls -->
                         <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
-                            <button id="lobby-btn-mic" class="ctrl-btn w-10 h-10" title="Micrófono" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(20px);">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                            <button id="lobby-btn-mic" class="ctrl-btn w-10 h-10" title="Micrófono"
+                                style="background: rgba(255,255,255,0.1); backdrop-filter: blur(20px);">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8"
+                                    viewBox="0 0 24 24">
+                                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+                                    <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                                    <line x1="12" y1="19" x2="12" y2="23" />
+                                    <line x1="8" y1="23" x2="16" y2="23" />
+                                </svg>
                             </button>
-                            <button id="lobby-btn-cam" class="ctrl-btn w-10 h-10" title="Cámara" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(20px);">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                            <button id="lobby-btn-cam" class="ctrl-btn w-10 h-10" title="Cámara"
+                                style="background: rgba(255,255,255,0.1); backdrop-filter: blur(20px);">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8"
+                                    viewBox="0 0 24 24">
+                                    <polygon points="23 7 16 12 23 17 23 7" />
+                                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+                                </svg>
                             </button>
                         </div>
                     </div>
@@ -806,15 +1310,25 @@
                     <!-- Profile Info -->
                     <div class="glass-card rounded-2xl p-4 md:p-5 border-gradient">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 md:w-14 md:h-14 rounded-full glass-light overflow-hidden flex items-center justify-center shrink-0">
+                            <div
+                                class="w-12 h-12 md:w-14 md:h-14 rounded-full glass-light overflow-hidden flex items-center justify-center shrink-0">
                                 <img id="lobby-avatar-small" src="" class="w-full h-full object-cover hidden" />
-                                <svg class="w-6 h-6 text-zinc-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+                                <svg class="w-6 h-6 text-zinc-500" fill="none" stroke="currentColor" stroke-width="1.5"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                </svg>
                             </div>
                             <div class="flex-1 min-w-0">
                                 <h2 class="text-lg font-extrabold text-white truncate" id="lobby-title">Cargando...</h2>
-                                <p class="text-zinc-500 text-sm flex items-center gap-1 cursor-pointer hover:text-amber-500 transition-colors group w-fit" id="lobby-handle" title="Cambiar usuario">
+                                <p class="text-zinc-500 text-sm flex items-center gap-1 cursor-pointer hover:text-amber-500 transition-colors group w-fit"
+                                    id="lobby-handle" title="Cambiar usuario">
                                     @...
-                                    <svg class="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                                    <svg class="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                    </svg>
                                 </p>
                             </div>
                         </div>
@@ -827,23 +1341,29 @@
                     <div class="glass-card rounded-2xl p-4 md:p-6 border-gradient flex-1">
                         <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2.5">
                             <span class="relative flex h-2.5 w-2.5">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                <span
+                                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                                 <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
                             </span>
                             Sala en Vivo
                         </h3>
 
                         <div id="lobby-room-status" class="flex flex-col gap-3">
-                            <div class="w-8 h-8 border-2 border-white/10 border-t-amber-500 rounded-full animate-spin mx-auto my-4"></div>
+                            <div
+                                class="w-8 h-8 border-2 border-white/10 border-t-amber-500 rounded-full animate-spin mx-auto my-4">
+                            </div>
                         </div>
                     </div>
 
                     <!-- Join Button -->
-                    <button id="btn-join-room" class="w-full py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-extrabold rounded-2xl transition-all shadow-[0_8px_30px_rgba(245,158,11,0.25)] hover:shadow-[0_8px_40px_rgba(245,158,11,0.4)] hover:scale-[1.02] transform flex items-center justify-center gap-3 text-base cursor-pointer active:scale-[0.98] relative overflow-hidden group">
+                    <button id="btn-join-room"
+                        class="w-full py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-extrabold rounded-2xl transition-all shadow-[0_8px_30px_rgba(245,158,11,0.25)] hover:shadow-[0_8px_40px_rgba(245,158,11,0.4)] hover:scale-[1.02] transform flex items-center justify-center gap-3 text-base cursor-pointer active:scale-[0.98] relative overflow-hidden group">
                         <!-- Pulse ring -->
-                        <div class="absolute inset-0 rounded-2xl border-2 border-amber-400/50" style="animation: pulseRing 2s ease-out infinite;"></div>
+                        <div class="absolute inset-0 rounded-2xl border-2 border-amber-400/50"
+                            style="animation: pulseRing 2s ease-out infinite;"></div>
                         <span class="relative flex h-3 w-3">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span>
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
                         </span>
                         <span class="relative">Unirse a Oracle</span>
@@ -852,7 +1372,10 @@
                     <!-- Activity Feed (Compact) -->
                     <div class="glass-card rounded-2xl p-4 md:p-5 border-gradient">
                         <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
-                            <svg class="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <svg class="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
                             Actividad Reciente
                         </h3>
                         <div id="lobby-history" class="flex flex-col gap-2 max-h-48 overflow-y-auto">
@@ -870,25 +1393,37 @@
     </div>
 
     <!-- ═══ HANDLE ASSIGNMENT MODAL ═══ -->
-    <div id="handle-modal" class="fixed inset-0 z-[100] bg-black/60 backdrop-blur-xl hidden items-center justify-center">
-        <div class="w-full max-w-sm glass-heavy p-8 rounded-3xl shadow-[0_30px_80px_rgba(0,0,0,0.6)] relative overflow-hidden transform transition-all scale-95 opacity-0 border-gradient" id="handle-card">
-            <div class="ambient-orb" style="width:200px;height:200px;background:radial-gradient(circle,rgba(245,158,11,0.08),transparent 70%);top:-30%;left:-30%;"></div>
-            <div class="ambient-orb" style="width:200px;height:200px;background:radial-gradient(circle,rgba(236,72,153,0.06),transparent 70%);bottom:-30%;right:-30%;"></div>
+    <div id="handle-modal"
+        class="fixed inset-0 z-[100] bg-black/60 backdrop-blur-xl hidden items-center justify-center">
+        <div class="w-full max-w-sm glass-heavy p-8 rounded-3xl shadow-[0_30px_80px_rgba(0,0,0,0.6)] relative overflow-hidden transform transition-all scale-95 opacity-0 border-gradient"
+            id="handle-card">
+            <div class="ambient-orb"
+                style="width:200px;height:200px;background:radial-gradient(circle,rgba(245,158,11,0.08),transparent 70%);top:-30%;left:-30%;">
+            </div>
+            <div class="ambient-orb"
+                style="width:200px;height:200px;background:radial-gradient(circle,rgba(236,72,153,0.06),transparent 70%);bottom:-30%;right:-30%;">
+            </div>
 
             <div class="relative z-10">
                 <h3 class="text-2xl font-extrabold text-white mb-2">Tu Identidad</h3>
-                <p class="text-zinc-400 text-sm mb-6 leading-relaxed">Elige un nombre de usuario único para Oracle. Así te verán los demás.</p>
+                <p class="text-zinc-400 text-sm mb-6 leading-relaxed">Elige un nombre de usuario único para Oracle. Así
+                    te verán los demás.</p>
 
                 <form id="handle-form" class="flex flex-col gap-4">
                     <div class="relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 font-bold">@</span>
-                        <input type="text" id="handle-input" class="w-full glass-input rounded-xl pl-10 pr-4 py-3 text-white font-bold outline-none transition-all placeholder:text-zinc-600 placeholder:font-normal" placeholder="usuario" required pattern="[a-zA-Z0-9_]{3,15}" title="3-15 letras, números o guión bajo">
+                        <input type="text" id="handle-input"
+                            class="w-full glass-input rounded-xl pl-10 pr-4 py-3 text-white font-bold outline-none transition-all placeholder:text-zinc-600 placeholder:font-normal"
+                            placeholder="usuario" required pattern="[a-zA-Z0-9_]{3,15}"
+                            title="3-15 letras, números o guión bajo">
                     </div>
                     <p id="handle-error" class="text-red-400 text-xs font-bold hidden"></p>
-                    <button type="submit" id="btn-save-handle" class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black font-extrabold rounded-xl transition-all shadow-[0_4px_15px_rgba(245,158,11,0.2)] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-[0.98]">
+                    <button type="submit" id="btn-save-handle"
+                        class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black font-extrabold rounded-xl transition-all shadow-[0_4px_15px_rgba(245,158,11,0.2)] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-[0.98]">
                         Guardar
                     </button>
-                    <button type="button" id="btn-cancel-handle" class="w-full py-2 bg-transparent text-zinc-500 hover:text-white font-bold rounded-xl transition-colors hidden cursor-pointer">
+                    <button type="button" id="btn-cancel-handle"
+                        class="w-full py-2 bg-transparent text-zinc-500 hover:text-white font-bold rounded-xl transition-colors hidden cursor-pointer">
                         Cancelar
                     </button>
                 </form>
@@ -946,7 +1481,7 @@
                     const lobbyIcon = document.getElementById('lobby-icon');
                     if (lobbyAvatar) {
                         lobbyAvatar.src = avatarUrl;
-                        lobbyAvatar.onerror = function() { this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=random`; };
+                        lobbyAvatar.onerror = function () { this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=random`; };
                         lobbyAvatar.classList.remove('hidden');
                         if (lobbyIcon) lobbyIcon.classList.add('hidden');
                     }
@@ -955,7 +1490,7 @@
                     const lobbyAvatarSmall = document.getElementById('lobby-avatar-small');
                     if (lobbyAvatarSmall) {
                         lobbyAvatarSmall.src = avatarUrl;
-                        lobbyAvatarSmall.onerror = function() { this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=random`; };
+                        lobbyAvatarSmall.onerror = function () { this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=random`; };
                         lobbyAvatarSmall.classList.remove('hidden');
                     }
 
@@ -1119,4 +1654,5 @@
     <script src="oracle.js?v=3"></script>
 
 </body>
+
 </html>
