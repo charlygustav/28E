@@ -3627,54 +3627,36 @@
 
     <!-- Loader Screen — Balanced Modern Elegance -->
     <!-- ═══ LOADER ═══ -->
-    <div id="loader"
-        style="position:fixed;inset:0;z-index:200;background:#030304;overflow:hidden;will-change:transform,opacity;user-select:none;font-family:'Inter',sans-serif;">
+    <div id="loader" class="loader-container">
 
         <!-- Delicate Background Atmosphere -->
-        <div
-            style="position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:600px;height:600px;background:radial-gradient(circle, rgba(245,158,11,0.03) 0%, transparent 70%);pointer-events:none;">
-        </div>
+        <div class="loader-bg-glow"></div>
 
         <!-- HUD Corner 1: Top Left -->
-        <div id="loader-logo"
-            style="position:absolute;top:2.5rem;left:2.5rem;z-index:10;opacity:0;animation:ldFadeIn 0.8s ease 0.1s forwards;">
+        <div id="loader-logo" class="loader-corner-tl">
             <div style="display:flex;flex-direction:column;gap:3px;">
-                <span
-                    style="font-weight:900;font-size:1.2rem;letter-spacing:-0.05em;color:#fff;line-height:1;">28E</span>
-                <span
-                    style="font-size:0.62rem;letter-spacing:0.25em;color:#f59e0b;text-transform:uppercase;font-weight:600;">Cinemascope
-                    V</span>
-                <span
-                    style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.12em;color:rgba(255,255,255,0.35);margin-top:2px;">18.4861°
-                    N, 69.9312° W</span>
+                <span style="font-weight:900;font-size:1.2rem;letter-spacing:-0.05em;color:#fff;line-height:1;">28E</span>
+                <span class="loader-subtext-yellow">Cinemascope V</span>
+                <span class="loader-subtext-mono">18.4861° N, 69.9312° W</span>
             </div>
         </div>
 
         <!-- HUD Corner 2: Top Right -->
-        <div
-            style="position:absolute;top:2.5rem;right:2.5rem;z-index:10;text-align:right;opacity:0;animation:ldFadeIn 0.8s ease 0.2s forwards;">
+        <div class="loader-corner-tr">
             <div style="display:flex;flex-direction:column;gap:3px;align-items:flex-end;">
-                <span
-                    style="font-size:0.68rem;letter-spacing:0.22em;color:rgba(255,255,255,0.65);text-transform:uppercase;font-weight:300;">28
-                    DE JUNIO • V ANIVERSARIO</span>
+                <span style="font-size:0.68rem;letter-spacing:0.22em;color:rgba(255,255,255,0.65);text-transform:uppercase;font-weight:300;">28 DE JUNIO • V ANIVERSARIO</span>
                 <div style="display:flex;align-items:center;gap:6px;">
-                    <span
-                        style="width:5px;height:5px;border-radius:50%;background:#10b981;display:inline-block;box-shadow:0 0 8px #10b981;"></span>
-                    <span
-                        style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.15em;color:rgba(255,255,255,0.45);text-transform:uppercase;">MEMORIA_ETERNAL.SYS</span>
+                    <span style="width:5px;height:5px;border-radius:50%;background:#10b981;display:inline-block;box-shadow:0 0 8px #10b981;"></span>
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.15em;color:rgba(255,255,255,0.45);text-transform:uppercase;">MEMORIA_ETERNAL.SYS</span>
                 </div>
             </div>
         </div>
 
         <!-- Center: Chronometer Bezel, Rotating Sphere & Progress Ring -->
-        <div
-            style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
-            <div id="custom-loader-wrapper"
-                style="position:relative;z-index:10;display:flex;align-items:center;justify-content:center;width:260px;height:260px;opacity:0;animation:ldScaleIn 1s cubic-bezier(0.16,1,0.3,1) 0.15s forwards;pointer-events:auto;">
-
+        <div class="loader-center-wrapper">
+            <div id="custom-loader-wrapper" class="loader-sphere-container">
                 <!-- High-Precision Chronometer SVG Ring -->
-                <svg width="260" height="260" viewBox="0 0 260 260"
-                    style="position:absolute;inset:0;z-index:2;filter:drop-shadow(0 0 30px rgba(245,158,11,0.15));">
+                <svg class="loader-svg-ring" viewBox="0 0 260 260">
                     <!-- Outer Diamond Bezel -->
                     <circle cx="130" cy="130" r="124" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
 
@@ -3700,46 +3682,116 @@
                 </svg>
 
                 <!-- Central Rotating Sphere -->
-                <div
-                    style="position:relative;width:196px;height:196px;border-radius:50%;overflow:hidden;box-shadow:0 0 90px rgba(0,0,0,0.95);border:1px solid rgba(255,255,255,0.06);">
+                <div class="loader-rotating-sphere">
                     <div class="loader-circle-bg"></div>
-                    <div
-                        style="position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 35px rgba(0,0,0,0.85);pointer-events:none;">
-                    </div>
+                    <div style="position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 35px rgba(0,0,0,0.85);pointer-events:none;"></div>
                 </div>
             </div>
         </div>
 
         <!-- HUD Corner 3: Bottom Left (Rotating Status Messages) -->
-        <div style="position:absolute;bottom:2.5rem;left:2.5rem;z-index:10;max-width:340px;">
-            <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;opacity:0.8;">
-                <span
-                    style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.18em;color:#f59e0b;text-transform:uppercase;font-weight:600;">[ACTO
-                    V] INTENCIONES</span>
+        <div class="loader-corner-bl">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;opacity:0.8;" class="loader-bl-flex">
+                <span class="loader-subtext-yellow">[ACTO V] INTENCIONES</span>
             </div>
-            <div id="loader-message"
-                style="font-size:0.88rem;font-weight:300;color:rgba(255,255,255,0.8);letter-spacing:0.04em;line-height:1.4;min-height:2.8em;text-align:left;">
-                Preparando nuestro universo...</div>
+            <div id="loader-message" class="loader-status-msg">Preparando nuestro universo...</div>
         </div>
 
         <!-- HUD Corner 4: Bottom Right (Giant Editorial Percentage Counter) -->
-        <div style="position:absolute;bottom:2rem;right:2.5rem;z-index:10;text-align:right;">
-            <div id="loader-percent"
-                style="font-variant-numeric:tabular-nums;font-weight:200;font-size:4.2rem;line-height:0.9;color:#fff;letter-spacing:-0.06em;opacity:0;animation:ldFadeUp 0.6s ease 0.3s forwards;">
-                0%</div>
-            <div id="loader-footer"
-                style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.25em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-top:8px;font-weight:400;">
-                CARGANDO UNIVERSO // HI-RES</div>
+        <div class="loader-corner-br">
+            <div id="loader-percent" class="loader-percent-text">0%</div>
+            <div id="loader-footer" class="loader-footer-text">CARGANDO UNIVERSO // HI-RES</div>
         </div>
 
         <!-- Full-width Bottom Edge Laser Progress Bar -->
-        <div id="loader-progress"
-            style="position:absolute;bottom:0;left:0;height:2px;width:0%;background:linear-gradient(90deg, #f59e0b, #ef4444, #ec4899);z-index:50;transition:width 0.3s ease;box-shadow:0 -2px 10px rgba(245,158,11,0.5);">
-        </div>
+        <div id="loader-progress" class="loader-progress-bar"></div>
 
     </div>
 
     <style>
+        /* Responsive Loader Styles */
+        .loader-container {
+            position:fixed; inset:0; z-index:200; background:#030304; overflow:hidden;
+            will-change:transform,opacity; user-select:none; font-family:'Inter',sans-serif;
+        }
+        .loader-bg-glow {
+            position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);
+            width:100vw; height:100vw; max-width:600px; max-height:600px;
+            background:radial-gradient(circle, rgba(245,158,11,0.03) 0%, transparent 70%);
+            pointer-events:none;
+        }
+        .loader-corner-tl {
+            position:absolute; top:1.5rem; left:1.5rem; z-index:10; opacity:0;
+            animation:ldFadeIn 0.8s ease 0.1s forwards; text-align:left;
+        }
+        .loader-corner-tr {
+            position:absolute; top:1.5rem; right:1.5rem; z-index:10; text-align:right; opacity:0;
+            animation:ldFadeIn 0.8s ease 0.2s forwards; display:none;
+        }
+        .loader-center-wrapper {
+            position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+            pointer-events:none;
+        }
+        .loader-sphere-container {
+            position:relative; z-index:10; display:flex; align-items:center; justify-content:center;
+            width:180px; height:180px; opacity:0;
+            animation:ldScaleIn 1s cubic-bezier(0.16,1,0.3,1) 0.15s forwards; pointer-events:auto;
+        }
+        .loader-svg-ring {
+            position:absolute; inset:0; z-index:2; filter:drop-shadow(0 0 30px rgba(245,158,11,0.15));
+            width:100%; height:100%;
+        }
+        .loader-rotating-sphere {
+            position:relative; width:135px; height:135px; border-radius:50%; overflow:hidden;
+            box-shadow:0 0 90px rgba(0,0,0,0.95); border:1px solid rgba(255,255,255,0.06);
+        }
+        .loader-corner-bl {
+            position:absolute; bottom:7.5rem; left:1rem; right:1rem; z-index:10; text-align:center;
+        }
+        .loader-corner-br {
+            position:absolute; bottom:2rem; left:1rem; right:1rem; z-index:10; text-align:center;
+        }
+        .loader-percent-text {
+            font-variant-numeric:tabular-nums; font-weight:200; font-size:3rem; line-height:1;
+            color:#fff; letter-spacing:-0.06em; opacity:0;
+            animation:ldFadeUp 0.6s ease 0.3s forwards;
+        }
+        .loader-footer-text {
+            font-family:'JetBrains Mono',monospace; font-size:0.5rem; letter-spacing:0.2em;
+            color:rgba(255,255,255,0.4); text-transform:uppercase; margin-top:4px; font-weight:400;
+        }
+        .loader-status-msg {
+            font-size:0.8rem; font-weight:300; color:rgba(255,255,255,0.8); letter-spacing:0.04em;
+            line-height:1.4; min-height:1.4em; text-align:center;
+        }
+        .loader-subtext-yellow {
+            font-size:0.62rem; letter-spacing:0.25em; color:#f59e0b; text-transform:uppercase; font-weight:600;
+        }
+        .loader-subtext-mono {
+            font-family:'JetBrains Mono',monospace; font-size:0.55rem; letter-spacing:0.12em;
+            color:rgba(255,255,255,0.35); margin-top:2px;
+        }
+        .loader-progress-bar {
+            position:absolute; bottom:0; left:0; height:3px; width:0%;
+            background:linear-gradient(90deg, #f59e0b, #ef4444, #ec4899); z-index:50;
+            transition:width 0.3s ease; box-shadow:0 -2px 10px rgba(245,158,11,0.5);
+        }
+        .loader-bl-flex {
+            justify-content:center;
+        }
+
+        @media (min-width: 768px) {
+            .loader-corner-tl { top:2.5rem; left:2.5rem; }
+            .loader-corner-tr { top:2.5rem; right:2.5rem; display:block; }
+            .loader-sphere-container { width:260px; height:260px; }
+            .loader-rotating-sphere { width:196px; height:196px; }
+            .loader-corner-bl { bottom:2.5rem; left:2.5rem; right:auto; text-align:left; max-width:340px; }
+            .loader-bl-flex { justify-content:flex-start; }
+            .loader-corner-br { bottom:2rem; right:2.5rem; left:auto; text-align:right; }
+            .loader-percent-text { font-size:4.2rem; line-height:0.9; }
+            .loader-footer-text { font-size:0.55rem; letter-spacing:0.25em; margin-top:8px; }
+            .loader-status-msg { font-size:0.88rem; text-align:left; min-height:2.8em; }
+        }
         /* ═══ CINEMASCOPE V (5 MONTHS) MASTER STYLES ═══ */
         .cs-wrapper {
             position: relative;
@@ -4218,7 +4270,7 @@
             <div class="menu-grid">
                 <a href="oracle.html" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400 relative glow-effect">
                     <span class="menu-link-icon bg-amber-500/20 text-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.5)]">🔮</span>
-                    <span class="font-bold text-amber-500 dark:text-amber-400">28E Oracle</span>
+                    <span class="font-bold text-amber-500 dark:text-amber-400">28E Inner Circle</span>
                 </a>
                 <a href="#promesas" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
                     <span class="menu-link-icon bg-amber-50 dark:bg-amber-900/20">💍</span>
@@ -17936,114 +17988,125 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 // 4. Hero Badge
-                if (cfg.heroBadge || cfg.heroBadgeLinkText || cfg.heroBadgeEmoji1 || cfg.heroBadgeEmoji2) {
-                    // Traducciones base desde Firebase o el propio texto
-                    const enTxt = cfg.heroBadge_en && cfg.heroBadge_en.trim() !== '' ? cfg.heroBadge_en : cfg.heroBadge;
-                    const ptTxt = cfg.heroBadge_pt && cfg.heroBadge_pt.trim() !== '' ? cfg.heroBadge_pt : cfg.heroBadge;
-                    const frTxt = cfg.heroBadge_fr && cfg.heroBadge_fr.trim() !== '' ? cfg.heroBadge_fr : cfg.heroBadge;
+                function applyHeroBadgeConfig(cfg) {
+                    if (cfg.heroBadge || cfg.heroBadgeLinkText || cfg.heroBadgeEmoji1 || cfg.heroBadgeEmoji2) {
+                        // Traducciones base desde Firebase o el propio texto
+                        const enTxt = cfg.heroBadge_en && cfg.heroBadge_en.trim() !== '' ? cfg.heroBadge_en : cfg.heroBadge;
+                        const ptTxt = cfg.heroBadge_pt && cfg.heroBadge_pt.trim() !== '' ? cfg.heroBadge_pt : cfg.heroBadge;
+                        const frTxt = cfg.heroBadge_fr && cfg.heroBadge_fr.trim() !== '' ? cfg.heroBadge_fr : cfg.heroBadge;
 
-                    if (typeof dictionary !== 'undefined') {
-                        if (dictionary['es']) dictionary['es'].hero_badge = cfg.heroBadge;
-                        if (dictionary['en']) dictionary['en'].hero_badge = enTxt;
-                        if (dictionary['pt']) dictionary['pt'].hero_badge = ptTxt;
-                        if (dictionary['fr']) dictionary['fr'].hero_badge = frTxt;
+                        if (typeof dictionary !== 'undefined') {
+                            if (dictionary['es']) dictionary['es'].hero_badge = cfg.heroBadge;
+                            if (dictionary['en']) dictionary['en'].hero_badge = enTxt;
+                            if (dictionary['pt']) dictionary['pt'].hero_badge = ptTxt;
+                            if (dictionary['fr']) dictionary['fr'].hero_badge = frTxt;
 
-                        if (cfg.heroBadgeLinkText) {
-                            const linkEn = cfg.heroBadgeLinkText_en || cfg.heroBadgeLinkText;
-                            const linkPt = cfg.heroBadgeLinkText_pt || cfg.heroBadgeLinkText;
-                            const linkFr = cfg.heroBadgeLinkText_fr || cfg.heroBadgeLinkText;
-                            if (dictionary['es']) dictionary['es'].hero_badge_link = cfg.heroBadgeLinkText;
-                            if (dictionary['en']) dictionary['en'].hero_badge_link = linkEn;
-                            if (dictionary['pt']) dictionary['pt'].hero_badge_link = linkPt;
-                            if (dictionary['fr']) dictionary['fr'].hero_badge_link = linkFr;
-                        }
+                            if (cfg.heroBadgeLinkText) {
+                                const linkEn = cfg.heroBadgeLinkText_en || cfg.heroBadgeLinkText;
+                                const linkPt = cfg.heroBadgeLinkText_pt || cfg.heroBadgeLinkText;
+                                const linkFr = cfg.heroBadgeLinkText_fr || cfg.heroBadgeLinkText;
+                                if (dictionary['es']) dictionary['es'].hero_badge_link = cfg.heroBadgeLinkText;
+                                if (dictionary['en']) dictionary['en'].hero_badge_link = linkEn;
+                                if (dictionary['pt']) dictionary['pt'].hero_badge_link = linkPt;
+                                if (dictionary['fr']) dictionary['fr'].hero_badge_link = linkFr;
+                            }
 
-                        // Marcar que el admin controla el badge (evita que initHeroCountdown sobreescriba)
-                        window.__adminBadgeApplied = true;
+                            // Marcar que el admin controla el badge (evita que initHeroCountdown sobreescriba)
+                            window.__adminBadgeApplied = true;
 
-                        // DOM Updates for Badge Elements
-                        const badgeTextEl = document.getElementById('hero-badge-text');
-                        const e1 = document.getElementById('hero-badge-e1');
-                        const e2 = document.getElementById('hero-badge-e2');
-                        const cDown = document.getElementById('hero-countdown');
-                        const dot = document.getElementById('hero-badge-dot');
-                        const linkEl = document.getElementById('hero-badge-link');
+                            // DOM Updates for Badge Elements
+                            const badgeTextEl = document.getElementById('hero-badge-text');
+                            const e1 = document.getElementById('hero-badge-e1');
+                            const e2 = document.getElementById('hero-badge-e2');
+                            const cDown = document.getElementById('hero-countdown');
+                            const dot = document.getElementById('hero-badge-dot');
+                            const linkEl = document.getElementById('hero-badge-link');
 
-                        // Texto principal: si vacío, ocultar
-                        if (badgeTextEl) {
-                            if (!cfg.heroBadge || cfg.heroBadge.trim() === '') {
-                                badgeTextEl.style.display = 'none';
-                            } else {
-                                badgeTextEl.style.display = '';
+                            // Texto principal: si vacío, ocultar
+                            if (badgeTextEl) {
+                                if (!cfg.heroBadge || cfg.heroBadge.trim() === '') {
+                                    badgeTextEl.style.display = 'none';
+                                } else {
+                                    badgeTextEl.style.display = '';
+                                }
+                            }
+
+                            // Emoji izquierdo: si vacío, ocultar
+                            if (e1) {
+                                if (!cfg.heroBadgeEmoji1 || cfg.heroBadgeEmoji1.trim() === '') {
+                                    e1.style.display = 'none';
+                                } else {
+                                    e1.textContent = cfg.heroBadgeEmoji1;
+                                    e1.style.display = '';
+                                }
+                            }
+
+                            // Enlace o Emoji derecho
+                            if (linkEl && cfg.heroBadgeLinkText && cfg.heroBadgeLinkText.trim() !== '') {
+                                linkEl.href = cfg.heroBadgeLinkUrl || '#';
+                                linkEl.classList.remove('hidden');
+                                if (cDown) cDown.style.display = 'none';
+                                if (dot) dot.classList.add('hidden');
+                                if (e2) e2.classList.add('hidden');
+                            } else if (e2) {
+                                if (linkEl) linkEl.classList.add('hidden');
+                                if (!cfg.heroBadgeEmoji2 || cfg.heroBadgeEmoji2.trim() === '') {
+                                    e2.style.display = 'none';
+                                } else {
+                                    e2.textContent = cfg.heroBadgeEmoji2;
+                                    e2.style.display = '';
+                                    e2.classList.remove('hidden');
+                                }
+                                if (cDown) cDown.style.display = 'none';
+                                if (dot) dot.classList.add('hidden');
+                            }
+
+                            // Aplicar los cambios de inmediato si la función existe
+                            if (typeof setLanguage === 'function' && typeof currentLang !== 'undefined') {
+                                setLanguage(currentLang, false);
                             }
                         }
 
-                        // Emoji izquierdo: si vacío, ocultar
-                        if (e1) {
-                            if (!cfg.heroBadgeEmoji1 || cfg.heroBadgeEmoji1.trim() === '') {
-                                e1.style.display = 'none';
-                            } else {
-                                e1.textContent = cfg.heroBadgeEmoji1;
-                                e1.style.display = '';
-                            }
+                        // Autocompletar traducciones faltantes (ej: si el panel viejo falló)
+                        if (enTxt === cfg.heroBadge) {
+                            const translateApi = async (text, lang) => {
+                                try {
+                                    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=${lang}&dt=t&q=${encodeURIComponent(text)}`;
+                                    const res = await fetch(url);
+                                    const data = await res.json();
+                                    return data[0].map(item => item[0]).join('');
+                                } catch (e) { return text; }
+                            };
+
+                            translateApi(cfg.heroBadge, 'en').then(t => {
+                                if (typeof dictionary !== 'undefined' && dictionary['en']) {
+                                    dictionary['en'].hero_badge = t;
+                                    if (typeof currentLang !== 'undefined' && currentLang === 'en' && typeof setLanguage === 'function') setLanguage('en', false);
+                                }
+                            });
+                            translateApi(cfg.heroBadge, 'pt').then(t => {
+                                if (typeof dictionary !== 'undefined' && dictionary['pt']) {
+                                    dictionary['pt'].hero_badge = t;
+                                    if (typeof currentLang !== 'undefined' && currentLang === 'pt' && typeof setLanguage === 'function') setLanguage('pt', false);
+                                }
+                            });
+                            translateApi(cfg.heroBadge, 'fr').then(t => {
+                                if (typeof dictionary !== 'undefined' && dictionary['fr']) {
+                                    dictionary['fr'].hero_badge = t;
+                                    if (typeof currentLang !== 'undefined' && currentLang === 'fr' && typeof setLanguage === 'function') setLanguage('fr', false);
+                                }
+                            });
                         }
-
-                        // Enlace o Emoji derecho
-                        if (linkEl && cfg.heroBadgeLinkText && cfg.heroBadgeLinkText.trim() !== '') {
-                            linkEl.href = cfg.heroBadgeLinkUrl || '#';
-                            linkEl.classList.remove('hidden');
-                            if (cDown) cDown.style.display = 'none';
-                            if (dot) dot.classList.add('hidden');
-                            if (e2) e2.classList.add('hidden');
-                        } else if (e2) {
-                            if (linkEl) linkEl.classList.add('hidden');
-                            if (!cfg.heroBadgeEmoji2 || cfg.heroBadgeEmoji2.trim() === '') {
-                                e2.style.display = 'none';
-                            } else {
-                                e2.textContent = cfg.heroBadgeEmoji2;
-                                e2.classList.remove('hidden');
-                            }
-                            if (cDown) cDown.style.display = 'none';
-                            if (dot) dot.classList.add('hidden');
-                        }
-
-                        // Aplicar los cambios de inmediato si la función existe
-                        if (typeof setLanguage === 'function' && typeof currentLang !== 'undefined') {
-                            setLanguage(currentLang, false);
-                        }
-                    }
-
-                    // Autocompletar traducciones faltantes (ej: si el panel viejo falló)
-                    if (enTxt === cfg.heroBadge) {
-                        const translateApi = async (text, lang) => {
-                            try {
-                                const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=${lang}&dt=t&q=${encodeURIComponent(text)}`;
-                                const res = await fetch(url);
-                                const data = await res.json();
-                                return data[0].map(item => item[0]).join('');
-                            } catch (e) { return text; }
-                        };
-
-                        translateApi(cfg.heroBadge, 'en').then(t => {
-                            if (typeof dictionary !== 'undefined' && dictionary['en']) {
-                                dictionary['en'].hero_badge = t;
-                                if (typeof currentLang !== 'undefined' && currentLang === 'en' && typeof setLanguage === 'function') setLanguage('en', false);
-                            }
-                        });
-                        translateApi(cfg.heroBadge, 'pt').then(t => {
-                            if (typeof dictionary !== 'undefined' && dictionary['pt']) {
-                                dictionary['pt'].hero_badge = t;
-                                if (typeof currentLang !== 'undefined' && currentLang === 'pt' && typeof setLanguage === 'function') setLanguage('pt', false);
-                            }
-                        });
-                        translateApi(cfg.heroBadge, 'fr').then(t => {
-                            if (typeof dictionary !== 'undefined' && dictionary['fr']) {
-                                dictionary['fr'].hero_badge = t;
-                                if (typeof currentLang !== 'undefined' && currentLang === 'fr' && typeof setLanguage === 'function') setLanguage('fr', false);
-                            }
-                        });
                     }
                 }
+
+                applyHeroBadgeConfig(cfg);
+
+                window.addEventListener('yaire_config_updated', (e) => {
+                    if (e.detail) {
+                        applyHeroBadgeConfig(e.detail);
+                    }
+                });
 
                 // 5. Spotlight Tips (Sincronización en vivo y fallback de traducción)
                 if (cfg.spotlightTips && typeof spotlightTips !== 'undefined') {

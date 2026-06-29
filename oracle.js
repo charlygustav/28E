@@ -462,7 +462,7 @@ class OracleRoom {
             });
             this.socket.emit('music_sync_request');
 
-            this.showToast('Conectado a Oracle');
+            this.showToast('Conectado al Inner Circle');
             OracleAudio.play('connect');
 
             // Start room timer
@@ -696,10 +696,10 @@ class OracleRoom {
         const btn = document.getElementById('btn-mic');
         if (this.micEnabled) {
             btn.classList.remove('muted');
-            btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`;
+            btn.innerHTML = `<i class="ri-mic-line"></i>`;
         } else {
             btn.classList.add('muted');
-            btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/><path d="M17 16.95A7 7 0 0 1 5 12v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`;
+            btn.innerHTML = `<i class="ri-mic-off-line"></i>`;
         }
 
         // Update local mic status icon
@@ -722,11 +722,14 @@ class OracleRoom {
     }
 
     updateCamBtnUI() {
-        const strike = document.getElementById('cam-strike');
+        const btn = document.getElementById('btn-cam');
+        if (!btn) return;
         if (this.cameraEnabled) {
-            strike.classList.replace('scale-100', 'scale-0');
+            btn.classList.remove('muted');
+            btn.innerHTML = `<i class="ri-video-line"></i>`;
         } else {
-            strike.classList.replace('scale-0', 'scale-100');
+            btn.classList.add('muted');
+            btn.innerHTML = `<i class="ri-video-off-line"></i>`;
         }
     }
 
@@ -736,6 +739,7 @@ class OracleRoom {
         this.roomJoinedAt = Date.now();
         const timerEl = document.getElementById('room-timer');
         if (!timerEl) return;
+        timerEl.style.display = 'block';
 
         if (this.roomTimerInterval) clearInterval(this.roomTimerInterval);
         this.roomTimerInterval = setInterval(() => {
@@ -752,7 +756,7 @@ class OracleRoom {
             this.roomTimerInterval = null;
         }
         const timerEl = document.getElementById('room-timer');
-        if (timerEl) timerEl.textContent = '00:00';
+        if (timerEl) { timerEl.textContent = '00:00'; timerEl.style.display = 'none'; }
     }
 
     // ═══ TYPING INDICATOR ═══
@@ -809,19 +813,24 @@ class OracleRoom {
 
         const lobbyOverlay = document.getElementById('lobby-overlay');
         if (lobbyOverlay) {
-            lobbyOverlay.style.display = 'flex';
-            setTimeout(() => lobbyOverlay.style.opacity = '1', 50);
+            if (window.gsap) {
+                gsap.fromTo(lobbyOverlay, { opacity: 0, scale: 0.98 }, { opacity: 1, scale: 1, duration: 0.5, ease: 'power3.out', display: 'flex' });
+                gsap.set(lobbyOverlay, { display: 'flex' });
+            } else {
+                lobbyOverlay.style.display = 'flex';
+                setTimeout(() => lobbyOverlay.style.opacity = '1', 50);
+            }
         }
 
         // Clear chat
         const chatContainer = document.getElementById('chat-messages');
         if (chatContainer) {
-            chatContainer.innerHTML = '<div class="text-center text-[10px] text-white/20 my-4 glass-card rounded-xl p-3 mx-auto w-fit font-medium">Bienvenido a Oracle. Tus mensajes están cifrados de extremo a extremo.</div>';
+            chatContainer.innerHTML = '<div style="text-align:center;font-size:0.68rem;color:var(--text-sm);padding:0.75rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);margin:0.5rem;">🔒 Bienvenido al Inner Circle. Mensajes cifrados E2E.</div>';
         }
 
         // Reset people list
         const peopleList = document.getElementById('people-list');
-        if (peopleList) peopleList.innerHTML = '<div class="text-xs text-white/20 text-center py-8">Nadie conectado aún.</div>';
+        if (peopleList) peopleList.innerHTML = '<div style="font-size:0.7rem;color:var(--text-sm);text-align:center;padding:2rem;">Nadie conectado aún.</div>';
     }
 
     // ═══ USER COUNT & PEOPLE LIST ═══
@@ -1486,12 +1495,19 @@ window.OracleSetup = () => {
     if (btnJoin) {
         btnJoin.addEventListener('click', () => {
             const lobbyOverlay = document.getElementById('lobby-overlay');
-            if (lobbyOverlay) {
+            if (window.gsap) {
+                gsap.to(lobbyOverlay, {
+                    opacity: 0, scale: 1.02, duration: 0.4, ease: 'power2.in',
+                    onComplete: () => { if (lobbyOverlay) lobbyOverlay.style.display = 'none'; }
+                });
+            } else if (lobbyOverlay) {
                 lobbyOverlay.style.opacity = '0';
                 setTimeout(() => lobbyOverlay.style.display = 'none', 500);
             }
             window.oracleRoom.stopLobbyPreview();
             window.oracleRoom.init();
+            // Show app with GSAP entrance
+            setTimeout(() => { if (window.__showApp) window.__showApp(); }, 100);
         });
 
         const urlParams = new URLSearchParams(window.location.search);
