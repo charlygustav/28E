@@ -140,6 +140,22 @@
         }
 
         /* ══════════════════════════════
+           CONTROL BAR
+        ══════════════════════════════ */
+        #control-bar-wrap {
+            display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 0.5rem;
+            border-radius: var(--radius-full);
+            backdrop-filter: var(--blur-md);
+            -webkit-backdrop-filter: var(--blur-md);
+            margin: 0 auto;
+            max-width: 100%;
+            min-width: 0;
+        }
+
+        /* ══════════════════════════════
            LOADER
         ══════════════════════════════ */
         #loader {
@@ -393,6 +409,11 @@
             transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
             max-width: 100%;
         }
+        @media (min-width: 1024px) {
+            #main-stage {
+                max-width: calc(100vw - var(--sidebar-w));
+            }
+        }
 
         /* Video Grid */
         #video-grid {
@@ -616,10 +637,10 @@
             display: flex; gap: 0.25rem;
             padding: 0.625rem 0.75rem;
             border-bottom: 1px solid var(--border);
-            flex-shrink: 0;
+            flex-shrink: 0; width: 100%;
         }
         .sidebar-tab {
-            flex: 1; padding: 0.35rem 0.2rem;
+            flex: 1 1 0%; width: 100%; padding: 0.35rem 0.2rem;
             border-radius: var(--radius-sm);
             font-size: 0.6rem; font-weight: 700;
             letter-spacing: 0.05em; text-transform: uppercase;
@@ -627,6 +648,7 @@
             color: var(--text-sm);
             border: 1px solid transparent;
             transition: all 0.2s;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
         }
         .sidebar-tab:hover { color: var(--text-md); background: var(--surface-md); }
         .sidebar-tab.active {
@@ -677,9 +699,10 @@
         #chat-input-area {
             padding: 0.75rem;
             border-top: 1px solid var(--border);
-            flex-shrink: 0;
+            flex-shrink: 0; width: 100%; overflow: hidden;
+            box-sizing: border-box;
         }
-        #chat-form { display: flex; gap: 0.5rem; }
+        #chat-form { display: flex; gap: 0.5rem; width: 100%; }
         #chat-input {
             flex: 1; min-width: 0; width: 100%;
             padding: 0.625rem 1rem;
