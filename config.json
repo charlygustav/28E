@@ -13,8 +13,8 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-06-29T08:01:16.025Z",
-  "maintDate": "2026-06-28T00:00",
+  "lastUpdated": "2026-06-29T08:02:04.440Z",
+  "maintDate": "2026-07-01T00:00",
   "maintMsg": "",
   "maintScreen": "cinematic",
   "maintSongs": [
@@ -49,7 +49,7 @@
       "title": "Toto Lindo"
     }
   ],
-  "maintType": "indefinite",
+  "maintType": "scheduled",
   "mantenimiento": true,
   "refugeText": "",
   "refugeTitle": "Te escucho, mi amor",
