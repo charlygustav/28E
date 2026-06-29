@@ -386,27 +386,24 @@
 
         /* Stage */
         #main-stage {
-            flex: 1; position: relative;
+            flex: 1; min-width: 0; min-height: 0; overflow: hidden;
+            position: relative;
             display: flex; flex-direction: column;
-            padding: 0.75rem;
-            padding-bottom: 6rem;
-            overflow: hidden;
+            padding: 1.5rem; gap: 1.5rem;
             transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
         }
 
         /* Video Grid */
-        .video-grid {
-            flex: 1;
-            display: grid; gap: 0.625rem;
-            place-items: center;
-            align-content: center;
-            width: 100%; height: 100%; min-height: 0;
-            transition: all 0.5s cubic-bezier(0.4,0,0.2,1);
+        #video-grid {
+            flex: 1; min-width: 0; min-height: 0;
+            display: grid; gap: 1rem;
+            align-content: center; justify-content: center;
+            width: 100%; height: 100%;
         }
-        .grid-1 { grid-template-columns: 1fr; }
-        .grid-2 { grid-template-columns: 1fr 1fr; }
-        .grid-3 { grid-template-columns: 1fr 1fr; }
-        .grid-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+        .grid-1 { grid-template-columns: minmax(0, 1fr); }
+        .grid-2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+        .grid-3 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+        .grid-4 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); }
 
         .video-container {
             position: relative;
@@ -415,8 +412,11 @@
             border-radius: var(--radius-xl);
             overflow: hidden;
             display: flex; align-items: center; justify-content: center;
-            aspect-ratio: 16/9;
-            width: 100%; height: 100%; max-height: calc(100vh - 10rem);
+            
+            width: 100%; height: auto;
+            max-height: 100%; aspect-ratio: 16/9;
+            margin: auto;
+
             box-shadow: 0 8px 40px rgba(0,0,0,0.5);
             transition: border-color 0.3s, box-shadow 0.3s;
         }
