@@ -105,12 +105,12 @@ io.on('connection', (socket) => {
     }
 
     // Add user
-    users.set(socket.id, { displayName: displayName.trim(), photoURL, oracleHandle, muted: false, dnd: false });
+    users.set(socket.id, { displayName: displayName.trim(), photoURL, oracleHandle, muted: false, dnd: false, camEnabled: false });
     socket.join(CHANNEL);
 
     const existingUsers = Array.from(users.entries())
       .filter(([id]) => id !== socket.id)
-      .map(([id, u]) => ({ id, displayName: u.displayName, photoURL: u.photoURL, oracleHandle: u.oracleHandle, muted: u.muted, dnd: u.dnd }));
+      .map(([id, u]) => ({ id, displayName: u.displayName, photoURL: u.photoURL, oracleHandle: u.oracleHandle, muted: u.muted, dnd: u.dnd, camEnabled: u.camEnabled }));
 
     // Tell the joiner who's already here
     socket.emit('joined', { userId: socket.id, existingUsers });
@@ -120,7 +120,8 @@ io.on('connection', (socket) => {
       userId: socket.id,
       displayName: displayName.trim(),
       photoURL,
-      oracleHandle
+      oracleHandle,
+      camEnabled: false
     });
 
     broadcastUsers();
@@ -137,6 +138,14 @@ io.on('connection', (socket) => {
     if (users.has(socket.id)) {
       users.get(socket.id).muted = muted;
       socket.to(CHANNEL).emit('user_mute_state', { userId: socket.id, muted });
+    }
+  });
+
+  // ── CAM STATE ─────────────────────────────────────────────────────────────
+  socket.on('cam_state', ({ camEnabled }) => {
+    if (users.has(socket.id)) {
+      users.get(socket.id).camEnabled = camEnabled;
+      socket.to(CHANNEL).emit('user_cam_state', { userId: socket.id, camEnabled });
     }
   });
 

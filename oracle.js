@@ -425,6 +425,8 @@ class OracleRoom {
         this.socket.on('connect', async () => {
             const pass = await Promise.resolve(passPromise);
             this.socket.emit('join_channel', { password: pass, displayName: name, photoURL, oracleHandle });
+            this.socket.emit('mute_state', { muted: !this.micEnabled });
+            this.socket.emit('cam_state', { camEnabled: this.cameraEnabled });
         });
 
         this.socket.on('joined', ({ userId, existingUsers }) => {
@@ -436,7 +438,15 @@ class OracleRoom {
 
             this.myId = userId;
             this.users = existingUsers;
-            existingUsers.forEach(u => this.createOffer(u.id));
+            existingUsers.forEach(u => {
+                this.createOffer(u.id);
+                this.updateVideoElement(u.id, null, u);
+                const container = document.getElementById(`video-container-${u.id}`);
+                if (container) {
+                    if (u.camEnabled) container.classList.add('has-video');
+                    else container.classList.remove('has-video');
+                }
+            });
             this.socket.emit('music_sync_request');
 
             this.showToast('Conectado a Oracle');
@@ -456,9 +466,14 @@ class OracleRoom {
             this.updatePeopleList();
         });
 
-        this.socket.on('user_joined', ({ userId, displayName, photoURL, oracleHandle }) => {
-            this.users.push({ id: userId, displayName, photoURL, oracleHandle });
+        this.socket.on('user_joined', ({ userId, displayName, photoURL, oracleHandle, camEnabled }) => {
+            this.users.push({ id: userId, displayName, photoURL, oracleHandle, camEnabled });
             this.updateVideoElement(userId, null, { displayName, photoURL, oracleHandle });
+            const container = document.getElementById(`video-container-${userId}`);
+            if (container) {
+                if (camEnabled) container.classList.add('has-video');
+                else container.classList.remove('has-video');
+            }
             this.showToast(`${displayName} se unió`);
             OracleAudio.play('join');
             this.updateUserCount();
@@ -542,6 +557,20 @@ class OracleRoom {
             const user = this.users.find(u => u.id === userId);
             if (user) user.muted = muted;
             this.updatePeopleList();
+        });
+
+        // Cam state
+        this.socket.on('user_cam_state', ({ userId, camEnabled }) => {
+            const container = document.getElementById(`video-container-${userId}`);
+            if (container) {
+                if (camEnabled) {
+                    container.classList.add('has-video');
+                } else {
+                    container.classList.remove('has-video');
+                }
+            }
+            const user = this.users.find(u => u.id === userId);
+            if (user) user.camEnabled = camEnabled;
         });
 
         // Music Events
@@ -674,6 +703,7 @@ class OracleRoom {
     toggleCam() {
         this.cameraEnabled = !this.cameraEnabled;
         OracleAudio.play(this.cameraEnabled ? 'toggleOn' : 'toggleOff');
+        if (this.socket) this.socket.emit('cam_state', { camEnabled: this.cameraEnabled });
         this.updateCamBtnUI();
         this.acquireMedia();
     }
