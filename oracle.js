@@ -376,12 +376,25 @@ class OracleRoom {
         }
 
         const vid = container.querySelector('video');
+        let shouldShowVideo = false;
+
         if (stream && stream.getVideoTracks().length > 0) {
             vid.srcObject = stream;
+            shouldShowVideo = true;
+        }
+
+        const isLocal = id === 'local';
+        if (isLocal) {
+            shouldShowVideo = this.cameraEnabled;
+        } else if (userObj && userObj.camEnabled !== undefined) {
+            shouldShowVideo = userObj.camEnabled;
+        }
+
+        if (shouldShowVideo) {
             container.classList.add('has-video');
         } else {
             container.classList.remove('has-video');
-            if (stream) vid.srcObject = stream;
+            if (stream && !vid.srcObject) vid.srcObject = stream;
         }
     }
 
