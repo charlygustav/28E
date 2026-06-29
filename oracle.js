@@ -323,7 +323,8 @@ class OracleRoom {
         // Update speak bars
         const bars = document.getElementById(`speak-bars-${id}`);
         if (bars) {
-            bars.classList.toggle('active', isSpeaking);
+            bars.classList.toggle('opacity-100', isSpeaking);
+            bars.classList.toggle('opacity-0', !isSpeaking);
         }
         // Update people list
         this.updatePeopleList();
@@ -344,28 +345,28 @@ class OracleRoom {
             const isLocal = id === 'local';
 
             container.innerHTML = `
-                <video id="vid-${id}" autoplay playsinline ${isLocal ? 'muted' : ''} style="${isLocal ? 'transform:scaleX(-1);' : ''}"></video>
-                <div class="avatar-fallback">
-                    <div class="w-20 h-20 rounded-full glass-light flex items-center justify-center overflow-hidden shadow-xl">
+                <video id="vid-${id}" class="absolute inset-0 w-full h-full object-cover" autoplay playsinline ${isLocal ? 'muted' : ''} style="${isLocal ? 'transform:scaleX(-1);' : ''}"></video>
+                <div class="avatar-fallback absolute inset-0 flex flex-col items-center justify-center bg-black/90">
+                    <div class="w-20 h-20 rounded-full flex items-center justify-center overflow-hidden shadow-xl" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);">
                         <img src="${avatarUrl}" class="w-full h-full object-cover" onerror="this.style.display='none'" />
                     </div>
                 </div>
-                <div class="video-overlay-info">
+                <div class="video-overlay-info absolute bottom-0 left-0 right-0 p-3.5 flex items-end justify-between pointer-events-none z-10" style="background:linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%);">
                     <div class="flex items-center gap-2">
-                        <div id="speak-bars-${id}" class="speak-bars">
-                            <div class="bar" style="height:3px;"></div>
-                            <div class="bar" style="height:5px;"></div>
-                            <div class="bar" style="height:3px;"></div>
-                            <div class="bar" style="height:7px;"></div>
+                        <div id="speak-bars-${id}" class="speak-bars flex items-end gap-0.5 h-3 opacity-0 transition-opacity">
+                            <div class="bar w-1 bg-green-500 rounded-t" style="height:3px;"></div>
+                            <div class="bar w-1 bg-green-500 rounded-t" style="height:5px;"></div>
+                            <div class="bar w-1 bg-green-500 rounded-t" style="height:3px;"></div>
+                            <div class="bar w-1 bg-green-500 rounded-t" style="height:7px;"></div>
                         </div>
                         <span class="text-xs font-bold text-white/90 drop-shadow-lg">${displayName}${isLocal ? ' (Tú)' : ''}</span>
                         ${handle ? `<span class="text-[10px] text-amber-500/50 font-bold">${handle}</span>` : ''}
                     </div>
                     <div id="mic-status-${id}" class="w-6 h-6 rounded-full flex items-center justify-center" style="background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);">
-                        <svg class="w-3 h-3 text-white/70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+                        <i class="ri-mic-line text-xs text-white/70"></i>
                     </div>
                 </div>
-                <div id="reactions-${id}" class="absolute inset-0 pointer-events-none overflow-hidden rounded-[1.25rem] z-10"></div>
+                <div id="reactions-${id}" class="absolute inset-0 pointer-events-none overflow-hidden rounded-[1.25rem] z-20"></div>
             `;
             grid.appendChild(container);
             this.updateGridLayout();
@@ -706,9 +707,9 @@ class OracleRoom {
         const localMic = document.getElementById('mic-status-local');
         if (localMic) {
             if (!this.micEnabled) {
-                localMic.innerHTML = '<svg class="w-3 h-3 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/><path d="M17 16.95A7 7 0 0 1 5 12v-2"/></svg>';
+                localMic.innerHTML = '<i class="ri-mic-off-line text-xs text-red-400"></i>';
             } else {
-                localMic.innerHTML = '<svg class="w-3 h-3 text-white/70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>';
+                localMic.innerHTML = '<i class="ri-mic-line text-xs text-white/70"></i>';
             }
         }
     }
@@ -875,7 +876,7 @@ class OracleRoom {
                         ${u.oracleHandle ? `<p class="text-[10px] text-amber-500/50 font-bold">@${u.oracleHandle}</p>` : ''}
                     </div>
                     <div class="flex items-center gap-1.5">
-                        ${u.muted ? '<div class="w-5 h-5 rounded-full bg-red-500/10 flex items-center justify-center"><svg class="w-3 h-3 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12"/></svg></div>' : ''}
+                        ${u.muted ? '<div class="w-5 h-5 rounded-full bg-red-500/10 flex items-center justify-center"><i class="ri-mic-off-line text-[10px] text-red-400"></i></div>' : ''}
                     </div>
                 </div>
             `;
