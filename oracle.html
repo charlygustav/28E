@@ -1046,6 +1046,7 @@
 
         #oracle-sidebar {
             width: var(--sidebar-w);
+            max-width: calc(100vw - 60px);
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
@@ -1063,6 +1064,7 @@
             transform: translateX(100%);
         }
 
+        /* Narrow viewports: sidebar becomes fixed overlay */
         @media (max-width: 1023px) {
             #oracle-sidebar {
                 position: fixed !important;
@@ -1070,13 +1072,18 @@
                 right: 0 !important;
                 bottom: 0 !important;
                 left: auto !important;
-                z-index: 50;
+                z-index: 55;
                 transform: translateX(100%) !important;
-                width: min(var(--sidebar-w), 85vw);
+                width: min(var(--sidebar-w), 88vw) !important;
+                max-width: none;
                 box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
             }
             #oracle-sidebar.sidebar-open {
                 transform: translateX(0) !important;
+            }
+            /* Even if JS opened it without sidebar-open class, hide it */
+            #oracle-sidebar:not(.sidebar-open) {
+                transform: translateX(100%) !important;
             }
         }
 
@@ -2165,6 +2172,34 @@
             const backdrop = document.getElementById('sidebar-backdrop');
             let isSidebarOpen = false;
 
+            function updateSidebarMode() {
+                if (window.innerWidth >= 1024) {
+                    // Desktop: sidebar in flex layout
+                    if (isSidebarOpen) {
+                        sidebar.classList.remove('sidebar-closed');
+                        sidebar.classList.remove('sidebar-open');
+                        backdrop.classList.remove('active');
+                        btnOpen.style.opacity = '0';
+                        btnOpen.style.pointerEvents = 'none';
+                    }
+                } else {
+                    // Narrow: sidebar needs overlay mode
+                    if (isSidebarOpen) {
+                        sidebar.classList.remove('sidebar-closed');
+                        sidebar.classList.add('sidebar-open');
+                        backdrop.classList.add('active');
+                    } else {
+                        sidebar.classList.add('sidebar-closed');
+                        sidebar.classList.remove('sidebar-open');
+                        backdrop.classList.remove('active');
+                    }
+                    btnOpen.style.opacity = isSidebarOpen ? '0' : '1';
+                    btnOpen.style.pointerEvents = isSidebarOpen ? 'none' : 'auto';
+                }
+                gsap.set(sidebar, { clearProps: 'transform,opacity,x' });
+            }
+
+            // Init sidebar state
             if (window.innerWidth >= 1024) {
                 isSidebarOpen = true;
                 sidebar.classList.remove('sidebar-closed');
@@ -2172,6 +2207,13 @@
                 btnOpen.style.opacity = '1';
                 btnOpen.style.pointerEvents = 'auto';
             }
+
+            // Handle window resize
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(updateSidebarMode, 150);
+            });
 
             function openSidebar() {
                 isSidebarOpen = true;
@@ -2182,7 +2224,7 @@
                 }
                 btnOpen.style.opacity = '0';
                 btnOpen.style.pointerEvents = 'none';
-                gsap.from(sidebar, { x: 60, opacity: 0.5, duration: 0.4, ease: 'power3.out', onComplete: () => gsap.set(sidebar, { clearProps: 'transform,opacity' }) });
+                gsap.from(sidebar, { x: 60, opacity: 0.5, duration: 0.4, ease: 'power3.out', onComplete: () => gsap.set(sidebar, { clearProps: 'transform,opacity,x' }) });
             }
 
             function closeSidebar() {
@@ -2247,8 +2289,8 @@
                 gsap.to(app, { opacity: 1, duration: 0.6, ease: 'power2.out' });
                 gsap.from('#topbar', { y: -20, opacity: 0, duration: 0.5, delay: 0.1, ease: 'power3.out' });
                 gsap.from('#control-bar-wrap', { y: 30, opacity: 0, duration: 0.6, delay: 0.25, ease: 'power3.out' });
-                if (isSidebarOpen) {
-                    gsap.from(sidebar, { x: 60, opacity: 0, duration: 0.5, delay: 0.2, ease: 'power3.out' });
+                if (isSidebarOpen && window.innerWidth >= 1024) {
+                    gsap.from(sidebar, { x: 60, opacity: 0, duration: 0.5, delay: 0.2, ease: 'power3.out', onComplete: () => gsap.set(sidebar, { clearProps: 'transform,opacity,x' }) });
                 }
             };
 
