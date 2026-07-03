@@ -11,7 +11,9 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 
     <!-- Icons -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
@@ -22,40 +24,63 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
 
     <style>
-        /* ═══════════════════════════════════════════════
-           DESIGN SYSTEM — 28E Inner Circle
-        ═══════════════════════════════════════════════ */
+        /* ═══════════════════════════════════════════════════════
+           DESIGN SYSTEM — 28E Inner Circle · v4 Ultra Premium
+        ═══════════════════════════════════════════════════════ */
         :root {
-            --bg:         #070709;
-            --surface:    rgba(255,255,255,0.03);
-            --surface-md: rgba(255,255,255,0.06);
-            --surface-hi: rgba(255,255,255,0.10);
-            --border:     rgba(255,255,255,0.06);
-            --border-hi:  rgba(255,255,255,0.12);
-            --accent:     #6366f1;
-            --accent-glow:rgba(99,102,241,0.35);
-            --gold:       #f59e0b;
-            --gold-glow:  rgba(245,158,11,0.3);
-            --danger:     #ef4444;
-            --green:      #22c55e;
-            --text:       #ffffff;
-            --text-md:    rgba(255,255,255,0.65);
-            --text-sm:    rgba(255,255,255,0.35);
-            --blur-lg:    blur(60px) saturate(160%);
-            --blur-md:    blur(30px) saturate(140%);
-            --blur-sm:    blur(16px);
-            --radius-xl:  1.5rem;
-            --radius-lg:  1rem;
-            --radius-md:  0.75rem;
-            --radius-sm:  0.5rem;
-            --sidebar-w:  320px;
+            --bg: #050508;
+            --bg-deep: #020204;
+            --surface: rgba(255, 255, 255, 0.035);
+            --surface-md: rgba(255, 255, 255, 0.065);
+            --surface-hi: rgba(255, 255, 255, 0.11);
+            --border: rgba(255, 255, 255, 0.06);
+            --border-md: rgba(255, 255, 255, 0.1);
+            --border-hi: rgba(255, 255, 255, 0.16);
+            --accent: #7c5cfc;
+            --accent-soft: #a78bfa;
+            --accent-deep: #5b3fd9;
+            --accent-glow: rgba(124, 92, 252, 0.5);
+            --gold: #f0a030;
+            --gold-soft: #fbbf24;
+            --gold-glow: rgba(240, 160, 48, 0.4);
+            --danger: #f43f5e;
+            --danger-glow: rgba(244, 63, 94, 0.35);
+            --green: #10b981;
+            --green-soft: #34d399;
+            --green-glow: rgba(16, 185, 129, 0.4);
+            --pink: #e879a8;
+            --text: #f0f0f5;
+            --text-md: rgba(255, 255, 255, 0.58);
+            --text-sm: rgba(255, 255, 255, 0.3);
+            --blur-xl: blur(80px) saturate(180%);
+            --blur-lg: blur(50px) saturate(160%);
+            --blur-md: blur(28px) saturate(140%);
+            --blur-sm: blur(14px);
+            --radius-full: 9999px;
+            --radius-2xl: 1.75rem;
+            --radius-xl: 1.25rem;
+            --radius-lg: 0.875rem;
+            --radius-md: 0.625rem;
+            --radius-sm: 0.375rem;
+            --sidebar-w: 330px;
+            --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-        html, body {
-            height: 100%; height: 100dvh;
-            font-family: 'Inter', -apple-system, sans-serif;
+        html,
+        body {
+            height: 100%;
+            height: 100dvh;
+            font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg);
             color: var(--text);
             overflow: hidden;
@@ -63,11 +88,47 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
+        /* Base background gradient — deep cosmic feel */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 50% -10%, rgba(124, 92, 252, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 90%, rgba(240, 160, 48, 0.04) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 40% at 10% 80%, rgba(232, 121, 168, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Dot grid background pattern */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 32px 32px;
+            pointer-events: none;
+            z-index: 0;
+            mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 70%);
+            -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 70%);
+        }
+
+        h1, h2, h3, h4,
+        .topbar-logo, .auth-pill, .live-badge {
+            font-family: 'Outfit', 'Inter', sans-serif;
+        }
+
         /* Scrollbar */
-        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar { width: 3px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 99px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.14); }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 99px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
 
         /* ── Noise Texture ── */
         .noise::after {
@@ -75,9 +136,9 @@
             position: absolute;
             inset: 0;
             border-radius: inherit;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
             pointer-events: none;
-            opacity: 0.4;
+            opacity: 0.5;
         }
 
         /* ── Glass System ── */
@@ -87,29 +148,33 @@
             -webkit-backdrop-filter: var(--blur-lg);
             border: 1px solid var(--border);
         }
+
         .glass-md {
             background: var(--surface-md);
             backdrop-filter: var(--blur-md);
             -webkit-backdrop-filter: var(--blur-md);
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-md);
         }
+
         .glass-hi {
-            background: rgba(10,10,18,0.75);
-            backdrop-filter: var(--blur-lg);
-            -webkit-backdrop-filter: var(--blur-lg);
+            background: rgba(8, 8, 16, 0.82);
+            backdrop-filter: var(--blur-xl);
+            -webkit-backdrop-filter: var(--blur-xl);
             border: 1px solid var(--border-hi);
         }
+
         .glass-input {
-            background: rgba(255,255,255,0.04);
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border);
             backdrop-filter: var(--blur-sm);
             -webkit-backdrop-filter: var(--blur-sm);
             outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            transition: border-color 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
         }
+
         .glass-input:focus {
-            border-color: rgba(99,102,241,0.5);
-            box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+            border-color: rgba(124, 92, 252, 0.45);
+            box-shadow: 0 0 0 3px rgba(124, 92, 252, 0.1), inset 0 0 20px rgba(124, 92, 252, 0.03);
         }
 
         /* ── Ambient Orbs ── */
@@ -117,21 +182,50 @@
             position: absolute;
             border-radius: 50%;
             pointer-events: none;
-            filter: blur(80px);
-            opacity: 0.6;
+            filter: blur(90px);
+            opacity: 0.5;
         }
 
         /* ── Gradient Border Trick ── */
         .grad-border {
             position: relative;
         }
+
         .grad-border::before {
             content: '';
             position: absolute;
             inset: 0;
             border-radius: inherit;
             padding: 1px;
-            background: linear-gradient(135deg, rgba(99,102,241,0.4), rgba(245,158,11,0.25), rgba(236,72,153,0.2));
+            background: linear-gradient(135deg,
+                rgba(124, 92, 252, 0.45) 0%,
+                rgba(240, 160, 48, 0.2) 50%,
+                rgba(232, 121, 168, 0.25) 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        /* ── Shimmer Effect ── */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .shimmer-border::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(90deg,
+                transparent 0%, transparent 30%,
+                rgba(124, 92, 252, 0.6) 50%,
+                transparent 70%, transparent 100%);
+            background-size: 200% 100%;
+            animation: shimmer 3s ease-in-out infinite;
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
@@ -140,200 +234,393 @@
         }
 
         /* ══════════════════════════════
-           CONTROL BAR
-        ══════════════════════════════ */
-        #control-bar-wrap {
-            display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: center;
-            background: rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.05);
-            padding: 0.5rem;
-            border-radius: var(--radius-full);
-            backdrop-filter: var(--blur-md);
-            -webkit-backdrop-filter: var(--blur-md);
-            margin: 0 auto;
-            max-width: 100%;
-            min-width: 0;
-        }
-
-        /* ══════════════════════════════
            LOADER
         ══════════════════════════════ */
         #loader {
-            position: fixed; inset: 0; z-index: 300;
+            position: fixed;
+            inset: 0;
+            z-index: 300;
             background: var(--bg);
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             overflow: hidden;
         }
+
+        /* Loader grid lines */
+        #loader::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(124, 92, 252, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(124, 92, 252, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, black 10%, transparent 70%);
+            -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, black 10%, transparent 70%);
+            animation: grid-pulse 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes grid-pulse {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.8; }
+        }
+
         .loader-ring-track {
             fill: none;
-            stroke: rgba(255,255,255,0.04);
-            stroke-width: 1;
+            stroke: rgba(255, 255, 255, 0.03);
+            stroke-width: 0.8;
         }
+
         .loader-ring-fill {
             fill: none;
             stroke: url(#ld-grad);
-            stroke-width: 1.5;
+            stroke-width: 1.8;
             stroke-linecap: round;
-            stroke-dasharray: 565.5;
-            stroke-dashoffset: 565.5;
+            stroke-dasharray: 351.9;
+            stroke-dashoffset: 351.9;
             transform: rotate(-90deg);
             transform-origin: center;
-            transition: stroke-dashoffset 0.4s cubic-bezier(0.4,0,0.2,1);
+            transition: stroke-dashoffset 0.5s var(--ease-out);
         }
+
         .loader-dot {
-            width: 5px; height: 5px;
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             position: absolute;
         }
+
         #loader-label {
-            font-size: 0.625rem;
-            letter-spacing: 0.2em;
+            font-size: 0.6rem;
+            letter-spacing: 0.25em;
             color: var(--text-sm);
             text-transform: uppercase;
-            margin-top: 2rem;
+            margin-top: 2.5rem;
             font-weight: 500;
+        }
+
+        /* Loader floating particles */
+        .loader-particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particle-float 6s ease-in-out infinite;
+        }
+
+        .loader-particle:nth-child(1) { left: 30%; top: 40%; animation-delay: 0s; }
+        .loader-particle:nth-child(2) { left: 60%; top: 55%; animation-delay: 1.2s; }
+        .loader-particle:nth-child(3) { left: 45%; top: 35%; animation-delay: 2.4s; }
+        .loader-particle:nth-child(4) { left: 55%; top: 60%; animation-delay: 3.6s; }
+
+        @keyframes particle-float {
+            0%, 100% { opacity: 0; transform: translateY(0) scale(0.5); }
+            20% { opacity: 0.8; }
+            50% { opacity: 0.4; transform: translateY(-40px) scale(1); }
+            80% { opacity: 0; }
         }
 
         /* ══════════════════════════════
            AUTH SCREEN
         ══════════════════════════════ */
         #auth-overlay {
-            position: fixed; inset: 0; z-index: 200;
+            position: fixed;
+            inset: 0;
+            z-index: 200;
             background: var(--bg);
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             overflow-y: auto;
             padding: 2rem 1rem;
         }
+
+        /* Auth grid lines */
+        #auth-overlay::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(124, 92, 252, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(124, 92, 252, 0.025) 1px, transparent 1px);
+            background-size: 48px 48px;
+            mask-image: radial-gradient(ellipse 60% 60% at 50% 40%, black 10%, transparent 60%);
+            -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 40%, black 10%, transparent 60%);
+            pointer-events: none;
+        }
+
         .auth-inner {
-            width: 100%; max-width: 420px;
-            display: flex; flex-direction: column; align-items: center;
-            text-align: center; gap: 2rem;
-        }
-        .auth-logo-ring {
-            width: 80px; height: 80px;
-            border-radius: 24px;
-            display: flex; align-items: center; justify-content: center;
-            background: rgba(99,102,241,0.1);
-            border: 1px solid rgba(99,102,241,0.25);
+            width: 100%;
+            max-width: 440px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1.75rem;
             position: relative;
+            z-index: 1;
         }
+
+        .auth-logo-ring {
+            width: 84px;
+            height: 84px;
+            border-radius: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(124, 92, 252, 0.12), rgba(124, 92, 252, 0.04));
+            border: 1px solid rgba(124, 92, 252, 0.2);
+            position: relative;
+            box-shadow: 0 0 60px rgba(124, 92, 252, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
         .auth-logo-ring::before {
             content: '';
-            position: absolute; inset: -8px;
-            border-radius: 32px;
-            background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%);
+            position: absolute;
+            inset: -12px;
+            border-radius: 34px;
+            background: radial-gradient(circle, rgba(124, 92, 252, 0.1) 0%, transparent 70%);
+            animation: ring-breathe 3s ease-in-out infinite;
         }
+
+        @keyframes ring-breathe {
+            0%, 100% { opacity: 0.5; transform: scale(0.95); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
         .auth-pill {
-            display: inline-flex; align-items: center; gap: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
             padding: 0.35rem 0.9rem;
             border-radius: 99px;
-            background: rgba(99,102,241,0.08);
-            border: 1px solid rgba(99,102,241,0.2);
-            font-size: 0.65rem; font-weight: 700;
-            letter-spacing: 0.12em; text-transform: uppercase;
-            color: #818cf8;
+            background: rgba(124, 92, 252, 0.06);
+            border: 1px solid rgba(124, 92, 252, 0.18);
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--accent-soft);
         }
+
         .auth-pill-dot {
-            width: 6px; height: 6px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             background: var(--accent);
-            box-shadow: 0 0 8px var(--accent);
+            box-shadow: 0 0 10px var(--accent);
             animation: pulse-dot 2s ease-in-out infinite;
         }
+
         @keyframes pulse-dot {
             0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(0.8); }
+            50% { opacity: 0.5; transform: scale(0.75); }
         }
+
         .auth-card {
             width: 100%;
-            border-radius: var(--radius-xl);
+            border-radius: var(--radius-2xl);
             padding: 2rem;
-            display: flex; flex-direction: column; gap: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.03);
         }
+
+        /* Inner glow for auth card */
+        .auth-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 20%;
+            right: 20%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(124, 92, 252, 0.3), transparent);
+            pointer-events: none;
+        }
+
         .auth-feature-grid {
-            display: grid; grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.625rem;
         }
+
         .auth-feature-item {
             border-radius: var(--radius-lg);
-            padding: 1rem;
-            display: flex; flex-direction: column; gap: 0.5rem;
-            transition: transform 0.25s, background 0.25s;
+            padding: 0.875rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            transition: transform 0.3s var(--ease-spring), background 0.3s;
+            cursor: default;
         }
-        .auth-feature-item:hover { transform: translateY(-2px); }
+
+        .auth-feature-item:hover {
+            transform: translateY(-3px);
+            background: var(--surface-md);
+        }
+
         .auth-feature-icon {
-            width: 32px; height: 32px;
-            border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1rem;
+            transition: transform 0.3s var(--ease-spring);
         }
+
+        .auth-feature-item:hover .auth-feature-icon {
+            transform: scale(1.1) rotate(-3deg);
+        }
+
         .btn-google {
             width: 100%;
-            display: flex; align-items: center; justify-content: center; gap: 0.75rem;
-            padding: 0.875rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 0.9rem 1.5rem;
             border-radius: var(--radius-lg);
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: white; font-size: 0.9rem; font-weight: 600;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s, border-color 0.2s, transform 0.15s;
+            transition: all 0.25s var(--ease-smooth);
+            position: relative;
+            overflow: hidden;
         }
-        .btn-google:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.18); transform: translateY(-1px); }
-        .btn-google:active { transform: scale(0.98); }
+
+        .btn-google::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .btn-google:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.14);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-google:hover::before {
+            transform: translateX(100%);
+        }
+
+        .btn-google:active {
+            transform: scale(0.97);
+        }
 
         /* ══════════════════════════════
            LOBBY
         ══════════════════════════════ */
         #lobby-overlay {
-            position: fixed; inset: 0; z-index: 100;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
             background: var(--bg);
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             overflow-y: auto;
             padding: 1.5rem 1rem;
         }
+
         .lobby-inner {
-            width: 100%; max-width: 960px;
-            display: flex; flex-direction: column; gap: 1.5rem;
+            width: 100%;
+            max-width: 980px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            position: relative;
+            z-index: 1;
         }
+
         .lobby-top {
-            display: flex; align-items: center; justify-content: space-between;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
+
         .lobby-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 1.25rem;
         }
+
         @media (min-width: 768px) {
-            .lobby-grid { grid-template-columns: 1fr 340px; }
+            .lobby-grid {
+                grid-template-columns: 1fr 360px;
+            }
         }
+
         .lobby-cam-wrap {
             position: relative;
-            border-radius: var(--radius-xl);
+            border-radius: var(--radius-2xl);
             overflow: hidden;
             aspect-ratio: 16/9;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
         }
+
+        /* Animated border when camera is on */
+        .lobby-cam-wrap.cam-active::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: inherit;
+            background: conic-gradient(from 0deg, var(--accent), var(--gold), var(--pink), var(--accent));
+            animation: rotate-slow 4s linear infinite;
+            z-index: -1;
+        }
+
         #lobby-cam-video {
-            width: 100%; height: 100%;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
             transform: scaleX(-1);
         }
+
         .lobby-cam-overlay {
-            position: absolute; inset: 0;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            background: rgba(7,7,9,0.85);
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(5, 5, 8, 0.88);
         }
+
         .lobby-cam-controls {
-            position: absolute; bottom: 1rem; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 0.5rem;
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
         }
+
         .lobby-right {
-            display: flex; flex-direction: column; gap: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
+
         .lobby-section {
-            border-radius: var(--radius-xl);
+            border-radius: var(--radius-2xl);
             padding: 1.25rem;
         }
 
@@ -341,143 +628,264 @@
            MAIN APP LAYOUT
         ══════════════════════════════ */
         #app {
-            display: flex; flex-direction: column;
-            height: 100dvh; overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100dvh;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
         }
 
         /* Top Bar */
         #topbar {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0.625rem 1rem;
-            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.25rem;
+            border-bottom: 1px solid transparent;
             flex-shrink: 0;
-            height: 48px;
+            height: 50px;
+            background: rgba(5, 5, 8, 0.6);
+            backdrop-filter: var(--blur-lg);
+            -webkit-backdrop-filter: var(--blur-lg);
+            position: relative;
         }
+
+        /* Gradient bottom border for topbar */
+        #topbar::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg,
+                transparent,
+                rgba(124, 92, 252, 0.15) 30%,
+                rgba(240, 160, 48, 0.1) 60%,
+                transparent);
+        }
+
         .topbar-brand {
-            display: flex; align-items: center; gap: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
         }
+
         .topbar-logo {
-            font-weight: 900; font-size: 1rem;
-            letter-spacing: -0.06em; color: white;
+            font-weight: 900;
+            font-size: 1.05rem;
+            letter-spacing: -0.06em;
+            color: white;
+            background: linear-gradient(135deg, #fff, rgba(255, 255, 255, 0.7));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
+
         .topbar-sep {
-            width: 1px; height: 14px;
-            background: var(--border-hi);
+            width: 1px;
+            height: 14px;
+            background: linear-gradient(to bottom, transparent, var(--border-hi), transparent);
         }
+
         .topbar-name {
-            font-size: 0.7rem; font-weight: 700;
-            letter-spacing: 0.1em; text-transform: uppercase;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
             color: var(--text-sm);
         }
+
         .topbar-right {
-            display: flex; align-items: center; gap: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
+
         #room-timer {
-            font-family: 'SF Mono', 'Fira Code', monospace;
-            font-size: 0.7rem;
+            font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+            font-size: 0.68rem;
             color: var(--text-sm);
             letter-spacing: 0.08em;
+            padding: 0.2rem 0.5rem;
+            background: var(--surface);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
         }
+
         .live-badge {
-            display: inline-flex; align-items: center; gap: 0.4rem;
-            padding: 0.2rem 0.65rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.2rem 0.7rem;
             border-radius: 99px;
-            background: rgba(34,197,94,0.08);
-            border: 1px solid rgba(34,197,94,0.18);
-            font-size: 0.6rem; font-weight: 700;
-            letter-spacing: 0.1em; text-transform: uppercase;
-            color: #4ade80;
+            background: rgba(16, 185, 129, 0.06);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--green-soft);
         }
+
         .live-badge-dot {
-            width: 5px; height: 5px; border-radius: 50%;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
             background: var(--green);
-            box-shadow: 0 0 6px var(--green);
+            box-shadow: 0 0 8px var(--green-glow);
             animation: pulse-dot 2s ease-in-out infinite;
         }
 
         /* Main Area */
         #main-area {
-            display: flex; flex: 1; overflow: hidden;
+            display: flex;
+            flex: 1;
+            overflow: hidden;
         }
 
         /* Stage */
         #main-stage {
-            flex: 1; min-width: 0; min-height: 0; overflow: hidden;
+            flex: 1;
+            min-width: 0;
+            min-height: 0;
+            overflow: hidden;
             position: relative;
-            display: flex; flex-direction: column;
-            padding: 1.5rem; gap: 1.5rem;
-            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            gap: 1rem;
+            transition: all 0.4s var(--ease-smooth);
             max-width: 100%;
         }
+
         @media (min-width: 1024px) {
             #main-stage {
                 max-width: calc(100vw - var(--sidebar-w));
+                padding: 1.25rem;
             }
         }
 
         /* Video Grid */
         #video-grid {
-            flex: 1; min-width: 0; min-height: 0;
-            display: grid; gap: 1rem;
-            align-content: center; justify-content: center;
-            width: 100%; height: 100%;
+            flex: 1;
+            min-width: 0;
+            min-height: 0;
+            display: grid;
+            gap: 0.75rem;
+            align-content: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
         }
+
         .grid-1 { grid-template-columns: minmax(0, 1fr); }
         .grid-2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
         .grid-3 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-        .grid-4 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); }
+        .grid-4 {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+        }
 
         .video-container {
             position: relative;
-            background: rgba(255,255,255,0.018);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: var(--radius-xl);
+            background: rgba(8, 8, 16, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: var(--radius-2xl);
             overflow: hidden;
-            display: flex; align-items: center; justify-content: center;
-            
-            width: 100%; height: auto;
-            max-width: 100%; max-height: 100%;
-            min-width: 0; min-height: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            min-width: 0;
+            min-height: 0;
             aspect-ratio: 16/9;
             margin: auto;
+            box-shadow:
+                0 12px 50px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.02);
+            transition: border-color 0.4s, box-shadow 0.4s;
+        }
 
-            box-shadow: 0 8px 40px rgba(0,0,0,0.5);
-            transition: border-color 0.3s, box-shadow 0.3s;
+        .video-container:hover {
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow:
+                0 16px 60px rgba(0, 0, 0, 0.55),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03);
         }
-        .video-container:hover { border-color: rgba(255,255,255,0.09); }
+
         .video-container.speaking {
-            border-color: rgba(34,197,94,0.45);
-            box-shadow: 0 0 0 2px rgba(34,197,94,0.15), 0 8px 40px rgba(0,0,0,0.5);
+            border-color: rgba(16, 185, 129, 0.4);
+            box-shadow:
+                0 0 0 2px rgba(16, 185, 129, 0.12),
+                0 0 40px rgba(16, 185, 129, 0.08),
+                0 12px 50px rgba(0, 0, 0, 0.5);
         }
+
         .video-container video {
-            width: 100%; height: 100%; object-fit: cover;
-            opacity: 0; transition: opacity 0.4s ease;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.5s var(--ease-smooth);
         }
-        .video-container.has-video video { opacity: 1; }
+
+        .video-container.has-video video {
+            opacity: 1;
+        }
+
         .avatar-fallback {
-            position: absolute; inset: 0;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            background: linear-gradient(135deg, rgba(12,12,20,0.95), rgba(18,18,30,0.95));
-            transition: opacity 0.3s;
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(160deg, rgba(10, 10, 18, 0.95), rgba(16, 14, 28, 0.95));
+            transition: opacity 0.4s;
         }
-        .video-container.has-video .avatar-fallback { opacity: 0; pointer-events: none; }
+
+        .video-container.has-video .avatar-fallback {
+            opacity: 0;
+            pointer-events: none;
+        }
+
         .video-overlay-info {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            padding: 0.875rem;
-            background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%);
-            display: flex; align-items: flex-end; justify-content: space-between;
-            pointer-events: none; z-index: 5;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 100%);
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            pointer-events: none;
+            z-index: 5;
         }
+
         .speak-indicator {
-            width: 7px; height: 7px; border-radius: 50%;
-            background: var(--green); opacity: 0; transition: opacity 0.3s;
-            box-shadow: 0 0 6px rgba(34,197,94,0.6);
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--green);
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 0 8px var(--green-glow);
         }
-        .speak-indicator.active { opacity: 1; animation: speak-pulse 1s ease-in-out infinite alternate; }
+
+        .speak-indicator.active {
+            opacity: 1;
+            animation: speak-pulse 1s ease-in-out infinite alternate;
+        }
+
         @keyframes speak-pulse {
-            0% { transform: scale(0.9); opacity: 0.7; }
-            100% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 10px rgba(34,197,94,0.9); }
+            0% { transform: scale(0.85); opacity: 0.7; }
+            100% { transform: scale(1.35); opacity: 1; box-shadow: 0 0 14px var(--green-glow); }
         }
 
         /* Floating Reactions */
@@ -487,313 +895,525 @@
             pointer-events: none;
             z-index: 100;
             user-select: none;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
         }
 
         /* ── Control Bar ── */
         #control-bar-wrap {
             position: absolute;
-            bottom: 1.25rem; left: 50%; transform: translateX(-50%);
+            bottom: 1.25rem;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 50;
-            display: flex; align-items: center; gap: 0.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem;
+            max-width: calc(100% - 2rem);
         }
+
         .ctrl-pill {
-            display: flex; align-items: center; gap: 0.375rem;
-            padding: 0.45rem 0.625rem;
-            border-radius: 99px;
-            background: rgba(8,8,14,0.8);
-            backdrop-filter: blur(50px) saturate(180%);
-            -webkit-backdrop-filter: blur(50px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.07);
-            box-shadow: 0 16px 48px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.04);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.4rem 0.5rem;
+            border-radius: var(--radius-full);
+            background: rgba(5, 5, 10, 0.85);
+            backdrop-filter: blur(60px) saturate(200%);
+            -webkit-backdrop-filter: blur(60px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.6),
+                0 0 0 0.5px rgba(255, 255, 255, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.04);
         }
+
         .ctrl-btn {
-            width: 2.625rem; height: 2.625rem;
+            width: 2.5rem;
+            height: 2.5rem;
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: transparent;
             border: 1px solid transparent;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.75);
             cursor: pointer;
-            font-size: 1.1rem;
-            transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+            font-size: 1.05rem;
+            transition: all 0.25s var(--ease-spring);
             position: relative;
         }
+
         .ctrl-btn:hover {
-            background: rgba(255,255,255,0.08);
-            border-color: rgba(255,255,255,0.1);
-            transform: translateY(-2px) scale(1.05);
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px) scale(1.06);
             color: white;
         }
-        .ctrl-btn:active { transform: scale(0.92); }
+
+        .ctrl-btn:active {
+            transform: scale(0.9);
+        }
+
         .ctrl-btn.active {
-            background: rgba(99,102,241,0.15);
-            border-color: rgba(99,102,241,0.3);
-            color: #818cf8;
+            background: rgba(124, 92, 252, 0.12);
+            border-color: rgba(124, 92, 252, 0.25);
+            color: var(--accent-soft);
         }
+
         .ctrl-btn.muted {
-            background: rgba(239,68,68,0.12);
-            border-color: rgba(239,68,68,0.3);
-            color: #f87171;
+            background: rgba(244, 63, 94, 0.1);
+            border-color: rgba(244, 63, 94, 0.25);
+            color: #fb7185;
         }
+
         .ctrl-btn.danger {
-            background: rgba(239,68,68,0.1);
-            border-color: rgba(239,68,68,0.25);
-            color: #f87171;
+            background: rgba(244, 63, 94, 0.08);
+            border-color: rgba(244, 63, 94, 0.2);
+            color: #fb7185;
         }
+
         .ctrl-btn.danger:hover {
-            background: rgba(239,68,68,0.22);
-            border-color: rgba(239,68,68,0.4);
+            background: rgba(244, 63, 94, 0.18);
+            border-color: rgba(244, 63, 94, 0.35);
+            box-shadow: 0 0 20px rgba(244, 63, 94, 0.1);
         }
+
         .ctrl-sep {
-            width: 1px; height: 1.5rem;
-            background: rgba(255,255,255,0.06);
+            width: 1px;
+            height: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
             margin: 0 0.125rem;
         }
+
         .reaction-btn {
-            width: 2rem; height: 2rem; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            background: transparent; border: none; cursor: pointer;
-            font-size: 1rem;
-            transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), background 0.2s;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: transform 0.25s var(--ease-spring), background 0.2s;
         }
-        .reaction-btn:hover { transform: scale(1.4) translateY(-4px); background: rgba(255,255,255,0.08); }
+
+        .reaction-btn:hover {
+            transform: scale(1.45) translateY(-4px);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .reaction-btn:active {
+            transform: scale(0.9);
+        }
 
         /* cam-strike for camera off */
         #cam-strike {
             position: absolute;
-            width: 2px; height: 1.8rem;
-            background: #f87171;
+            width: 2px;
+            height: 1.8rem;
+            background: #fb7185;
             border-radius: 2px;
             transform: rotate(45deg) scale(0);
-            transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+            transition: transform 0.2s var(--ease-spring);
         }
 
         /* ══════════════════════════════
            SIDEBAR
         ══════════════════════════════ */
         #sidebar-backdrop {
-            position: fixed; inset: 0; z-index: 49;
-            background: rgba(0,0,0,0.5);
-            opacity: 0; pointer-events: none;
-            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-            transition: opacity 0.3s;
+            position: fixed;
+            inset: 0;
+            z-index: 49;
+            background: rgba(0, 0, 0, 0.55);
+            opacity: 0;
+            pointer-events: none;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            transition: opacity 0.35s var(--ease-smooth);
         }
-        #sidebar-backdrop.active { opacity: 1; pointer-events: auto; }
-        @media (min-width: 1024px) { #sidebar-backdrop { display: none !important; } }
+
+        #sidebar-backdrop.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        @media (min-width: 1024px) {
+            #sidebar-backdrop { display: none !important; }
+        }
 
         #oracle-sidebar {
             width: var(--sidebar-w);
             flex-shrink: 0;
-            display: flex; flex-direction: column;
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
             border-left: 1px solid var(--border);
-            background: rgba(7,7,12,0.9);
-            backdrop-filter: var(--blur-lg);
-            -webkit-backdrop-filter: var(--blur-lg);
-            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+            background: rgba(5, 5, 10, 0.92);
+            backdrop-filter: var(--blur-xl);
+            -webkit-backdrop-filter: var(--blur-xl);
+            transition: all 0.4s var(--ease-smooth);
             position: relative;
             z-index: 50;
         }
+
         #oracle-sidebar.sidebar-closed {
             transform: translateX(100%);
         }
+
         @media (max-width: 1023px) {
             #oracle-sidebar {
-                position: fixed; top: 0; right: 0; bottom: 0;
+                position: fixed;
+                top: 0;
+                right: 0;
+                bottom: 0;
                 z-index: 50;
                 transform: translateX(100%);
             }
-            #oracle-sidebar.sidebar-open { transform: translateX(0); }
+            #oracle-sidebar.sidebar-open {
+                transform: translateX(0);
+            }
         }
+
         @media (min-width: 1024px) {
-            #oracle-sidebar.sidebar-closed { width: 0; border-left: none; overflow: hidden; }
+            #oracle-sidebar.sidebar-closed {
+                width: 0;
+                border-left: none;
+                overflow: hidden;
+            }
         }
 
         /* Sidebar Header */
         .sidebar-header {
-            height: 48px; flex-shrink: 0;
-            display: flex; align-items: center; justify-content: space-between;
+            height: 50px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             padding: 0 1rem;
-            border-bottom: 1px solid var(--border);
+            position: relative;
         }
+
+        /* Gradient bottom border for sidebar header */
+        .sidebar-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border-md), transparent);
+        }
+
         .sidebar-brand {
-            font-size: 0.7rem; font-weight: 700;
-            letter-spacing: 0.1em; text-transform: uppercase;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
             color: var(--text-sm);
-            display: flex; align-items: center; gap: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
+
         #sidebar-user-count {
-            font-size: 0.65rem; font-weight: 700;
+            font-size: 0.6rem;
+            font-weight: 700;
             color: var(--green);
-            background: rgba(34,197,94,0.08);
-            border: 1px solid rgba(34,197,94,0.15);
+            background: rgba(16, 185, 129, 0.06);
+            border: 1px solid rgba(16, 185, 129, 0.12);
             padding: 0.1rem 0.5rem;
             border-radius: 99px;
         }
 
         /* Sidebar Tabs */
         .sidebar-tabs {
-            display: flex; gap: 0.25rem;
-            padding: 0.625rem 0.75rem;
+            display: flex;
+            gap: 0.2rem;
+            padding: 0.5rem 0.75rem;
             border-bottom: 1px solid var(--border);
-            flex-shrink: 0; width: 100%;
+            flex-shrink: 0;
+            width: 100%;
+            position: relative;
         }
+
         .sidebar-tab {
-            flex: 1 1 0%; width: 100%; padding: 0.35rem 0.2rem;
-            border-radius: var(--radius-sm);
-            font-size: 0.6rem; font-weight: 700;
-            letter-spacing: 0.05em; text-transform: uppercase;
-            text-align: center; cursor: pointer;
+            flex: 1 1 0%;
+            width: 100%;
+            padding: 0.4rem 0.2rem;
+            border-radius: var(--radius-md);
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            text-align: center;
+            cursor: pointer;
             color: var(--text-sm);
             border: 1px solid transparent;
-            transition: all 0.2s;
-            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+            transition: all 0.25s var(--ease-smooth);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            position: relative;
         }
-        .sidebar-tab:hover { color: var(--text-md); background: var(--surface-md); }
+
+        .sidebar-tab:hover {
+            color: var(--text-md);
+            background: var(--surface);
+        }
+
         .sidebar-tab.active {
             color: white;
             background: var(--surface-md);
-            border-color: var(--border-hi);
+            border-color: var(--border-md);
+            box-shadow: 0 0 12px rgba(124, 92, 252, 0.05);
         }
 
         /* Sidebar Panes */
-        [data-pane] { flex: 1; display: flex; flex-direction: column; min-height: 0; }
-        [data-pane].hidden { display: none; }
+        [data-pane] {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        [data-pane].hidden {
+            display: none;
+        }
 
         /* Chat */
         #chat-messages {
-            flex: 1; overflow-y: auto;
-            padding: 1rem; display: flex; flex-direction: column; gap: 0.625rem;
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.875rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
+
         .chat-bubble-me {
-            background: linear-gradient(135deg, var(--accent), #4f46e5);
+            background: linear-gradient(135deg, var(--accent), var(--accent-deep));
             color: white;
-            border-radius: 1rem 1rem 0.25rem 1rem;
-            padding: 0.5rem 0.875rem;
-            font-size: 0.8rem;
-            max-width: 80%; align-self: flex-end;
-            box-shadow: 0 4px 16px rgba(99,102,241,0.25);
+            border-radius: 1.1rem 1.1rem 0.2rem 1.1rem;
+            padding: 0.55rem 0.9rem;
+            font-size: 0.78rem;
+            max-width: 82%;
+            align-self: flex-end;
+            box-shadow: 0 4px 20px rgba(124, 92, 252, 0.2);
+            line-height: 1.5;
         }
+
         .chat-bubble-other {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.06);
-            color: rgba(255,255,255,0.9);
-            border-radius: 1rem 1rem 1rem 0.25rem;
-            padding: 0.5rem 0.875rem;
-            font-size: 0.8rem;
-            max-width: 80%; align-self: flex-start;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.88);
+            border-radius: 1.1rem 1.1rem 1.1rem 0.2rem;
+            padding: 0.55rem 0.9rem;
+            font-size: 0.78rem;
+            max-width: 82%;
+            align-self: flex-start;
+            line-height: 1.5;
         }
+
         .typing-indicator span {
-            width: 5px; height: 5px; border-radius: 50%;
-            background: rgba(255,255,255,0.25);
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.22);
             display: inline-block;
             animation: typingDot 1.2s ease-in-out infinite;
         }
+
         .typing-indicator span:nth-child(2) { animation-delay: 0.15s; }
         .typing-indicator span:nth-child(3) { animation-delay: 0.3s; }
+
         @keyframes typingDot {
             0%, 60%, 100% { opacity: 0.25; transform: translateY(0); }
             30% { opacity: 1; transform: translateY(-4px); }
         }
+
         #chat-input-area {
             padding: 0.75rem;
             border-top: 1px solid var(--border);
-            flex-shrink: 0; width: 100%; overflow: hidden;
+            flex-shrink: 0;
+            width: 100%;
+            overflow: hidden;
             box-sizing: border-box;
         }
-        #chat-form { display: flex; gap: 0.5rem; width: 100%; }
+
+        #chat-form {
+            display: flex;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
         #chat-input {
-            flex: 1; min-width: 0; width: 100%;
+            flex: 1;
+            min-width: 0;
+            width: 100%;
             padding: 0.625rem 1rem;
             border-radius: var(--radius-lg);
-            color: white; font-size: 0.8rem;
+            color: white;
+            font-size: 0.8rem;
             font-family: inherit;
         }
+
         .chat-send-btn {
-            width: 2.5rem; height: 2.5rem;
+            width: 2.5rem;
+            height: 2.5rem;
             border-radius: var(--radius-md);
-            background: linear-gradient(135deg, var(--accent), #4f46e5);
-            border: none; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 1rem;
-            transition: transform 0.15s, box-shadow 0.15s;
-            box-shadow: 0 4px 16px rgba(99,102,241,0.25);
+            background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.95rem;
+            transition: all 0.2s var(--ease-spring);
+            box-shadow: 0 4px 16px rgba(124, 92, 252, 0.2);
+            flex-shrink: 0;
         }
-        .chat-send-btn:hover { transform: translateY(-1px) scale(1.05); box-shadow: 0 6px 20px rgba(99,102,241,0.35); }
-        .chat-send-btn:active { transform: scale(0.95); }
+
+        .chat-send-btn:hover {
+            transform: translateY(-1px) scale(1.06);
+            box-shadow: 0 8px 24px rgba(124, 92, 252, 0.3);
+        }
+
+        .chat-send-btn:active {
+            transform: scale(0.92);
+        }
 
         /* Music */
         .rave-progress-bar {
-            height: 3px; border-radius: 99px;
-            background: rgba(255,255,255,0.05);
-            overflow: hidden; cursor: pointer;
+            height: 3px;
+            border-radius: 99px;
+            background: rgba(255, 255, 255, 0.04);
+            overflow: hidden;
+            cursor: pointer;
         }
+
         .rave-progress-fill {
-            height: 100%; border-radius: 99px;
-            background: linear-gradient(90deg, #ec4899, var(--gold));
+            height: 100%;
+            border-radius: 99px;
+            background: linear-gradient(90deg, var(--accent), var(--pink), var(--gold));
+            background-size: 200% 100%;
+            animation: gradient-shift 3s ease-in-out infinite;
             transition: width 0.3s linear;
         }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
         .rave-track-card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-lg);
             padding: 0.75rem;
             cursor: pointer;
-            transition: background 0.2s, border-color 0.2s;
+            transition: all 0.25s var(--ease-smooth);
         }
-        .rave-track-card:hover { background: var(--surface-md); }
+
+        .rave-track-card:hover {
+            background: var(--surface-md);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
         .rave-track-card.playing {
-            border-color: rgba(236,72,153,0.3);
-            background: rgba(236,72,153,0.05);
+            border-color: rgba(232, 121, 168, 0.25);
+            background: rgba(232, 121, 168, 0.04);
+            box-shadow: 0 0 20px rgba(232, 121, 168, 0.06);
         }
 
         /* People */
         .person-card {
-            display: flex; align-items: center; gap: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
             padding: 0.625rem 0.75rem;
             border-radius: var(--radius-md);
-            transition: background 0.2s;
+            transition: all 0.2s var(--ease-smooth);
         }
-        .person-card:hover { background: var(--surface); }
+
+        .person-card:hover {
+            background: var(--surface);
+            transform: translateX(2px);
+        }
+
         .person-avatar {
-            width: 32px; height: 32px; border-radius: 50%;
-            object-fit: cover; flex-shrink: 0;
-            border: 1px solid var(--border-hi);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1.5px solid var(--border-hi);
         }
 
         /* ══════════════════════════════
            OPEN SIDEBAR BUTTON
         ══════════════════════════════ */
         #btn-open-sidebar {
-            position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%);
-            width: 2rem; height: 2rem;
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 2rem;
+            height: 2rem;
             border-radius: var(--radius-sm);
             border: 1px solid var(--border);
             background: var(--surface);
-            color: var(--text-sm); cursor: pointer; font-size: 0.9rem;
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s; opacity: 0; pointer-events: none;
+            color: var(--text-sm);
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s var(--ease-spring);
+            opacity: 0;
+            pointer-events: none;
         }
-        #btn-open-sidebar:hover { background: var(--surface-md); color: white; }
+
+        #btn-open-sidebar:hover {
+            background: var(--surface-md);
+            color: white;
+            transform: translateY(-50%) scale(1.08);
+        }
 
         /* ══════════════════════════════
            TOASTS
         ══════════════════════════════ */
         #toast-container {
-            position: fixed; top: 3.5rem; left: 50%; transform: translateX(-50%);
+            position: fixed;
+            top: 3.5rem;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 400;
-            display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
             pointer-events: none;
         }
+
         .toast-msg {
-            background: rgba(8,8,14,0.85);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.08);
-            color: white; padding: 0.5rem 1.1rem;
-            border-radius: 99px; font-size: 0.75rem; font-weight: 600;
-            display: flex; align-items: center; gap: 0.5rem;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            background: rgba(5, 5, 10, 0.88);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 99px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
             white-space: nowrap;
         }
 
@@ -801,28 +1421,61 @@
            HANDLE MODAL
         ══════════════════════════════ */
         #handle-modal {
-            position: fixed; inset: 0; z-index: 200;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            display: none; align-items: center; justify-content: center;
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: none;
+            align-items: center;
+            justify-content: center;
             padding: 1rem;
         }
+
         #handle-card {
-            width: 100%; max-width: 380px;
-            border-radius: 1.75rem; padding: 2rem;
-            position: relative; overflow: hidden;
+            width: 100%;
+            max-width: 400px;
+            border-radius: var(--radius-2xl);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
         }
+
+        /* Top glow line for handle card */
+        #handle-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 15%;
+            right: 15%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(124, 92, 252, 0.4), transparent);
+            pointer-events: none;
+        }
+
         .handle-input-wrap {
             position: relative;
         }
+
         .handle-at {
-            position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
-            color: var(--text-sm); font-weight: 700; font-size: 0.9rem;
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent-soft);
+            font-weight: 700;
+            font-size: 0.9rem;
         }
+
         #handle-input {
-            width: 100%; padding: 0.75rem 1rem 0.75rem 2rem;
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2rem;
             border-radius: var(--radius-md);
-            color: white; font-size: 0.9rem; font-weight: 600;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 600;
             font-family: inherit;
         }
 
@@ -830,27 +1483,76 @@
            GLOBAL BUTTONS
         ══════════════════════════════ */
         .btn-primary {
-            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
             padding: 0.85rem 1.5rem;
             border-radius: var(--radius-lg);
-            background: linear-gradient(135deg, var(--accent), #4f46e5);
-            border: none; color: white; font-weight: 700; font-size: 0.875rem;
-            cursor: pointer; font-family: inherit;
-            box-shadow: 0 8px 24px rgba(99,102,241,0.3);
-            transition: transform 0.15s, box-shadow 0.15s;
+            background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+            border: none;
+            color: white;
+            font-weight: 700;
+            font-size: 0.875rem;
+            cursor: pointer;
+            font-family: inherit;
+            box-shadow: 0 8px 30px rgba(124, 92, 252, 0.25);
+            transition: all 0.2s var(--ease-spring);
+            position: relative;
+            overflow: hidden;
         }
-        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 32px rgba(99,102,241,0.4); }
-        .btn-primary:active { transform: scale(0.97); }
-        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        /* Aurora animation on join button */
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.12) 50%,
+                transparent 100%);
+            transform: translateX(-100%);
+            animation: btn-aurora 3s ease-in-out infinite;
+        }
+
+        @keyframes btn-aurora {
+            0% { transform: translateX(-100%); }
+            60%, 100% { transform: translateX(100%); }
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 40px rgba(124, 92, 252, 0.35);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
 
         .btn-ghost {
-            padding: 0.7rem 1.25rem; border-radius: var(--radius-md);
-            background: transparent; border: 1px solid var(--border);
-            color: var(--text-sm); font-size: 0.8rem; font-weight: 600;
-            cursor: pointer; font-family: inherit;
-            transition: background 0.2s, color 0.2s;
+            padding: 0.7rem 1.25rem;
+            border-radius: var(--radius-md);
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.25s var(--ease-smooth);
         }
-        .btn-ghost:hover { background: var(--surface-md); color: white; }
+
+        .btn-ghost:hover {
+            background: var(--surface-md);
+            color: white;
+            border-color: var(--border-md);
+        }
 
         /* ══════════════════════════════
            AMBIENT & KEYFRAMES
@@ -860,13 +1562,87 @@
             33% { transform: translate(30px, -20px) scale(1.04); }
             66% { transform: translate(-15px, 25px) scale(0.97); }
         }
+
         @keyframes rotate-slow {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
         @keyframes spin-reverse {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(-360deg); }
+        }
+
+        @keyframes vc-eq {
+            0%, 100% { height: 3px; }
+            50% { height: 14px; }
+        }
+
+        @keyframes vc-marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .vc-marquee-container {
+            display: flex;
+            overflow: hidden;
+            white-space: nowrap;
+            mask-image: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent);
+            width: 100%;
+        }
+
+        .vc-marquee-content {
+            flex-shrink: 0;
+            animation: vc-marquee 12s linear infinite;
+            padding-right: 2rem;
+        }
+
+        /* ══════════════════════════════
+           RESPONSIVE — MOBILE
+        ══════════════════════════════ */
+        @media (max-width: 640px) {
+            #main-stage {
+                padding: 0.75rem;
+                gap: 0.75rem;
+            }
+
+            .ctrl-pill {
+                padding: 0.35rem 0.4rem;
+                gap: 0.2rem;
+            }
+
+            .ctrl-btn {
+                width: 2.25rem;
+                height: 2.25rem;
+                font-size: 0.95rem;
+            }
+
+            .reaction-btn {
+                width: 1.75rem;
+                height: 1.75rem;
+                font-size: 0.85rem;
+            }
+
+            .video-container {
+                border-radius: var(--radius-xl);
+            }
+
+            .auth-feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-card {
+                padding: 1.5rem;
+            }
+        }
+
+        /* ══════════════════════════════
+           SELECTION
+        ══════════════════════════════ */
+        ::selection {
+            background: rgba(124, 92, 252, 0.3);
+            color: white;
         }
     </style>
 </head>
@@ -880,25 +1656,41 @@
     ══════════════════════════════════════════════ -->
     <div id="loader">
         <!-- Ambient orbs -->
-        <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(99,102,241,0.07),transparent 70%);top:50%;left:50%;transform:translate(-50%,-55%);animation:drift 8s ease-in-out infinite;"></div>
-        <div class="orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(245,158,11,0.04),transparent 70%);top:50%;left:50%;transform:translate(-50%,-45%);animation:drift 10s ease-in-out infinite reverse;"></div>
+        <div class="orb"
+            style="width:600px;height:600px;background:radial-gradient(circle,rgba(124,92,252,0.06),transparent 70%);top:50%;left:50%;transform:translate(-50%,-55%);animation:drift 8s ease-in-out infinite;">
+        </div>
+        <div class="orb"
+            style="width:450px;height:450px;background:radial-gradient(circle,rgba(240,160,48,0.035),transparent 70%);top:50%;left:50%;transform:translate(-50%,-45%);animation:drift 12s ease-in-out infinite reverse;">
+        </div>
+
+        <!-- Floating particles -->
+        <div class="loader-particle"></div>
+        <div class="loader-particle"></div>
+        <div class="loader-particle"></div>
+        <div class="loader-particle"></div>
 
         <!-- Ring -->
-        <div id="loader-ring-wrap" style="position:relative;width:120px;height:120px;opacity:0;">
-            <svg width="120" height="120" viewBox="0 0 120 120" style="position:absolute;inset:0;">
+        <div id="loader-ring-wrap" style="position:relative;width:130px;height:130px;opacity:0;">
+            <svg width="130" height="130" viewBox="0 0 130 130" style="position:absolute;inset:0;">
                 <defs>
                     <linearGradient id="ld-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#6366f1"/>
-                        <stop offset="100%" stop-color="#f59e0b"/>
+                        <stop offset="0%" stop-color="#7c5cfc" />
+                        <stop offset="50%" stop-color="#e879a8" />
+                        <stop offset="100%" stop-color="#f0a030" />
                     </linearGradient>
                 </defs>
-                <circle class="loader-ring-track" cx="60" cy="60" r="52"/>
-                <circle id="loader-ring-fill" class="loader-ring-fill" cx="60" cy="60" r="52"/>
+                <circle class="loader-ring-track" cx="65" cy="65" r="56" />
+                <circle id="loader-ring-fill" class="loader-ring-fill" cx="65" cy="65" r="56"
+                    style="stroke-dasharray:351.9;stroke-dashoffset:351.9;" />
             </svg>
             <!-- Logo center -->
-            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;">
-                <span style="font-weight:900;font-size:1.1rem;letter-spacing:-0.06em;color:white;line-height:1;">28E</span>
-                <span style="font-size:0.45rem;letter-spacing:0.18em;color:rgba(255,255,255,0.35);text-transform:uppercase;font-weight:600;">Inner Circle</span>
+            <div
+                style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;">
+                <span
+                    style="font-weight:900;font-size:1.2rem;letter-spacing:-0.06em;background:linear-gradient(135deg,#fff,rgba(255,255,255,0.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;">28E</span>
+                <span
+                    style="font-size:0.42rem;letter-spacing:0.2em;color:rgba(255,255,255,0.3);text-transform:uppercase;font-weight:600;">Inner
+                    Circle</span>
             </div>
         </div>
 
@@ -910,8 +1702,15 @@
     ══════════════════════════════════════════════ -->
     <div id="auth-overlay">
         <!-- Ambient -->
-        <div class="orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(99,102,241,0.06),transparent 70%);top:-20%;left:-15%;animation:drift 20s ease-in-out infinite;"></div>
-        <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(245,158,11,0.04),transparent 70%);bottom:-20%;right:-15%;animation:drift 25s ease-in-out infinite reverse;"></div>
+        <div class="orb"
+            style="width:700px;height:700px;background:radial-gradient(circle,rgba(124,92,252,0.06),transparent 70%);top:-25%;left:-20%;animation:drift 20s ease-in-out infinite;">
+        </div>
+        <div class="orb"
+            style="width:550px;height:550px;background:radial-gradient(circle,rgba(240,160,48,0.04),transparent 70%);bottom:-25%;right:-20%;animation:drift 25s ease-in-out infinite reverse;">
+        </div>
+        <div class="orb"
+            style="width:400px;height:400px;background:radial-gradient(circle,rgba(232,121,168,0.03),transparent 70%);top:50%;left:60%;animation:drift 18s ease-in-out infinite;">
+        </div>
 
         <div class="auth-inner">
             <!-- Badge -->
@@ -924,55 +1723,66 @@
 
             <!-- Logo -->
             <div class="auth-logo-ring auth-stagger">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3a9 9 0 0 1 9 9H3a9 9 0 0 1 9-9Z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18M3 12h18"/>
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#7c5cfc" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3a9 9 0 0 1 9 9H3a9 9 0 0 1 9-9Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18M3 12h18" />
                 </svg>
             </div>
 
             <!-- Headline -->
             <div class="auth-stagger" style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;">
-                <h1 style="font-weight:900;font-size:2rem;letter-spacing:-0.05em;line-height:1;">28E Inner Circle</h1>
-                <p id="auth-status-text" style="font-size:0.75rem;color:var(--text-sm);font-weight:500;">Verificando sesión...</p>
+                <h1 style="font-weight:900;font-size:2.1rem;letter-spacing:-0.05em;line-height:1;background:linear-gradient(135deg,#fff,rgba(255,255,255,0.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">28E Inner Circle</h1>
+                <p id="auth-status-text" style="font-size:0.75rem;color:var(--text-sm);font-weight:500;">Verificando
+                    sesión...</p>
             </div>
 
             <!-- Card: actions -->
-            <div id="auth-actions" class="auth-card glass grad-border noise auth-stagger" style="display:none;flex-direction:column;align-items:center;gap:1.25rem;">
+            <div id="auth-actions" class="auth-card glass grad-border noise auth-stagger"
+                style="display:none;flex-direction:column;align-items:center;gap:1.25rem;">
                 <!-- Feature grid -->
                 <div class="auth-feature-grid" style="width:100%;">
                     <div class="auth-feature-item glass">
-                        <div class="auth-feature-icon" style="background:rgba(99,102,241,0.12);">📹</div>
+                        <div class="auth-feature-icon" style="background:rgba(124,92,252,0.1);">📹</div>
                         <div style="font-size:0.75rem;font-weight:700;color:white;">Video HD</div>
-                        <div style="font-size:0.65rem;color:var(--text-sm);line-height:1.4;">Llamadas de alta calidad, baja latencia.</div>
+                        <div style="font-size:0.63rem;color:var(--text-sm);line-height:1.5;">Llamadas de alta calidad,
+                            baja latencia.</div>
                     </div>
                     <div class="auth-feature-item glass">
-                        <div class="auth-feature-icon" style="background:rgba(236,72,153,0.1);">🎵</div>
+                        <div class="auth-feature-icon" style="background:rgba(232,121,168,0.08);">🎵</div>
                         <div style="font-size:0.75rem;font-weight:700;color:white;">Música Sync</div>
-                        <div style="font-size:0.65rem;color:var(--text-sm);line-height:1.4;">Escuchen lo mismo en tiempo real.</div>
+                        <div style="font-size:0.63rem;color:var(--text-sm);line-height:1.5;">Escuchen lo mismo en tiempo
+                            real.</div>
                     </div>
                     <div class="auth-feature-item glass">
-                        <div class="auth-feature-icon" style="background:rgba(34,197,94,0.1);">🔒</div>
+                        <div class="auth-feature-icon" style="background:rgba(16,185,129,0.08);">🔒</div>
                         <div style="font-size:0.75rem;font-weight:700;color:white;">Cifrado E2E</div>
-                        <div style="font-size:0.65rem;color:var(--text-sm);line-height:1.4;">Conexión peer-to-peer privada.</div>
+                        <div style="font-size:0.63rem;color:var(--text-sm);line-height:1.5;">Conexión peer-to-peer
+                            privada.</div>
                     </div>
                     <div class="auth-feature-item glass">
-                        <div class="auth-feature-icon" style="background:rgba(245,158,11,0.1);">💬</div>
+                        <div class="auth-feature-icon" style="background:rgba(240,160,48,0.08);">💬</div>
                         <div style="font-size:0.75rem;font-weight:700;color:white;">Chat</div>
-                        <div style="font-size:0.65rem;color:var(--text-sm);line-height:1.4;">Mensajes y reacciones en vivo.</div>
+                        <div style="font-size:0.63rem;color:var(--text-sm);line-height:1.5;">Mensajes y reacciones en
+                            vivo.</div>
                     </div>
                 </div>
 
                 <!-- Divider -->
-                <div style="width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border-hi),transparent);"></div>
+                <div
+                    style="width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border-hi),transparent);">
+                </div>
 
                 <!-- Google Button -->
                 <button id="btn-login-google" class="btn-google" style="width:100%;">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:20px;height:20px;" alt="Google">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                        style="width:18px;height:18px;" alt="Google">
                     Continuar con Google
                 </button>
 
-                <a href="index.html" style="font-size:0.75rem;color:var(--text-sm);font-weight:500;text-decoration:none;display:flex;align-items:center;gap:0.4rem;transition:color 0.2s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--text-sm)'">
+                <a href="index.html"
+                    style="font-size:0.72rem;color:var(--text-sm);font-weight:500;text-decoration:none;display:flex;align-items:center;gap:0.4rem;transition:color 0.25s;"
+                    onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--text-sm)'">
                     <i class="ri-arrow-left-line"></i> Volver al inicio
                 </a>
             </div>
@@ -984,17 +1794,25 @@
     ══════════════════════════════════════════════ -->
     <div id="lobby-overlay">
         <!-- Ambient -->
-        <div class="orb" style="width:700px;height:700px;background:radial-gradient(circle,rgba(99,102,241,0.05),transparent 70%);top:-20%;left:-15%;animation:drift 18s ease-in-out infinite;"></div>
-        <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(245,158,11,0.04),transparent 70%);bottom:-20%;right:-15%;animation:drift 22s ease-in-out infinite reverse;"></div>
+        <div class="orb"
+            style="width:800px;height:800px;background:radial-gradient(circle,rgba(124,92,252,0.045),transparent 70%);top:-25%;left:-20%;animation:drift 18s ease-in-out infinite;">
+        </div>
+        <div class="orb"
+            style="width:600px;height:600px;background:radial-gradient(circle,rgba(240,160,48,0.035),transparent 70%);bottom:-25%;right:-20%;animation:drift 22s ease-in-out infinite reverse;">
+        </div>
 
         <div class="lobby-inner">
             <!-- Top Nav -->
             <div class="lobby-top">
-                <a href="index.html" style="display:flex;align-items:center;gap:0.5rem;color:var(--text-sm);text-decoration:none;font-size:0.8rem;font-weight:600;transition:color 0.2s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--text-sm)'">
+                <a href="index.html"
+                    style="display:flex;align-items:center;gap:0.5rem;color:var(--text-sm);text-decoration:none;font-size:0.78rem;font-weight:600;transition:color 0.25s;"
+                    onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--text-sm)'">
                     <i class="ri-arrow-left-line"></i> 28E
                 </a>
                 <div style="display:flex;align-items:center;gap:0.5rem;">
-                    <span style="font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-sm);">Inner Circle</span>
+                    <span
+                        style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-sm);">Inner
+                        Circle</span>
                 </div>
             </div>
 
@@ -1005,33 +1823,49 @@
                     <div class="lobby-cam-wrap glass grad-border">
                         <video id="lobby-cam-video" autoplay playsinline muted></video>
                         <div id="lobby-cam-placeholder" class="lobby-cam-overlay">
-                            <div style="width:72px;height:72px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--surface-md);border:1px solid var(--border-hi);margin-bottom:0.75rem;">
-                                <img id="lobby-avatar" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:none;">
-                                <i id="lobby-icon" class="ri-user-3-line" style="font-size:1.75rem;color:var(--text-sm);"></i>
+                            <div
+                                style="width:76px;height:76px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--surface-md);border:1.5px solid var(--border-hi);margin-bottom:0.75rem;">
+                                <img id="lobby-avatar" src="" alt=""
+                                    style="width:100%;height:100%;object-fit:cover;display:none;">
+                                <i id="lobby-icon" class="ri-user-3-line"
+                                    style="font-size:1.75rem;color:var(--text-sm);"></i>
                             </div>
-                            <p style="font-size:0.75rem;color:var(--text-sm);">Cámara apagada</p>
+                            <p style="font-size:0.73rem;color:var(--text-sm);">Cámara apagada</p>
                         </div>
                         <div class="lobby-cam-controls">
-                            <button id="lobby-btn-mic" class="ctrl-btn" style="background:rgba(8,8,14,0.7);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);" title="Micrófono">
+                            <button id="lobby-btn-mic" class="ctrl-btn"
+                                style="background:rgba(5,5,10,0.75);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.08);"
+                                title="Micrófono">
                                 <i class="ri-mic-line"></i>
                             </button>
-                            <button id="lobby-btn-cam" class="ctrl-btn" style="background:rgba(8,8,14,0.7);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);" title="Cámara">
+                            <button id="lobby-btn-cam" class="ctrl-btn"
+                                style="background:rgba(5,5,10,0.75);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.08);"
+                                title="Cámara">
                                 <i class="ri-video-line"></i>
                             </button>
                         </div>
                     </div>
 
                     <!-- Profile row -->
-                    <div class="glass grad-border" style="border-radius:var(--radius-xl);padding:1rem;display:flex;align-items:center;gap:1rem;">
-                        <div style="width:44px;height:44px;border-radius:50%;overflow:hidden;border:1px solid var(--border-hi);flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--surface-md);">
-                            <img id="lobby-avatar-small" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:none;">
+                    <div class="glass grad-border"
+                        style="border-radius:var(--radius-2xl);padding:1rem;display:flex;align-items:center;gap:1rem;">
+                        <div
+                            style="width:46px;height:46px;border-radius:50%;overflow:hidden;border:1.5px solid var(--border-hi);flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--surface-md);">
+                            <img id="lobby-avatar-small" src="" alt=""
+                                style="width:100%;height:100%;object-fit:cover;display:none;">
                             <i class="ri-user-3-line" style="font-size:1.25rem;color:var(--text-sm);"></i>
                         </div>
                         <div style="flex:1;min-width:0;">
-                            <div id="lobby-title" style="font-weight:800;font-size:0.95rem;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Cargando...</div>
-                            <p id="lobby-handle" class="group" title="Cambiar handle" style="font-size:0.75rem;color:var(--text-sm);cursor:pointer;display:flex;align-items:center;gap:0.35rem;width:fit-content;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-sm)'">
+                            <div id="lobby-title"
+                                style="font-weight:800;font-size:0.95rem;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                                Cargando...</div>
+                            <p id="lobby-handle" class="group" title="Cambiar handle"
+                                style="font-size:0.72rem;color:var(--text-sm);cursor:pointer;display:flex;align-items:center;gap:0.35rem;width:fit-content;transition:color 0.25s;"
+                                onmouseover="this.style.color='var(--gold)'"
+                                onmouseout="this.style.color='var(--text-sm)'">
                                 @...
-                                <i class="ri-pencil-line" style="font-size:0.65rem;opacity:0;transition:opacity 0.2s;" id="handle-edit-icon"></i>
+                                <i class="ri-pencil-line" style="font-size:0.6rem;opacity:0;transition:opacity 0.25s;"
+                                    id="handle-edit-icon"></i>
                             </p>
                         </div>
                     </div>
@@ -1041,35 +1875,44 @@
                 <div class="lobby-right">
                     <!-- Room Status -->
                     <div class="lobby-section glass grad-border" style="flex:1;">
-                        <h3 style="font-size:0.875rem;font-weight:700;color:white;display:flex;align-items:center;gap:0.625rem;margin-bottom:1rem;">
-                            <span style="width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);flex-shrink:0;"></span>
+                        <h3
+                            style="font-size:0.85rem;font-weight:700;color:white;display:flex;align-items:center;gap:0.625rem;margin-bottom:1rem;">
+                            <span
+                                style="width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green-glow);flex-shrink:0;"></span>
                             Sala en Vivo
                         </h3>
                         <div id="lobby-room-status" style="display:flex;flex-direction:column;gap:0.75rem;">
                             <div style="display:flex;align-items:center;justify-content:center;padding:1.5rem;">
-                                <div style="width:24px;height:24px;border-radius:50%;border:2px solid rgba(255,255,255,0.08);border-top-color:var(--accent);animation:rotate-slow 0.8s linear infinite;"></div>
+                                <div
+                                    style="width:24px;height:24px;border-radius:50%;border:2px solid rgba(255,255,255,0.06);border-top-color:var(--accent);animation:rotate-slow 0.8s linear infinite;">
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Join Button -->
-                    <button id="btn-join-room" class="btn-primary" style="width:100%;padding:1rem;font-size:0.9rem;position:relative;overflow:hidden;">
-                        <span style="width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);flex-shrink:0;"></span>
+                    <button id="btn-join-room" class="btn-primary shimmer-border"
+                        style="width:100%;padding:1.1rem;font-size:0.9rem;position:relative;overflow:hidden;">
+                        <span
+                            style="width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green-glow);flex-shrink:0;"></span>
                         Unirse al Inner Circle
                     </button>
 
                     <!-- Activity -->
-                    <div class="lobby-section glass" style="border-radius:var(--radius-xl);">
-                        <h3 style="font-size:0.75rem;font-weight:700;color:var(--text-md);display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;">
+                    <div class="lobby-section glass" style="border-radius:var(--radius-2xl);">
+                        <h3
+                            style="font-size:0.73rem;font-weight:700;color:var(--text-md);display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;">
                             <i class="ri-history-line" style="color:var(--text-sm);"></i>
                             Actividad Reciente
                         </h3>
-                        <div id="lobby-history" style="display:flex;flex-direction:column;gap:0.5rem;max-height:180px;overflow-y:auto;">
-                            <div style="font-size:0.7rem;color:var(--text-sm);text-align:center;padding:1rem;">Cargando...</div>
+                        <div id="lobby-history"
+                            style="display:flex;flex-direction:column;gap:0.5rem;max-height:180px;overflow-y:auto;">
+                            <div style="font-size:0.7rem;color:var(--text-sm);text-align:center;padding:1rem;">
+                                Cargando...</div>
                         </div>
                     </div>
 
-                    <div style="text-align:center;font-size:0.6rem;color:rgba(255,255,255,0.15);letter-spacing:0.08em;">
+                    <div style="text-align:center;font-size:0.58rem;color:rgba(255,255,255,0.12);letter-spacing:0.1em;">
                         28E Inner Circle © 2026 · Conexiones cifradas E2E
                     </div>
                 </div>
@@ -1082,7 +1925,7 @@
     ══════════════════════════════════════════════ -->
     <div id="app" style="opacity:0;">
         <!-- ── Top Bar ── -->
-        <div id="topbar" class="glass">
+        <div id="topbar">
             <div class="topbar-brand">
                 <span class="topbar-logo">28E</span>
                 <div class="topbar-sep"></div>
@@ -1111,26 +1954,46 @@
                 <div id="control-bar-wrap">
                     <div class="ctrl-pill">
                         <button id="btn-mic" class="ctrl-btn" title="Micrófono">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8"
+                                viewBox="0 0 24 24">
+                                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                                <line x1="12" y1="19" x2="12" y2="23" />
+                                <line x1="8" y1="23" x2="16" y2="23" />
+                            </svg>
                         </button>
                         <button id="btn-cam" class="ctrl-btn" title="Cámara" style="position:relative;">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8"
+                                viewBox="0 0 24 24">
+                                <path d="M23 7l-7 5 7 5V7z" />
+                                <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+                            </svg>
                             <div id="cam-strike"></div>
                         </button>
                     </div>
 
                     <div class="ctrl-pill">
-                        <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('❤️')" title="Love">❤️</button>
-                        <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('🔥')" title="Fire">🔥</button>
-                        <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('😂')" title="Laugh">😂</button>
-                        <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('👏')" title="Clap">👏</button>
-                        <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('😍')" title="Love eyes">😍</button>
-                        <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('🎉')" title="Party">🎉</button>
+                        <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('❤️')"
+                            title="Love">❤️</button>
+                        <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('🔥')"
+                            title="Fire">🔥</button>
+                        <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('😂')"
+                            title="Laugh">😂</button>
+                        <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('👏')"
+                            title="Clap">👏</button>
+                        <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('😍')"
+                            title="Love eyes">😍</button>
+                        <button class="reaction-btn" onclick="window.oracleRoom && window.oracleRoom.sendReaction('🎉')"
+                            title="Party">🎉</button>
                     </div>
 
                     <div class="ctrl-pill">
                         <button id="btn-leave" class="ctrl-btn danger" title="Salir del Inner Circle">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 8l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M5 3a2 2 0 00-2 2v1c0 8.284 6.716 15 15 15h1a2 2 0 002-2v-3.28a1 1 0 00-.684-.948l-4.493-1.498a1 1 0 00-1.21.502l-1.13 2.257a11.042 11.042 0 01-5.516-5.517l2.257-1.128a1 1 0 00.502-1.21L9.228 3.683A1 1 0 008.279 3H5z"></path></svg>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16 8l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M5 3a2 2 0 00-2 2v1c0 8.284 6.716 15 15 15h1a2 2 0 002-2v-3.28a1 1 0 00-.684-.948l-4.493-1.498a1 1 0 00-1.21.502l-1.13 2.257a11.042 11.042 0 01-5.516-5.517l2.257-1.128a1 1 0 00.502-1.21L9.228 3.683A1 1 0 008.279 3H5z">
+                                </path>
+                            </svg>
                         </button>
                     </div>
                 </div>
@@ -1144,11 +2007,14 @@
                 <!-- Header -->
                 <div class="sidebar-header">
                     <div class="sidebar-brand">
-                        <span style="width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);"></span>
+                        <span
+                            style="width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green-glow);"></span>
                         Inner Circle
                         <span id="sidebar-user-count">0</span>
                     </div>
-                    <button id="btn-close-sidebar" style="background:none;border:none;color:var(--text-sm);cursor:pointer;font-size:1.1rem;padding:0.25rem;border-radius:var(--radius-sm);transition:color 0.2s;" title="Cerrar">
+                    <button id="btn-close-sidebar"
+                        style="background:none;border:none;color:var(--text-sm);cursor:pointer;font-size:1.1rem;padding:0.25rem;border-radius:var(--radius-sm);transition:all 0.2s;"
+                        title="Cerrar">
                         <i class="ri-close-line"></i>
                     </button>
                 </div>
@@ -1163,13 +2029,14 @@
                 <!-- ── Pane: Chat ── -->
                 <div id="pane-chat" data-pane="chat">
                     <div id="chat-messages">
-                        <div style="text-align:center;font-size:0.68rem;color:var(--text-sm);padding:0.75rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);margin:0.5rem;">
+                        <div
+                            style="text-align:center;font-size:0.66rem;color:var(--text-sm);padding:0.75rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);margin:0.5rem;">
                             🔒 Bienvenido al Inner Circle. Mensajes cifrados E2E.
                         </div>
                     </div>
                     <!-- Typing -->
                     <div id="typing-indicator" class="hidden" style="padding:0.5rem 1rem;">
-                        <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.68rem;color:var(--text-sm);">
+                        <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.66rem;color:var(--text-sm);">
                             <div class="typing-indicator" style="display:flex;gap:3px;align-items:center;">
                                 <span></span><span></span><span></span>
                             </div>
@@ -1179,7 +2046,8 @@
                     <!-- Input -->
                     <div id="chat-input-area">
                         <form id="chat-form">
-                            <input id="chat-input" class="glass-input" type="text" placeholder="Escribe un mensaje..." autocomplete="off" style="border-radius:var(--radius-lg);">
+                            <input id="chat-input" class="glass-input" type="text" placeholder="Escribe un mensaje..."
+                                autocomplete="off" style="border-radius:var(--radius-lg);">
                             <button type="submit" class="chat-send-btn" title="Enviar">
                                 <i class="ri-send-plane-fill"></i>
                             </button>
@@ -1189,16 +2057,21 @@
 
                 <!-- ── Pane: Music ── -->
                 <div id="pane-music" data-pane="music" class="hidden">
-                    <div id="music-inner" style="flex:1;overflow-y:auto;padding:0.75rem;display:flex;flex-direction:column;gap:0.75rem;"></div>
+                    <div id="music-inner"
+                        style="flex:1;overflow-y:auto;padding:0.75rem;display:flex;flex-direction:column;gap:0.75rem;">
+                    </div>
                 </div>
 
                 <!-- ── Pane: People ── -->
                 <div id="pane-people" data-pane="people" class="hidden">
                     <div style="padding:0.75rem;border-bottom:1px solid var(--border);">
-                        <span style="font-size:0.6rem;text-transform:uppercase;font-weight:700;letter-spacing:0.12em;color:var(--text-sm);">Participantes</span>
+                        <span
+                            style="font-size:0.58rem;text-transform:uppercase;font-weight:700;letter-spacing:0.14em;color:var(--text-sm);">Participantes</span>
                     </div>
-                    <div id="people-list" style="flex:1;overflow-y:auto;padding:0.5rem;display:flex;flex-direction:column;gap:0.25rem;">
-                        <div style="font-size:0.7rem;color:var(--text-sm);text-align:center;padding:2rem;">Nadie conectado aún.</div>
+                    <div id="people-list"
+                        style="flex:1;overflow-y:auto;padding:0.5rem;display:flex;flex-direction:column;gap:0.25rem;">
+                        <div style="font-size:0.7rem;color:var(--text-sm);text-align:center;padding:2rem;">Nadie
+                            conectado aún.</div>
                     </div>
                 </div>
             </aside>
@@ -1211,26 +2084,35 @@
     <div id="handle-modal">
         <div id="handle-card" class="glass-hi grad-border noise" style="opacity:0;transform:scale(0.9);">
             <!-- Ambient -->
-            <div class="orb" style="width:200px;height:200px;background:radial-gradient(circle,rgba(99,102,241,0.1),transparent 70%);top:-30%;left:-30%;filter:blur(50px);"></div>
-            <div class="orb" style="width:180px;height:180px;background:radial-gradient(circle,rgba(245,158,11,0.07),transparent 70%);bottom:-30%;right:-30%;filter:blur(50px);"></div>
+            <div class="orb"
+                style="width:200px;height:200px;background:radial-gradient(circle,rgba(124,92,252,0.1),transparent 70%);top:-30%;left:-30%;filter:blur(50px);">
+            </div>
+            <div class="orb"
+                style="width:180px;height:180px;background:radial-gradient(circle,rgba(240,160,48,0.06),transparent 70%);bottom:-30%;right:-30%;filter:blur(50px);">
+            </div>
 
             <div style="position:relative;z-index:10;">
-                <div style="width:48px;height:48px;border-radius:14px;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;">
+                <div
+                    style="width:50px;height:50px;border-radius:16px;background:linear-gradient(135deg,rgba(124,92,252,0.12),rgba(124,92,252,0.04));border:1px solid rgba(124,92,252,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;">
                     <i class="ri-at-line" style="color:var(--accent);font-size:1.5rem;"></i>
                 </div>
-                <h3 style="font-size:1.4rem;font-weight:900;color:white;margin-bottom:0.4rem;letter-spacing:-0.03em;">Tu Identidad</h3>
-                <p style="color:var(--text-sm);font-size:0.8rem;line-height:1.6;margin-bottom:1.5rem;">Elige un handle único para el Inner Circle. Así te verán los demás.</p>
+                <h3 style="font-size:1.35rem;font-weight:900;color:white;margin-bottom:0.4rem;letter-spacing:-0.03em;">Tu
+                    Identidad</h3>
+                <p style="color:var(--text-sm);font-size:0.78rem;line-height:1.6;margin-bottom:1.5rem;">Elige un handle
+                    único para el Inner Circle. Así te verán los demás.</p>
 
                 <form id="handle-form" style="display:flex;flex-direction:column;gap:0.875rem;">
                     <div class="handle-input-wrap">
                         <span class="handle-at">@</span>
-                        <input id="handle-input" class="glass-input" type="text" placeholder="usuario" required pattern="[a-zA-Z0-9_]{3,15}" title="3-15 letras, números o guión bajo">
+                        <input id="handle-input" class="glass-input" type="text" placeholder="usuario" required
+                            pattern="[a-zA-Z0-9_]{3,15}" title="3-15 letras, números o guión bajo">
                     </div>
-                    <p id="handle-error" style="color:#f87171;font-size:0.72rem;font-weight:600;display:none;"></p>
+                    <p id="handle-error" style="color:#fb7185;font-size:0.7rem;font-weight:600;display:none;"></p>
                     <button type="submit" id="btn-save-handle" class="btn-primary" style="width:100%;">
                         <i class="ri-check-line"></i> Guardar
                     </button>
-                    <button type="button" id="btn-cancel-handle" class="btn-ghost" style="width:100%;display:none;">Cancelar</button>
+                    <button type="button" id="btn-cancel-handle" class="btn-ghost"
+                        style="width:100%;display:none;">Cancelar</button>
                 </form>
             </div>
         </div>
@@ -1240,150 +2122,150 @@
          SIDEBAR & TAB LOGIC + GSAP INIT
     ══════════════════════════════════════════════ -->
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Register GSAP CustomEase
-        if (window.CustomEase) {
-            CustomEase.create('bounce.out', 'M0,0 C0,0 0.058,0.454 0.204,0.726 0.295,0.884 0.362,0.962 0.5,1 0.638,1.038 0.7,1.008 0.79,0.998 0.88,0.988 1,1 1,1');
-        }
-
-        // ── Loader GSAP ──
-        const loaderRing = document.getElementById('loader-ring-wrap');
-        const loaderRingFill = document.getElementById('loader-ring-fill');
-        const CIRCUMFERENCE = 2 * Math.PI * 52; // 326.7
-
-        // Entrance
-        gsap.to(loaderRing, { opacity: 1, scale: 1, duration: 0.8, ease: 'power3.out', delay: 0.2 });
-        gsap.from('#loader-label', { opacity: 0, y: 12, duration: 0.6, delay: 0.5, ease: 'power2.out' });
-
-        // Ring rotation
-        gsap.to(loaderRing, { rotation: 360, duration: 4, ease: 'none', repeat: -1 });
-
-        // Simulated loading progress
-        window.__loaderProgress = (p) => {
-            if (loaderRingFill) {
-                const offset = CIRCUMFERENCE * (1 - p / 100);
-                loaderRingFill.style.strokeDashoffset = offset;
+        document.addEventListener('DOMContentLoaded', () => {
+            // Register GSAP CustomEase
+            if (window.CustomEase) {
+                CustomEase.create('bounce.out', 'M0,0 C0,0 0.058,0.454 0.204,0.726 0.295,0.884 0.362,0.962 0.5,1 0.638,1.038 0.7,1.008 0.79,0.998 0.88,0.988 1,1 1,1');
             }
-        };
 
-        // ── Auth GSAP ──
-        gsap.from('.auth-stagger', {
-            opacity: 0, y: 30, scale: 0.95,
-            duration: 0.8, stagger: 0.1,
-            ease: 'power3.out', delay: 0.3
-        });
+            // ── Loader GSAP ──
+            const loaderRing = document.getElementById('loader-ring-wrap');
+            const loaderRingFill = document.getElementById('loader-ring-fill');
+            const CIRCUMFERENCE = 2 * Math.PI * 56; // updated radius
 
-        // ── Sidebar Logic ──
-        const sidebar = document.getElementById('oracle-sidebar');
-        const btnClose = document.getElementById('btn-close-sidebar');
-        const btnOpen = document.getElementById('btn-open-sidebar');
-        const backdrop = document.getElementById('sidebar-backdrop');
-        let isSidebarOpen = false;
+            // Entrance
+            gsap.to(loaderRing, { opacity: 1, scale: 1, duration: 0.9, ease: 'power3.out', delay: 0.2 });
+            gsap.from('#loader-label', { opacity: 0, y: 14, duration: 0.6, delay: 0.5, ease: 'power2.out' });
 
-        if (window.innerWidth >= 1024) {
-            isSidebarOpen = true;
-            sidebar.classList.remove('sidebar-closed');
-        } else {
-            btnOpen.style.opacity = '1';
-            btnOpen.style.pointerEvents = 'auto';
-        }
+            // Ring rotation
+            gsap.to(loaderRing, { rotation: 360, duration: 5, ease: 'none', repeat: -1 });
 
-        function openSidebar() {
-            isSidebarOpen = true;
-            sidebar.classList.remove('sidebar-closed');
-            if (window.innerWidth < 1024) {
-                sidebar.classList.add('sidebar-open');
-                backdrop.classList.add('active');
-            }
-            btnOpen.style.opacity = '0';
-            btnOpen.style.pointerEvents = 'none';
-            gsap.from(sidebar, { x: 60, opacity: 0.5, duration: 0.4, ease: 'power3.out' });
-        }
-
-        function closeSidebar() {
-            isSidebarOpen = false;
-            gsap.to(sidebar, {
-                x: 40, opacity: 0, duration: 0.3, ease: 'power2.in',
-                onComplete: () => {
-                    sidebar.classList.add('sidebar-closed');
-                    sidebar.classList.remove('sidebar-open');
-                    backdrop.classList.remove('active');
-                    gsap.set(sidebar, { clearProps: 'all' });
+            // Simulated loading progress
+            window.__loaderProgress = (p) => {
+                if (loaderRingFill) {
+                    const offset = CIRCUMFERENCE * (1 - p / 100);
+                    loaderRingFill.style.strokeDashoffset = offset;
                 }
+            };
+
+            // ── Auth GSAP ──
+            gsap.from('.auth-stagger', {
+                opacity: 0, y: 30, scale: 0.95,
+                duration: 0.8, stagger: 0.1,
+                ease: 'power3.out', delay: 0.3
             });
-            btnOpen.style.opacity = '1';
-            btnOpen.style.pointerEvents = 'auto';
-        }
 
-        if (btnClose) btnClose.addEventListener('click', closeSidebar);
-        if (btnOpen) btnOpen.addEventListener('click', openSidebar);
-        if (backdrop) backdrop.addEventListener('click', closeSidebar);
+            // ── Sidebar Logic ──
+            const sidebar = document.getElementById('oracle-sidebar');
+            const btnClose = document.getElementById('btn-close-sidebar');
+            const btnOpen = document.getElementById('btn-open-sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            let isSidebarOpen = false;
 
-        // ── Tab Switching ──
-        const tabs = document.querySelectorAll('.sidebar-tab');
-        const panes = document.querySelectorAll('[data-pane]');
+            if (window.innerWidth >= 1024) {
+                isSidebarOpen = true;
+                sidebar.classList.remove('sidebar-closed');
+            } else {
+                btnOpen.style.opacity = '1';
+                btnOpen.style.pointerEvents = 'auto';
+            }
 
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const target = tab.dataset.tab;
-                tabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                panes.forEach(p => {
-                    const show = p.dataset.pane === target;
-                    if (show) {
-                        p.classList.remove('hidden');
-                        gsap.from(p, { opacity: 0, y: 8, duration: 0.3, ease: 'power2.out' });
-                    } else {
-                        p.classList.add('hidden');
+            function openSidebar() {
+                isSidebarOpen = true;
+                sidebar.classList.remove('sidebar-closed');
+                if (window.innerWidth < 1024) {
+                    sidebar.classList.add('sidebar-open');
+                    backdrop.classList.add('active');
+                }
+                btnOpen.style.opacity = '0';
+                btnOpen.style.pointerEvents = 'none';
+                gsap.from(sidebar, { x: 60, opacity: 0.5, duration: 0.4, ease: 'power3.out' });
+            }
+
+            function closeSidebar() {
+                isSidebarOpen = false;
+                gsap.to(sidebar, {
+                    x: 40, opacity: 0, duration: 0.3, ease: 'power2.in',
+                    onComplete: () => {
+                        sidebar.classList.add('sidebar-closed');
+                        sidebar.classList.remove('sidebar-open');
+                        backdrop.classList.remove('active');
+                        gsap.set(sidebar, { clearProps: 'all' });
                     }
+                });
+                btnOpen.style.opacity = '1';
+                btnOpen.style.pointerEvents = 'auto';
+            }
+
+            if (btnClose) btnClose.addEventListener('click', closeSidebar);
+            if (btnOpen) btnOpen.addEventListener('click', openSidebar);
+            if (backdrop) backdrop.addEventListener('click', closeSidebar);
+
+            // ── Tab Switching ──
+            const tabs = document.querySelectorAll('.sidebar-tab');
+            const panes = document.querySelectorAll('[data-pane]');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = tab.dataset.tab;
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    panes.forEach(p => {
+                        const show = p.dataset.pane === target;
+                        if (show) {
+                            p.classList.remove('hidden');
+                            gsap.from(p, { opacity: 0, y: 8, duration: 0.3, ease: 'power2.out' });
+                        } else {
+                            p.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            // ── Lobby handle icon show/hide ──
+            const lobbyHandle = document.getElementById('lobby-handle');
+            const handleEditIcon = document.getElementById('handle-edit-icon');
+            if (lobbyHandle && handleEditIcon) {
+                lobbyHandle.addEventListener('mouseenter', () => handleEditIcon.style.opacity = '0.8');
+                lobbyHandle.addEventListener('mouseleave', () => handleEditIcon.style.opacity = '0');
+            }
+
+            // ── Lobby GSAP entrance ──
+            gsap.from('.lobby-inner > *', {
+                opacity: 0, y: 24, scale: 0.97,
+                duration: 0.7, stagger: 0.1,
+                ease: 'power3.out', delay: 0.2
+            });
+
+            // ── App entrance (called when joining) ──
+            window.__showApp = () => {
+                const app = document.getElementById('app');
+                if (!app) return;
+                gsap.to(app, { opacity: 1, duration: 0.6, ease: 'power2.out' });
+                gsap.from('#topbar', { y: -20, opacity: 0, duration: 0.5, delay: 0.1, ease: 'power3.out' });
+                gsap.from('#control-bar-wrap', { y: 30, opacity: 0, duration: 0.6, delay: 0.25, ease: 'power3.out' });
+                if (isSidebarOpen) {
+                    gsap.from(sidebar, { x: 60, opacity: 0, duration: 0.5, delay: 0.2, ease: 'power3.out' });
+                }
+            };
+
+            // Control bar micro-hover
+            document.querySelectorAll('.ctrl-btn').forEach(btn => {
+                btn.addEventListener('mouseenter', () => {
+                    gsap.to(btn, { scale: 1.08, duration: 0.2, ease: 'back.out(2)' });
+                });
+                btn.addEventListener('mouseleave', () => {
+                    gsap.to(btn, { scale: 1, duration: 0.15, ease: 'power2.out' });
+                });
+            });
+
+            // Reaction button bounce
+            document.querySelectorAll('.reaction-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    gsap.from(btn, { scale: 0.6, duration: 0.4, ease: 'elastic.out(1.5, 0.5)' });
                 });
             });
         });
-
-        // ── Lobby handle icon show/hide ──
-        const lobbyHandle = document.getElementById('lobby-handle');
-        const handleEditIcon = document.getElementById('handle-edit-icon');
-        if (lobbyHandle && handleEditIcon) {
-            lobbyHandle.addEventListener('mouseenter', () => handleEditIcon.style.opacity = '0.8');
-            lobbyHandle.addEventListener('mouseleave', () => handleEditIcon.style.opacity = '0');
-        }
-
-        // ── Lobby GSAP entrance ──
-        gsap.from('.lobby-inner > *', {
-            opacity: 0, y: 24, scale: 0.97,
-            duration: 0.7, stagger: 0.1,
-            ease: 'power3.out', delay: 0.2
-        });
-
-        // ── App entrance (called when joining) ──
-        window.__showApp = () => {
-            const app = document.getElementById('app');
-            if (!app) return;
-            gsap.to(app, { opacity: 1, duration: 0.6, ease: 'power2.out' });
-            gsap.from('#topbar', { y: -20, opacity: 0, duration: 0.5, delay: 0.1, ease: 'power3.out' });
-            gsap.from('#control-bar-wrap', { y: 30, opacity: 0, duration: 0.6, delay: 0.25, ease: 'power3.out' });
-            if (isSidebarOpen) {
-                gsap.from(sidebar, { x: 60, opacity: 0, duration: 0.5, delay: 0.2, ease: 'power3.out' });
-            }
-        };
-
-        // Control bar micro-hover
-        document.querySelectorAll('.ctrl-btn').forEach(btn => {
-            btn.addEventListener('mouseenter', () => {
-                gsap.to(btn, { scale: 1.08, duration: 0.2, ease: 'back.out(2)' });
-            });
-            btn.addEventListener('mouseleave', () => {
-                gsap.to(btn, { scale: 1, duration: 0.15, ease: 'power2.out' });
-            });
-        });
-
-        // Reaction button bounce
-        document.querySelectorAll('.reaction-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                gsap.from(btn, { scale: 0.6, duration: 0.4, ease: 'elastic.out(1.5, 0.5)' });
-            });
-        });
-    });
     </script>
 
     <!-- ══════════════════════════════════════════════
@@ -1409,11 +2291,11 @@
         const provider = new GoogleAuthProvider();
         const db = getDatabase(app);
 
-        const authOverlay   = document.getElementById('auth-overlay');
-        const authActions   = document.getElementById('auth-actions');
-        const btnLogin      = document.getElementById('btn-login-google');
-        const statusText    = document.getElementById('auth-status-text');
-        const loader        = document.getElementById('loader');
+        const authOverlay = document.getElementById('auth-overlay');
+        const authActions = document.getElementById('auth-actions');
+        const btnLogin = document.getElementById('btn-login-google');
+        const statusText = document.getElementById('auth-status-text');
+        const loader = document.getElementById('loader');
 
         // Simulate loader ring progress
         let prog = 0;
@@ -1456,7 +2338,7 @@
 
                     // Avatar big
                     const lobbyAvatar = document.getElementById('lobby-avatar');
-                    const lobbyIcon   = document.getElementById('lobby-icon');
+                    const lobbyIcon = document.getElementById('lobby-icon');
                     if (lobbyAvatar) {
                         lobbyAvatar.src = avatarUrl;
                         lobbyAvatar.onerror = () => lobbyAvatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=random`;
@@ -1474,16 +2356,16 @@
                         if (placeholderI) placeholderI.style.display = 'none';
                     }
 
-                    const lobbyTitle  = document.getElementById('lobby-title');
+                    const lobbyTitle = document.getElementById('lobby-title');
                     const lobbyHandle = document.getElementById('lobby-handle');
                     if (lobbyTitle) lobbyTitle.textContent = user.displayName;
 
                     // Handle logic
-                    const handleModal     = document.getElementById('handle-modal');
-                    const handleCard      = document.getElementById('handle-card');
-                    const handleInput     = document.getElementById('handle-input');
-                    const handleError     = document.getElementById('handle-error');
-                    const handleForm      = document.getElementById('handle-form');
+                    const handleModal = document.getElementById('handle-modal');
+                    const handleCard = document.getElementById('handle-card');
+                    const handleInput = document.getElementById('handle-input');
+                    const handleError = document.getElementById('handle-error');
+                    const handleForm = document.getElementById('handle-form');
                     const btnCancelHandle = document.getElementById('btn-cancel-handle');
                     let currentHandle = null;
 
@@ -1577,13 +2459,13 @@
                                 snap.forEach(child => entries.push(child.val()));
                                 entries.reverse();
                                 historyEl.innerHTML = entries.map(e => `
-                                    <div class="post-card" style="display:flex;align-items:center;gap:0.625rem;padding:0.5rem;border-radius:var(--radius-md);transition:background 0.2s;" onmouseover="this.style.background='var(--surface)'" onmouseout="this.style.background='transparent'">
+                                    <div class="post-card" style="display:flex;align-items:center;gap:0.625rem;padding:0.5rem 0.625rem;border-radius:var(--radius-md);transition:all 0.2s;border-left:2px solid transparent;" onmouseover="this.style.background='var(--surface)';this.style.borderLeftColor='var(--accent)'" onmouseout="this.style.background='transparent';this.style.borderLeftColor='transparent'">
                                         <img src="${e.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(e.displayName || 'U')}&background=random`}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid var(--border);flex-shrink:0;" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(e.displayName || 'U')}&background=random'">
                                         <div style="flex:1;min-width:0;">
-                                            <span style="font-size:0.72rem;font-weight:700;color:white;">${e.displayName || 'Usuario'}</span>
-                                            <span style="font-size:0.65rem;color:var(--text-sm);margin-left:0.25rem;">${e.action || 'se conectó'}</span>
+                                            <span style="font-size:0.7rem;font-weight:700;color:white;">${e.displayName || 'Usuario'}</span>
+                                            <span style="font-size:0.63rem;color:var(--text-sm);margin-left:0.25rem;">${e.action || 'se conectó'}</span>
                                         </div>
-                                        <span style="font-size:0.62rem;color:rgba(255,255,255,0.2);flex-shrink:0;">${e.ts ? new Date(e.ts).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' }) : ''}</span>
+                                        <span style="font-size:0.58rem;color:rgba(255,255,255,0.18);flex-shrink:0;">${e.ts ? new Date(e.ts).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' }) : ''}</span>
                                     </div>
                                 `).join('');
                                 if (window.gsap) {
@@ -1619,4 +2501,5 @@
     <script src="oracle.js?v=4"></script>
 
 </body>
+
 </html>
