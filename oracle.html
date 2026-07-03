@@ -1054,7 +1054,7 @@
             background: rgba(5, 5, 10, 0.92);
             backdrop-filter: var(--blur-xl);
             -webkit-backdrop-filter: var(--blur-xl);
-            transition: all 0.4s var(--ease-smooth);
+            transition: transform 0.4s var(--ease-smooth), width 0.4s var(--ease-smooth), opacity 0.4s var(--ease-smooth);
             position: relative;
             z-index: 50;
         }
@@ -1065,15 +1065,18 @@
 
         @media (max-width: 1023px) {
             #oracle-sidebar {
-                position: fixed;
-                top: 0;
-                right: 0;
-                bottom: 0;
+                position: fixed !important;
+                top: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+                left: auto !important;
                 z-index: 50;
-                transform: translateX(100%);
+                transform: translateX(100%) !important;
+                width: min(var(--sidebar-w), 85vw);
+                box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
             }
             #oracle-sidebar.sidebar-open {
-                transform: translateX(0);
+                transform: translateX(0) !important;
             }
         }
 
@@ -2179,7 +2182,7 @@
                 }
                 btnOpen.style.opacity = '0';
                 btnOpen.style.pointerEvents = 'none';
-                gsap.from(sidebar, { x: 60, opacity: 0.5, duration: 0.4, ease: 'power3.out' });
+                gsap.from(sidebar, { x: 60, opacity: 0.5, duration: 0.4, ease: 'power3.out', onComplete: () => gsap.set(sidebar, { clearProps: 'transform,opacity' }) });
             }
 
             function closeSidebar() {
