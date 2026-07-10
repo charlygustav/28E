@@ -325,6 +325,11 @@
         // Redirect back to main site when admin disables maintenance (unless in preview mode)
         const urlParams = new URLSearchParams(window.location.search);
         const isPreview = urlParams.get('preview') === 'true';
+        if (isPreview) {
+            if (urlParams.has('type')) cfg.maintType = urlParams.get('type');
+            if (urlParams.has('date')) cfg.maintDate = urlParams.get('date');
+        }
+
         if (cfg.mantenimiento === false && !isPreview) {
           window.location.href = '/';
           return;
