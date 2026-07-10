@@ -839,7 +839,7 @@
               ${avatarHtml}
             </div>
             <div class="flex-1 min-w-0">
-              <div class="text-white text-sm font-medium truncate">${u.displayName} ${u.oracleHandle ? `<span class="text-amber-500/80 text-[10px] ml-1">@${u.oracleHandle}</span>` : ''} ${isMe ? `<span class="text-white/30 text-[10px] ml-1 px-1.5 py-0.5 rounded-md bg-white/10">${_t('tag_you')}</span>` : ''}</div>
+              <div class="text-white text-sm font-medium truncate">${u.displayName} ${isMe ? `<span class="text-white/30 text-[10px] ml-1 px-1.5 py-0.5 rounded-md bg-white/10">${_t('tag_you')}</span>` : ''}</div>
             </div>
             <div class="flex items-center gap-2 pr-1 opacity-100 vc-icons-container">
                ${bellIcon}${micIcon}
@@ -866,10 +866,7 @@
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <button id="vc-btn-oracle-redirect" class="py-1 px-3 rounded-lg bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-black font-bold text-[10px] uppercase tracking-wider transition-all flex items-center gap-1.5" title="Seguir en Inner Circle">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-              <span>Inner Circle</span>
-            </button>
+
             <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
           </div>
         </div>
@@ -995,7 +992,7 @@
               ${avatarHtml}
             </div>
             <div class="flex-1 min-w-0">
-              <div class="text-white text-sm font-medium truncate">${u.displayName} ${u.oracleHandle ? `<span class="text-amber-500/80 text-[10px] ml-1">@${u.oracleHandle}</span>` : ''} ${isMe ? `<span class="text-white/30 text-[10px] ml-1 px-1.5 py-0.5 rounded-md bg-white/10">${_t('tag_you')}</span>` : ''}</div>
+              <div class="text-white text-sm font-medium truncate">${u.displayName} ${isMe ? `<span class="text-white/30 text-[10px] ml-1 px-1.5 py-0.5 rounded-md bg-white/10">${_t('tag_you')}</span>` : ''}</div>
             </div>
             <div class="flex items-center gap-2 pr-1 opacity-100 vc-icons-container">
             </div>
@@ -1195,13 +1192,7 @@
       if (tabChat) tabChat.addEventListener('click', () => switchTab('chat'));
       if (tabMusic) tabMusic.addEventListener('click', () => switchTab('music'));
 
-      const btnOracleRedirect = document.getElementById('vc-btn-oracle-redirect');
-      if (btnOracleRedirect) {
-        btnOracleRedirect.addEventListener('click', () => {
-          this._leave();
-          window.location.href = '/oracle.html?autojoin=true';
-        });
-      }
+
 
       // Chat send & typing
       const chatSend = document.getElementById('vc-chat-send');
@@ -1338,7 +1329,7 @@
         });
 
         this.socket.on('connect', () => {
-          this.socket.emit('join_channel', { password: pass, displayName: name, photoURL: window.yaireCurrentUser?.photoURL || null, oracleHandle: window.yaireCurrentUser?.oracleHandle || null });
+          this.socket.emit('join_channel', { password: pass, displayName: name, photoURL: window.yaireCurrentUser?.photoURL || null });
         });
 
         this.socket.on('join_error', ({ message }) => {
@@ -1549,7 +1540,7 @@
         // Re-join channel silently after background reconnect
         this.socket.io.on('reconnect', () => {
           if (this._savedName && this._savedPass) {
-            this.socket.emit('join_channel', { password: this._savedPass, displayName: this._savedName, photoURL: window.yaireCurrentUser?.photoURL || null, oracleHandle: window.yaireCurrentUser?.oracleHandle || null });
+            this.socket.emit('join_channel', { password: this._savedPass, displayName: this._savedName, photoURL: window.yaireCurrentUser?.photoURL || null });
           }
         });
       };

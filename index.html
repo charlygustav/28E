@@ -4268,10 +4268,7 @@
             <!-- Especial -->
             <p class="menu-category-label text-zinc-400 dark:text-zinc-500" data-i18n="menu_cat_special">✦ ESPECIAL</p>
             <div class="menu-grid">
-                <a href="oracle.html" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400 relative glow-effect">
-                    <span class="menu-link-icon bg-amber-500/20 text-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.5)]">🔮</span>
-                    <span class="font-bold text-amber-500 dark:text-amber-400">28E Inner Circle</span>
-                </a>
+
                 <a href="#promesas" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
                     <span class="menu-link-icon bg-amber-50 dark:bg-amber-900/20">💍</span>
                     <span data-i18n="menu_promises">Promesas</span>
@@ -18322,10 +18319,7 @@ document.addEventListener("DOMContentLoaded", () => {
             window.yaireCurrentUser = user; // Expose globally
             if (user) {
                 window.yaireVcHistoryData = await window.yaireVcHistoryGet();
-                try {
-                    const snap = await get(ref(db, `users/${user.uid}/oracle_handle`));
-                    if (snap.exists()) window.yaireCurrentUser.oracleHandle = snap.val();
-                } catch(e) {}
+
             } else {
                 window.yaireVcHistoryData = [];
             }
