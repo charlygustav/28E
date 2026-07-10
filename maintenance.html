@@ -322,8 +322,10 @@
         const cfg = await res.json();
         if (!cfg) return;
 
-        // Redirect back to main site when admin disables maintenance
-        if (cfg.mantenimiento === false) {
+        // Redirect back to main site when admin disables maintenance (unless in preview mode)
+        const urlParams = new URLSearchParams(window.location.search);
+        const isPreview = urlParams.get('preview') === 'true';
+        if (cfg.mantenimiento === false && !isPreview) {
           window.location.href = '/';
           return;
         } else if (cfg.maintScreen !== 'cinematic') {
