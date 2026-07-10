@@ -13,10 +13,10 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-07-10T05:24:47.221Z",
-  "maintDate": "2026-07-09T21:04",
+  "lastUpdated": "2026-07-10T05:32:27.755Z",
+  "maintDate": "2026-07-10T02:32",
   "maintMsg": "",
-  "maintScreen": "cinematic",
+  "maintScreen": "standard",
   "maintSongs": [
     {
       "artist": "John Legend",
@@ -50,7 +50,7 @@
     }
   ],
   "maintType": "indefinite",
-  "mantenimiento": false,
+  "mantenimiento": true,
   "refugeText": "",
   "refugeTitle": "Te escucho, mi amor",
   "songs": [
