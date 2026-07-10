@@ -422,6 +422,10 @@
         if (document.getElementById('pct')) document.getElementById('pct').textContent = '100%';
         document.getElementById('progress-fill').style.width = '100%';
 
+        const urlParams = new URLSearchParams(window.location.search);
+        const isPreview = urlParams.get('preview') === 'true';
+        if (isPreview) return;
+
         // Turn off maintenance in Firebase automatically
         fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json?nocache=' + Date.now())
           .then(res => res.json())
