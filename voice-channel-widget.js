@@ -2293,25 +2293,94 @@
       addBtn.innerHTML = `<div class="w-3 h-3 rounded-full border-[2px] border-black border-t-transparent animate-spin inline-block align-middle"></div>`;
       addBtn.disabled = true;
       input.disabled = true;
-
-      // Show searching indicator
-      const errEl = document.getElementById('vc-music-err');
-      if (errEl) {
-        errEl.innerHTML = `<span class="text-amber-500 flex items-center justify-center gap-1.5"><span class="w-2 h-2 rounded-full border border-amber-500 border-t-transparent animate-spin inline-block"></span> ${parsed.type === 'spotify' ? 'Buscando en YouTube…' : 'Cargando…'}</span>`;
-      }
-      
-      let title = parsed.type === 'youtube' ? 'YouTube Video' : 'Spotify Track';
-      try { title = await this._fetchMusicTitle(parsed.url, parsed.type); } catch(e) {}
-      
-      if (errEl) errEl.innerHTML = '';
       input.value = '';
-      input.disabled = false;
-      addBtn.disabled = false;
-      addBtn.innerHTML = originalText;
-      if (this.socket) {
-        this.socket.emit('music_add', { url: parsed.url, title, type: parsed.type });
-        this._playSfx('toggleOn', 0.3);
+
+      const errEl = document.getElementById('vc-music-err');
+
+      try {
+        let finalUrl = parsed.url;
+        let finalTitle = '';
+        let finalType = parsed.type;
+
+        if (parsed.type === 'youtube') {
+          // YouTube: just fetch the title
+          if (errEl) errEl.innerHTML = `<span class="text-amber-500 flex items-center justify-center gap-1.5"><span class="w-2 h-2 rounded-full border border-amber-500 border-t-transparent animate-spin inline-block"></span> Cargando…</span>`;
+          try { finalTitle = await this._fetchMusicTitle(parsed.url, 'youtube'); } catch(e) {}
+          finalTitle = finalTitle || 'YouTube Video';
+        } else if (parsed.type === 'spotify') {
+          // Spotify: get title from oEmbed, then search YouTube on the client
+          if (errEl) errEl.innerHTML = `<span class="text-amber-500 flex items-center justify-center gap-1.5"><span class="w-2 h-2 rounded-full border border-amber-500 border-t-transparent animate-spin inline-block"></span> Obteniendo info…</span>`;
+          
+          let searchQuery = '';
+          try {
+            const res = await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(parsed.url)}`);
+            const data = await res.json();
+            const artist = data.author_name || '';
+            const title = data.title || 'Spotify Track';
+            searchQuery = artist ? `${title} - ${artist}` : title;
+            finalTitle = searchQuery;
+          } catch(e) { searchQuery = 'Spotify Track'; finalTitle = searchQuery; }
+
+          if (errEl) errEl.innerHTML = `<span class="text-amber-500 flex items-center justify-center gap-1.5"><span class="w-2 h-2 rounded-full border border-amber-500 border-t-transparent animate-spin inline-block"></span> Buscando en YouTube…</span>`;
+
+          // Search YouTube from client using Piped API (CORS-friendly)
+          const ytResult = await this._searchYouTubeClient(searchQuery);
+          if (ytResult) {
+            finalUrl = `https://www.youtube.com/watch?v=${ytResult.id}`;
+            finalType = 'youtube';
+          }
+        }
+
+        // Keep indicator until server confirms
+        if (errEl) errEl.innerHTML = `<span class="text-amber-500 flex items-center justify-center gap-1.5"><span class="w-2 h-2 rounded-full border border-amber-500 border-t-transparent animate-spin inline-block"></span> Añadiendo…</span>`;
+
+        if (this.socket) {
+          // Wait for server confirmation before hiding indicator
+          const queueHandler = () => {
+            if (errEl) errEl.innerHTML = '';
+            addBtn.disabled = false;
+            input.disabled = false;
+            addBtn.innerHTML = originalText;
+          };
+          this.socket.once('music_queue_update', queueHandler);
+          // Timeout fallback in case server doesn't respond
+          setTimeout(() => { this.socket.off('music_queue_update', queueHandler); queueHandler(); }, 15000);
+
+          this.socket.emit('music_add', { url: finalUrl, title: finalTitle, type: finalType });
+          this._playSfx('toggleOn', 0.3);
+        } else {
+          if (errEl) errEl.innerHTML = '';
+          addBtn.disabled = false;
+          input.disabled = false;
+          addBtn.innerHTML = originalText;
+        }
+      } catch(e) {
+        console.error('[VC] Music add error:', e);
+        if (errEl) errEl.innerHTML = '';
+        addBtn.disabled = false;
+        input.disabled = false;
+        addBtn.innerHTML = originalText;
       }
+    }
+
+    async _searchYouTubeClient(query) {
+      // Try multiple Piped instances for reliability
+      const pipedInstances = [
+        'https://pipedapi.kavin.rocks',
+        'https://pipedapi.adminforge.de',
+        'https://api.piped.yt'
+      ];
+      for (const instance of pipedInstances) {
+        try {
+          const res = await fetch(`${instance}/search?q=${encodeURIComponent(query + ' audio')}&filter=videos`, { signal: AbortSignal.timeout(8000) });
+          const data = await res.json();
+          if (data.items?.length > 0) {
+            const video = data.items[0];
+            return { id: video.url?.replace('/watch?v=', '') || '', title: video.title };
+          }
+        } catch(e) { continue; }
+      }
+      return null;
     }
 
     _parseMusicUrl(url) {

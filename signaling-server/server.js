@@ -210,35 +210,19 @@ io.on('connection', (socket) => {
     let trackType = type;
     let trackTitle = title || url;
     
-    // Automatically convert Spotify links to YouTube for synchronized playback
+    // Fallback: if client still sends spotify type, try server-side conversion
     if (type === 'spotify') {
       try {
         let searchTitle = trackTitle;
-        // Improve search title if it's generic or missing
         if (searchTitle === 'Spotify Track' || !searchTitle || searchTitle.trim() === '') {
           try {
-            // First try to scrape the raw HTML <title> since it contains the artist (e.g. "Song Name - song and lyrics by Artist | Spotify")
-            const htmlRes = await fetch(trackUrl, { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' } });
-            const html = await htmlRes.text();
-            const titleMatch = html.match(/<title>(.*?)<\/title>/i);
-            
-            if (titleMatch && titleMatch[1] && !titleMatch[1].toLowerCase().includes('page not found')) {
-              let clean = titleMatch[1].split('| Spotify')[0].trim();
-              clean = clean.replace(/ - song( and lyrics)? by /i, ' - ');
-              clean = clean.replace(/ - Album by /i, ' - ');
-              clean = clean.replace(/ - Playlist by /i, ' - ');
-              searchTitle = clean;
-            } else {
-              // Fallback to oembed if HTML scraping fails
-              const res = await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(trackUrl)}`);
-              const data = await res.json();
-              const artist = data.author_name || '';
-              const title = data.title ? data.title.replace(/\s*[\[\(](official.*|video oficial|audio oficial|audio|video|music video|lyric.*|visualizer|hd)[\]\)]/gi, '').replace(/\s*[-|]\s*$/g, '').trim() : 'Spotify Track';
-              searchTitle = artist ? `${title} - ${artist}` : title;
-            }
-          } catch(e) { console.error('Spotify title fetch error:', e); }
+            const res = await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(trackUrl)}`);
+            const data = await res.json();
+            const artist = data.author_name || '';
+            const t = data.title || 'Spotify Track';
+            searchTitle = artist ? `${t} - ${artist}` : t;
+          } catch(e) {}
         }
-        
         console.log('[Spotify] Searching YouTube for:', searchTitle + ' audio');
         const yts = require('yt-search');
         const r = await yts(searchTitle + ' audio');
