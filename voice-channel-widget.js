@@ -5,7 +5,7 @@
   'use strict';
 
   // ── CONFIG (cambia SIGNALING_URL tras el deploy en Railway) ──────────────
-  const SIGNALING_URL = 'https://28e-production.up.railway.app';
+  const SIGNALING_URL = 'https://two8e-signaling.onrender.com';
 
   // ── INTERNATIONALIZATION ──────────────────────────────────────────────────
   const VC_I18N = {
