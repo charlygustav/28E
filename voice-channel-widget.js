@@ -1444,25 +1444,6 @@
           this._showRingOverlay(name);
         });
 
-        this.socket.on('webrtc_offer', async ({ from, sdp }) => {
-          await this._handleOffer(from, sdp);
-        });
-
-        this.socket.on('webrtc_answer', async ({ from, sdp }) => {
-          const pc = this.peers.get(from);
-          if (pc) await pc.setRemoteDescription(new RTCSessionDescription(sdp));
-          this._flushIce(from);
-        });
-
-        this.socket.on('ice_candidate', async ({ from, candidate }) => {
-          const pc = this.peers.get(from);
-          if (pc && pc.remoteDescription) {
-            await pc.addIceCandidate(new RTCIceCandidate(candidate)).catch(() => {});
-          } else {
-            if (!this.pendingIce.has(from)) this.pendingIce.set(from, []);
-            this.pendingIce.get(from).push(candidate);
-          }
-        });
 
         this.socket.on('user_mute_state', ({ userId, muted }) => {
           const u = this.users.find(x => x.id === userId);
@@ -1556,110 +1537,95 @@
     }
 
     // ── WebRTC ─────────────────────────────────────────────────────────────
-    _makePeer(peerId) {
-      // Close any existing peer connection for this peer first (prevents ghost connections)
-      if (this.peers.has(peerId)) {
-        console.log(`[VC] Closing existing peer ${peerId} before creating new one`);
-        this._closePeer(peerId);
+    // ── LIVEKIT ────────────────────────────────────────────────────────────
+    async _connectLiveKit(token, url) {
+      if (this.room) {
+        await this.room.disconnect();
       }
 
-      const pc = new RTCPeerConnection(this.ice);
-      // Use noise-cancelled stream for peers, fallback to raw stream
-      const outStream = this._processedStream || this.stream;
-      if (outStream) {
-        outStream.getTracks().forEach(t => pc.addTrack(t, outStream));
+      this.room = new window.LivekitClient.Room({
+        adaptiveStream: true,
+        dynacast: true,
+        publishDefaults: {
+          audioPreset: { maxBitrate: 128000 },
+          dtx: true,
+          red: true
+        }
+      });
+
+      this.room.on(window.LivekitClient.RoomEvent.TrackSubscribed, (track, publication, participant) => {
+        const element = track.attach();
+        element.dataset.vcPeer = participant.identity;
+        element.setAttribute('playsinline', '');
+        element.setAttribute('webkit-playsinline', '');
+        document.body.appendChild(element);
+        this.audios.set(participant.identity, element);
+        element.volume = this.dnd ? 0 : 1;
+        const u = this.users.find(x => x.id === participant.identity);
+        element.muted = u && u.localMuted ? true : false;
+        this._robustPlay(element, participant.identity);
+      });
+
+      this.room.on(window.LivekitClient.RoomEvent.TrackUnsubscribed, (track, publication, participant) => {
+        track.detach();
+        const element = this.audios.get(participant.identity);
+        if (element) {
+          element.remove();
+          this.audios.delete(participant.identity);
+        }
+      });
+
+      this.room.on(window.LivekitClient.RoomEvent.ActiveSpeakersChanged, (speakers) => {
+        this.users.forEach(u => this._updateAvatar(u.id, false));
+        this._updateAvatar(this.myId, false);
+        speakers.forEach(speaker => this._updateAvatar(speaker.identity, true));
+      });
+
+      this.room.on(window.LivekitClient.RoomEvent.ConnectionQualityChanged, (quality, participant) => {
+        if (this._updatePingIndicator) {
+          this._updatePingIndicator(participant.identity, quality);
+        }
+      });
+
+      try {
+        await this.room.connect(url, token);
+        
+        let krispFilter = null;
+        if (window.LivekitKrisp && window.LivekitKrisp.KrispNoiseFilter) {
+          krispFilter = window.LivekitKrisp.KrispNoiseFilter();
+        }
+
+        const tracks = await window.LivekitClient.createLocalTracks({
+          audio: {
+            ...this._audioConstraints,
+            echoCancellation: true,
+            noiseSuppression: true,
+          },
+          video: false
+        });
+
+        this._localAudioTrack = tracks[0];
+        
+        if (krispFilter) {
+          try {
+            await this._localAudioTrack.setProcessor(krispFilter);
+            console.log('[VC] 🔇 Krisp AI Noise Cancellation active');
+          } catch(e) {
+             console.error("Krisp failed", e);
+          }
+        }
+
+        await this.room.localParticipant.publishTrack(this._localAudioTrack);
+        
+        this.stream = new MediaStream([this._localAudioTrack.mediaStreamTrack]);
+        
+        if (this.muted) {
+          this._localAudioTrack.mute();
+        }
+      } catch (e) {
+        console.error('LiveKit connection failed', e);
+        this._render(this._tplLogin("Error de voz (LiveKit)"));
       }
-      this.peers.set(peerId, pc);
-
-      // Log ICE connection state changes for debugging
-      pc.oniceconnectionstatechange = () => {
-        console.log(`[VC] ICE state for ${peerId}: ${pc.iceConnectionState}`);
-        if (pc.iceConnectionState === 'failed') {
-          console.warn('[VC] ICE failed — attempting restart');
-          pc.restartIce();
-        }
-      };
-
-      pc.onconnectionstatechange = () => {
-        console.log(`[VC] Connection state for ${peerId}: ${pc.connectionState}`);
-      };
-
-      pc.onicegatheringstatechange = () => {
-        console.log(`[VC] ICE gathering for ${peerId}: ${pc.iceGatheringState}`);
-      };
-
-      pc.onicecandidate = ({ candidate }) => {
-        if (candidate && this.socket) {
-          console.log(`[VC] Sending ICE candidate to ${peerId}: ${candidate.type || 'unknown'} ${candidate.protocol || ''}`);
-          this.socket.emit('ice_candidate', { to: peerId, candidate });
-        }
-      };
-
-      pc.ontrack = (event) => {
-        console.log(`[VC] Received remote track from ${peerId}:`, event.track.kind, event.track.readyState);
-        const stream = event.streams[0] || new MediaStream([event.track]);
-        let audio = this.audios.get(peerId);
-        if (!audio) {
-          audio = document.createElement('audio');
-          audio.autoplay = true;
-          audio.playsInline = true;
-          audio.setAttribute('playsinline', '');
-          audio.setAttribute('webkit-playsinline', '');
-          audio.dataset.vcPeer = 'true';
-          // iOS Safari needs the audio element in the DOM
-          document.body.appendChild(audio);
-          this.audios.set(peerId, audio);
-        }
-        audio.srcObject = stream;
-        audio.volume = this.dnd ? 0 : 1;
-        const u = this.users.find(x => x.id === peerId);
-        audio.muted = u && u.localMuted ? true : false;
-        // Robust play with retry — crucial for mobile browsers
-        this._robustPlay(audio, peerId);
-      };
-
-      return pc;
-    }
-
-    _forceHighBitrateSDP(sdp) {
-      if (sdp.includes('useinbandfec=1')) {
-        return sdp.replace(/useinbandfec=1/g, 'useinbandfec=1; stereo=1; sprop-stereo=1; maxaveragebitrate=128000');
-      } else {
-        return sdp.replace(/(a=fmtp:111\s+.*)/g, '$1; stereo=1; sprop-stereo=1; maxaveragebitrate=128000');
-      }
-    }
-
-    async _createOffer(peerId) {
-      const pc = this._makePeer(peerId);
-      const offer = await pc.createOffer();
-      offer.sdp = this._forceHighBitrateSDP(offer.sdp);
-      await pc.setLocalDescription(offer);
-      console.log(`[VC] Sending offer to ${peerId} (HQ Audio)`);
-      this.socket.emit('webrtc_offer', { to: peerId, sdp: pc.localDescription });
-    }
-
-    async _handleOffer(fromId, sdp) {
-      const pc = this._makePeer(fromId);
-      await pc.setRemoteDescription(new RTCSessionDescription(sdp));
-      const answer = await pc.createAnswer();
-      answer.sdp = this._forceHighBitrateSDP(answer.sdp);
-      await pc.setLocalDescription(answer);
-      this.socket.emit('webrtc_answer', { to: fromId, sdp: pc.localDescription });
-      this._flushIce(fromId);
-    }
-
-    _flushIce(peerId) {
-      const pc = this.peers.get(peerId);
-      const queue = this.pendingIce.get(peerId) || [];
-      queue.forEach(c => pc.addIceCandidate(new RTCIceCandidate(c)).catch(() => {}));
-      this.pendingIce.delete(peerId);
-    }
-
-    _closePeer(peerId) {
-      const pc = this.peers.get(peerId);
-      if (pc) { pc.close(); this.peers.delete(peerId); }
-      const audio = this.audios.get(peerId);
-      if (audio) { audio.srcObject = null; audio.remove(); this.audios.delete(peerId); }
     }
 
     // ── MUTE ──────────────────────────────────────────────────────────────

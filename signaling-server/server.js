@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
+const { AccessToken } = require('livekit-server-sdk');
 
 const app = express();
 app.use(cors());
@@ -391,6 +392,31 @@ app.post('/api/password', (req, res) => {
   CHANNEL_PASSWORD = password.trim();
   console.log(`[API] Voice password updated by admin to: ${CHANNEL_PASSWORD}`);
   res.json({ success: true });
+});
+
+// ── LIVEKIT TOKEN ENDPOINT ───────────────────────────────────────────────────
+app.get('/api/livekit-token', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const { participantName } = req.query;
+  
+  if (!participantName) {
+    return res.status(400).json({ error: 'Falta participantName' });
+  }
+
+  // Claves por defecto para evitar crashes en desarrollo si no están configuradas
+  const API_KEY = process.env.LIVEKIT_API_KEY || 'devkey';
+  const API_SECRET = process.env.LIVEKIT_API_SECRET || 'secret';
+  const LK_URL = process.env.LIVEKIT_URL || 'wss://your-livekit-url.livekit.cloud';
+
+  const at = new AccessToken(API_KEY, API_SECRET, {
+    identity: participantName,
+    name: participantName,
+  });
+
+  at.addGrant({ roomJoin: true, room: CHANNEL, canPublish: true, canSubscribe: true });
+
+  const token = at.toJwt();
+  res.json({ token, url: LK_URL });
 });
 
 const PORT = process.env.PORT || 3001;
