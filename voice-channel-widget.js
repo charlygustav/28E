@@ -2298,44 +2298,26 @@
       const errEl = document.getElementById('vc-music-err');
 
       try {
-        let finalUrl = parsed.url;
         let finalTitle = '';
-        let finalType = parsed.type;
-
         if (parsed.type === 'youtube') {
-          // YouTube: just fetch the title
           if (errEl) errEl.innerHTML = `<span class="text-amber-500 flex items-center justify-center gap-1.5"><span class="w-2 h-2 rounded-full border border-amber-500 border-t-transparent animate-spin inline-block"></span> Cargando…</span>`;
           try { finalTitle = await this._fetchMusicTitle(parsed.url, 'youtube'); } catch(e) {}
           finalTitle = finalTitle || 'YouTube Video';
         } else if (parsed.type === 'spotify') {
-          // Spotify: get title from oEmbed, then search YouTube on the client
           if (errEl) errEl.innerHTML = `<span class="text-amber-500 flex items-center justify-center gap-1.5"><span class="w-2 h-2 rounded-full border border-amber-500 border-t-transparent animate-spin inline-block"></span> Obteniendo info…</span>`;
-          
-          let searchQuery = '';
           try {
             const res = await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(parsed.url)}`);
             const data = await res.json();
             const artist = data.author_name || '';
             const title = data.title || 'Spotify Track';
-            searchQuery = artist ? `${title} - ${artist}` : title;
-            finalTitle = searchQuery;
-          } catch(e) { searchQuery = 'Spotify Track'; finalTitle = searchQuery; }
-
-          if (errEl) errEl.innerHTML = `<span class="text-amber-500 flex items-center justify-center gap-1.5"><span class="w-2 h-2 rounded-full border border-amber-500 border-t-transparent animate-spin inline-block"></span> Buscando en YouTube…</span>`;
-
-          // Search YouTube from client using Piped API (CORS-friendly)
-          const ytResult = await this._searchYouTubeClient(searchQuery);
-          if (ytResult) {
-            finalUrl = `https://www.youtube.com/watch?v=${ytResult.id}`;
-            finalType = 'youtube';
-          }
+            finalTitle = artist ? `${title} - ${artist}` : title;
+          } catch(e) { finalTitle = 'Spotify Track'; }
         }
 
-        // Keep indicator until server confirms
-        if (errEl) errEl.innerHTML = `<span class="text-amber-500 flex items-center justify-center gap-1.5"><span class="w-2 h-2 rounded-full border border-amber-500 border-t-transparent animate-spin inline-block"></span> Añadiendo…</span>`;
+        // The server will do the Spotify -> YouTube conversion
+        if (errEl) errEl.innerHTML = `<span class="text-amber-500 flex items-center justify-center gap-1.5"><span class="w-2 h-2 rounded-full border border-amber-500 border-t-transparent animate-spin inline-block"></span> ${parsed.type === 'spotify' ? 'Buscando en YouTube…' : 'Añadiendo…'}</span>`;
 
         if (this.socket) {
-          // Wait for server confirmation before hiding indicator
           const queueHandler = () => {
             if (errEl) errEl.innerHTML = '';
             addBtn.disabled = false;
@@ -2343,10 +2325,10 @@
             addBtn.innerHTML = originalText;
           };
           this.socket.once('music_queue_update', queueHandler);
-          // Timeout fallback in case server doesn't respond
-          setTimeout(() => { this.socket.off('music_queue_update', queueHandler); queueHandler(); }, 15000);
+          // Fallback if server takes too long
+          setTimeout(() => { this.socket.off('music_queue_update', queueHandler); queueHandler(); }, 20000);
 
-          this.socket.emit('music_add', { url: finalUrl, title: finalTitle, type: finalType });
+          this.socket.emit('music_add', { url: parsed.url, title: finalTitle, type: parsed.type });
           this._playSfx('toggleOn', 0.3);
         } else {
           if (errEl) errEl.innerHTML = '';
@@ -2360,50 +2342,6 @@
         addBtn.disabled = false;
         input.disabled = false;
         addBtn.innerHTML = originalText;
-      }
-    }
-
-    async _searchYouTubeClient(query) {
-      const q = encodeURIComponent(query + ' audio');
-      
-      // Search via multiple APIs in PARALLEL — fastest response wins
-      const searches = [
-        // Piped via Vercel proxy (ad-blocker safe)
-        fetch(`/yt-search/piped/search?q=${q}&filter=videos`, { signal: AbortSignal.timeout(5000) })
-          .then(r => r.json())
-          .then(data => {
-            if (data.items?.length > 0) {
-              const v = data.items[0];
-              return { id: v.url?.replace('/watch?v=', '') || '', title: v.title };
-            }
-            throw new Error('no results');
-          }),
-        // Invidious via Vercel proxy (ad-blocker safe)
-        fetch(`/yt-search/inv/search?q=${q}&type=video`, { signal: AbortSignal.timeout(5000) })
-          .then(r => r.json())
-          .then(data => {
-            if (Array.isArray(data) && data.length > 0) {
-              return { id: data[0].videoId, title: data[0].title };
-            }
-            throw new Error('no results');
-          }),
-        // Direct Piped fallback
-        fetch(`https://pipedapi.kavin.rocks/search?q=${q}&filter=videos`, { signal: AbortSignal.timeout(5000) })
-          .then(r => r.json())
-          .then(data => {
-            if (data.items?.length > 0) {
-              const v = data.items[0];
-              return { id: v.url?.replace('/watch?v=', '') || '', title: v.title };
-            }
-            throw new Error('no results');
-          })
-      ];
-
-      try {
-        return await Promise.any(searches);
-      } catch(e) {
-        console.error('[VC] All YouTube searches failed:', e);
-        return null;
       }
     }
 
