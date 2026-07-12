@@ -15,6 +15,14 @@
       "destination": "https://two8e-signaling.onrender.com/:path*"
     },
     {
+      "source": "/yt-search/piped/:path*",
+      "destination": "https://pipedapi.kavin.rocks/:path*"
+    },
+    {
+      "source": "/yt-search/inv/:path*",
+      "destination": "https://inv.nadeko.net/api/v1/:path*"
+    },
+    {
       "source": "/__/:path*",
       "destination": "https://yaire-591ca.firebaseapp.com/__/:path*"
     }

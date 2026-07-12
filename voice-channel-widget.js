@@ -2364,23 +2364,47 @@
     }
 
     async _searchYouTubeClient(query) {
-      // Try multiple Piped instances for reliability
-      const pipedInstances = [
-        'https://pipedapi.kavin.rocks',
-        'https://pipedapi.adminforge.de',
-        'https://api.piped.yt'
+      const q = encodeURIComponent(query + ' audio');
+      
+      // Search via multiple APIs in PARALLEL — fastest response wins
+      const searches = [
+        // Piped via Vercel proxy (ad-blocker safe)
+        fetch(`/yt-search/piped/search?q=${q}&filter=videos`, { signal: AbortSignal.timeout(5000) })
+          .then(r => r.json())
+          .then(data => {
+            if (data.items?.length > 0) {
+              const v = data.items[0];
+              return { id: v.url?.replace('/watch?v=', '') || '', title: v.title };
+            }
+            throw new Error('no results');
+          }),
+        // Invidious via Vercel proxy (ad-blocker safe)
+        fetch(`/yt-search/inv/search?q=${q}&type=video`, { signal: AbortSignal.timeout(5000) })
+          .then(r => r.json())
+          .then(data => {
+            if (Array.isArray(data) && data.length > 0) {
+              return { id: data[0].videoId, title: data[0].title };
+            }
+            throw new Error('no results');
+          }),
+        // Direct Piped fallback
+        fetch(`https://pipedapi.kavin.rocks/search?q=${q}&filter=videos`, { signal: AbortSignal.timeout(5000) })
+          .then(r => r.json())
+          .then(data => {
+            if (data.items?.length > 0) {
+              const v = data.items[0];
+              return { id: v.url?.replace('/watch?v=', '') || '', title: v.title };
+            }
+            throw new Error('no results');
+          })
       ];
-      for (const instance of pipedInstances) {
-        try {
-          const res = await fetch(`${instance}/search?q=${encodeURIComponent(query + ' audio')}&filter=videos`, { signal: AbortSignal.timeout(8000) });
-          const data = await res.json();
-          if (data.items?.length > 0) {
-            const video = data.items[0];
-            return { id: video.url?.replace('/watch?v=', '') || '', title: video.title };
-          }
-        } catch(e) { continue; }
+
+      try {
+        return await Promise.any(searches);
+      } catch(e) {
+        console.error('[VC] All YouTube searches failed:', e);
+        return null;
       }
-      return null;
     }
 
     _parseMusicUrl(url) {
