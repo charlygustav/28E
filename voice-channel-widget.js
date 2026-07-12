@@ -1100,7 +1100,7 @@
       
       if (document.getElementById('vc-join')) {
         const updateConnCount = () => {
-          fetch(SIGNALING_URL + '/health').then(r => r.json()).then(data => {
+          fetch('/vc-api/health').then(r => r.json()).then(data => {
             const cnt = document.getElementById('vc-conn-count');
             if (cnt) {
               if (data.users === 0) {

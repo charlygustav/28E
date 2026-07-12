@@ -11,6 +11,10 @@
   ],
   "rewrites": [
     {
+      "source": "/vc-api/:path*",
+      "destination": "https://two8e-signaling.onrender.com/:path*"
+    },
+    {
       "source": "/__/:path*",
       "destination": "https://yaire-591ca.firebaseapp.com/__/:path*"
     }
