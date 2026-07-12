@@ -4249,11 +4249,7 @@
                         class="menu-link-icon bg-purple-50 dark:bg-purple-900/20 shadow-[0_0_12px_rgba(168,85,247,0.3)]">🎮</span>
                     <span data-i18n="menu_games">Minijuegos</span>
                 </a>
-                <a href="#ruleta" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400 relative">
-                    <span
-                        class="menu-link-icon bg-red-50 dark:bg-red-900/20 shadow-[0_0_12px_rgba(239,68,68,0.3)]">🎰</span>
-                    <span>Ruleta de Citas</span>
-                </a>
+
                 <a href="#colores-yaire" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
                     <span
                         class="menu-link-icon bg-rose-50 dark:bg-rose-900/20 shadow-[0_0_12px_rgba(244,63,94,0.3)]">🎨</span>
@@ -7518,87 +7514,6 @@
 
 
 
-        <!-- Ruleta de Citas -->
-        <section id="ruleta"
-            class="py-24 border-t border-zinc-200 dark:border-zinc-800 scroll-mt-20 reveal cv-section relative overflow-hidden">
-            <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center relative z-10">
-                <div class="text-center mb-16 px-4">
-                    <h2 class="text-sm font-bold tracking-widest uppercase text-tulip-500 mb-4">Experiencias</h2>
-                    <h3 class="text-3xl md:text-5xl font-extrabold mb-4 text-zinc-900 dark:text-white">Ruleta de Citas
-                    </h3>
-                    <p class="text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto text-lg font-light">Nuestra próxima
-                        experiencia a distancia juntos será...</p>
-                </div>
-
-                <!-- The Machine Container -->
-                <div
-                    class="max-w-lg mx-auto relative p-2 rounded-[2.5rem] bg-gradient-to-b from-zinc-300 to-zinc-400 dark:from-zinc-800 dark:to-zinc-950 shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                    <!-- Inner Bezel -->
-                    <div
-                        class="relative bg-zinc-100 dark:bg-zinc-900 rounded-[2.25rem] p-6 shadow-[inset_0_10px_20px_rgba(0,0,0,0.5)] border border-zinc-400/50 dark:border-black/50">
-
-                        <!-- Machine Details (Screws/Lights) -->
-                        <div
-                            class="absolute top-4 left-6 w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444] animate-[pulse_2s_ease-in-out_infinite]">
-                        </div>
-                        <div class="absolute top-4 right-6 w-2 h-2 rounded-full bg-brand-500 shadow-[0_0_8px_#ec4899]">
-                        </div>
-
-                        <!-- The Slot Window -->
-                        <div
-                            class="relative w-full h-32 bg-black rounded-xl overflow-hidden shadow-[inset_0_0_30px_rgba(0,0,0,1)] border-2 border-zinc-700/50 dark:border-zinc-800 mt-4 mb-8">
-                            <!-- Glass reflection -->
-                            <div
-                                class="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 pointer-events-none z-30">
-                            </div>
-
-                            <!-- Fading top/bottom gradients to simulate curvature -->
-                            <div
-                                class="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-black via-black/80 to-transparent pointer-events-none z-20">
-                            </div>
-                            <div
-                                class="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none z-20">
-                            </div>
-
-                            <!-- The neon selector line (Target area) -->
-                            <div
-                                class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[48px] border-y-2 border-brand-500/80 bg-brand-500/10 pointer-events-none z-10 shadow-[0_0_15px_rgba(236,72,153,0.5),inset_0_0_10px_rgba(236,72,153,0.2)]">
-                                <!-- Left/Right indicator arrows -->
-                                <div
-                                    class="absolute -left-1 top-1/2 -translate-y-1/2 w-0 h-0 border-y-[6px] border-y-transparent border-l-[8px] border-l-brand-500 shadow-[0_0_5px_#ec4899]">
-                                </div>
-                                <div
-                                    class="absolute -right-1 top-1/2 -translate-y-1/2 w-0 h-0 border-y-[6px] border-y-transparent border-r-[8px] border-r-brand-500 shadow-[0_0_5px_#ec4899]">
-                                </div>
-                            </div>
-
-                            <!-- Numbers/Text container -->
-                            <div id="roulette-slot"
-                                class="absolute left-0 right-0 flex flex-col items-center transition-transform"
-                                style="transform: translateY(0px); top: 2.5rem;">
-                                <!-- JS will populate options here -->
-                            </div>
-                        </div>
-
-                        <!-- The Lever/Button -->
-                        <button id="roulette-spin-btn" onclick="spinRoulette()"
-                            class="w-full relative group outline-none">
-                            <div
-                                class="absolute -inset-1 bg-gradient-to-r from-brand-500 via-rose-500 to-orange-500 rounded-2xl blur-md opacity-70 group-hover:opacity-100 transition duration-300">
-                            </div>
-                            <div
-                                class="relative px-8 py-4 bg-gradient-to-b from-brand-500 to-rose-600 border-t border-white/20 text-white font-black text-xl rounded-xl shadow-[0_6px_0_#9f1239,0_15px_20px_rgba(0,0,0,0.4)] group-active:shadow-[0_0px_0_#9f1239,0_5px_10px_rgba(0,0,0,0.4)] group-active:translate-y-[6px] transition-all flex items-center justify-center gap-3 tracking-wide uppercase">
-                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path
-                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-2h2v2zm0-4H9V8h2v4zm4 4h-2v-2h2v2zm0-4h-2V8h2v4z" />
-                                </svg>
-                                <span id="roulette-spin-text">Tirar de la Palanca</span>
-                            </div>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- Promesas -->
         <section id="promesas"
@@ -14532,7 +14447,7 @@
             document.querySelectorAll('.cv-section').forEach(el => animPauseObs.observe(el));
 
             // Scroll spy del menú — usa la sección más centrada en pantalla
-            const sectionIds = ['hero', 'historia', 'nombre', 'tulipanes', 'guia-colores-tulipan', 'quiz-girasol', 'distancia', 'comida', 'universo', 'galeria', 'minijuegos', 'ruleta', 'promesas', 'guestbook', 'colores-yaire', 'memorial', 'hype', 'estadisticas', 'top5yaire', 'enigma-28', 'tu-cancion', 'secreto'];
+            const sectionIds = ['hero', 'historia', 'nombre', 'tulipanes', 'guia-colores-tulipan', 'quiz-girasol', 'distancia', 'comida', 'universo', 'galeria', 'minijuegos', 'promesas', 'guestbook', 'colores-yaire', 'memorial', 'hype', 'estadisticas', 'top5yaire', 'enigma-28', 'tu-cancion', 'secreto'];
 
             // Cache: elementos del DOM resueltos una sola vez — evitar getElementById en cada tick de scroll
             const _sectionEls = {};
@@ -18502,7 +18417,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     "universo": "Universo",
                     "galeria": "Galería de Arte",
                     "minijuegos": "Zona de Juegos",
-                    "ruleta": "Ruleta de Citas",
                     "promesas": "Mis Promesas",
                     "guestbook": "Muro de Dedicatorias",
                     "colores-yaire": "Colores de Yaire",
@@ -18843,107 +18757,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    <!-- ROULETTE LOGIC -->
-    <script>
-        const rouletteIdeas = [
-            "🍕 Cena Sorpresa (UberEats cruzado)",
-            "🍿 Noche de Cine Sincronizada",
-            "🎮 Noche Gamer Juntos",
-            "✈️ Turismo Virtual por Europa",
-            "🎵 Batalla Musical de la Radio",
-            "🍷 Cita de Gala en Llamada",
-            "🛌 Pijamada en Llamada",
-            "❓ Test de Preguntas Profundas",
-            "🎨 Noche de Dibujar Juntos",
-            "☕ Café Virtual por la Mañana"
-        ];
 
-
-
-        let isSpinningRoulette = false;
-        let lastWinnerIndex = 0;
-
-        function initRouletteSlot() {
-            const slot = document.getElementById('roulette-slot');
-            slot.innerHTML = '';
-            const longList = [];
-            for (let i = 0; i < 10; i++) {
-                longList.push(...rouletteIdeas);
-            }
-
-            longList.forEach(idea => {
-                const div = document.createElement('div');
-                div.className = 'h-[48px] flex items-center justify-center text-lg md:text-xl font-bold text-zinc-100 whitespace-nowrap drop-shadow-[0_2px_4px_rgba(0,0,0,1)]';
-                div.innerText = idea;
-                slot.appendChild(div);
-            });
-
-            if (!isSpinningRoulette && window.gsap) {
-                gsap.set(slot, { y: 0 });
-                lastWinnerIndex = 0;
-            }
-        }
-
-        window.spinRoulette = function () {
-            if (isSpinningRoulette || !window.gsap) return;
-            isSpinningRoulette = true;
-
-            const slot = document.getElementById('roulette-slot');
-            const itemHeight = 48;
-            const totalItems = rouletteIdeas.length;
-
-            // Instantly snap to the equivalent item near the top to allow infinite spinning
-            gsap.set(slot, { y: -(lastWinnerIndex * itemHeight) });
-
-            const winnerIndex = Math.floor(Math.random() * totalItems);
-            lastWinnerIndex = winnerIndex;
-
-            const targetItemIndex = (20 * totalItems) + winnerIndex;
-
-            const targetY = -(targetItemIndex * itemHeight);
-
-            const btn = document.getElementById('roulette-spin-btn');
-            const btnText = document.getElementById('roulette-spin-text');
-            btnText.innerText = 'Girando...';
-            btn.style.opacity = '0.5';
-            btn.style.pointerEvents = 'none';
-
-            gsap.to(slot, {
-                y: targetY,
-                duration: 6,
-                ease: "power4.out",
-                onComplete: () => {
-                    isSpinningRoulette = false;
-                    btnText.innerText = 'Volver a Girar';
-                    btn.style.opacity = '1';
-                    btn.style.pointerEvents = 'auto';
-                    try {
-                        if (window.__loadConfetti) {
-                            window.__loadConfetti().then(function (confetti) {
-                                if (!confetti) return;
-                                confetti({
-                                particleCount: 150,
-                                spread: 80,
-                                origin: { y: 0.6 },
-                                colors: ['#ec4899', '#8b5cf6', '#f43f5e', '#fbbf24'],
-                                zIndex: 9999
-                                });
-                            }).catch(function () { });
-                        }
-                    } catch (e) { }
-
-                    try {
-                        const audio = new Audio('/api/tts?text=' + encodeURIComponent("Su cita de hoy será: " + rouletteIdeas[winnerIndex]));
-                        audio.play().catch(e => console.log(e));
-                    } catch (e) { }
-                }
-            });
-        };
-
-        document.addEventListener("DOMContentLoaded", () => {
-            initRouletteSlot();
-        });
-    </script>
 </body>
 
 </html>
