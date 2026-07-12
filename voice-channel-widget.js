@@ -2293,10 +2293,17 @@
       addBtn.innerHTML = `<div class="w-3 h-3 rounded-full border-[2px] border-black border-t-transparent animate-spin inline-block align-middle"></div>`;
       addBtn.disabled = true;
       input.disabled = true;
+
+      // Show searching indicator
+      const errEl = document.getElementById('vc-music-err');
+      if (errEl) {
+        errEl.innerHTML = `<span class="text-amber-500 flex items-center justify-center gap-1.5"><span class="w-2 h-2 rounded-full border border-amber-500 border-t-transparent animate-spin inline-block"></span> ${parsed.type === 'spotify' ? 'Buscando en YouTube…' : 'Cargando…'}</span>`;
+      }
       
       let title = parsed.type === 'youtube' ? 'YouTube Video' : 'Spotify Track';
       try { title = await this._fetchMusicTitle(parsed.url, parsed.type); } catch(e) {}
       
+      if (errEl) errEl.innerHTML = '';
       input.value = '';
       input.disabled = false;
       addBtn.disabled = false;
