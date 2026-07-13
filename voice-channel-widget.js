@@ -538,6 +538,7 @@
           <span id="vc-bar-sub" class="text-[10px] text-white/50 font-medium leading-none">${_t('bar_conn').split(' · ')[1]}</span>
         </div>
         <div class="w-[1px] h-6 bg-white/10 mx-1"></div>
+        <div id="vc-bar-avatars" class="flex items-center -space-x-1.5 mx-1 hidden"></div>
         <div class="flex items-center px-1">
           <span id="vc-bar-timer" class="text-white font-mono text-[13px] font-bold tabular-nums tracking-wide">00:00</span>
         </div>
@@ -838,8 +839,9 @@
             <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold transition-all relative ${isMe ? 'bg-amber-500/20 text-amber-500 border-2 border-transparent' : 'bg-pink-500/20 text-pink-500 border-2 border-transparent'} vc-av" id="vc-av-${u.id}">
               ${avatarHtml}
             </div>
-            <div class="flex-1 min-w-0">
+            <div class="flex-1 min-w-0 flex items-center gap-2">
               <div class="text-white text-sm font-medium truncate">${u.displayName} ${isMe ? `<span class="text-white/30 text-[10px] ml-1 px-1.5 py-0.5 rounded-md bg-white/10">${_t('tag_you')}</span>` : ''}</div>
+              <div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.5)] transition-colors duration-300" id="vc-ping-${u.id}" title="Conexión excelente"></div>
             </div>
             <div class="flex items-center gap-2 pr-1 opacity-100 vc-icons-container">
                ${bellIcon}${micIcon}
@@ -1091,6 +1093,63 @@
           existingMic.title = u.localMuted ? 'Silenciado localmente' : 'Silenciado';
         }
       });
+      
+      this._updateBarAvatars();
+    }
+
+    _updatePingIndicator(userId, quality) {
+      const pingDot = document.getElementById(`vc-ping-${userId}`);
+      if (!pingDot) return;
+      if (quality === 'excellent' || quality === window.LivekitClient?.ConnectionQuality?.Excellent) {
+        pingDot.className = 'w-2 h-2 rounded-full bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.5)] transition-colors duration-300';
+        pingDot.title = 'Conexión excelente';
+      } else if (quality === 'good' || quality === window.LivekitClient?.ConnectionQuality?.Good) {
+        pingDot.className = 'w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_5px_rgba(245,158,11,0.5)] transition-colors duration-300';
+        pingDot.title = 'Conexión inestable';
+      } else {
+        pingDot.className = 'w-2 h-2 rounded-full bg-red-500 shadow-[0_0_5px_rgba(239,68,68,0.5)] transition-colors duration-300';
+        pingDot.title = 'Conexión mala';
+      }
+    }
+
+    _updateBarAvatars() {
+      const avatarsContainer = document.getElementById('vc-bar-avatars');
+      if (!avatarsContainer) return;
+
+      if (!this.connected) {
+        avatarsContainer.classList.add('hidden');
+        avatarsContainer.innerHTML = '';
+        return;
+      }
+
+      avatarsContainer.classList.remove('hidden');
+      const maxToShow = 4;
+      const displayUsers = this.users.slice(0, maxToShow);
+      const extraCount = Math.max(0, this.users.length - maxToShow);
+
+      let html = displayUsers.map(u => {
+        const isMe = u.id === this.myId;
+        const initials = u.displayName.slice(0, 2).toUpperCase();
+        const avatarHtml = (u.photoURL || (isMe && window.yaireCurrentUser?.photoURL))
+          ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" class="w-full h-full rounded-full object-cover" />`
+          : initials;
+
+        return `
+          <div id="vc-bar-av-${u.id}" class="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold bg-zinc-800 text-white border border-zinc-900 shadow-sm relative transition-all duration-300 overflow-hidden z-10" title="${u.displayName}">
+            ${avatarHtml}
+          </div>
+        `;
+      }).join('');
+
+      if (extraCount > 0) {
+        html += `
+          <div class="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold bg-zinc-800 text-white border border-zinc-900 shadow-sm z-0 relative">
+            +${extraCount}
+          </div>
+        `;
+      }
+
+      avatarsContainer.innerHTML = html;
     }
 
     _render(tpl) {
@@ -2690,6 +2749,15 @@
     _updateAvatar(userId, speaking) {
       const el = document.getElementById(`vc-av-${userId}`);
       if (el) el.classList.toggle('speaking', speaking);
+      
+      const barAv = document.getElementById(`vc-bar-av-${userId}`);
+      if (barAv) {
+        if (speaking) {
+          barAv.classList.add('ring-2', 'ring-green-400', 'scale-110', 'z-20');
+        } else {
+          barAv.classList.remove('ring-2', 'ring-green-400', 'scale-110', 'z-20');
+        }
+      }
       this._updateBarSpeakingState();
     }
 
