@@ -3618,7 +3618,7 @@
         <!-- HUD Corner 1: Top Left -->
         <div id="loader-logo" class="loader-corner-tl">
             <div style="display:flex;flex-direction:column;gap:3px;">
-                <span style="font-weight:900;font-size:1.2rem;letter-spacing:-0.05em;color:transparent;background-clip:text;-webkit-background-clip:text;background-image:linear-gradient(90deg, #f59e0b, #fff);line-height:1;">MEDIO AÑO A TU LADO</span>
+                <span style="font-weight:900;font-size:1.5rem;letter-spacing:-0.05em;color:transparent;background-clip:text;-webkit-background-clip:text;background-image:linear-gradient(90deg, #f59e0b, #f97316);line-height:1;">28E</span>
                 <span class="loader-subtext-yellow">Especial Medio Año</span>
                 <span class="loader-subtext-mono">18.4861° N, 69.9312° W</span>
             </div>
@@ -3669,9 +3669,8 @@
                 <div class="loader-ripple-ring"></div>
                 <div class="loader-ripple-ring"></div>
 
-                <!-- Central Rotating Sphere with Trophy -->
-                <div class="loader-rotating-sphere" style="display:flex;align-items:center;justify-content:center;font-size:3.5rem;background:linear-gradient(135deg, rgba(245,158,11,0.1), rgba(236,72,153,0.1));">
-                    <span style="display:inline-block; animation: ldHeartbeat 1.5s ease-in-out infinite;">🏆</span>
+                <!-- Central Rotating Sphere -->
+                <div class="loader-rotating-sphere" style="display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg, rgba(245,158,11,0.2), rgba(236,72,153,0.2)); animation: ldHeartbeat 2s ease-in-out infinite;">
                     <div style="position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 35px rgba(0,0,0,0.85);pointer-events:none;"></div>
                 </div>
             </div>
@@ -13742,17 +13741,17 @@
 
             // Entrance is handled purely by CSS animations — no GSAP dependency
 
-            // Fake counter 0→90 over ~1.5s so progress feels alive
+            // Fake counter 0→90 over ~3s so progress feels alive
             let _ldFakeVal = 0;
             const _ldFakeInterval = setInterval(() => {
                 if (_ldFakeVal < 90) {
-                    _ldFakeVal = Math.min(90, _ldFakeVal + 5);
+                    _ldFakeVal = Math.min(90, _ldFakeVal + 1);
                     if (percentText && !loaderEscondido) percentText.textContent = Math.floor(_ldFakeVal) + '%';
                     if (ringFill) ringFill.style.strokeDashoffset = ringCirc * (1 - _ldFakeVal / 100);
                 } else {
                     clearInterval(_ldFakeInterval);
                 }
-            }, 50);
+            }, 35);
 
             // ── Messages ──
             const _ld = (typeof dictionary !== 'undefined' && dictionary[typeof currentLang !== 'undefined' ? currentLang : 'es'])
@@ -13834,13 +13833,13 @@
 
             addResource(document.fonts.ready, 2);
 
-            // Absolute safety net — 800ms max after DOMContentLoaded (prevents font hang)
+            // Absolute safety net — 3.5s max after DOMContentLoaded
             const fallback = setTimeout(() => {
                 if (!loaderEscondido) {
                     console.warn('Loader: tiempo límite alcanzado. Forzando entrada.');
                     setProgress(100);
                 }
-            }, 800);
+            }, 3500);
 
             // ── Progress setter ──
             function setProgress(pct) {
@@ -14014,12 +14013,12 @@
 
             // Kick off — wait for all tracked resources
             logDebug('Iniciando fake loader interval');
-            // Min 1.5s - blocks exit until elapsed, then triggers final setProgress(100)
+            // Min 3.5s - blocks exit until elapsed, then triggers final setProgress(100)
             setTimeout(() => {
-                logDebug('Min elapsed timeout (800ms) finalizado');
+                logDebug('Min elapsed timeout (3.5s) finalizado');
                 _loaderMinElapsed = true;
                 setProgress(100); // now allowed to exit
-            }, 800);
+            }, 3500);
             // Resources still update the bar visually (but can't exit before 1.5s)
             Promise.all(resources).then(() => logDebug('Promise.all(resources) finalizado')).catch(() => { logDebug('Promise.all error'); });
 
