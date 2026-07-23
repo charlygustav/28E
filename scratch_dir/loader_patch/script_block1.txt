@@ -1,0 +1,182 @@
+            // ── GSAP Entrance Animation ──────────────────────────────────────
+            if (typeof gsap !== 'undefined') {
+                const entranceTl = gsap.timeline({ defaults: { ease: 'power3.out', force3D: true } });
+
+                // Set initial states
+                gsap.set(['.loader-grid', '.loader-scanlines', '.loader-ambient'], { opacity: 0 });
+                gsap.set('.loader-orb-assembly', { opacity: 0, scale: 0.5 });
+                gsap.set('.loader-orbit', { opacity: 0, scale: 0.8 });
+                gsap.set('.loader-orb', { opacity: 0, scale: 0 });
+                gsap.set('.loader-letter', { opacity: 0, y: 20, rotationX: 90 });
+                gsap.set('.loader-subtext-yellow, .loader-subtext-mono', { opacity: 0, x: -10 });
+                gsap.set('.loader-corner-bl', { opacity: 0, y: 15 });
+                gsap.set('.loader-corner-br', { opacity: 0, y: 15 });
+                gsap.set('.loader-corner-tr', { opacity: 0, x: 15 });
+
+                // Build entrance timeline
+                entranceTl
+                    // Phase 1: Background atmosphere
+                    .to('.loader-grid', { opacity: 1, duration: 1.2, ease: 'power2.inOut' }, 0)
+                    .to('.loader-scanlines', { opacity: 1, duration: 0.8 }, 0.2)
+                    .to('.loader-ambient', { opacity: 1, duration: 1, ease: 'power2.inOut' }, 0.1)
+                    // Phase 2: Orb assembly entrance
+                    .to('.loader-orb-assembly', { opacity: 1, scale: 1, duration: 1, ease: 'back.out(1.4)' }, 0.3)
+                    .to('.loader-orb', { opacity: 1, scale: 1, duration: 0.8, ease: 'elastic.out(1, 0.5)' }, 0.5)
+                    .to('.loader-orbit', { opacity: 1, scale: 1, duration: 0.6, stagger: 0.15 }, 0.6)
+                    // Phase 3: Text reveals
+                    .to('.loader-letter', {
+                        opacity: 1, y: 0, rotationX: 0,
+                        duration: 0.5, stagger: 0.1, ease: 'back.out(2)'
+                    }, 0.7)
+                    .to('.loader-subtext-yellow', { opacity: 1, x: 0, duration: 0.4 }, 0.95)
+                    .to('.loader-subtext-mono', { opacity: 1, x: 0, duration: 0.4 }, 1.05)
+                    // Phase 4: HUD corners
+                    .to('.loader-corner-tr', { opacity: 1, x: 0, duration: 0.5 }, 0.9)
+                    .to('.loader-corner-bl', { opacity: 1, y: 0, duration: 0.5 }, 0.8)
+                    .to('.loader-corner-br', { opacity: 1, y: 0, duration: 0.5 }, 0.85);
+
+                // ── Continuous Animations ──
+                // Orbital ring rotations
+                gsap.to('.loader-orbit-1', {
+                    rotation: 360, duration: 8, repeat: -1, ease: 'none',
+                    transformOrigin: 'center center'
+                });
+                gsap.to('.loader-orbit-2', {
+                    rotation: -360, duration: 12, repeat: -1, ease: 'none',
+                    transformOrigin: 'center center'
+                });
+
+                // Orb core glow pulse
+                gsap.to('.loader-orb-core', {
+                    boxShadow: '0 0 80px rgba(245,158,11,0.35), 0 0 150px rgba(236,72,153,0.15), inset 0 0 30px rgba(0,0,0,0.7)',
+                    duration: 2, repeat: -1, yoyo: true, ease: 'sine.inOut'
+                });
+
+                // Ambient glow breathing
+                gsap.to('.loader-ambient', {
+                    scale: 1.15, opacity: 0.8, duration: 3, repeat: -1, yoyo: true, ease: 'sine.inOut'
+                });
+
+                // Orbital dots — animated around the orb via trigonometry
+                const orbitalDots = document.querySelectorAll('.loader-orbital-dot');
+                orbitalDots.forEach((dot, i) => {
+                    const radius = 70 + i * 12;
+                    const speed = 3 + i * 1.5;
+                    const startAngle = i * (Math.PI * 2 / 3);
+                    gsap.set(dot, { opacity: 0 });
+                    gsap.to(dot, { opacity: 0.8, duration: 0.5, delay: 1 + i * 0.2 });
+                    const proxy = { angle: startAngle };
+                    gsap.to(proxy, {
+                        angle: startAngle + Math.PI * 2,
+                        duration: speed, repeat: -1, ease: 'none',
+                        onUpdate: function() {
+                            const wrapper = document.querySelector('.loader-orb-assembly');
+                            if (!wrapper) return;
+                            const cx = wrapper.offsetWidth / 2;
+                            const cy = wrapper.offsetHeight / 2;
+                            dot.style.left = (cx + Math.cos(proxy.angle) * radius - 1.5) + 'px';
+                            dot.style.top = (cy + Math.sin(proxy.angle) * radius - 1.5) + 'px';
+                        }
+                    });
+                });
+
+                // Floating particles — dynamically created
+                const particlesContainer = document.getElementById('loader-particles');
+                if (particlesContainer && !window.__PERF_LITE__) {
+                    for (let i = 0; i < 15; i++) {
+                        const p = document.createElement('div');
+                        p.className = 'loader-particle';
+                        const size = gsap.utils.random(1.5, 4);
+                        const isGold = Math.random() > 0.4;
+                        p.style.width = size + 'px';
+                        p.style.height = size + 'px';
+                        p.style.background = isGold
+                            ? 'rgba(245,158,11,' + gsap.utils.random(0.3, 0.7) + ')'
+                            : 'rgba(236,72,153,' + gsap.utils.random(0.2, 0.5) + ')';
+                        p.style.left = gsap.utils.random(15, 85) + '%';
+                        p.style.top = gsap.utils.random(25, 75) + '%';
+                        p.style.boxShadow = '0 0 ' + (size * 2) + 'px ' +
+                            (isGold ? 'rgba(245,158,11,0.4)' : 'rgba(236,72,153,0.3)');
+                        particlesContainer.appendChild(p);
+                        gsap.set(p, { opacity: 0, scale: 0 });
+                        gsap.to(p, {
+                            opacity: gsap.utils.random(0.2, 0.6), scale: 1,
+                            duration: gsap.utils.random(0.5, 1.2),
+                            delay: gsap.utils.random(0.5, 2), ease: 'power2.out'
+                        });
+                        gsap.to(p, {
+                            x: gsap.utils.random(-40, 40), y: gsap.utils.random(-60, -10),
+                            duration: gsap.utils.random(4, 8), repeat: -1, yoyo: true,
+                            ease: 'sine.inOut', delay: gsap.utils.random(0, 2)
+                        });
+                    }
+                }
+            }
+
+            // Fake counter 0→90 over ~1.5s so progress feels alive
+            let _ldFakeVal = 0;
+            const _ldFakeInterval = setInterval(() => {
+                if (_ldFakeVal < 90) {
+                    _ldFakeVal = Math.min(90, _ldFakeVal + 5);
+                    if (percentText && !loaderEscondido) percentText.textContent = Math.floor(_ldFakeVal) + '%';
+                    if (ringFill) ringFill.style.strokeDashoffset = ringCirc * (1 - _ldFakeVal / 100);
+                } else {
+                    clearInterval(_ldFakeInterval);
+                }
+            }, 50);
+
+            // ── Messages ──
+            const _ld = (typeof dictionary !== 'undefined' && dictionary[typeof currentLang !== 'undefined' ? currentLang : 'es'])
+                ? dictionary[typeof currentLang !== 'undefined' ? currentLang : 'es'] : {};
+            const loaderMessages = [
+                _ld.loader_msg1 || 'Preparando nuestro universo...',
+                _ld.loader_msg2 || 'Cargando recuerdos...',
+                _ld.loader_msg3 || 'Pintando tulipanes...',
+                _ld.loader_msg4 || 'Conectando corazones...',
+                _ld.loader_msg5 || 'Casi listo...'
+            ];
+            let msgIndex = 0;
+            let loaderMsgInterval = null;
+            if (loaderMsg) {
+                if (typeof gsap !== 'undefined') {
+                    gsap.set(loaderMsg, { opacity: 0, y: 10 });
+                    loaderMsg.textContent = loaderMessages[0];
+                    gsap.to(loaderMsg, { opacity: 1, y: 0, duration: 0.5, delay: 0.8, ease: 'power2.out' });
+                } else {
+                    loaderMsg.style.transition = 'none';
+                    loaderMsg.style.opacity = '0';
+                    loaderMsg.style.transform = 'translateY(10px)';
+                    loaderMsg.textContent = loaderMessages[0];
+                    requestAnimationFrame(() => requestAnimationFrame(() => {
+                        loaderMsg.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+                        loaderMsg.style.opacity = '1';
+                        loaderMsg.style.transform = 'translateY(0)';
+                    }));
+                }
+                setTimeout(() => {
+                    loaderMsgInterval = setInterval(() => {
+                        msgIndex = (msgIndex + 1) % loaderMessages.length;
+                        if (typeof gsap !== 'undefined') {
+                            gsap.to(loaderMsg, {
+                                opacity: 0, y: -8, duration: 0.2, ease: 'power2.in',
+                                onComplete: () => {
+                                    loaderMsg.textContent = loaderMessages[msgIndex];
+                                    gsap.fromTo(loaderMsg,
+                                        { opacity: 0, y: 8 },
+                                        { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }
+                                    );
+                                }
+                            });
+                        } else {
+                            loaderMsg.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+                            loaderMsg.style.opacity = '0';
+                            loaderMsg.style.transform = 'translateY(6px)';
+                            setTimeout(() => {
+                                loaderMsg.textContent = loaderMessages[msgIndex];
+                                loaderMsg.style.opacity = '1';
+                                loaderMsg.style.transform = 'translateY(0)';
+                            }, 200);
+                        }
+                    }, 1000);
+                }, 1200);
+            }

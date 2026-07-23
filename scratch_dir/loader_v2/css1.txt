@@ -1,0 +1,50 @@
+        /* ═══ LOADER — BREATH ═══ */
+        #loader {
+            position: fixed !important;
+            inset: 0 !important;
+            background: #030304 !important;
+            z-index: 200 !important;
+            overflow: hidden !important;
+            will-change: transform, opacity !important;
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+
+        /* Subtle ambient glow */
+        .loader-ambient {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(245,158,11,0.04) 0%, rgba(236,72,153,0.02) 50%, transparent 70%);
+            pointer-events: none;
+            border-radius: 50%;
+            filter: blur(40px);
+        }
+
+        /* Micro particles container */
+        #loader-particles {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .loader-particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            will-change: transform, opacity;
+        }
+
+        .loader-hidden {
+            opacity: 0 !important;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }

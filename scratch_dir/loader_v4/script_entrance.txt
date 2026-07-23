@@ -1,0 +1,82 @@
+            const percentText = document.getElementById('loader-percent-v4');
+            const progressBlocks = document.querySelectorAll('.p-block');
+            const loaderEl = document.getElementById('loader');
+            const sceneEl = document.getElementById('loader-3d-scene');
+
+            // ── GSAP Entrance & Interactions — Interactive Glass Engine ──
+            if (typeof gsap !== 'undefined') {
+                const entranceTl = gsap.timeline({ defaults: { ease: 'power3.out', force3D: true } });
+
+                // Init states
+                gsap.set('.loader-bg-orbs', { opacity: 0, scale: 0.8 });
+                gsap.set('.loader-hud-panel', { opacity: 0, scale: 0.9, z: 20 });
+                gsap.set('#loader-core-v4', { opacity: 0, scale: 0.5, z: 50 });
+                gsap.set('.core-char', { opacity: 0, y: 20 });
+                
+                // Entrance animation
+                entranceTl
+                    .to('.loader-bg-orbs', { opacity: 1, scale: 1, duration: 2, ease: 'power2.out' }, 0)
+                    .to('#loader-core-v4', { opacity: 1, scale: 1, duration: 1.2, ease: 'back.out(1.4)' }, 0.3)
+                    .to('.core-char', { opacity: 1, y: 0, stagger: 0.1, duration: 0.8, ease: 'back.out(1.5)' }, 0.6)
+                    .to('.hud-tl', { opacity: 1, scale: 1, x: 0, duration: 0.8 }, 0.8)
+                    .to('.hud-tr', { opacity: 1, scale: 1, x: 0, duration: 0.8 }, 0.9)
+                    .to('.hud-bl', { opacity: 1, scale: 1, x: 0, duration: 0.8 }, 1.0)
+                    .to('.hud-br', { opacity: 1, scale: 1, x: 0, duration: 0.8 }, 1.1);
+
+                // ── 3D Mouse Parallax ──
+                if (!window.matchMedia("(max-width: 768px)").matches) {
+                    document.addEventListener('mousemove', (e) => {
+                        if (loaderEscondido) return;
+                        const x = (e.clientX / window.innerWidth - 0.5) * 2;
+                        const y = (e.clientY / window.innerHeight - 0.5) * 2;
+                        
+                        // Scene rotates slightly
+                        gsap.to(sceneEl, {
+                            rotationY: x * 10,
+                            rotationX: -y * 10,
+                            duration: 1,
+                            ease: 'power2.out'
+                        });
+                        
+                        // Core floats oppositely for depth
+                        gsap.to('#loader-core-v4', {
+                            x: -x * 30,
+                            y: -y * 30,
+                            duration: 1.5,
+                            ease: 'power2.out'
+                        });
+                        
+                        // HUD panels subtle shift
+                        gsap.to('.loader-hud-panel', {
+                            x: x * 15,
+                            y: y * 15,
+                            duration: 2,
+                            ease: 'power2.out'
+                        });
+                    });
+                }
+                
+                // Particles
+                const pContainer = document.getElementById('loader-particles-v4');
+                if (pContainer && !window.__PERF_LITE__) {
+                    for (let i=0; i<30; i++) {
+                        const p = document.createElement('div');
+                        p.className = 'l-particle-v4';
+                        const size = gsap.utils.random(1, 3);
+                        p.style.width = size+'px'; p.style.height = size+'px';
+                        p.style.left = gsap.utils.random(0, 100)+'%';
+                        p.style.top = gsap.utils.random(0, 100)+'%';
+                        pContainer.appendChild(p);
+                        
+                        gsap.to(p, {
+                            y: gsap.utils.random(-100, -200),
+                            x: gsap.utils.random(-50, 50),
+                            opacity: gsap.utils.random(0.3, 0.8),
+                            duration: gsap.utils.random(5, 15),
+                            repeat: -1,
+                            yoyo: true,
+                            ease: 'sine.inOut'
+                        });
+                    }
+                }
+            }

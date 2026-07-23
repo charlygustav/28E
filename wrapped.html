@@ -3,1113 +3,615 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>28E Wrapped</title>
+    <title>28E Wrapped — Half Year</title>
     <link rel="icon" type="image/x-icon" href="tulip.ico">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Merriweather:ital@0;1&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #000;
-            color: #fff;
-            overflow: hidden;
-            touch-action: none; /* Prevent scroll on touch devices */
-        }
-        
-        .slide {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 2rem;
-            opacity: 0;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .slide.active {
-            opacity: 1;
-            z-index: 60;
-            pointer-events: none; /* Deja pasar los clics a las tap-zones en las primeras 18 pantallas */
-        }
-        .slide.active:last-child {
-            pointer-events: auto; /* La última pantalla recupera los toques para el carrusel */
-        }
-
-        /* Progress Bar */
-        .progress-container {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            display: flex;
-            gap: 4px;
-            z-index: 70;
-            pointer-events: none;
-        }
-        .progress-bar {
-            flex: 1;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            background: white;
-            width: 0%;
-            will-change: width;
-        }
-
-        /* Tap Zones */
-        .tap-zone-left, .tap-zone-right {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 50%;
-            z-index: 50;
-            cursor: pointer;
-        }
-        .tap-zone-right {
-            position: absolute;
-            top: 3rem; right: 0; bottom: 25vh; width: 55%;
-            z-index: 30;
-        }
-
-        /* Ambient Orbs */
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
-            transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Typography */
-        .text-huge {
-            font-size: clamp(3rem, 12vw, 6rem);
-            line-height: 1;
-            font-weight: 900;
-            letter-spacing: -0.05em;
-        }
-        
-        /* Floating Emojis / Particles */
-        .particle {
-            position: absolute;
-            font-size: 1.5rem;
-            pointer-events: none;
-            opacity: 0;
-            z-index: 15;
-        }
-
-        /* Image Collage */
-        .collage-img {
-            position: absolute;
-            width: 55vw;
-            max-width: 250px;
-            max-height: 30vh;
-            object-fit: cover;
-            border-radius: 12px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-            border: 4px solid rgba(255,255,255,0.15);
-            opacity: 0;
-            transform: scale(0.5) rotate(0deg);
-        }
-
-        /* Loader */
-        #auth-overlay {
-            position: fixed;
-            inset: 0;
-            background: #000;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            transition: opacity 0.5s ease;
-        }
-
-        .loader {
-            width: 48px;
-            height: 48px;
-            border: 3px solid rgba(255,255,255,0.1);
-            border-radius: 50%;
-            border-top-color: #ec4899; /* Tulip 500 */
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .gsap-text, .gsap-reveal {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        /* Start Screen Animations */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in-up {
-            animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            opacity: 0;
-        }
-        .delay-200 { animation-delay: 200ms; }
-        .delay-400 { animation-delay: 400ms; }
-        .delay-600 { animation-delay: 600ms; }
+        body { font-family: 'Inter', sans-serif; background-color: #000; color: #fff; overflow: hidden; touch-action: none; }
+        .slide { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 2rem; opacity: 0; pointer-events: none; z-index: 10; }
+        .slide.active { opacity: 1; z-index: 60; pointer-events: none; }
+        .slide.active:last-child { pointer-events: auto; }
+        .progress-container { position: absolute; top: 20px; left: 20px; right: 20px; display: flex; gap: 3px; z-index: 70; pointer-events: none; }
+        .progress-bar { flex: 1; height: 3px; background: rgba(255,255,255,0.15); border-radius: 2px; overflow: hidden; }
+        .progress-fill { height: 100%; background: white; width: 0%; will-change: width; }
+        .tap-zone-left, .tap-zone-right { position: absolute; top: 0; bottom: 0; width: 50%; z-index: 50; cursor: pointer; }
+        .tap-zone-right { position: absolute; top: 3rem; right: 0; bottom: 25vh; width: 55%; z-index: 30; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .text-huge { font-size: clamp(3rem, 12vw, 6rem); line-height: 1; font-weight: 900; letter-spacing: -0.05em; }
+        .particle { position: absolute; font-size: 1.5rem; pointer-events: none; opacity: 0; z-index: 15; }
+        .collage-img { position: absolute; width: 55vw; max-width: 250px; max-height: 30vh; object-fit: cover; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); border: 4px solid rgba(255,255,255,0.15); opacity: 0; transform: scale(0.5); }
+        #auth-overlay { position: fixed; inset: 0; background: #000; z-index: 100; display: flex; align-items: center; justify-content: center; flex-direction: column; transition: opacity 0.5s ease; }
+        .loader { width: 48px; height: 48px; border: 3px solid rgba(255,255,255,0.1); border-radius: 50%; border-top-color: #ec4899; animation: spin 1s ease-in-out infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .gsap-text, .gsap-reveal { opacity: 0; transform: translateY(30px); }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in-up { animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+        .delay-200 { animation-delay: 200ms; } .delay-400 { animation-delay: 400ms; } .delay-600 { animation-delay: 600ms; }
+        .mini-bar { transition: height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .glow-text { text-shadow: 0 0 40px currentColor, 0 0 80px currentColor; }
     </style>
 </head>
 <body>
-
-    <!-- Auth Protection Overlay -->
-    <div id="auth-overlay">
-        <div class="loader mb-4"></div>
-        <p class="text-zinc-500 font-mono text-sm tracking-widest uppercase">Verificando Credenciales</p>
-    </div>
-
-    <!-- Wrapped App Container -->
+    <div id="auth-overlay"><div class="loader mb-4"></div><p class="text-zinc-500 font-mono text-sm tracking-widest uppercase">Verificando Credenciales</p></div>
     <div id="wrapped-app" class="relative w-full h-screen hidden overflow-hidden bg-black text-white selection:bg-pink-500 selection:text-white">
-        
-        <!-- Ambient Background Orbs -->
         <div id="orb1" class="orb bg-pink-600 w-[150vw] h-[150vw] md:w-[60vw] md:h-[60vw] top-[-20%] left-[-20%]"></div>
         <div id="orb2" class="orb bg-purple-900 w-[150vw] h-[150vw] md:w-[60vw] md:h-[60vw] bottom-[-20%] right-[-20%]"></div>
         <div id="orb3" class="orb bg-transparent w-[100vw] h-[100vw] md:w-[50vw] md:h-[50vw] top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 opacity-0"></div>
 
-        <!-- Start Screen -->
-        <div id="start-screen" class="absolute inset-0 z-[100] bg-black flex flex-col items-center justify-center p-6 transition-opacity duration-1000 overflow-hidden">
-            
-            <!-- Animated Background Gradient -->
+        <!-- Start Screen (Redesigned) -->
+        <div id="start-screen" class="absolute inset-0 z-[100] bg-[#050505] flex flex-col items-center justify-center p-4 transition-opacity duration-1000 overflow-hidden font-sans">
+            <!-- Modern Grid & Glow Background -->
             <div class="absolute inset-0 z-0">
-                <div class="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black opacity-80"></div>
-                <div class="absolute top-[20%] left-[20%] w-[60vw] h-[60vw] bg-pink-600/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" style="animation-duration: 4s;"></div>
-                <div class="absolute bottom-[10%] right-[10%] w-[50vw] h-[50vw] bg-indigo-600/20 rounded-full blur-[100px] mix-blend-screen animate-pulse" style="animation-duration: 5s; animation-delay: 1s;"></div>
+                <div class="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f10_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f10_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+                <div class="absolute top-[10%] left-[20%] w-[70vw] h-[70vw] md:w-[40vw] md:h-[40vw] bg-gradient-to-tr from-amber-600/30 to-pink-600/10 rounded-full blur-[100px] mix-blend-screen animate-pulse" style="animation-duration: 6s;"></div>
+                <div class="absolute bottom-[0%] right-[10%] w-[60vw] h-[60vw] md:w-[40vw] md:h-[40vw] bg-gradient-to-bl from-pink-600/20 to-purple-800/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" style="animation-duration: 7s; animation-delay: 2s;"></div>
             </div>
 
-            <!-- Glassmorphism Container -->
-            <div class="relative z-10 flex flex-col items-center justify-center w-full max-w-md p-8 md:p-12 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl shadow-2xl animate-fade-in-up delay-200 group hover:bg-white/10 transition-colors duration-500">
+            <!-- Premium Glass Card -->
+            <div class="relative z-10 w-full max-w-[400px] rounded-[32px] group animate-fade-in-up delay-200 perspective-[1000px] max-h-[90vh] overflow-y-auto no-scrollbar" style="scrollbar-width: none;">
                 
-                <!-- Logo -->
-                <div class="mb-8 flex flex-col items-center animate-fade-in-up delay-400">
-                    <h1 class="text-5xl font-black tracking-tighter text-white drop-shadow-md" style="line-height: 1;">28E</h1>
-                    <p class="text-rose-400 font-bold tracking-[0.3em] uppercase text-xs mt-1">Wrapped</p>
-                </div>
-
-                <!-- Welcome Text -->
-                <h2 class="text-2xl md:text-3xl font-bold text-white text-center mb-4 tracking-tight animate-fade-in-up delay-400">
-                    Hola, <span id="user-name-display" class="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-rose-300">...</span> 👋
-                </h2>
-                
-                <p class="text-zinc-300 text-center text-sm md:text-base mb-8 leading-relaxed animate-fade-in-up delay-600">
-                    Hemos preparado un viaje a través de nuestros 120 días juntos. Los mensajes, las madrugadas y todo lo que nos hace especiales.
-                </p>
-
-                <!-- Interactive Audio Warning -->
-                <div class="flex items-center gap-3 bg-black/30 px-5 py-3 rounded-2xl mb-10 border border-white/5 animate-fade-in-up delay-600 group-hover:border-white/20 transition-all duration-300 cursor-default">
-                    <div class="p-2 bg-pink-500/20 rounded-full text-pink-400">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+                <!-- Card Content -->
+                <div class="relative w-full min-h-full bg-zinc-950/80 backdrop-blur-2xl rounded-[32px] p-6 md:p-8 border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] flex flex-col items-center justify-center">
+                    
+                    <!-- Top Tag -->
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-4 animate-fade-in-up delay-400">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span class="text-[9px] font-black tracking-widest text-zinc-300 uppercase">Experiencia Exclusiva</span>
                     </div>
-                    <span class="text-xs md:text-sm text-zinc-400 font-medium">Asegúrate de tener el volumen encendido.</span>
-                </div>
 
-                <!-- Play Button -->
-                <div class="flex flex-col md:flex-row items-center gap-4 animate-fade-in-up delay-[800ms] w-full max-w-xs md:max-w-none justify-center">
-                    <button onclick="startWrapped()" class="relative overflow-hidden group/btn px-10 py-4 bg-white text-black font-black rounded-full hover:scale-105 transition-transform duration-300 uppercase tracking-widest text-sm shadow-[0_0_40px_rgba(255,255,255,0.2)] w-full md:w-auto">
-                        <span class="relative z-10 flex items-center justify-center gap-2">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="flex-shrink-0"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                            Comenzar
-                        </span>
-                        <div class="absolute inset-0 bg-gradient-to-r from-pink-300 to-rose-300 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
-                    </button>
-                    <button onclick="returnToIndex()" class="px-10 py-4 bg-transparent border border-white/20 text-white font-bold rounded-full hover:bg-white/10 transition-colors uppercase tracking-widest text-sm w-full md:w-auto text-center">
-                        Volver
-                    </button>
+                    <!-- Title Header -->
+                    <div class="flex flex-col items-center mb-5 animate-fade-in-up delay-400">
+                        <div class="relative">
+                            <h1 class="text-5xl md:text-6xl font-extrabold tracking-tighter text-white" style="line-height:1;">28E</h1>
+                            <div class="absolute -top-2 -right-8 bg-gradient-to-r from-amber-400 to-amber-600 shadow-[0_0_15px_rgba(251,191,36,0.5)] text-[9px] font-black text-black px-2 py-0.5 rounded-full uppercase tracking-widest">VI</div>
+                        </div>
+                        <p class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-pink-500 font-bold tracking-[0.4em] uppercase text-[9px] mt-2">Wrapped — Half Year</p>
+                    </div>
+
+                    <!-- Welcome Text -->
+                    <h2 class="text-2xl font-bold text-white text-center mb-2 tracking-tight animate-fade-in-up delay-600">Hola, <span id="user-name-display" class="font-black text-transparent bg-clip-text bg-gradient-to-br from-amber-300 via-pink-400 to-rose-400">Yaire</span></h2>
+                    
+                    <p class="text-zinc-400 text-center text-[13px] mb-6 leading-relaxed animate-fade-in-up delay-[700ms] font-medium">Hemos preparado un viaje a través de nuestros <strong class="text-white">182 días</strong> juntos. <span class="text-zinc-300">50,835 mensajes</span>, madrugadas infinitas y la historia de cómo cambiamos nuestra vida.</p>
+
+                    <!-- Audio Recommendation -->
+                    <div class="flex items-center justify-center w-full gap-3 bg-zinc-900/50 rounded-2xl p-2.5 mb-6 border border-white/5 animate-fade-in-up delay-[800ms]">
+                        <div class="p-2 bg-gradient-to-br from-amber-500/20 to-pink-500/20 rounded-xl text-amber-400">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                        </div>
+                        <div class="flex flex-col text-left">
+                            <span class="text-[9px] font-bold text-amber-400 uppercase tracking-widest">Recomendación</span>
+                            <span class="text-[10px] text-zinc-400 font-medium leading-tight">Sube el volumen para la mejor experiencia.</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col gap-2.5 w-full animate-fade-in-up delay-[900ms]">
+                        <button onclick="startWrapped()" class="relative group w-full px-6 py-3.5 bg-white text-black font-black rounded-2xl hover:scale-[1.02] transition-all uppercase tracking-widest text-xs flex justify-center items-center gap-2 overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-r from-amber-400 to-pink-500 opacity-0 group-hover:opacity-10 transition-opacity"></div>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="group-hover:scale-110 transition-transform"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                            Comenzar el Viaje
+                        </button>
+                        
+                        <button onclick="returnToIndex()" class="w-full px-6 py-3.5 bg-transparent border border-zinc-800 text-zinc-400 font-bold rounded-2xl hover:bg-zinc-900 hover:text-white hover:border-zinc-700 transition-all uppercase tracking-widest text-[11px] flex justify-center items-center">
+                            Volver al 28E
+                        </button>
+                    </div>
+
                 </div>
             </div>
-            
         </div>
 
         <!-- Controls -->
         <div class="absolute top-8 right-4 z-[70] flex items-center gap-2">
-            <!-- Play/Pause Button -->
-            <button id="pause-btn" onclick="togglePause()" class="hidden flex items-center justify-center p-2 text-white/60 hover:text-white hover:scale-110 transition-transform focus:outline-none drop-shadow-lg">
-                <svg id="icon-pause" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
-                <svg id="icon-play" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            </button>
-            
-            <!-- Mute Button -->
-            <button id="mute-btn" onclick="toggleMute()" class="hidden flex items-center justify-center p-2 text-white/60 hover:text-white hover:scale-110 transition-transform focus:outline-none drop-shadow-lg">
-                <svg id="icon-unmuted" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
-                <svg id="icon-muted" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
-            </button>
+            <button id="pause-btn" onclick="togglePause()" class="hidden items-center justify-center p-2 text-white/60 hover:text-white hover:scale-110 transition-transform"><svg id="icon-pause" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg><svg id="icon-play" class="hidden" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button>
+            <button id="mute-btn" onclick="toggleMute()" class="hidden items-center justify-center p-2 text-white/60 hover:text-white hover:scale-110 transition-transform"><svg id="icon-unmuted" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg><svg id="icon-muted" class="hidden" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg></button>
         </div>
-
-        <!-- Progress Indicator -->
-        <div class="progress-container" id="progress-container">
-            <!-- Bars injected by JS -->
-        </div>
-
-        <!-- Tap Controls -->
+        <div class="progress-container" id="progress-container"></div>
         <div class="tap-zone-left" onclick="event.stopPropagation(); prevSlide()"></div>
         <div class="tap-zone-right" onclick="event.stopPropagation(); nextSlide()"></div>
 
-        <!-- Slides -->
+        <!-- ═══ SLIDES ═══ -->
         <div id="slides-wrapper">
-            
-            <!-- Slide 0: Intro -->
-            <div class="slide" data-bg1="bg-blue-600" data-bg2="bg-teal-700" data-bg3="bg-cyan-600">
-                <p class="text-xl text-cyan-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Han pasado exactamente</p>
-                <h2 class="text-huge text-white mb-4 gsap-text">120<br>Días.</h2>
-                <p class="text-xl text-cyan-100 font-serif italic max-w-sm mt-4 gsap-reveal">Desde el primer momento en que sintonizamos la misma frecuencia. 🤍</p>
+
+            <!-- S0: Intro -->
+            <div class="slide" data-bg1="bg-amber-600" data-bg2="bg-orange-700" data-bg3="bg-yellow-600">
+                <p class="text-xl text-amber-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Han pasado exactamente</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">182<br>Días.</h2>
+                <p class="text-xl text-amber-100 font-serif italic max-w-sm mt-4 gsap-reveal">Medio año. 26 semanas. 4,368 horas. Y cada segundo ha valido la pena.</p>
             </div>
 
-            <!-- Slide 1: Total Messages -->
+            <!-- S1: Total Messages -->
             <div class="slide" data-bg1="bg-emerald-600" data-bg2="bg-teal-700" data-bg3="bg-green-500">
-                <p class="text-xl text-emerald-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Durante este tiempo...</p>
-                <h2 class="text-huge text-white mb-4 gsap-text">32,371</h2>
-                <p class="text-xl text-emerald-100 font-medium max-w-sm mt-4 gsap-reveal">Mensajes intercambiados. Nuestras pantallas no pararon de vibrar ni un solo día.</p>
+                <p class="text-xl text-emerald-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">En este tiempo nos enviamos</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">50,835</h2>
+                <p class="text-xl text-emerald-100 font-medium max-w-sm mt-4 gsap-reveal">Mensajes. Nuestras pantallas nunca dejaron de vibrar ni un solo día.</p>
             </div>
 
-            <!-- Slide 2: Who spoke more -->
+            <!-- S2: Who spoke more -->
             <div class="slide" data-bg1="bg-cyan-600" data-bg2="bg-blue-700" data-bg3="bg-sky-500">
-                <p class="text-xl text-cyan-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">¿Y quién habló más?</p>
+                <p class="text-xl text-cyan-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">¿Quién habló más?</p>
                 <div class="space-y-6 mt-8 gsap-reveal w-full max-w-sm">
-                    <div class="bg-black/40 backdrop-blur-md p-4 rounded-xl border-l-4 border-cyan-400">
-                        <p class="text-zinc-400 text-sm font-bold uppercase">Charles Gustav</p>
-                        <p class="text-3xl text-white font-black">16,574 <span class="text-lg font-normal">mensajes</span></p>
-                    </div>
-                    <div class="bg-black/40 backdrop-blur-md p-4 rounded-xl border-l-4 border-pink-400">
-                        <p class="text-zinc-400 text-sm font-bold uppercase">Mi novia linda 🌷</p>
-                        <p class="text-3xl text-white font-black">15,797 <span class="text-lg font-normal">mensajes</span></p>
-                    </div>
+                    <div class="bg-black/40 backdrop-blur-md p-4 rounded-xl border-l-4 border-cyan-400"><p class="text-zinc-400 text-sm font-bold uppercase">Charles Gustav</p><p class="text-3xl text-white font-black">25,711 <span class="text-lg font-normal">msgs</span></p></div>
+                    <div class="bg-black/40 backdrop-blur-md p-4 rounded-xl border-l-4 border-pink-400"><p class="text-zinc-400 text-sm font-bold uppercase">Mi novia linda</p><p class="text-3xl text-white font-black">25,124 <span class="text-lg font-normal">msgs</span></p></div>
                 </div>
-                <p class="text-xl text-cyan-100 font-serif italic max-w-sm mt-8 gsap-reveal">Gané, pero por muy poco. 😌</p>
+                <p class="text-xl text-cyan-100 font-serif italic max-w-sm mt-8 gsap-reveal">Casi empatados. Así de equilibrada es nuestra conexión.</p>
             </div>
 
-            <!-- Slide 3: Connection Hours -->
-            <div class="slide" data-bg1="bg-blue-600" data-bg2="bg-purple-600" data-bg3="bg-indigo-600">
-                <p class="text-xl text-blue-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Nuestra Conexión</p>
-                <h2 class="text-huge text-white mb-2 gsap-text">2,880<br>Horas.</h2>
-                <div class="space-y-4 mt-8 gsap-reveal">
-                    <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-xl">
-                        <p class="text-blue-100 font-medium">Llamadas infinitas en nuestro canal de voz, construyendo nuestro propio universo.</p>
-                    </div>
-                </div>
-                <div class="absolute top-1/2 right-10 text-5xl opacity-20 rotate-12">🎙️</div>
+            <!-- S3: The Streak -->
+            <div class="slide" data-bg1="bg-orange-500" data-bg2="bg-red-600" data-bg3="bg-amber-500">
+                <p class="text-xl text-orange-100 font-bold uppercase tracking-widest mb-4 gsap-reveal">La Racha Imbatible</p>
+                <h2 class="text-huge text-white mb-4 gsap-text glow-text" style="color:#f59e0b;">164</h2>
+                <p class="text-xl text-orange-50 font-medium max-w-sm mt-4 gsap-reveal">Días consecutivos hablando. <strong>Sin fallar ni uno solo.</strong> Desde el primer mensaje hasta hoy, jamás dejamos de buscarnos.</p>
             </div>
 
-            <!-- Slide 4: Laughter -->
+            <!-- S4: Daily Average -->
+            <div class="slide" data-bg1="bg-violet-600" data-bg2="bg-purple-700" data-bg3="bg-fuchsia-600">
+                <p class="text-xl text-violet-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">En promedio, cada día...</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">310</h2>
+                <p class="text-xl text-violet-100 font-medium max-w-sm mt-4 gsap-reveal">Mensajes por día. Eso es <strong>1 mensaje cada 4 minutos</strong> durante las horas que estamos despiertos.</p>
+                <div class="mt-6 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-xl max-w-sm gsap-reveal"><p class="text-violet-200 text-sm font-medium">Si cada mensaje fuera un paso, habríamos caminado <strong class="text-white">25 km juntos</strong> solo en texto.</p></div>
+            </div>
+
+            <!-- S5: Monthly Evolution -->
+            <div class="slide" data-bg1="bg-indigo-600" data-bg2="bg-blue-800" data-bg3="bg-slate-700">
+                <p class="text-xl text-indigo-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Nuestra Evolución</p>
+                <div class="flex items-end justify-between gap-1 sm:gap-2 h-52 mt-8 gsap-reveal w-full max-w-sm px-2">
+                    <div class="flex flex-col items-center justify-end h-full w-full"><span class="text-[10px] md:text-xs font-bold text-white mb-2">8.4K</span><div class="w-full max-w-[2.5rem] bg-gradient-to-t from-indigo-600 to-cyan-400 rounded-t-lg mini-bar" style="height:67%"></div><span class="text-[9px] md:text-[10px] text-zinc-400 font-bold mt-2">FEB</span></div>
+                    <div class="flex flex-col items-center justify-end h-full w-full"><span class="text-[10px] md:text-xs font-bold text-white mb-2">9.4K</span><div class="w-full max-w-[2.5rem] bg-gradient-to-t from-indigo-600 to-cyan-400 rounded-t-lg mini-bar" style="height:75%"></div><span class="text-[9px] md:text-[10px] text-zinc-400 font-bold mt-2">MAR</span></div>
+                    <div class="flex flex-col items-center justify-end h-full w-full"><span class="text-[10px] md:text-xs font-bold text-white mb-2">7.2K</span><div class="w-full max-w-[2.5rem] bg-gradient-to-t from-indigo-600 to-cyan-400 rounded-t-lg mini-bar" style="height:57%"></div><span class="text-[9px] md:text-[10px] text-zinc-400 font-bold mt-2">ABR</span></div>
+                    <div class="flex flex-col items-center justify-end h-full w-full"><span class="text-[10px] md:text-xs font-bold text-white mb-2">8.7K</span><div class="w-full max-w-[2.5rem] bg-gradient-to-t from-indigo-600 to-cyan-400 rounded-t-lg mini-bar" style="height:69%"></div><span class="text-[9px] md:text-[10px] text-zinc-400 font-bold mt-2">MAY</span></div>
+                    <div class="flex flex-col items-center justify-end h-full w-full"><span class="text-[10px] md:text-xs font-bold text-amber-400 font-black mb-2 drop-shadow-md">10K!</span><div class="w-full max-w-[2.5rem] bg-gradient-to-t from-amber-600 to-amber-300 rounded-t-lg mini-bar shadow-[0_0_15px_rgba(245,158,11,0.6)]" style="height:100%"></div><span class="text-[9px] md:text-[10px] text-amber-400 font-black mt-2 drop-shadow-md">JUN</span></div>
+                    <div class="flex flex-col items-center justify-end h-full w-full"><span class="text-[10px] md:text-xs font-bold text-white mb-2">7.2K</span><div class="w-full max-w-[2.5rem] bg-gradient-to-t from-indigo-600 to-cyan-400 rounded-t-lg mini-bar" style="height:57%"></div><span class="text-[9px] md:text-[10px] text-zinc-400 font-bold mt-2">JUL</span></div>
+                </div>
+                <p class="text-lg text-indigo-100 font-serif italic max-w-sm mt-6 gsap-reveal">Junio fue nuestro mes más intenso: <strong>10,057</strong> mensajes.</p>
+            </div>
+
+            <!-- S6: Busiest Day -->
+            <div class="slide" data-bg1="bg-red-600" data-bg2="bg-rose-700" data-bg3="bg-pink-600">
+                <p class="text-xl text-red-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">El Día Más Explosivo</p>
+                <h2 class="text-huge text-white mb-2 gsap-text">1,125</h2>
+                <p class="text-2xl text-rose-200 font-bold mt-2 gsap-reveal">22 de Febrero, 2026</p>
+                <p class="text-xl text-red-100 font-medium max-w-sm mt-4 gsap-reveal">Un mensaje cada <strong>77 segundos</strong> durante todo el día. Solo nosotros sabemos qué pasó.</p>
+            </div>
+
+            <!-- S7: Peak Hour -->
             <div class="slide" data-bg1="bg-yellow-500" data-bg2="bg-amber-600" data-bg3="bg-orange-500">
-                <p class="text-xl text-yellow-100 font-bold uppercase tracking-widest mb-4 gsap-reveal">Nos hicimos reír</p>
-                <h2 class="text-huge text-white mb-4 gsap-text">556</h2>
+                <p class="text-xl text-yellow-100 font-bold uppercase tracking-widest mb-4 gsap-reveal">Nuestra Hora Favorita</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">12:00<br>PM</h2>
+                <p class="text-xl text-yellow-50 font-medium max-w-sm mt-4 gsap-reveal"><strong>7,179 mensajes</strong> a mediodía. Mientras el mundo almuerza, nosotros alimentamos nuestra conexión.</p>
+            </div>
+
+            <!-- S8: Night Owls -->
+            <div class="slide" data-bg1="bg-black" data-bg2="bg-zinc-900" data-bg3="bg-gray-800">
+                <p class="text-xl text-zinc-400 font-bold uppercase tracking-widest mb-4 gsap-reveal">Las Noches Nunca Fueron Para Dormir</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">15,071</h2>
+                <p class="text-xl text-zinc-300 font-medium max-w-sm mt-4 gsap-reveal">Mensajes entre medianoche y 5AM. El <strong>30% de TODO</strong>. Somos los reyes de la madrugada.</p>
+                <div class="mt-6 bg-white/5 border border-white/10 p-4 rounded-xl max-w-sm gsap-reveal"><p class="text-zinc-400 text-sm">Hora más activa: <strong class="text-white">1:00 AM</strong> — 5,546 mensajes.</p></div>
+            </div>
+
+            <!-- S9: 3AM -->
+            <div class="slide" data-bg1="bg-indigo-900" data-bg2="bg-blue-900" data-bg3="bg-slate-900">
+                <p class="text-xl text-indigo-300 font-bold uppercase tracking-widest mb-4 gsap-reveal">Nuestro Horario Secreto</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">3:00<br>AM.</h2>
+                <p class="text-xl text-indigo-100 font-serif italic max-w-sm mt-4 gsap-reveal">3,363 mensajes a esa hora. Sobrevivimos a madrugadas eternas y descubrí que eres mi lugar seguro.</p>
+            </div>
+
+            <!-- S10: Laughter -->
+            <div class="slide" data-bg1="bg-yellow-500" data-bg2="bg-amber-500" data-bg3="bg-orange-400">
+                <p class="text-xl text-yellow-100 font-bold uppercase tracking-widest mb-4 gsap-reveal">Nos Hicimos Reír</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">811</h2>
                 <p class="text-xl text-yellow-50 font-medium max-w-sm mt-4 gsap-reveal">Veces que escribimos "jajaja". Incluso cuando la vida pesaba, fuiste mi mejor medicina.</p>
             </div>
 
-            <!-- Slide 5: Multimedia -->
+            <!-- S11: Multimedia -->
             <div class="slide" data-bg1="bg-fuchsia-600" data-bg2="bg-purple-800" data-bg3="bg-pink-600">
-                <p class="text-xl text-fuchsia-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Compartimos nuestra vida</p>
-                <h2 class="text-huge text-white mb-4 gsap-text">3,698</h2>
-                <p class="text-xl text-fuchsia-100 font-medium max-w-sm mt-4 gsap-reveal">Fotos, audios y videos enviados a través del celular. Una galería llena de nuestra historia.</p>
+                <p class="text-xl text-fuchsia-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Compartimos Nuestra Vida</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">5,045</h2>
+                <p class="text-xl text-fuchsia-100 font-medium max-w-sm mt-4 gsap-reveal">Fotos, audios, videos y stickers. Una galería interminable llena de nuestra historia.</p>
             </div>
 
-            <!-- Slide 6: Siempre -->
+            <!-- S12: Calls -->
+            <div class="slide" data-bg1="bg-blue-600" data-bg2="bg-purple-600" data-bg3="bg-indigo-600">
+                <p class="text-xl text-blue-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Cuando los Textos No Bastaban</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">169</h2>
+                <p class="text-xl text-blue-100 font-medium max-w-sm mt-4 gsap-reveal">Llamadas registradas. Necesitábamos escuchar la voz del otro para sentirnos más cerca.</p>
+            </div>
+
+            <!-- S13: Te Amo -->
+            <div class="slide" data-bg1="bg-rose-600" data-bg2="bg-red-700" data-bg3="bg-pink-600">
+                <p class="text-xl text-rose-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">La Palabra Mágica</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">2,582</h2>
+                <p class="text-xl text-rose-100 font-medium max-w-sm mt-4 gsap-reveal">"Te amo". <strong>14 veces por día</strong>. Nunca me cansaré de decirlo.</p>
+                <div class="mt-6 space-y-3 max-w-sm gsap-reveal">
+                    <div class="bg-black/30 p-3 rounded-xl border-l-4 border-cyan-400"><p class="text-zinc-400 text-xs font-bold uppercase">Charles</p><p class="text-2xl text-white font-black">2,272</p></div>
+                    <div class="bg-black/30 p-3 rounded-xl border-l-4 border-pink-400"><p class="text-zinc-400 text-xs font-bold uppercase">Yaire</p><p class="text-2xl text-white font-black">310</p></div>
+                </div>
+            </div>
+
+            <!-- S14: Amor -->
+            <div class="slide" data-bg1="bg-pink-400" data-bg2="bg-rose-400" data-bg3="bg-red-400">
+                <p class="text-xl text-pink-100 font-bold uppercase tracking-widest mb-4 gsap-reveal">Nuestro Nombre Clave</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">3,589</h2>
+                <p class="text-xl text-pink-50 font-medium max-w-sm mt-4 gsap-reveal">"Amor". Y <strong>938</strong> de esas fueron "Mi amor". Nuestra marca registrada.</p>
+            </div>
+
+            <!-- S15: Siempre -->
             <div class="slide" data-bg1="bg-sky-500" data-bg2="bg-blue-400" data-bg3="bg-cyan-400">
                 <p class="text-xl text-sky-100 font-bold uppercase tracking-widest mb-4 gsap-reveal">Nuestra Promesa</p>
-                <h2 class="text-huge text-white mb-4 gsap-text">494</h2>
-                <p class="text-xl text-sky-50 font-medium max-w-sm mt-4 gsap-reveal">Veces que escribimos la palabra "Siempre". Prometiéndonos que pase lo que pase, estaremos ahí el uno para el otro.</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">721</h2>
+                <p class="text-xl text-sky-50 font-medium max-w-sm mt-4 gsap-reveal">"Siempre". Prometiéndonos que pase lo que pase, estaremos ahí.</p>
             </div>
 
-            <!-- Slide 7: Perdon -->
+            <!-- S16: Piropos -->
+            <div class="slide" data-bg1="bg-rose-500" data-bg2="bg-pink-500" data-bg3="bg-fuchsia-500">
+                <p class="text-xl text-rose-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Piropos Sin Parar</p>
+                <div class="space-y-3 mt-6 max-w-sm gsap-reveal">
+                    <div class="bg-white/10 border border-white/20 p-4 rounded-xl flex items-center gap-4"><span class="text-3xl">👸</span><div><p class="text-white font-black text-xl">"Princesa"</p><p class="text-pink-200 text-sm">379 veces</p></div></div>
+                    <div class="bg-white/10 border border-white/20 p-4 rounded-xl flex items-center gap-4"><span class="text-3xl">🌸</span><div><p class="text-white font-black text-xl">"Linda"</p><p class="text-pink-200 text-sm">484 veces</p></div></div>
+                    <div class="bg-white/10 border border-white/20 p-4 rounded-xl flex items-center gap-4"><span class="text-3xl">💎</span><div><p class="text-white font-black text-xl">"Hermosa"</p><p class="text-pink-200 text-sm">86 veces</p></div></div>
+                </div>
+                <p class="text-lg text-pink-100 font-serif italic mt-6 gsap-reveal">949 piropos en 182 días.</p>
+            </div>
+
+            <!-- S17: Vida -->
+            <div class="slide" data-bg1="bg-rose-600" data-bg2="bg-red-600" data-bg3="bg-pink-700">
+                <p class="text-xl text-rose-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">El Apodo Más Profundo</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">388</h2>
+                <p class="text-xl text-rose-100 font-medium max-w-sm mt-4 gsap-reveal">"Vida". Dejaste de ser parte de mi mundo... te convertiste en él completo.</p>
+            </div>
+
+            <!-- S18: Perdón -->
             <div class="slide" data-bg1="bg-stone-500" data-bg2="bg-neutral-600" data-bg3="bg-zinc-500">
                 <p class="text-xl text-stone-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">La Madurez</p>
-                <h2 class="text-huge text-white mb-4 gsap-text">142</h2>
-                <p class="text-xl text-stone-100 font-medium max-w-sm mt-4 gsap-reveal">Veces que dijimos "Perdón". Demostrando que nuestro orgullo jamás será más grande que nuestras ganas de arreglar las cosas.</p>
+                <h2 class="text-huge text-white mb-4 gsap-text">221</h2>
+                <p class="text-xl text-stone-100 font-medium max-w-sm mt-4 gsap-reveal">"Perdón". Nuestro orgullo jamás será más grande que nuestras ganas de arreglar las cosas.</p>
             </div>
 
-            <!-- Slide 8: Universe (Hevvo) -->
+            <!-- S19: Gracias + Buenos Días -->
+            <div class="slide" data-bg1="bg-teal-600" data-bg2="bg-emerald-700" data-bg3="bg-cyan-600">
+                <p class="text-xl text-teal-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Gratitud Diaria</p>
+                <div class="space-y-3 mt-6 max-w-sm gsap-reveal">
+                    <div class="bg-white/10 border border-white/20 p-4 rounded-xl"><p class="text-teal-100 text-sm uppercase font-bold">"Gracias"</p><p class="text-3xl text-white font-black">285</p></div>
+                    <div class="bg-white/10 border border-white/20 p-4 rounded-xl"><p class="text-teal-100 text-sm uppercase font-bold">"Buenos días"</p><p class="text-3xl text-white font-black">240</p></div>
+                    <div class="bg-white/10 border border-white/20 p-4 rounded-xl"><p class="text-teal-100 text-sm uppercase font-bold">"Buenas noches"</p><p class="text-3xl text-white font-black">85</p></div>
+                </div>
+                <p class="text-lg text-teal-100 font-serif italic mt-6 gsap-reveal">El primer y último pensamiento... siempre fuimos el uno para el otro.</p>
+            </div>
+
+            <!-- S20: Emoji -->
+            <div class="slide" data-bg1="bg-pink-500" data-bg2="bg-rose-600" data-bg3="bg-fuchsia-500">
+                <p class="text-xl text-pink-100 font-bold uppercase tracking-widest mb-4 gsap-reveal">Nuestro Emoji Favorito</p>
+                <h2 class="gsap-text" style="font-size:clamp(5rem,20vw,10rem);line-height:1;">💗</h2>
+                <p class="text-xl text-pink-50 font-medium max-w-sm mt-4 gsap-reveal"><strong>450 veces</strong>. Nuestra firma digital.</p>
+                <div class="flex items-center gap-4 mt-6 gsap-reveal">
+                    <div class="flex items-center gap-2 bg-black/30 px-4 py-2 rounded-full"><span class="text-2xl">😭</span><span class="text-sm font-bold">59</span></div>
+                    <div class="flex items-center gap-2 bg-black/30 px-4 py-2 rounded-full"><span class="text-2xl">🤍</span><span class="text-sm font-bold">56</span></div>
+                    <div class="flex items-center gap-2 bg-black/30 px-4 py-2 rounded-full"><span class="text-2xl">🥹</span><span class="text-sm font-bold">29</span></div>
+                </div>
+            </div>
+
+            <!-- S21: Fun Facts -->
+            <div class="slide" data-bg1="bg-amber-600" data-bg2="bg-orange-700" data-bg3="bg-yellow-600">
+                <p class="text-xl text-amber-100 font-bold uppercase tracking-widest mb-4 gsap-reveal">Datos Curiosos</p>
+                <div class="space-y-3 mt-6 max-w-sm gsap-reveal">
+                    <div class="bg-black/30 p-3 rounded-xl border border-white/10 flex items-center gap-3"><span class="text-2xl">📚</span><p class="text-sm text-amber-50">Nuestros mensajes llenarían un libro de <strong class="text-white">1,270 páginas</strong>.</p></div>
+                    <div class="bg-black/30 p-3 rounded-xl border border-white/10 flex items-center gap-3"><span class="text-2xl">🎵</span><p class="text-sm text-amber-50">Dijimos "te amo" suficientes veces para una <strong class="text-white">playlist de 43 horas</strong>.</p></div>
+                    <div class="bg-black/30 p-3 rounded-xl border border-white/10 flex items-center gap-3"><span class="text-2xl">🌍</span><p class="text-sm text-amber-50">Si cada mensaje fuera 1 metro, cubrimos <strong class="text-white">50 km</strong> de distancia.</p></div>
+                    <div class="bg-black/30 p-3 rounded-xl border border-white/10 flex items-center gap-3"><span class="text-2xl">⏱️</span><p class="text-sm text-amber-50">Leer todo en voz alta tomaría <strong class="text-white">más de 4 días sin parar</strong>.</p></div>
+                </div>
+            </div>
+
+            <!-- S22: Pixel World -->
             <div class="slide" data-bg1="bg-indigo-900" data-bg2="bg-blue-900" data-bg3="bg-slate-900">
-                <p class="text-xl text-indigo-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Encontramos refugio</p>
+                <p class="text-xl text-indigo-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Encontramos Refugio</p>
                 <h2 class="text-5xl md:text-7xl text-white font-black mb-4 gsap-text tracking-tighter">En los píxeles.</h2>
-                <p class="text-xl text-indigo-100 font-serif italic max-w-sm mt-4 gsap-reveal">Construimos una vida en Hevvo y HabboID, pero al final, decidimos salir juntos para que nuestro amor sea 100% real en el mundo exterior.</p>
+                <p class="text-xl text-indigo-100 font-serif italic max-w-sm mt-4 gsap-reveal">Construimos una vida entre pantallas, pero decidimos que nuestro amor merecía ser real.</p>
                 <div class="absolute bottom-1/4 right-10 text-6xl opacity-30">👾</div>
             </div>
 
-            <!-- Slide 9: Madrugadas -->
-            <div class="slide" data-bg1="bg-black" data-bg2="bg-zinc-900" data-bg3="bg-gray-800">
-                <p class="text-xl text-zinc-400 font-bold uppercase tracking-widest mb-4 gsap-reveal">Las noches nunca fueron para dormir</p>
-                <h2 class="text-huge text-white mb-4 gsap-text">3:00<br>AM.</h2>
-                <p class="text-xl text-zinc-300 font-medium max-w-sm mt-4 gsap-reveal">Sobrevivimos a madrugadas eternas, desveladas y chistes de cucarachas... Descubrí que eres mi lugar seguro. 🪳</p>
-            </div>
-
-            <!-- Slide 10: Amor -->
-            <div class="slide" data-bg1="bg-pink-400" data-bg2="bg-rose-400" data-bg3="bg-red-400">
-                <p class="text-xl text-pink-100 font-bold uppercase tracking-widest mb-4 gsap-reveal">El apodo perfecto</p>
-                <h2 class="text-huge text-white mb-4 gsap-text">2,564</h2>
-                <p class="text-xl text-pink-50 font-medium max-w-sm mt-4 gsap-reveal">Veces que nos llamamos "Amor". Se volvió nuestra identidad, nuestra marca registrada.</p>
-            </div>
-
-            <!-- Slide 11: Te amo -->
-            <div class="slide" data-bg1="bg-rose-600" data-bg2="bg-red-700" data-bg3="bg-pink-600">
-                <p class="text-xl text-rose-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Y nunca faltó la palabra mágica</p>
-                <h2 class="text-huge text-white mb-4 gsap-text">843</h2>
-                <p class="text-xl text-rose-100 font-medium max-w-sm mt-4 gsap-reveal">Veces que nos dijimos "Te amo" (¡casi 7 veces por día!). Nunca me cansaré de escucharlo.</p>
-            </div>
-
-            <!-- Slide 12: Buenos Dias -->
-            <div class="slide" data-bg1="bg-amber-500" data-bg2="bg-orange-400" data-bg3="bg-yellow-300">
-                <p class="text-xl text-amber-100 font-bold uppercase tracking-widest mb-4 gsap-reveal">Nuestro primer pensamiento</p>
-                <h2 class="text-huge text-white mb-4 gsap-text">153</h2>
-                <p class="text-xl text-amber-50 font-medium max-w-sm mt-4 gsap-reveal">Veces que nos dijimos "Buenos días". Sin importar qué pasara, siempre fuimos lo primero en la mente del otro al despertar. ☀️</p>
-            </div>
-
-            <!-- Slide 13: Vida -->
-            <div class="slide" data-bg1="bg-rose-500" data-bg2="bg-red-500" data-bg3="bg-pink-600">
-                <p class="text-xl text-rose-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">El apodo más profundo</p>
-                <h2 class="text-huge text-white mb-4 gsap-text">297</h2>
-                <p class="text-xl text-rose-100 font-medium max-w-sm mt-4 gsap-reveal">Veces que nos llamamos "Vida". Porque, poco a poco, nos convertimos en el mundo entero del otro. ❤️</p>
-            </div>
-
-            <!-- Slide 14: Gracias -->
-            <div class="slide" data-bg1="bg-teal-600" data-bg2="bg-emerald-700" data-bg3="bg-cyan-600">
-                <p class="text-xl text-teal-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Nuestra Gratitud</p>
-                <h2 class="text-huge text-white mb-4 gsap-text">188</h2>
-                <p class="text-xl text-teal-100 font-medium max-w-sm mt-4 gsap-reveal">Veces que nos dijimos "Gracias". Por estar ahí, por no rendirnos, por sanar las heridas del pasado juntos. 🙏</p>
-            </div>
-
-            <!-- Slide 15: Llamadas -->
-            <div class="slide" data-bg1="bg-indigo-600" data-bg2="bg-violet-700" data-bg3="bg-purple-600">
-                <p class="text-xl text-indigo-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Cuando los textos no bastaban</p>
-                <h2 class="text-huge text-white mb-4 gsap-text">91</h2>
-                <p class="text-xl text-indigo-100 font-medium max-w-sm mt-4 gsap-reveal">Llamadas registradas en WhatsApp. Necesitábamos escuchar la voz del otro para sentirnos más cerca. 📞</p>
-            </div>
-
-            <!-- Slide 16: Superación -->
+            <!-- S23: Challenges -->
             <div class="slide" data-bg1="bg-slate-700" data-bg2="bg-zinc-800" data-bg3="bg-gray-600">
-                <p class="text-xl text-slate-300 font-bold uppercase tracking-widest mb-4 gsap-reveal">Hubo momentos de miedo</p>
-                <h2 class="text-4xl md:text-6xl text-white font-black mb-4 gsap-text leading-tight">Y dudas.</h2>
-                <p class="text-xl text-slate-200 font-serif italic max-w-sm mt-4 gsap-reveal">Pero nunca nos rendimos. Pasamos celos, estrés y malos entendidos... y escogimos perdonar, sanar y mejorar. Siempre juntos.</p>
+                <p class="text-xl text-slate-300 font-bold uppercase tracking-widest mb-4 gsap-reveal">Hubo Momentos Difíciles</p>
+                <h2 class="text-4xl md:text-6xl text-white font-black mb-4 gsap-text leading-tight">Y dudas.<br>Y miedo.</h2>
+                <p class="text-xl text-slate-200 font-serif italic max-w-sm mt-4 gsap-reveal">Pero escogimos perdonar 221 veces, sanar y mejorar. <strong>Siempre juntos.</strong></p>
             </div>
 
-            <!-- Slide 17: Reconocimiento -->
+            <!-- S24: Recognition -->
             <div class="slide" data-bg1="bg-violet-600" data-bg2="bg-fuchsia-700" data-bg3="bg-purple-500">
                 <p class="text-xl text-violet-200 font-bold uppercase tracking-widest mb-4 gsap-reveal">Y quiero que sepas...</p>
-                <h2 class="text-4xl md:text-6xl text-white font-black mb-4 gsap-text leading-tight">Eres mi niña valiente.</h2>
-                <p class="text-xl text-violet-100 font-medium max-w-sm mt-4 gsap-reveal">Has soportado tanto en la vida, que para mí eres un ejemplo. Eres el amor de mi vida.</p>
+                <h2 class="text-4xl md:text-6xl text-white font-black mb-4 gsap-text leading-tight">Eres mi niña<br>valiente.</h2>
+                <p class="text-xl text-violet-100 font-medium max-w-sm mt-4 gsap-reveal">Eres el amor de mi vida. Y estos 182 días apenas son el comienzo.</p>
             </div>
 
-            <!-- Slide 18: Collage -->
+            <!-- S25: Collage -->
             <div class="slide flex flex-col justify-between items-center py-16" data-bg1="bg-pink-500" data-bg2="bg-rose-600" data-bg3="bg-red-500">
                 <p class="text-xl text-pink-200 font-bold uppercase tracking-widest gsap-reveal z-30 relative drop-shadow-md w-full text-left px-8">Cada instante...</p>
-                
-                <!-- Collage Images (absolute positioned) -->
-                <img src="https://i.ibb.co/yByRfq5y/IMG-20260125-WA0097.jpg" class="collage-img img-1" style="top: 15%; left: 5%; width: 40vw; max-width: 180px;">
-                <img src="https://i.ibb.co/DDHBsJy2/IMG-20260127-WA0067.jpg" class="collage-img img-2" style="top: 25%; right: 5%; width: 40vw; max-width: 180px;">
-                <img src="https://i.ibb.co/SDfLGvby/IMG-20260301-WA0027.jpg" class="collage-img img-3" style="top: 45%; left: 10%; width: 40vw; max-width: 180px;">
-                <img src="lasfotos/1000004047.jpg" class="collage-img img-4" style="top: 10%; left: 40%; width: 35vw; max-width: 160px; z-index: 10;">
-                <img src="lasfotos/1000007900.jpg" class="collage-img img-5" style="top: 55%; right: 10%; width: 35vw; max-width: 160px; z-index: 12;">
-                <img src="lasfotos/1000007992.jpg" class="collage-img img-6" style="top: 65%; left: 5%; width: 35vw; max-width: 160px; z-index: 15;">
-                <img src="lasfotos/1000019581.jpg" class="collage-img img-7" style="top: 35%; left: 50%; width: 35vw; max-width: 160px; z-index: 11;">
-                <img src="lasfotos/1000020209.jpg" class="collage-img img-8" style="top: 20%; right: 25%; width: 35vw; max-width: 160px; z-index: 9;">
-                <img src="lasfotos/AirBrush_20260327204142.jpg" class="collage-img img-9" style="top: 75%; right: 30%; width: 35vw; max-width: 160px; z-index: 14;">
-                <img src="lasfotos/IMG-20260208-WA0043.jpg" class="collage-img img-10" style="top: 5%; right: 10%; width: 35vw; max-width: 160px; z-index: 8;">
-                
-                <h2 class="text-4xl md:text-6xl font-black text-white z-30 relative drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] gsap-text w-full text-left px-8 mb-4">es una obra<br>de arte. ✨</h2>
+                <!-- ibb.co -->
+                <img src="https://i.ibb.co/yByRfq5y/IMG-20260125-WA0097.jpg" class="collage-img absolute object-cover rounded-xl border-4 border-white shadow-2xl" style="top:-2%; left:-2%; width:25vw; max-width:150px; aspect-ratio:3/4; z-index:10;">
+                <img src="https://i.ibb.co/DDHBsJy2/IMG-20260127-WA0067.jpg" class="collage-img absolute object-cover rounded-xl border-4 border-white shadow-2xl" style="top:15%; left:10%; width:22vw; max-width:140px; aspect-ratio:4/5; z-index:15;">
+                <img src="https://i.ibb.co/SDfLGvby/IMG-20260301-WA0027.jpg" class="collage-img absolute object-cover rounded-xl border-4 border-white shadow-2xl" style="top:5%; left:30%; width:30vw; max-width:180px; aspect-ratio:3/4; z-index:12;">
+
+                <!-- old lasfotos -->
+                <img src="lasfotos/1000004047.jpg" class="collage-img absolute object-cover rounded-xl border-4 border-white shadow-2xl" style="top:10%; right:35%; width:25vw; max-width:160px; aspect-ratio:4/5; z-index:11;">
+                <img src="lasfotos/1000007900.jpg" class="collage-img absolute object-cover rounded-xl border-4 border-white shadow-2xl" style="top:5%; right:12%; width:28vw; max-width:170px; aspect-ratio:1/1; z-index:18;">
+                <img src="lasfotos/1000007992.jpg" class="collage-img absolute object-cover rounded-xl border-4 border-white shadow-2xl" style="top:25%; right:-5%; width:22vw; max-width:140px; aspect-ratio:3/4; z-index:14;">
+                <img src="lasfotos/1000019581.jpg" class="collage-img absolute object-cover rounded-xl border-4 border-white shadow-2xl" style="top:35%; left:2%; width:32vw; max-width:190px; aspect-ratio:4/5; z-index:13;">
+                <img src="lasfotos/1000020209.jpg" class="collage-img absolute object-cover rounded-xl border-4 border-white shadow-2xl" style="top:45%; left:25%; width:25vw; max-width:150px; aspect-ratio:3/4; z-index:16;">
+                <img src="lasfotos/AirBrush_20260327204142.jpg" class="collage-img absolute object-cover rounded-xl border-4 border-white shadow-2xl" style="top:35%; left:45%; width:35vw; max-width:210px; aspect-ratio:1/1; z-index:9;">
+                <img src="lasfotos/IMG-20260208-WA0043.jpg" class="collage-img absolute object-cover rounded-xl border-4 border-white shadow-2xl" style="top:45%; right:25%; width:28vw; max-width:170px; aspect-ratio:4/5; z-index:17;">
+
+                <!-- new lasfotos -->
+                <img src="lasfotos/IMG-20260718-WA0010.jpg" class="collage-img absolute object-cover rounded-xl border-4 border-white shadow-2xl" style="top:50%; right:2%; width:26vw; max-width:160px; aspect-ratio:3/4; z-index:12;">
+                <img src="lasfotos/IMG-20260718-WA0012.jpg" class="collage-img absolute object-cover rounded-xl border-4 border-white shadow-2xl" style="bottom:20%; left:35%; width:24vw; max-width:150px; aspect-ratio:4/5; z-index:20;">
+                <img src="lasfotos/IMG-20260719-WA0021.jpg" class="collage-img absolute object-cover rounded-xl border-4 border-white shadow-2xl" style="bottom:5%; left:50%; width:30vw; max-width:180px; aspect-ratio:3/4; z-index:15;">
+                <img src="lasfotos/IMG-20260719-WA0024.jpg" class="collage-img absolute object-cover rounded-xl border-4 border-white shadow-2xl" style="bottom:25%; right:35%; width:28vw; max-width:170px; aspect-ratio:1/1; z-index:19;">
+                <img src="lasfotos/IMG-20260720-WA0018.jpg" class="collage-img absolute object-cover rounded-xl border-4 border-white shadow-2xl" style="bottom:10%; right:15%; width:32vw; max-width:200px; aspect-ratio:3/4; z-index:11;">
+                <img src="lasfotos/IMG-20260720-WA0038.jpg" class="collage-img absolute object-cover rounded-xl border-4 border-white shadow-2xl" style="bottom:-2%; right:-2%; width:25vw; max-width:150px; aspect-ratio:4/5; z-index:18;">
+                <img src="lasfotos/IMG-20260720-WA0046.jpg" class="collage-img absolute object-cover rounded-xl border-4 border-white shadow-2xl" style="top:25%; right:20%; width:22vw; max-width:140px; aspect-ratio:3/4; z-index:16;">
+                <h2 class="text-4xl md:text-6xl font-black text-white z-30 relative drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] gsap-text w-full text-left px-8 mb-4">es una obra<br>de arte.</h2>
             </div>
 
-            <!-- Slide 19: Export/Share -->
-            <div class="slide flex-col items-center justify-center px-0 pt-10 pb-4 relative" data-bg1="bg-zinc-900" data-bg2="bg-black" data-bg3="bg-zinc-800">
-                
-                <p class="text-[10px] text-white/50 uppercase tracking-widest mb-3 gsap-reveal z-50 md:hidden">Desliza para elegir tu tarjeta ➔</p>
+            <!-- S26: Share -->
+            <div class="slide flex-col items-center justify-center px-0 pt-6 pb-2 relative overflow-hidden" data-bg1="bg-zinc-900" data-bg2="bg-black" data-bg3="bg-zinc-800">
 
-                <div class="w-full flex-1 relative flex flex-col items-center justify-center">
-                    <!-- Flechas de navegación (Solo PC) -->
-                    <button onclick="event.stopPropagation(); scrollCards(-1)" class="absolute left-8 top-1/2 -translate-y-1/2 z-[70] p-4 bg-black/60 hover:bg-black/80 border border-white/20 rounded-full text-white backdrop-blur-md hidden md:flex transition-colors shadow-2xl">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                </button>
-                <button onclick="event.stopPropagation(); scrollCards(1)" class="absolute right-8 top-1/2 -translate-y-1/2 z-[70] p-4 bg-black/60 hover:bg-black/80 border border-white/20 rounded-full text-white backdrop-blur-md hidden md:flex transition-colors shadow-2xl">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </button>
+                <!-- Background ambient glow -->
+                <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 80% 60% at 20% 50%, rgba(236,72,153,0.12) 0%, transparent 60%), radial-gradient(ellipse 60% 80% at 80% 50%, rgba(168,85,247,0.10) 0%, transparent 60%); z-index:0;"></div>
 
-                <div id="cards-container" class="flex overflow-x-auto snap-x snap-mandatory gap-6 w-[100vw] px-[calc(50vw-120px)] pb-2 gsap-reveal relative z-[60] scroll-smooth" style="scrollbar-width: none; -ms-overflow-style: none;">
-                    
-                    <!-- Card 1: Pink/Rose -->
-                    <div class="share-card-item pc-card-active flex-shrink-0 snap-center relative bg-gradient-to-br from-indigo-900 via-pink-900 to-rose-900 rounded-md p-5 shadow-2xl border border-white/10 overflow-hidden block" style="width: 240px; height: 426px;">
-                        <!-- Badge PC -->
-                        <div class="pc-indicator hidden md:flex absolute -top-1 right-3 bg-white text-black text-[10px] font-bold px-3 py-1.5 rounded-b-lg shadow-xl items-center gap-1 opacity-0 translate-y-[-10px] scale-95 transition-all z-50">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-green-600"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            SELECCIONADA
-                        </div>
-                        
-                        <div class="absolute top-4 right-4 opacity-20 text-4xl" style="line-height: 1;">🌷</div>
-                        
-                        <div class="mb-8" style="position: relative; z-index: 10;">
-                            <h1 class="text-5xl font-black tracking-tighter text-white drop-shadow-md mb-1" style="line-height: 1;">28E</h1>
-                            <p class="text-pink-300 font-bold tracking-[0.2em] uppercase text-xs" style="line-height: 1;">Wrapped</p>
-                        </div>
-                        
-                        <h2 class="text-3xl font-black text-white mb-6 tracking-tight" style="line-height: 1.1; position: relative; z-index: 10;">Nuestros<br>120 Días</h2>
-                        
-                        <div class="mb-10" style="position: relative; z-index: 10;">
-                            <div class="flex justify-between items-end border-b border-white/40 pb-1 mb-3"><span class="text-zinc-200 font-medium text-xs">Mensajes</span><span class="text-white font-black text-lg" style="line-height: 1;">32,371</span></div>
-                            <div class="flex justify-between items-end border-b border-white/40 pb-1 mb-3"><span class="text-zinc-200 font-medium text-xs">Conexión (Hrs)</span><span class="text-white font-black text-lg" style="line-height: 1;">2,880</span></div>
-                            <div class="flex justify-between items-end border-b border-white/40 pb-1 mb-3"><span class="text-zinc-200 font-medium text-xs">Veces "Amor"</span><span class="text-white font-black text-lg" style="line-height: 1;">2,564</span></div>
-                            <div class="flex justify-between items-end border-b border-white/40 pb-1"><span class="text-zinc-200 font-medium text-xs">Veces "Te amo"</span><span class="text-white font-black text-lg" style="line-height: 1;">843</span></div>
-                        </div>
-
-                        <div class="flex justify-between items-center opacity-90 border-t border-white/20 pt-3" style="position: relative; z-index: 10;">
-                            <p class="font-serif italic text-pink-200" style="font-size: 10px;">Para mi niña valiente.</p>
-                            <p class="text-white font-bold uppercase tracking-widest" style="font-size: 10px;">C & Y</p>
-                        </div>
-                    </div>
-
-                    <!-- Card 2: Blue/Ocean -->
-                    <div class="share-card-item pc-card-inactive flex-shrink-0 snap-center relative bg-gradient-to-br from-blue-700 via-indigo-600 to-cyan-600 rounded-md p-5 shadow-2xl border border-white/20 overflow-hidden block" style="width: 240px; height: 426px;">
-                        <!-- Badge PC -->
-                        <div class="pc-indicator hidden md:flex absolute -top-1 right-3 bg-white text-black text-[10px] font-bold px-3 py-1.5 rounded-b-lg shadow-xl items-center gap-1 opacity-0 translate-y-[-10px] scale-95 transition-all z-50">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-green-600"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            SELECCIONADA
-                        </div>
-                        
-                        <div class="absolute top-4 right-4 opacity-20 text-4xl" style="line-height: 1;">🌊</div>
-                        
-                        <div class="mb-8" style="position: relative; z-index: 10;">
-                            <h1 class="text-5xl font-black tracking-tighter text-white drop-shadow-md mb-1" style="line-height: 1;">28E</h1>
-                            <p class="text-cyan-200 font-bold tracking-[0.2em] uppercase text-xs" style="line-height: 1;">Wrapped</p>
-                        </div>
-                        
-                        <h2 class="text-3xl font-black text-white mb-6 tracking-tight" style="line-height: 1.1; position: relative; z-index: 10;">Nuestros<br>120 Días</h2>
-                        
-                        <div class="mb-10" style="position: relative; z-index: 10;">
-                            <div class="flex justify-between items-end border-b border-white/30 pb-1 mb-3"><span class="text-blue-100 font-medium text-xs">Mensajes</span><span class="text-white font-black text-lg" style="line-height: 1;">32,371</span></div>
-                            <div class="flex justify-between items-end border-b border-white/30 pb-1 mb-3"><span class="text-blue-100 font-medium text-xs">Conexión (Hrs)</span><span class="text-white font-black text-lg" style="line-height: 1;">2,880</span></div>
-                            <div class="flex justify-between items-end border-b border-white/30 pb-1 mb-3"><span class="text-blue-100 font-medium text-xs">Veces "Amor"</span><span class="text-white font-black text-lg" style="line-height: 1;">2,564</span></div>
-                            <div class="flex justify-between items-end border-b border-white/30 pb-1"><span class="text-blue-100 font-medium text-xs">Veces "Te amo"</span><span class="text-white font-black text-lg" style="line-height: 1;">843</span></div>
-                        </div>
-
-                        <div class="flex justify-between items-center opacity-90 border-t border-white/20 pt-3" style="position: relative; z-index: 10;">
-                            <p class="font-serif italic text-cyan-200" style="font-size: 10px;">Para mi niña valiente.</p>
-                            <p class="text-white font-bold uppercase tracking-widest" style="font-size: 10px;">C & Y</p>
-                        </div>
-                    </div>
-
-                    <!-- Card 3: White/Light -->
-                    <div class="share-card-item pc-card-inactive flex-shrink-0 snap-center relative bg-gradient-to-br from-white via-slate-50 to-zinc-200 rounded-md p-5 shadow-2xl border border-black/10 overflow-hidden block" style="width: 240px; height: 426px;">
-                        <!-- Badge PC -->
-                        <div class="pc-indicator hidden md:flex absolute -top-1 right-3 bg-zinc-900 text-white text-[10px] font-bold px-3 py-1.5 rounded-b-lg shadow-xl items-center gap-1 opacity-0 translate-y-[-10px] scale-95 transition-all z-50">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-green-400"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            SELECCIONADA
-                        </div>
-                        
-                        <div class="absolute top-4 right-4 opacity-20 text-4xl" style="line-height: 1;">☁️</div>
-                        
-                        <div class="mb-8" style="position: relative; z-index: 10;">
-                            <h1 class="text-5xl font-black tracking-tighter text-black drop-shadow-sm mb-1" style="line-height: 1;">28E</h1>
-                            <p class="text-rose-500 font-bold tracking-[0.2em] uppercase text-xs" style="line-height: 1;">Wrapped</p>
-                        </div>
-                        
-                        <h2 class="text-3xl font-black text-black mb-6 tracking-tight" style="line-height: 1.1; position: relative; z-index: 10;">Nuestros<br>120 Días</h2>
-                        
-                        <div class="mb-10" style="position: relative; z-index: 10;">
-                            <div class="flex justify-between items-end border-b border-black/20 pb-1 mb-3"><span class="text-zinc-600 font-medium text-xs">Mensajes</span><span class="text-black font-black text-lg" style="line-height: 1;">32,371</span></div>
-                            <div class="flex justify-between items-end border-b border-black/20 pb-1 mb-3"><span class="text-zinc-600 font-medium text-xs">Conexión (Hrs)</span><span class="text-black font-black text-lg" style="line-height: 1;">2,880</span></div>
-                            <div class="flex justify-between items-end border-b border-black/20 pb-1 mb-3"><span class="text-zinc-600 font-medium text-xs">Veces "Amor"</span><span class="text-black font-black text-lg" style="line-height: 1;">2,564</span></div>
-                            <div class="flex justify-between items-end border-b border-black/20 pb-1"><span class="text-zinc-600 font-medium text-xs">Veces "Te amo"</span><span class="text-black font-black text-lg" style="line-height: 1;">843</span></div>
-                        </div>
-
-                        <div class="flex justify-between items-center opacity-90 border-t border-black/10 pt-3" style="position: relative; z-index: 10;">
-                            <p class="font-serif italic text-rose-500" style="font-size: 10px;">Para mi niña valiente.</p>
-                            <p class="text-black font-bold uppercase tracking-widest" style="font-size: 10px;">C & Y</p>
-                        </div>
-                    </div>
-
-                    <!-- Card 4: Green/Red -->
-                    <div class="share-card-item pc-card-inactive flex-shrink-0 snap-center relative bg-gradient-to-br from-red-900 via-rose-800 to-emerald-900 rounded-md p-5 shadow-2xl border border-white/20 overflow-hidden block" style="width: 240px; height: 426px;">
-                        <!-- Badge PC -->
-                        <div class="pc-indicator hidden md:flex absolute -top-1 right-3 bg-white text-black text-[10px] font-bold px-3 py-1.5 rounded-b-lg shadow-xl items-center gap-1 opacity-0 translate-y-[-10px] scale-95 transition-all z-50">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-green-600"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            SELECCIONADA
-                        </div>
-                        
-                        <div class="absolute top-4 right-4 opacity-20 text-4xl" style="line-height: 1;">🍉</div>
-                        
-                        <div class="mb-8" style="position: relative; z-index: 10;">
-                            <h1 class="text-5xl font-black tracking-tighter text-white drop-shadow-md mb-1" style="line-height: 1;">28E</h1>
-                            <p class="text-green-300 font-bold tracking-[0.2em] uppercase text-xs" style="line-height: 1;">Wrapped</p>
-                        </div>
-                        
-                        <h2 class="text-3xl font-black text-white mb-6 tracking-tight" style="line-height: 1.1; position: relative; z-index: 10;">Nuestros<br>120 Días</h2>
-                        
-                        <div class="mb-10" style="position: relative; z-index: 10;">
-                            <div class="flex justify-between items-end border-b border-white/40 pb-1 mb-3"><span class="text-rose-200 font-medium text-xs">Mensajes</span><span class="text-white font-black text-lg" style="line-height: 1;">32,371</span></div>
-                            <div class="flex justify-between items-end border-b border-white/40 pb-1 mb-3"><span class="text-rose-200 font-medium text-xs">Conexión (Hrs)</span><span class="text-white font-black text-lg" style="line-height: 1;">2,880</span></div>
-                            <div class="flex justify-between items-end border-b border-white/40 pb-1 mb-3"><span class="text-rose-200 font-medium text-xs">Veces "Amor"</span><span class="text-white font-black text-lg" style="line-height: 1;">2,564</span></div>
-                            <div class="flex justify-between items-end border-b border-white/40 pb-1"><span class="text-rose-200 font-medium text-xs">Veces "Te amo"</span><span class="text-white font-black text-lg" style="line-height: 1;">843</span></div>
-                        </div>
-
-                        <div class="flex justify-between items-center opacity-90 border-t border-white/20 pt-3" style="position: relative; z-index: 10;">
-                            <p class="font-serif italic text-green-200" style="font-size: 10px;">Para mi niña valiente.</p>
-                            <p class="text-white font-bold uppercase tracking-widest" style="font-size: 10px;">C & Y</p>
-                        </div>
-                    </div>
+                <!-- Header -->
+                <div class="w-full text-center mb-2 gsap-reveal relative z-10 px-6">
+                    <p class="text-[10px] font-black uppercase tracking-[0.25em] text-white/40 mb-0.5">Guarda tu tarjeta</p>
+                    <h2 class="text-xl font-black text-white tracking-tight">Nuestros <span style="background:linear-gradient(90deg,#f59e0b,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">182 Días</span></h2>
                 </div>
 
-                <style>
-                    /* Custom Scrollbar for horizontal scrolling if needed */
-                    ::-webkit-scrollbar {
-                        height: 4px;
-                        width: 4px;
-                    }
-                    ::-webkit-scrollbar-track {
-                        background: rgba(255, 255, 255, 0.05); 
-                    }
-                    ::-webkit-scrollbar-thumb {
-                        background: rgba(255, 255, 255, 0.2); 
-                        border-radius: 4px;
-                    }
-                    ::-webkit-scrollbar-thumb:hover {
-                        background: rgba(255, 255, 255, 0.4); 
-                    }
-                    
-                    @media (min-width: 768px) {
-                        /* PC Card Highlight Effects */
-                        .pc-card-active {
-                            transform: scale(1.02);
-                            opacity: 1;
-                            filter: brightness(1);
-                            box-shadow: 0 0 40px rgba(255,255,255,0.15);
-                        }
-                        .pc-card-inactive {
-                            transform: scale(0.92);
-                            opacity: 0.4;
-                            filter: brightness(0.6);
-                        }
-                        .share-card-item {
-                            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-                        }
-                        .pc-card-active .pc-indicator {
-                            opacity: 1 !important;
-                            transform: translateY(0) scale(1) !important;
-                        }
-                    }
-                </style>
-                </div>
+                <!-- Scroll hint mobile -->
+                <p class="text-[9px] text-white/30 uppercase tracking-widest mb-2 gsap-reveal z-10 relative md:hidden">← desliza para ver más →</p>
 
-                <div class="mt-4 md:mt-6 flex flex-col md:flex-row items-center justify-center gap-4 w-full max-w-xs md:max-w-[600px] z-50 pointer-events-auto relative px-4">
-                    <button id="btn-download" onclick="downloadShareCard()" class="w-full md:flex-1 py-3.5 bg-rose-600 text-white font-bold rounded-full hover:bg-rose-500 transition-all shadow-lg shadow-rose-600/30 flex items-center justify-center gap-2 uppercase tracking-widest text-sm pointer-events-auto">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
-                        <span class="md:hidden">Compartir Resumen</span>
-                        <span class="hidden md:inline">Descargar</span>
+                <!-- Cards row -->
+                <div class="w-full flex-1 relative flex items-center justify-center z-10">
+                    <button onclick="event.stopPropagation();scrollCards(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 z-[70] w-10 h-10 bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 rounded-full text-white hidden md:flex items-center justify-center shadow-2xl transition-all">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
                     </button>
-                    <button onclick="resetWrapped()" class="w-full md:flex-1 py-3.5 bg-white/10 text-white font-bold rounded-full hover:bg-white/20 transition-all backdrop-blur-sm border border-white/10 uppercase tracking-widest text-sm pointer-events-auto">
-                        Volver al Inicio
+                    <button onclick="event.stopPropagation();scrollCards(1)" class="absolute right-4 top-1/2 -translate-y-1/2 z-[70] w-10 h-10 bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 rounded-full text-white hidden md:flex items-center justify-center shadow-2xl transition-all">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+
+                    <div id="cards-container" class="flex overflow-x-auto snap-x snap-mandatory gap-4 w-full px-[calc(50vw-clamp(100px,11vw,140px))] pb-2 gsap-reveal relative z-[60] scroll-smooth" style="scrollbar-width:none; -webkit-overflow-scrolling:touch;">
+
+                        <!-- Card 1: Gold Luxury -->
+                        <div class="share-card-item pc-card-active flex-shrink-0 snap-center relative overflow-hidden" style="width:clamp(220px,28vw,320px); height:calc(100vh - 140px); max-height:520px; min-height:340px; border-radius:24px;">
+                            <div class="pc-indicator hidden md:flex absolute -top-1 right-3 bg-white text-black text-[10px] font-bold px-3 py-1.5 rounded-b-xl shadow-xl items-center gap-1 opacity-0 translate-y-[-10px] scale-95 transition-all z-50"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="text-emerald-600"><polyline points="20 6 9 17 4 12"></polyline></svg>SELECCIONADA</div>
+                            <!-- BG gradient -->
+                            <div class="absolute inset-0" style="background: linear-gradient(145deg, #0f0800 0%, #1a0e00 40%, #0d0500 100%);"></div>
+                            <!-- Gold lines decorative -->
+                            <div class="absolute inset-0 opacity-20" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(245,158,11,0.3) 40px, rgba(245,158,11,0.3) 41px);"></div>
+                            <!-- Top glow -->
+                            <div class="absolute top-0 left-0 right-0 h-32 opacity-60" style="background: radial-gradient(ellipse at 50% 0%, rgba(245,158,11,0.5) 0%, transparent 70%);"></div>
+                            <!-- Content -->
+                            <div class="relative z-10 flex flex-col h-full p-4">
+                                <!-- Logo -->
+                                <div class="flex items-start justify-between mb-2">
+                                    <div>
+                                        <div class="relative inline-block">
+                                            <span class="text-3xl font-black text-white tracking-tighter" style="line-height:1;">28E</span>
+                                            <span class="absolute -top-1 -right-7 text-[7px] font-black bg-amber-500 text-black px-1.5 py-0.5 rounded-full">VI</span>
+                                        </div>
+                                        <p class="text-[9px] font-bold tracking-[0.3em] uppercase mt-0.5" style="color:#d97706;">WRAPPED — HALF YEAR</p>
+                                    </div>
+                                    <span class="text-xl opacity-60">🌷</span>
+                                </div>
+                                <!-- Big stat -->
+                                <div class="mb-2 py-2.5 border-y" style="border-color:rgba(245,158,11,0.2);">
+                                    <p class="text-[10px] font-bold uppercase tracking-wider mb-0.5" style="color:rgba(245,158,11,0.6);">Mensajes totales</p>
+                                    <p class="text-4xl font-black text-white tracking-tight" style="line-height:1;">50,835</p>
+                                </div>
+                                <!-- Stats grid -->
+                                <div class="grid grid-cols-2 gap-1.5 flex-1">
+                                    <div class="rounded-lg p-2" style="background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.15);">
+                                        <p class="text-[8px] uppercase font-bold mb-0.5" style="color:rgba(245,158,11,0.6);">Racha</p>
+                                        <p class="text-lg font-black text-white">164<span class="text-[10px] font-medium ml-0.5" style="color:rgba(245,158,11,0.7);">días</span></p>
+                                    </div>
+                                    <div class="rounded-lg p-2" style="background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.15);">
+                                        <p class="text-[8px] uppercase font-bold mb-0.5" style="color:rgba(245,158,11,0.6);">Te amo</p>
+                                        <p class="text-lg font-black text-white">2,582</p>
+                                    </div>
+                                    <div class="rounded-lg p-2" style="background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.15);">
+                                        <p class="text-[8px] uppercase font-bold mb-0.5" style="color:rgba(245,158,11,0.6);">Amor</p>
+                                        <p class="text-lg font-black text-white">3,589</p>
+                                    </div>
+                                    <div class="rounded-lg p-2" style="background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.15);">
+                                        <p class="text-[8px] uppercase font-bold mb-0.5" style="color:rgba(245,158,11,0.6);">Madrugadas</p>
+                                        <p class="text-lg font-black text-white">15k</p>
+                                    </div>
+                                </div>
+                                <!-- Footer -->
+                                <div class="mt-2 pt-2 flex items-center justify-between" style="border-top:1px solid rgba(245,158,11,0.15);">
+                                    <p class="font-serif italic text-[10px]" style="color:rgba(245,158,11,0.7);">Felices 6 meses, mi vida.</p>
+                                    <p class="text-white font-black text-[11px] tracking-wider">C & Y</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Aurora Pink/Purple -->
+                        <div class="share-card-item pc-card-inactive flex-shrink-0 snap-center relative overflow-hidden" style="width:clamp(220px,28vw,320px); height:calc(100vh - 140px); max-height:520px; min-height:340px; border-radius:24px;">
+                            <div class="pc-indicator hidden md:flex absolute -top-1 right-3 bg-white text-black text-[10px] font-bold px-3 py-1.5 rounded-b-xl shadow-xl items-center gap-1 opacity-0 translate-y-[-10px] scale-95 transition-all z-50"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="text-emerald-600"><polyline points="20 6 9 17 4 12"></polyline></svg>SELECCIONADA</div>
+                            <!-- BG -->
+                            <div class="absolute inset-0" style="background: linear-gradient(145deg, #0a001a 0%, #1a0028 50%, #0f000f 100%);"></div>
+                            <!-- Aurora effect -->
+                            <div class="absolute inset-0" style="background: radial-gradient(ellipse 100% 60% at 50% -10%, rgba(236,72,153,0.5) 0%, transparent 60%), radial-gradient(ellipse 80% 60% at 80% 110%, rgba(139,92,246,0.4) 0%, transparent 60%);"></div>
+                            <!-- Content -->
+                            <div class="relative z-10 flex flex-col h-full p-4">
+                                <div class="flex items-start justify-between mb-2">
+                                    <div>
+                                        <div class="relative inline-block">
+                                            <span class="text-3xl font-black text-white tracking-tighter" style="line-height:1;">28E</span>
+                                            <span class="absolute -top-1 -right-7 text-[7px] font-black bg-pink-500 text-white px-1.5 py-0.5 rounded-full">VI</span>
+                                        </div>
+                                        <p class="text-[9px] font-bold tracking-[0.3em] uppercase mt-0.5" style="color:rgba(236,72,153,0.8);">WRAPPED — HALF YEAR</p>
+                                    </div>
+                                    <span class="text-xl opacity-60">💗</span>
+                                </div>
+                                <div class="mb-2 py-2.5 border-y" style="border-color:rgba(236,72,153,0.2);">
+                                    <p class="text-[10px] font-bold uppercase tracking-wider mb-0.5" style="color:rgba(236,72,153,0.6);">Mensajes totales</p>
+                                    <p class="text-4xl font-black text-white tracking-tight" style="line-height:1;">50,835</p>
+                                </div>
+                                <div class="grid grid-cols-2 gap-1.5 flex-1">
+                                    <div class="rounded-lg p-2" style="background:rgba(236,72,153,0.1); border:1px solid rgba(236,72,153,0.2);">
+                                        <p class="text-[8px] uppercase font-bold mb-0.5" style="color:rgba(236,72,153,0.7);">Racha</p>
+                                        <p class="text-lg font-black text-white">164<span class="text-[10px] font-medium ml-0.5" style="color:rgba(236,72,153,0.6);">días</span></p>
+                                    </div>
+                                    <div class="rounded-lg p-2" style="background:rgba(139,92,246,0.1); border:1px solid rgba(139,92,246,0.2);">
+                                        <p class="text-[8px] uppercase font-bold mb-0.5" style="color:rgba(167,139,250,0.7);">Te amo</p>
+                                        <p class="text-lg font-black text-white">2,582</p>
+                                    </div>
+                                    <div class="rounded-lg p-2" style="background:rgba(139,92,246,0.1); border:1px solid rgba(139,92,246,0.2);">
+                                        <p class="text-[8px] uppercase font-bold mb-0.5" style="color:rgba(167,139,250,0.7);">Amor</p>
+                                        <p class="text-lg font-black text-white">3,589</p>
+                                    </div>
+                                    <div class="rounded-lg p-2" style="background:rgba(236,72,153,0.1); border:1px solid rgba(236,72,153,0.2);">
+                                        <p class="text-[8px] uppercase font-bold mb-0.5" style="color:rgba(236,72,153,0.7);">Madrugadas</p>
+                                        <p class="text-lg font-black text-white">15k</p>
+                                    </div>
+                                </div>
+                                <div class="mt-2 pt-2 flex items-center justify-between" style="border-top:1px solid rgba(236,72,153,0.2);">
+                                    <p class="font-serif italic text-[10px]" style="color:rgba(236,72,153,0.7);">Para mi niña valiente.</p>
+                                    <p class="text-white font-black text-[11px] tracking-wider">C & Y</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Midnight Dark Glass -->
+                        <div class="share-card-item pc-card-inactive flex-shrink-0 snap-center relative overflow-hidden" style="width:clamp(220px,28vw,320px); height:calc(100vh - 140px); max-height:520px; min-height:340px; border-radius:24px;">
+                            <div class="pc-indicator hidden md:flex absolute -top-1 right-3 bg-white text-black text-[10px] font-bold px-3 py-1.5 rounded-b-xl shadow-xl items-center gap-1 opacity-0 translate-y-[-10px] scale-95 transition-all z-50"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="text-emerald-600"><polyline points="20 6 9 17 4 12"></polyline></svg>SELECCIONADA</div>
+                            <!-- BG -->
+                            <div class="absolute inset-0" style="background: linear-gradient(145deg, #f8f4f0 0%, #ede8e4 50%, #f5f0ec 100%);"></div>
+                            <!-- Soft pink top -->
+                            <div class="absolute top-0 left-0 right-0 h-48" style="background: linear-gradient(180deg, rgba(252,231,243,0.8) 0%, transparent 100%);"></div>
+                            <!-- Content -->
+                            <div class="relative z-10 flex flex-col h-full p-4">
+                                <div class="flex items-start justify-between mb-2">
+                                    <div>
+                                        <div class="relative inline-block">
+                                            <span class="text-3xl font-black text-zinc-900 tracking-tighter" style="line-height:1;">28E</span>
+                                            <span class="absolute -top-1 -right-7 text-[7px] font-black bg-rose-500 text-white px-1.5 py-0.5 rounded-full">VI</span>
+                                        </div>
+                                        <p class="text-[9px] font-bold tracking-[0.3em] uppercase mt-0.5 text-rose-500">WRAPPED — HALF YEAR</p>
+                                    </div>
+                                    <span class="text-xl opacity-50">🌸</span>
+                                </div>
+                                <div class="mb-2 py-2.5 border-y border-zinc-200">
+                                    <p class="text-[10px] font-bold uppercase tracking-wider mb-0.5 text-zinc-400">Mensajes totales</p>
+                                    <p class="text-4xl font-black text-zinc-900 tracking-tight" style="line-height:1;">50,835</p>
+                                </div>
+                                <div class="grid grid-cols-2 gap-1.5 flex-1">
+                                    <div class="rounded-lg p-2 bg-white/80 border border-zinc-100 shadow-sm">
+                                        <p class="text-[8px] uppercase font-bold mb-0.5 text-zinc-400">Racha</p>
+                                        <p class="text-lg font-black text-zinc-900">164<span class="text-[10px] font-medium ml-0.5 text-zinc-400">días</span></p>
+                                    </div>
+                                    <div class="rounded-lg p-2 bg-white/80 border border-zinc-100 shadow-sm">
+                                        <p class="text-[8px] uppercase font-bold mb-0.5 text-rose-400">Te amo</p>
+                                        <p class="text-lg font-black text-zinc-900">2,582</p>
+                                    </div>
+                                    <div class="rounded-lg p-2 bg-white/80 border border-zinc-100 shadow-sm">
+                                        <p class="text-[8px] uppercase font-bold mb-0.5 text-rose-400">Amor</p>
+                                        <p class="text-lg font-black text-zinc-900">3,589</p>
+                                    </div>
+                                    <div class="rounded-lg p-2 bg-white/80 border border-zinc-100 shadow-sm">
+                                        <p class="text-[8px] uppercase font-bold mb-0.5 text-zinc-400">Madrugadas</p>
+                                        <p class="text-lg font-black text-zinc-900">15k</p>
+                                    </div>
+                                </div>
+                                <div class="mt-2 pt-2 flex items-center justify-between border-t border-zinc-200">
+                                    <p class="font-serif italic text-[10px] text-rose-400">Felices 6 meses.</p>
+                                    <p class="text-zinc-900 font-black text-[11px] tracking-wider">C & Y</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 4: Deep Teal -->
+                        <div class="share-card-item pc-card-inactive flex-shrink-0 snap-center relative overflow-hidden" style="width:clamp(220px,28vw,320px); height:calc(100vh - 140px); max-height:520px; min-height:340px; border-radius:24px;">
+                            <div class="pc-indicator hidden md:flex absolute -top-1 right-3 bg-white text-black text-[10px] font-bold px-3 py-1.5 rounded-b-xl shadow-xl items-center gap-1 opacity-0 translate-y-[-10px] scale-95 transition-all z-50"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="text-emerald-600"><polyline points="20 6 9 17 4 12"></polyline></svg>SELECCIONADA</div>
+                            <!-- BG -->
+                            <div class="absolute inset-0" style="background: linear-gradient(145deg, #00100c 0%, #001a14 50%, #000e0a 100%);"></div>
+                            <div class="absolute inset-0" style="background: radial-gradient(ellipse 100% 50% at 50% 0%, rgba(52,211,153,0.35) 0%, transparent 60%), radial-gradient(ellipse 80% 60% at 30% 100%, rgba(6,182,212,0.25) 0%, transparent 60%);"></div>
+                            <!-- Content -->
+                            <div class="relative z-10 flex flex-col h-full p-4">
+                                <div class="flex items-start justify-between mb-2">
+                                    <div>
+                                        <div class="relative inline-block">
+                                            <span class="text-3xl font-black text-white tracking-tighter" style="line-height:1;">28E</span>
+                                            <span class="absolute -top-1 -right-7 text-[7px] font-black bg-emerald-500 text-black px-1.5 py-0.5 rounded-full">VI</span>
+                                        </div>
+                                        <p class="text-[9px] font-bold tracking-[0.3em] uppercase mt-0.5" style="color:rgba(52,211,153,0.8);">WRAPPED — HALF YEAR</p>
+                                    </div>
+                                    <span class="text-xl opacity-60">🌿</span>
+                                </div>
+                                <div class="mb-2 py-2.5 border-y" style="border-color:rgba(52,211,153,0.2);">
+                                    <p class="text-[10px] font-bold uppercase tracking-wider mb-0.5" style="color:rgba(52,211,153,0.6);">Mensajes totales</p>
+                                    <p class="text-4xl font-black text-white tracking-tight" style="line-height:1;">50,835</p>
+                                </div>
+                                <div class="grid grid-cols-2 gap-1.5 flex-1">
+                                    <div class="rounded-lg p-2" style="background:rgba(52,211,153,0.08); border:1px solid rgba(52,211,153,0.15);">
+                                        <p class="text-[8px] uppercase font-bold mb-0.5" style="color:rgba(52,211,153,0.6);">Racha</p>
+                                        <p class="text-lg font-black text-white">164<span class="text-[10px] font-medium ml-0.5" style="color:rgba(52,211,153,0.5);">días</span></p>
+                                    </div>
+                                    <div class="rounded-lg p-2" style="background:rgba(6,182,212,0.08); border:1px solid rgba(6,182,212,0.15);">
+                                        <p class="text-[8px] uppercase font-bold mb-0.5" style="color:rgba(6,182,212,0.7);">Te amo</p>
+                                        <p class="text-lg font-black text-white">2,582</p>
+                                    </div>
+                                    <div class="rounded-lg p-2" style="background:rgba(6,182,212,0.08); border:1px solid rgba(6,182,212,0.15);">
+                                        <p class="text-[8px] uppercase font-bold mb-0.5" style="color:rgba(6,182,212,0.7);">Amor</p>
+                                        <p class="text-lg font-black text-white">3,589</p>
+                                    </div>
+                                    <div class="rounded-lg p-2" style="background:rgba(52,211,153,0.08); border:1px solid rgba(52,211,153,0.15);">
+                                        <p class="text-[8px] uppercase font-bold mb-0.5" style="color:rgba(52,211,153,0.6);">Madrugadas</p>
+                                        <p class="text-lg font-black text-white">15k</p>
+                                    </div>
+                                </div>
+                                <div class="mt-2 pt-2 flex items-center justify-between" style="border-top:1px solid rgba(52,211,153,0.15);">
+                                    <p class="font-serif italic text-[10px]" style="color:rgba(52,211,153,0.7);">Mi lugar favorito es contigo.</p>
+                                    <p class="text-white font-black text-[11px] tracking-wider">C & Y</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="flex items-center gap-3 mt-3 px-6 gsap-reveal z-50 relative w-full max-w-md mx-auto">
+                    <button onclick="downloadCard()" class="flex-1 py-3 text-black font-black rounded-xl uppercase tracking-wider text-xs flex items-center justify-center gap-1.5 shadow-xl transition-all hover:scale-105 active:scale-95" style="background:linear-gradient(135deg,#f59e0b,#ec4899); box-shadow:0 8px 20px rgba(236,72,153,0.3);">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        Guardar
+                    </button>
+                    <button onclick="goToSlide(0)" class="flex-1 py-3 bg-transparent border border-white/15 text-white/60 font-bold rounded-xl uppercase tracking-wider text-xs hover:bg-white/8 hover:text-white transition-all">
+                        ↩ Inicio
                     </button>
                 </div>
             </div>
+
         </div>
-
     </div>
 
-    <!-- Firebase Scripts -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
-        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDFkuktrXnsV9-jg2bv5dpJQRR-he8PT3g",
-            authDomain: "yairealvarado.firebaseapp.com",
-            databaseURL: "https://yaire-591ca-default-rtdb.firebaseio.com",
-            projectId: "yairealvarado",
-            storageBucket: "yaire-591ca.firebasestorage.app",
-            messagingSenderId: "53493863484",
-            appId: "1:53493863484:web:58309a4d2c8849b2512134"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        // Protect Page
-        onAuthStateChanged(auth, (user) => {
-            const overlay = document.getElementById('auth-overlay');
-            if (user) {
-                // Autenticado
-                let name = "Invitado";
-                if (user.displayName) {
-                    name = user.displayName.split(' ')[0];
-                } else if (user.email) {
-                    name = user.email.split('@')[0];
-                }
-                document.getElementById('user-name-display').innerText = name;
-                
-                const sessionInit = document.getElementById('session-initiator');
-                if (sessionInit) sessionInit.innerText = name;
-
-                overlay.style.opacity = '0';
-                setTimeout(() => {
-                    overlay.style.display = 'none';
-                    document.getElementById('wrapped-app').classList.remove('hidden');
-                    initWrapped();
-                }, 500);
-            } else {
-                // No autenticado
-                window.location.replace('/');
-            }
-        });
-    </script>
-
-    <!-- Wrapped Logic & GSAP -->
     <script>
-        const SLIDE_DURATION = 8000; // 8 seconds per slide for more emotion
-        let currentSlide = 0;
-        let slides = [];
-        let progressBars = [];
-        let slideTimer;
-        let animationStart;
-        let isPlaying = false;
-        let isPaused = false;
-        let pauseTimeOffset = 0;
-        let pauseStartTime = 0;
-        let audioEl;
-        let audioElFinal;
-        let autoAdvanceTimer;
-
-        function initWrapped() {
-            slides = document.querySelectorAll('.slide');
-            const progContainer = document.getElementById('progress-container');
-            
-            // Inicializar el audio vía JS puro
-            audioEl = new Audio();
-            audioEl.src = "radio/Don Toliver - No Pole.mp3";
-            audioEl.loop = true;
-            audioEl.load();
-
-            audioElFinal = new Audio();
-            audioElFinal.src = "radio/John Legend - Crowd Go Crazy.mp3";
-            audioElFinal.loop = true;
-            audioElFinal.load();
-            
-            // Create progress bars
-            slides.forEach((_, i) => {
-                const bar = document.createElement('div');
-                bar.className = 'progress-bar';
-                bar.innerHTML = `<div class="progress-fill" id="fill-${i}"></div>`;
-                progContainer.appendChild(bar);
-                progressBars.push(document.getElementById(`fill-${i}`));
-            });
-            
-            // Pre-set GSAP initial states
-            gsap.set('.gsap-text, .gsap-reveal', { y: 40, opacity: 0 });
-            gsap.set('.collage-img', { scale: 0.5, opacity: 0, rotation: 0 });
-        }
-
-        function startWrapped() {
-            document.getElementById('start-screen').style.opacity = '0';
-            
-            // Play Audio directly to maximize compatibility
-            audioEl.volume = 1.0;
-            audioEl.muted = false;
-            audioElFinal.volume = 1.0;
-            audioElFinal.muted = false;
-            
-            const playPromise = audioEl.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(e => {
-                    console.error("Audio play failed:", e);
-                });
-            }
-
-            setTimeout(() => {
-                document.getElementById('start-screen').style.display = 'none';
-                document.getElementById('mute-btn').classList.remove('hidden');
-                document.getElementById('pause-btn').classList.remove('hidden');
-                
-                // Inicializar eventos de scroll para indicador PC
-                const cardsContainer = document.getElementById('cards-container');
-                if (cardsContainer) {
-                    cardsContainer.addEventListener('scroll', updatePcIndicator);
-                }
-                
-                isPlaying = true;
-                isPaused = false;
-                pauseTimeOffset = 0;
-                showSlide(0);
-            }, 500);
-        }
-
-        window.returnToIndex = function() {
-            const inicioAudio = new Audio('sounds/inicio.wav');
-            inicioAudio.play().catch(e => console.log(e));
-            setTimeout(() => {
-                window.location.href = '/';
-            }, 400);
-        };
-
-        window.resetWrapped = function() {
-            const flyoutAudio = new Audio('sounds/flyout.wav');
-            flyoutAudio.play().catch(e => console.log(e));
-            
-            clearTimeout(autoAdvanceTimer);
-            isPlaying = false;
-            if (audioEl) {
-                audioEl.pause();
-                audioEl.currentTime = 0;
-            }
-            if (audioElFinal) {
-                audioElFinal.pause();
-                audioElFinal.currentTime = 0;
-            }
-            gsap.killTweensOf('.gsap-text, .gsap-reveal, .collage-img');
-            
-            const startScreen = document.getElementById('start-screen');
-            startScreen.style.display = 'flex';
-            // Force reflow
-            void startScreen.offsetWidth;
-            startScreen.style.opacity = '1';
-            
-            document.getElementById('mute-btn').classList.add('hidden');
-            document.getElementById('pause-btn').classList.add('hidden');
-            
-            currentSlide = 0;
-            const progressBars = document.querySelectorAll('.progress-fill');
-            progressBars.forEach(bar => {
-                bar.style.width = '0%';
-            });
-            
-            slides.forEach((slide) => {
-                slide.classList.remove('active');
-                slide.style.opacity = '';
-                slide.style.pointerEvents = '';
-                slide.style.zIndex = '';
-            });
-        };
-
-        function playSlideAnimations(index) {
-            const slide = slides[index];
-            
-            // Reset all animations
-            gsap.killTweensOf('.gsap-text, .gsap-reveal, .collage-img');
-            gsap.set('.gsap-text, .gsap-reveal', { y: 40, opacity: 0 });
-            gsap.set('.collage-img', { scale: 0.5, opacity: 0, rotation: 0 });
-
-            // Animate Texts
-            const texts = slide.querySelectorAll('.gsap-text, .gsap-reveal');
-            if (texts.length > 0) {
-                gsap.to(texts, {
-                    y: 0,
-                    opacity: 1,
-                    duration: 1,
-                    stagger: 0.3,
-                    ease: "power3.out",
-                    delay: 0.2
-                });
-            }
-
-            // Specific Collage Animations (Slide 18)
-            if (index === 18) {
-                gsap.utils.toArray('.collage-img').forEach((img, i) => {
-                    const rotations = [-12, 10, -8, 5, -15, 12, -6, 8, -10, 14];
-                    gsap.to(img, { 
-                        opacity: 1, 
-                        scale: i % 2 === 0 ? 1 : 1.05, 
-                        rotation: rotations[i] || (Math.random() * 30 - 15), 
-                        duration: 1, 
-                        ease: "back.out(1.5)", 
-                        delay: 0.8 + (i * 0.3) 
-                    });
-                });
-            }
-        }
-
-        function togglePause() {
-            isPaused = !isPaused;
-            const iconPause = document.getElementById('icon-pause');
-            const iconPlay = document.getElementById('icon-play');
-            if (isPaused) {
-                new Audio('sounds/sliderbajo.wav').play().catch(e => console.log(e));
-                if (iconPause) iconPause.classList.add('hidden');
-                if (iconPlay) iconPlay.classList.remove('hidden');
-                if (audioEl) audioEl.pause();
-                if (audioElFinal) audioElFinal.pause();
-                pauseStartTime = performance.now();
-            } else {
-                new Audio('sounds/slideralto.wav').play().catch(e => console.log(e));
-                if (iconPause) iconPause.classList.remove('hidden');
-                if (iconPlay) iconPlay.classList.add('hidden');
-                if (currentSlide === slides.length - 1) {
-                    if (audioElFinal) audioElFinal.play().catch(e => console.log(e));
-                } else {
-                    if (audioEl) audioEl.play().catch(e => console.log(e));
-                }
-                pauseTimeOffset += (performance.now() - pauseStartTime);
-            }
-        }
-
-        function toggleMute() {
-            if (audioEl) audioEl.muted = !audioEl.muted;
-            if (audioElFinal) audioElFinal.muted = !audioElFinal.muted;
-            const iconMuted = document.getElementById('icon-muted');
-            const iconUnmuted = document.getElementById('icon-unmuted');
-            const isMuted = audioEl ? audioEl.muted : false;
-            if (isMuted) {
-                new Audio('sounds/sliderbajo.wav').play().catch(e => console.log(e));
-                if (iconMuted) iconMuted.classList.remove('hidden');
-                if (iconUnmuted) iconUnmuted.classList.add('hidden');
-            } else {
-                new Audio('sounds/slideralto.wav').play().catch(e => console.log(e));
-                if (iconMuted) iconMuted.classList.add('hidden');
-                if (iconUnmuted) iconUnmuted.classList.remove('hidden');
-            }
-        }
-
-        function showSlide(index) {
-            if (index < 0) index = 0;
-            if (index >= slides.length) {
-                index = slides.length - 1;
-                cancelAnimationFrame(slideTimer);
-                return;
-            }
-
-            // Hide tap zones on the last slide to allow full touch interactions
-            const tapLeft = document.querySelector('.tap-zone-left');
-            const tapRight = document.querySelector('.tap-zone-right');
-            if (index === slides.length - 1) {
-                if(tapLeft) tapLeft.style.display = 'none';
-                if(tapRight) tapRight.style.display = 'none';
-                
-                // Cambiar la música a John Legend en la última pantalla
-                if (audioEl && !audioEl.paused) audioEl.pause();
-                if (!isPaused && audioElFinal && audioElFinal.paused) audioElFinal.play().catch(e => console.log(e));
-            } else {
-                if(tapLeft) tapLeft.style.display = 'block';
-                if(tapRight) tapRight.style.display = 'block';
-                
-                // Cambiar de vuelta a Don Toliver si se retrocede
-                if (audioElFinal && !audioElFinal.paused) audioElFinal.pause();
-                if (!isPaused && audioEl && audioEl.paused) audioEl.play().catch(e => console.log(e));
-            }
-
-            // Update UI
-            slides.forEach((s, i) => {
-                if (i === index) {
-                    s.classList.add('active');
-                    // Change ambient orbs dynamically
-                    const orb1 = document.getElementById('orb1');
-                    const orb2 = document.getElementById('orb2');
-                    const orb3 = document.getElementById('orb3');
-                    
-                    orb1.className = `orb w-[150vw] h-[150vw] md:w-[60vw] md:h-[60vw] top-[-20%] left-[-20%] ${s.dataset.bg1}`;
-                    orb2.className = `orb w-[150vw] h-[150vw] md:w-[60vw] md:h-[60vw] bottom-[-20%] right-[-20%] ${s.dataset.bg2}`;
-                    
-                    if (s.dataset.bg3 && s.dataset.bg3 !== 'bg-transparent') {
-                        orb3.className = `orb w-[100vw] h-[100vw] md:w-[50vw] md:h-[50vw] top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 ${s.dataset.bg3}`;
-                        gsap.to(orb3, { opacity: 0.4, duration: 1 });
-                    } else {
-                        gsap.to(orb3, { opacity: 0, duration: 0.5 });
-                    }
-
-                    // Trigger GSAP timeline for this slide
-                    playSlideAnimations(index);
-
-                } else {
-                    s.classList.remove('active');
-                }
-            });
-
-            // Update progress bars
-            progressBars.forEach((bar, i) => {
-                if (i < index) bar.style.width = '100%';
-                else if (i > index) bar.style.width = '0%';
-                else bar.style.width = '0%'; // Reset current bar instantly
-            });
-
-            currentSlide = index;
-            
-            // If it's the last slide, stop auto-advance
-            if (index === slides.length - 1) {
-                progressBars[index].style.width = '100%';
-                cancelAnimationFrame(slideTimer);
-                return;
-            }
-
-            // Start animation timer
-            cancelAnimationFrame(slideTimer);
-            animationStart = performance.now();
-            pauseTimeOffset = 0;
-            animateProgress();
-        }
-
-        function animateProgress() {
-            if (!isPlaying) return;
-            if (isPaused) {
-                slideTimer = requestAnimationFrame(animateProgress);
-                return;
-            }
-            
-            const now = performance.now();
-            const elapsed = now - animationStart - pauseTimeOffset;
-            const percentage = Math.min((elapsed / SLIDE_DURATION) * 100, 100);
-            
-            progressBars[currentSlide].style.width = `${percentage}%`;
-
-            if (percentage >= 100) {
-                nextSlide();
-            } else {
-                slideTimer = requestAnimationFrame(animateProgress);
-            }
-        }
-
-        function nextSlide() {
-            if (currentSlide < slides.length - 1) {
-                showSlide(currentSlide + 1);
-            }
-        }
-
-        function prevSlide() {
-            if (currentSlide > 0) {
-                showSlide(currentSlide - 1);
-            }
-        }
-
-        function goHome() {
-            audioEl.pause();
-            window.location.href = '/';
-        }
-
-        function getVisibleCard() {
-            const container = document.getElementById('cards-container');
-            const cards = container.querySelectorAll('.share-card-item');
-            let closest = cards[0];
-            let minDiff = Infinity;
-            // Centro de la pantalla/contenedor
-            const containerCenter = container.scrollLeft + (container.clientWidth / 2);
-            
-            cards.forEach(card => {
-                const cardCenter = card.offsetLeft + (card.clientWidth / 2) - container.offsetLeft;
-                const diff = Math.abs(containerCenter - cardCenter);
-                if (diff < minDiff) {
-                    minDiff = diff;
-                    closest = card;
-                }
-            });
-            return closest;
-        }
-
-        function updatePcIndicator() {
-            if (window.innerWidth < 768) return; // Solo actua visualmente en PC
-            const container = document.getElementById('cards-container');
-            if (!container) return;
-            const cards = container.querySelectorAll('.share-card-item');
-            const visibleCard = getVisibleCard();
-            
-            cards.forEach(card => {
-                if (card === visibleCard) {
-                    card.classList.add('pc-card-active');
-                    card.classList.remove('pc-card-inactive');
-                } else {
-                    card.classList.remove('pc-card-active');
-                    card.classList.add('pc-card-inactive');
-                }
-            });
-        }
-
-        function scrollCards(direction) {
-            const scrollAudio = new Audio('sounds/scroll.wav');
-            scrollAudio.play().catch(e => console.log(e));
-
-            const container = document.getElementById('cards-container');
-            const cards = Array.from(container.querySelectorAll('.share-card-item'));
-            
-            // Encontrar la tarjeta visible actual
-            let closestIndex = 0;
-            let minDiff = Infinity;
-            const containerCenter = container.scrollLeft + (container.clientWidth / 2);
-            
-            cards.forEach((card, index) => {
-                const cardCenter = card.offsetLeft + (card.clientWidth / 2) - container.offsetLeft;
-                const diff = Math.abs(containerCenter - cardCenter);
-                if (diff < minDiff) {
-                    minDiff = diff;
-                    closestIndex = index;
-                }
-            });
-
-            // Calcular índice destino
-            let nextIndex = closestIndex + direction;
-            if (nextIndex < 0) nextIndex = 0;
-            if (nextIndex >= cards.length) nextIndex = cards.length - 1;
-
-            // Scrollear directo a la tarjeta elegida (Evita bugs con snap-mandatory)
-            cards[nextIndex].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-        }
-
-        async function downloadShareCard() {
-            const btn = document.getElementById('btn-download');
-            const originalText = btn.innerHTML;
-            
-            const card = getVisibleCard();
-            
-            // Clonamos la tarjeta fuera de pantalla para evitar bugs de html2canvas
-            const clone = card.cloneNode(true);
-            clone.style.position = 'absolute';
-            clone.style.top = '0px';
-            clone.style.left = '0px';
-            clone.style.zIndex = '-9999'; // Lo mantenemos en el flujo pero escondido atrás
-            clone.style.transform = 'none';
-            document.body.appendChild(clone);
-
-            btn.innerHTML = `<span class="opacity-50">Preparando...</span>`;
-            
-            try {
-                const canvas = await html2canvas(clone, {
-                    backgroundColor: null,
-                    scale: 3, 
-                    logging: false,
-                    useCORS: true
-                });
-
-                document.body.removeChild(clone);
-
-                canvas.toBlob(async (blob) => {
-                    const file = new File([blob], '28E_Wrapped.png', { type: 'image/png' });
-
-                    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-                    if (isMobile && navigator.canShare && navigator.canShare({ files: [file] })) {
-                        try {
-                            await navigator.share({
-                                title: 'Mi 28E Wrapped',
-                                text: '¡Mira mi resumen de nuestros 120 días juntos!',
-                                files: [file]
-                            });
-                            btn.innerHTML = originalText;
-                        } catch (err) {
-                            console.error("Share failed/canceled:", err);
-                            btn.innerHTML = originalText;
-                        }
-                    } else {
-                        // Descarga directa en PC
-                        const link = document.createElement('a');
-                        link.href = URL.createObjectURL(blob);
-                        link.download = '28E_Wrapped.png';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                        URL.revokeObjectURL(link.href);
-                        btn.innerHTML = originalText;
-                    }
-                }, 'image/png');
-
-            } catch (err) {
-                console.error("Export Error:", err);
-                btn.innerHTML = "Error al compartir";
-                if(document.body.contains(clone)) document.body.removeChild(clone);
-                setTimeout(() => btn.innerHTML = originalText, 2000);
-            }
-        }
+    const SLIDE_DURATION=8000,slides=document.querySelectorAll('.slide'),TOTAL=slides.length;let current=0,timer=null,isPaused=false,bgAudio=null;
+    (function(){const o=document.getElementById('auth-overlay'),a=document.getElementById('wrapped-app');setTimeout(()=>{o.style.opacity='0';setTimeout(()=>{o.style.display='none';a.classList.remove('hidden');const n=document.getElementById('user-name-display');if(n)n.textContent='Yaire';},500);},1500);})();
+    function returnToIndex(){window.location.href='index.html';}
+    function startWrapped(){const s=document.getElementById('start-screen');s.style.opacity='0';setTimeout(()=>{s.style.display='none';document.getElementById('pause-btn').classList.remove('hidden');document.getElementById('pause-btn').style.display='flex';document.getElementById('mute-btn').classList.remove('hidden');document.getElementById('mute-btn').style.display='flex';buildProgressBars();goToSlide(0);},1000);try{bgAudio=new Audio('sounds/Otis McDonald - O.Sky.mp3');bgAudio.loop=true;bgAudio.volume=0.3;bgAudio.play().catch(()=>{});}catch(e){}}
+    function buildProgressBars(){const c=document.getElementById('progress-container');c.innerHTML='';for(let i=0;i<TOTAL;i++){const b=document.createElement('div');b.className='progress-bar';b.innerHTML='<div class="progress-fill" id="pf-'+i+'"></div>';c.appendChild(b);}}
+    function goToSlide(index){if(index<0||index>=TOTAL)return;clearTimeout(timer);slides.forEach((s,i)=>{s.classList.remove('active');const f=document.getElementById('pf-'+i);if(!f)return;f.style.transition='none';if(i<index)f.style.width='100%';else f.style.width='0%';});current=index;const slide=slides[current];slide.classList.add('active');const o1=document.getElementById('orb1'),o2=document.getElementById('orb2'),o3=document.getElementById('orb3');o1.className='orb w-[150vw] h-[150vw] md:w-[60vw] md:h-[60vw] top-[-20%] left-[-20%] '+(slide.dataset.bg1||'');o2.className='orb w-[150vw] h-[150vw] md:w-[60vw] md:h-[60vw] bottom-[-20%] right-[-20%] '+(slide.dataset.bg2||'');o3.className='orb w-[100vw] h-[100vw] md:w-[50vw] md:h-[50vw] top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 opacity-30 '+(slide.dataset.bg3||'');const texts=slide.querySelectorAll('.gsap-text'),reveals=slide.querySelectorAll('.gsap-reveal'),imgs=slide.querySelectorAll('.collage-img');gsap.fromTo(texts,{opacity:0,y:60,scale:0.9},{opacity:1,y:0,scale:1,duration:0.8,stagger:0.15,ease:'back.out(1.7)'});gsap.fromTo(reveals,{opacity:0,y:30},{opacity:1,y:0,duration:0.7,stagger:0.1,delay:0.2,ease:'power3.out'});if(imgs.length)imgs.forEach((img,i)=>{gsap.fromTo(img,{opacity:0,scale:0.5,rotation:-10+Math.random()*20},{opacity:1,scale:1,rotation:-8+Math.random()*16,duration:0.6,delay:0.1+i*0.12,ease:'back.out(1.5)'});});spawnParticles(slide);const fill=document.getElementById('pf-'+current);if(fill){fill.style.transition='none';fill.style.width='0%';requestAnimationFrame(()=>{fill.style.transition='width '+(SLIDE_DURATION/1000)+'s linear';fill.style.width='100%';});}if(!isPaused&&current<TOTAL-1)timer=setTimeout(()=>nextSlide(),SLIDE_DURATION);}
+    function nextSlide(){if(current<TOTAL-1)goToSlide(current+1);}
+    function prevSlide(){if(current>0)goToSlide(current-1);}
+    function togglePause(){isPaused=!isPaused;document.getElementById('icon-pause').classList.toggle('hidden',isPaused);document.getElementById('icon-play').classList.toggle('hidden',!isPaused);if(isPaused){clearTimeout(timer);if(bgAudio)bgAudio.pause();}else{if(bgAudio)bgAudio.play().catch(()=>{});timer=setTimeout(()=>nextSlide(),SLIDE_DURATION/2);}}
+    function toggleMute(){if(!bgAudio)return;bgAudio.muted=!bgAudio.muted;document.getElementById('icon-unmuted').classList.toggle('hidden',bgAudio.muted);document.getElementById('icon-muted').classList.toggle('hidden',!bgAudio.muted);}
+    function spawnParticles(slide){const e=['💗','🌷','✨','🤍','💕','🌸','⭐'];for(let i=0;i<6;i++){const p=document.createElement('span');p.className='particle';p.textContent=e[Math.floor(Math.random()*e.length)];p.style.left=Math.random()*80+10+'%';p.style.top=Math.random()*80+10+'%';slide.appendChild(p);gsap.fromTo(p,{opacity:0,scale:0,y:20},{opacity:0.6,scale:1,y:-40-Math.random()*60,duration:2+Math.random()*2,delay:Math.random()*2,ease:'power2.out',onComplete:()=>p.remove()});}}
+    function getActiveCard(){const cards=document.querySelectorAll('.share-card-item'),c=document.getElementById('cards-container');if(!c)return cards[0];const center=c.scrollLeft+c.clientWidth/2;let closest=cards[0],minDist=Infinity;cards.forEach(card=>{const dist=Math.abs(card.offsetLeft+card.offsetWidth/2-center);if(dist<minDist){minDist=dist;closest=card;}});return closest;}
+    function scrollCards(dir){document.getElementById('cards-container').scrollBy({left:dir*236,behavior:'smooth'});}
+    (function(){const c=document.getElementById('cards-container');if(!c)return;const u=()=>{const cards=document.querySelectorAll('.share-card-item'),center=c.scrollLeft+c.clientWidth/2;cards.forEach(card=>{const dist=Math.abs(card.offsetLeft+card.offsetWidth/2-center),active=dist<140,ind=card.querySelector('.pc-indicator');if(active){card.classList.remove('pc-card-inactive');card.classList.add('pc-card-active');if(ind){ind.style.opacity='1';ind.style.transform='translateY(0) scale(1)';}}else{card.classList.remove('pc-card-active');card.classList.add('pc-card-inactive');if(ind){ind.style.opacity='0';ind.style.transform='translateY(-10px) scale(0.95)';}}});};c.addEventListener('scroll',u);setTimeout(u,500);})();
+    async function downloadCard(){const card=getActiveCard();if(!card)return;try{const canvas=await html2canvas(card,{backgroundColor:null,scale:3,useCORS:true});const link=document.createElement('a');link.download='28E-Wrapped-HalfYear.png';link.href=canvas.toDataURL('image/png');link.click();}catch(e){alert('Error al generar la imagen.');}}
+    document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')nextSlide();if(e.key==='ArrowLeft')prevSlide();});
     </script>
 </body>
 </html>

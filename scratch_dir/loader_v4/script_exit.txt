@@ -1,0 +1,95 @@
+                    const heroSection = document.getElementById('hero');
+
+                    if (typeof gsap !== 'undefined') {
+                        // ── EXIT GSAP — Glass Engine Shatter/Zoom ───────
+                        loaderEl.style.willChange = 'opacity';
+                        document.removeEventListener('mousemove', null); // clean up implicit
+
+                        setTimeout(() => {
+                            requestAnimationFrame(() => {
+                                // Kill continuous animations
+                                gsap.killTweensOf('#loader-3d-scene, #loader-core-v4, .loader-hud-panel, .l-particle-v4');
+
+                                const exitTl = gsap.timeline({ defaults: { force3D: true } });
+                                exitTl.addLabel('start');
+
+                                const navEl = document.querySelector('nav');
+
+                                // 1. Hide Hero initially
+                                if (heroSection) {
+                                    document.querySelectorAll('.hero-anim').forEach(el => {
+                                        el.style.transition = 'none';
+                                        el.style.filter = '';
+                                        el.style.willChange = 'transform, opacity, filter';
+                                    });
+                                    // Hero starts zoomed out and blurred
+                                    exitTl.set('.hero-anim', { opacity: 0, scale: 0.8, filter: 'blur(20px)' }, 'start');
+                                }
+                                if (navEl) {
+                                    navEl.style.willChange = 'transform, opacity';
+                                    exitTl.set(navEl, { opacity: 0, y: -20 }, 'start');
+                                }
+
+                                // 2. HUD Panels shoot outwards and fade
+                                exitTl.to('.hud-tl', { x: -100, y: -100, opacity: 0, duration: 0.6, ease: 'power2.in' }, 'start');
+                                exitTl.to('.hud-tr', { x: 100, y: -100, opacity: 0, duration: 0.6, ease: 'power2.in' }, 'start');
+                                exitTl.to('.hud-bl', { x: -100, y: 100, opacity: 0, duration: 0.6, ease: 'power2.in' }, 'start');
+                                exitTl.to('.hud-br', { x: 100, y: 100, opacity: 0, duration: 0.6, ease: 'power2.in' }, 'start');
+
+                                // 3. Core Glass massive zoom in (flying through the core)
+                                exitTl.to('#loader-core-v4', {
+                                    scale: 15,
+                                    opacity: 0,
+                                    duration: 1,
+                                    ease: 'power3.in'
+                                }, 'start+=0.2');
+
+                                // 4. Background fades
+                                exitTl.to('.loader-bg-orbs, #loader-particles-v4', {
+                                    opacity: 0, duration: 0.5
+                                }, 'start+=0.4');
+
+                                // 5. Main container dissolve
+                                exitTl.to(loaderEl, {
+                                    opacity: 0,
+                                    duration: 0.4,
+                                    ease: 'none'
+                                }, 'start+=0.8')
+                                .set(loaderEl, { display: 'none' })
+                                .call(() => {
+                                    document.body.classList.add('page-ready');
+                                });
+
+                                // 6. Page reveal (flying out of the blur)
+                                if (heroSection) {
+                                    exitTl.to('.hero-anim', {
+                                        opacity: 1, scale: 1, filter: 'blur(0px)',
+                                        duration: 1.5, stagger: 0.08, ease: 'power4.out',
+                                        onComplete: () => {
+                                            document.querySelectorAll('.hero-anim').forEach(el => {
+                                                el.style.willChange = 'auto';
+                                                el.style.filter = '';
+                                            });
+                                        }
+                                    }, 'start+=0.7');
+                                }
+                                if (navEl) {
+                                    exitTl.to(navEl, {
+                                        opacity: 1, y: 0,
+                                        duration: 1, ease: 'power3.out',
+                                        onComplete: () => { navEl.style.willChange = 'auto'; }
+                                    }, 'start+=0.9');
+                                }
+
+                                exitTl.call(() => {
+                                    initScrollSpy();
+                                    const top5Section = document.getElementById('top5yaire');
+                                    if (top5Section) {
+                                        const barObs = new IntersectionObserver((entries) => {
+                                            entries.forEach(e => { if (e.isIntersecting) { animateWordBars(); barObs.disconnect(); } });
+                                        }, { threshold: 0.3 });
+                                        barObs.observe(top5Section);
+                                    }
+                                }, null, 'start+=1.5');
+                            });
+                        }, 400); 

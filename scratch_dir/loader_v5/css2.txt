@@ -1,0 +1,104 @@
+    <style>
+        /* Panel Layouts */
+        .hud-tl { top: 3rem; left: 3rem; width: 280px; }
+        .hud-tr { top: 3rem; right: 3rem; width: 280px; }
+        .hud-bl { bottom: 3rem; left: 3rem; width: 320px; }
+        .hud-br { bottom: 3rem; right: 3rem; width: 240px; }
+
+        .hud-tr .g-header { flex-direction: row-reverse; }
+        .hud-tr .g-header::after { background: linear-gradient(-90deg, rgba(255,255,255,0.1), transparent); }
+
+        /* Content Styles */
+        .g-info { display: flex; flex-direction: column; gap: 4px; }
+        .g-info.right { align-items: flex-end; text-align: right; }
+
+        .g-label { font-family: 'Inter', sans-serif; font-size: 0.6rem; color: rgba(255,255,255,0.3); letter-spacing: 0.1em; }
+        .g-val { font-family: 'Inter', sans-serif; font-size: 0.85rem; color: #fff; font-weight: 300; }
+        .g-val.mono { font-family: 'JetBrains Mono', 'SF Mono', monospace; font-size: 0.75rem; color: #10b981; }
+
+        .text-gold { color: #f59e0b; text-shadow: 0 0 10px rgba(245,158,11,0.3); font-weight: 500; }
+        .text-pink { color: #ec4899; text-shadow: 0 0 10px rgba(236,72,153,0.3); font-weight: 500; }
+        .mt-3 { margin-top: 1.2rem; }
+
+        /* Terminal */
+        .g-terminal { display: flex; flex-direction: column; gap: 6px; }
+        .t-line { font-family: 'JetBrains Mono', 'SF Mono', monospace; font-size: 0.65rem; color: rgba(255,255,255,0.25); }
+        .t-line.active { color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.3); }
+        .t-cursor { display: inline-block; width: 6px; background: #fff; margin-left: 4px; animation: termBlink 1s infinite step-end; }
+        @keyframes termBlink { 50% { opacity: 0; } }
+
+        /* Progress */
+        .g-pct-row { display: flex; align-items: baseline; justify-content: flex-end; gap: 2px; margin-bottom: 0.8rem; }
+        .g-pct-num { font-family: 'Inter', sans-serif; font-weight: 200; font-size: 3rem; line-height: 1; color: #fff; font-variant-numeric: tabular-nums; }
+        .g-pct-sym { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 1rem; color: rgba(255,255,255,0.3); }
+        
+        .g-prog-track { width: 100%; height: 2px; background: rgba(255,255,255,0.1); border-radius: 1px; overflow: hidden; }
+        .g-prog-fill { width: 0%; height: 100%; background: linear-gradient(90deg, transparent, #f59e0b, #ec4899); border-radius: 1px; box-shadow: 0 0 10px rgba(236,72,153,0.5); transition: width 0.3s ease; }
+
+        /* Center Core */
+        #loader-core-v5 {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            transform: translateZ(50px);
+        }
+
+        .core-glass-v5 {
+            position: absolute;
+            inset: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: inset 0 0 40px rgba(255,255,255,0.02), 0 20px 60px -10px rgba(0,0,0,0.8);
+            z-index: 1;
+        }
+
+        .core-ring-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .ring-elegant {
+            transform-origin: center;
+            animation: spinRingSmooth 15s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+
+        @keyframes spinRingSmooth {
+            100% { transform: rotate(360deg); }
+        }
+
+        .core-text-v5 {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            gap: 4px;
+        }
+
+        .c-char {
+            font-family: 'Inter', sans-serif;
+            font-weight: 200;
+            font-size: 5.5rem;
+            color: #fff;
+            letter-spacing: 0.05em;
+            text-shadow: 0 0 30px rgba(255,255,255,0.2);
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .hud-tl, .hud-tr, .hud-bl { display: none; }
+            .hud-br { bottom: 2rem; right: 50%; transform: translateX(50%) !important; width: 280px; text-align: center; }
+            .g-pct-row { justify-content: center; }
+            .g-header { justify-content: center; }
+            .g-header::after { display: none; }
+            #loader-core-v5 { transform: scale(0.85); }
+        }

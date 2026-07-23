@@ -1,0 +1,39 @@
+    <!-- Loader Screen — Breath -->
+    <!-- ═══ LOADER ═══ -->
+    <div id="loader">
+
+        <!-- Subtle ambient glow -->
+        <div class="loader-ambient"></div>
+
+        <!-- Micro particles -->
+        <div id="loader-particles"></div>
+
+        <!-- Center content block -->
+        <div class="loader-center">
+            <!-- Main title: 28E -->
+            <div id="loader-logo" class="loader-title">
+                <span class="loader-char">2</span><span class="loader-char">8</span><span class="loader-char">E</span>
+            </div>
+
+            <!-- Subtitle -->
+            <div class="loader-sub">Cinemascope V</div>
+
+            <!-- Progress line -->
+            <div class="loader-track">
+                <div id="loader-progress" class="loader-fill"></div>
+            </div>
+
+            <!-- Status message -->
+            <div id="loader-message" class="loader-msg">Preparando nuestro universo...</div>
+        </div>
+
+        <!-- Bottom: Percentage -->
+        <div class="loader-bottom">
+            <div class="loader-pct-row">
+                <div id="loader-percent" class="loader-pct">0</div>
+                <span class="loader-pct-symbol">%</span>
+            </div>
+            <div id="loader-footer" class="loader-foot">28E · V</div>
+        </div>
+
+    </div>

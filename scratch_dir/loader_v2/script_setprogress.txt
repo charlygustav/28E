@@ -1,0 +1,4 @@
+
+                // Update text + progress bar
+                if (percentText) percentText.textContent = Math.floor(pct);
+                if (progressBar) progressBar.style.width = pct + '%';

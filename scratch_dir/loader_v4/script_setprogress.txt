@@ -1,0 +1,8 @@
+
+                // V4 Progress logic
+                if (percentText) percentText.textContent = Math.floor(pct);
+                const blocksActive = Math.floor((pct / 100) * 10);
+                progressBlocks.forEach((block, index) => {
+                    if (index < blocksActive) block.classList.add('active');
+                    else block.classList.remove('active');
+                });

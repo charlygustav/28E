@@ -1,0 +1,79 @@
+    <!-- Loader Screen — Cinematic Memory Glass (V5) -->
+    <!-- ═══ LOADER ═══ -->
+    <div id="loader">
+        
+        <div id="loader-scene-v5">
+            
+            <div class="loader-ambient-v5"></div>
+            <div id="loader-embers-v5"></div>
+
+            <!-- HUD: Top Left (System) -->
+            <div class="glass-panel-v5 hud-tl">
+                <div class="g-header">ESTADO DEL SISTEMA</div>
+                <div class="g-info">
+                    <div class="g-label">OPERACIÓN:</div>
+                    <div class="g-val text-gold">CINEMASCOPE V</div>
+                </div>
+                <div class="g-info mt-3">
+                    <div class="g-label">ACCIÓN:</div>
+                    <div class="g-val">Cargando memorias...</div>
+                </div>
+            </div>
+
+            <!-- HUD: Top Right (Connection) -->
+            <div class="glass-panel-v5 hud-tr">
+                <div class="g-header">CONEXIÓN ALMA</div>
+                <div class="g-info right">
+                    <div class="g-label">DESTINO:</div>
+                    <div class="g-val text-pink">YAIRE 🌷</div>
+                </div>
+                <div class="g-info right mt-3">
+                    <div class="g-label">LATENCIA:</div>
+                    <div class="g-val mono">0ms (Perfecta)</div>
+                </div>
+            </div>
+
+            <!-- HUD: Bottom Left (Terminal) -->
+            <div class="glass-panel-v5 hud-bl">
+                <div class="g-header">REGISTROS</div>
+                <div class="g-terminal" id="loader-term-v5">
+                    <div class="t-line">> Inicializando Acto V... [OK]</div>
+                    <div class="t-line">> Buscando sonrisas... [ENCONTRADAS]</div>
+                    <div class="t-line active">> <span id="term-typer-v5">Desplegando tulipanes</span><span class="t-cursor">_</span></div>
+                </div>
+            </div>
+
+            <!-- HUD: Bottom Right (Progress) -->
+            <div class="glass-panel-v5 hud-br">
+                <div class="g-header">PROGRESO</div>
+                <div class="g-pct-row">
+                    <div id="loader-percent-v5" class="g-pct-num">0</div>
+                    <div class="g-pct-sym">%</div>
+                </div>
+                <div class="g-prog-track">
+                    <div id="loader-progress-v5" class="g-prog-fill"></div>
+                </div>
+            </div>
+
+            <!-- CENTER CORE: Clean Glass -->
+            <div id="loader-core-v5">
+                <div class="core-glass-v5"></div>
+                
+                <!-- Elegant Single Glowing Ring -->
+                <svg class="core-ring-svg" viewBox="0 0 300 300">
+                    <circle class="ring-elegant" cx="150" cy="150" r="130" fill="none" stroke="url(#gold-grad)" stroke-width="1.5" stroke-dasharray="150 50" stroke-linecap="round" />
+                    <defs>
+                        <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#f59e0b" />
+                            <stop offset="100%" stop-color="rgba(245,158,11,0)" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+
+                <div class="core-text-v5">
+                    <span class="c-char">2</span><span class="c-char">8</span><span class="c-char">E</span>
+                </div>
+            </div>
+
+        </div>
+    </div>

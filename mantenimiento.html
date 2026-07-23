@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>28E - Mantenimiento</title>
+  <link rel="icon" type="image/x-icon" href="tulip.ico?v=3">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --tulip-400: #ec4899; --amber-400: #f59e0b; --text: #f4f4f5; }
+    html, body { height: 100%; overflow: hidden; font-family: 'Inter', sans-serif; background: #000; color: var(--text); -webkit-font-smoothing: antialiased; }
+    
+    .video-bg { position: fixed; inset: 0; z-index: 0; }
+    .video-bg video { width: 100%; height: 100%; object-fit: cover; opacity: 0.65; }
+    .overlay { position: fixed; inset: 0; z-index: 1; background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.9) 100%); pointer-events: none; }
+    
+    .container { position: relative; z-index: 2; height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-align: center; }
+    
+    #start-screen { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); transition: opacity 1s ease; }
+    .start-btn { padding: 1rem 3rem; font-size: 1.2rem; font-weight: 800; color: #fff; background: linear-gradient(135deg, var(--amber-400), var(--tulip-400)); border: none; border-radius: 99px; cursor: pointer; transition: transform 0.3s; box-shadow: 0 10px 30px rgba(236, 72, 153, 0.4); margin-bottom: 2rem;}
+    .start-btn:hover { transform: scale(1.05); }
+
+    /* Maintenance Header (Moved to Bottom Right) */
+    .maint-header { position: absolute; bottom: 2rem; right: 2rem; z-index: 5; display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; opacity: 0; transition: opacity 1s ease; }
+    .maint-badge { background: rgba(236, 72, 153, 0.2); border: 1px solid rgba(236, 72, 153, 0.5); padding: 0.4rem 1rem; border-radius: 99px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--tulip-400); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
+    .maint-badge .pulse { width: 6px; height: 6px; background: var(--tulip-400); border-radius: 50%; animation: pulse 1.5s infinite; }
+    .countdown { display: flex; gap: 0.8rem; font-variant-numeric: tabular-nums; background: rgba(0,0,0,0.4); padding: 0.8rem 1.2rem; border-radius: 1rem; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); }
+    .cd-item { display: flex; flex-direction: column; align-items: center; }
+    .cd-num { font-size: 1.5rem; font-weight: 900; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+    .cd-label { font-size: 0.5rem; font-weight: 700; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.1em; }
+
+    .slide-glass { background: rgba(20, 20, 25, 0.4); backdrop-filter: blur(25px) saturate(1.2); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 2rem; padding: 4rem 3rem; max-width: 750px; width: 100%; box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2); position: relative; overflow: hidden; display: none; }
+    .slide-glass::before { content: ''; position: absolute; top: -50px; left: -50px; width: 150px; height: 150px; background: var(--amber-400); filter: blur(80px); opacity: 0.15; }
+    .slide-glass::after { content: ''; position: absolute; bottom: -50px; right: -50px; width: 150px; height: 150px; background: var(--tulip-400); filter: blur(80px); opacity: 0.15; }
+    
+    .slide-content { position: relative; z-index: 3; opacity: 0; transform: scale(0.95) translateY(15px); transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1), transform 1.5s cubic-bezier(0.4, 0, 0.2, 1); min-height: 280px; display: flex; flex-direction: column; justify-content: center; }
+    .slide-content.active { opacity: 1; transform: scale(1) translateY(0); }
+    .slide-content.fade-out { opacity: 0; transform: scale(1.05) translateY(-15px); }
+
+    .stat-category { font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; color: var(--amber-400); margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 0.8rem; }
+    .stat-category::before, .stat-category::after { content: ''; width: 30px; height: 1px; background: rgba(245, 158, 11, 0.3); }
+    .stat-text { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3rem); font-style: italic; font-weight: 700; line-height: 1.2; background: linear-gradient(135deg, #fff, #a1a1aa); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 4px 20px rgba(0,0,0,0.5); margin-bottom: 2rem; }
+    .stat-details { font-size: 1.1rem; color: rgba(255, 255, 255, 0.8); font-weight: 400; font-family: 'Inter', sans-serif; line-height: 1.6; }
+    .stat-highlight { color: #fff; font-weight: 900; font-size: 1.4rem; background: linear-gradient(90deg, var(--amber-400), var(--tulip-400)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+    .progress-dots { display: none; gap: 0.5rem; margin-top: 3rem; z-index: 2; flex-wrap: wrap; justify-content: center; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: all 0.5s ease; }
+    .dot.active { width: 25px; border-radius: 10px; background: linear-gradient(90deg, var(--amber-400), var(--tulip-400)); box-shadow: 0 0 10px rgba(245, 158, 11, 0.5); }
+
+    .brand-logo { position: absolute; top: 2rem; left: 2rem; z-index: 10; font-family: 'Inter', sans-serif; font-size: 1.5rem; font-weight: 900; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.5); letter-spacing: -0.05em; opacity: 0; animation: fadeInLogo 1s ease forwards 1s; display: flex; align-items: center; gap: 0.8rem; }
+    @keyframes fadeInLogo { to { opacity: 0.8; } }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(236, 72, 153, 0); } 100% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0); } }
+  </style>
+</head>
+
+<body>
+  <!-- Video Background -->
+  <div class="video-bg">
+    <video autoplay loop playsinline id="bg-video">
+      <source src="WWDC_25_Final_10m.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="overlay"></div>
+
+  <!-- Logo -->
+  <div class="brand-logo">28E</div>
+
+  <!-- Maintenance Header -->
+  <div class="maint-header" id="maint-header">
+    <div class="maint-badge"><div class="pulse"></div> EN MANTENIMIENTO</div>
+    <div class="countdown" id="countdown">
+      <div class="cd-item"><span class="cd-num" id="cd-h">00</span><span class="cd-label">Horas</span></div>
+      <div class="cd-item"><span class="cd-num" style="color: rgba(255,255,255,0.3)">:</span><span class="cd-label">&nbsp;</span></div>
+      <div class="cd-item"><span class="cd-num" id="cd-m">00</span><span class="cd-label">Minutos</span></div>
+      <div class="cd-item"><span class="cd-num" style="color: rgba(255,255,255,0.3)">:</span><span class="cd-label">&nbsp;</span></div>
+      <div class="cd-item"><span class="cd-num" id="cd-s">00</span><span class="cd-label">Segundos</span></div>
+    </div>
+  </div>
+
+  <!-- Main UI -->
+  <div class="container">
+    <div class="slide-glass" id="glass-panel">
+      <div id="slide-container" class="slide-content"></div>
+    </div>
+    <div id="dots-container" class="progress-dots"></div>
+  </div>
+
+  <script>
+    const slides = [
+      {
+        category: "El Comienzo",
+        text: "Todo empezó aquel 28 de Enero.",
+        details: "Aunque WhatsApp no guardó las primeras dos semanas de nuestra historia (el archivo arranca en febrero), nosotros sabemos que ahí fue donde nació <span class='stat-highlight'>la magia real</span>."
+      },
+      {
+        category: "Sneak Peek #1 🤫",
+        text: "Cinemascope VI.",
+        details: "Una experiencia visual completamente reinventada para sumergirnos en nuestros videos como nunca antes. El cine privado se eleva al siguiente nivel."
+      },
+      {
+        category: "Sobredosis de Amor",
+        text: "Nos lo dijimos 1,295 veces.",
+        details: "Entre 'te amo' y 'te quiero', el contador llegó a la locura de <span class='stat-highlight'>1,295 menciones</span>. El amor nunca faltó en estos meses."
+      },
+      {
+        category: "¿Quién habló más?",
+        text: "Un empate casi perfecto.",
+        details: "El equilibrio lo es todo. Charles ha enviado <span class='stat-highlight'>25,711 mensajes</span> frente a los veinticinco mil de Yaire. ¡Siempre conectados!"
+      },
+      {
+        category: "Risas por escrito",
+        text: "654 carcajadas.",
+        details: "La palabra 'jaja' (y sus derivados) ha aparecido <span class='stat-highlight'>654 veces</span> en la pantalla. Porque si no nos reímos juntos, no vale."
+      },
+      {
+        category: "Las Madrugadas",
+        text: "Cuando dormir era opcional.",
+        details: "Hemos intercambiado <span class='stat-highlight'>11,781 mensajes</span> entre las 12 AM y las 5 AM. Porque la noche siempre fue nuestra mejor cómplice."
+      },
+      {
+        category: "El Lenguaje del Amor",
+        text: "Los emojis más usados.",
+        details: "Nuestros top 3 emojis que definen la relación: 💗 (450 veces), 😭 (59 veces) y 🤍 (56 veces)."
+      },
+      {
+        category: "Rituales Diarios",
+        text: "Los Buenos Días ganan.",
+        details: "Nos hemos dado los 'Buenos días' <span class='stat-highlight'>242 veces</span> frente a solo 84 'Buenas noches'. Empezar el día es más importante."
+      },
+      {
+        category: "El Mes de la Locura",
+        text: "Junio rompió la escala.",
+        details: "Junio de 2026 fue nuestro mes más activo, con la asombrosa cifra de <span class='stat-highlight'>10,057 mensajes</span> en 30 días."
+      },
+      {
+        category: "El Día Más Intenso",
+        text: "22 de Febrero de 2026.",
+        details: "Ese día nos enviamos <span class='stat-highlight'>1,125 mensajes</span> en 24 horas. Simplemente no podíamos soltar el teléfono."
+      },
+      {
+        category: "Testamentos",
+        text: "Mensajes que parecen libros.",
+        details: "El mensaje más largo que nos enviamos en estos meses tiene la increíble cantidad de <span class='stat-highlight'>8,701 palabras</span>. Un verdadero poema gigante."
+      },
+      {
+        category: "El Archivo",
+        text: "Escribimos un libro entero.",
+        details: "<span class='stat-highlight'>281,346 palabras</span> escritas y <span class='stat-highlight'>5,045 fotos</span> compartidas a lo largo de este medio año."
+      },
+      {
+        category: "Sneak Peek #2 🤫",
+        text: "28E Wrapped — Half Year.",
+        details: "Un evento interactivo exclusivo para celebrar nuestros primeros 6 meses. La historia completa, contada con datos, música y magia."
+      },
+      {
+        category: "Mantenimiento",
+        text: "Preparando la siguiente etapa.",
+        details: "Actualmente la bóveda está en mantenimiento, actualizando los sistemas para todo lo increíble que nos espera en los próximos meses."
+      }
+    ];
+
+    let currentSlide = 0;
+    const slideContainer = document.getElementById('slide-container');
+    const dotsContainer = document.getElementById('dots-container');
+    const glassPanel = document.getElementById('glass-panel');
+    const maintHeader = document.getElementById('maint-header');
+    const video = document.getElementById('bg-video');
+
+    slides.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = `dot ${i === 0 ? 'active' : ''}`;
+      dotsContainer.appendChild(dot);
+    });
+    const dots = document.querySelectorAll('.dot');
+
+    function renderSlide(index) {
+      const slide = slides[index];
+      slideContainer.innerHTML = `
+        <div class="stat-category">${slide.category}</div>
+        <h2 class="stat-text">${slide.text}</h2>
+        <div class="stat-details">${slide.details}</div>
+      `;
+    }
+
+    function nextSlide() {
+      slideContainer.classList.remove('active');
+      slideContainer.classList.add('fade-out');
+      setTimeout(() => {
+        currentSlide = (currentSlide + 1) % slides.length;
+        dots.forEach(d => d.classList.remove('active'));
+        dots[currentSlide].classList.add('active');
+        renderSlide(currentSlide);
+        slideContainer.classList.remove('fade-out');
+        void slideContainer.offsetWidth;
+        slideContainer.classList.add('active');
+      }, 1500);
+    }
+
+    window.addEventListener('load', () => {
+      video.play().catch(e => console.log("Auto-play prevented by browser."));
+
+      let targetTime = 0;
+      let isScheduled = false;
+      const cdContainer = document.querySelector('.countdown');
+
+      async function syncConfig() {
+          try {
+              const res = await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json');
+              const cfg = await res.json();
+              
+              if (cfg && cfg.mantenimiento === false) {
+                  window.location.replace('index.html');
+                  return;
+              }
+              
+              if (cfg && cfg.maintType === 'scheduled' && cfg.maintDate) {
+                  isScheduled = true;
+                  const [dPart, tPart] = cfg.maintDate.split('T');
+                  const [yyyy, mm, dd] = dPart.split('-');
+                  const [hh, min] = tPart.split(':');
+                  targetTime = new Date(yyyy, mm - 1, dd, hh, min).getTime();
+                  if (cdContainer) cdContainer.style.display = 'flex';
+              } else {
+                  isScheduled = false;
+                  if (cdContainer) cdContainer.style.display = 'none';
+              }
+          } catch(e) { }
+      }
+
+      syncConfig();
+      setInterval(syncConfig, 30000); // Check every 30 seconds
+
+      setInterval(() => {
+        if (!isScheduled || targetTime === 0) return;
+        const now = new Date().getTime();
+        const distance = targetTime - now;
+        if (distance > 0) {
+          document.getElementById("cd-h").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+          document.getElementById("cd-m").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+          document.getElementById("cd-s").innerText = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
+        } else {
+          document.getElementById("cd-h").innerText = "00";
+          document.getElementById("cd-m").innerText = "00";
+          document.getElementById("cd-s").innerText = "00";
+        }
+      }, 1000);
+
+      setTimeout(() => {
+        maintHeader.style.opacity = '1';
+        glassPanel.style.display = 'block';
+        dotsContainer.style.display = 'flex';
+        renderSlide(0);
+        
+        setTimeout(() => {
+          slideContainer.classList.add('active');
+          setInterval(nextSlide, 8500);
+        }, 800);
+      }, 500);
+    });
+  </script>
+</body>
+</html>

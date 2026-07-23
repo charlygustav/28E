@@ -1,0 +1,26 @@
+                    if (typeof gsap !== 'undefined') {
+                        // ── EXIT GSAP — Cinematic Warp-Through ───────
+                        loaderEl.style.willChange = 'opacity';
+
+                        // Let the user see 100% before exiting
+                        setTimeout(() => {
+                            requestAnimationFrame(() => {
+                                // Kill all continuous loader animations
+                                gsap.killTweensOf('.loader-orbit-1, .loader-orbit-2, .loader-orb-core, .loader-ambient, .loader-particle, .loader-orbital-dot');
+
+                                // Particles burst outward
+                                document.querySelectorAll('.loader-particle').forEach(p => {
+                                    gsap.to(p, {
+                                        x: gsap.utils.random(-200, 200),
+                                        y: gsap.utils.random(-200, 200),
+                                        opacity: 0, scale: 0,
+                                        duration: 0.6, ease: 'power3.in'
+                                    });
+                                });
+
+                                const exitTl = gsap.timeline({ defaults: { force3D: true } });
+                                exitTl.addLabel('start');
+
+                                const customLoader = document.getElementById('custom-loader-wrapper');
+                                const loaderLogo = document.getElementById('loader-logo');
+                                const letters = customLoader ? gsap.utils.toArray(customLoader.querySelectorAll('.loader-letter')) : [];

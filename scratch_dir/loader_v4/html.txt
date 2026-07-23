@@ -1,0 +1,114 @@
+    <!-- Loader Screen — Interactive Glass Engine (Cinemascope V) -->
+    <!-- ═══ LOADER ═══ -->
+    <div id="loader">
+        
+        <div id="loader-3d-scene">
+            
+            <!-- Deep Background -->
+            <div class="loader-bg-orbs">
+                <div class="loader-bg-orb loader-orb-1"></div>
+                <div class="loader-bg-orb loader-orb-2"></div>
+                <div class="loader-bg-orb loader-orb-3"></div>
+            </div>
+            <div id="loader-particles-v4"></div>
+
+            <!-- HUD: Top Left (Mission) -->
+            <div class="loader-hud-panel hud-tl" id="hud-tl">
+                <div class="hud-header"><div class="hud-dot"></div>CINEMASCOPE V</div>
+                <div class="hud-data-row">
+                    <span class="hud-label">OBJETIVO:</span>
+                    <span class="hud-value">YAIRE 🌷</span>
+                </div>
+                <div class="hud-data-row">
+                    <span class="hud-label">COORDENADAS:</span>
+                    <span class="hud-value mono">18.4861° N, 69.9312° W</span>
+                </div>
+                <div class="hud-data-row mt-2">
+                    <span class="hud-label">UPTIME:</span>
+                    <span class="hud-value mono text-amber" id="hud-uptime">00:00:00</span>
+                </div>
+            </div>
+
+            <!-- HUD: Top Right (Telemetry) -->
+            <div class="loader-hud-panel hud-tr" id="hud-tr">
+                <div class="hud-header"><div class="hud-dot pink"></div>TELEMETRÍA</div>
+                <div class="hud-chart-container">
+                    <div class="hud-eq-bar"><div class="eq-fill"></div></div>
+                    <div class="hud-eq-bar"><div class="eq-fill eq-2"></div></div>
+                    <div class="hud-eq-bar"><div class="eq-fill eq-3"></div></div>
+                    <div class="hud-eq-bar"><div class="eq-fill eq-4"></div></div>
+                    <div class="hud-eq-bar"><div class="eq-fill eq-5"></div></div>
+                    <div class="hud-eq-bar"><div class="eq-fill eq-6"></div></div>
+                    <div class="hud-eq-bar"><div class="eq-fill eq-7"></div></div>
+                    <div class="hud-eq-bar"><div class="eq-fill eq-8"></div></div>
+                </div>
+                <div class="hud-data-row">
+                    <span class="hud-label">LATIDOS_SINC:</span>
+                    <span class="hud-value mono text-pink" id="hud-bpm">99.9%</span>
+                </div>
+                <div class="hud-data-row">
+                    <span class="hud-label">CONEXIÓN_ALMA:</span>
+                    <span class="hud-value mono">ESTABLE</span>
+                </div>
+            </div>
+
+            <!-- HUD: Bottom Left (Terminal) -->
+            <div class="loader-hud-panel hud-bl" id="hud-bl">
+                <div class="hud-header"><div class="hud-dot green"></div>[ACTO V] REGISTROS</div>
+                <div class="hud-terminal" id="loader-terminal">
+                    <div class="term-line">> Inicializando memorias... [OK]</div>
+                    <div class="term-line">> Calibrando motor emocional...</div>
+                </div>
+                <div class="term-active-line">> <span id="term-typer">Preparando nuestro universo</span><span class="term-cursor">_</span></div>
+            </div>
+
+            <!-- HUD: Bottom Right (Progress) -->
+            <div class="loader-hud-panel hud-br" id="hud-br">
+                <div class="hud-pct-wrapper">
+                    <div id="loader-percent-v4" class="hud-pct-large">0</div>
+                    <div class="hud-pct-sym">%</div>
+                </div>
+                <div class="hud-progress-blocks">
+                    <!-- 10 blocks, lit based on percentage -->
+                    <div class="p-block"></div><div class="p-block"></div>
+                    <div class="p-block"></div><div class="p-block"></div>
+                    <div class="p-block"></div><div class="p-block"></div>
+                    <div class="p-block"></div><div class="p-block"></div>
+                    <div class="p-block"></div><div class="p-block"></div>
+                </div>
+                <div class="hud-data-row mt-1" style="justify-content: flex-end;">
+                    <span class="hud-label">CARGA DE SISTEMA</span>
+                </div>
+            </div>
+
+            <!-- CENTER CORE -->
+            <div id="loader-core-v4">
+                <!-- The interactive glowing glass orb -->
+                <div class="core-glass"></div>
+                
+                <!-- SVG High-Tech Rings -->
+                <svg class="core-rings" viewBox="0 0 300 300">
+                    <!-- Outer Dashed Ring -->
+                    <circle class="ring-outer" cx="150" cy="150" r="140" fill="none" stroke="rgba(245,158,11,0.2)" stroke-width="2" stroke-dasharray="4 8" />
+                    <!-- Middle Gradient Ring -->
+                    <circle class="ring-middle" cx="150" cy="150" r="125" fill="none" stroke="url(#core-grad)" stroke-width="4" stroke-dasharray="100 20 40 20" stroke-linecap="round" />
+                    <!-- Inner Tech Ring -->
+                    <circle class="ring-inner" cx="150" cy="150" r="110" fill="none" stroke="rgba(236,72,153,0.3)" stroke-width="1" stroke-dasharray="2 4" />
+                    
+                    <defs>
+                        <linearGradient id="core-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#f59e0b" />
+                            <stop offset="50%" stop-color="#ef4444" />
+                            <stop offset="100%" stop-color="#ec4899" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+
+                <!-- Center Text -->
+                <div class="core-logo">
+                    <span class="core-char">2</span><span class="core-char">8</span><span class="core-char">E</span>
+                </div>
+            </div>
+
+        </div>
+    </div>

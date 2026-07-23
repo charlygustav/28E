@@ -3365,9 +3365,9 @@
             <!-- Input -->
             <div class="w-full relative mb-3">
                 <div class="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-500 text-lg">🔑</div>
-                <input type="password" id="secret-pwd"
+                <input type="text" id="secret-pwd" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true"
                     class="w-full bg-zinc-900/80 border-2 border-zinc-700/80 focus:border-brand-500 outline-none rounded-2xl pl-14 pr-24 py-5 text-center text-xl font-bold text-white placeholder-zinc-600 tracking-[0.3em] transition-all duration-300"
-                    placeholder="••••••••" style="letter-spacing: 0.4em;">
+                    placeholder="••••••••" style="letter-spacing: 0.4em; -webkit-text-security: disc;">
                 <div class="absolute right-12 top-1/2 -translate-y-1/2 text-zinc-600 text-sm font-mono"
                     id="pwd-char-count">0</div>
                 <button type="button" id="toggle-pwd-btn" onclick="togglePwdVisibility()"
@@ -3431,196 +3431,173 @@
             </div>
         </div>
 
-        <!-- ══════════ CARTA SECRETA ══════════ -->
+        <!-- ══════════ CARTA SECRETA (CINEMATIC) ══════════ -->
         <div id="secret-letter" class="hidden w-full max-w-3xl mx-4 relative"
-            style="transition: opacity 0.5s ease, transform 0.5s ease;">
+            style="transition: opacity 0.5s ease, transform 0.5s ease; z-index: 100; height: 88vh;">
+            <!-- Partículas -->
+            <div id="letter-hearts" class="absolute inset-0 pointer-events-none overflow-hidden rounded-[2rem]" style="z-index:0;"></div>
 
-            <!-- Partículas de corazones flotando al abrir -->
-            <div id="letter-hearts" class="absolute inset-0 pointer-events-none overflow-hidden rounded-[2rem]"></div>
-
-            <!-- Carta Container — Premium Glass -->
-            <div class="rounded-[2rem] overflow-hidden max-h-[92vh] flex flex-col"
-                style="background: linear-gradient(160deg, #18181b 0%, #0d0d10 100%); border: 1px solid rgba(245,158,11,0.18); box-shadow: 0 0 80px rgba(245,158,11,0.08), 0 30px 60px rgba(0,0,0,0.6);">
-
-                <!-- Header elegante de la carta -->
-                <div class="relative flex-shrink-0 px-7 pt-7 pb-6 border-b border-white/5"
-                    style="background: linear-gradient(135deg, rgba(245,158,11,0.06) 0%, rgba(236,72,153,0.06) 100%);">
-
+            <!-- Contenedor Carta -->
+            <div class="rounded-[2rem] overflow-hidden flex flex-col relative" style="height:100%; z-index:10; background: linear-gradient(160deg, rgba(24,24,27,0.97) 0%, rgba(13,13,16,0.99) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(245,158,11,0.2); box-shadow: 0 0 80px rgba(245,158,11,0.1), 0 30px 60px rgba(0,0,0,0.8);">
+                
+                <!-- Header -->
+                <div class="relative flex-shrink-0 px-6 pt-5 pb-4 border-b border-white/10" style="z-index:20; background: linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(236,72,153,0.08) 100%);">
                     <!-- Botón cerrar -->
-                    <button onclick="closeSecretModal()" class="pc-close-btn"
-                        style="z-index: 30; top: 1.25rem; right: 1.25rem;" aria-label="Cerrar carta"
-                        data-i18n-aria="aria_close_letter">
-                        <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <line x1="1" y1="1" x2="13" y2="13" />
-                            <line x1="13" y1="1" x2="1" y2="13" />
-                        </svg>
-                    </button>
-
-                    <div class="flex items-center gap-5">
-                        <!-- Sello de cera a la izquierda -->
+                    <button onclick="closeSecretModal()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full text-white/50 hover:text-white transition-all text-lg" style="z-index:30; background:rgba(255,255,255,0.05);" aria-label="Cerrar carta">✕</button>
+                    <div class="flex items-center gap-4">
+                        <!-- Sello -->
                         <div class="relative flex-shrink-0">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-br from-brand-500 to-tulip-500 rounded-full blur-lg opacity-50 animate-pulse-slow">
-                            </div>
-                            <div class="relative w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center text-2xl md:text-3xl border border-brand-500/40 shadow-xl"
-                                style="background: linear-gradient(135deg, #78350f, #451a03);">
-                                💌
-                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-br from-brand-500 to-tulip-500 rounded-full blur-lg opacity-50 animate-pulse-slow"></div>
+                            <div class="relative w-12 h-12 rounded-full flex items-center justify-center text-xl border border-brand-500/40 shadow-xl" style="background: linear-gradient(135deg, #78350f, #451a03);">💌</div>
                         </div>
-
-                        <!-- Títulos a la derecha del sello -->
                         <div class="flex-1 min-w-0">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span
-                                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-[9px] font-bold uppercase tracking-widest text-brand-400">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse"></span>
-                                    <span data-i18n="secret_update_notice">Solo para sus ojos</span>
-                                </span>
-                            </div>
-                            <h3 class="text-xl md:text-3xl font-extrabold text-white tracking-tight leading-tight font-serif"
-                                id="letter-title" data-i18n="secret_letter_title">Mi Amada Yaire,</h3>
-                            <div class="flex items-center gap-2 mt-1.5">
-                                <div class="h-px w-8 bg-gradient-to-r from-brand-500/50 to-transparent"></div>
-                                <span class="text-[10px] text-zinc-500 font-mono tracking-widest">28.01.2026</span>
-                                <div class="h-px w-8 bg-gradient-to-l from-brand-500/50 to-transparent"></div>
+                            <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-[9px] font-bold uppercase tracking-widest text-brand-400 mb-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse"></span> <span data-i18n="secret_update_notice">Solo para sus ojos</span>
+                            </span>
+                            <h3 class="text-lg md:text-2xl font-extrabold text-white tracking-tight leading-tight font-serif" id="letter-title" data-i18n="secret_letter_title">Mi Amada Yaire,</h3>
+                            <div class="flex items-center gap-2 mt-1 opacity-60">
+                                <div class="h-px w-6 bg-gradient-to-r from-brand-500 to-transparent"></div>
+                                <span class="text-[10px] text-white font-mono tracking-widest">28.01.2026</span>
+                                <div class="h-px w-6 bg-gradient-to-l from-brand-500 to-transparent"></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Cuerpo de la carta con lectura párrafo a párrafo -->
-                <div class="flex-1 overflow-y-auto letter-scroll px-7 md:px-12 py-8">
-                    <!-- Párrafos con aparición animada -->
-                    <div id="letter-body"
-                        class="space-y-6 text-base md:text-lg text-zinc-100 font-light leading-loose tracking-wide drop-shadow-sm">
-                    </div>
+                <!-- Scrollable Body (Cinematic) -->
+                <div id="cinematic-letter-body" class="flex-1 overflow-y-auto scroll-smooth relative" style="scrollbar-width: none; padding: 2rem 1.5rem 2rem 1.5rem;">
+                    <div class="max-w-2xl mx-auto text-base md:text-lg text-zinc-300 font-light leading-relaxed tracking-wide">
+                        
+                        <p class="cine-para" style="opacity:0.15; filter:blur(3px); transform:translateY(20px); transition: opacity 0.8s ease, filter 0.8s ease, transform 0.8s ease; margin-bottom: 4rem;" data-i18n="secret_letter_p1"></p>
+                        
+                        <p class="cine-para" style="opacity:0.15; filter:blur(3px); transform:translateY(20px); transition: opacity 0.8s ease, filter 0.8s ease, transform 0.8s ease; margin-bottom: 4rem;" data-i18n="secret_letter_p2"></p>
+                        
+                        <div class="cine-para flex justify-center" style="opacity:0.15; filter:blur(3px); transform:translateY(20px); transition: opacity 0.8s ease, filter 0.8s ease, transform 0.8s ease; margin-bottom: 4rem;">
+                            <img src="lasfotos/AirBrush_20260327204142.jpg" alt="Nuestra foto" style="max-height:200px; width:auto; max-width:80%; object-fit:contain; border-radius:1rem; border:1px solid rgba(255,255,255,0.1); box-shadow:0 20px 40px rgba(0,0,0,0.5); opacity:0.85;">
+                        </div>
+                        
+                        <p class="cine-para" style="opacity:0.15; filter:blur(3px); transform:translateY(20px); transition: opacity 0.8s ease, filter 0.8s ease, transform 0.8s ease; margin-bottom: 4rem;" data-i18n="secret_letter_p3"></p>
+                        
+                        <p class="cine-para" style="opacity:0.15; filter:blur(3px); transform:translateY(20px); transition: opacity 0.8s ease, filter 0.8s ease, transform 0.8s ease; margin-bottom: 4rem;" data-i18n="secret_letter_p4"></p>
+                        
+                        <p class="cine-para" style="opacity:0.15; filter:blur(3px); transform:translateY(20px); transition: opacity 0.8s ease, filter 0.8s ease, transform 0.8s ease; margin-bottom: 4rem; color:#fff; font-weight:500;" data-i18n="secret_letter_p5"></p>
+                        
+                        <!-- Secret Hold-to-Reveal Block -->
+                        <div id="secret-reveal-block" class="cine-para flex flex-col items-center" style="opacity:0.15; filter:blur(3px); transform:translateY(20px); transition: opacity 0.8s ease, filter 0.8s ease, transform 0.8s ease; margin-top:5rem; padding-top:3rem; border-top:1px dashed rgba(255,255,255,0.15);">
+                            
+                            <p id="secret-hidden-text" class="font-serif italic text-center select-none" style="font-size:1.15rem; filter:blur(8px); transition: filter 1s ease, color 1s ease; background: linear-gradient(90deg, #fcd34d, #f472b6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;" data-i18n="secret_letter_secret"></p>
 
-                    <!-- Navegación de párrafos -->
-                    <div id="letter-nav" class="flex items-center justify-between mt-10 pt-5 border-t border-white/5">
-                        <button id="prev-para" onclick="letterNav(-1)"
-                            class="hidden px-5 py-2.5 rounded-xl bg-zinc-800/60 text-zinc-400 hover:text-white hover:bg-zinc-700/60 font-bold text-sm transition-all gap-2 items-center border border-white/5 backdrop-blur-sm transform-gpu"
-                            data-i18n="secret_nav_prev">← Anterior</button>
-                        <div class="flex gap-1.5 mx-auto" id="para-dots"></div>
-                        <button id="next-para" onclick="letterNav(1)"
-                            class="px-5 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 shadow-md hover:opacity-90 active:scale-95"
-                            style="background: linear-gradient(135deg, #f59e0b, #ec4899); color: white;"
-                            data-i18n="secret_nav_next">Siguiente →</button>
+                            <button id="hold-reveal-btn" style="margin-top:2.5rem; width:5rem; height:5rem; border-radius:50%; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.4); cursor:pointer; transition:transform 0.2s;">
+                                <div id="hold-progress" style="position:absolute; bottom:0; left:0; right:0; height:0; background: linear-gradient(to top, #f59e0b, #ec4899); transition: height 3000ms linear;"></div>
+                                <svg style="width:2rem; height:2rem; color:rgba(255,255,255,0.4); position:relative; z-index:10; pointer-events:none;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
+                                </svg>
+                            </button>
+                            <p id="hold-hint" style="font-size:9px; color:rgba(255,255,255,0.35); text-transform:uppercase; letter-spacing:0.15em; margin-top:1rem; font-weight:700; text-align:center;" data-i18n="secret_hold_hint">Mantén presionado 3s para revelar</p>
+                        </div>
                     </div>
-
-                    <!-- Fin del letter-body y letter-nav -->
                 </div>
+                
+                <!-- Floating Scroll Hint -->
+                <div id="scroll-hint" class="pointer-events-none" style="position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 30; opacity: 0.5; transition: opacity 0.5s ease; display: flex; flex-direction: column; align-items: center;">
+                    <span style="font-size: 8px; color: #fff; text-transform: uppercase; letter-spacing: 0.3em; font-weight: 600; text-align: center; margin-bottom: 6px;">Desliza</span>
+                    <div style="margin: 0 auto; width: 24px; height: 36px; border: 1.5px solid rgba(255,255,255,0.4); border-radius: 12px; display: flex; justify-content: center; padding-top: 4px;">
+                        <div style="width: 2px; height: 6px; background-color: rgba(255,255,255,0.6); border-radius: 2px; animation: bounce 2s infinite;"></div>
+                    </div>
+                </div>
+
+                <!-- Bottom Fade -->
+                <div class="absolute bottom-0 left-0 right-0 pointer-events-none" style="height:6rem; z-index:20; background: linear-gradient(to top, #0d0d10, transparent);"></div>
+
             </div>
         </div>
 
         <!-- ── Dedicatoria Final (Nueva Modal Interna) ── -->
-        <div id="secret-dedication-modal"
-            class="hidden absolute inset-0 flex flex-col items-center justify-center p-4 z-50">
-            <div class="relative z-10 w-full max-w-md transform transition-all duration-700 scale-95 opacity-0 flex flex-col items-center"
-                id="dedication-content">
+        <div id="secret-dedication-modal" class="hidden absolute inset-0 flex flex-col items-center justify-center p-4 z-50">
+            <!-- Background effects -->
+            <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(circle at center, rgba(245,158,11,0.08) 0%, rgba(0,0,0,0.8) 100%);"></div>
+            
+            <div class="relative w-full max-w-md transform transition-all duration-700 scale-95 opacity-0 flex flex-col items-center" id="dedication-content">
 
-                <!-- ── Bloque de firma principal ── -->
-                <div class="relative rounded-2xl overflow-hidden mb-6 shadow-2xl"
-                    style="background: linear-gradient(135deg, rgba(245,158,11,0.07) 0%, rgba(236,72,153,0.09) 100%); border: 1px solid rgba(245,158,11,0.18);">
-                    <!-- Glow top -->
-                    <div class="absolute top-0 inset-x-0 h-px"
-                        style="background: linear-gradient(90deg, transparent, rgba(245,158,11,0.4), transparent);">
-                    </div>
-                    <!-- Cuerpo principal -->
-                    <div class="px-6 pt-6 pb-4">
-                        <!-- Cabecera del remitente -->
-                        <div class="flex items-center gap-4 mb-5">
-                            <div class="relative flex-shrink-0">
-                                <div class="absolute inset-0 rounded-full blur-md opacity-60"
-                                    style="background: radial-gradient(circle, #f59e0b, #ec4899);"></div>
-                                <div class="relative w-12 h-12 rounded-full flex items-center justify-center text-xl font-black text-white shadow-lg"
-                                    style="background: linear-gradient(135deg, #78350f, #7c2d12);">C</div>
+                <!-- ── Premium Signature Card ── -->
+                <div class="relative w-full rounded-[2rem] overflow-hidden mb-8"
+                    style="background: linear-gradient(160deg, rgba(24,24,27,0.8) 0%, rgba(13,13,16,0.95) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);">
+                    
+                    <!-- Ambient Glow -->
+                    <div class="absolute -top-24 -right-24 w-48 h-48 bg-brand-500 rounded-full blur-[80px] opacity-20 pointer-events-none"></div>
+                    <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-pink-500 rounded-full blur-[80px] opacity-20 pointer-events-none"></div>
+
+                    <div class="p-8 relative z-10">
+                        <!-- Header -->
+                        <div class="flex items-center gap-5 mb-8">
+                            <div class="relative">
+                                <div class="absolute inset-0 bg-gradient-to-br from-brand-400 to-pink-500 rounded-full blur-md opacity-50 animate-pulse"></div>
+                                <div id="dedication-avatar-container" class="relative w-14 h-14 rounded-full flex items-center justify-center text-2xl font-black text-white border-2 border-white/10" style="background: linear-gradient(135deg, #78350f, #451a03); overflow: hidden;">
+                                    <img id="dedication-avatar-img" src="lasfotos/AirBrush_20260327204142.jpg" class="w-full h-full object-cover">
+                                </div>
                             </div>
-                            <div class="flex-1 text-left">
-                                <p class="text-white font-bold text-sm leading-none mb-1">Charles</p>
-                                <p class="text-zinc-500 text-xs font-mono" data-i18n="sig_sender_sub">Tu novio · Desde
-                                    el 28.01.2026</p>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <div class="w-7 h-7 rounded-full flex items-center justify-center"
-                                    style="background: linear-gradient(135deg, #f59e0b, #ec4899);">
-                                    <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clip-rule="evenodd" />
-                                    </svg>
+                            <div class="flex-1">
+                                <h4 id="dedication-sender-name" class="text-white font-bold text-lg tracking-wide mb-1">Charles</h4>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                    <p class="text-zinc-400 text-[10px] font-mono tracking-widest uppercase">Tu novio · 28.01.2026</p>
                                 </div>
                             </div>
                         </div>
-                        <!-- Frase principal -->
-                        <div class="text-center mb-5">
-                            <p class="text-2xl md:text-3xl font-extrabold font-serif italic leading-snug mb-1"
-                                style="background: linear-gradient(135deg, #fbbf24, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"
-                                data-i18n="secret_signature_text">Te amo, hoy y siempre.</p>
-                            <p class="text-zinc-500 text-xs tracking-widest uppercase font-bold"
-                                data-i18n="sig_dedication">— Con todo mi corazón</p>
-                        </div>
-                        <!-- ── Grid de stats relacionales ── -->
-                        <div class="grid grid-cols-3 gap-2 mb-5">
-                            <div class="rounded-xl px-3 py-2.5 text-center"
-                                style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
-                                <p class="text-brand-400 font-black text-lg leading-none" id="sig-days-count">—</p>
-                                <p class="text-zinc-600 text-[9px] font-bold uppercase tracking-widest mt-1"
-                                    data-i18n="sig_days">Días juntos</p>
-                            </div>
-                            <div class="rounded-xl px-3 py-2.5 text-center"
-                                style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
-                                <p class="text-tulip-400 font-black text-lg leading-none">900</p>
-                                <p class="text-zinc-600 text-[9px] font-bold uppercase tracking-widest mt-1"
-                                    data-i18n="sig_km">Km de amor</p>
-                            </div>
-                            <div class="rounded-xl px-3 py-2.5 text-center"
-                                style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
-                                <p class="text-emerald-400 font-black text-lg leading-none">∞</p>
-                                <p class="text-zinc-600 text-[9px] font-bold uppercase tracking-widest mt-1"
-                                    data-i18n="sig_love">Amor</p>
+
+                        <!-- Main Phrase -->
+                        <div class="text-center mb-10">
+                            <h2 class="text-3xl md:text-4xl font-extrabold font-serif italic mb-3" style="background: linear-gradient(135deg, #fcd34d, #f472b6, #fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1.3;" data-i18n="secret_signature_text">
+                                Te amo, hoy y siempre.
+                            </h2>
+                            <div class="flex items-center justify-center gap-3">
+                                <div class="h-px w-8 bg-gradient-to-r from-transparent to-zinc-500/50"></div>
+                                <p class="text-zinc-500 text-xs tracking-[0.2em] uppercase font-bold" data-i18n="sig_dedication">Con todo mi corazón</p>
+                                <div class="h-px w-8 bg-gradient-to-l from-transparent to-zinc-500/50"></div>
                             </div>
                         </div>
-                        <!-- ── Barra de progreso "Amor completado" ── -->
-                        <div class="mb-2">
-                            <div class="flex justify-between items-center mb-1.5">
-                                <span class="text-[9px] font-bold uppercase tracking-widest text-zinc-600"
-                                    data-i18n="sig_progress">Nivel de amor</span>
-                                <span class="text-[9px] font-black text-brand-400">∞ / ∞</span>
+
+                        <!-- Stats Grid -->
+                        <div class="grid grid-cols-3 gap-3 mb-8">
+                            <div class="flex flex-col items-center justify-center py-4 rounded-2xl" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);">
+                                <span class="text-brand-400 font-black text-xl mb-1 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]" id="sig-days-count">—</span>
+                                <span class="text-zinc-500 text-[8px] font-bold uppercase tracking-widest" data-i18n="sig_days">Días Juntos</span>
                             </div>
-                            <div class="h-1.5 rounded-full overflow-hidden" style="background: rgba(255,255,255,0.05);">
-                                <div class="h-full rounded-full"
-                                    style="width: 100%; background: linear-gradient(90deg, #f59e0b, #ec4899, #f59e0b); background-size: 200% 100%; animation: shimmerBar 3s linear infinite;">
-                                </div>
+                            <div class="flex flex-col items-center justify-center py-4 rounded-2xl" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);">
+                                <span class="text-pink-400 font-black text-xl mb-1 drop-shadow-[0_0_8px_rgba(236,72,153,0.5)]">900</span>
+                                <span class="text-zinc-500 text-[8px] font-bold uppercase tracking-widest" data-i18n="sig_km">Km de Amor</span>
+                            </div>
+                            <div class="flex flex-col items-center justify-center py-4 rounded-2xl" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);">
+                                <span class="text-emerald-400 font-black text-2xl mb-1 leading-none drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]">∞</span>
+                                <span class="text-zinc-500 text-[8px] font-bold uppercase tracking-widest" data-i18n="sig_love">Amor</span>
                             </div>
                         </div>
-                    </div>
-                    <!-- Footer del bloque -->
-                    <div class="px-6 py-3 flex items-center justify-between"
-                        style="border-top: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.15);">
-                        <span class="text-zinc-600 text-[9px] font-mono tracking-widest">28.01.2026 · GMT-4</span>
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span class="text-emerald-500 text-[9px] font-bold uppercase tracking-widest"
-                                data-i18n="sig_online">En vivo</span>
+
+                        <!-- Infinity Progress Bar -->
+                        <div class="relative">
+                            <div class="flex justify-between items-end mb-2">
+                                <span class="text-[9px] font-bold uppercase tracking-widest text-zinc-500" data-i18n="sig_progress">Nivel de Amor</span>
+                                <span class="text-[10px] font-black text-white/90">∞ / ∞</span>
+                            </div>
+                            <div class="h-2 rounded-full overflow-hidden relative" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05);">
+                                <div class="absolute inset-y-0 left-0 rounded-full" style="width: 100%; background: linear-gradient(90deg, #f59e0b, #ec4899, #f59e0b); background-size: 200% 100%; animation: shimmerBar 3s linear infinite;"></div>
+                                <div class="absolute inset-0 rounded-full blur-[4px] opacity-50" style="background: linear-gradient(90deg, #f59e0b, #ec4899, #f59e0b); background-size: 200% 100%; animation: shimmerBar 3s linear infinite;"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- ── Botón Único de Cierre ── -->
-                <div class="flex justify-center">
-                    <button onclick="finishSecretModal()"
-                        class="w-full max-w-[220px] flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold text-base transition-all shadow-xl hover:opacity-90 active:scale-95 group"
-                        style="background: linear-gradient(135deg, #f59e0b, #ec4899); color: white; box-shadow: 0 10px 25px -5px rgba(236, 72, 153, 0.4);">
-                        <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="currentColor"
-                            viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span data-i18n="sig_love_btn">Te amo</span>
-                    </button>
-                </div>
-
+                <!-- ── Floating Button ── -->
+                <button onclick="finishSecretModal()"
+                    class="relative group w-48 h-14 flex items-center justify-center gap-3 rounded-full font-bold text-lg text-white shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95"
+                    style="background: linear-gradient(135deg, #f59e0b, #ec4899);">
+                    <div class="absolute inset-0 rounded-full bg-white opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                    <div class="absolute -inset-1 rounded-full blur-md opacity-40 group-hover:opacity-70 transition-opacity" style="background: linear-gradient(135deg, #f59e0b, #ec4899); z-index:-1;"></div>
+                    <svg class="w-5 h-5 text-white animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+                    </svg>
+                    <span data-i18n="sig_love_btn">Te amo</span>
+                </button>
             </div>
         </div>
     </div>
@@ -4109,6 +4086,146 @@
         })();
     </script>
 
+    <!-- ═══ 🎆 CELEBRATION OVERLAY — 6 MONTH ANNIVERSARY ═══ -->
+    <div id="celebration-overlay" class="fixed inset-0 z-[310] flex flex-col items-center justify-center overflow-hidden" style="background: radial-gradient(ellipse at center, #18181b 0%, #000 100%); display: none; opacity: 0;">
+        <canvas id="celebration-canvas" class="absolute inset-0 w-full h-full pointer-events-none" style="z-index:1;"></canvas>
+        <div id="confetti-container" class="absolute inset-0 pointer-events-none overflow-hidden" style="z-index:2;"></div>
+        <div class="relative z-10 flex flex-col items-center text-center px-6" id="celebration-content">
+            <div id="celeb-number" class="font-black select-none" style="font-family:\'Inter\',sans-serif; font-size: clamp(8rem, 30vw, 18rem); line-height:1; background: linear-gradient(135deg, #f59e0b 0%, #ec4899 50%, #fbbf24 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; filter: drop-shadow(0 0 60px rgba(245,158,11,0.4)); opacity:0; transform: scale(0.5);">6</div>
+            <h2 id="celeb-title" class="text-white font-black tracking-tight mt-[-1rem] sm:mt-[-1.5rem]" style="font-size: clamp(1.5rem, 5vw, 3rem); opacity:0; transform: translateY(30px);">Felices 6 Meses, Yaire 🌷</h2>
+            <p id="celeb-subtitle" class="text-zinc-400 font-light mt-3 tracking-wide" style="font-size: clamp(0.85rem, 2.5vw, 1.15rem); opacity:0; transform: translateY(20px);">Medio año amándote — 182 días de infinito</p>
+            <button id="celeb-enter-btn" onclick="dismissCelebration()" class="mt-10 px-8 py-3.5 rounded-full font-bold text-sm tracking-widest uppercase border transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer" style="background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(236,72,153,0.15)); border-color: rgba(245,158,11,0.4); color: #fbbf24; box-shadow: 0 0 30px rgba(245,158,11,0.15), inset 0 0 20px rgba(245,158,11,0.05); opacity:0; transform: translateY(20px);">Entrar a 28E ✨</button>
+        </div>
+    </div>
+    <style>
+        .celeb-confetti { position: absolute; width: 10px; height: 10px; pointer-events: none; z-index: 2; }
+        .celeb-confetti.rect { border-radius: 2px; }
+        .celeb-confetti.circle { border-radius: 50%; }
+        .celeb-confetti.strip { width: 4px; height: 16px; border-radius: 2px; }
+        .fw-particle { position: absolute; border-radius: 50%; pointer-events: none; z-index: 1; }
+        #celeb-enter-btn:hover { background: linear-gradient(135deg, rgba(245,158,11,0.25), rgba(236,72,153,0.25)) !important; box-shadow: 0 0 50px rgba(245,158,11,0.3), inset 0 0 30px rgba(245,158,11,0.1) !important; border-color: rgba(245,158,11,0.7) !important; }
+    </style>
+    <script>
+    (function() {
+        var now = new Date();
+        var month = now.getMonth();
+        var day = now.getDate();
+        var urlParams = new URLSearchParams(window.location.search);
+        var forceCeleb = urlParams.get('celeb') === '1';
+        var isCelebDay = (month === 6 && day >= 27 && day <= 29) || forceCeleb;
+        var alreadySeen = sessionStorage.getItem('celeb_6m_seen');
+        if (!isCelebDay || alreadySeen) return;
+        var overlay = document.getElementById('celebration-overlay');
+        if (!overlay) return;
+        overlay.style.display = 'flex';
+
+        function showCelebration() {
+            sessionStorage.setItem('celeb_6m_seen', '1');
+            overlay.style.transition = 'opacity 0.8s ease';
+            overlay.style.opacity = '1';
+            if (typeof gsap === 'undefined') {
+                overlay.querySelectorAll('#celeb-number, #celeb-title, #celeb-subtitle, #celeb-enter-btn').forEach(function(el) { el.style.opacity = '1'; el.style.transform = 'none'; });
+                return;
+            }
+            var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+            tl.to('#celeb-number', { opacity: 1, scale: 1, duration: 1.5, ease: 'elastic.out(1, 0.5)' }, 0.3);
+            tl.to('#celeb-title', { opacity: 1, y: 0, duration: 1 }, 1.0);
+            tl.to('#celeb-subtitle', { opacity: 1, y: 0, duration: 0.8 }, 1.4);
+            tl.to('#celeb-enter-btn', { opacity: 1, y: 0, duration: 0.8 }, 1.8);
+            tl.call(function() { launchFireworks(); }, null, 1.2);
+            tl.call(function() { startConfetti(); }, null, 1.5);
+        }
+
+        function launchFireworks() {
+            var canvas = document.getElementById('celebration-canvas');
+            if (!canvas) return;
+            var ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            var colors = ['#f59e0b','#ec4899','#fbbf24','#f472b6','#fff','#a78bfa','#34d399'];
+            var particles = [];
+            var animId;
+            function createBurst(x, y) {
+                var count = 60 + Math.floor(Math.random() * 40);
+                for (var i = 0; i < count; i++) {
+                    var angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.3;
+                    var speed = 2 + Math.random() * 5;
+                    particles.push({ x:x, y:y, vx: Math.cos(angle)*speed, vy: Math.sin(angle)*speed, life:1, decay: 0.012+Math.random()*0.015, color: colors[Math.floor(Math.random()*colors.length)], size: 1.5+Math.random()*2.5, trail:[] });
+                }
+            }
+            function animate() {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.fillStyle = 'rgba(0,0,0,0.15)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.globalCompositeOperation = 'lighter';
+                particles = particles.filter(function(p) { return p.life > 0; });
+                particles.forEach(function(p) {
+                    p.trail.push({x:p.x, y:p.y}); if(p.trail.length > 5) p.trail.shift();
+                    p.x += p.vx; p.y += p.vy; p.vy += 0.04; p.vx *= 0.99; p.life -= p.decay;
+                    p.trail.forEach(function(t, i) { ctx.beginPath(); ctx.arc(t.x, t.y, p.size*(i/p.trail.length)*0.5, 0, Math.PI*2); ctx.fillStyle = p.color; ctx.globalAlpha = p.life*(i/p.trail.length)*0.3; ctx.fill(); });
+                    ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fillStyle = p.color; ctx.globalAlpha = p.life; ctx.fill(); ctx.globalAlpha = 1;
+                });
+                var ov = document.getElementById('celebration-overlay');
+                if (particles.length > 0 || (ov && ov.style.display !== 'none')) { animId = requestAnimationFrame(animate); }
+            }
+            animate();
+            var w = canvas.width, h = canvas.height;
+            createBurst(w*0.5, h*0.35);
+            setTimeout(function(){ createBurst(w*0.25, h*0.3); }, 400);
+            setTimeout(function(){ createBurst(w*0.75, h*0.25); }, 700);
+            setTimeout(function(){ createBurst(w*0.4, h*0.2); }, 1100);
+            setTimeout(function(){ createBurst(w*0.6, h*0.35); }, 1500);
+            var burstCount = 0;
+            var burstInterval = setInterval(function() {
+                if (burstCount > 15 || !document.getElementById('celebration-overlay') || document.getElementById('celebration-overlay').style.display === 'none') { clearInterval(burstInterval); return; }
+                createBurst(w*(0.15+Math.random()*0.7), h*(0.1+Math.random()*0.4)); burstCount++;
+            }, 2000);
+            window.__celebCleanup = function() { cancelAnimationFrame(animId); clearInterval(burstInterval); ctx.clearRect(0,0,canvas.width,canvas.height); };
+        }
+
+        function startConfetti() {
+            var container = document.getElementById('confetti-container');
+            if (!container || typeof gsap === 'undefined') return;
+            var confettiColors = ['#f59e0b','#ec4899','#fbbf24','#f472b6','#a78bfa','#34d399','#fff'];
+            var shapes = ['rect','circle','strip'];
+            var confettiInterval;
+            function spawnConfetti() {
+                for (var i = 0; i < 4; i++) {
+                    var el = document.createElement('div');
+                    var shape = shapes[Math.floor(Math.random()*shapes.length)];
+                    el.className = 'celeb-confetti ' + shape;
+                    el.style.background = confettiColors[Math.floor(Math.random()*confettiColors.length)];
+                    el.style.left = Math.random()*100 + '%'; el.style.top = '-20px';
+                    container.appendChild(el);
+                    gsap.to(el, { y: window.innerHeight+50, x: (Math.random()-0.5)*200, rotation: Math.random()*720-360, opacity: 0, duration: 3+Math.random()*3, ease: 'power1.in', onComplete: function() { if(el.parentNode) el.remove(); } });
+                }
+            }
+            for (var i = 0; i < 8; i++) { setTimeout(spawnConfetti, i*100); }
+            confettiInterval = setInterval(spawnConfetti, 400);
+            setTimeout(function() { clearInterval(confettiInterval); }, 20000);
+            window.__confettiCleanup = function() { clearInterval(confettiInterval); };
+        }
+
+        window.dismissCelebration = function() {
+            var ov = document.getElementById('celebration-overlay');
+            if (!ov) return;
+            if (typeof gsap !== 'undefined') {
+                gsap.to(ov, { opacity: 0, scale: 1.05, duration: 0.8, ease: 'power2.inOut', onComplete: function() { ov.style.display = 'none'; if(window.__celebCleanup) window.__celebCleanup(); if(window.__confettiCleanup) window.__confettiCleanup(); } });
+            } else { ov.style.opacity = '0'; setTimeout(function(){ ov.style.display = 'none'; }, 800); }
+        };
+
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(m) {
+                if (m.type === 'attributes' && m.attributeName === 'class' && document.body.classList.contains('page-ready')) {
+                    observer.disconnect();
+                    setTimeout(showCelebration, 600);
+                }
+            });
+        });
+        observer.observe(document.body, { attributes: true });
+        if (document.body.classList.contains('page-ready')) { setTimeout(showCelebration, 600); }
+    })();
+    </script>
+
     <!-- Navegación — Floating Panel -->
     <div id="drawer-overlay"
         class="fixed inset-0 bg-zinc-900/40 dark:bg-black/50 backdrop-blur-sm transform-gpu z-[90] hidden opacity-0 transition-opacity duration-300"
@@ -4294,15 +4411,38 @@
 
             </div>
 
-            <!-- Capítulo V: 5 Meses -->
-            <div class="mt-3 mb-1">
-                <a href="#mes-cinco"
-                    class="menu-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-extrabold text-brand-500 bg-brand-500/10 dark:bg-brand-500/20 border border-brand-500/30 group shadow-md transition-all hover:scale-[1.02]">
+            
+
+            <!-- Capítulo VI: 6 Meses — MEDIO AÑO -->
+            <div class="mt-2 mb-1">
+                <a href="#mes-seis"
+                    class="menu-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-extrabold text-amber-400 bg-gradient-to-r from-amber-500/15 via-pink-500/10 to-amber-500/15 dark:from-amber-500/25 dark:via-pink-500/15 dark:to-amber-500/25 border border-amber-500/40 group shadow-lg" style="box-shadow: 0 0 25px rgba(245,158,11,0.15);">
                     <span
-                        class="menu-link-icon bg-brand-500 text-black shadow-sm transition-transform duration-300 group-hover:rotate-12">🎬</span>
-                    <span data-i18n="menu_mes_cinco">Capítulo V: 5 Meses</span>
+                        class="menu-link-icon bg-gradient-to-br from-amber-500 to-pink-500 text-black shadow-sm">🏆</span>
+                    <span>Capítulo VI: Medio Año</span>
                     <span
-                        class="ml-auto text-[10px] bg-brand-500 text-black px-1.5 py-0.5 rounded-full font-black tracking-wider uppercase animate-pulse">28E</span>
+                        class="ml-auto text-[10px] bg-gradient-to-r from-amber-500 to-pink-500 text-black px-1.5 py-0.5 rounded-full font-black tracking-wider uppercase animate-pulse">NUEVO</span>
+                </a>
+            </div>
+
+            <div class="mt-2 mb-1">
+                <a href="#timeline-semestral" class="menu-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-zinc-600 dark:text-zinc-400 hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                    <span class="menu-link-icon bg-amber-50 dark:bg-amber-900/20">🗓️</span>
+                    <span>Timeline Semestral</span>
+                </a>
+            </div>
+            
+            <div class="mt-2 mb-1">
+                <a href="#logros" class="menu-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-zinc-600 dark:text-zinc-400 hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                    <span class="menu-link-icon bg-fuchsia-50 dark:bg-fuchsia-900/20">🏆</span>
+                    <span>Logros</span>
+                </a>
+            </div>
+
+            <div class="mt-2 mb-1">
+                <a href="#playlist-aniversario" class="menu-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-zinc-600 dark:text-zinc-400 hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                    <span class="menu-link-icon bg-emerald-50 dark:bg-emerald-900/20 text-emerald-500">🎵</span>
+                    <span>Soundtrack 6 Meses</span>
                 </a>
             </div>
 
@@ -5395,7 +5535,7 @@
                 <div id="hero-badge-container"
                     class="hero-anim hero-anim-1 inline-flex flex-col sm:flex-row items-center gap-1 sm:gap-2.5 px-5 py-2.5 rounded-full border border-brand-500/30 bg-gradient-to-r from-brand-500/10 to-tulip-500/10 text-brand-600 dark:text-brand-400 text-sm font-bold mb-8 uppercase tracking-widest glow-effect transition-all hover:border-brand-500/50">
                     <span class="flex items-center gap-1.5">
-                        <span id="hero-badge-text" data-i18n="hero_badge">¡Felices 4 Meses!</span> <span
+                        <span id="hero-badge-text" data-i18n="hero_badge">¡Felices 6 Meses!</span> <span
                             id="hero-badge-e1">✨</span>
                     </span>
                     <span class="inline-flex items-center gap-1.5 font-extrabold"
@@ -5888,6 +6028,107 @@
                 </div>
             </div>
 
+
+            <!-- ═══ 🌷 TULIP GARDEN — 6 MONTH ANNIVERSARY EXPANSION ═══ -->
+            <div class="max-w-5xl mx-auto mb-16 relative z-10">
+                <div class="relative bg-gradient-to-br from-pink-50/80 via-rose-50/60 to-tulip-50/40 dark:from-pink-950/30 dark:via-rose-950/20 dark:to-zinc-900/40 backdrop-blur-md rounded-[3rem] p-8 md:p-12 shadow-2xl border border-pink-200/40 dark:border-pink-800/30 overflow-hidden">
+                    
+                    <!-- Decorative Background -->
+                    <div class="absolute inset-0 pointer-events-none overflow-hidden rounded-[3rem]">
+                        <div class="absolute -right-20 -top-20 w-[400px] h-[400px] rounded-full bg-gradient-to-bl from-amber-500/10 to-transparent blur-[80px]"></div>
+                        <div class="absolute -left-20 -bottom-20 w-[300px] h-[300px] rounded-full bg-gradient-to-tr from-pink-500/10 to-transparent blur-[60px]"></div>
+                        <!-- Floating tulips -->
+                        <div class="absolute top-8 right-10 text-5xl opacity-10 tulip-float-anim select-none" style="animation-delay: -0.5s;">🌷</div>
+                        <div class="absolute bottom-6 left-8 text-4xl opacity-10 tulip-float-anim select-none" style="animation-delay: -2s;">🌷</div>
+                        <div class="absolute top-1/2 right-1/4 text-3xl opacity-5 tulip-float-anim select-none" style="animation-delay: -3.5s;">🌷</div>
+                    </div>
+
+                    <div class="relative z-10">
+                        <!-- Header -->
+                        <div class="text-center mb-10">
+                            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100/60 dark:bg-amber-900/20 border border-amber-200/50 dark:border-amber-800/30 text-amber-700 dark:text-amber-400 text-[10px] font-black uppercase tracking-[0.3em] mb-5">
+                                <span class="relative flex h-2 w-2">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                                </span>
+                                Medio Año Floreciendo
+                            </div>
+                            <h4 class="text-3xl md:text-4xl font-black text-zinc-900 dark:text-white mb-3 leading-tight">Tu Jardín de 182 Días 🌷</h4>
+                            <p class="text-zinc-500 dark:text-zinc-400 text-sm md:text-base max-w-xl mx-auto font-light">Cada tulipán representa un mes que hemos caminado juntos. Mira cómo ha florecido nuestro jardín.</p>
+                        </div>
+
+                        <!-- 6 Tulip Garden Grid -->
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4 mb-10">
+                            <!-- Mes 1 -->
+                            <div class="group flex flex-col items-center gap-3 p-4 rounded-2xl bg-white/60 dark:bg-white/5 border border-pink-200/30 dark:border-pink-800/20 hover:border-pink-400/50 dark:hover:border-pink-600/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-lg hover:shadow-pink-500/10 cursor-default">
+                                <div class="text-4xl group-hover:scale-125 transition-transform duration-500 group-hover:rotate-12 select-none">🌱</div>
+                                <div class="text-center">
+                                    <p class="text-[10px] font-black text-pink-500 uppercase tracking-widest mb-0.5">Mes 1</p>
+                                    <p class="text-xs font-bold text-zinc-800 dark:text-white">Enero</p>
+                                    <p class="text-[10px] text-zinc-500 dark:text-zinc-500 mt-1 leading-snug">La semilla</p>
+                                </div>
+                            </div>
+                            <!-- Mes 2 -->
+                            <div class="group flex flex-col items-center gap-3 p-4 rounded-2xl bg-white/60 dark:bg-white/5 border border-pink-200/30 dark:border-pink-800/20 hover:border-pink-400/50 dark:hover:border-pink-600/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-lg hover:shadow-pink-500/10 cursor-default">
+                                <div class="text-4xl group-hover:scale-125 transition-transform duration-500 group-hover:rotate-12 select-none">🌿</div>
+                                <div class="text-center">
+                                    <p class="text-[10px] font-black text-pink-500 uppercase tracking-widest mb-0.5">Mes 2</p>
+                                    <p class="text-xs font-bold text-zinc-800 dark:text-white">Febrero</p>
+                                    <p class="text-[10px] text-zinc-500 dark:text-zinc-500 mt-1 leading-snug">Echó raíces</p>
+                                </div>
+                            </div>
+                            <!-- Mes 3 -->
+                            <div class="group flex flex-col items-center gap-3 p-4 rounded-2xl bg-white/60 dark:bg-white/5 border border-pink-200/30 dark:border-pink-800/20 hover:border-pink-400/50 dark:hover:border-pink-600/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-lg hover:shadow-pink-500/10 cursor-default">
+                                <div class="text-4xl group-hover:scale-125 transition-transform duration-500 group-hover:rotate-12 select-none">🌱</div>
+                                <div class="text-center">
+                                    <p class="text-[10px] font-black text-pink-500 uppercase tracking-widest mb-0.5">Mes 3</p>
+                                    <p class="text-xs font-bold text-zinc-800 dark:text-white">Marzo</p>
+                                    <p class="text-[10px] text-zinc-500 dark:text-zinc-500 mt-1 leading-snug">El brote</p>
+                                </div>
+                            </div>
+                            <!-- Mes 4 -->
+                            <div class="group flex flex-col items-center gap-3 p-4 rounded-2xl bg-white/60 dark:bg-white/5 border border-pink-200/30 dark:border-pink-800/20 hover:border-pink-400/50 dark:hover:border-pink-600/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-lg hover:shadow-pink-500/10 cursor-default">
+                                <div class="text-4xl group-hover:scale-125 transition-transform duration-500 group-hover:rotate-12 select-none">🌼</div>
+                                <div class="text-center">
+                                    <p class="text-[10px] font-black text-pink-500 uppercase tracking-widest mb-0.5">Mes 4</p>
+                                    <p class="text-xs font-bold text-zinc-800 dark:text-white">Abril</p>
+                                    <p class="text-[10px] text-zinc-500 dark:text-zinc-500 mt-1 leading-snug">Abrió pétalos</p>
+                                </div>
+                            </div>
+                            <!-- Mes 5 -->
+                            <div class="group flex flex-col items-center gap-3 p-4 rounded-2xl bg-white/60 dark:bg-white/5 border border-pink-200/30 dark:border-pink-800/20 hover:border-pink-400/50 dark:hover:border-pink-600/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-lg hover:shadow-pink-500/10 cursor-default">
+                                <div class="text-4xl group-hover:scale-125 transition-transform duration-500 group-hover:rotate-12 select-none">🌸</div>
+                                <div class="text-center">
+                                    <p class="text-[10px] font-black text-pink-500 uppercase tracking-widest mb-0.5">Mes 5</p>
+                                    <p class="text-xs font-bold text-zinc-800 dark:text-white">Mayo</p>
+                                    <p class="text-[10px] text-zinc-500 dark:text-zinc-500 mt-1 leading-snug">En flor</p>
+                                </div>
+                            </div>
+                            <!-- Mes 6 — SPECIAL -->
+                            <div class="group flex flex-col items-center gap-3 p-4 rounded-2xl bg-gradient-to-br from-amber-50 to-pink-50 dark:from-amber-900/20 dark:to-pink-900/20 border-2 border-amber-400/40 dark:border-amber-500/30 hover:border-amber-500/70 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-amber-500/15 cursor-default relative" style="box-shadow: 0 0 25px rgba(245,158,11,0.08);">
+                                <div class="absolute -top-2 -right-2 px-2 py-0.5 bg-amber-500 text-[8px] font-black text-white uppercase tracking-widest rounded-full shadow-lg animate-pulse">HOY</div>
+                                <div class="text-4xl group-hover:scale-125 transition-transform duration-500 group-hover:rotate-12 select-none">🌷</div>
+                                <div class="text-center">
+                                    <p class="text-[10px] font-black text-amber-500 uppercase tracking-widest mb-0.5">Mes 6</p>
+                                    <p class="text-xs font-bold text-amber-600 dark:text-amber-400">Julio</p>
+                                    <p class="text-[10px] text-amber-600/70 dark:text-amber-500/70 mt-1 leading-snug font-bold">¡Floreció!</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Message -->
+                        <div class="text-center">
+                            <div class="h-px bg-gradient-to-r from-transparent via-pink-300/30 to-transparent dark:via-pink-600/15 mb-8"></div>
+                            <p class="text-zinc-700 dark:text-zinc-300 text-base md:text-lg font-medium leading-relaxed max-w-2xl mx-auto italic">
+                                "Lo que plantamos el 28 de enero como una semilla tímida, hoy es un tulipán en plena floración. 
+                                Seis meses después, nuestro jardín sigue creciendo y cada pétalo nuevo es un día más que elijo amarte."
+                            </p>
+                            <p class="text-pink-400 dark:text-pink-500 text-sm font-bold mt-4">— Charles, Julio 2026 🌷</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- The Promise — Grand Finale Card -->
             <div class="max-w-4xl mx-auto relative z-10">
                 <div
@@ -5920,7 +6161,7 @@
                             <div
                                 class="bg-white/10 backdrop-blur-sm transform-gpu rounded-2xl px-5 py-3 border border-white/10">
                                 <span class="block text-2xl md:text-3xl font-extrabold text-white"
-                                    id="tulip-promise-days">60</span>
+                                    id="tulip-promise-days">182</span>
                                 <span class="block text-[9px] font-bold text-pink-200 uppercase tracking-widest"
                                     data-i18n="tulips_promise_flowers">Tulipanes prometidos</span>
                             </div>
@@ -6667,26 +6908,41 @@
                                     data-i18n="univ_lock_btn">Saber más</a>
                             </div>
                             <!-- Slide 3: 28E Wrapped -->
-                            <div class="w-full flex-shrink-0 snap-center bg-zinc-200/80 dark:bg-zinc-900/50 p-6 md:p-8 rounded-[2rem] shadow-md dark:shadow-xl border border-zinc-300/60 dark:border-zinc-800/50 flex flex-col items-center justify-center gap-3 relative overflow-hidden"
-                                style="margin-left: 1rem; min-height: 250px;">
-                                <div
-                                    class="absolute inset-0 bg-gradient-to-br from-brand-500/10 to-tulip-500/10 pointer-events-none">
+                            <div class="w-full flex-shrink-0 snap-center relative overflow-hidden rounded-[2rem] shadow-2xl transition-transform duration-300" 
+                                style="margin-left: 1rem; min-height: 250px; background: #0f0f11; border: 1px solid rgba(255,255,255,0.1);">
+                                
+                                <!-- Background Patterns / Gradients -->
+                                <div class="absolute inset-0 opacity-40 transition-opacity duration-500 pointer-events-none" 
+                                    style="background: radial-gradient(circle at top right, rgba(245, 158, 11, 0.25), transparent 60%), radial-gradient(circle at bottom left, rgba(236, 72, 153, 0.25), transparent 60%);"></div>
+                                
+                                <!-- Content Container -->
+                                <div class="relative z-10 flex flex-col items-center justify-center p-8 w-full h-full text-center">
+                                    
+                                    <!-- Icon -->
+                                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-pink-500 flex items-center justify-center mb-5 shadow-[0_10px_20px_rgba(245,158,11,0.3)] transition-all duration-300">
+                                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                        </svg>
+                                    </div>
+                                    
+                                    <!-- Typography -->
+                                    <h3 class="text-xl md:text-2xl font-black text-white tracking-[0.2em] uppercase mb-3 drop-shadow-md" 
+                                        data-i18n="univ_wrapped_title">28E WRAPPED — HALF YEAR</h3>
+                                    
+                                    <p class="text-zinc-400 text-sm font-medium mb-8 max-w-md leading-relaxed" 
+                                        data-i18n="univ_wrapped_subtitle">Una sorpresa especial por nuestro primer medio año juntos. Tu resumen interactivo de nuestra historia.</p>
+                                    
+                                    <!-- Premium Button -->
+                                    <button
+                                        onclick="if(window.yaireCurrentUser){ if(typeof AudioManager !== 'undefined') AudioManager.play('entry.wav', 0.6); openModal('wrapped-redirect-modal', 'wrapped-redirect-content'); } else { if(window.showPremiumAlert) window.showPremiumAlert('Acceso Restringido', 'Inicia sesión con tu cuenta de Google primero para ver tu 28E Wrapped.', 'error'); }"
+                                        class="px-8 py-3.5 rounded-full text-xs md:text-sm font-black text-white bg-white/10 hover:bg-white/20 border border-white/20 hover:border-white/40 transition-all duration-300 uppercase tracking-widest flex items-center gap-3 shadow-lg"
+                                        data-i18n="univ_wrapped_btn">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                        </svg>
+                                        ABRIR
+                                    </button>
                                 </div>
-                                <div class="text-4xl opacity-90 mb-2 relative z-10">🎉</div>
-                                <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 tracking-widest uppercase text-center relative z-10"
-                                    data-i18n="univ_wrapped_title">28E Wrapped</h3>
-                                <p class="text-zinc-600 dark:text-zinc-400 text-sm font-medium text-center mb-4 relative z-10"
-                                    data-i18n="univ_wrapped_subtitle">Una sorpresa especial por nuestros 4 meses juntos.
-                                    Tu resumen personalizado de nuestros momentos.</p>
-                                <button
-                                    onclick="if(window.yaireCurrentUser){ if(typeof AudioManager !== 'undefined') AudioManager.play('entry.wav', 0.6); openModal('wrapped-redirect-modal', 'wrapped-redirect-content'); } else { if(window.showPremiumAlert) window.showPremiumAlert('Acceso Restringido', 'Inicia sesión con tu cuenta de Google primero para ver tu 28E Wrapped.', 'error'); }"
-                                    class="relative z-10 px-8 py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-brand-500 to-tulip-500 hover:scale-105 transition-transform active:scale-95 shadow-lg shadow-brand-500/30 uppercase tracking-widest flex items-center gap-2"
-                                    data-i18n="univ_wrapped_btn">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                                    </svg>
-                                    Abrir
-                                </button>
                             </div>
 
                         </div>
@@ -10387,6 +10643,303 @@
             }
         </style>
 
+
+        <!-- ═══ 🗓️ TIMELINE SEMESTRAL — 6 MESES ═══ -->
+        <section id="timeline-semestral" class="cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal scroll-mt-20 relative overflow-hidden">
+            <div class="absolute inset-0 pointer-events-none">
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-gradient-to-tr from-amber-500/5 to-pink-500/5 blur-[100px]"></div>
+            </div>
+            <div class="max-w-6xl mx-auto px-4 relative z-10">
+                <div class="text-center mb-14">
+                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/10 text-zinc-600 dark:text-zinc-300 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-6 shadow-sm">
+                        <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>Enero → Julio 2026</span>
+                    <h2 class="text-4xl md:text-6xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 tracking-tight">Nuestros 6 Meses</h2>
+                    <p class="text-zinc-500 dark:text-zinc-400 text-lg max-w-xl mx-auto font-light">Cada mes fue un capítulo único en nuestra historia.</p>
+                </div>
+
+                <!-- Timeline Cards Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+                    <!-- Mes 1: Enero -->
+                    <div class="group relative rounded-2xl p-5 border border-zinc-200/50 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 backdrop-blur-sm transition-all duration-500 hover:border-amber-500/30 hover:shadow-lg hover:shadow-amber-500/5">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-lg">💫</div>
+                            <div>
+                                <p class="text-[9px] font-extrabold text-zinc-500 dark:text-zinc-500 uppercase tracking-widest">Mes 1</p>
+                                <p class="text-sm font-bold text-zinc-900 dark:text-white">Enero 2026</p>
+                            </div>
+                        </div>
+                        <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-100 mb-1.5">El Destello Inicial</h4>
+                        <p class="text-zinc-500 dark:text-zinc-400 text-xs leading-relaxed mb-3">Un cruce inesperado de palabras encendió la chispa. Dos almas a 900km sintonizaron la misma frecuencia.</p>
+                        <div class="flex items-center gap-1.5 text-[10px] font-bold text-amber-500 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>28 de Enero — Día 1</div>
+                    </div>
+                    <!-- Mes 2: Febrero -->
+                    <div class="group relative rounded-2xl p-5 border border-zinc-200/50 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 backdrop-blur-sm transition-all duration-500 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/5">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-lg">🔥</div>
+                            <div>
+                                <p class="text-[9px] font-extrabold text-zinc-500 uppercase tracking-widest">Mes 2</p>
+                                <p class="text-sm font-bold text-zinc-900 dark:text-white">Febrero 2026</p>
+                            </div>
+                        </div>
+                        <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-100 mb-1.5">Raíces de Fuego</h4>
+                        <p class="text-zinc-500 dark:text-zinc-400 text-xs leading-relaxed mb-3">Superamos la primera tormenta. El pacto se selló y los cimientos se volvieron titanio puro.</p>
+                        <div class="flex items-center gap-1.5 text-[10px] font-bold text-pink-500 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-pink-500"></span>Primer Mes Oficial</div>
+                    </div>
+                    <!-- Mes 3: Marzo -->
+                    <div class="group relative rounded-2xl p-5 border border-zinc-200/50 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 backdrop-blur-sm transition-all duration-500 hover:border-violet-500/30 hover:shadow-lg hover:shadow-violet-500/5">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-lg">🌙</div>
+                            <div>
+                                <p class="text-[9px] font-extrabold text-zinc-500 uppercase tracking-widest">Mes 3</p>
+                                <p class="text-sm font-bold text-zinc-900 dark:text-white">Marzo 2026</p>
+                            </div>
+                        </div>
+                        <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-100 mb-1.5">Madrugadas Infinitas</h4>
+                        <p class="text-zinc-500 dark:text-zinc-400 text-xs leading-relaxed mb-3">Las conversaciones a las 3am se volvieron nuestro ritual. Cada nota de voz, un abrazo encapsulado.</p>
+                        <div class="flex items-center gap-1.5 text-[10px] font-bold text-violet-500 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-violet-500"></span>Segundo Mes Oficial</div>
+                    </div>
+                    <!-- Mes 4: Abril -->
+                    <div class="group relative rounded-2xl p-5 border border-zinc-200/50 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 backdrop-blur-sm transition-all duration-500 hover:border-emerald-500/30 hover:shadow-lg hover:shadow-emerald-500/5">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-lg">🔓</div>
+                            <div>
+                                <p class="text-[9px] font-extrabold text-zinc-500 uppercase tracking-widest">Mes 4</p>
+                                <p class="text-sm font-bold text-zinc-900 dark:text-white">Abril 2026</p>
+                            </div>
+                        </div>
+                        <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-100 mb-1.5">28E se Desbloquea</h4>
+                        <p class="text-zinc-500 dark:text-zinc-400 text-xs leading-relaxed mb-3">La bóveda digital se abrió oficialmente el 28 de abril. Tu sorpresa por fin vio la luz.</p>
+                        <div class="flex items-center gap-1.5 text-[10px] font-bold text-emerald-500 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>28E Desbloqueado</div>
+                    </div>
+                    <!-- Mes 5: Mayo -->
+                    <div class="group relative rounded-2xl p-5 border border-zinc-200/50 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 backdrop-blur-sm transition-all duration-500 hover:border-sky-500/30 hover:shadow-lg hover:shadow-sky-500/5">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-lg">💯</div>
+                            <div>
+                                <p class="text-[9px] font-extrabold text-zinc-500 uppercase tracking-widest">Mes 5</p>
+                                <p class="text-sm font-bold text-zinc-900 dark:text-white">Mayo 2026</p>
+                            </div>
+                        </div>
+                        <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-100 mb-1.5">Cien Días Juntos</h4>
+                        <p class="text-zinc-500 dark:text-zinc-400 text-xs leading-relaxed mb-3">Cruzamos la barrera de los 100 días. Cada uno más intenso que el anterior.</p>
+                        <div class="flex items-center gap-1.5 text-[10px] font-bold text-sky-500 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>100 Días ✓</div>
+                    </div>
+                    <!-- Mes 6: Junio -->
+                    <div class="group relative rounded-2xl p-5 border border-zinc-200/50 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 backdrop-blur-sm transition-all duration-500 hover:border-rose-500/30 hover:shadow-lg hover:shadow-rose-500/5">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-lg">🎬</div>
+                            <div>
+                                <p class="text-[9px] font-extrabold text-zinc-500 uppercase tracking-widest">Mes 6</p>
+                                <p class="text-sm font-bold text-zinc-900 dark:text-white">Junio 2026</p>
+                            </div>
+                        </div>
+                        <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-100 mb-1.5">Cinemascope V</h4>
+                        <p class="text-zinc-500 dark:text-zinc-400 text-xs leading-relaxed mb-3">El quinto capítulo cinematográfico. Nuestra historia contada como obra de arte digital.</p>
+                        <div class="flex items-center gap-1.5 text-[10px] font-bold text-rose-500 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>Quinto Mes Oficial</div>
+                    </div>
+                </div>
+
+                <!-- Current Month — GOLDEN CARD -->
+                <div class="mt-5 relative rounded-2xl p-6 md:p-8 border border-amber-500/30 bg-gradient-to-r from-amber-500/5 via-pink-500/3 to-amber-500/5 backdrop-blur-sm overflow-hidden" style="box-shadow: 0 0 40px rgba(245,158,11,0.08);">
+                    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at center, rgba(245,158,11,0.06), transparent 70%);"></div>
+                    <div class="relative z-10 flex flex-col md:flex-row items-center gap-5 md:gap-8">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-pink-500 flex items-center justify-center text-3xl shadow-lg flex-shrink-0" style="box-shadow: 0 0 30px rgba(245,158,11,0.3);">🏆</div>
+                        <div class="text-center md:text-left">
+                            <p class="text-[9px] font-extrabold text-amber-500 uppercase tracking-widest mb-1">Julio 2026 — AHORA</p>
+                            <h4 class="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-pink-400 mb-1">Medio Año Oficial</h4>
+                            <p class="text-zinc-400 text-sm leading-relaxed">182 días de amarnos sin condición. Hoy celebramos que esto es para siempre. 🌷</p>
+                        </div>
+                        <div class="flex-shrink-0 text-center">
+                            <div class="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-amber-400 to-pink-500">6</div>
+                            <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Meses</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ 🏆 LOGROS — ACHIEVEMENTS SYSTEM ═══ -->
+        <section id="logros" class="cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal scroll-mt-20 relative overflow-hidden">
+            <div class="absolute inset-0 pointer-events-none">
+                <div class="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-gradient-to-bl from-amber-500/5 to-transparent blur-[80px]"></div>
+            </div>
+            <div class="max-w-5xl mx-auto px-4 relative z-10">
+                <div class="text-center mb-14">
+                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/10 text-zinc-600 dark:text-zinc-300 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-6 shadow-sm">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>8/8 Desbloqueados</span>
+                    <h2 class="text-4xl md:text-6xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 tracking-tight">Logros de Pareja</h2>
+                    <p class="text-zinc-500 dark:text-zinc-400 text-lg max-w-xl mx-auto font-light">Hitos que hemos desbloqueado juntos en 6 meses.</p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+                    <!-- Logro 1 -->
+                    <div class="relative rounded-2xl p-4 md:p-5 border border-amber-500/20 bg-gradient-to-b from-amber-500/5 to-transparent text-center group hover:border-amber-500/40 transition-all duration-500 hover:shadow-lg hover:shadow-amber-500/10">
+                        <div class="text-3xl md:text-4xl mb-2 group-hover:scale-110 transition-transform duration-300">💫</div>
+                        <h5 class="text-xs md:text-sm font-bold text-zinc-900 dark:text-white mb-1">Primer Encuentro</h5>
+                        <p class="text-[10px] text-zinc-500 dark:text-zinc-500">28 Ene 2026</p>
+                        <div class="mt-2 inline-flex items-center gap-1 text-[9px] font-bold text-emerald-500 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Desbloqueado</div>
+                    </div>
+                    <!-- Logro 2 -->
+                    <div class="relative rounded-2xl p-4 md:p-5 border border-pink-500/20 bg-gradient-to-b from-pink-500/5 to-transparent text-center group hover:border-pink-500/40 transition-all duration-500 hover:shadow-lg hover:shadow-pink-500/10">
+                        <div class="text-3xl md:text-4xl mb-2 group-hover:scale-110 transition-transform duration-300">🌙</div>
+                        <h5 class="text-xs md:text-sm font-bold text-zinc-900 dark:text-white mb-1">Un Mes Oficial</h5>
+                        <p class="text-[10px] text-zinc-500">28 Feb 2026</p>
+                        <div class="mt-2 inline-flex items-center gap-1 text-[9px] font-bold text-emerald-500 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Desbloqueado</div>
+                    </div>
+                    <!-- Logro 3 -->
+                    <div class="relative rounded-2xl p-4 md:p-5 border border-violet-500/20 bg-gradient-to-b from-violet-500/5 to-transparent text-center group hover:border-violet-500/40 transition-all duration-500 hover:shadow-lg hover:shadow-violet-500/10">
+                        <div class="text-3xl md:text-4xl mb-2 group-hover:scale-110 transition-transform duration-300">💯</div>
+                        <h5 class="text-xs md:text-sm font-bold text-zinc-900 dark:text-white mb-1">100 Días</h5>
+                        <p class="text-[10px] text-zinc-500">~7 May 2026</p>
+                        <div class="mt-2 inline-flex items-center gap-1 text-[9px] font-bold text-emerald-500 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Desbloqueado</div>
+                    </div>
+                    <!-- Logro 4 -->
+                    <div class="relative rounded-2xl p-4 md:p-5 border border-amber-500/30 bg-gradient-to-b from-amber-500/8 to-transparent text-center group hover:border-amber-500/50 transition-all duration-500 hover:shadow-lg hover:shadow-amber-500/15" style="box-shadow: 0 0 20px rgba(245,158,11,0.08);">
+                        <div class="text-3xl md:text-4xl mb-2 group-hover:scale-110 transition-transform duration-300">🏆</div>
+                        <h5 class="text-xs md:text-sm font-bold text-amber-400 mb-1">Medio Año</h5>
+                        <p class="text-[10px] text-amber-500/70">28 Jul 2026</p>
+                        <div class="mt-2 inline-flex items-center gap-1 text-[9px] font-bold text-amber-500 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>¡NUEVO!</div>
+                    </div>
+                    <!-- Logro 5 -->
+                    <div class="relative rounded-2xl p-4 md:p-5 border border-sky-500/20 bg-gradient-to-b from-sky-500/5 to-transparent text-center group hover:border-sky-500/40 transition-all duration-500 hover:shadow-lg hover:shadow-sky-500/10">
+                        <div class="text-3xl md:text-4xl mb-2 group-hover:scale-110 transition-transform duration-300">💬</div>
+                        <h5 class="text-xs md:text-sm font-bold text-zinc-900 dark:text-white mb-1">10,000 Mensajes</h5>
+                        <p class="text-[10px] text-zinc-500">Superado</p>
+                        <div class="mt-2 inline-flex items-center gap-1 text-[9px] font-bold text-emerald-500 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Desbloqueado</div>
+                    </div>
+                    <!-- Logro 6 -->
+                    <div class="relative rounded-2xl p-4 md:p-5 border border-red-500/20 bg-gradient-to-b from-red-500/5 to-transparent text-center group hover:border-red-500/40 transition-all duration-500 hover:shadow-lg hover:shadow-red-500/10">
+                        <div class="text-3xl md:text-4xl mb-2 group-hover:scale-110 transition-transform duration-300">❤️</div>
+                        <h5 class="text-xs md:text-sm font-bold text-zinc-900 dark:text-white mb-1">Primer "Te Amo"</h5>
+                        <p class="text-[10px] text-zinc-500">Febrero 2026</p>
+                        <div class="mt-2 inline-flex items-center gap-1 text-[9px] font-bold text-emerald-500 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Desbloqueado</div>
+                    </div>
+                    <!-- Logro 7 -->
+                    <div class="relative rounded-2xl p-4 md:p-5 border border-indigo-500/20 bg-gradient-to-b from-indigo-500/5 to-transparent text-center group hover:border-indigo-500/40 transition-all duration-500 hover:shadow-lg hover:shadow-indigo-500/10">
+                        <div class="text-3xl md:text-4xl mb-2 group-hover:scale-110 transition-transform duration-300">🌅</div>
+                        <h5 class="text-xs md:text-sm font-bold text-zinc-900 dark:text-white mb-1">Madrugadores</h5>
+                        <p class="text-[10px] text-zinc-500">Chat a las 3am+</p>
+                        <div class="mt-2 inline-flex items-center gap-1 text-[9px] font-bold text-emerald-500 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Desbloqueado</div>
+                    </div>
+                    <!-- Logro 8 -->
+                    <div class="relative rounded-2xl p-4 md:p-5 border border-emerald-500/20 bg-gradient-to-b from-emerald-500/5 to-transparent text-center group hover:border-emerald-500/40 transition-all duration-500 hover:shadow-lg hover:shadow-emerald-500/10">
+                        <div class="text-3xl md:text-4xl mb-2 group-hover:scale-110 transition-transform duration-300">🔧</div>
+                        <h5 class="text-xs md:text-sm font-bold text-zinc-900 dark:text-white mb-1">Constructores 28E</h5>
+                        <p class="text-[10px] text-zinc-500">Plataforma creada</p>
+                        <div class="mt-2 inline-flex items-center gap-1 text-[9px] font-bold text-emerald-500 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Desbloqueado</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+                <!-- ═══ 🎵 SOUNDTRACK DE MEDIO AÑO ═══ -->
+        <section id="playlist-aniversario" class="cv-section py-32 border-t border-zinc-200 dark:border-zinc-800 reveal scroll-mt-20 relative overflow-hidden">
+            <!-- Dynamic Background -->
+            <div class="absolute inset-0 pointer-events-none">
+                <!-- Glowing Orbs -->
+                <div class="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-gradient-to-bl from-emerald-500/10 via-teal-500/5 to-transparent blur-[100px] animate-pulse" style="animation-duration: 4s;"></div>
+                <div class="absolute bottom-0 left-0 w-[800px] h-[800px] rounded-full bg-gradient-to-tr from-green-500/5 via-emerald-500/5 to-transparent blur-[120px] animate-pulse" style="animation-duration: 7s;"></div>
+                
+                <!-- Floating Musical Notes (Pure CSS) -->
+                <div class="absolute top-1/4 left-10 text-4xl text-emerald-500/20 animate-bounce" style="animation-duration: 3s;">♪</div>
+                <div class="absolute top-1/2 right-12 text-5xl text-teal-500/20 animate-bounce" style="animation-duration: 4.5s; animation-delay: 1s;">♫</div>
+                <div class="absolute bottom-1/4 left-1/3 text-3xl text-emerald-500/10 animate-bounce" style="animation-duration: 5s; animation-delay: 0.5s;">♩</div>
+            </div>
+            
+            <div class="max-w-6xl mx-auto px-4 relative z-10 flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+                
+                <!-- Left: Info & Text -->
+                <div class="w-full lg:w-5/12 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/20 text-emerald-500 text-xs font-black uppercase tracking-widest mb-6 shadow-[0_0_20px_rgba(16,185,129,0.15)]">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        On Air — 182 Días
+                    </div>
+                    
+                    <h2 class="text-5xl md:text-6xl font-black mb-6 text-transparent bg-clip-text bg-gradient-to-br from-zinc-900 via-zinc-700 to-zinc-500 dark:from-white dark:via-emerald-100 dark:to-emerald-400 tracking-tight leading-[1.1]" style="filter: drop-shadow(0 4px 20px rgba(16,185,129,0.2));">Soundtrack de Nuestro <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-500 dark:from-emerald-400 dark:to-teal-500">Medio Año</span></h2>
+                    
+                    <p class="text-zinc-600 dark:text-zinc-400 text-lg font-light leading-relaxed mb-8">Porque 182 días de magia necesitaban una banda sonora a la altura. Estas son las canciones que definen tu vibra, nuestra historia y todo lo que nos hace vibrar en la misma frecuencia.</p>
+                    
+                    <!-- Soundwave Animation -->
+                    <div class="flex items-center justify-center lg:justify-start gap-1.5 h-10 mb-8 opacity-70">
+                        <div class="w-1.5 bg-emerald-500 rounded-full animate-[soundwave_1s_ease-in-out_infinite_alternate] h-4"></div>
+                        <div class="w-1.5 bg-emerald-400 rounded-full animate-[soundwave_1.2s_ease-in-out_infinite_alternate] h-8"></div>
+                        <div class="w-1.5 bg-teal-400 rounded-full animate-[soundwave_0.8s_ease-in-out_infinite_alternate] h-5"></div>
+                        <div class="w-1.5 bg-emerald-500 rounded-full animate-[soundwave_1.5s_ease-in-out_infinite_alternate] h-10"></div>
+                        <div class="w-1.5 bg-teal-500 rounded-full animate-[soundwave_0.9s_ease-in-out_infinite_alternate] h-3"></div>
+                        <div class="w-1.5 bg-emerald-400 rounded-full animate-[soundwave_1.1s_ease-in-out_infinite_alternate] h-7"></div>
+                        <div class="w-1.5 bg-teal-400 rounded-full animate-[soundwave_1.3s_ease-in-out_infinite_alternate] h-6"></div>
+                    </div>
+                    
+                    <!-- Curator Tag -->
+                    <div class="inline-flex items-center gap-4 bg-zinc-100/80 dark:bg-zinc-900/50 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-2xl p-3 shadow-xl">
+                        <div class="flex -space-x-3 relative">
+                            <div class="w-12 h-12 rounded-full border-2 border-white dark:border-zinc-900 bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center overflow-hidden shadow-lg z-10 text-white text-xl">
+                                🎧
+                            </div>
+                            <div class="w-12 h-12 rounded-full border-2 border-white dark:border-zinc-900 bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center shadow-lg relative">
+                                <span class="text-sm">👩🏻</span>
+                            </div>
+                        </div>
+                        <div class="pr-3 text-left">
+                            <p class="text-[10px] font-black text-emerald-600 dark:text-emerald-500 uppercase tracking-widest mb-0.5">Selección Oficial</p>
+                            <p class="text-sm font-bold text-zinc-900 dark:text-white">Curado para Yaire 🌷</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right: Spotify Embed & Vinyl -->
+                <div class="w-full lg:w-7/12 relative flex justify-center lg:justify-end mt-10 lg:mt-0">
+                    
+                    <!-- Spinning Vinyl Background -->
+                    <div class="absolute top-1/2 right-1/2 translate-x-[20%] -translate-y-1/2 w-[350px] h-[350px] md:w-[450px] md:h-[450px] rounded-full border border-zinc-300 dark:border-zinc-800 bg-zinc-900 dark:bg-zinc-950 shadow-2xl dark:shadow-[0_0_50px_rgba(0,0,0,0.8)] flex items-center justify-center animate-[spin_10s_linear_infinite]" style="z-index: 0;">
+                        <!-- Vinyl Grooves -->
+                        <div class="absolute inset-2 rounded-full border border-white/5 dark:border-zinc-800/50"></div>
+                        <div class="absolute inset-6 rounded-full border border-white/5 dark:border-zinc-800/50"></div>
+                        <div class="absolute inset-10 rounded-full border border-white/5 dark:border-zinc-800/50"></div>
+                        <div class="absolute inset-14 rounded-full border border-white/5 dark:border-zinc-800/50"></div>
+                        <div class="absolute inset-20 rounded-full border border-white/5 dark:border-zinc-800/50"></div>
+                        <!-- Vinyl Center Label -->
+                        <div class="w-32 h-32 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-400 border-[4px] border-zinc-800 dark:border-zinc-900 flex items-center justify-center relative shadow-inner">
+                            <div class="w-4 h-4 rounded-full bg-zinc-900 shadow-inner"></div>
+                            <!-- Circular Text -->
+                            <svg class="absolute inset-0 w-full h-full animate-[spin_15s_linear_infinite_reverse]" viewBox="0 0 100 100">
+                                <path id="curve" d="M 50 15 A 35 35 0 1 1 49.9 15" fill="transparent" />
+                                <text class="text-[10px] font-black uppercase tracking-widest" fill="rgba(0,0,0,0.6)">
+                                    <textPath href="#curve">28 DE ENERO — SEIS MESES JUNTOS —</textPath>
+                                </text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Spotify Player Container -->
+                    <div class="relative z-10 w-full max-w-[420px] group perspective-[1000px]">
+                        <!-- Glow behind player -->
+                        <div class="absolute -inset-2 bg-gradient-to-br from-emerald-500 to-teal-400 rounded-[32px] blur-xl opacity-30 group-hover:opacity-50 transition duration-700"></div>
+                        
+                        <!-- Glass Player Card -->
+                        <div class="relative bg-zinc-100/90 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[28px] p-4 border border-white/50 dark:border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                            
+                            <!-- Glass Reflection -->
+                            <div class="absolute inset-0 rounded-[28px] bg-gradient-to-br from-white/40 dark:from-white/[0.05] to-transparent pointer-events-none"></div>
+
+                            <iframe style="border-radius:16px" src="https://open.spotify.com/embed/playlist/34Txo6D9vCnRjezQwo2nh5?utm_source=generator&theme=0" width="100%" height="450" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" class="relative z-10 w-full h-[450px] shadow-lg"></iframe>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <style>
+                @keyframes soundwave {
+                    0% { transform: scaleY(0.3); opacity: 0.5; }
+                    100% { transform: scaleY(1); opacity: 1; }
+                }
+            </style>
+        </section>
+
         <section id="estadisticas"
             class="cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal-fade scroll-mt-20 relative overflow-hidden">
             <div class="max-w-6xl mx-auto px-4 relative z-10">
@@ -12283,105 +12836,130 @@
                 })();
             </script>
         </section>
-        <section id="mes-cinco" class="cs-wrapper reveal scroll-mt-20">
+        
+
+        <!-- ═══ 🎬 CINEMASCOPE VI — MEDIO AÑO ═══ -->
+        <section id="mes-seis" class="cs-wrapper reveal scroll-mt-20">
             <!-- Glow background decor -->
-            <div
-                class="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-b from-amber-500/15 via-pink-500/10 to-transparent blur-3xl pointer-events-none">
-            </div>
+            <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-b from-amber-500/20 via-pink-500/12 to-transparent blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-40 right-0 w-[400px] h-[400px] bg-gradient-to-t from-pink-500/8 to-transparent blur-3xl pointer-events-none"></div>
 
             <div class="cs-header">
-                <div class="cs-badge">
-                    <span>✦ Est. 28 Junio 2026</span>
+                <div class="cs-badge" style="background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.35); box-shadow: 0 0 20px rgba(245,158,11,0.1);">
+                    <span>✦ Est. 28 Julio 2026 — MEDIO AÑO</span>
                 </div>
-                <h2 class="cs-title">Cinemascope V</h2>
-                <p class="cs-subtitle">Cinco meses oficiales amándonos. Un viaje que no se mide en kilómetros, sino en
-                    la intensidad de cada latido compartido a través de la pantalla.</p>
+                <h2 class="cs-title" style="font-size: clamp(2.5rem, 8vw, 5rem); background: linear-gradient(135deg, #fbbf24, #ec4899, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Cinemascope VI</h2>
+                <p class="cs-subtitle">Seis meses oficiales de amarnos sin condición. 182 días donde cada latido tuyo se convirtió en la brújula de mi universo. Hoy no celebramos un número — celebramos la certeza de que esto es para siempre.</p>
             </div>
 
             <!-- Cinematic Timeline -->
-              <div class="cs-timeline">
-  
-                  <!-- Act I -->
-                  <div class="cs-act">
-                      <div class="cs-node"></div>
-                      <div class="cs-act-card">
-                          <span class="cs-act-tag">Acto I ✦ 28 de Enero 2026</span>
-                          <h3 class="cs-act-title">El Destello Inicial</h3>
-                          <p class="cs-act-desc">Todo comenzó con un cruce de palabras y una chispa digital. Dos coordenadas lejanas sintonizando exactamente la misma frecuencia por primera vez. Ese día no solo nos cruzamos, sino que plantamos la semilla de lo que hoy es nuestro refugio inquebrantable.</p>
-                      </div>
-                  </div>
-  
-                  <!-- Act II -->
-                  <div class="cs-act">
-                      <div class="cs-node"></div>
-                      <div class="cs-act-card">
-                          <span class="cs-act-tag">Acto II ✦ 10 de Febrero 2026</span>
-                          <h3 class="cs-act-title">La Prueba de Fuego</h3>
-                          <p class="cs-act-desc">Superamos las primeras tormentas desde el inicio. Entre malentendidos y el ruido del exterior, me dijiste: <i>"Nuestro amor va más allá de cualquier obstáculo"</i>. Ese día decidimos que nada apagaría nuestro fuego y sellamos un pacto real y eterno.</p>
-                      </div>
-                  </div>
-  
-                  <!-- Act III -->
-                  <div class="cs-act">
-                      <div class="cs-node"></div>
-                      <div class="cs-act-card">
-                          <span class="cs-act-tag">Acto III ✦ 900 Kilómetros</span>
-                          <h3 class="cs-act-title">Desafiando la Distancia</h3>
-                          <p class="cs-act-desc">Construimos un santuario donde las notas de voz se convierten en abrazos físicos y las madrugadas en conversaciones sin fin. Hemos demostrado con hechos que la distancia es solo una ilusión frente a la magnitud de nuestra conexión.</p>
-                      </div>
-                  </div>
-  
-                  <!-- Act IV -->
-                  <div class="cs-act">
-                      <div class="cs-node"></div>
-                      <div class="cs-act-card">
-                          <span class="cs-act-tag">Acto IV ✦ Métricas del Alma</span>
-                          <h3 class="cs-act-title">41,810 Mensajes Juntos</h3>
-                          <p class="cs-act-desc">Nuestro historial no miente, es una simetría perfecta de devoción: 4,503 recuerdos multimedia compartidos y exactamente 1,034 veces que nos prometimos la vida con un "Te amo" (525 veces yo, 509 veces tú). No son números, son latidos.</p>
-                      </div>
-                  </div>
-  
-                  <!-- Act V -->
-                  <div class="cs-act">
-                      <div class="cs-node"></div>
-                      <div class="cs-act-card">
-                          <span class="cs-act-tag">Acto V ✦ La Musa Eterna</span>
-                          <h3 class="cs-act-title">Inspiración Infinita</h3>
-                          <p class="cs-act-desc">Eres la luz detrás de cada línea de código de esta plataforma, cada detalle diseñado y cada sorpresa guardada. En nuestro chat el futuro y el "siempre" son certezas. Eres mi paz en el caos y el amor absoluto de mi vida.</p>
-                      </div>
-                  </div>
-  
-                  <!-- Act VI -->
-                  <div class="cs-act">
-                      <div class="cs-node"></div>
-                      <div class="cs-act-card"
-                          style="border-color: rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.05); box-shadow: 0 0 30px rgba(245, 158, 11, 0.1);">
-                          <span class="cs-act-tag" style="color: #ec4899; text-shadow: 0 0 10px rgba(236,72,153,0.5);">Acto VI ✦ 28 de Junio 2026</span>
-                          <h3 class="cs-act-title" style="color: #f59e0b;">El Quinto Mes Oficial</h3>
-                          <p class="cs-act-desc">Hoy precintamos el capítulo número cinco de nuestra historia. Un mes más sumado a la eternidad que nos espera. Mantén presionado el sello inferior para desbloquear mi juramento de este mes.</p>
-                      </div>
-                  </div>
-  
-              </div>
-  
-              <!-- Hold 3s to Unlock Oath -->
+            <div class="cs-timeline">
+
+                <!-- Act I -->
+                <div class="cs-act">
+                    <div class="cs-node"></div>
+                    <div class="cs-act-card">
+                        <span class="cs-act-tag">Acto I ✦ El Origen</span>
+                        <h3 class="cs-act-title">28 de Enero — Donde Todo Empezó</h3>
+                        <p class="cs-act-desc">Un cruce de palabras que cambió el eje de todo. Dos almas a 900 kilómetros de distancia descubrieron que la frecuencia del corazón no entiende de mapas. Ese día no solo nos conocimos — comenzamos a construir un universo que nadie más puede ver.</p>
+                    </div>
+                </div>
+
+                <!-- Act II -->
+                <div class="cs-act">
+                    <div class="cs-node"></div>
+                    <div class="cs-act-card">
+                        <span class="cs-act-tag">Acto II ✦ Raíces de Fuego</span>
+                        <h3 class="cs-act-title">Las Tormentas que nos Forjaron</h3>
+                        <p class="cs-act-desc">Cada obstáculo se convirtió en cemento para nuestros cimientos. Donde otros hubieran corrido, nosotros cavamos más profundo. Aprendimos que el amor verdadero no evita el fuego — lo atraviesa de la mano y sale más fuerte del otro lado.</p>
+                    </div>
+                </div>
+
+                <!-- Act III -->
+                <div class="cs-act">
+                    <div class="cs-node"></div>
+                    <div class="cs-act-card">
+                        <span class="cs-act-tag">Acto III ✦ La Distancia es Mentira</span>
+                        <h3 class="cs-act-title">900 km = 0 cm del Alma</h3>
+                        <p class="cs-act-desc">Las madrugadas se volvieron nuestro horario secreto. Cada nota de voz un abrazo encapsulado, cada videollamada un portal interdimensional. Hemos demostrado que la distancia es solo una ilusión óptica frente a la magnitud de lo que sentimos.</p>
+                    </div>
+                </div>
+
+                <!-- Act IV -->
+                <div class="cs-act">
+                    <div class="cs-node"></div>
+                    <div class="cs-act-card">
+                        <span class="cs-act-tag">Acto IV ✦ Las Cifras del Corazón</span>
+                        <h3 class="cs-act-title">Seis Meses en Números</h3>
+                        <p class="cs-act-desc">182 amaneceres pensando en ti. Miles de mensajes donde cada "te amo" pesa más que el anterior. Incontables risas a las 3am, planes susurrados y promesas grabadas en código. No son estadísticas — son las huellas digitales de nuestra historia.</p>
+                    </div>
+                </div>
+
+                <!-- Act V -->
+                <div class="cs-act">
+                    <div class="cs-node"></div>
+                    <div class="cs-act-card">
+                        <span class="cs-act-tag">Acto V ✦ La Musa Infinita</span>
+                        <h3 class="cs-act-title">Cada Línea de Código Lleva tu Nombre</h3>
+                        <p class="cs-act-desc">Esta plataforma existe porque tú existes. Cada animación, cada detalle, cada sorpresa escondida — todo fue creado pensando en tu sonrisa al descubrirlo. Eres la inspiración que no se agota, la razón detrás de cada pixel iluminado.</p>
+                    </div>
+                </div>
+
+                <!-- Act VI -->
+                <div class="cs-act">
+                    <div class="cs-node"></div>
+                    <div class="cs-act-card">
+                        <span class="cs-act-tag">Acto VI ✦ Lo que Viene</span>
+                        <h3 class="cs-act-title">El Futuro nos Pertenece</h3>
+                        <p class="cs-act-desc">Medio año es solo el prólogo. Nos esperan viajes, abrazos en persona, risas que aún no hemos inventado y un "siempre" que construiremos día a día. Lo mejor de nuestra historia aún no ha sido escrito — y eso me emociona más que nada.</p>
+                    </div>
+                </div>
+
+                <!-- Act VII — GOLDEN FINALE -->
+                <div class="cs-act">
+                    <div class="cs-node" style="background: #f59e0b; box-shadow: 0 0 20px rgba(245,158,11,0.6);"></div>
+                    <div class="cs-act-card" style="border-color: rgba(245,158,11,0.5); background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(236,72,153,0.05)); box-shadow: 0 0 40px rgba(245,158,11,0.12);">
+                        <span class="cs-act-tag" style="color: #ec4899; text-shadow: 0 0 10px rgba(236,72,153,0.5);">Acto VII ✦ 28 de Julio 2026</span>
+                        <h3 class="cs-act-title" style="color: #f59e0b; text-shadow: 0 0 20px rgba(245,158,11,0.3);">Medio Año Oficial 🏆</h3>
+                        <p class="cs-act-desc">Hoy sellamos el capítulo de oro: seis meses completos de amarnos sin tregua, sin condiciones, sin fronteras. Medio año que vale más que toda una vida cualquiera. Mantén presionado el sello inferior para desbloquear mi juramento de medio año.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Hold 3s to Unlock Oath VI -->
             <div class="cs-hold-container">
-                <div id="cs-hold-btn" class="cs-hold-btn">
+                <div id="cs6-hold-btn" class="cs-hold-btn">
                     <svg class="cs-hold-svg" viewBox="0 0 232 232">
                         <defs>
-                            <linearGradient id="csGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <linearGradient id="cs6GoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                                 <stop offset="0%" stop-color="#f59e0b" />
                                 <stop offset="50%" stop-color="#ec4899" />
                                 <stop offset="100%" stop-color="#fbbf24" />
                             </linearGradient>
                         </defs>
                         <circle class="cs-hold-circle-bg" cx="116" cy="116" r="110" />
-                        <circle id="cs-hold-circle-val" class="cs-hold-circle-val" cx="116" cy="116" r="110" />
+                        <circle id="cs6-hold-circle-val" class="cs-hold-circle-val" cx="116" cy="116" r="110" />
                     </svg>
                     <div class="cs-hold-content">
-                        <span id="cs-hold-icon" class="cs-hold-icon">🔒</span>
-                        <span id="cs-hold-label" class="cs-hold-label">Juramento V</span>
-                        <span id="cs-hold-sub" class="cs-hold-sub">Mantén 3s para revelar</span>
+                        <span id="cs6-hold-icon" class="cs-hold-icon">🔒</span>
+                        <span id="cs6-hold-label" class="cs-hold-label">Juramento VI</span>
+                        <span id="cs6-hold-sub" class="cs-hold-sub">Mantén 3s para revelar</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Oath VI reveal container (hidden until unlocked) -->
+            <div id="cs6-oath" class="mt-12 text-center" style="display:none; opacity:0;">
+                <div class="max-w-2xl mx-auto px-6 py-10 rounded-3xl relative overflow-hidden" style="background: rgba(245,158,11,0.03); border: 1px solid rgba(245,158,11,0.2);">
+                    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at center, rgba(245,158,11,0.08), transparent 70%);"></div>
+                    <div class="relative z-10">
+                        <div class="text-5xl mb-4">🏆</div>
+                        <h3 class="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-pink-400 to-amber-400 mb-6" style="line-height:1.3;">Juramento de Medio Año</h3>
+                        <p class="text-zinc-300 text-base md:text-lg leading-relaxed font-light italic" id="cs6-oath-text">
+                            «A los 182 días de haberte encontrado, juro ante el universo que cada mañana elijo amarte de nuevo. No por costumbre — por convicción absoluta. Medio año atrás no sabía que existías, y hoy no puedo imaginar mi existencia sin la tuya. Te prometo otros seis meses, y otros seis, hasta que los números pierdan el sentido y solo quede la eternidad que construimos juntos. Eres mi certeza en un mundo incierto. Te amo, Yaire — hoy, mañana, y cada día que invente el tiempo.»
+                        </p>
+                        <p class="text-zinc-500 text-xs mt-6 tracking-widest uppercase">— Charles Gustav, 28 de Julio de 2026</p>
                     </div>
                 </div>
             </div>
@@ -12811,10 +13389,12 @@
                 secret_pwd_title: "El Último Secreto", secret_pwd_desc: "Solo ella conoce la palabra mágica.", secret_pwd_error: "Esa no es la palabra mágica.", secret_hint: "Pista: La identidad que usaste cuando nuestra historia continuó entre píxeles.", secret_pwd_btn: "Desbloquear", secret_pwd_cancel: "Volver",
                 secret_security_badge: "Acceso Restringido", secret_lockout: "Acceso bloqueado",
                 secret_letter_title: "Mi Amada Yaire,",
-                secret_letter_p1: "Si estás leyendo esto, es porque conoces la llave que abre no solo esta bóveda digital, sino la puerta directa a mi alma. Mi hermosa manzanita, no existen palabras en ningún diccionario que puedan medir la inmensidad de lo que causas en mí.",
-                secret_letter_p2: "Desde aquel primer cruce de palabras en Hevvo, pasando por nuestras interminables charlas en Habbo, hasta llegar a este punto donde te has convertido en el centro absoluto de mi universo, mi vida ha cambiado para siempre.",
-                secret_letter_p3: "Me enamoro de ti todos los días. Me enamoro de la forma en que tus ojos brillan, de esa sonrisa que podría detener guerras, de tu inteligencia, de tu fuerza para superar los días difíciles y de la ternura infinita que guardas en tu corazón.",
-                secret_letter_p4: "Sé que los 900 kilómetros de océano que nos separan a veces parecen crueles. Pero quiero que sepas que cada segundo de espera vale la pena. No me importa la distancia cuando se trata de la mujer con la que quiero despertar cada mañana.",
+                secret_letter_p1: "Si lograste entrar aquí, es porque sabes que nuestro vínculo desafía toda la lógica de este mundo. Mi amada Yaire, han pasado 182 días desde que decidimos que la distancia era solo un detalle técnico, y no hay un solo día en que no agradezca al destino por haberte puesto en mi camino.",
+                secret_letter_p2: "Más de 50,000 mensajes no son suficientes para describir la revolución que has causado en mí. Hemos construido un imperio de palabras, de videollamadas en la madrugada donde el cansancio desaparecía solo con escuchar tu voz, y de «Te amos» (exactamente 2,582 de ellos) que atraviesan los kilómetros como si no existieran.",
+                secret_letter_p3: "Me he enamorado no solo de tu sonrisa hermosa, sino de tu resiliencia brutal. Eres la mujer más fuerte que conozco, mi lugar seguro. Cuando hablas con esa voz suave, cuando te ríes de mis locuras, y cuando me compartes tus miedos, me confirmas que mi alma siempre estuvo buscándote, incluso antes de conocerte.",
+                secret_letter_p4: "Cientos de kilómetros de océano nos separan físicamente, pero nuestras mentes y corazones laten sincronizados. Ya sea en nuestras noches de desvelo o en nuestros sueños, siempre te elijo. Eres la dueña absoluta de mis pensamientos, la razón por la que mi teléfono vibra y mi corazón también.",
+                secret_letter_p5: "Pero hay algo más... Algo que he guardado en el rincón más profundo de esta bóveda. Algo que solo podrás leer si realmente estás dispuesta a sentirlo. Porque esto no es solo una declaración, es una promesa grabada a fuego...",
+                secret_letter_secret: "Prometo amarte hasta que el mar que nos separa sea solo un charco que podamos saltar juntos. Prometo ser tu paz cuando el mundo haga demasiado ruido. Y prometo que el día que por fin pueda tenerte entre mis brazos, te abrazaré tan fuerte que todos estos días de espera desaparecerán en un segundo. Te amo con cada átomo de mi ser, hoy, mañana y siempre.",
                 hype_airline: "Aerolínea del Amor", hype_bp_label: "Boarding Pass",
                 hype_passenger: "Pasajera", hype_class: "Clase", hype_class_val: "Amor Total",
                 hype_seat: "Asiento", hype_waiting: "En espera · Fecha TBD", hype_flight_dur: "~2h de vuelo",
@@ -12856,7 +13436,7 @@
                 modal_morado_icon1: "Misterio", modal_morado_icon2: "Magia", modal_morado_icon3: "Sueños",
                 modal_morado_note: "\"El morado en ti es ese universo interior que pocos llegan a ver del todo. Una profundidad que me atrae y me maravilla cada vez que me dejas asomar a ella.\"",
                 hex_copied: "copiado", copy_hex: "Copiar hex",
-                secret_letter_p5: "Prometo cuidarte, respetarte, hacerte reír hasta que te duela el estómago y ser el hombre que mereces. Esto es más que una simple página web; es un testamento de mi amor por ti. Gracias por elegirme, Yaire.",
+                secret_letter_old_p5: "Prometo cuidarte, respetarte, hacerte reír hasta que te duela el estómago y ser el hombre que mereces. Esto es más que una simple página web; es un testamento de mi amor por ti. Gracias por elegirme, Yaire.",
                 secret_update_notice: "Solo para sus ojos",
                 secret_letter_v2_p1: "Si estás leyendo esto, es porque el tiempo no se detiene, y hoy cumplimos tres meses maravillosos. Mi hermosa manzanita, sigo sin encontrar las palabras exactas, pero mi alma entera vibra cada vez que pienso en nosotros. Tres meses parecen poco para quien no nos conoce, pero para nosotros es toda una eternidad de amor.",
                 secret_letter_v2_p2: "Desde aquel primer cruce de palabras en Hevvo, y nuestras inolvidables charlas en Habbo, hasta este preciso instante, me pregunto: ¿Cómo es posible amarte más cada día? Te has convertido en mi hogar, en el latido de mi corazón y en la razón por la que sonrío al despertar.",
@@ -12947,8 +13527,8 @@
                 univ_unlock_desc: "Una canción compuesta desde cero, solo para ti. Cada beat, cada violín y cada letra tiene tu nombre. Este es el soundtrack oficial de nosotros dos.",
                 univ_unlock_btn: "<svg class=\"w-4 h-4\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M8 5v14l11-7z\"/></svg>Escuchar la canción",
                 univ_unlock_footer: "© 2026 Charles Gustav & Google Flow Music.",
-                univ_wrapped_title: "28E Wrapped",
-                univ_wrapped_subtitle: "Una sorpresa especial por nuestros 4 meses juntos. Tu resumen personalizado de nuestros momentos.",
+                univ_wrapped_title: "28E WRAPPED — HALF YEAR",
+                univ_wrapped_subtitle: "Una sorpresa especial por nuestro primer medio año juntos. Tu resumen interactivo de nuestra historia.",
                 univ_wrapped_btn: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Abrir',
                 menu_song: "Tu Canción",
                 song_badge: "🎤 Producción Original", song_title: "Tulipanes Pa' Yaire",
@@ -14942,8 +15522,14 @@
             const eyeOn = document.getElementById('eye-icon');
             const eyeOff = document.getElementById('eye-off-icon');
             if (!input) return;
-            const isHidden = input.type === 'password';
-            input.type = isHidden ? 'text' : 'password';
+            const isHidden = input.style.webkitTextSecurity === 'disc';
+            
+            if(isHidden) {
+                input.style.webkitTextSecurity = 'none';
+            } else {
+                input.style.webkitTextSecurity = 'disc';
+            }
+            
             eyeOn.classList.toggle('hidden', isHidden);
             eyeOff.classList.toggle('hidden', !isHidden);
             input.focus();
@@ -15102,29 +15688,160 @@
         function showLetter() {
             const letter = document.getElementById('secret-letter');
             if (!letter) return;
-            const dict = dictionary[currentLang] || dictionary['es'];
-            const isV2Ready = true;
-            if (isV2Ready && dict.secret_letter_v2_p1) {
-                letterParagraphs = [dict.secret_letter_v2_p1, dict.secret_letter_v2_p2, dict.secret_letter_v2_p3, dict.secret_letter_v2_p4, dict.secret_letter_v2_p5];
-            } else {
-                letterParagraphs = [dict.secret_letter_p1, dict.secret_letter_p2, dict.secret_letter_p3, dict.secret_letter_p4, dict.secret_letter_p5];
-            }
-            currentPara = 0;
-            const lt = document.getElementById('letter-title'); if (lt) lt.textContent = dict.secret_letter_title;
-            const nav = document.getElementById('letter-nav'); if (nav) nav.classList.remove('hidden');
-            const sig = document.getElementById('letter-signature'); if (sig) sig.classList.add('hidden');
-            renderLetterPara();
+            
+            // Populate text via the i18n system
+            setLanguage(currentLang, false);
+            
             letter.style.opacity = '0';
             letter.style.transform = 'scale(0.93) translateY(16px)';
             letter.classList.remove('hidden');
+            
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
                     letter.style.transition = 'opacity 0.55s ease, transform 0.55s ease';
                     letter.style.opacity = '1';
                     letter.style.transform = 'scale(1) translateY(0)';
-                    spawnLetterHearts();
+                    if(typeof spawnLetterHearts === 'function') spawnLetterHearts();
+                    
+                    setTimeout(() => initCinematicScroll(), 300);
                 });
             });
+        }
+
+        function initCinematicScroll() {
+            const scrollContainer = document.getElementById('cinematic-letter-body');
+            const paras = document.querySelectorAll('.cine-para');
+            if(!scrollContainer || !paras.length) return;
+
+            // Fade out scroll hint on first scroll
+            const scrollHint = document.getElementById('scroll-hint');
+            if(scrollHint) {
+                scrollContainer.addEventListener('scroll', function hideHint() {
+                    scrollHint.style.transition = 'opacity 0.5s ease';
+                    scrollHint.style.opacity = '0';
+                    setTimeout(() => { scrollHint.style.display = 'none'; }, 500);
+                    scrollContainer.removeEventListener('scroll', hideHint);
+                });
+            }
+            
+            // IntersectionObserver using inline style manipulation (Tailwind classes not compiled)
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.filter = 'blur(0px)';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { root: scrollContainer, threshold: 0.2, rootMargin: '0px 0px -60px 0px' });
+            
+            paras.forEach(p => observer.observe(p));
+            
+            // Hold to Reveal Logic
+            const btn = document.getElementById('hold-reveal-btn');
+            const progress = document.getElementById('hold-progress');
+            const secretText = document.getElementById('secret-hidden-text');
+            const hint = document.getElementById('hold-hint');
+            
+            if(!btn || !progress || !secretText) return;
+
+            let holdTimeout;
+            let isHolding = false;
+            let isRevealed = false;
+            
+            const startHold = (e) => {
+                if(isRevealed) return;
+                e.preventDefault(); 
+                isHolding = true;
+                if(typeof AudioManager !== 'undefined') AudioManager.play('scroll.wav', 0.2); 
+                
+                progress.style.transitionDuration = '3000ms';
+                progress.style.height = '100%';
+                
+                holdTimeout = setTimeout(() => {
+                    if(isHolding) revealSecret();
+                }, 3000);
+            };
+            
+            const endHold = () => {
+                if(isRevealed) return;
+                isHolding = false;
+                clearTimeout(holdTimeout);
+                progress.style.transitionDuration = '500ms';
+                progress.style.height = '0';
+            };
+            
+            btn.addEventListener('mousedown', startHold);
+            btn.addEventListener('touchstart', startHold, {passive: false});
+            window.addEventListener('mouseup', endHold);
+            window.addEventListener('touchend', endHold);
+            
+            function revealSecret() {
+                isRevealed = true;
+                if(typeof AudioManager !== 'undefined') AudioManager.play('abrirtusecreto.mp3', 0.8);
+                
+                progress.style.transitionDuration = '0s';
+                progress.style.height = '100%';
+                progress.style.background = 'linear-gradient(to top, #22c55e, #16a34a)';
+                
+                const svg = btn.querySelector('svg');
+                if(svg) {
+                    svg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>';
+                    svg.style.color = '#fff';
+                }
+                
+                // Reveal the secret text
+                secretText.style.filter = 'blur(0px)';
+                secretText.style.webkitTextFillColor = '';
+                secretText.style.background = 'none';
+                secretText.style.webkitBackgroundClip = '';
+                secretText.style.backgroundClip = '';
+                secretText.style.color = '#f59e0b';
+                secretText.style.textShadow = '0 0 20px rgba(245,158,11,0.4)';
+                
+                if(hint) hint.textContent = "✨ El secreto ha sido revelado ✨";
+                
+                // Show dedication after 6 seconds
+                setTimeout(() => {
+                    showDedication();
+                }, 6000);
+            }
+        }
+
+        function showDedication() {
+            const letter = document.getElementById('secret-letter');
+            const dedModal = document.getElementById('secret-dedication-modal');
+            const dedContent = document.getElementById('dedication-content');
+            
+            // Hide letter, show dedication
+            if(letter) {
+                letter.style.transition = 'opacity 0.5s ease';
+                letter.style.opacity = '0';
+                setTimeout(() => { letter.classList.add('hidden'); letter.style.opacity = ''; }, 500);
+            }
+            
+            if(dedModal && dedContent) {
+                dedModal.classList.remove('hidden');
+                dedModal.style.background = 'radial-gradient(ellipse at center, rgba(245,158,11,0.05) 0%, rgba(0,0,0,0.6) 100%)';
+                dedContent.style.opacity = '0';
+                dedContent.style.transform = 'scale(0.95)';
+                
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        dedContent.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+                        dedContent.style.opacity = '1';
+                        dedContent.style.transform = 'scale(1)';
+                    });
+                });
+                
+                // Update days count
+                const sigDays = document.getElementById('sig-days-count');
+                if(sigDays) {
+                    const start = new Date(2026, 0, 28);
+                    const now = new Date();
+                    sigDays.textContent = Math.floor((now - start) / 86400000);
+                }
+            }
         }
 
         /*
@@ -17154,6 +17871,90 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         };
     
+        // ═══ CINEMASCOPE VI — HOLD TO UNLOCK OATH VI ═══
+        (function initCinemascopeVIHold() {
+            const btn6 = document.getElementById('cs6-hold-btn');
+            const circle6 = document.getElementById('cs6-hold-circle-val');
+            const icon6 = document.getElementById('cs6-hold-icon');
+            const label6 = document.getElementById('cs6-hold-label');
+            const sub6 = document.getElementById('cs6-hold-sub');
+            const oath6 = document.getElementById('cs6-oath');
+            if (!btn6 || !circle6) return;
+
+            let holdTimer6 = null;
+            let startTime6 = 0;
+            const HOLD_DURATION6 = 3000;
+            const CIRCUMFERENCE6 = 691;
+            let unlocked6 = false;
+
+            function startHold6(e) {
+                if (unlocked6) return;
+                if (e.cancelable && e.type === 'touchstart') e.preventDefault();
+                startTime6 = performance.now();
+                if (typeof AudioManager !== 'undefined' && AudioManager.play) AudioManager.play('magic.wav', 0.5);
+                btn6.style.boxShadow = '0 0 70px rgba(245, 158, 11, 0.4)';
+                btn6.style.transform = 'scale(0.96)';
+
+                function loop6(now) {
+                    var elapsed = now - startTime6;
+                    var progress = Math.min(1, elapsed / HOLD_DURATION6);
+                    circle6.style.strokeDashoffset = CIRCUMFERENCE6 * (1 - progress);
+                    var secondsLeft = Math.ceil((HOLD_DURATION6 - elapsed) / 1000);
+                    if (sub6 && secondsLeft > 0) sub6.textContent = secondsLeft + 's restantes...';
+                    if (progress < 1) {
+                        holdTimer6 = requestAnimationFrame(loop6);
+                    } else {
+                        triggerUnlock6();
+                    }
+                }
+                holdTimer6 = requestAnimationFrame(loop6);
+            }
+
+            function cancelHold6() {
+                if (unlocked6) return;
+                if (holdTimer6) cancelAnimationFrame(holdTimer6);
+                holdTimer6 = null;
+                circle6.style.strokeDashoffset = CIRCUMFERENCE6;
+                if (sub6) sub6.textContent = 'Mantén 3s para revelar';
+                btn6.style.boxShadow = '0 0 40px rgba(0, 0, 0, 0.8)';
+                btn6.style.transform = 'scale(1)';
+            }
+
+            function triggerUnlock6() {
+                unlocked6 = true;
+                if (typeof AudioManager !== 'undefined' && AudioManager.play) AudioManager.play('gameopen.wav', 1);
+                if (icon6) icon6.textContent = '🏆';
+                if (label6) label6.textContent = '¡Juramento Sellado!';
+                if (sub6) sub6.textContent = '28 de Julio 2026 — Medio Año';
+                btn6.style.boxShadow = '0 0 100px rgba(245, 158, 11, 0.8)';
+                btn6.style.borderColor = '#f59e0b';
+
+                if (window.__loadConfetti) {
+                    window.__loadConfetti().then(function(confetti) {
+                        if (confetti) confetti({ particleCount: 350, spread: 140, origin: { y: 0.6 }, colors: ['#f59e0b', '#ec4899', '#fbbf24', '#ffffff', '#a78bfa'], zIndex: 99999 });
+                    });
+                }
+
+                // Reveal the oath inline with GSAP
+                if (oath6) {
+                    oath6.style.display = 'block';
+                    if (typeof gsap !== 'undefined') {
+                        gsap.fromTo(oath6, { opacity: 0, y: 40, scale: 0.95 }, { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: 'power3.out' });
+                    } else {
+                        oath6.style.opacity = '1';
+                    }
+                    setTimeout(function() { oath6.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 400);
+                }
+            }
+
+            btn6.addEventListener('mousedown', startHold6);
+            btn6.addEventListener('touchstart', startHold6, { passive: false });
+            window.addEventListener('mouseup', cancelHold6);
+            btn6.addEventListener('mouseleave', cancelHold6);
+            window.addEventListener('touchend', cancelHold6);
+            window.addEventListener('touchcancel', cancelHold6);
+        })();
+
 </script>
     <!-- MOBILE SWIPE NAVIGATION — Only active on phones (≤768px)       -->
     <!-- ═══════════════════════════════════════════════════════════════ -->
@@ -18342,12 +19143,28 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
+        function getFriendlyAuthError(err) {
+            const code = err.code || '';
+            if (code === 'auth/cancelled-popup-request' || code === 'auth/popup-closed-by-user') {
+                return "Parece que cerraste la ventana antes de terminar. ¡Inténtalo de nuevo cuando estés listo!";
+            } else if (code === 'auth/popup-blocked') {
+                return "Tu navegador bloqueó la ventana de inicio de sesión. Por favor, permite las ventanas emergentes para este sitio.";
+            } else if (code === 'auth/network-request-failed') {
+                return "Hubo un problema de conexión. Verifica tu internet e inténtalo de nuevo.";
+            } else if (code === 'auth/account-exists-with-different-credential') {
+                return "Ese correo ya está registrado de otra forma. Intenta iniciar sesión con el método original que usaste.";
+            } else {
+                return "Ocurrió un error inesperado al conectar con Google. (Detalle técnico: " + (code || err.message) + ")";
+            }
+        }
+
         authBtnLogin.addEventListener('click', () => {
             signInWithPopup(auth, provider).then(() => {
                 toggleAuthMenu();
             }).catch(err => {
                 console.error("Error logging in:", err);
-                if (window.showPremiumAlert) window.showPremiumAlert("Error de Inicio de Sesión", err.message, "error"); else alert("Error: " + err.message);
+                const friendlyMsg = getFriendlyAuthError(err);
+                if (window.showPremiumAlert) window.showPremiumAlert("No se pudo iniciar sesión", friendlyMsg, "error"); else alert("Error: " + friendlyMsg);
             });
         });
 
@@ -18362,7 +19179,8 @@ document.addEventListener("DOMContentLoaded", () => {
             gbLoginBtn.addEventListener('click', () => {
                 signInWithPopup(auth, provider).catch(err => {
                     console.error("Error logging in from guestbook:", err);
-                    if (window.showPremiumAlert) window.showPremiumAlert("Error de Inicio de Sesión", err.message, "error"); else alert("Error: " + err.message);
+                    const friendlyMsg = getFriendlyAuthError(err);
+                    if (window.showPremiumAlert) window.showPremiumAlert("No se pudo iniciar sesión", friendlyMsg, "error"); else alert("Error: " + friendlyMsg);
                 });
             });
         }
@@ -18761,3 +19579,4 @@ document.addEventListener("DOMContentLoaded", () => {
 </body>
 
 </html>
+

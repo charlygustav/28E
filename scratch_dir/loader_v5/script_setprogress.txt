@@ -1,0 +1,4 @@
+
+                // V5 Progress update
+                if (pctV5) pctV5.textContent = Math.floor(pct);
+                if (progV5) progV5.style.width = pct + '%';

@@ -1,0 +1,43 @@
+            // Fake counter updates V5 percentage text
+            let _ldFakeVal = 0;
+            const _ldFakeInterval = setInterval(() => {
+                if (_ldFakeVal < 90) {
+                    _ldFakeVal = Math.min(90, _ldFakeVal + 5);
+                    if (pctV5 && !loaderEscondido) pctV5.textContent = Math.floor(_ldFakeVal);
+                } else {
+                    clearInterval(_ldFakeInterval);
+                }
+            }, 60);
+
+            // Terminal typer logic (V5)
+            const typerV5 = document.getElementById('term-typer-v5');
+            const termPhrases = ["Desplegando tulipanes", "Conectando almas", "Casi listo"];
+            let tIdx = 0;
+            let charIdx = 0;
+            let isDeleting = false;
+            
+            function typeV5() {
+                if(loaderEscondido || !typerV5) return;
+                const currentStr = termPhrases[tIdx];
+                
+                if (isDeleting) {
+                    typerV5.textContent = currentStr.substring(0, charIdx - 1);
+                    charIdx--;
+                } else {
+                    typerV5.textContent = currentStr.substring(0, charIdx + 1);
+                    charIdx++;
+                }
+
+                let speed = isDeleting ? 30 : 70;
+
+                if (!isDeleting && charIdx === currentStr.length) {
+                    speed = 1500; // pause at end
+                    isDeleting = true;
+                } else if (isDeleting && charIdx === 0) {
+                    isDeleting = false;
+                    tIdx = (tIdx + 1) % termPhrases.length;
+                    speed = 500; // pause before typing next
+                }
+                setTimeout(typeV5, speed);
+            }
+            if(typerV5) setTimeout(typeV5, 2500);

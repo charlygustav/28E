@@ -1,0 +1,118 @@
+        /* ═══ LOADER — INTERACTIVE GLASS ENGINE (V4) ═══ */
+        #loader {
+            position: fixed !important;
+            inset: 0 !important;
+            background: #030304 !important;
+            z-index: 200 !important;
+            overflow: hidden !important;
+            user-select: none;
+            perspective: 1000px;
+        }
+
+        /* 3D Scene Container (responds to mouse) */
+        #loader-3d-scene {
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            will-change: transform;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Background Animated Orbs */
+        .loader-bg-orbs {
+            position: absolute;
+            inset: -20%;
+            pointer-events: none;
+            z-index: 0;
+            transform: translateZ(-200px);
+        }
+        
+        .loader-bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+            mix-blend-mode: screen;
+            will-change: transform;
+        }
+        
+        .loader-orb-1 { width: 60vw; height: 60vw; background: #f59e0b; top: -10%; left: -10%; animation: floatOrb 20s infinite alternate ease-in-out; }
+        .loader-orb-2 { width: 50vw; height: 50vw; background: #ec4899; bottom: -10%; right: -10%; animation: floatOrb 25s infinite alternate-reverse ease-in-out; }
+        .loader-orb-3 { width: 40vw; height: 40vw; background: #ef4444; top: 40%; left: 40%; animation: floatOrb 15s infinite alternate ease-in-out; }
+
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(10%, 10%) scale(1.2); }
+        }
+
+        /* Starfield particles */
+        #loader-particles-v4 {
+            position: absolute;
+            inset: -50px;
+            pointer-events: none;
+            z-index: 1;
+            transform: translateZ(-100px);
+        }
+
+        .l-particle-v4 {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0;
+            box-shadow: 0 0 10px rgba(255,255,255,0.8);
+        }
+
+        /* Universal Glass Panel (HUDs) */
+        .loader-hud-panel {
+            position: absolute;
+            background: rgba(24, 24, 27, 0.25);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            z-index: 10;
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+            color: #fff;
+            opacity: 0;
+            will-change: transform, opacity;
+            transform: translateZ(50px);
+        }
+
+        /* HUD Headers */
+        .hud-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0.8rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: rgba(255,255,255,0.5);
+            font-weight: 600;
+        }
+
+        .hud-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #f59e0b;
+            box-shadow: 0 0 8px #f59e0b;
+        }
+        
+        .hud-dot.pink { background: #ec4899; box-shadow: 0 0 8px #ec4899; }
+        .hud-dot.green { background: #10b981; box-shadow: 0 0 8px #10b981; animation: hudPulse 2s infinite; }
+
+        @keyframes hudPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+
+        .loader-hidden {
+            opacity: 0 !important;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }

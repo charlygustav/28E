@@ -1,0 +1,69 @@
+            const percentText = document.getElementById('loader-percent');
+            const progressBar = document.getElementById('loader-progress');
+            const loaderMsg = document.getElementById('loader-message');
+            const loaderEl = document.getElementById('loader');
+
+            // ── GSAP Entrance Animation — Breath ──────────────────────────────
+            if (typeof gsap !== 'undefined') {
+                const entranceTl = gsap.timeline({ defaults: { ease: 'power3.out', force3D: true } });
+
+                // Set initial states
+                gsap.set('.loader-ambient', { opacity: 0, scale: 0.8 });
+                gsap.set('.loader-center', { opacity: 1 });
+                gsap.set('.loader-char', { opacity: 0, y: 30, scale: 0.9 });
+                gsap.set('.loader-sub', { opacity: 0, y: 10 });
+                gsap.set('.loader-track', { opacity: 0, scaleX: 0 });
+                gsap.set('.loader-bottom', { opacity: 0, y: 10 });
+
+                // Build entrance timeline
+                entranceTl
+                    // Phase 1: Ambient atmosphere
+                    .to('.loader-ambient', { opacity: 1, scale: 1, duration: 1.5, ease: 'power2.inOut' }, 0)
+                    // Phase 2: Letters reveal one by one
+                    .to('.loader-char', {
+                        opacity: 1, y: 0, scale: 1,
+                        duration: 0.7, stagger: 0.12, ease: 'back.out(1.7)'
+                    }, 0.3)
+                    // Phase 3: Subtitle
+                    .to('.loader-sub', { opacity: 1, y: 0, duration: 0.5 }, 0.85)
+                    // Phase 4: Progress track expands from center
+                    .to('.loader-track', { opacity: 1, scaleX: 1, duration: 0.6, ease: 'power2.out' }, 0.95)
+                    // Phase 5: Bottom percentage
+                    .to('.loader-bottom', { opacity: 1, y: 0, duration: 0.5 }, 0.95);
+
+                // ── Continuous Animations ──
+                // Ambient glow breathing
+                gsap.to('.loader-ambient', {
+                    scale: 1.2, opacity: 0.7, duration: 3, repeat: -1, yoyo: true, ease: 'sine.inOut'
+                });
+
+                // Micro particles — very subtle
+                const particlesContainer = document.getElementById('loader-particles');
+                if (particlesContainer && !window.__PERF_LITE__) {
+                    for (let i = 0; i < 8; i++) {
+                        const p = document.createElement('div');
+                        p.className = 'loader-particle';
+                        const size = gsap.utils.random(1, 2.5);
+                        const isGold = Math.random() > 0.5;
+                        p.style.width = size + 'px';
+                        p.style.height = size + 'px';
+                        p.style.background = isGold
+                            ? 'rgba(245,158,11,' + gsap.utils.random(0.15, 0.35) + ')'
+                            : 'rgba(255,255,255,' + gsap.utils.random(0.05, 0.15) + ')';
+                        p.style.left = gsap.utils.random(20, 80) + '%';
+                        p.style.top = gsap.utils.random(30, 70) + '%';
+                        particlesContainer.appendChild(p);
+                        gsap.set(p, { opacity: 0, scale: 0 });
+                        gsap.to(p, {
+                            opacity: gsap.utils.random(0.15, 0.4), scale: 1,
+                            duration: gsap.utils.random(0.8, 1.5),
+                            delay: gsap.utils.random(0.8, 2.5), ease: 'power2.out'
+                        });
+                        gsap.to(p, {
+                            x: gsap.utils.random(-25, 25), y: gsap.utils.random(-35, -5),
+                            duration: gsap.utils.random(5, 10), repeat: -1, yoyo: true,
+                            ease: 'sine.inOut', delay: gsap.utils.random(0, 3)
+                        });
+                    }
+                }
+            }

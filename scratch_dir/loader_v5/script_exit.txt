@@ -1,0 +1,93 @@
+                    const heroSection = document.getElementById('hero');
+
+                    if (typeof gsap !== 'undefined') {
+                        // ── EXIT GSAP — Cinematic Memory Glass ───────
+                        loaderEl.style.willChange = 'opacity';
+
+                        setTimeout(() => {
+                            requestAnimationFrame(() => {
+                                // Kill continuous animations
+                                gsap.killTweensOf('.ember-v5, .c-char');
+
+                                const exitTl = gsap.timeline({ defaults: { force3D: true } });
+                                exitTl.addLabel('start');
+
+                                const navEl = document.querySelector('nav');
+
+                                if (heroSection) {
+                                    document.querySelectorAll('.hero-anim').forEach(el => {
+                                        el.style.transition = 'none';
+                                        el.style.filter = '';
+                                        el.style.willChange = 'transform, opacity, filter';
+                                    });
+                                    // Hero starts slightly scaled down and blurred for cinematic reveal
+                                    exitTl.set('.hero-anim', { opacity: 0, scale: 0.9, filter: 'blur(10px)' }, 'start');
+                                }
+                                if (navEl) {
+                                    navEl.style.willChange = 'transform, opacity';
+                                    exitTl.set(navEl, { opacity: 0, y: -20 }, 'start');
+                                }
+
+                                // 1. Text blurs and fades
+                                exitTl.to('.c-char', { opacity: 0, filter: 'blur(15px)', scale: 1.2, duration: 0.6, ease: 'power2.in' }, 'start');
+                                
+                                // 2. HUD Panels fade out gently
+                                exitTl.to('.glass-panel-v5', { opacity: 0, scale: 0.95, duration: 0.6, ease: 'power2.inOut' }, 'start');
+
+                                // 3. Core Ring expands massively (crossing the screen)
+                                exitTl.to('#loader-core-v5', {
+                                    scale: 12,
+                                    opacity: 0,
+                                    duration: 1.2,
+                                    ease: 'power3.in'
+                                }, 'start+=0.2');
+
+                                // 4. Background and Embers fade
+                                exitTl.to('.loader-ambient-v5, #loader-embers-v5', {
+                                    opacity: 0, duration: 0.8
+                                }, 'start+=0.4');
+
+                                // 5. Main container dissolve
+                                exitTl.to(loaderEl, {
+                                    opacity: 0,
+                                    duration: 0.6,
+                                    ease: 'power2.inOut'
+                                }, 'start+=0.8')
+                                .set(loaderEl, { display: 'none' })
+                                .call(() => {
+                                    document.body.classList.add('page-ready');
+                                });
+
+                                // 6. Page reveal (flying out of the blur)
+                                if (heroSection) {
+                                    exitTl.to('.hero-anim', {
+                                        opacity: 1, scale: 1, filter: 'blur(0px)',
+                                        duration: 1.2, stagger: 0.1, ease: 'power3.out',
+                                        onComplete: () => {
+                                            document.querySelectorAll('.hero-anim').forEach(el => {
+                                                el.style.willChange = 'auto';
+                                                el.style.filter = '';
+                                            });
+                                        }
+                                    }, 'start+=0.8');
+                                }
+                                if (navEl) {
+                                    exitTl.to(navEl, {
+                                        opacity: 1, y: 0,
+                                        duration: 1, ease: 'power3.out',
+                                        onComplete: () => { navEl.style.willChange = 'auto'; }
+                                    }, 'start+=1.0');
+                                }
+
+                                exitTl.call(() => {
+                                    initScrollSpy();
+                                    const top5Section = document.getElementById('top5yaire');
+                                    if (top5Section) {
+                                        const barObs = new IntersectionObserver((entries) => {
+                                            entries.forEach(e => { if (e.isIntersecting) { animateWordBars(); barObs.disconnect(); } });
+                                        }, { threshold: 0.3 });
+                                        barObs.observe(top5Section);
+                                    }
+                                }, null, 'start+=1.5');
+                            });
+                        }, 400); 

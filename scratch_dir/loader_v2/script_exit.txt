@@ -1,0 +1,103 @@
+                    const heroSection = document.getElementById('hero');
+
+                    if (typeof gsap !== 'undefined') {
+                        // ── EXIT GSAP — Breath Dissolve ───────
+                        loaderEl.style.willChange = 'opacity';
+
+                        // Let the user see 100% before exiting
+                        setTimeout(() => {
+                            requestAnimationFrame(() => {
+                                // Kill continuous animations
+                                gsap.killTweensOf('.loader-ambient, .loader-particle');
+
+                                // Particles fade out
+                                document.querySelectorAll('.loader-particle').forEach(p => {
+                                    gsap.to(p, { opacity: 0, duration: 0.4, ease: 'power2.in' });
+                                });
+
+                                const exitTl = gsap.timeline({ defaults: { force3D: true } });
+                                exitTl.addLabel('start');
+
+                                const loaderLogo = document.getElementById('loader-logo');
+                                const navEl = document.querySelector('nav');
+
+                                // ── 1. Prepare page elements (hidden) ──
+                                if (heroSection) {
+                                    document.querySelectorAll('.hero-anim').forEach(el => {
+                                        el.style.transition = 'none';
+                                        el.style.filter = '';
+                                        el.style.willChange = 'transform, opacity';
+                                    });
+                                    exitTl.set('.hero-anim', { opacity: 0, scale: 0.96, y: 0 }, 'start');
+                                }
+                                if (navEl) {
+                                    navEl.style.willChange = 'transform, opacity';
+                                    exitTl.set(navEl, { opacity: 0, y: -15 }, 'start');
+                                }
+
+                                // ── 2. Loader elements dissolve ──
+                                // Letters scale up gently and fade
+                                exitTl.to('.loader-char', {
+                                    opacity: 0, scale: 1.15, y: -10,
+                                    duration: 0.6, stagger: 0.04, ease: 'power2.in'
+                                }, 'start');
+
+                                // Subtitle, track, message fade
+                                exitTl.to('.loader-sub, .loader-track, .loader-msg', {
+                                    opacity: 0, y: -5, duration: 0.4, ease: 'power2.in'
+                                }, 'start');
+
+                                // Bottom percentage fades
+                                exitTl.to('.loader-bottom', {
+                                    opacity: 0, y: 10, duration: 0.4, ease: 'power2.in'
+                                }, 'start');
+
+                                // Ambient glow expands and vanishes
+                                exitTl.to('.loader-ambient', {
+                                    scale: 2, opacity: 0, duration: 0.8, ease: 'power2.in'
+                                }, 'start');
+
+                                // ── 3. Main container dissolve ──
+                                exitTl.to(loaderEl, {
+                                    opacity: 0,
+                                    duration: 0.8,
+                                    ease: 'power3.inOut'
+                                }, 'start+=0.15')
+                                    .set(loaderEl, { display: 'none' })
+                                    .call(() => {
+                                        document.body.classList.add('page-ready');
+                                    });
+
+                                // ── 4. Page reveal ──
+                                if (heroSection) {
+                                    exitTl.to('.hero-anim', {
+                                        opacity: 1, scale: 1, y: 0,
+                                        duration: 1, stagger: 0.06, ease: 'power3.out',
+                                        force3D: true,
+                                        onComplete: () => {
+                                            document.querySelectorAll('.hero-anim').forEach(el => {
+                                                el.style.willChange = 'auto';
+                                            });
+                                        }
+                                    }, 'start+=0.3');
+                                }
+                                if (navEl) {
+                                    exitTl.to(navEl, {
+                                        opacity: 1, y: 0,
+                                        duration: 0.8, ease: 'power3.out', force3D: true,
+                                        onComplete: () => { navEl.style.willChange = 'auto'; }
+                                    }, 'start+=0.35');
+                                }
+
+                                exitTl.call(() => {
+                                    initScrollSpy();
+                                    const top5Section = document.getElementById('top5yaire');
+                                    if (top5Section) {
+                                        const barObs = new IntersectionObserver((entries) => {
+                                            entries.forEach(e => { if (e.isIntersecting) { animateWordBars(); barObs.disconnect(); } });
+                                        }, { threshold: 0.3 });
+                                        barObs.observe(top5Section);
+                                    }
+                                }, null, 'start+=1.2');
+                            });
+                        }, 400); // end rAF + 400ms delay to show 100%

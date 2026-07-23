@@ -1,0 +1,28 @@
+            // Fake counter updates percentage and HUD blocks
+            let _ldFakeVal = 0;
+            const _ldFakeInterval = setInterval(() => {
+                if (_ldFakeVal < 90) {
+                    _ldFakeVal = Math.min(90, _ldFakeVal + 5);
+                    if (percentText && !loaderEscondido) percentText.textContent = Math.floor(_ldFakeVal);
+                    // Light up blocks
+                    const blocksActive = Math.floor((_ldFakeVal / 100) * 10);
+                    progressBlocks.forEach((block, index) => {
+                        if (index < blocksActive) block.classList.add('active');
+                        else block.classList.remove('active');
+                    });
+                } else {
+                    clearInterval(_ldFakeInterval);
+                }
+            }, 60);
+
+            // Uptime counter
+            let uptimeSecs = 0;
+            const uptimeEl = document.getElementById('hud-uptime');
+            const uptimeInt = setInterval(() => {
+                if(loaderEscondido) { clearInterval(uptimeInt); return; }
+                uptimeSecs++;
+                const h = String(Math.floor(uptimeSecs/3600)).padStart(2,'0');
+                const m = String(Math.floor((uptimeSecs%3600)/60)).padStart(2,'0');
+                const s = String(uptimeSecs%60).padStart(2,'0');
+                if(uptimeEl) uptimeEl.textContent = `${h}:${m}:${s}`;
+            }, 1000);

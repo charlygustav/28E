@@ -1,0 +1,10 @@
+            // Fake counter 0→90 over ~1.5s so progress feels alive
+            let _ldFakeVal = 0;
+            const _ldFakeInterval = setInterval(() => {
+                if (_ldFakeVal < 90) {
+                    _ldFakeVal = Math.min(90, _ldFakeVal + 5);
+                    if (percentText && !loaderEscondido) percentText.textContent = Math.floor(_ldFakeVal);
+                } else {
+                    clearInterval(_ldFakeInterval);
+                }
+            }, 50);
