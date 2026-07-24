@@ -12713,26 +12713,7 @@
                 </div>
             </div>
 
-            <!-- Oath VI reveal Modal (hidden until unlocked) -->
-            <div id="cs6-oath" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-opacity duration-300" style="display:none; opacity:0;">
-                <div class="max-w-2xl w-full mx-auto px-6 py-10 rounded-3xl relative overflow-hidden bg-zinc-900 shadow-2xl" style="border: 1px solid rgba(245,158,11,0.4);">
-                    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at center, rgba(245,158,11,0.15), transparent 70%);"></div>
-                    
-                    <!-- Close button -->
-                    <button onclick="document.getElementById('cs6-oath').style.opacity='0'; setTimeout(()=>document.getElementById('cs6-oath').style.display='none', 300);" class="absolute top-4 right-4 text-zinc-400 hover:text-white z-20 text-xl font-bold bg-zinc-800/80 w-10 h-10 rounded-full flex items-center justify-center transition-colors">
-                        ✕
-                    </button>
 
-                    <div class="relative z-10 text-center">
-                        <div class="text-5xl mb-4">🏆</div>
-                        <h3 class="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-pink-400 to-amber-400 mb-6" style="line-height:1.3;">Juramento de Medio Año</h3>
-                        <p class="text-zinc-300 text-base md:text-lg leading-relaxed font-light italic" id="cs6-oath-text">
-                            «A los 182 días de haberte encontrado, juro ante el universo que cada mañana elijo amarte de nuevo. No por costumbre — por convicción absoluta. Medio año atrás no sabía que existías, y hoy no puedo imaginar mi existencia sin la tuya. Te prometo otros seis meses, y otros seis, hasta que los números pierdan el sentido y solo quede la eternidad que construimos juntos. Eres mi certeza en un mundo incierto. Te amo, Yaire — hoy, mañana, y cada día que invente el tiempo.»
-                        </p>
-                        <p class="text-zinc-500 text-xs mt-6 tracking-widest uppercase">— Charles Gustav, 28 de Julio de 2026</p>
-                    </div>
-                </div>
-            </div>
         </section>
 
 <section id="timeline-semestral" class="cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal scroll-mt-20 relative overflow-hidden">
@@ -19640,6 +19621,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+    <!-- Oath VI reveal Modal (hidden until unlocked) -->
+    <div id="cs6-oath" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-opacity duration-300" style="display:none; opacity:0;">
+        <div class="max-w-2xl w-full mx-auto px-6 py-10 rounded-3xl relative overflow-hidden bg-zinc-900 shadow-2xl" style="border: 1px solid rgba(245,158,11,0.4);">
+            <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at center, rgba(245,158,11,0.15), transparent 70%);"></div>
+            
+            <!-- Close button -->
+            <button onclick="document.getElementById('cs6-oath').style.opacity='0'; setTimeout(()=>document.getElementById('cs6-oath').style.display='none', 300);" class="absolute top-4 right-4 text-zinc-400 hover:text-white z-20 text-xl font-bold bg-zinc-800/80 w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                ✕
+            </button>
+
+            <div class="relative z-10 text-center">
+                <div class="text-5xl mb-4">🏆</div>
+                <h3 class="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-pink-400 to-amber-400 mb-6" style="line-height:1.3;">Juramento de Medio Año</h3>
+                <p class="text-zinc-300 text-base md:text-lg leading-relaxed font-light italic" id="cs6-oath-text">
+                    «A los 182 días de haberte encontrado, juro ante el universo que cada mañana elijo amarte de nuevo. No por costumbre — por convicción absoluta. Medio año atrás no sabía que existías, y hoy no puedo imaginar mi existencia sin la tuya. Te prometo otros seis meses, y otros seis, hasta que los números pierdan el sentido y solo quede la eternidad que construimos juntos. Eres mi certeza en un mundo incierto. Te amo, Yaire — hoy, mañana, y cada día que invente el tiempo.»
+                </p>
+                <p class="text-zinc-500 text-xs mt-6 tracking-widest uppercase">— Charles Gustav, 28 de Julio de 2026</p>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
