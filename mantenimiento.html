@@ -225,31 +225,24 @@
           video.addEventListener('canplay', () => video.classList.add('is-ready'), { once: true });
       }
 
-      // EXTREME AUTOPLAY HACK: AudioContext trick to unlock mobile audio
-      const forceAudio = async () => {
-          video.muted = false;
-          try {
-              // 1. Crear un contexto de audio que a veces engaña al navegador
-              const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-              
-              // 2. Intentar un resume agresivo
-              if (audioCtx.state === 'suspended') {
-                  await audioCtx.resume();
-              }
-              
-              // 3. Forzar el play del video
-              await video.play();
-              console.log("Audio forzado exitosamente");
-          } catch (error) {
-              console.log("Navegador extremadamente restrictivo, intentando mute -> unmute rápido");
-              video.muted = true;
-              video.play().then(() => {
-                  setTimeout(() => { video.muted = false; }, 50); // Intento de desmutear medio segundo después
-              }).catch(e => console.log(e));
-          }
-      };
-      
-      forceAudio();
+      // Reproducción inteligente (Opción 1: Stealth Unmute)
+      video.muted = false;
+      video.play().catch(e => {
+        // Fallback: reproducir sin sonido (visual) y esperar primer toque
+        video.muted = true;
+        video.play().catch(err => console.log("Video bloqueado visualmente", err));
+        
+        const stealthUnmute = () => {
+            video.muted = false;
+            // Safari iOS a veces requiere volver a llamar a play() en el evento de usuario
+            video.play();
+            document.removeEventListener('touchstart', stealthUnmute);
+            document.removeEventListener('click', stealthUnmute);
+        };
+        
+        document.addEventListener('touchstart', stealthUnmute, { once: true });
+        document.addEventListener('click', stealthUnmute, { once: true });
+      });
 
       // Iniciar animaciones GSAP sin esperar clics
       gsap.set('.brand-logo', { y: -30 });
