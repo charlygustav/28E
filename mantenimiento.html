@@ -230,14 +230,20 @@
       
       const stealthUnmute = () => {
           video.muted = false;
-          // Android Chrome solo necesita que le quites el mute durante el click/touchend
-          document.body.removeEventListener('click', stealthUnmute, true);
-          document.body.removeEventListener('touchend', stealthUnmute, true);
+          video.volume = 1;
+          if (video.paused) {
+              video.play().catch(e => console.log(e));
+          }
+          
+          document.removeEventListener('click', stealthUnmute, true);
+          document.removeEventListener('touchstart', stealthUnmute, true);
+          document.removeEventListener('touchend', stealthUnmute, true);
       };
       
-      // 'click' es el evento más confiable en Chrome para permisos de audio
-      document.body.addEventListener('click', stealthUnmute, { once: true, capture: true });
-      document.body.addEventListener('touchend', stealthUnmute, { once: true, capture: true });
+      // Adjuntar a 'document' es más seguro que a 'document.body' en móviles
+      document.addEventListener('click', stealthUnmute, { once: true, capture: true });
+      document.addEventListener('touchstart', stealthUnmute, { once: true, capture: true });
+      document.addEventListener('touchend', stealthUnmute, { once: true, capture: true });
 
       // Iniciar animaciones GSAP sin esperar clics
       gsap.set('.brand-logo', { y: -30 });
