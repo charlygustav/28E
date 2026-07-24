@@ -151,7 +151,7 @@
                                     if (Date.now() >= new Date(yyyy, mm - 1, dd, hh, min).getTime()) timeIsUp = true;
                                 }
 
-                                if (fbCfg.mantenimiento && !timeIsUp) {
+                                if (fbCfg.mantenimiento && !timeIsUp && urlParams.get('dev') !== '1') {
                                     const targetPage = (fbCfg.maintScreen === 'cinematic') ? 'maintenance' : 'mantenimiento';
                                     // Solo si el estado previo NO era mantenimiento y ahora sí es mantenimiento
                                     if (oldCfg && !oldCfg.mantenimiento) {
@@ -180,7 +180,7 @@
                                 const [hh, min] = tPart.split(':');
                                 if (Date.now() >= new Date(yyyy, mm - 1, dd, hh, min).getTime()) timeIsUp = true;
                             }
-                            if (fbCfg.mantenimiento && !timeIsUp) {
+                            if (fbCfg.mantenimiento && !timeIsUp && urlParams.get('dev') !== '1') {
                                 const targetPage = (fbCfg.maintScreen === 'cinematic') ? 'maintenance' : 'mantenimiento';
                                 window.location.replace(targetPage);
                                 return;
