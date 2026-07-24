@@ -75,7 +75,7 @@
 <body>
   <!-- Video Background -->
   <div class="video-bg">
-    <video autoplay loop playsinline muted preload="auto" id="bg-video">
+    <video autoplay loop playsinline preload="auto" id="bg-video">
       <source src="WWDC_25_Final_10m.mp4" type="video/mp4">
     </video>
   </div>
@@ -228,22 +228,26 @@
       // Reproducción inteligente para Android Chrome (Simple Mute Toggle)
       // El video ya empieza "muted" por HTML para asegurar que sí se mueva la imagen
       
-      const stealthUnmute = () => {
-          video.muted = false;
-          video.volume = 1;
-          if (video.paused) {
-              video.play().catch(e => console.log(e));
-          }
+      // HÍBRIDO PC/MÓVIL: Intentar arrancar con sonido (Funciona en PC instantáneamente)
+      video.muted = false;
+      video.play().catch(e => {
+          // Si falla (Móviles bloquean el sonido automático), arrancarlo mudo visualmente
+          video.muted = true;
+          video.play().catch(err => console.log(err));
           
-          document.removeEventListener('click', stealthUnmute, true);
-          document.removeEventListener('touchstart', stealthUnmute, true);
-          document.removeEventListener('touchend', stealthUnmute, true);
-      };
-      
-      // Adjuntar a 'document' es más seguro que a 'document.body' en móviles
-      document.addEventListener('click', stealthUnmute, { once: true, capture: true });
-      document.addEventListener('touchstart', stealthUnmute, { once: true, capture: true });
-      document.addEventListener('touchend', stealthUnmute, { once: true, capture: true });
+          // Esperar un toque en la pantalla para activar el sonido en el celular
+          const stealthUnmute = () => {
+              video.muted = false;
+              video.volume = 1;
+              if (video.paused) video.play();
+              
+              document.removeEventListener('click', stealthUnmute, true);
+              document.removeEventListener('touchend', stealthUnmute, true);
+          };
+          
+          document.addEventListener('click', stealthUnmute, { once: true, capture: true });
+          document.addEventListener('touchend', stealthUnmute, { once: true, capture: true });
+      });
 
       // Iniciar animaciones GSAP sin esperar clics
       gsap.set('.brand-logo', { y: -30 });
