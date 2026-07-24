@@ -73,10 +73,6 @@
 </head>
 
 <body>
-  <!-- Start Screen (To bypass mobile autoplay policies) -->
-  <div id="start-screen">
-    <button class="start-btn" id="start-btn">ENTRAR AL SISTEMA</button>
-  </div>
   <!-- Video Background -->
   <div class="video-bg">
     <video autoplay loop playsinline preload="auto" id="bg-video">
@@ -229,39 +225,51 @@
           video.addEventListener('canplay', () => video.classList.add('is-ready'), { once: true });
       }
 
-      const startScreen = document.getElementById('start-screen');
-      const startBtn = document.getElementById('start-btn');
-
-      // Esperar a que el usuario haga clic para entrar (Garantiza el audio en celulares)
-      startBtn.addEventListener('click', () => {
-          // Fade out start screen
-          startScreen.style.opacity = '0';
-          setTimeout(() => { startScreen.style.display = 'none'; }, 1000);
-
-          // Activar video con sonido
+      // EXTREME AUTOPLAY HACK: AudioContext trick to unlock mobile audio
+      const forceAudio = async () => {
           video.muted = false;
-          video.play().catch(e => console.log('Error reproduciendo video:', e));
+          try {
+              // 1. Crear un contexto de audio que a veces engaña al navegador
+              const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+              
+              // 2. Intentar un resume agresivo
+              if (audioCtx.state === 'suspended') {
+                  await audioCtx.resume();
+              }
+              
+              // 3. Forzar el play del video
+              await video.play();
+              console.log("Audio forzado exitosamente");
+          } catch (error) {
+              console.log("Navegador extremadamente restrictivo, intentando mute -> unmute rápido");
+              video.muted = true;
+              video.play().then(() => {
+                  setTimeout(() => { video.muted = false; }, 50); // Intento de desmutear medio segundo después
+              }).catch(e => console.log(e));
+          }
+      };
+      
+      forceAudio();
 
-          // Iniciar animaciones GSAP
-          gsap.set('.brand-logo', { y: -30 });
-          gsap.set(glassPanel, { scale: 0.85 });
-          gsap.set(slideContainer, { y: 30 });
-          gsap.set(maintHeader, { y: 30 });
-          gsap.set(dotsContainer, { opacity: 0, display: 'flex' });
-          
-          renderSlide(0);
+      // Iniciar animaciones GSAP sin esperar clics
+      gsap.set('.brand-logo', { y: -30 });
+      gsap.set(glassPanel, { scale: 0.85 });
+      gsap.set(slideContainer, { y: 30 });
+      gsap.set(maintHeader, { y: 30 });
+      gsap.set(dotsContainer, { opacity: 0, display: 'flex' });
+      
+      renderSlide(0);
 
-          const tl = gsap.timeline({ delay: 0.2 });
-          
-          tl.to('.brand-logo', { autoAlpha: 1, y: 0, duration: 1.2, ease: 'power3.out' })
-            .to(glassPanel, { autoAlpha: 1, scale: 1, duration: 1.5, ease: 'power3.out' }, '-=0.8')
-            .to(slideContainer, { autoAlpha: 1, y: 0, duration: 1.2, ease: 'power3.out' }, '-=0.9')
-            .to(dotsContainer, { opacity: 1, duration: 0.8, ease: 'power2.inOut' }, '-=0.6')
-            .to(maintHeader, { autoAlpha: 1, y: 0, duration: 1.2, ease: 'power3.out' }, '-=0.8')
-            .call(() => {
-              setInterval(nextSlide, 8500);
-            });
-      });
+      const tl = gsap.timeline({ delay: 0.2 });
+      
+      tl.to('.brand-logo', { autoAlpha: 1, y: 0, duration: 1.2, ease: 'power3.out' })
+        .to(glassPanel, { autoAlpha: 1, scale: 1, duration: 1.5, ease: 'power3.out' }, '-=0.8')
+        .to(slideContainer, { autoAlpha: 1, y: 0, duration: 1.2, ease: 'power3.out' }, '-=0.9')
+        .to(dotsContainer, { opacity: 1, duration: 0.8, ease: 'power2.inOut' }, '-=0.6')
+        .to(maintHeader, { autoAlpha: 1, y: 0, duration: 1.2, ease: 'power3.out' }, '-=0.8')
+        .call(() => {
+          setInterval(nextSlide, 8500);
+        });
 
       let targetTime = 0;
       let isScheduled = false;
