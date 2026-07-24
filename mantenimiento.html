@@ -83,11 +83,6 @@
   <!-- Logo -->
   <div class="brand-logo">28E</div>
 
-  <!-- Unmute Button (Hidden by default) -->
-  <button id="unmute-btn" style="display: none; position: absolute; top: 2rem; right: 2rem; z-index: 20; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 0.5rem 1rem; border-radius: 99px; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 600; backdrop-filter: blur(10px); align-items: center; transition: all 0.3s ease;">
-    🔊 Sonido Muteado (Toca para activar)
-  </button>
-
   <!-- Maintenance Header -->
   <div class="maint-header" id="maint-header">
     <div class="maint-badge"><div class="pulse"></div> EN MANTENIMIENTO</div>
@@ -222,20 +217,21 @@
     }
 
     window.addEventListener('load', () => {
-      const unmuteBtn = document.getElementById('unmute-btn');
-      
+      // Intentar reproducir con sonido (funcionará en PC por el Media Engagement Index)
       video.muted = false;
       video.play().catch(e => {
-        console.log("Auto-play con sonido bloqueado. Muteando video para permitir reproducción visual.");
+        // Si el celular lo bloquea, mutear para que al menos se vea el video
         video.muted = true;
         video.play();
-        unmuteBtn.style.display = 'flex';
-      });
-
-      unmuteBtn.addEventListener('click', () => {
-        video.muted = false;
-        video.play();
-        unmuteBtn.style.display = 'none';
+        
+        // Unmute silencioso en cuanto el usuario toque cualquier parte de la pantalla
+        const stealthUnmute = () => {
+            video.muted = false;
+            document.removeEventListener('touchstart', stealthUnmute);
+            document.removeEventListener('click', stealthUnmute);
+        };
+        document.addEventListener('touchstart', stealthUnmute, { once: true });
+        document.addEventListener('click', stealthUnmute, { once: true });
       });
 
       let targetTime = 0;
