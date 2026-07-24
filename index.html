@@ -17982,12 +17982,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 // Reveal the oath as a Modal with GSAP
-                if (oath6) {
-                    oath6.style.display = 'flex';
+                const currentOath6 = document.getElementById('cs6-oath');
+                if (currentOath6) {
+                    currentOath6.style.display = 'flex';
                     if (typeof gsap !== 'undefined') {
-                        gsap.fromTo(oath6, { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.2)' });
+                        gsap.fromTo(currentOath6, { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.2)' });
                     } else {
-                        oath6.style.opacity = '1';
+                        currentOath6.style.opacity = '1';
                     }
                 }
             }
