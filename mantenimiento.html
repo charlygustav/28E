@@ -75,7 +75,7 @@
 <body>
   <!-- Video Background -->
   <div class="video-bg">
-    <video autoplay loop playsinline preload="auto" id="bg-video">
+    <video autoplay loop playsinline muted preload="auto" id="bg-video">
       <source src="WWDC_25_Final_10m.mp4" type="video/mp4">
     </video>
   </div>
@@ -225,29 +225,19 @@
           video.addEventListener('canplay', () => video.classList.add('is-ready'), { once: true });
       }
 
-      // Reproducción inteligente (Opción 1: Stealth Unmute Agresivo)
-      video.muted = false;
-      video.play().catch(e => {
-        // Fallback: reproducir sin sonido (visual) y esperar primer toque
-        video.muted = true;
-        video.play().catch(err => console.log("Video bloqueado visualmente", err));
-        
-        const stealthUnmute = () => {
-            video.muted = false;
-            // Hack para iOS estricto: forzar pausa y reproducción dentro del mismo frame del gesto
-            video.pause();
-            video.play();
-            
-            document.removeEventListener('touchstart', stealthUnmute, true);
-            document.removeEventListener('touchend', stealthUnmute, true);
-            document.removeEventListener('click', stealthUnmute, true);
-        };
-        
-        // El uso de 'capture: true' garantiza que atrapamos el toque antes que cualquier otra cosa en la web
-        document.addEventListener('touchstart', stealthUnmute, { once: true, capture: true });
-        document.addEventListener('touchend', stealthUnmute, { once: true, capture: true });
-        document.addEventListener('click', stealthUnmute, { once: true, capture: true });
-      });
+      // Reproducción inteligente para Android Chrome (Simple Mute Toggle)
+      // El video ya empieza "muted" por HTML para asegurar que sí se mueva la imagen
+      
+      const stealthUnmute = () => {
+          video.muted = false;
+          // Android Chrome solo necesita que le quites el mute durante el click/touchend
+          document.body.removeEventListener('click', stealthUnmute, true);
+          document.body.removeEventListener('touchend', stealthUnmute, true);
+      };
+      
+      // 'click' es el evento más confiable en Chrome para permisos de audio
+      document.body.addEventListener('click', stealthUnmute, { once: true, capture: true });
+      document.body.addEventListener('touchend', stealthUnmute, { once: true, capture: true });
 
       // Iniciar animaciones GSAP sin esperar clics
       gsap.set('.brand-logo', { y: -30 });
