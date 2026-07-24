@@ -73,6 +73,10 @@
 </head>
 
 <body>
+  <!-- Start Screen (To bypass mobile autoplay policies) -->
+  <div id="start-screen">
+    <button class="start-btn" id="start-btn">ENTRAR AL SISTEMA</button>
+  </div>
   <!-- Video Background -->
   <div class="video-bg">
     <video autoplay loop playsinline preload="auto" id="bg-video">
@@ -225,21 +229,38 @@
           video.addEventListener('canplay', () => video.classList.add('is-ready'), { once: true });
       }
 
-      // Intentar reproducir con sonido (funcionará en PC por el Media Engagement Index)
-      video.muted = false;
-      video.play().catch(e => {
-        // Si el celular lo bloquea, mutear para que al menos se vea el video
-        video.muted = true;
-        video.play();
-        
-        // Unmute silencioso en cuanto el usuario toque cualquier parte de la pantalla
-        const stealthUnmute = () => {
-            video.muted = false;
-            document.removeEventListener('touchstart', stealthUnmute);
-            document.removeEventListener('click', stealthUnmute);
-        };
-        document.addEventListener('touchstart', stealthUnmute, { once: true });
-        document.addEventListener('click', stealthUnmute, { once: true });
+      const startScreen = document.getElementById('start-screen');
+      const startBtn = document.getElementById('start-btn');
+
+      // Esperar a que el usuario haga clic para entrar (Garantiza el audio en celulares)
+      startBtn.addEventListener('click', () => {
+          // Fade out start screen
+          startScreen.style.opacity = '0';
+          setTimeout(() => { startScreen.style.display = 'none'; }, 1000);
+
+          // Activar video con sonido
+          video.muted = false;
+          video.play().catch(e => console.log('Error reproduciendo video:', e));
+
+          // Iniciar animaciones GSAP
+          gsap.set('.brand-logo', { y: -30 });
+          gsap.set(glassPanel, { scale: 0.85 });
+          gsap.set(slideContainer, { y: 30 });
+          gsap.set(maintHeader, { y: 30 });
+          gsap.set(dotsContainer, { opacity: 0, display: 'flex' });
+          
+          renderSlide(0);
+
+          const tl = gsap.timeline({ delay: 0.2 });
+          
+          tl.to('.brand-logo', { autoAlpha: 1, y: 0, duration: 1.2, ease: 'power3.out' })
+            .to(glassPanel, { autoAlpha: 1, scale: 1, duration: 1.5, ease: 'power3.out' }, '-=0.8')
+            .to(slideContainer, { autoAlpha: 1, y: 0, duration: 1.2, ease: 'power3.out' }, '-=0.9')
+            .to(dotsContainer, { opacity: 1, duration: 0.8, ease: 'power2.inOut' }, '-=0.6')
+            .to(maintHeader, { autoAlpha: 1, y: 0, duration: 1.2, ease: 'power3.out' }, '-=0.8')
+            .call(() => {
+              setInterval(nextSlide, 8500);
+            });
       });
 
       let targetTime = 0;
@@ -289,26 +310,6 @@
           document.getElementById("cd-s").innerText = "00";
         }
       }, 1000);
-
-      // Prepare GSAP initial states
-      gsap.set('.brand-logo', { y: -30 });
-      gsap.set(glassPanel, { scale: 0.85 });
-      gsap.set(slideContainer, { y: 30 });
-      gsap.set(maintHeader, { y: 30 });
-      gsap.set(dotsContainer, { opacity: 0, display: 'flex' });
-      
-      renderSlide(0);
-
-      const tl = gsap.timeline({ delay: 0.2 });
-      
-      tl.to('.brand-logo', { autoAlpha: 1, y: 0, duration: 1.2, ease: 'power3.out' })
-        .to(glassPanel, { autoAlpha: 1, scale: 1, duration: 1.5, ease: 'power3.out' }, '-=0.8')
-        .to(slideContainer, { autoAlpha: 1, y: 0, duration: 1.2, ease: 'power3.out' }, '-=0.9')
-        .to(dotsContainer, { opacity: 1, duration: 0.8, ease: 'power2.inOut' }, '-=0.6')
-        .to(maintHeader, { autoAlpha: 1, y: 0, duration: 1.2, ease: 'power3.out' }, '-=0.8')
-        .call(() => {
-          setInterval(nextSlide, 8500);
-        });
     });
   </script>
 </body>
