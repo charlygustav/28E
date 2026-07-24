@@ -870,10 +870,16 @@
                                     <div>
                                         <div class="flex items-center justify-between mb-2">
                                             <label class="block text-[11px] font-bold text-zinc-500 uppercase tracking-widest">Pantalla de Espera</label>
-                                            <button type="button" onclick="openMaintPreview()"
-                                                class="flex items-center gap-1.5 text-[11px] font-bold text-zinc-500 hover:text-amber-400 transition-colors">
-                                                <i class="ph-bold ph-arrow-square-out text-sm"></i>Preview
-                                            </button>
+                                            <div class="flex items-center gap-4">
+                                                <button type="button" onclick="window.open('https://www.yaire.site/?dev=1', '_blank')"
+                                                    class="flex items-center gap-1.5 text-[11px] font-bold text-zinc-500 hover:text-emerald-400 transition-colors">
+                                                    <i class="ph-bold ph-key text-sm"></i>Bypass
+                                                </button>
+                                                <button type="button" onclick="openMaintPreview()"
+                                                    class="flex items-center gap-1.5 text-[11px] font-bold text-zinc-500 hover:text-amber-400 transition-colors">
+                                                    <i class="ph-bold ph-arrow-square-out text-sm"></i>Preview
+                                                </button>
+                                            </div>
                                         </div>
                                         <p class="text-xs text-zinc-600 mb-4">Elige qué verán los usuarios mientras el sitio está en mantenimiento.</p>
                                         <input type="hidden" id="maint-screen" value="cinematic">
