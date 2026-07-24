@@ -33,7 +33,7 @@ const newTabContent = `
                 <div class="bg-card border border-border rounded-2xl p-6 shadow-2xl relative overflow-hidden">
                     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 to-purple-600 animate-pulse"></div>
                     <div class="flex flex-col md:flex-row items-center gap-6">
-                        <img id="dj-current-art" src="../28E Main/tulip.ico" class="w-32 h-32 rounded-xl object-cover shadow-lg border border-white/10" alt="Artwork" onerror="this.src='https://yaire.vercel.app/tulip.ico?v=3'">
+                        <img id="dj-current-art" src="../28E Main/tulip.ico" class="w-32 h-32 rounded-xl object-cover shadow-lg border border-white/10" alt="Artwork" onerror="this.src='https://www.yaire.site/tulip.ico?v=3'">
                         <div class="flex-1 text-center md:text-left">
                             <span id="dj-status-badge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-bold uppercase tracking-widest mb-3">
                                 <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span> AL AIRE

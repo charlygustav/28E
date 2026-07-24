@@ -592,7 +592,7 @@
 
                 <div class="w-px h-3 bg-white/10 mx-1 hidden md:block"></div>
 
-                <span id="system-status-badge" onclick="window.open('https://yaire.vercel.app/', '_blank')"
+                <span id="system-status-badge" onclick="window.open('https://www.yaire.site/', '_blank')"
                     class="flex items-center gap-2 text-[10px] font-bold text-emerald-400 tracking-widest uppercase cursor-pointer hover:scale-105 transition-transform">
                     <span id="system-status-dot"
                         class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
@@ -1752,7 +1752,7 @@
                     <div class="flex flex-col md:flex-row items-center gap-6">
                         <img id="dj-current-art" src="/tulip.ico"
                             class="w-32 h-32 rounded-xl object-cover shadow-lg border border-white/10" alt="Artwork"
-                            onerror="this.src='https://yaire.vercel.app/tulip.ico?v=3'">
+                            onerror="this.src='https://www.yaire.site/tulip.ico?v=3'">
                         <div class="flex-1 text-center md:text-left">
                             <div class="flex flex-wrap gap-2 mb-3">
                                 <span id="dj-status-badge"
@@ -4458,7 +4458,7 @@
         function openMaintPreview() {
             const type = document.getElementById('maint-type').value;
             const date = document.getElementById('maint-date').value || '';
-            const url = `https://yaire.vercel.app/maintenance.html?preview=true&type=${type}&date=${encodeURIComponent(date)}`;
+            const url = `https://www.yaire.site/maintenance.html?preview=true&type=${type}&date=${encodeURIComponent(date)}`;
             window.open(url, '_blank');
         }
 
@@ -5532,7 +5532,7 @@
                 cover = await searchDeezer(thirdQ, null);
             }
             
-            cover = cover || 'https://yaire.vercel.app/tulip.ico?v=3';
+            cover = cover || 'https://www.yaire.site/tulip.ico?v=3';
             spotArtworkCache[key] = cover;
             return cover;
         }
