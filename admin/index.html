@@ -3319,11 +3319,26 @@
             ];
             let changed = false;
             fallbackMaintSongs.forEach(s => {
-                if (!cfg.songs.find(cs => cs.title === s.title)) {
+                if (!cfg.songs.find(cs => cs.src === s.src || cs.title === s.title)) {
                     cfg.songs.push(s);
                     changed = true;
                 }
             });
+
+            // Deduplicate by src to clean up any existing duplicates
+            const uniqueSongs = [];
+            const seenSrc = new Set();
+            cfg.songs.forEach(s => {
+                if (!seenSrc.has(s.src)) {
+                    seenSrc.add(s.src);
+                    uniqueSongs.push(s);
+                }
+            });
+            if (uniqueSongs.length !== cfg.songs.length) {
+                cfg.songs = uniqueSongs;
+                changed = true;
+            }
+
             if (changed) {
                 localStorage.setItem('yaire_config', JSON.stringify(cfg));
             }
