@@ -13,42 +13,10 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-07-25T02:41:39.602Z",
+  "lastUpdated": "2026-07-25T20:27:16.638Z",
   "maintDate": "2026-07-28T00:00",
   "maintMsg": "",
   "maintScreen": "special",
-  "maintSongs": [
-    {
-      "artist": "John Legend",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779958727306_John_Legend_-_Crowd_Go_Crazy.mp3",
-      "title": "Crowd Go Crazy"
-    },
-    {
-      "artist": "Otis McDonald",
-      "src": "sounds/Otis McDonald - O.Sky.mp3",
-      "title": "O.Sky"
-    },
-    {
-      "artist": "THIZZY52",
-      "src": "sounds/THIZZY52 - BLOCKKIDS.mp3",
-      "title": "BLOCKKIDS"
-    },
-    {
-      "artist": "Oblivion's Mighty Trash",
-      "src": "sounds/Oro Fundido - Oblivion's Mighty Trash - SpotubeDL.com.mp3",
-      "title": "Oro Fundido"
-    },
-    {
-      "artist": "Otis McDonald",
-      "src": "sounds/Otis McDonald - CRAZY - Live (SPOTISAVER).mp3",
-      "title": "CRAZY (Live)"
-    },
-    {
-      "artist": "Huan62",
-      "src": "sounds/Huan62 - Toto Lindo.mp3",
-      "title": "Toto Lindo"
-    }
-  ],
   "maintType": "scheduled",
   "mantenimiento": true,
   "refugeText": "",
@@ -175,19 +143,29 @@
       "title": "Slow Burn - Corbyn Kites"
     },
     {
-      "artist": "Desconocido",
-      "src": "radio/1779958727306_John_Legend_-_Crowd_Go_Crazy.mp3",
-      "title": "John Legend - Crowd Go Crazy"
-    },
-    {
-      "artist": "Desconocido",
+      "artist": "Michael Jackson",
       "src": "radio/1779975688545_Michael_Jackson_-_Heaven_Can_Wait.mp3",
-      "title": "Michael Jackson - Heaven Can Wait"
+      "title": "Heaven Can Wait"
     },
     {
-      "artist": "Desconocido",
+      "artist": "Don Toliver",
       "src": "radio/Don Toliver - No Pole.mp3",
-      "title": "Don Toliver - No Pole"
+      "title": "No Pole"
+    },
+    {
+      "artist": "John Legend",
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779958727306_John_Legend_-_Crowd_Go_Crazy.mp3",
+      "title": "Crowd Go Crazy"
+    },
+    {
+      "artist": "THIZZY52",
+      "src": "sounds/THIZZY52 - BLOCKKIDS.mp3",
+      "title": "BLOCKKIDS"
+    },
+    {
+      "artist": "Huan62",
+      "src": "sounds/Huan62 - Toto Lindo.mp3",
+      "title": "Toto Lindo"
     }
   ],
   "spotlightTips": {
