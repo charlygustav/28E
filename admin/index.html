@@ -3409,8 +3409,10 @@
                         <input type="text" class="bg-transparent border-b border-white/5 py-2 text-sm text-zinc-400 focus:border-purple-500 outline-none transition-colors" value="${song.artist}" onchange="updateSong(${i},'artist',this.value)" placeholder="Artista">
                         <input type="text" ${srcAttrs} value="${song.src}">
                     </div>
-                    
-                    <button onclick="removeSong(${i})" class="w-10 h-10 rounded-full bg-red-500/0 hover:bg-red-500/10 text-zinc-600 hover:text-red-500 flex items-center justify-center transition-all border border-transparent hover:border-red-500/20 ml-2 shadow-sm"><i class="ph-bold ph-trash text-lg"></i></button>
+                    <div class="flex items-center ml-2">
+                        <button onclick="togglePreview(${i})" id="preview-btn-${i}" class="w-10 h-10 rounded-full bg-purple-500/0 hover:bg-purple-500/10 text-zinc-600 hover:text-purple-400 flex items-center justify-center transition-all border border-transparent hover:border-purple-500/20 shadow-sm" title="Escuchar Vista Previa"><i class="ph-fill ph-play text-lg"></i></button>
+                        <button onclick="removeSong(${i})" class="w-10 h-10 rounded-full bg-red-500/0 hover:bg-red-500/10 text-zinc-600 hover:text-red-500 flex items-center justify-center transition-all border border-transparent hover:border-red-500/20 shadow-sm ml-1" title="Eliminar"><i class="ph-bold ph-trash text-lg"></i></button>
+                    </div>
                 `;
 
                 // Drag events
@@ -3469,6 +3471,53 @@
                 checkDirtyState();
             }
         }
+        let previewAudio = new Audio();
+        let currentPreviewIndex = -1;
+
+        function togglePreview(index) {
+            const song = currentSongs[index];
+            const btn = document.getElementById(`preview-btn-${index}`);
+            
+            if (currentPreviewIndex === index && !previewAudio.paused) {
+                previewAudio.pause();
+                btn.innerHTML = '<i class="ph-fill ph-play text-lg"></i>';
+                btn.classList.remove('text-purple-400', 'bg-purple-500/10');
+                btn.classList.add('text-zinc-600');
+                return;
+            }
+
+            document.querySelectorAll('[id^="preview-btn-"]').forEach(b => {
+                b.innerHTML = '<i class="ph-fill ph-play text-lg"></i>';
+                b.classList.remove('text-purple-400', 'bg-purple-500/10');
+                b.classList.add('text-zinc-600');
+            });
+
+            let src = song.src;
+            if (!src.startsWith('http')) {
+                src = 'https://raw.githubusercontent.com/charlygustav/yaire/main/' + src;
+            }
+            
+            if (currentPreviewIndex !== index || previewAudio.src !== src) {
+                previewAudio.src = src;
+                previewAudio.volume = 0.5;
+            }
+
+            previewAudio.onended = () => {
+                btn.innerHTML = '<i class="ph-fill ph-play text-lg"></i>';
+                btn.classList.remove('text-purple-400', 'bg-purple-500/10');
+                btn.classList.add('text-zinc-600');
+            };
+
+            previewAudio.play().then(() => {
+                currentPreviewIndex = index;
+                btn.innerHTML = '<i class="ph-fill ph-stop text-lg"></i>';
+                btn.classList.remove('text-zinc-600');
+                btn.classList.add('text-purple-400', 'bg-purple-500/10');
+            }).catch(e => {
+                showToast("Error", "No se pudo reproducir la pista.", 3000);
+            });
+        }
+
         function removeSong(i) {
             currentSongs.splice(i, 1);
             renderSongs(true);
