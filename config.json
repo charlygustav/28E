@@ -13,7 +13,7 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-07-25T20:28:59.115Z",
+  "lastUpdated": "2026-07-25T20:38:48.621Z",
   "maintDate": "2026-07-28T00:00",
   "maintMsg": "",
   "maintScreen": "special",
@@ -146,21 +146,6 @@
       "artist": "THIZZY52",
       "src": "sounds/THIZZY52 - BLOCKKIDS.mp3",
       "title": "BLOCKKIDS"
-    },
-    {
-      "artist": "Desconocido",
-      "src": "radio/1777472687999_f47486720.mp3",
-      "title": "f47486720"
-    },
-    {
-      "artist": "Desconocido",
-      "src": "radio/1777546771959_f41578504.mp3",
-      "title": "f41578504"
-    },
-    {
-      "artist": "Desconocido",
-      "src": "radio/1777594789237_f228324448.mp3",
-      "title": "f228324448"
     }
   ],
   "spotlightTips": {
