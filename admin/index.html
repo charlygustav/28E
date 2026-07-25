@@ -3299,10 +3299,32 @@
             const savedTips = (cfg.spotlightTips && cfg.spotlightTips.es) ? cfg.spotlightTips.es : defaultTips;
             document.getElementById('spotlight-tips').value = savedTips.join('\n');
 
+            if (!cfg.songs) cfg.songs = [];
+            
+            // Si el usuario tenía maintSongs guardadas, migrarlas
             if (cfg.maintSongs && cfg.maintSongs.length > 0) {
-                if (!cfg.songs) cfg.songs = [];
                 cfg.songs = cfg.songs.concat(cfg.maintSongs);
                 delete cfg.maintSongs;
+                localStorage.setItem('yaire_config', JSON.stringify(cfg));
+            }
+
+            // Asegurarnos de que las canciones por defecto de mantenimiento estén ahí
+            // (Si el usuario nunca guardó maintSongs, cfg.maintSongs era undefined, y se perdían visualmente)
+            const fallbackMaintSongs = [
+                { src: 'sounds/Otis McDonald - O.Sky.mp3', title: 'O.Sky', artist: 'Otis McDonald' },
+                { src: 'sounds/THIZZY52 - BLOCKKIDS.mp3', title: 'BLOCKKIDS', artist: 'THIZZY52' },
+                { src: "sounds/Oro Fundido - Oblivion's Mighty Trash - SpotubeDL.com.mp3", title: 'Oro Fundido', artist: "Oblivion's Mighty Trash" },
+                { src: 'sounds/Otis McDonald - CRAZY - Live (SPOTISAVER).mp3', title: 'CRAZY (Live)', artist: 'Otis McDonald' },
+                { src: 'sounds/Huan62 - Toto Lindo.mp3', title: 'Toto Lindo', artist: 'Huan62' }
+            ];
+            let changed = false;
+            fallbackMaintSongs.forEach(s => {
+                if (!cfg.songs.find(cs => cs.title === s.title)) {
+                    cfg.songs.push(s);
+                    changed = true;
+                }
+            });
+            if (changed) {
                 localStorage.setItem('yaire_config', JSON.stringify(cfg));
             }
 
