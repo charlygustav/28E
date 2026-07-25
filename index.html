@@ -10073,7 +10073,6 @@
                 <!-- Dynamic glow border mask -->
                 <div class="absolute inset-0 z-0 bg-zinc-900 dark:bg-zinc-900/90 transition-opacity duration-500"></div>
 
-
                 <!-- Main Glass Card -->
                 <div
                     class="relative z-10 w-full h-full bg-zinc-950/60 backdrop-blur-3xl transform-gpu p-8 md:p-14 rounded-[calc(2.5rem-1px)] text-center overflow-hidden flex flex-col items-center border border-white/10 dark:border-white/5 shadow-2xl">
@@ -10085,66 +10084,99 @@
                     <!-- Content -->
                     <div class="relative z-20 w-full flex flex-col items-center pointer-events-none">
 
-                        <div
-                            class="w-16 h-16 md:w-20 md:h-20 mb-10 memorial-svg-container animate-floating relative transition-transform duration-1000 ease-out">
-                            <!-- Ethereal SVG Feather / Light -->
-                            <svg viewBox="0 0 100 100"
-                                class="w-full h-full drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M50 5 C50 5, 65 30, 65 60 C65 80, 50 95, 50 95 C50 95, 35 80, 35 60 C35 30, 50 5, 50 5 Z"
-                                    fill="url(#etherealGradient)" stroke="rgba(255,255,255,0.8)" stroke-width="0.5" />
-                                <path
-                                    d="M50 15 C50 15, 60 35, 60 60 C60 75, 50 85, 50 85 C50 85, 40 75, 40 60 C40 35, 50 15, 50 15 Z"
-                                    fill="rgba(255,255,255,0.15)" />
-                                <line x1="50" y1="10" x2="50" y2="90" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"
-                                    stroke-linecap="round" stroke-dasharray="2 4" />
-                                <circle cx="50" cy="80" r="2" fill="#fff" class="animate-pulse" />
-                                <circle cx="50" cy="65" r="1.5" fill="#fff" class="animate-pulse"
-                                    style="animation-delay: 0.5s" />
-                                <circle cx="50" cy="50" r="1" fill="#fff" class="animate-pulse"
-                                    style="animation-delay: 1s" />
+                        <!-- Angel Wings SVG Icon -->
+                        <div class="w-20 h-20 md:w-24 md:h-24 mb-8 memorial-svg-container animate-floating relative transition-transform duration-1000 ease-out memorial-staggered" style="--stgr: 0;">
+                            <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-[0_0_20px_rgba(245,200,100,0.4)]" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Left Wing -->
+                                <path d="M50 55 C45 45, 20 30, 10 40 C5 45, 8 60, 20 65 C28 68, 40 62, 50 55 Z" fill="url(#wingGradL)" stroke="rgba(255,235,180,0.6)" stroke-width="0.5"/>
+                                <path d="M50 55 C44 48, 25 35, 15 42 C12 50, 18 58, 25 62 C32 65, 42 60, 50 55 Z" fill="rgba(255,255,255,0.08)"/>
+                                <!-- Right Wing -->
+                                <path d="M50 55 C55 45, 80 30, 90 40 C95 45, 92 60, 80 65 C72 68, 60 62, 50 55 Z" fill="url(#wingGradR)" stroke="rgba(255,235,180,0.6)" stroke-width="0.5"/>
+                                <path d="M50 55 C56 48, 75 35, 85 42 C88 50, 82 58, 75 62 C68 65, 58 60, 50 55 Z" fill="rgba(255,255,255,0.08)"/>
+                                <!-- Halo -->
+                                <ellipse cx="50" cy="28" rx="14" ry="5" fill="none" stroke="url(#haloGrad)" stroke-width="1.5"/>
+                                <ellipse cx="50" cy="28" rx="10" ry="3.5" fill="none" stroke="rgba(255,235,180,0.15)" stroke-width="0.8"/>
+                                <!-- Star -->
+                                <circle cx="50" cy="42" r="3" fill="rgba(255,235,180,0.9)" class="animate-pulse"/>
+                                <circle cx="50" cy="42" r="5" fill="none" stroke="rgba(255,235,180,0.3)" stroke-width="0.5" class="animate-pulse" style="animation-delay: 0.5s"/>
+                                <!-- Small accent stars -->
+                                <circle cx="22" cy="50" r="1" fill="#fff" class="animate-pulse" style="animation-delay: 0.3s"/>
+                                <circle cx="78" cy="50" r="1" fill="#fff" class="animate-pulse" style="animation-delay: 0.8s"/>
+                                <circle cx="35" cy="35" r="0.8" fill="rgba(255,235,180,0.7)" class="animate-pulse" style="animation-delay: 1.2s"/>
+                                <circle cx="65" cy="35" r="0.8" fill="rgba(255,235,180,0.7)" class="animate-pulse" style="animation-delay: 0.6s"/>
                                 <defs>
-                                    <linearGradient id="etherealGradient" x1="50" y1="5" x2="50" y2="95"
-                                        gradientUnits="userSpaceOnUse">
-                                        <stop offset="0%" stop-color="rgba(255, 255, 255, 0.9)" />
-                                        <stop offset="50%" stop-color="rgba(210, 190, 140, 0.4)" />
-                                        <stop offset="100%" stop-color="rgba(255, 255, 255, 0)" />
+                                    <linearGradient id="wingGradL" x1="10" y1="40" x2="50" y2="55" gradientUnits="userSpaceOnUse">
+                                        <stop offset="0%" stop-color="rgba(255, 235, 180, 0.7)"/>
+                                        <stop offset="100%" stop-color="rgba(255, 255, 255, 0.1)"/>
+                                    </linearGradient>
+                                    <linearGradient id="wingGradR" x1="90" y1="40" x2="50" y2="55" gradientUnits="userSpaceOnUse">
+                                        <stop offset="0%" stop-color="rgba(255, 235, 180, 0.7)"/>
+                                        <stop offset="100%" stop-color="rgba(255, 255, 255, 0.1)"/>
+                                    </linearGradient>
+                                    <linearGradient id="haloGrad" x1="36" y1="28" x2="64" y2="28" gradientUnits="userSpaceOnUse">
+                                        <stop offset="0%" stop-color="rgba(255, 235, 180, 0)"/>
+                                        <stop offset="50%" stop-color="rgba(255, 235, 180, 0.8)"/>
+                                        <stop offset="100%" stop-color="rgba(255, 235, 180, 0)"/>
                                     </linearGradient>
                                 </defs>
                             </svg>
                         </div>
 
+                        <!-- Label -->
                         <div class="memorial-staggered" style="--stgr: 1;">
-                            <h2 class="text-xs md:text-sm font-bold tracking-[0.3em] uppercase text-zinc-400 mb-5"
+                            <h2 class="text-xs md:text-sm font-bold tracking-[0.3em] uppercase text-zinc-400 mb-3"
                                 data-i18n="memorial_label">Un Ángel en el Cielo</h2>
                         </div>
 
+                        <!-- Name -->
                         <div class="memorial-staggered" style="--stgr: 2;">
-                            <h3 class="text-3xl md:text-4xl font-serif italic mb-8 text-transparent bg-clip-text bg-gradient-to-br from-white via-zinc-200 to-zinc-400"
-                                data-i18n="memorial_title">Para tu pequeño sobrino</h3>
+                            <h3 class="text-4xl md:text-5xl font-serif italic mb-4 text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-100/90 to-zinc-400"
+                                data-i18n="memorial_title">Yahir</h3>
                         </div>
 
-                        <div class="memorial-staggered w-full" style="--stgr: 3;">
+                        <!-- Time Counter -->
+                        <div class="memorial-staggered mb-8" style="--stgr: 2.5;">
+                            <div class="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 text-xs text-zinc-400 font-medium tracking-wide">
+                                <span class="w-1.5 h-1.5 rounded-full bg-amber-400/80 animate-pulse"></span>
+                                <span id="memorial-counter" data-i18n-prefix="memorial_counter">hace 7 meses</span>
+                            </div>
+                        </div>
+
+                        <!-- Divider -->
+                        <div class="memorial-staggered w-16 h-px bg-gradient-to-r from-transparent via-amber-200/30 to-transparent mb-8" style="--stgr: 3;"></div>
+
+                        <!-- Block 1: The Story -->
+                        <div class="memorial-staggered w-full" style="--stgr: 3.5;">
                             <p class="text-zinc-400 leading-relaxed font-light mb-7 text-base md:text-lg max-w-2xl mx-auto"
-                                data-i18n="memorial_text1">Sé que su partida dejó una herida profunda y un vacío inmenso
-                                en tu
-                                corazón. El dolor de perder a alguien tan pequeño, tan frágil y tan lleno de luz pura es
-                                verdaderamente indescriptible y abrumador.</p>
+                                data-i18n="memorial_text1">Un viernes de diciembre se movía lleno de vida. El lunes 23, a las tres de la tarde, hizo su último movimiento y dijo adiós en silencio. La Nochebuena cambió para siempre. Tú fuiste valiente: te quedaste despierta toda la noche cuidando a tu hermana después de la cesárea, sin dormir, sin comer, sosteniendo todo con tus propias manos.</p>
                         </div>
 
-                        <div class="memorial-staggered w-full" style="--stgr: 4;">
-                            <p class="text-zinc-300 leading-relaxed font-serif italic text-lg md:text-xl max-w-2xl mx-auto"
-                                data-i18n="memorial_text2">Pero quiero que, a pesar del dolor, siempre recuerdes esta
-                                certeza
-                                absoluta: él tuvo la dicha inmensa de tener a <strong
-                                    class="text-amber-100/90 font-bold not-italic font-sans">la mejor tía de todo el
-                                    universo</strong>. Aunque no pudieron conocerse, su lazo existe más allá del tiempo
-                                y la
-                                distancia. Él ahora es un angelito que te cuida desde arriba, y yo te prometo estar aquí
-                                abajo,
-                                sosteniendo tu mano firmemente, siempre que necesites apoyo para seguir adelante.</p>
+                        <!-- Block 2: Yuneth & the 23rd -->
+                        <div class="memorial-staggered w-full" style="--stgr: 4.5;">
+                            <p class="text-zinc-400 leading-relaxed font-light mb-7 text-base md:text-lg max-w-2xl mx-auto"
+                                data-i18n="memorial_text2">Cada 23 del mes, Yuneth lo recuerda. Y tú estás ahí para ella, siempre. Porque sabes que la vida sigue, pero también sabes que un bebé no se supera — simplemente se aprende a caminar con ese peso. Lo conociste, y aunque no fue de la forma que soñabas, viste lo hermoso y perfecto que era.</p>
                         </div>
+
+                        <!-- Block 3: Charles's promise -->
+                        <div class="memorial-staggered w-full" style="--stgr: 5.5;">
+                            <p class="text-zinc-300 leading-relaxed font-serif italic text-lg md:text-xl max-w-2xl mx-auto mb-8"
+                                data-i18n="memorial_text3">Yo también perdí a mi hermanita. No sé exactamente lo que sientes, pero conozco ese vacío. Por eso te prometo que nunca cargarás esto sola. Quiero ser tu lugar seguro para llorar, para desahogarte, para recordarlo sin miedo. Aquí estoy, aquí estaré — sosteniendo tu mano firmemente, hoy y siempre.</p>
+                        </div>
+
+                        <!-- Divider -->
+                        <div class="memorial-staggered w-12 h-px bg-gradient-to-r from-transparent via-amber-200/20 to-transparent mb-8" style="--stgr: 6;"></div>
+
+                        <!-- Quote from her -->
+                        <div class="memorial-staggered w-full" style="--stgr: 6.5;">
+                            <blockquote class="max-w-xl mx-auto relative">
+                                <div class="absolute -top-3 left-1/2 -translate-x-1/2 text-amber-400/20 text-4xl font-serif select-none">"</div>
+                                <p class="text-zinc-300/90 text-sm md:text-base leading-relaxed italic px-6"
+                                    data-i18n="memorial_quote">Yahir tiene un lugar, un lugar que nadie va a quitar. Así sea que lleguen nuevos o nuevas, Yahir estará allí presente.</p>
+                                <footer class="mt-3 text-xs text-zinc-500 font-medium tracking-wider uppercase"
+                                    data-i18n="memorial_quote_author">— Yaire</footer>
+                            </blockquote>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -10163,7 +10195,7 @@
                 }
 
                 .memorial-svg-container {
-                    filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.2));
+                    filter: drop-shadow(0 0 25px rgba(245, 200, 100, 0.25));
                 }
             </style>
 
@@ -10173,13 +10205,37 @@
                     const canvas = document.getElementById('memorial-canvas');
                     if (!card || !canvas) return;
 
+                    // ── Time counter ──
+                    const counterEl = document.getElementById('memorial-counter');
+                    function updateCounter() {
+                        if (!counterEl) return;
+                        const departure = new Date(2025, 11, 23); // Dec 23, 2025
+                        const now = new Date();
+                        let months = (now.getFullYear() - departure.getFullYear()) * 12 + (now.getMonth() - departure.getMonth());
+                        let days = now.getDate() - departure.getDate();
+                        if (days < 0) {
+                            months--;
+                            const prev = new Date(now.getFullYear(), now.getMonth(), 0);
+                            days += prev.getDate();
+                        }
+                        if (months >= 12) {
+                            const years = Math.floor(months / 12);
+                            const rem = months % 12;
+                            counterEl.textContent = years + (years === 1 ? ' año' : ' años') + (rem > 0 ? ', ' + rem + (rem === 1 ? ' mes' : ' meses') : '') + ' y ' + days + (days === 1 ? ' día' : ' días') + ' desde su partida';
+                        } else {
+                            counterEl.textContent = months + (months === 1 ? ' mes' : ' meses') + ' y ' + days + (days === 1 ? ' día' : ' días') + ' desde su partida';
+                        }
+                    }
+                    updateCounter();
+                    setInterval(updateCounter, 60000);
+
+                    // ── Hover glow ──
                     let cardRect = null;
                     function updateCardRect() {
                         cardRect = card.getBoundingClientRect();
                     }
                     updateCardRect();
 
-                    // Hover Glow
                     card.addEventListener('mouseenter', updateCardRect);
                     let _cardRaf;
                     card.addEventListener('mousemove', (e) => {
@@ -10190,8 +10246,6 @@
                             const y = e.clientY - cardRect.top;
                             card.style.setProperty('--mouse-x', `${x}px`);
                             card.style.setProperty('--mouse-y', `${y}px`);
-
-                            // mouse influence for particles (only when hovering inside card)
                             mousePos.x = x;
                             mousePos.y = y;
                         });
@@ -10202,7 +10256,7 @@
                         mousePos.y = null;
                     });
 
-                    // Particles Canvas logic
+                    // ── Particles Canvas ──
                     const ctx = canvas.getContext('2d');
                     let particles = [];
                     let w, h;
@@ -10228,14 +10282,13 @@
                             this.speedX = (Math.random() - 0.5) * 0.3;
                             this.life = Math.random() * 0.8 + 0.2;
                             this.glow = Math.random() * 0.5 + 0.2;
-                            this.baseColor = Math.random() > 0.5 ? '255, 235, 180' : '255, 255, 255';
+                            this.baseColor = Math.random() > 0.3 ? '255, 235, 180' : '255, 255, 255';
                         }
                         update() {
                             this.y += this.speedY;
-                            this.x += this.speedX + Math.sin(this.y * 0.01) * 0.3; // subtle sway
+                            this.x += this.speedX + Math.sin(this.y * 0.01) * 0.3;
                             this.life -= 0.002;
 
-                            // cursor interaction
                             if (mousePos.x !== null && mousePos.y !== null) {
                                 const dx = mousePos.x - this.x;
                                 const dy = mousePos.y - this.y;
@@ -10258,7 +10311,6 @@
                             ctx.fillStyle = `rgba(${this.baseColor}, ${alpha})`;
                             ctx.fill();
 
-                            // add a subtle blur pass around the particle if it's very bright
                             if (alpha > 0.7) {
                                 ctx.shadowBlur = 5;
                                 ctx.shadowColor = `rgba(${this.baseColor}, ${alpha})`;
@@ -10273,7 +10325,6 @@
                         resize();
                         particles = [];
                         for (let i = 0; i < 60; i++) particles.push(new Particle());
-                        // Guard: evitar duplicar el listener resize si initParticles se llama más de una vez
                         if (!_resizeAttached) {
                             window.addEventListener('resize', resize, { passive: true });
                             _resizeAttached = true;
@@ -10295,10 +10346,8 @@
                                 staggers.forEach(el => el.classList.add('visible'));
 
                                 if (!particles.length) initParticles();
-                                // Reanudar loop si fue cancelado al salir de pantalla
                                 if (!animFrame) loop();
                             } else {
-                                // Cancelar rAF cuando la sección sale del viewport — ahorra GPU/CPU
                                 if (animFrame) {
                                     cancelAnimationFrame(animFrame);
                                     animFrame = null;
@@ -10308,6 +10357,15 @@
                     }, { threshold: 0.2 });
 
                     setTimeout(() => {
+                        obs.observe(card);
+                    }, 500);
+                })();
+            </script>
+        </section>
+
+
+
+
                         obs.observe(card);
                     }, 500); // small delay to ensure DOM is ready
                 })();
@@ -13368,9 +13426,12 @@
                 step3_title: "Crecimiento y Equipo", step3_desc: "Prometo nunca cortar tus alas, sino ser el viento que las impulse. Seré tu fan número uno en la primera fila de todos tus éxitos. Ya sea estudiando, trabajando, o construyendo el imperio de Tiana, prometo estar a tu lado trabajando codo a codo como un equipo invencible.<br><br>Porque tus sueños ahora son también los míos. Celebraré todas y cada una de tus victorias como propias y seré tu red de seguridad en cada caída. Juntos construiremos no solo una relación hermosa, sino un futuro brillante.",
                 step4_title: "Amarte Como Elección Diaria", step4_desc: "Prometo amarte no solo en tus mejores días, sino también cuando estés despeinada, en pijamas y estresada. Prometo que el amor no será solo un sentimiento, sino una acción constante. Te elijo hoy, te elegí ayer, y prometo elegirte cada mañana cuando me despierte. Eres mi hogar.<br><br>No busco la perfección, te busco a ti hoy y siempre tal cual eres. En la salud, en la enfermedad, en la abundancia y en la escasez. Mi promesa más sagrada es que mi amor es incondicional, porque en ti, bonita, encontré a mi persona.",
 
-                memorial_label: "Un Ángel en el Cielo", memorial_title: "Para tu pequeño sobrino",
-                memorial_text1: "Sé que su partida dejó una herida profunda y un vacío inmenso en tu corazón. El dolor de perder a alguien tan pequeño, tan frágil y tan lleno de luz pura es verdaderamente indescriptible y abrumador.",
-                memorial_text2: "Pero quiero que, a pesar del dolor, siempre recuerdes esta certeza absoluta: él tuvo la dicha inmensa de tener a <strong class='text-brand-500'>la mejor tía de todo el universo</strong>. Aunque no pudieron conocerse, su lazo existe más allá del tiempo y la distancia. Él ahora es un angelito que te cuida desde arriba, y yo te prometo estar aquí abajo, sosteniendo tu mano firmemente, siempre que necesites apoyo para seguir adelante.",
+                memorial_label: "Un Ángel en el Cielo", memorial_title: "Yahir",
+                memorial_counter: "hace {months} meses",
+                memorial_text1: "Un viernes de diciembre se movía lleno de vida. El lunes 23, a las tres de la tarde, hizo su último movimiento y dijo adiós en silencio. La Nochebuena cambió para siempre. Tú fuiste valiente: te quedaste despierta toda la noche cuidando a tu hermana después de la cesárea, sin dormir, sin comer, sosteniendo todo con tus propias manos.",
+                memorial_text2: "Cada 23 del mes, Yuneth lo recuerda. Y tú estás ahí para ella, siempre. Porque sabes que la vida sigue, pero también sabes que un bebé no se supera — simplemente se aprende a caminar con ese peso. Lo conociste, y aunque no fue de la forma que soñabas, viste lo hermoso y perfecto que era.",
+                memorial_text3: "Yo también perdí a mi hermanita. No sé exactamente lo que sientes, pero conozco ese vacío. Por eso te prometo que nunca cargarás esto sola. Quiero ser tu lugar seguro para llorar, para desahogarte, para recordarlo sin miedo. Aquí estoy, aquí estaré — sosteniendo tu mano firmemente, hoy y siempre.",
+                memorial_quote: "Yahir tiene un lugar, un lugar que nadie va a quitar. Así sea que lleguen nuevos o nuevas, Yahir estará allí presente.", memorial_quote_author: "— Yaire",
 
                 hype_title: "Ojalá este Hype se haga REAL.", hype_text: "Todavía no es un hecho, pero la sola idea de que algún día ese avión aterrice en Venezuela me tiene soñando despierto. Ya tengo pensada la ruta, los lugares, la comida, y lo más importante: el momento exacto en el que por fin te pueda dar ese abrazo en persona. ¡Mantengo la esperanza intacta!",
                 hype_list1_title: "El Abrazo de Aeropuerto", hype_list1_desc: "Ese primer momento donde por fin podré comprobar si eres tan abrazable como imagino (seguro que sí). Cero soltarte por al menos 5 minutos.",
