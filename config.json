@@ -13,7 +13,7 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-07-25T20:27:16.638Z",
+  "lastUpdated": "2026-07-25T20:27:37.111Z",
   "maintDate": "2026-07-28T00:00",
   "maintMsg": "",
   "maintScreen": "special",
@@ -161,11 +161,6 @@
       "artist": "THIZZY52",
       "src": "sounds/THIZZY52 - BLOCKKIDS.mp3",
       "title": "BLOCKKIDS"
-    },
-    {
-      "artist": "Huan62",
-      "src": "sounds/Huan62 - Toto Lindo.mp3",
-      "title": "Toto Lindo"
     }
   ],
   "spotlightTips": {
