@@ -1613,12 +1613,7 @@
                             sitio.</p>
                     </div>
 
-                    <div class="flex bg-black/40 p-1 rounded-xl border border-white/5">
-                        <button type="button" onclick="switchMusicTab('main')" id="btn-tab-music-main"
-                            class="px-4 py-2 rounded-lg text-xs font-bold transition-all bg-purple-500/20 text-purple-400">Principales</button>
-                        <button type="button" onclick="switchMusicTab('maint')" id="btn-tab-music-maint"
-                            class="px-4 py-2 rounded-lg text-xs font-bold transition-all text-zinc-500 hover:text-white">Mantenimiento</button>
-                    </div>
+
 
                     <div class="flex gap-3 flex-wrap">
                         <button onclick="triggerMusicUpload()"
@@ -1627,8 +1622,7 @@
                         </button>
                         <input type="file" id="music-upload" accept="audio/mpeg,audio/mp3,.mp3" class="hidden"
                             onchange="handleMusicUpload(event)">
-                        <input type="file" id="maint-music-upload" accept="audio/mpeg,audio/mp3,.mp3" class="hidden"
-                            onchange="handleMaintMusicUpload(event)">
+
                     </div>
                 </div>
 
@@ -1639,12 +1633,7 @@
                     </div>
                 </div>
 
-                <div id="music-maint-section"
-                    class="hidden yaire-card overflow-hidden border border-amber-500/10 relative z-10 shadow-[0_0_40px_rgba(245,158,11,0.05)]">
-                    <div id="maint-music-list" class="space-y-2 bg-amber-900/10 p-2">
-                        <!-- Maint songs injected here -->
-                    </div>
-                </div>
+
             </div>
 
             <!-- VOICE TAB -->
@@ -2239,8 +2228,7 @@
                 heroBadgeLinkText: document.getElementById('hero-badge-link-text')?.value || '',
                 heroBadgeLinkUrl: document.getElementById('hero-badge-link-url')?.value || '',
                 spotlightTips: document.getElementById('spotlight-tips')?.value || '',
-                songsStr: getDOMSongsStr(),
-                maintSongsStr: JSON.stringify(currentMaintSongs || [])
+                songsStr: getDOMSongsStr()
             };
             _initialStateJSON = JSON.stringify(state);
             hideUnsavedBar();
@@ -2267,8 +2255,7 @@
                 heroBadgeLinkText: document.getElementById('hero-badge-link-text')?.value || '',
                 heroBadgeLinkUrl: document.getElementById('hero-badge-link-url')?.value || '',
                 spotlightTips: document.getElementById('spotlight-tips')?.value || '',
-                songsStr: getDOMSongsStr(),
-                maintSongsStr: JSON.stringify(currentMaintSongs || [])
+                songsStr: getDOMSongsStr()
             };
 
             _hasUnsavedChanges = _initialStateJSON !== JSON.stringify(currentState);
@@ -2436,16 +2423,7 @@
             { title: "O.Sky", artist: "Otis McDonald", src: "sounds/Otis McDonald - O.Sky.mp3" }
         ];
 
-        const defaultMaintSongs = [
-            { src: 'sounds/Otis McDonald - O.Sky.mp3', title: 'O.Sky', artist: 'Otis McDonald' },
-            { src: 'sounds/THIZZY52 - BLOCKKIDS.mp3', title: 'BLOCKKIDS', artist: 'THIZZY52' },
-            { src: "sounds/Oro Fundido - Oblivion's Mighty Trash - SpotubeDL.com.mp3", title: 'Oro Fundido', artist: "Oblivion's Mighty Trash" },
-            { src: 'sounds/Otis McDonald - CRAZY - Live (SPOTISAVER).mp3', title: 'CRAZY (Live)', artist: 'Otis McDonald' },
-            { src: 'sounds/Huan62 - Toto Lindo.mp3', title: 'Toto Lindo', artist: 'Huan62' }
-        ];
-
         let currentSongs = [];
-        let currentMaintSongs = [];
         let ipLogs = [];
 
         // ADMIN BGM
@@ -3321,8 +3299,14 @@
             const savedTips = (cfg.spotlightTips && cfg.spotlightTips.es) ? cfg.spotlightTips.es : defaultTips;
             document.getElementById('spotlight-tips').value = savedTips.join('\n');
 
+            if (cfg.maintSongs && cfg.maintSongs.length > 0) {
+                if (!cfg.songs) cfg.songs = [];
+                cfg.songs = cfg.songs.concat(cfg.maintSongs);
+                delete cfg.maintSongs;
+                localStorage.setItem('yaire_config', JSON.stringify(cfg));
+            }
+
             currentSongs = cfg.songs && cfg.songs.length > 0 ? cfg.songs : [...defaultSongs];
-            currentMaintSongs = cfg.maintSongs && cfg.maintSongs.length > 0 ? cfg.maintSongs : [...defaultMaintSongs];
             document.getElementById('dash-songs').textContent = currentSongs.length;
 
             // Iniciar carga de métricas reales asíncronas
@@ -3350,7 +3334,6 @@
             }
 
             renderSongs();
-            renderMaintSongs();
             setTimeout(captureInitialState, 100);
         }
 
@@ -3661,122 +3644,8 @@
             event.target.value = '';
         }
 
-        function renderMaintSongs(skipAnimation = false) {
-            const container = document.getElementById('maint-music-list');
-            if (!container) return;
-            container.innerHTML = '';
-
-            if (!currentMaintSongs || currentMaintSongs.length === 0) {
-                container.innerHTML = `<div class="p-4 border border-dashed border-white/10 rounded-xl text-center">
-                    <p class="text-zinc-500 text-[11px] font-medium uppercase tracking-widest">No hay canciones añadidas.</p>
-                </div>`;
-                return;
-            }
-
-            currentMaintSongs.forEach((song, i) => {
-                const div = document.createElement('div');
-                div.className = "p-3 bg-black/40 border border-white/5 rounded-xl flex items-center gap-3";
-                div.innerHTML = `
-                    <div class="text-amber-500 bg-amber-500/10 p-2 rounded-lg shrink-0"><i class="ph-fill ph-music-note"></i></div>
-                    <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2">
-                        <input type="text" class="bg-transparent border border-white/5 rounded-lg py-1.5 px-3 text-xs text-white focus:border-amber-500 outline-none font-mono" placeholder="Título" value="${song.title || ''}" onchange="updateMaintSong(${i},'title',this.value)">
-                        <input type="text" class="bg-transparent border border-white/5 rounded-lg py-1.5 px-3 text-xs text-zinc-400 focus:border-amber-500 outline-none font-mono" placeholder="Artista" value="${song.artist || ''}" onchange="updateMaintSong(${i},'artist',this.value)">
-                        <input type="text" class="bg-transparent border border-white/5 rounded-lg py-1.5 px-3 text-xs text-zinc-500 md:col-span-2 focus:border-amber-500 outline-none font-mono transition-all" placeholder="Ruta (ej: radio/cancion.mp3)" value="${song.src || ''}" onchange="updateMaintSong(${i},'src',this.value)">
-                    </div>
-                    <button type="button" onclick="removeMaintSong(${i})" class="text-red-400 hover:text-red-300 p-2 shrink-0 transition-colors"><i class="ph-bold ph-trash text-lg"></i></button>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function updateMaintSong(i, field, val) {
-            if (currentMaintSongs[i][field] !== val) {
-                currentMaintSongs[i][field] = val;
-                checkDirtyState();
-            }
-        }
-
-        function removeMaintSong(i) {
-            currentMaintSongs.splice(i, 1);
-            renderMaintSongs(true);
-            checkDirtyState();
-        }
-
-        async function handleMaintMusicUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const ext = file.name.split('.').pop().toLowerCase();
-            const allowed = ['mp3'];
-            if (!allowed.includes(ext)) {
-                showToast("Archivo no soportado", "Por favor selecciona un archivo MP3.", 4000);
-                event.target.value = '';
-                return;
-            }
-
-            showToast("Subiendo canción...", "Conectando con GitHub...", null, true);
-
-            try {
-                const path = await uploadToGitHub(file, 'radio', (percent) => {
-                    updateToastProgress(percent);
-                });
-                let title = file.name.replace(/\.[^/.]+$/, "").replace(/_/g, ' ');
-                currentMaintSongs.unshift({ title: title, artist: "Desconocido", src: path });
-                renderMaintSongs();
-
-                const cfg = JSON.parse(localStorage.getItem('yaire_config') || '{}');
-                cfg.maintSongs = currentMaintSongs;
-                localStorage.setItem('yaire_config', JSON.stringify(cfg));
-
-                gsap.to(document.getElementById('toast'), { y: 150, opacity: 0, scale: 0.9, duration: 0.5, ease: "power2.in" });
-                checkDirtyState();
-            } catch (e) {
-                showToast("Error de Subida", e.message, 4000);
-            }
-            event.target.value = '';
-        }
-
-        let activeMusicSubTab = 'main';
-        function switchMusicTab(tabName) {
-            if (activeMusicSubTab === tabName) return;
-            activeMusicSubTab = tabName;
-
-            const btnMain = document.getElementById('btn-tab-music-main');
-            const btnMaint = document.getElementById('btn-tab-music-maint');
-            const secMain = document.getElementById('music-main-section');
-            const secMaint = document.getElementById('music-maint-section');
-
-            const sectionToHide = tabName === 'main' ? secMaint : secMain;
-            const sectionToShow = tabName === 'main' ? secMain : secMaint;
-
-            if (tabName === 'main') {
-                btnMain.className = "px-4 py-2 rounded-lg text-xs font-bold transition-all bg-purple-500/20 text-purple-400";
-                btnMaint.className = "px-4 py-2 rounded-lg text-xs font-bold transition-all text-zinc-500 hover:text-white";
-            } else {
-                btnMaint.className = "px-4 py-2 rounded-lg text-xs font-bold transition-all bg-amber-500/20 text-amber-500";
-                btnMain.className = "px-4 py-2 rounded-lg text-xs font-bold transition-all text-zinc-500 hover:text-white";
-            }
-
-            gsap.to(sectionToHide, {
-                opacity: 0,
-                y: -10,
-                duration: 0.2,
-                onComplete: () => {
-                    sectionToHide.classList.add('hidden');
-                    sectionToHide.classList.remove('block');
-                    sectionToShow.classList.remove('hidden');
-                    sectionToShow.classList.add('block');
-                    gsap.fromTo(sectionToShow, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.2 });
-                }
-            });
-        }
-
         function triggerMusicUpload() {
-            if (activeMusicSubTab === 'main') {
-                document.getElementById('music-upload').click();
-            } else {
-                document.getElementById('maint-music-upload').click();
-            }
+            document.getElementById('music-upload').click();
         }
 
         // WHATSAPP ANALYZER LOGIC
@@ -4242,7 +4111,6 @@
             cfg.spotlightTips.es = tipsVal;
 
             cfg.songs = currentSongs;
-            cfg.maintSongs = currentMaintSongs;
             cfg.lastUpdated = new Date().toISOString();
 
             // vocab fields are updated via confirmVocabUpdate(), not here
@@ -4295,7 +4163,6 @@
             }
 
             cfg.songs = currentSongs;
-            cfg.maintSongs = currentMaintSongs;
 
             const pwd = document.getElementById('vault-pwd').value;
             if (pwd.trim() !== '') {
