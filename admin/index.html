@@ -3315,6 +3315,8 @@
             document.getElementById('maint-toggle').checked = cfg.mantenimiento || false;
             document.getElementById('maint-type').value = cfg.maintType || 'indefinite';
             document.getElementById('maint-date').value = cfg.maintDate || '';
+            if (cfg.maintScreen) setMaintScreen(cfg.maintScreen);
+            else setMaintScreen('cinematic');
             toggleMaintOptions(false);
             toggleMaintDate();
 
@@ -4491,8 +4493,8 @@
                 gsap.fromTo(dateCont, { opacity: 0, x: -10 }, { opacity: 1, x: 0, duration: 0.3 });
             } else {
                 gsap.killTweensOf(dateCont);
-                dateCont.classList.add('hidden', '!hidden');
-                gsap.set(dateCont, { clearProps: 'all' });
+                dateCont.classList.add('hidden');
+                gsap.set(dateCont, { display: 'none' });
             }
         }
 
