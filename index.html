@@ -10136,14 +10136,14 @@
 
                         <!-- Time Counter -->
                         <div class="memorial-staggered mb-8" style="--stgr: 2.5;">
-                            <div class="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 text-xs text-zinc-400 font-medium tracking-wide">
-                                <span class="w-1.5 h-1.5 rounded-full bg-amber-400/80 animate-pulse"></span>
-                                <span id="memorial-counter" data-i18n-prefix="memorial_counter">hace 7 meses</span>
+                            <div class="inline-flex items-center justify-center gap-2.5 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 text-xs text-zinc-300 font-medium tracking-wide">
+                                <span class="block w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" style="box-shadow: 0 0 8px rgba(251, 191, 36, 0.8);"></span>
+                                <span id="memorial-counter"></span>
                             </div>
                         </div>
 
                         <!-- Divider -->
-                        <div class="memorial-staggered w-16 h-px bg-gradient-to-r from-transparent via-amber-200/30 to-transparent mb-8" style="--stgr: 3;"></div>
+                        <div class="memorial-staggered w-32 h-[1px] bg-gradient-to-r from-transparent via-amber-400/40 to-transparent mb-8" style="--stgr: 3;"></div>
 
                         <!-- Block 1: The Story -->
                         <div class="memorial-staggered w-full" style="--stgr: 3.5;">
@@ -10164,7 +10164,7 @@
                         </div>
 
                         <!-- Divider -->
-                        <div class="memorial-staggered w-12 h-px bg-gradient-to-r from-transparent via-amber-200/20 to-transparent mb-8" style="--stgr: 6;"></div>
+                        <div class="memorial-staggered w-24 h-[1px] bg-gradient-to-r from-transparent via-amber-400/30 to-transparent mb-8" style="--stgr: 6;"></div>
 
                         <!-- Quote from her -->
                         <div class="memorial-staggered w-full" style="--stgr: 6.5;">
@@ -10277,16 +10277,16 @@
                         reset(randomY) {
                             this.x = Math.random() * w;
                             this.y = randomY ? Math.random() * h : h + 10;
-                            this.size = Math.random() * 1.5 + 0.5;
+                            this.size = Math.random() * 2 + 0.8;
                             this.speedY = -(Math.random() * 0.4 + 0.1);
                             this.speedX = (Math.random() - 0.5) * 0.3;
                             this.life = Math.random() * 0.8 + 0.2;
-                            this.glow = Math.random() * 0.5 + 0.2;
-                            this.baseColor = Math.random() > 0.3 ? '255, 235, 180' : '255, 255, 255';
+                            this.glow = Math.random() * 0.5 + 0.3;
+                            this.baseColor = Math.random() > 0.3 ? '255, 220, 150' : '255, 255, 255';
                         }
                         update() {
                             this.y += this.speedY;
-                            this.x += this.speedX + Math.sin(this.y * 0.01) * 0.3;
+                            this.x += this.speedX + Math.sin(this.y * 0.01) * 0.4;
                             this.life -= 0.002;
 
                             if (mousePos.x !== null && mousePos.y !== null) {
@@ -10311,8 +10311,8 @@
                             ctx.fillStyle = `rgba(${this.baseColor}, ${alpha})`;
                             ctx.fill();
 
-                            if (alpha > 0.7) {
-                                ctx.shadowBlur = 5;
+                            if (alpha > 0.6) {
+                                ctx.shadowBlur = 8;
                                 ctx.shadowColor = `rgba(${this.baseColor}, ${alpha})`;
                             } else {
                                 ctx.shadowBlur = 0;
@@ -10324,7 +10324,7 @@
                     function initParticles() {
                         resize();
                         particles = [];
-                        for (let i = 0; i < 60; i++) particles.push(new Particle());
+                        for (let i = 0; i < 70; i++) particles.push(new Particle());
                         if (!_resizeAttached) {
                             window.addEventListener('resize', resize, { passive: true });
                             _resizeAttached = true;
@@ -10338,14 +10338,16 @@
                         animFrame = requestAnimationFrame(loop);
                     }
 
+                    // Start particles immediately to ensure they show up
+                    initParticles();
+                    loop();
+
                     // Intersection Observer for animations
                     const obs = new IntersectionObserver((entries) => {
                         entries.forEach(entry => {
                             if (entry.isIntersecting) {
                                 const staggers = card.querySelectorAll('.memorial-staggered');
                                 staggers.forEach(el => el.classList.add('visible'));
-
-                                if (!particles.length) initParticles();
                                 if (!animFrame) loop();
                             } else {
                                 if (animFrame) {
@@ -10354,11 +10356,11 @@
                                 }
                             }
                         });
-                    }, { threshold: 0.2 });
+                    }, { threshold: 0.15 });
 
                     setTimeout(() => {
                         obs.observe(card);
-                    }, 500);
+                    }, 300);
                 })();
             </script>
         </section>
