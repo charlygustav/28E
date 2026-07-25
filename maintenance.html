@@ -331,7 +331,7 @@
         }
 
         if (cfg.mantenimiento === false && !isPreview) {
-          window.location.href = '/';
+          window.location.href = 'wrapped.html';
           return;
         } else if (cfg.maintScreen !== 'cinematic') {
           window.location.href = 'mantenimiento';
@@ -448,10 +448,10 @@
           })
           .then(() => {
             localStorage.removeItem('yaire_config');
-            window.location.href = '/';
+            window.location.href = 'wrapped.html';
           })
           .catch(() => {
-            window.location.href = '/';
+            window.location.href = 'wrapped.html';
           });
         return;
       }
