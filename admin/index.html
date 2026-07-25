@@ -3313,12 +3313,11 @@
             }
 
             document.getElementById('maint-toggle').checked = cfg.mantenimiento || false;
-            document.getElementById('maint-type').value = cfg.maintType || 'indefinite';
             document.getElementById('maint-date').value = cfg.maintDate || '';
             if (cfg.maintScreen) setMaintScreen(cfg.maintScreen);
             else setMaintScreen('cinematic');
+            setMaintDuration(cfg.maintType || 'indefinite');
             toggleMaintOptions(false);
-            toggleMaintDate();
 
             // Actualizar la insignia de estado según el estado de mantenimiento real en el servidor
             updateSystemStatusBadge(cfg.mantenimiento || false);
