@@ -970,23 +970,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Google Translate API -->
-                                <div
-                                    class="bg-black/40 border border-white/5 rounded-2xl p-4 transition-all hover:bg-white/[0.02]">
-                                    <div class="flex items-start justify-between mb-3">
-                                        <div class="flex items-center gap-2 text-zinc-400">
-                                            <i class="ph-fill ph-translate text-lg"></i>
-                                            <span class="text-xs font-bold uppercase tracking-widest">Translate</span>
-                                        </div>
-                                        <div id="node-status-tr"
-                                            class="w-2.5 h-2.5 rounded-full bg-zinc-600 transition-colors"></div>
-                                    </div>
-                                    <div class="flex items-end justify-between">
-                                        <span class="text-sm font-semibold text-white">Google API</span>
-                                        <span id="tr-status-label"
-                                            class="font-mono text-xs text-zinc-500 font-bold">...</span>
-                                    </div>
-                                </div>
 
                                 <!-- App Pública (Edge) -->
                                 <div
@@ -2646,19 +2629,6 @@
                 document.getElementById('node-status-gh').className = 'w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.4)]';
             }
 
-            // 5. Google Translate API ping
-            try {
-                const t0 = Date.now();
-                await fetch('https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=en&dt=t&q=ok');
-                const ping = Date.now() - t0;
-                document.getElementById('tr-status-label').textContent = `${ping}ms`;
-                document.getElementById('tr-status-label').className = 'text-brand-400 font-mono text-xs';
-                document.getElementById('node-status-tr').className = 'w-2.5 h-2.5 rounded-full bg-brand-500 shadow-[0_0_10px_rgba(239,68,68,0.4)]';
-            } catch (e) {
-                document.getElementById('tr-status-label').textContent = 'Error';
-                document.getElementById('tr-status-label').className = 'text-red-400 font-mono text-xs';
-                document.getElementById('node-status-tr').className = 'w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.4)]';
-            }
 
             // Llamar una vez a las nuevas métricas (Edge, Network, RAM)
             updateExtraMetrics();
