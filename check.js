@@ -431,7 +431,7 @@ let spotlightTracks = [
                             const expArtist = document.getElementById('spotlight-expanded-artist');
                             const compactArtist = document.getElementById('spotlight-artist');
 
-                            if (expTitle) expTitle.textContent = state.title || 'Spotlight Radio';
+                            if (expTitle) expTitle.textContent = state.title || 'Spotlight Music';
                             if (expArtist) expArtist.innerHTML = `<span class="text-red-500 font-bold tracking-widest uppercase animate-pulse">🔴 EN VIVO: ${state.artist || 'Transmisión'}</span>`;
                             if (compactArtist) compactArtist.innerHTML = `<span class="text-red-500 font-bold tracking-wider animate-pulse">🔴 ${state.artist || 'EN VIVO'}</span>`;
 
@@ -449,7 +449,7 @@ let spotlightTracks = [
                                     let seekTime = (now - state.startTime) / 1000;
 
                                     if (seekTime < 5) {
-                                        const announcerText = `Estás escuchando ${state.title} de ${state.artist}, en Spotlight Radio.`;
+                                        const announcerText = `Estás escuchando ${state.title} de ${state.artist}, en Spotlight Music.`;
                                         const announcerAudio = new Audio(`/api/tts?text=${encodeURIComponent(announcerText)}`);
 
                                         // We use the Audio object directly to check if API is available
@@ -918,7 +918,7 @@ let spotlightTracks = [
                             document.title = '28E FM (Live)';
                             if ('mediaSession' in navigator) {
                                 navigator.mediaSession.metadata = new MediaMetadata({
-                                    title: 'Spotlight Radio',
+                                    title: 'Spotlight Music',
                                     artist: 'Live Broadcast',
                                     album: '28E',
                                     artwork: [{ src: 'tulip.ico?v=3', sizes: '512x512', type: 'image/x-icon' }]
@@ -1094,9 +1094,9 @@ let spotlightTracks = [
                         };
 
                         // Set live text
-                        if (compactTitle) compactTitle.textContent = 'Spotlight Radio';
+                        if (compactTitle) compactTitle.textContent = 'Spotlight Music';
                         if (compactArtist) compactArtist.innerHTML = `<span class="text-red-500 font-bold tracking-wider animate-pulse" data-i18n="radio_live_badge">${dict.radio_live_badge}</span>`;
-                        if (expTitle) expTitle.textContent = 'Spotlight Radio';
+                        if (expTitle) expTitle.textContent = 'Spotlight Music';
                         if (expArtist) expArtist.innerHTML = `<span class="text-red-500 font-bold tracking-widest uppercase animate-pulse" data-i18n="radio_live_title">${dict.radio_live_title}</span>`;
 
                         // Use default radio artwork
@@ -6179,7 +6179,7 @@ const dictionary = {
         const G4_ROUND_TIME = 15; // seconds per round
 
         function getG4Tracks() {
-            // Use spotlightTracks from the Spotlight Radio player
+            // Use spotlightTracks from the Spotlight Music player
             if (typeof spotlightTracks !== 'undefined' && spotlightTracks.length > 0) return spotlightTracks;
             return [];
         }

@@ -514,7 +514,7 @@
                 <button onclick="switchTab('radiodj')"
                     class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-zinc-400 hover:bg-white/5 hover:text-white transition-all text-sm"
                     data-target="radiodj">
-                    <i class="ph-bold ph-radio text-lg"></i> Spotlight Radio
+                    <i class="ph-bold ph-radio text-lg"></i> Spotlight Music
                 </button>
                 <button onclick="switchTab('voice')"
                     class="nav-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-zinc-400 hover:bg-white/5 hover:text-white transition-all text-sm"
@@ -1716,7 +1716,7 @@
                 <div class="flex items-center gap-3 mb-2">
                     <i class="ph-fill ph-radio text-3xl text-red-500"></i>
                     <div>
-                        <h2 class="text-2xl font-black tracking-tight font-sans text-white">Spotlight Radio (Live DJ)</h2>
+                        <h2 class="text-2xl font-black tracking-tight font-sans text-white">Spotlight Music (Live DJ)</h2>
                         <p class="text-zinc-400 text-sm mt-1">Controla la estación de radio de la página principal en
                             tiempo real.</p>
                     </div>
@@ -3190,7 +3190,7 @@
                 }
             });
 
-            const titles = { dashboard: 'Visión General', activity: 'Registro de Auditoría', analytics: 'Tráfico de Red', gallery: 'Galería de Arte', vocab: 'Textos Principales', music: 'Spotlight Radio', voice: 'Canal de Voz', security: 'Seguridad', events: 'Eventos en Vivo', guestbook: 'Libro de Visitas' };
+            const titles = { dashboard: 'Visión General', activity: 'Registro de Auditoría', analytics: 'Tráfico de Red', gallery: 'Galería de Arte', vocab: 'Textos Principales', music: 'Spotlight Music', voice: 'Canal de Voz', security: 'Seguridad', events: 'Eventos en Vivo', guestbook: 'Libro de Visitas' };
             document.getElementById('header-title').textContent = titles[target];
 
             // Transición instántanea para evitar el lag de bloqueo
@@ -4636,7 +4636,7 @@
                 }
             });
 
-            const titles = { dashboard: 'Visión General', activity: 'Registro de Auditoría', analytics: 'Tráfico de Red', gallery: 'Galería de Arte', vocab: 'Textos Principales', music: 'Spotlight Music', radiodj: 'Spotlight Radio', voice: 'Canal de Voz', security: 'Seguridad', events: 'Eventos en Vivo', guestbook: 'Libro de Visitas' };
+            const titles = { dashboard: 'Visión General', activity: 'Registro de Auditoría', analytics: 'Tráfico de Red', gallery: 'Galería de Arte', vocab: 'Textos Principales', music: 'Spotlight Music', radiodj: 'Spotlight Music', voice: 'Canal de Voz', security: 'Seguridad', events: 'Eventos en Vivo', guestbook: 'Libro de Visitas' };
             const icons = { dashboard: 'ph-squares-four', activity: 'ph-clipboard-text', analytics: 'ph-chart-line-up', gallery: 'ph-image', vocab: 'ph-text-aa', music: 'ph-music-notes-simple', radiodj: 'ph-radio', voice: 'ph-microphone-stage', security: 'ph-shield-check', events: 'ph-sparkle', guestbook: 'ph-book-open-text' };
             const headerEl = document.getElementById('header-title');
             const headerIcon = document.getElementById('header-icon');

@@ -29,7 +29,7 @@ function startFirebaseRadio() {
             const expArtist = document.getElementById('spotlight-expanded-artist');
             const compactArtist = document.getElementById('spotlight-artist');
             
-            if (expTitle) expTitle.textContent = state.title || 'Spotlight Radio';
+            if (expTitle) expTitle.textContent = state.title || 'Spotlight Music';
             if (expArtist) expArtist.innerHTML = \`<span class="text-red-500 font-bold tracking-widest uppercase animate-pulse">🔴 EN VIVO: \${state.artist || 'Transmisión'}</span>\`;
             if (compactArtist) compactArtist.innerHTML = \`<span class="text-red-500 font-bold tracking-wider animate-pulse">🔴 \${state.artist || 'EN VIVO'}</span>\`;
 
