@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>28E Admin Panel</title>
-    <link rel="icon" type="image/png" href="/admin/rose_1f339.png">
+    <link rel="icon" type="image/png" href="./rose_1f339.png">
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- GSAP for smooth animations -->
@@ -2427,26 +2427,26 @@
         let ipLogs = [];
 
         // ADMIN BGM
-        const adminAudio = new Audio("/admin/admin panel resources/Admin Panel Vibe.mp3");
+        const adminAudio = new Audio("./admin panel resources/Admin Panel Vibe.mp3");
         adminAudio.loop = true;
         adminAudio.volume = 0.5;
         let isAdminAudioMuted = localStorage.getItem('yaire_admin_mute') === 'true';
         adminAudio.muted = isAdminAudioMuted;
 
         // SFX
-        const sfxLogin = new Audio("/admin/admin panel resources/celebration.wav");
-        const sfxIncorrect = new Audio("/admin/admin panel resources/incorrect.wav");
-        const sfxProgress = new Audio("/admin/admin panel resources/progress_loop.wav");
+        const sfxLogin = new Audio("./admin panel resources/celebration.wav");
+        const sfxIncorrect = new Audio("./admin panel resources/incorrect.wav");
+        const sfxProgress = new Audio("./admin panel resources/progress_loop.wav");
         sfxProgress.loop = true;
-        const sfxTyping = new Audio("/admin/admin panel resources/typing.wav");
-        const sfxFlyIn = new Audio("/admin/admin panel resources/flyin.wav");
-        const sfxSwitchOn = new Audio("/admin/admin panel resources/seleccionsi.wav");
-        const sfxSwitchOff = new Audio("/admin/admin panel resources/seleccionno.wav");
-        const sfxSuccess = new Audio("/admin/admin panel resources/dedicatoriacarta.mp3");
+        const sfxTyping = new Audio("./admin panel resources/typing.wav");
+        const sfxFlyIn = new Audio("./admin panel resources/flyin.wav");
+        const sfxSwitchOn = new Audio("./admin panel resources/seleccionsi.wav");
+        const sfxSwitchOff = new Audio("./admin panel resources/seleccionno.wav");
+        const sfxSuccess = new Audio("./admin panel resources/dedicatoriacarta.mp3");
         const sfxTab = new Audio("sounds/abrirtusecreto.mp3");
 
-        const sfxSliderAlto = new Audio("/admin/admin panel resources/slideralto.wav");
-        const sfxSliderBajo = new Audio("/admin/admin panel resources/sliderbajo.wav");
+        const sfxSliderAlto = new Audio("./admin panel resources/slideralto.wav");
+        const sfxSliderBajo = new Audio("./admin panel resources/sliderbajo.wav");
         sfxSliderAlto.volume = 0.8;
         sfxSliderBajo.volume = 0.8;
 
