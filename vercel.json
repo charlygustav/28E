@@ -11,14 +11,6 @@
   ],
   "rewrites": [
     {
-      "source": "/admin",
-      "destination": "/404.html"
-    },
-    {
-      "source": "/admin/:match*",
-      "destination": "/404.html"
-    },
-    {
       "source": "/vc-api/:path*",
       "destination": "https://voice.yaire.site/:path*"
     },
