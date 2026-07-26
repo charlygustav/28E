@@ -2,6 +2,13 @@
 <html lang="es" class="dark">
 
 <head>
+    <script>
+        if (window.location.hostname !== 'admin.yaire.site' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+            document.documentElement.innerHTML = '<head><title>404 Not Found</title><style>body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #000; color: #fff; margin: 0; }</style></head><body><h1>404 Not Found</h1></body>';
+            window.stop();
+            throw new Error('Access blocked');
+        }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>28E Admin Panel</title>
