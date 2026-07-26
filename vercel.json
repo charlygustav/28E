@@ -9,17 +9,15 @@
       ]
     }
   ],
-  "redirects": [
-    {
-      "source": "/admin/:match*",
-      "destination": "https://admin.yaire.site/"
-    },
+  "rewrites": [
     {
       "source": "/admin",
-      "destination": "https://admin.yaire.site/"
-    }
-  ],
-  "rewrites": [
+      "destination": "/404.html"
+    },
+    {
+      "source": "/admin/:match*",
+      "destination": "/404.html"
+    },
     {
       "source": "/vc-api/:path*",
       "destination": "https://voice.yaire.site/:path*"
