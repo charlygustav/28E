@@ -12,7 +12,7 @@
   "rewrites": [
     {
       "source": "/vc-api/:path*",
-      "destination": "https://two8e-signaling.onrender.com/:path*"
+      "destination": "https://voice.yaire.site/:path*"
     },
     {
       "source": "/yt-search/piped/:path*",

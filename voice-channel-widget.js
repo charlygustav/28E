@@ -5,7 +5,7 @@
   'use strict';
 
   // ── CONFIG (cambia SIGNALING_URL tras el deploy en Railway) ──────────────
-  const SIGNALING_URL = 'https://two8e-signaling.onrender.com';
+  const SIGNALING_URL = 'https://voice.yaire.site';
 
   // ── INTERNATIONALIZATION ──────────────────────────────────────────────────
   const VC_I18N = {

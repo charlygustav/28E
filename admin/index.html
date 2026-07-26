@@ -4676,7 +4676,7 @@
 
         // ── VOICE CHANNEL STATUS ─────────────────────────────────────────────
         (function vcStatus() {
-            const API = 'https://two8e-signaling.onrender.com/api/status';
+            const API = 'https://voice.yaire.site/api/status';
             const dot = document.getElementById('vc-live-dot');
             const list = document.getElementById('vc-user-list');
             const cnt = document.getElementById('vc-user-count');
@@ -4719,7 +4719,7 @@
                     if (!r1.ok) throw new Error("Error al guardar en Firebase RTDB");
 
                     // 2. Update signaling server
-                    const r2 = await fetch('https://two8e-signaling.onrender.com/api/password', {
+                    const r2 = await fetch('https://voice.yaire.site/api/password', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ password, adminKey: ADMIN_KEY })
@@ -4751,7 +4751,7 @@
             window.kickUser = async function (userId, name) {
                 if (!confirm(`¿Expulsar a ${name} del canal?`)) return;
                 try {
-                    const r = await fetch('https://two8e-signaling.onrender.com/api/kick', {
+                    const r = await fetch('https://voice.yaire.site/api/kick', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ userId, adminKey: ADMIN_KEY })
