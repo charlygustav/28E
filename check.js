@@ -7357,6 +7357,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/fireba
         // --- AUTH ---
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
         const authToggle = document.getElementById('auth-toggle');
         const authIcon = document.getElementById('auth-icon');
         const authAvatar = document.getElementById('auth-avatar');

@@ -18526,6 +18526,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // --- AUTH ---
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
         const authToggle = document.getElementById('auth-toggle');
         const authIcon = document.getElementById('auth-icon');
         const authAvatar = document.getElementById('auth-avatar');
