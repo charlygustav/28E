@@ -259,12 +259,10 @@ const _debugMode = new URLSearchParams(window.location.search).get('debug') === 
             var _t = setTimeout(function () {
                 var ld = document.getElementById('loader');
                 if (ld && ld.style.display !== 'none' && !document.body.classList.contains('page-ready')) {
-                    ld.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
                     ld.style.opacity = '0';
-                    ld.style.transform = 'scale(1.06)';
-                    setTimeout(function () { ld.style.display = 'none'; document.body.classList.add('page-ready'); }, 650);
+                    setTimeout(function () { ld.style.display = 'none'; document.body.classList.add('page-ready'); }, 400);
                 }
-            }, 2500);
+            }, 1500);
             window.__cancelLoaderSafety = function () { clearTimeout(_t); };
         })();
 (function() {
@@ -2702,303 +2700,39 @@ const dictionary = {
 
         // ══════════ INICIO PRINCIPAL ══════════
         let loaderEscondido = false;
-        let _loaderMinElapsed = false; // Blocks exit until min time passes
 
         logDebug('Script loader principal ejecutando');
 
-        // ── Real Resource Loader ──────────────────────────────────────────
+        // ── Fast Loader ──────────────────────────────────────────
         document.addEventListener('DOMContentLoaded', () => {
             logDebug('DOMContentLoaded disparado');
 
-            const percentText = document.getElementById('loader-percent');
-            const progressBar = document.getElementById('loader-progress');
-            const loaderMsg = document.getElementById('loader-message');
             const loaderEl = document.getElementById('loader');
-            const ringFill = document.getElementById('loader-ring-fill');
-            const ringCirc = 653.45;
 
-            // Entrance is handled purely by CSS animations — no GSAP dependency
+            // ── Fast exit — fade out immediately ──
+            if (window.__cancelLoaderSafety) window.__cancelLoaderSafety();
+            loaderEscondido = true;
 
-            // Fake counter 0→90 over ~1.5s so progress feels alive
-            let _ldFakeVal = 0;
-            const _ldFakeInterval = setInterval(() => {
-                if (_ldFakeVal < 90) {
-                    _ldFakeVal = Math.min(90, _ldFakeVal + 5);
-                    if (percentText && !loaderEscondido) percentText.textContent = Math.floor(_ldFakeVal) + '%';
-                    if (ringFill) ringFill.style.strokeDashoffset = ringCirc * (1 - _ldFakeVal / 100);
-                } else {
-                    clearInterval(_ldFakeInterval);
-                }
-            }, 50);
-
-            // ── Messages ──
-            const _ld = (typeof dictionary !== 'undefined' && dictionary[typeof currentLang !== 'undefined' ? currentLang : 'es'])
-                ? dictionary[typeof currentLang !== 'undefined' ? currentLang : 'es'] : {};
-            const loaderMessages = [
-                _ld.loader_msg1 || 'Preparando nuestro universo...',
-                _ld.loader_msg2 || 'Cargando recuerdos...',
-                _ld.loader_msg3 || 'Pintando tulipanes...',
-                _ld.loader_msg4 || 'Conectando corazones...',
-                _ld.loader_msg5 || 'Casi listo...'
-            ];
-            let msgIndex = 0;
-            let loaderMsgInterval = null;
-            if (loaderMsg) {
-                loaderMsg.style.transition = 'none';
-                loaderMsg.style.opacity = '0';
-                loaderMsg.style.transform = 'translateY(10px)';
-                loaderMsg.textContent = loaderMessages[0];
-                requestAnimationFrame(() => requestAnimationFrame(() => {
-                    loaderMsg.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
-                    loaderMsg.style.opacity = '1';
-                    loaderMsg.style.transform = 'translateY(0)';
-                }));
+            if (loaderEl) {
+                loaderEl.style.opacity = '0';
                 setTimeout(() => {
-                    loaderMsgInterval = setInterval(() => {
-                        msgIndex = (msgIndex + 1) % loaderMessages.length;
-                        loaderMsg.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-                        loaderMsg.style.opacity = '0';
-                        loaderMsg.style.transform = 'translateY(6px)';
-                        setTimeout(() => {
-                            loaderMsg.textContent = loaderMessages[msgIndex];
-                            loaderMsg.style.opacity = '1';
-                            loaderMsg.style.transform = 'translateY(0)';
-                        }, 200);
-                    }, 1000);
-                }, 1200);
+                    loaderEl.style.display = 'none';
+                    document.body.classList.add('page-ready');
+                }, 350);
+            } else {
+                document.body.classList.add('page-ready');
             }
 
-            // ── Real resources to track ──
-            // Each entry has a weight (importance) and a promise that resolves when done.
-            const resources = [];
-            let totalWeight = 0;
-            let loadedWeight = 0;
-
-            function addResource(promise, weight = 1) {
-                totalWeight += weight;
-                resources.push(promise.then(() => {
-                    loadedWeight += weight;
-                    setProgress(Math.round((loadedWeight / totalWeight) * 100));
-                }).catch(() => {
-                    loadedWeight += weight; // count failed ones as loaded so bar doesn't stall
-                    setProgress(Math.round((loadedWeight / totalWeight) * 100));
-                }));
-            }
-
-            // Helper: load an image as a Promise
-            function loadImage(url) {
-                return new Promise(resolve => {
-                    const img = new Image();
-                    img.onload = img.onerror = resolve;
-                    img.src = url;
-                });
-            }
-
-            // Helper: wait for a <script> tag that's already in the DOM to finish loading
-            function waitForScript(src) {
-                return new Promise(resolve => {
-                    const existing = document.querySelector(`script[src="${src}"]`);
-                    if (!existing) { resolve(); return; }
-                    if (existing.dataset.loaded) { resolve(); return; }
-                    existing.addEventListener('load', resolve, { once: true });
-                    existing.addEventListener('error', resolve, { once: true });
-                    // If already loaded (readyState), resolve immediately
-                    if (existing.readyState === 'complete' || existing.readyState === undefined && existing.src) {
-                        setTimeout(resolve, 0);
-                    }
-                });
-            }
-
-            addResource(document.fonts.ready, 2);
-
-            // Absolute safety net — 800ms max after DOMContentLoaded (prevents font hang)
-            const fallback = setTimeout(() => {
-                if (!loaderEscondido) {
-                    console.warn('Loader: tiempo límite alcanzado. Forzando entrada.');
-                    setProgress(100);
-                }
-            }, 800);
-
-            // ── Progress setter ──
-            function setProgress(pct) {
-                pct = Math.min(100, Math.max(0, pct));
-
-                // Update text + ring
-                if (percentText) percentText.textContent = Math.floor(pct) + '%';
-                if (ringFill) ringFill.style.strokeDashoffset = ringCirc * (1 - pct / 100);
-                if (progressBar) progressBar.style.width = pct + '%';
-
-                if (pct >= 100 && !loaderEscondido && _loaderMinElapsed) {
-                    clearTimeout(fallback);
-                    if (window.__cancelLoaderSafety) window.__cancelLoaderSafety();
-                    if (loaderMsgInterval) clearInterval(loaderMsgInterval);
-                    loaderEscondido = true;
-
-                    const grads = document.getElementById('loader-gradients');
-                    const heroSection = document.getElementById('hero');
-
-                    if (false) {
-                        // ── EXIT GSAP — Premium Minimal Transition ───────
-                        loaderEl.style.willChange = 'opacity';
-
-                        // Let the user see 100% before exiting
-                        setTimeout(() => {
-                            requestAnimationFrame(() => {
-                                const exitTl = gsap.timeline({ defaults: { force3D: true } });
-                                exitTl.addLabel('start');
-
-                                const customLoader = document.getElementById('custom-loader-wrapper');
-                                const loaderLogo = document.getElementById('loader-logo');
-                                const letters = customLoader ? gsap.utils.toArray(customLoader.querySelectorAll('.loader-letter')) : [];
-                                const circleBg = customLoader ? customLoader.querySelector('.loader-circle-bg') : null;
-
-                                const navEl = document.querySelector('nav');
-
-                                // ── 1. Set initial hidden states immediately at 'start' ──
-                                // Symmetrical landing: page elements are hidden scaled down slightly (scale: 0.94)
-                                // and the fixed navbar is shifted up, preparing for a highly cushioned zoom-in!
-                                if (heroSection) {
-                                    document.querySelectorAll('.hero-anim').forEach(el => {
-                                        el.style.transition = 'none';
-                                        el.style.filter = '';
-                                        el.style.willChange = 'transform, opacity';
-                                    });
-                                    exitTl.set('.hero-anim', {
-                                        opacity: 0,
-                                        scale: 0.94,
-                                        y: 0
-                                    }, 'start');
-                                }
-                                if (navEl) {
-                                    navEl.style.willChange = 'transform, opacity';
-                                    exitTl.set(navEl, {
-                                        opacity: 0,
-                                        y: -20
-                                    }, 'start');
-                                }
-
-                                // ── 2. Foreground Elements Zoom-Through (Cinematic Warp Passage) ──
-                                // Symmetrical depth: the center logo and glowing ring scale UP dramatically
-                                // towards the camera, fading out as if the user is zooming right through them!
-                                const exitElements = [];
-                                if (loaderLogo) exitElements.push(loaderLogo);
-                                if (customLoader) exitElements.push(customLoader);
-
-                                if (exitElements.length) {
-                                    exitTl.to(exitElements, {
-                                        opacity: 0,
-                                        scale: 1.45,
-                                        duration: 0.8,
-                                        ease: 'power3.out',
-                                        stagger: 0.04
-                                    }, 'start');
-                                }
-
-                                const loaderFooter = document.getElementById('loader-footer');
-                                if (loaderFooter) {
-                                    exitTl.to(loaderFooter, {
-                                        opacity: 0,
-                                        y: 20,
-                                        duration: 0.65,
-                                        ease: 'power2.out'
-                                    }, 'start');
-                                }
-
-                                // ── 3. Main Background Scale & Dissolve (Guaranteed Zero Cuts) ──
-                                // To prevent any layout stutters or engine repaints, we avoid clip-paths and instead
-                                // use 100% composite-only scale-up and opacity fade on the main loader container.
-                                // The background expands softly (scale: 1.1) and fades out at a solid, buttery 60+ FPS.
-                                exitTl.to(loaderEl, {
-                                    scale: 1.1,
-                                    opacity: 0,
-                                    duration: 0.95,
-                                    ease: 'power3.inOut'
-                                }, 'start')
-                                    .set(loaderEl, { display: 'none' }) // Ensure it is hidden from screen and pointer interactions
-                                    .call(() => {
-                                        document.body.classList.add('page-ready');
-                                    });
-
-                                // ── 4. Main Page Zoom-In Reveal (Exquisite Cushioning) ──
-                                // As the user zooms past the loader, the landing page elements scale up gently
-                                // to their final size with premium deceleration easing.
-                                if (heroSection) {
-                                    exitTl.to('.hero-anim', {
-                                        opacity: 1,
-                                        scale: 1,
-                                        y: 0,
-                                        duration: 1.15,
-                                        stagger: 0.07,
-                                        ease: 'power3.out',
-                                        force3D: true,
-                                        onComplete: () => {
-                                            document.querySelectorAll('.hero-anim').forEach(el => {
-                                                el.style.willChange = 'auto';
-                                            });
-                                        }
-                                    }, 'start+=0.35');
-                                }
-                                if (navEl) {
-                                    exitTl.to(navEl, {
-                                        opacity: 1,
-                                        y: 0,
-                                        duration: 0.95,
-                                        ease: 'power3.out',
-                                        force3D: true,
-                                        onComplete: () => {
-                                            navEl.style.willChange = 'auto';
-                                        }
-                                    }, 'start+=0.4');
-                                }
-
-                                exitTl.call(() => {
-                                    initScrollSpy();
-                                    const top5Section = document.getElementById('top5yaire');
-                                    if (top5Section) {
-                                        const barObs = new IntersectionObserver((entries) => {
-                                            entries.forEach(e => { if (e.isIntersecting) { animateWordBars(); barObs.disconnect(); } });
-                                        }, { threshold: 0.3 });
-                                        barObs.observe(top5Section);
-                                    }
-                                }, null, 'start+=1.35');
-                            });
-                        }, 400); // end rAF + 400ms delay to show 100%
-
-                    } else {
-                        // Fallback sin GSAP
-                        setTimeout(() => {
-                            if (loaderEl) {
-                                loaderEl.classList.add('loader-hidden');
-                                setTimeout(() => { loaderEl.style.display = 'none'; }, 700);
-                                setTimeout(() => { document.body.classList.add('page-ready'); }, 750);
-                            }
-                            if (heroSection) {
-                                heroSection.classList.remove('hero-enter-ready');
-                                heroSection.classList.add('hero-enter-active');
-                            }
-                            initScrollSpy();
-                            const top5Section = document.getElementById('top5yaire');
-                            if (top5Section) {
-                                const barObs = new IntersectionObserver((entries) => {
-                                    entries.forEach(e => { if (e.isIntersecting) { animateWordBars(); barObs.disconnect(); } });
-                                }, { threshold: 0.3 });
-                                barObs.observe(top5Section);
-                            }
-                        }, 700);
-                    }
-                }
-            }
-
-            // Kick off — wait for all tracked resources
-            logDebug('Iniciando fake loader interval');
-            // Min 1.5s - blocks exit until elapsed, then triggers final setProgress(100)
             setTimeout(() => {
-                logDebug('Min elapsed timeout (800ms) finalizado');
-                _loaderMinElapsed = true;
-                setProgress(100); // now allowed to exit
-            }, 800);
-            // Resources still update the bar visually (but can't exit before 1.5s)
-            Promise.all(resources).then(() => logDebug('Promise.all(resources) finalizado')).catch(() => { logDebug('Promise.all error'); });
+                initScrollSpy();
+                const top5Section = document.getElementById('top5yaire');
+                if (top5Section) {
+                    const barObs = new IntersectionObserver((entries) => {
+                        entries.forEach(e => { if (e.isIntersecting) { animateWordBars(); barObs.disconnect(); } });
+                    }, { threshold: 0.3 });
+                    barObs.observe(top5Section);
+                }
+            }, 500);
 
             // 2. Inicialización Básica
             logDebug('Llamando a initTheme()');

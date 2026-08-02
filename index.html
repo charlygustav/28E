@@ -3602,44 +3602,67 @@
         </div>
     </div>
 
-    <!-- ═══ LOADER (MINIMALIST GLASSMORPHISM) ═══ -->
-    <div id="loader" class="fixed inset-0 z-[500] flex flex-col items-center justify-center overflow-hidden bg-black/40 backdrop-blur-xl transition-opacity duration-700">
-        <!-- Background subtle glow -->
-        <div class="absolute inset-0 pointer-events-none bg-gradient-to-tr from-pink-500/10 via-transparent to-amber-500/10 mix-blend-screen"></div>
-        
-        <div class="relative z-10 flex flex-col items-center justify-center w-full max-w-sm px-8">
-            <!-- Animated Logo / Text -->
-            <div class="overflow-hidden mb-8">
-                <h1 id="loader-logo-text" class="text-white font-black text-6xl tracking-tighter" style="font-family: 'Inter', sans-serif; opacity: 0; transform: translateY(40px);">28E</h1>
+    <!-- ═══ LOADER (SKELETON SCREEN) ═══ -->
+    <div id="loader" style="position:fixed;inset:0;z-index:500;background:#09090b;transition:opacity .4s ease-out;pointer-events:all;overflow:hidden;">
+        <style>
+            @keyframes skeletonShimmer {
+                0% { transform: translateX(-100%); }
+                100% { transform: translateX(100%); }
+            }
+            .sk-bone {
+                background: #18181b;
+                border-radius: 8px;
+                position: relative;
+                overflow: hidden;
+            }
+            .sk-bone::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.04) 40%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.04) 60%, transparent 100%);
+                animation: skeletonShimmer 1.8s ease-in-out infinite;
+            }
+            .sk-circle { border-radius: 50%; }
+            .sk-pill { border-radius: 9999px; }
+        </style>
+        <!-- Fake Nav Bar -->
+        <div style="padding:24px 32px;display:flex;align-items:center;justify-content:space-between;max-width:900px;margin:0 auto;">
+            <div style="display:flex;align-items:center;gap:16px;">
+                <div class="sk-bone sk-circle" style="width:32px;height:32px;flex-shrink:0;"></div>
+                <div class="sk-bone sk-pill" style="width:48px;height:18px;"></div>
             </div>
-            
-            <!-- Progress Container -->
-            <div class="w-full flex flex-col gap-3" id="loader-progress-container" style="opacity: 0;">
-                <div class="flex justify-between items-center text-[10px] font-bold text-white/50 tracking-widest uppercase">
-                    <span id="loader-message">Iniciando entorno...</span>
-                    <span id="loader-percent" class="text-white/80 font-mono">0%</span>
-                </div>
-                <!-- Glassmorphism Progress Track -->
-                <div class="h-[2px] w-full bg-white/10 rounded-full overflow-hidden relative">
-                    <!-- Progress Fill -->
-                    <div id="loader-progress" class="absolute top-0 left-0 h-full w-0 bg-gradient-to-r from-amber-500 to-pink-500 rounded-full shadow-[0_0_10px_rgba(236,72,153,0.5)]"></div>
-                </div>
+            <div class="sk-bone sk-circle" style="width:32px;height:32px;flex-shrink:0;"></div>
+        </div>
+        <!-- Hero Skeleton -->
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 24px 40px;max-width:700px;margin:0 auto;gap:28px;">
+            <!-- Badge -->
+            <div class="sk-bone sk-pill" style="width:200px;height:32px;"></div>
+            <!-- Title line 1 -->
+            <div class="sk-bone" style="width:85%;max-width:480px;height:40px;border-radius:10px;"></div>
+            <!-- Title line 2 -->
+            <div class="sk-bone" style="width:55%;max-width:300px;height:40px;border-radius:10px;"></div>
+            <!-- Subtitle lines -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;margin-top:8px;">
+                <div class="sk-bone" style="width:90%;max-width:560px;height:14px;"></div>
+                <div class="sk-bone" style="width:80%;max-width:500px;height:14px;"></div>
+                <div class="sk-bone" style="width:65%;max-width:400px;height:14px;"></div>
+            </div>
+        </div>
+        <!-- Section divider -->
+        <div style="max-width:700px;margin:32px auto 0;padding:0 24px;">
+            <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:24px;">
+                <div class="sk-bone" style="width:32px;height:1px;"></div>
+                <div class="sk-bone sk-pill" style="width:100px;height:12px;"></div>
+                <div class="sk-bone" style="width:32px;height:1px;"></div>
+            </div>
+            <!-- Quote block -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+                <div class="sk-bone" style="width:75%;max-width:420px;height:20px;border-radius:6px;"></div>
+                <div class="sk-bone" style="width:60%;max-width:340px;height:20px;border-radius:6px;"></div>
+                <div class="sk-bone sk-pill" style="width:100px;height:12px;margin-top:8px;"></div>
             </div>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (typeof gsap !== 'undefined') {
-                gsap.to('#loader-logo-text', { opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: 0.2 });
-                gsap.to('#loader-progress-container', { opacity: 1, duration: 1, ease: 'power2.out', delay: 0.5 });
-            } else {
-                const logo = document.getElementById('loader-logo-text');
-                const prog = document.getElementById('loader-progress-container');
-                if(logo) { logo.style.opacity = '1'; logo.style.transform = 'translateY(0)'; }
-                if(prog) { prog.style.opacity = '1'; }
-            }
-        });
-    </script>
     <!-- ═══ 🎆 CELEBRATION OVERLAY — 6 MONTH ANNIVERSARY ═══ -->
     <div id="celebration-overlay" class="fixed inset-0 z-[310] flex flex-col items-center justify-center overflow-hidden" style="background: radial-gradient(ellipse at center, #18181b 0%, #000 100%); display: none; opacity: 0;">
         <canvas id="celebration-canvas" class="absolute inset-0 w-full h-full pointer-events-none" style="z-index:1;"></canvas>
@@ -13257,217 +13280,64 @@
 
         // ══════════ INICIO PRINCIPAL ══════════
         let loaderEscondido = false;
-        let _loaderMinElapsed = false; // Blocks exit until min time passes
 
         logDebug('Script loader principal ejecutando');
 
-        // ── Real Resource Loader ──────────────────────────────────────────
+        // ── Fast Skeleton Loader ─────────────────────────────────────
         document.addEventListener('DOMContentLoaded', () => {
             logDebug('DOMContentLoaded disparado');
 
-            const percentText = document.getElementById('loader-percent');
-            const progressBar = document.getElementById('loader-progress');
-            const loaderMsg = document.getElementById('loader-message');
             const loaderEl = document.getElementById('loader');
-            const ringFill = document.getElementById('loader-ring-fill');
-            const ringCirc = 653.45;
 
-            // Entrance is handled purely by CSS animations — no GSAP dependency
+            // ── Fast exit — fade out the skeleton ──
+            loaderEscondido = true;
 
-            // Fake counter 0→90 over ~3s so progress feels alive
-            let _ldFakeVal = 0;
-            const _ldFakeInterval = setInterval(() => {
-                if (_ldFakeVal < 90) {
-                    _ldFakeVal = Math.min(90, _ldFakeVal + 1);
-                    if (percentText && !loaderEscondido) percentText.textContent = Math.floor(_ldFakeVal) + '%';
-                    if (ringFill) ringFill.style.strokeDashoffset = ringCirc * (1 - _ldFakeVal / 100);
-                } else {
-                    clearInterval(_ldFakeInterval);
-                }
-            }, 35);
-
-            // ── Messages ──
-            const _ld = (typeof dictionary !== 'undefined' && dictionary[typeof currentLang !== 'undefined' ? currentLang : 'es'])
-                ? dictionary[typeof currentLang !== 'undefined' ? currentLang : 'es'] : {};
-            const loaderMessages = [
-                _ld.loader_msg1 || 'Sincronizando 182 días de recuerdos...',
-                _ld.loader_msg2 || 'Afinando detalles del Capítulo VI...',
-                _ld.loader_msg3 || 'Desbloqueando el último secreto...',
-                _ld.loader_msg4 || 'Preparando el juramento...',
-                _ld.loader_msg5 || 'Casi listo...'
-            ];
-            let msgIndex = 0;
-            let loaderMsgInterval = null;
-            if (loaderMsg) {
-                loaderMsg.style.transition = 'none';
-                loaderMsg.style.opacity = '0';
-                loaderMsg.style.transform = 'translateY(10px)';
-                loaderMsg.textContent = loaderMessages[0];
-                requestAnimationFrame(() => requestAnimationFrame(() => {
-                    loaderMsg.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
-                    loaderMsg.style.opacity = '1';
-                    loaderMsg.style.transform = 'translateY(0)';
-                }));
+            function hideLoader() {
+                if (!loaderEl) { document.body.classList.add('page-ready'); return; }
+                loaderEl.style.opacity = '0';
                 setTimeout(() => {
-                    loaderMsgInterval = setInterval(() => {
-                        msgIndex = (msgIndex + 1) % loaderMessages.length;
-                        loaderMsg.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-                        loaderMsg.style.opacity = '0';
-                        loaderMsg.style.transform = 'translateY(6px)';
-                        setTimeout(() => {
-                            loaderMsg.textContent = loaderMessages[msgIndex];
-                            loaderMsg.style.opacity = '1';
-                            loaderMsg.style.transform = 'translateY(0)';
-                        }, 200);
-                    }, 1000);
-                }, 1200);
+                    loaderEl.style.display = 'none';
+                    document.body.classList.add('page-ready');
+                }, 400);
             }
 
-            // ── Real resources to track ──
-            // Each entry has a weight (importance) and a promise that resolves when done.
-            const resources = [];
-            let totalWeight = 0;
-            let loadedWeight = 0;
-
-            function addResource(promise, weight = 1) {
-                totalWeight += weight;
-                resources.push(promise.then(() => {
-                    loadedWeight += weight;
-                    setProgress(Math.round((loadedWeight / totalWeight) * 100));
-                }).catch(() => {
-                    loadedWeight += weight; // count failed ones as loaded so bar doesn't stall
-                    setProgress(Math.round((loadedWeight / totalWeight) * 100));
-                }));
-            }
-
-            // Helper: load an image as a Promise
-            function loadImage(url) {
-                return new Promise(resolve => {
-                    const img = new Image();
-                    img.onload = img.onerror = resolve;
-                    img.src = url;
-                });
-            }
-
-            // Helper: wait for a <script> tag that's already in the DOM to finish loading
-            function waitForScript(src) {
-                return new Promise(resolve => {
-                    const existing = document.querySelector(`script[src="${src}"]`);
-                    if (!existing) { resolve(); return; }
-                    if (existing.dataset.loaded) { resolve(); return; }
-                    existing.addEventListener('load', resolve, { once: true });
-                    existing.addEventListener('error', resolve, { once: true });
-                    // If already loaded (readyState), resolve immediately
-                    if (existing.readyState === 'complete' || existing.readyState === undefined && existing.src) {
-                        setTimeout(resolve, 0);
-                    }
-                });
-            }
-
-            addResource(document.fonts.ready, 2);
-
-            // Absolute safety net — 3.5s max after DOMContentLoaded
-            const fallback = setTimeout(() => {
-                if (!loaderEscondido) {
-                    console.warn('Loader: tiempo límite alcanzado. Forzando entrada.');
-                    setProgress(100);
+            // If GSAP loaded, do a slightly nicer reveal of hero + nav
+            if (typeof gsap !== 'undefined') {
+                const heroSection = document.getElementById('hero');
+                const navEl = document.querySelector('nav');
+                if (heroSection) {
+                    document.querySelectorAll('.hero-anim').forEach(el => {
+                        el.style.transition = 'none';
+                        el.style.willChange = 'transform, opacity';
+                    });
+                    gsap.set('.hero-anim', { opacity: 0, y: 12 });
                 }
-            }, 3500);
+                if (navEl) { gsap.set(navEl, { opacity: 0, y: -10 }); }
 
-            // ── Progress setter ──
-            function setProgress(pct) {
-                pct = Math.min(100, Math.max(0, pct));
-                const percentText = document.getElementById('loader-percent');
-                const progressBar = document.getElementById('loader-progress');
-                const loaderEl = document.getElementById('loader');
+                hideLoader();
 
-                if (percentText) percentText.textContent = Math.floor(pct) + '%';
-                if (progressBar) progressBar.style.width = pct + '%';
-
-                if (pct >= 100 && !loaderEscondido && _loaderMinElapsed) {
-                    clearTimeout(fallback);
-                    if (window.__cancelLoaderSafety) window.__cancelLoaderSafety();
-                    if (loaderMsgInterval) clearInterval(loaderMsgInterval);
-                    loaderEscondido = true;
-
-                    const heroSection = document.getElementById('hero');
-
-                    if (typeof gsap !== 'undefined') {
-                        loaderEl.style.willChange = 'opacity';
-                        setTimeout(() => {
-                            requestAnimationFrame(() => {
-                                const exitTl = gsap.timeline({ defaults: { force3D: true } });
-                                exitTl.addLabel('start');
-
-                                const navEl = document.querySelector('nav');
-                                const loaderLogo = document.getElementById('loader-logo-text');
-                                const loaderProgressContainer = document.getElementById('loader-progress-container');
-
-                                if (heroSection) {
-                                    document.querySelectorAll('.hero-anim').forEach(el => {
-                                        el.style.transition = 'none';
-                                        el.style.filter = '';
-                                        el.style.willChange = 'transform, opacity';
-                                    });
-                                    exitTl.set('.hero-anim', { opacity: 0, scale: 0.98, y: 15 }, 'start');
-                                }
-                                if (navEl) {
-                                    navEl.style.willChange = 'transform, opacity';
-                                    exitTl.set(navEl, { opacity: 0, y: -20 }, 'start');
-                                }
-
-                                exitTl.to([loaderProgressContainer, loaderLogo], { opacity: 0, y: -20, duration: 0.6, stagger: 0.1, ease: 'power3.in' }, 'start');
-                                exitTl.to(loaderEl, { opacity: 0, duration: 0.8, ease: 'power2.inOut' }, 'start+=0.4').set(loaderEl, { display: 'none' }).call(() => { document.body.classList.add('page-ready'); });
-
-                                if (heroSection) {
-                                    exitTl.to('.hero-anim', { opacity: 1, scale: 1, y: 0, duration: 1.2, stagger: 0.08, ease: 'power3.out', force3D: true, onComplete: () => document.querySelectorAll('.hero-anim').forEach(el => el.style.willChange = 'auto') }, 'start+=0.8');
-                                }
-                                if (navEl) {
-                                    exitTl.to(navEl, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', force3D: true, onComplete: () => navEl.style.willChange = 'auto' }, 'start+=0.9');
-                                }
-
-                                exitTl.call(() => {
-                                    initScrollSpy();
-                                    const top5Section = document.getElementById('top5yaire');
-                                    if (top5Section) {
-                                        const barObs = new IntersectionObserver((entries) => {
-                                            entries.forEach(e => { if (e.isIntersecting) { animateWordBars(); barObs.disconnect(); } });
-                                        }, { threshold: 0.3 });
-                                        barObs.observe(top5Section);
-                                    }
-                                }, null, 'start+=1.3');
-                            });
-                        }, 400);
-                    } else {
-                        setTimeout(() => {
-                            if (loaderEl) {
-                                loaderEl.style.opacity = '0';
-                                setTimeout(() => { loaderEl.style.display = 'none'; }, 700);
-                                setTimeout(() => { document.body.classList.add('page-ready'); }, 750);
-                            }
-                            if (heroSection) heroSection.classList.add('hero-enter-active');
-                            initScrollSpy();
-                            const top5Section = document.getElementById('top5yaire');
-                            if (top5Section) {
-                                const barObs = new IntersectionObserver((entries) => {
-                                    entries.forEach(e => { if (e.isIntersecting) { animateWordBars(); barObs.disconnect(); } });
-                                }, { threshold: 0.3 });
-                                barObs.observe(top5Section);
-                            }
-                        }, 700);
+                setTimeout(() => {
+                    if (heroSection) {
+                        gsap.to('.hero-anim', { opacity: 1, y: 0, duration: 0.8, stagger: 0.06, ease: 'power3.out', onComplete: () => document.querySelectorAll('.hero-anim').forEach(el => el.style.willChange = 'auto') });
                     }
-                }
+                    if (navEl) {
+                        gsap.to(navEl, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', onComplete: () => navEl.style.willChange = 'auto' });
+                    }
+                }, 100);
+            } else {
+                hideLoader();
             }
-            // Kick off — wait for all tracked resources
-            logDebug('Iniciando fake loader interval');
-            // Min 3.5s - blocks exit until elapsed, then triggers final setProgress(100)
+
             setTimeout(() => {
-                logDebug('Min elapsed timeout (3.5s) finalizado');
-                _loaderMinElapsed = true;
-                setProgress(100); // now allowed to exit
-            }, 3500);
-            // Resources still update the bar visually (but can't exit before 1.5s)
-            Promise.all(resources).then(() => logDebug('Promise.all(resources) finalizado')).catch(() => { logDebug('Promise.all error'); });
+                initScrollSpy();
+                const top5Section = document.getElementById('top5yaire');
+                if (top5Section) {
+                    const barObs = new IntersectionObserver((entries) => {
+                        entries.forEach(e => { if (e.isIntersecting) { animateWordBars(); barObs.disconnect(); } });
+                    }, { threshold: 0.3 });
+                    barObs.observe(top5Section);
+                }
+            }, 600);
 
             // 2. Inicialización Básica
             logDebug('Llamando a initTheme()');
