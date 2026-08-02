@@ -24,7 +24,7 @@
     },
     {
       "source": "/__/:path*",
-      "destination": "https://yaire-591ca.firebaseapp.com/__/:path*"
+      "destination": "https://yairealvarado.firebaseapp.com/__/:path*"
     }
   ]
 }
