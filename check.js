@@ -7268,7 +7268,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/fireba
 
         const firebaseConfig = {
             apiKey: "AIzaSyDFkuktrXnsV9-jg2bv5dpJQRR-he8PT3g",
-            authDomain: "yaire.site",
+            authDomain: window.location.hostname,
             databaseURL: "https://yaire-591ca-default-rtdb.firebaseio.com",
             projectId: "yaire-591ca",
             storageBucket: "yaire-591ca.firebasestorage.app",
