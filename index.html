@@ -34,10 +34,10 @@
 
                 const overlay = document.createElement('div');
                 overlay.id = 'maintenance-countdown-overlay';
-                overlay.className = 'fixed inset-0 z-[999999] flex items-center justify-center bg-black/60 md:backdrop-blur-md opacity-0';
+                overlay.className = 'fixed inset-0 z-[999999] flex items-center justify-center bg-black/60 backdrop-blur-md opacity-0';
 
                 overlay.innerHTML = `
-                    <div class="relative p-8 rounded-2xl bg-zinc-900/80 border border-white/10 text-center max-w-sm w-full mx-4 shadow-md md:shadow-2xl overflow-hidden md:backdrop-blur-lg transform scale-95 opacity-0" id="maintenance-card" style="transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease;">
+                    <div class="relative p-8 rounded-2xl bg-zinc-900/80 border border-white/10 text-center max-w-sm w-full mx-4 shadow-2xl overflow-hidden backdrop-blur-lg transform scale-95 opacity-0" id="maintenance-card" style="transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease;">
                         <!-- Orbes brillantes decorativos -->
                         <div class="absolute -top-10 -right-10 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
                         <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-pink-500/10 rounded-full blur-2xl pointer-events-none"></div>
@@ -382,8 +382,8 @@
             -webkit-backdrop-filter: none !important;
         }
 
-        html.perf-lite .drop-shadow-md md:shadow-xl,
-        html.perf-lite .drop-shadow-md md:shadow-2xl {
+        html.perf-lite .drop-shadow-xl,
+        html.perf-lite .drop-shadow-2xl {
             filter: none !important;
         }
 
@@ -2092,11 +2092,11 @@
     <!-- 0. Credits Modal -->
     <!-- 0. Credits Modal -->
     <div id="credits-modal"
-        class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-zinc-950/80 md:backdrop-blur-xl transform-gpu transition-opacity opacity-0"
+        class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-zinc-950/80 backdrop-blur-xl transform-gpu transition-opacity opacity-0"
         onclick="if(event.target === this) closeModal('credits-modal', 'credits-content')">
 
         <!-- Contenedor Principal con Glassmorphism -->
-        <div class="relative w-full max-w-4xl mx-4 max-h-[85vh] flex flex-col bg-zinc-950/60 border border-white/[0.07] rounded-[1.25rem] shadow-md md:shadow-2xl shadow-brand-500/10 overflow-hidden transform scale-95 transition-transform duration-300 md:backdrop-blur-2xl"
+        <div class="relative w-full max-w-4xl mx-4 max-h-[85vh] flex flex-col bg-zinc-950/60 border border-white/[0.07] rounded-[1.25rem] shadow-2xl shadow-brand-500/10 overflow-hidden transform scale-95 transition-transform duration-300 backdrop-blur-2xl"
             id="credits-content">
 
             <!-- Orbes de fondo decorativos -->
@@ -2485,9 +2485,9 @@
 
     <!-- 1. Media Redirect Modal -->
     <div id="redirect-modal"
-        class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-zinc-900/60 md:backdrop-blur-sm transform-gpu transition-opacity opacity-0"
+        class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-zinc-900/60 backdrop-blur-sm transform-gpu transition-opacity opacity-0"
         onclick="if(event.target === this) closeModal('redirect-modal', 'redirect-content')">
-        <div class="bg-white dark:bg-zinc-900 p-8 rounded-3xl shadow-md md:shadow-2xl border border-zinc-200 dark:border-zinc-800 max-w-md w-full mx-4 transform scale-95 transition-transform duration-300"
+        <div class="bg-white dark:bg-zinc-900 p-8 rounded-3xl shadow-2xl border border-zinc-200 dark:border-zinc-800 max-w-md w-full mx-4 transform scale-95 transition-transform duration-300"
             id="redirect-content">
             <div id="modal-icon" class="text-5xl mb-4 text-center">🎧</div>
             <h3 class="text-2xl font-bold mb-2 text-center text-zinc-900 dark:text-white" data-i18n="modal_title">¡Un
@@ -2509,7 +2509,7 @@
 
     <!-- 1.5 Wrapped Redirect Modal -->
     <div id="wrapped-redirect-modal"
-        class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-zinc-950/85 md:backdrop-blur-md transform-gpu transition-opacity opacity-0 px-4"
+        class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-zinc-950/85 backdrop-blur-md transform-gpu transition-opacity opacity-0 px-4"
         onclick="if(event.target === this) closeModal('wrapped-redirect-modal', 'wrapped-redirect-content')">
         <div class="bg-white dark:bg-[#0e0e12] p-8 sm:p-10 rounded-[2.25rem] sm:rounded-[2.5rem] shadow-[0_30px_80px_rgba(0,0,0,.5)] border border-zinc-200/50 dark:border-zinc-700/40 max-w-md w-full transform scale-95 transition-transform duration-300 relative overflow-hidden"
             id="wrapped-redirect-content">
@@ -2538,7 +2538,7 @@
 
     <!-- 2. Interactive Recipe Modal — REDESIGNED -->
     <div id="recipe-modal"
-        class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-zinc-950/85 md:backdrop-blur-md transform-gpu transition-opacity opacity-0 px-4 sm:p-4 lg:p-6"
+        class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-zinc-950/85 backdrop-blur-md transform-gpu transition-opacity opacity-0 px-4 sm:p-4 lg:p-6"
         onclick="if(event.target === this) closeModal('recipe-modal', 'recipe-content')">
         <div class="bg-white dark:bg-[#0e0e12] p-0 rounded-[2.25rem] sm:rounded-[2.5rem] shadow-[0_30px_80px_rgba(0,0,0,.5)] border border-zinc-200/50 dark:border-zinc-700/40 w-full max-w-[340px] h-[580px] sm:max-w-4xl sm:max-h-[96vh] sm:h-auto md:max-w-5xl lg:max-w-6xl flex flex-col transform scale-95 transition-transform duration-300 overflow-hidden"
             id="recipe-content">
@@ -2570,7 +2570,7 @@
                 </button>
                 <!-- Contenido header -->
                 <div class="relative z-10 p-4 sm:p-6 md:p-8 flex items-end gap-3 sm:gap-5 h-full">
-                    <div class="w-12 h-12 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-2xl sm:rounded-3xl flex items-center justify-center text-3xl sm:text-5xl shadow-md md:shadow-2xl flex-shrink-0 border border-white/20"
+                    <div class="w-12 h-12 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-2xl sm:rounded-3xl flex items-center justify-center text-3xl sm:text-5xl shadow-2xl flex-shrink-0 border border-white/20"
                         style="background:linear-gradient(135deg,rgba(255,255,255,.15),rgba(255,255,255,.05)); backdrop-filter:blur(10px);">
                         🍗</div>
                     <div class="flex-1 min-w-0 pr-4 sm:pr-0">
@@ -3041,7 +3041,7 @@
                     </div>
 
                     <!-- Barra de progreso sticky -->
-                    <div class="sticky bottom-4 mt-8 bg-white/95 dark:bg-zinc-900/95 md:backdrop-blur-md transform-gpu p-4 rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 shadow-md md:shadow-xl flex items-center gap-4 z-30"
+                    <div class="sticky bottom-4 mt-8 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md transform-gpu p-4 rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 shadow-xl flex items-center gap-4 z-30"
                         id="prep-progress-container">
                         <div class="text-3xl transition-transform duration-500 select-none" id="prep-emoji">👨‍🍳</div>
                         <div class="flex-1">
@@ -3329,7 +3329,7 @@
                     class="absolute w-36 h-36 rounded-full bg-gradient-to-br from-brand-500/20 to-tulip-500/20 blur-2xl animate-pulse-slow">
                 </div>
                 <div id="vault-lock-icon"
-                    class="relative w-24 h-24 rounded-full bg-gradient-to-br from-zinc-800 to-zinc-900 border-2 border-brand-500/50 flex items-center justify-center shadow-md md:shadow-2xl transition-all duration-500">
+                    class="relative w-24 h-24 rounded-full bg-gradient-to-br from-zinc-800 to-zinc-900 border-2 border-brand-500/50 flex items-center justify-center shadow-2xl transition-all duration-500">
                     <svg xmlns="http://www.w3.org/2000/svg" id="lock-svg" viewBox="0 0 48 48"
                         class="w-12 h-12 transition-all duration-500">
                         <rect x="10" y="22" width="28" height="20" rx="4" fill="#f59e0b" opacity="0.9" />
@@ -3453,7 +3453,7 @@
                         <!-- Sello -->
                         <div class="relative flex-shrink-0">
                             <div class="absolute inset-0 bg-gradient-to-br from-brand-500 to-tulip-500 rounded-full blur-lg opacity-50 animate-pulse-slow"></div>
-                            <div class="relative w-12 h-12 rounded-full flex items-center justify-center text-xl border border-brand-500/40 shadow-md md:shadow-xl" style="background: linear-gradient(135deg, #78350f, #451a03);">💌</div>
+                            <div class="relative w-12 h-12 rounded-full flex items-center justify-center text-xl border border-brand-500/40 shadow-xl" style="background: linear-gradient(135deg, #78350f, #451a03);">💌</div>
                         </div>
                         <div class="flex-1 min-w-0">
                             <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-[9px] font-bold uppercase tracking-widest text-brand-400 mb-1">
@@ -3594,7 +3594,7 @@
 
                 <!-- ── Floating Button ── -->
                 <button onclick="finishSecretModal()"
-                    class="relative group w-48 h-14 flex items-center justify-center gap-3 rounded-full font-bold text-lg text-white shadow-md md:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95"
+                    class="relative group w-48 h-14 flex items-center justify-center gap-3 rounded-full font-bold text-lg text-white shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95"
                     style="background: linear-gradient(135deg, #f59e0b, #ec4899);">
                     <div class="absolute inset-0 rounded-full bg-white opacity-0 group-hover:opacity-20 transition-opacity"></div>
                     <div class="absolute -inset-1 rounded-full blur-md opacity-40 group-hover:opacity-70 transition-opacity" style="background: linear-gradient(135deg, #f59e0b, #ec4899); z-index:-1;"></div>
@@ -3810,11 +3810,11 @@
 
     <!-- Navegación — Floating Panel -->
     <div id="drawer-overlay"
-        class="fixed inset-0 bg-zinc-900/40 dark:bg-black/50 md:backdrop-blur-sm transform-gpu z-[90] hidden opacity-0 transition-opacity duration-300"
+        class="fixed inset-0 bg-zinc-900/40 dark:bg-black/50 backdrop-blur-sm transform-gpu z-[90] hidden opacity-0 transition-opacity duration-300"
         onclick="toggleMenu()"></div>
 
     <div id="menu-panel"
-        class="bg-white/70 dark:bg-zinc-950/40 md:backdrop-blur-3xl transform-gpu rounded-[2rem] border border-white/40 dark:border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_16px_48px_0_rgba(0,0,0,0.4)] flex flex-col overflow-hidden relative">
+        class="bg-white/70 dark:bg-zinc-950/40 backdrop-blur-3xl transform-gpu rounded-[2rem] border border-white/40 dark:border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_16px_48px_0_rgba(0,0,0,0.4)] flex flex-col overflow-hidden relative">
 
         <!-- Header -->
         <div class="px-5 pt-5 pb-3 flex items-center justify-between flex-shrink-0">
@@ -3848,7 +3848,7 @@
                 </svg>
                 <input id="menu-search" type="text" placeholder="Buscar sección..." autocomplete="off"
                     data-i18n-placeholder="search_placeholder"
-                    class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-white/50 dark:bg-white/5 md:backdrop-blur-md text-sm text-zinc-800 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-500 border border-white/30 dark:border-white/10 focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500/50 transition-all"
+                    class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-white/50 dark:bg-white/5 backdrop-blur-md text-sm text-zinc-800 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-500 border border-white/30 dark:border-white/10 focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500/50 transition-all"
                     autocomplete="off" />
                 <span
                     class="menu-shortcut absolute right-3 top-1/2 -translate-y-1/2 bg-zinc-200/80 dark:bg-zinc-700/80 text-zinc-500 dark:text-zinc-400 hidden md:flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-bold tracking-widest"><kbd
@@ -5001,7 +5001,7 @@
     </div>
 
     <nav
-        class="fixed top-4 left-4 right-4 md:top-6 md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-4xl z-50 bg-zinc-50/50 dark:bg-zinc-950/50 md:backdrop-blur-md transform-gpu border border-white/40 dark:border-white/10 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-colors duration-500">
+        class="fixed top-4 left-4 right-4 md:top-6 md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-4xl z-50 bg-zinc-50/50 dark:bg-zinc-950/50 backdrop-blur-md transform-gpu border border-white/40 dark:border-white/10 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-colors duration-500">
         <div class="px-6 h-16 flex items-center justify-between">
             <div class="flex items-center gap-4">
                 <button onclick="toggleMenu()"
@@ -5026,7 +5026,7 @@
                     </button>
                     <!-- Menú de autenticación -->
                     <div id="auth-menu"
-                        class="absolute right-0 top-full mt-5 w-56 rounded-[1.25rem] border border-black/5 dark:border-white/10 bg-white/80 dark:bg-zinc-950/80 md:backdrop-blur-2xl transform-gpu shadow-md md:shadow-xl py-2 z-[999] opacity-0 scale-95 pointer-events-none transition-all duration-300 origin-top-right overflow-hidden"
+                        class="absolute right-0 top-full mt-5 w-56 rounded-[1.25rem] border border-black/5 dark:border-white/10 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-2xl transform-gpu shadow-xl py-2 z-[999] opacity-0 scale-95 pointer-events-none transition-all duration-300 origin-top-right overflow-hidden"
                         style="display:none;">
 
                         <!-- Estado desconectado -->
@@ -5163,7 +5163,7 @@
 
                 <div class="flex flex-col gap-6 w-full">
                     <div
-                        class="animacion-respiro respiro-amber bg-white dark:bg-zinc-900 p-6 md:p-8 rounded-3xl shadow-md md:shadow-xl border border-brand-200 dark:border-brand-900/50 text-center relative overflow-hidden">
+                        class="animacion-respiro respiro-amber bg-white dark:bg-zinc-900 p-6 md:p-8 rounded-3xl shadow-xl border border-brand-200 dark:border-brand-900/50 text-center relative overflow-hidden">
                         <div class="absolute -top-10 -right-10 text-9xl opacity-5 dark:opacity-10 text-brand-500">⏳
                         </div>
                         <h4 class="text-xl font-bold mb-8 text-zinc-800 dark:text-zinc-100 relative z-10"
@@ -5261,7 +5261,7 @@
                         perfecto, porque desde que llegaste, llenaste de luz y color todos mis días.</p>
                 </div>
                 <div
-                    class="bg-gradient-to-br from-brand-500 to-tulip-500 p-8 rounded-3xl shadow-md md:shadow-xl text-center text-white hover:-translate-y-2 transition-transform transform">
+                    class="bg-gradient-to-br from-brand-500 to-tulip-500 p-8 rounded-3xl shadow-xl text-center text-white hover:-translate-y-2 transition-transform transform">
                     <div
                         class="text-4xl mb-4 bg-white/20 w-16 h-16 mx-auto flex items-center justify-center rounded-full">
                         💖</div>
@@ -5283,7 +5283,7 @@
             <!-- Section Header -->
             <div class="text-center mb-16 relative z-10">
                 <div
-                    class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-pink-100/60 dark:bg-pink-900/20 border border-pink-200/50 dark:border-pink-800/40 text-tulip-600 dark:text-tulip-400 text-xs font-extrabold uppercase tracking-[0.25em] mb-6 md:backdrop-blur-sm transform-gpu">
+                    class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-pink-100/60 dark:bg-pink-900/20 border border-pink-200/50 dark:border-pink-800/40 text-tulip-600 dark:text-tulip-400 text-xs font-extrabold uppercase tracking-[0.25em] mb-6 backdrop-blur-sm transform-gpu">
                     <span class="w-2 h-2 rounded-full bg-tulip-500 animate-pulse"></span>
                     <span data-i18n="tulips_label">Tus Flores Favoritas</span>
                     <span>🌷</span>
@@ -5298,7 +5298,7 @@
             <!-- Hero Tulip Card — Glass Morphism -->
             <div class="max-w-5xl mx-auto mb-16 relative z-10">
                 <div
-                    class="animacion-respiro respiro-pink relative bg-gradient-to-br from-tulip-50/80 via-pink-50/60 to-rose-100/80 dark:from-tulip-900/30 dark:via-pink-900/20 dark:to-rose-900/30 md:backdrop-blur-md transform-gpu rounded-[3rem] p-8 md:p-14 shadow-md md:shadow-2xl border border-pink-200/40 dark:border-pink-800/30 overflow-hidden">
+                    class="animacion-respiro respiro-pink relative bg-gradient-to-br from-tulip-50/80 via-pink-50/60 to-rose-100/80 dark:from-tulip-900/30 dark:via-pink-900/20 dark:to-rose-900/30 backdrop-blur-md transform-gpu rounded-[3rem] p-8 md:p-14 shadow-2xl border border-pink-200/40 dark:border-pink-800/30 overflow-hidden">
                     <!-- Decorative background elements -->
                     <div
                         class="absolute -right-16 -bottom-16 text-[12rem] opacity-[0.06] pointer-events-none transform -rotate-12 select-none">
@@ -5318,7 +5318,7 @@
                                     class="absolute -inset-4 rounded-full bg-gradient-to-br from-pink-300/30 to-rose-400/20 dark:from-pink-500/15 dark:to-rose-500/10 blur-xl">
                                 </div>
                                 <div
-                                    class="relative w-44 h-44 md:w-56 md:h-56 bg-white/40 dark:bg-white/5 rounded-full flex items-center justify-center shadow-md md:shadow-2xl border-2 border-white/30 dark:border-white/10 md:backdrop-blur-md transform-gpu">
+                                    class="relative w-44 h-44 md:w-56 md:h-56 bg-white/40 dark:bg-white/5 rounded-full flex items-center justify-center shadow-2xl border-2 border-white/30 dark:border-white/10 backdrop-blur-md transform-gpu">
                                     <span class="text-7xl md:text-8xl select-none">🌷</span>
                                 </div>
                             </div>
@@ -5351,7 +5351,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <!-- Card 1: Affection -->
                     <div
-                        class="tulip-meaning-card group bg-white/80 dark:bg-zinc-900/60 md:backdrop-blur-md transform-gpu p-6 rounded-3xl border border-pink-200/40 dark:border-pink-800/30 shadow-lg hover:shadow-md md:shadow-xl hover:-translate-y-2 transition-all duration-500 cursor-default relative overflow-hidden">
+                        class="tulip-meaning-card group bg-white/80 dark:bg-zinc-900/60 backdrop-blur-md transform-gpu p-6 rounded-3xl border border-pink-200/40 dark:border-pink-800/30 shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-500 cursor-default relative overflow-hidden">
                         <div
                             class="absolute -right-3 -bottom-3 text-5xl opacity-[0.06] pointer-events-none group-hover:opacity-[0.12] transition-opacity">
                             💕</div>
@@ -5365,7 +5365,7 @@
                             auténtico y sincero, que nace del corazón sin pretensiones.</p>
                     </div>
                     <!-- Card 2: Care -->
-                    <div class="tulip-meaning-card group bg-white/80 dark:bg-zinc-900/60 md:backdrop-blur-md transform-gpu p-6 rounded-3xl border border-pink-200/40 dark:border-pink-800/30 shadow-lg hover:shadow-md md:shadow-xl hover:-translate-y-2 transition-all duration-500 cursor-default relative overflow-hidden"
+                    <div class="tulip-meaning-card group bg-white/80 dark:bg-zinc-900/60 backdrop-blur-md transform-gpu p-6 rounded-3xl border border-pink-200/40 dark:border-pink-800/30 shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-500 cursor-default relative overflow-hidden"
                         style="animation-delay: 0.1s;">
                         <div
                             class="absolute -right-3 -bottom-3 text-5xl opacity-[0.06] pointer-events-none group-hover:opacity-[0.12] transition-opacity">
@@ -5380,7 +5380,7 @@
                             como quien cuida la flor más delicada de su jardín.</p>
                     </div>
                     <!-- Card 3: Good wishes -->
-                    <div class="tulip-meaning-card group bg-white/80 dark:bg-zinc-900/60 md:backdrop-blur-md transform-gpu p-6 rounded-3xl border border-pink-200/40 dark:border-pink-800/30 shadow-lg hover:shadow-md md:shadow-xl hover:-translate-y-2 transition-all duration-500 cursor-default relative overflow-hidden"
+                    <div class="tulip-meaning-card group bg-white/80 dark:bg-zinc-900/60 backdrop-blur-md transform-gpu p-6 rounded-3xl border border-pink-200/40 dark:border-pink-800/30 shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-500 cursor-default relative overflow-hidden"
                         style="animation-delay: 0.2s;">
                         <div
                             class="absolute -right-3 -bottom-3 text-5xl opacity-[0.06] pointer-events-none group-hover:opacity-[0.12] transition-opacity">
@@ -5395,13 +5395,13 @@
                             esa persona, deseándole felicidad eterna.</p>
                     </div>
                     <!-- Card 4: Blossoming love -->
-                    <div class="tulip-meaning-card group bg-gradient-to-br from-tulip-500 to-rose-500 p-6 rounded-3xl shadow-md md:shadow-xl hover:shadow-md md:shadow-2xl hover:-translate-y-2 transition-all duration-500 cursor-default relative overflow-hidden text-white"
+                    <div class="tulip-meaning-card group bg-gradient-to-br from-tulip-500 to-rose-500 p-6 rounded-3xl shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 cursor-default relative overflow-hidden text-white"
                         style="animation-delay: 0.3s;">
                         <div
                             class="absolute -right-3 -bottom-3 text-5xl opacity-10 pointer-events-none group-hover:opacity-20 transition-opacity">
                             🌷</div>
                         <div
-                            class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform duration-500 shadow-sm md:backdrop-blur-sm transform-gpu">
+                            class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform duration-500 shadow-sm backdrop-blur-sm transform-gpu">
                             🌹</div>
                         <h5 class="font-bold text-sm mb-2" data-i18n="tulips_sym4_title">Amor Floreciente</h5>
                         <p class="text-pink-100 text-xs leading-relaxed" data-i18n="tulips_sym4_desc">El significado más
@@ -5414,7 +5414,7 @@
             <!-- Interactive Tulip Color Guide -->
             <div id="guia-colores-tulipan" class="max-w-5xl mx-auto mb-16 relative z-10 scroll-mt-24">
                 <div
-                    class="bg-white/70 dark:bg-zinc-900/50 md:backdrop-blur-md transform-gpu rounded-[2.5rem] p-6 md:p-10 border border-zinc-200/50 dark:border-zinc-800/50 shadow-md md:shadow-xl overflow-hidden">
+                    class="bg-white/70 dark:bg-zinc-900/50 backdrop-blur-md transform-gpu rounded-[2.5rem] p-6 md:p-10 border border-zinc-200/50 dark:border-zinc-800/50 shadow-xl overflow-hidden">
                     <div class="flex flex-col md:flex-row items-start md:items-center gap-4 mb-8">
                         <h4 class="text-xs font-extrabold tracking-[0.25em] uppercase text-zinc-400 dark:text-zinc-500"
                             data-i18n="tulips_colors_title">Guía de Colores del Tulipán</h4>
@@ -5515,7 +5515,7 @@
                         </style>
 
                         <div
-                            class="w-[85%] sm:w-[45%] lg:w-[30%] flex-shrink-0 snap-center bg-white/80 dark:bg-zinc-900/60 md:backdrop-blur-md transform-gpu p-6 rounded-3xl border border-pink-200/30 dark:border-pink-800/20 shadow-lg">
+                            class="w-[85%] sm:w-[45%] lg:w-[30%] flex-shrink-0 snap-center bg-white/80 dark:bg-zinc-900/60 backdrop-blur-md transform-gpu p-6 rounded-3xl border border-pink-200/30 dark:border-pink-800/20 shadow-lg">
                             <div class="text-3xl mb-3">🏰</div>
                             <h5 class="font-bold text-zinc-900 dark:text-white text-sm mb-2"
                                 data-i18n="tulips_fact1_title">La Fiebre del Tulipán</h5>
@@ -5525,7 +5525,7 @@
                                 canal de Ámsterdam.</p>
                         </div>
                         <div
-                            class="w-[85%] sm:w-[45%] lg:w-[30%] flex-shrink-0 snap-center bg-white/80 dark:bg-zinc-900/60 md:backdrop-blur-md transform-gpu p-6 rounded-3xl border border-pink-200/30 dark:border-pink-800/20 shadow-lg">
+                            class="w-[85%] sm:w-[45%] lg:w-[30%] flex-shrink-0 snap-center bg-white/80 dark:bg-zinc-900/60 backdrop-blur-md transform-gpu p-6 rounded-3xl border border-pink-200/30 dark:border-pink-800/20 shadow-lg">
                             <div class="text-3xl mb-3">🌍</div>
                             <h5 class="font-bold text-zinc-900 dark:text-white text-sm mb-2"
                                 data-i18n="tulips_fact2_title">Origen Turco</h5>
@@ -5535,7 +5535,7 @@
                                 (turbante).</p>
                         </div>
                         <div
-                            class="w-[85%] sm:w-[45%] lg:w-[30%] flex-shrink-0 snap-center bg-white/80 dark:bg-zinc-900/60 md:backdrop-blur-md transform-gpu p-6 rounded-3xl border border-pink-200/30 dark:border-pink-800/20 shadow-lg">
+                            class="w-[85%] sm:w-[45%] lg:w-[30%] flex-shrink-0 snap-center bg-white/80 dark:bg-zinc-900/60 backdrop-blur-md transform-gpu p-6 rounded-3xl border border-pink-200/30 dark:border-pink-800/20 shadow-lg">
                             <div class="text-3xl mb-3">📐</div>
                             <h5 class="font-bold text-zinc-900 dark:text-white text-sm mb-2"
                                 data-i18n="tulips_fact3_title">Proporción Áurea</h5>
@@ -5545,7 +5545,7 @@
                                 vegetal.</p>
                         </div>
                         <div
-                            class="w-[85%] sm:w-[45%] lg:w-[30%] flex-shrink-0 snap-center bg-white/80 dark:bg-zinc-900/60 md:backdrop-blur-md transform-gpu p-6 rounded-3xl border border-pink-200/30 dark:border-pink-800/20 shadow-lg">
+                            class="w-[85%] sm:w-[45%] lg:w-[30%] flex-shrink-0 snap-center bg-white/80 dark:bg-zinc-900/60 backdrop-blur-md transform-gpu p-6 rounded-3xl border border-pink-200/30 dark:border-pink-800/20 shadow-lg">
                             <div class="text-3xl mb-3">🌙</div>
                             <h5 class="font-bold text-zinc-900 dark:text-white text-sm mb-2"
                                 data-i18n="tulips_fact4_title">Flores Nocturnas</h5>
@@ -5554,7 +5554,7 @@
                                 luz del sol. Son fotosensibles, igual que los girasoles pero de manera diferente.</p>
                         </div>
                         <div
-                            class="w-[85%] sm:w-[45%] lg:w-[30%] flex-shrink-0 snap-center bg-white/80 dark:bg-zinc-900/60 md:backdrop-blur-md transform-gpu p-6 rounded-3xl border border-pink-200/30 dark:border-pink-800/20 shadow-lg">
+                            class="w-[85%] sm:w-[45%] lg:w-[30%] flex-shrink-0 snap-center bg-white/80 dark:bg-zinc-900/60 backdrop-blur-md transform-gpu p-6 rounded-3xl border border-pink-200/30 dark:border-pink-800/20 shadow-lg">
                             <div class="text-3xl mb-3">💎</div>
                             <h5 class="font-bold text-zinc-900 dark:text-white text-sm mb-2"
                                 data-i18n="tulips_fact5_title">+3,000 Variedades</h5>
@@ -5576,7 +5576,7 @@
 
             <!-- ═══ 🌷 TULIP GARDEN — 6 MONTH ANNIVERSARY EXPANSION ═══ -->
             <div class="max-w-5xl mx-auto mb-16 relative z-10">
-                <div class="relative bg-gradient-to-br from-pink-50/80 via-rose-50/60 to-tulip-50/40 dark:from-pink-950/30 dark:via-rose-950/20 dark:to-zinc-900/40 md:backdrop-blur-md rounded-[3rem] p-8 md:p-12 shadow-md md:shadow-2xl border border-pink-200/40 dark:border-pink-800/30 overflow-hidden">
+                <div class="relative bg-gradient-to-br from-pink-50/80 via-rose-50/60 to-tulip-50/40 dark:from-pink-950/30 dark:via-rose-950/20 dark:to-zinc-900/40 backdrop-blur-md rounded-[3rem] p-8 md:p-12 shadow-2xl border border-pink-200/40 dark:border-pink-800/30 overflow-hidden">
                     
                     <!-- Decorative Background -->
                     <div class="absolute inset-0 pointer-events-none overflow-hidden rounded-[3rem]">
@@ -5650,7 +5650,7 @@
                                 </div>
                             </div>
                             <!-- Mes 6 — SPECIAL -->
-                            <div class="group flex flex-col items-center gap-3 p-4 rounded-2xl bg-gradient-to-br from-amber-50 to-pink-50 dark:from-amber-900/20 dark:to-pink-900/20 border-2 border-amber-400/40 dark:border-amber-500/30 hover:border-amber-500/70 transition-all duration-500 hover:-translate-y-2 hover:shadow-md md:shadow-xl hover:shadow-amber-500/15 cursor-default relative" style="box-shadow: 0 0 25px rgba(245,158,11,0.08);">
+                            <div class="group flex flex-col items-center gap-3 p-4 rounded-2xl bg-gradient-to-br from-amber-50 to-pink-50 dark:from-amber-900/20 dark:to-pink-900/20 border-2 border-amber-400/40 dark:border-amber-500/30 hover:border-amber-500/70 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-amber-500/15 cursor-default relative" style="box-shadow: 0 0 25px rgba(245,158,11,0.08);">
                                 <div class="absolute -top-2 -right-2 px-2 py-0.5 bg-amber-500 text-[8px] font-black text-white uppercase tracking-widest rounded-full shadow-lg animate-pulse">HOY</div>
                                 <div class="text-4xl group-hover:scale-125 transition-transform duration-500 group-hover:rotate-12 select-none">🌷</div>
                                 <div class="text-center">
@@ -5677,7 +5677,7 @@
             <!-- The Promise — Grand Finale Card -->
             <div class="max-w-4xl mx-auto relative z-10">
                 <div
-                    class="relative bg-gradient-to-br from-tulip-500 via-rose-500 to-pink-600 p-8 md:p-12 rounded-[3rem] shadow-md md:shadow-2xl overflow-hidden group">
+                    class="relative bg-gradient-to-br from-tulip-500 via-rose-500 to-pink-600 p-8 md:p-12 rounded-[3rem] shadow-2xl overflow-hidden group">
                     <!-- Animated background layers -->
                     <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                     <div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-white/10 blur-3xl"></div>
@@ -5689,7 +5689,7 @@
 
                     <div class="relative z-10 text-center">
                         <div
-                            class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 text-white/90 text-[10px] font-extrabold uppercase tracking-[0.3em] mb-6 md:backdrop-blur-sm transform-gpu border border-white/10">
+                            class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 text-white/90 text-[10px] font-extrabold uppercase tracking-[0.3em] mb-6 backdrop-blur-sm transform-gpu border border-white/10">
                             <span>💐</span>
                             <span data-i18n="tulips_promise_badge">Mi Promesa</span>
                         </div>
@@ -5704,20 +5704,20 @@
                         <!-- Promise Counter -->
                         <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-6">
                             <div
-                                class="bg-white/10 md:backdrop-blur-sm transform-gpu rounded-2xl px-5 py-3 border border-white/10">
+                                class="bg-white/10 backdrop-blur-sm transform-gpu rounded-2xl px-5 py-3 border border-white/10">
                                 <span class="block text-2xl md:text-3xl font-extrabold text-white"
                                     id="tulip-promise-days">182</span>
                                 <span class="block text-[9px] font-bold text-pink-200 uppercase tracking-widest"
                                     data-i18n="tulips_promise_flowers">Tulipanes prometidos</span>
                             </div>
                             <div
-                                class="bg-white/10 md:backdrop-blur-sm transform-gpu rounded-2xl px-5 py-3 border border-white/10">
+                                class="bg-white/10 backdrop-blur-sm transform-gpu rounded-2xl px-5 py-3 border border-white/10">
                                 <span class="block text-2xl md:text-3xl font-extrabold text-white">∞</span>
                                 <span class="block text-[9px] font-bold text-pink-200 uppercase tracking-widest"
                                     data-i18n="tulips_promise_love">Amor contenido</span>
                             </div>
                             <div
-                                class="bg-white/10 md:backdrop-blur-sm transform-gpu rounded-2xl px-5 py-3 border border-white/10">
+                                class="bg-white/10 backdrop-blur-sm transform-gpu rounded-2xl px-5 py-3 border border-white/10">
                                 <span class="block text-2xl md:text-3xl font-extrabold text-white">1</span>
                                 <span class="block text-[9px] font-bold text-pink-200 uppercase tracking-widest"
                                     data-i18n="tulips_promise_dest">Destinataria</span>
@@ -5963,7 +5963,7 @@
                 </div>
 
                 <div id="sunflower-widget"
-                    class="relative w-full max-w-2xl mx-auto rounded-3xl overflow-hidden border-4 border-zinc-200/50 dark:border-zinc-800 shadow-md md:shadow-2xl mb-8 touch-none"
+                    class="relative w-full max-w-2xl mx-auto rounded-3xl overflow-hidden border-4 border-zinc-200/50 dark:border-zinc-800 shadow-2xl mb-8 touch-none"
                     style="height: 380px;">
                     <!-- Sky Gradients -->
                     <div id="sky-morning"
@@ -6011,7 +6011,7 @@
                         <div id="sunflower-head"
                             class="absolute -top-10 transform -translate-y-1/2 origin-center transition-transform duration-100 flex justify-center items-center"
                             style="width: 110px; height: 110px; transform: translateY(-50%) rotate(-60deg);">
-                            <svg width="120" height="120" viewBox="0 0 100 100" class="drop-shadow-md md:shadow-xl"
+                            <svg width="120" height="120" viewBox="0 0 100 100" class="drop-shadow-xl"
                                 style="overflow: visible;">
                                 <g fill="#FBBF24" stroke="#D97706" stroke-width="0.5">
                                     <path d="M50 10 Q55 25 50 40 Q45 25 50 10" transform="rotate(0 50 50)" />
@@ -6058,7 +6058,7 @@
                     <!-- Hint Overlay -->
                     <div id="sunflower-hint"
                         class="absolute top-10 w-full text-center z-30 pointer-events-none transition-opacity duration-500">
-                        <p class="text-white font-bold text-lg drop-shadow-md bg-black/25 inline-block px-5 py-2 rounded-full md:backdrop-blur-sm transform-gpu animate-pulse"
+                        <p class="text-white font-bold text-lg drop-shadow-md bg-black/25 inline-block px-5 py-2 rounded-full backdrop-blur-sm transform-gpu animate-pulse"
                             data-i18n="sunflower_hint">Arrastra el sol para iluminarlo... ☀️</p>
                     </div>
                 </div>
@@ -6117,7 +6117,7 @@
 
                 <!-- Mapa de distancia visual interactivo -->
                 <div
-                    class="bg-white dark:bg-zinc-900 rounded-[3rem] shadow-md md:shadow-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden mb-8">
+                    class="bg-white dark:bg-zinc-900 rounded-[3rem] shadow-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden mb-8">
                     <!-- Barra superior con info -->
                     <div class="grid grid-cols-3 border-b border-zinc-100 dark:border-zinc-800">
                         <div class="p-4 md:p-6 text-center border-r border-zinc-100 dark:border-zinc-800">
@@ -6416,7 +6416,7 @@
 
                             <!-- Slide 1: La Playlist -->
                             <div
-                                class="w-full flex-shrink-0 snap-center bg-zinc-900 p-6 md:p-8 rounded-[2rem] shadow-md md:shadow-xl border border-zinc-800 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
+                                class="w-full flex-shrink-0 snap-center bg-zinc-900 p-6 md:p-8 rounded-[2rem] shadow-xl border border-zinc-800 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
                                 <div
                                     class="absolute -left-6 -bottom-6 text-8xl opacity-5 pointer-events-none transform -rotate-12">
                                     🎵</div>
@@ -6440,7 +6440,7 @@
 
                             <!-- Slide 2: La Canción (Locked Placeholder) -->
                             <div id="univ-song-slide"
-                                class="w-full flex-shrink-0 snap-center bg-zinc-200/80 dark:bg-zinc-900/50 p-6 md:p-8 rounded-[2rem] shadow-md dark:shadow-md md:shadow-xl border border-zinc-300/60 dark:border-zinc-800/50 flex flex-col items-center justify-center gap-3 relative overflow-hidden"
+                                class="w-full flex-shrink-0 snap-center bg-zinc-200/80 dark:bg-zinc-900/50 p-6 md:p-8 rounded-[2rem] shadow-md dark:shadow-xl border border-zinc-300/60 dark:border-zinc-800/50 flex flex-col items-center justify-center gap-3 relative overflow-hidden"
                                 style="margin-left: 1rem; min-height: 250px;">
                                 <div class="text-4xl opacity-80 animate-pulse mb-1">🔒</div>
                                 <h3 class="text-xl font-bold text-zinc-600 dark:text-zinc-400 tracking-widest uppercase text-center"
@@ -6453,7 +6453,7 @@
                                     data-i18n="univ_lock_btn">Saber más</a>
                             </div>
                             <!-- Slide 3: 28E Wrapped -->
-                            <div class="w-full flex-shrink-0 snap-center relative overflow-hidden rounded-[2rem] shadow-md md:shadow-2xl transition-transform duration-300" 
+                            <div class="w-full flex-shrink-0 snap-center relative overflow-hidden rounded-[2rem] shadow-2xl transition-transform duration-300" 
                                 style="margin-left: 1rem; min-height: 250px; background: #0f0f11; border: 1px solid rgba(255,255,255,0.1);">
                                 
                                 <!-- Background Patterns / Gradients -->
@@ -7021,7 +7021,7 @@
 
                 <!-- ═══ GAME 1: JARDÍN DINÁMICO ═══ -->
                 <div id="game1-wrapper"
-                    class="bg-white dark:bg-zinc-900 rounded-xl md:rounded-[3rem] p-1.5 md:p-6 relative overflow-hidden border-2 border-brand-300 dark:border-brand-700/50 shadow-md md:shadow-2xl w-full md:max-w-2xl mx-auto hidden">
+                    class="bg-white dark:bg-zinc-900 rounded-xl md:rounded-[3rem] p-1.5 md:p-6 relative overflow-hidden border-2 border-brand-300 dark:border-brand-700/50 shadow-2xl w-full md:max-w-2xl mx-auto hidden">
                     <div class="py-2 mb-2 w-full flex items-center justify-center">
                         <h4 class="text-2xl font-black text-zinc-900 dark:text-white" data-i18n="game1_title">El Jardín
                             de Yaire</h4>
@@ -7054,7 +7054,7 @@
                                 class="flex flex-row items-center justify-center gap-2 sm:gap-4 w-full px-2 max-w-4xl mx-auto h-full overflow-hidden py-4">
                                 <div class="game-ov-card transition-all duration-500 w-full max-w-[280px] shrink min-w-0"
                                     id="main-card-g1">
-                                    <div class="text-4xl md:text-5xl mb-3 drop-shadow-md md:shadow-xl" id="g1-ov-icon">🌻</div>
+                                    <div class="text-4xl md:text-5xl mb-3 drop-shadow-xl" id="g1-ov-icon">🌻</div>
                                     <p id="g1-ov-title"
                                         class="bg-gradient-to-r from-brand-600 to-amber-400 dark:from-brand-500 dark:to-yellow-300 bg-clip-text text-transparent font-black text-2xl md:text-3xl mb-4"
                                         data-i18n="game1_start_title">¡Prepárate!</p>
@@ -7073,7 +7073,7 @@
 
                 <!-- ═══ GAME 2: VUELO HACIA TI ═══ -->
                 <div id="game2-wrapper"
-                    class="bg-white dark:bg-zinc-900 rounded-xl md:rounded-[3rem] p-1.5 md:p-6 relative overflow-hidden border-2 border-tulip-300 dark:border-tulip-700/50 shadow-md md:shadow-2xl w-full md:max-w-4xl mx-auto flex flex-col justify-between hidden">
+                    class="bg-white dark:bg-zinc-900 rounded-xl md:rounded-[3rem] p-1.5 md:p-6 relative overflow-hidden border-2 border-tulip-300 dark:border-tulip-700/50 shadow-2xl w-full md:max-w-4xl mx-auto flex flex-col justify-between hidden">
                     <div class="py-2 mb-2 w-full flex items-center justify-center">
                         <h4 class="text-2xl font-black text-zinc-900 dark:text-white" data-i18n="game2_title">Vuelo
                             Hacia Ti</h4>
@@ -7103,7 +7103,7 @@
                                 class="flex flex-row items-center justify-center gap-2 sm:gap-4 w-full px-2 max-w-4xl mx-auto h-full overflow-hidden py-4">
                                 <div class="game-ov-card transition-all duration-500 w-full max-w-[280px] shrink min-w-0"
                                     id="main-card-g2">
-                                    <div class="text-3xl mb-3 drop-shadow-md md:shadow-xl" id="game2-overlay-icon">🦋</div>
+                                    <div class="text-3xl mb-3 drop-shadow-xl" id="game2-overlay-icon">🦋</div>
                                     <p id="game2-overlay-text"
                                         class="bg-gradient-to-r from-tulip-600 to-pink-400 dark:from-tulip-400 dark:to-pink-300 bg-clip-text text-transparent font-black text-2xl md:text-3xl mb-4"
                                         data-i18n="game2_start_title">¡A volar!</p>
@@ -7121,7 +7121,7 @@
 
                 <!-- ═══ GAME 3: CARTAS MÁGICAS ═══ -->
                 <div id="game3-wrapper"
-                    class="bg-white dark:bg-zinc-900 rounded-xl md:rounded-[3rem] p-1.5 md:p-6 relative overflow-hidden border-2 border-purple-300 dark:border-purple-700/50 shadow-md md:shadow-2xl w-full md:max-w-2xl mx-auto hidden">
+                    class="bg-white dark:bg-zinc-900 rounded-xl md:rounded-[3rem] p-1.5 md:p-6 relative overflow-hidden border-2 border-purple-300 dark:border-purple-700/50 shadow-2xl w-full md:max-w-2xl mx-auto hidden">
                     <div class="py-2 mb-2 w-full flex items-center justify-center">
                         <h4 class="text-2xl font-black text-zinc-900 dark:text-white" data-i18n="game3_title">Cartas
                             Ocultas</h4>
@@ -7167,7 +7167,7 @@
                                 class="flex flex-col items-center justify-center gap-4 sm:gap-6 w-full px-4 max-w-sm mx-auto h-full max-h-full overflow-y-auto py-6">
                                 <div class="game-ov-card transition-all duration-500 w-full max-w-[300px] shrink"
                                     id="main-card-g3">
-                                    <div class="text-4xl md:text-5xl mb-3 drop-shadow-md md:shadow-xl" id="game3-overlay-icon">🃏
+                                    <div class="text-4xl md:text-5xl mb-3 drop-shadow-xl" id="game3-overlay-icon">🃏
                                     </div>
                                     <p id="game3-overlay-text"
                                         class="bg-gradient-to-r from-purple-600 to-indigo-400 dark:from-purple-400 dark:to-indigo-300 bg-clip-text text-transparent font-black text-2xl md:text-3xl mb-4"
@@ -7186,7 +7186,7 @@
 
                 <!-- ═══ GAME 4: ADIVINA LA CANCIÓN ═══ -->
                 <div id="game4-wrapper"
-                    class="bg-white dark:bg-zinc-900 rounded-xl md:rounded-[3rem] p-1.5 md:p-6 relative overflow-hidden border-2 border-emerald-300 dark:border-emerald-700/50 shadow-md md:shadow-2xl w-full md:max-w-4xl mx-auto flex flex-col justify-between hidden">
+                    class="bg-white dark:bg-zinc-900 rounded-xl md:rounded-[3rem] p-1.5 md:p-6 relative overflow-hidden border-2 border-emerald-300 dark:border-emerald-700/50 shadow-2xl w-full md:max-w-4xl mx-auto flex flex-col justify-between hidden">
                     <div class="py-2 mb-2 w-full flex items-center justify-center">
                         <h4 class="text-2xl font-black text-zinc-900 dark:text-white" data-i18n="game4_title">Adivina la
                             Canción</h4>
@@ -7292,7 +7292,7 @@
                                 class="flex flex-row items-center justify-center gap-2 sm:gap-4 w-full px-2 max-w-4xl mx-auto h-full overflow-hidden py-4">
                                 <div class="game-ov-card transition-all duration-500 w-full max-w-[280px] shrink min-w-0"
                                     id="main-card-g4">
-                                    <div class="text-4xl md:text-5xl mb-3 drop-shadow-md md:shadow-xl" id="game4-overlay-icon">🎵
+                                    <div class="text-4xl md:text-5xl mb-3 drop-shadow-xl" id="game4-overlay-icon">🎵
                                     </div>
                                     <p id="game4-overlay-text"
                                         class="bg-gradient-to-r from-emerald-600 to-teal-400 dark:from-emerald-400 dark:to-teal-300 bg-clip-text text-transparent font-black text-2xl md:text-3xl mb-4"
@@ -7806,7 +7806,7 @@
                     <!-- Formulario (Digital Glass Postcard) -->
                     <div class="lg:w-1/3 z-20" id="gb-form-anim">
                         <div
-                            class="bg-white/80 dark:bg-zinc-900/80 md:backdrop-blur-xl border border-zinc-200/50 dark:border-zinc-700/50 rounded-[2rem] p-8 shadow-md md:shadow-2xl shadow-zinc-200/50 dark:shadow-none sticky top-28 overflow-hidden relative group">
+                            class="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border border-zinc-200/50 dark:border-zinc-700/50 rounded-[2rem] p-8 shadow-2xl shadow-zinc-200/50 dark:shadow-none sticky top-28 overflow-hidden relative group">
                             <!-- Glow effect behind form -->
                             <div
                                 class="absolute -top-24 -right-24 w-48 h-48 bg-amber-400/20 rounded-full blur-3xl group-hover:bg-amber-400/30 transition-all duration-500">
@@ -7869,7 +7869,7 @@
                                     </div>
                                 </div>
                                 <button type="submit"
-                                    class="w-full relative overflow-hidden group/btn bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-black py-4 px-6 rounded-2xl transition-all mt-2 shadow-md md:shadow-xl hover:shadow-md md:shadow-2xl hover:-translate-y-1 hover:scale-[1.02]">
+                                    class="w-full relative overflow-hidden group/btn bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-black py-4 px-6 rounded-2xl transition-all mt-2 shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02]">
                                     <!-- Button Hover Gradient -->
                                     <div
                                         class="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-500 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300">
@@ -8538,7 +8538,7 @@
 
         <!-- Modal Paleta (cada tarjeta abre una ventana con todo) -->
         <div id="paleta-modal"
-            class="fixed inset-0 z-[145] hidden flex items-center justify-center bg-zinc-950/70 md:backdrop-blur-sm transform-gpu px-4"
+            class="fixed inset-0 z-[145] hidden flex items-center justify-center bg-zinc-950/70 backdrop-blur-sm transform-gpu px-4"
             onclick="if(event.target===this) pcClosePaletaModal()">
             <div
                 class="paleta-modal-panel relative w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-[2.25rem] border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col">
@@ -8981,7 +8981,7 @@
                 <!-- ── MEZCLADOR ── -->
                 <div id="view-mixer2" class="hidden">
                     <div
-                        class="max-w-2xl mx-auto bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-md md:shadow-xl overflow-hidden">
+                        class="max-w-2xl mx-auto bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-xl overflow-hidden">
                         <div class="p-5 md:p-7 border-b border-zinc-100 dark:border-zinc-800">
                             <p class="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-1"
                                 data-i18n="pal_mix_lab">Laboratorio de colores</p>
@@ -9561,7 +9561,7 @@
 
                 <!-- Main Glass Card -->
                 <div
-                    class="relative z-10 w-full h-full bg-zinc-950/60 md:backdrop-blur-3xl transform-gpu p-8 md:p-14 rounded-[calc(2.5rem-1px)] text-center overflow-hidden flex flex-col items-center border border-white/10 dark:border-white/5 shadow-md md:shadow-2xl">
+                    class="relative z-10 w-full h-full bg-zinc-950/60 backdrop-blur-3xl transform-gpu p-8 md:p-14 rounded-[calc(2.5rem-1px)] text-center overflow-hidden flex flex-col items-center border border-white/10 dark:border-white/5 shadow-2xl">
 
                     <!-- Particles Canvas -->
                     <canvas id="memorial-canvas"
@@ -9869,7 +9869,7 @@
 
                 <!-- Boarding Pass animado -->
                 <div class="max-w-2xl mx-auto mb-12">
-                    <div class="relative bg-white dark:bg-zinc-900 rounded-[2rem] shadow-md md:shadow-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden"
+                    <div class="relative bg-white dark:bg-zinc-900 rounded-[2rem] shadow-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden"
                         id="boarding-pass">
                         <!-- Banda superior de color -->
                         <div class="h-3 bg-gradient-to-r from-brand-500 via-tulip-500 to-brand-500 bg-[length:200%]"
@@ -10935,7 +10935,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <!-- TOP 5 PALABRAS -->
                     <div
-                        class="bg-white dark:bg-zinc-900 rounded-[2.5rem] shadow-md md:shadow-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden self-start">
+                        class="bg-white dark:bg-zinc-900 rounded-[2.5rem] shadow-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden self-start">
                         <div class="bg-gradient-to-r from-tulip-500 to-pink-400 p-6 flex items-center gap-4">
                             <div
                                 class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-2xl shadow-inner">
@@ -11068,7 +11068,7 @@
                     </div>
                     <!-- TOP 5 FRASES -->
                     <div
-                        class="bg-white dark:bg-zinc-900 rounded-[2.5rem] shadow-md md:shadow-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden self-start">
+                        class="bg-white dark:bg-zinc-900 rounded-[2.5rem] shadow-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden self-start">
                         <div class="bg-gradient-to-r from-brand-500 to-amber-400 p-6 flex items-center gap-4">
                             <div
                                 class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-2xl shadow-inner">
@@ -11577,7 +11577,7 @@
                 <!-- Header -->
                 <div class="text-center mb-16 relative">
                     <div
-                        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-zinc-800/80 border border-zinc-700/50 mb-6 md:backdrop-blur-md transform-gpu shadow-lg shadow-tulip-500/10">
+                        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-zinc-800/80 border border-zinc-700/50 mb-6 backdrop-blur-md transform-gpu shadow-lg shadow-tulip-500/10">
                         <span class="relative flex h-2 w-2">
                             <span
                                 class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tulip-400 opacity-75"></span>
@@ -11597,10 +11597,10 @@
                 <div class="song-player-glow mb-20 max-w-3xl mx-auto group">
 
                     <div
-                        class="relative rounded-[1.5rem] overflow-hidden border border-zinc-700/50 bg-zinc-900 shadow-md md:shadow-2xl">
+                        class="relative rounded-[1.5rem] overflow-hidden border border-zinc-700/50 bg-zinc-900 shadow-2xl">
                         <!-- Top bar -->
                         <div
-                            class="flex items-center justify-between px-5 py-4 bg-zinc-900/90 md:backdrop-blur-md transform-gpu border-b border-zinc-800/80">
+                            class="flex items-center justify-between px-5 py-4 bg-zinc-900/90 backdrop-blur-md transform-gpu border-b border-zinc-800/80">
                             <div class="flex items-center gap-4">
                                 <div class="flex gap-2">
                                     <span
@@ -11672,7 +11672,7 @@
 
                 <!-- The 3 Detail Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 relative z-20">
-                    <div class="song-detail-card bg-zinc-800/40 md:backdrop-blur-md transform-gpu p-6 rounded-3xl border border-zinc-700/50 hover:bg-zinc-800/80 hover:border-tulip-500/50 cursor-default"
+                    <div class="song-detail-card bg-zinc-800/40 backdrop-blur-md transform-gpu p-6 rounded-3xl border border-zinc-700/50 hover:bg-zinc-800/80 hover:border-tulip-500/50 cursor-default"
                         onmouseenter="if(typeof AudioManager !== 'undefined') AudioManager.play('hover.wav', 0.2)">
                         <div
                             class="w-12 h-12 rounded-2xl bg-brand-500/20 flex items-center justify-center mb-4 border border-brand-500/30">
@@ -11684,7 +11684,7 @@
                             me haces sentir: esa mezcla de adrenalina, nervios y fascinación total.</p>
                     </div>
 
-                    <div class="song-detail-card bg-zinc-800/40 md:backdrop-blur-md transform-gpu p-6 rounded-3xl border border-zinc-700/50 hover:bg-zinc-800/80 hover:border-tulip-500/50 cursor-default"
+                    <div class="song-detail-card bg-zinc-800/40 backdrop-blur-md transform-gpu p-6 rounded-3xl border border-zinc-700/50 hover:bg-zinc-800/80 hover:border-tulip-500/50 cursor-default"
                         onmouseenter="if(typeof AudioManager !== 'undefined') AudioManager.play('hover.wav', 0.2)">
                         <div
                             class="w-12 h-12 rounded-2xl bg-tulip-500/20 flex items-center justify-center mb-4 border border-tulip-500/30">
@@ -11696,7 +11696,7 @@
                             el drop explosivo de Jersey Club es la forma en que mi corazón se acelera por ti.</p>
                     </div>
 
-                    <div class="song-detail-card bg-zinc-800/40 md:backdrop-blur-md transform-gpu p-6 rounded-3xl border border-zinc-700/50 hover:bg-zinc-800/80 hover:border-tulip-500/50 cursor-default"
+                    <div class="song-detail-card bg-zinc-800/40 backdrop-blur-md transform-gpu p-6 rounded-3xl border border-zinc-700/50 hover:bg-zinc-800/80 hover:border-tulip-500/50 cursor-default"
                         onmouseenter="if(typeof AudioManager !== 'undefined') AudioManager.play('hover.wav', 0.2)">
                         <div
                             class="w-12 h-12 rounded-2xl bg-pink-500/20 flex items-center justify-center mb-4 border border-pink-500/30">
@@ -11711,7 +11711,7 @@
 
                 <!-- Lyrics Section -->
                 <div
-                    class="bg-zinc-900/60 md:backdrop-blur-md transform-gpu p-8 md:p-10 rounded-[2.5rem] border border-zinc-800/80 shadow-md md:shadow-2xl relative">
+                    class="bg-zinc-900/60 backdrop-blur-md transform-gpu p-8 md:p-10 rounded-[2.5rem] border border-zinc-800/80 shadow-2xl relative">
                     <!-- Decoraciones en esquinas -->
                     <div
                         class="absolute top-0 left-0 w-20 h-20 border-t border-l border-zinc-700/50 rounded-tl-[2.5rem] pointer-events-none">
@@ -12061,7 +12061,7 @@
                                 univSlide.innerHTML = decodeURIComponent(escape(atob(payload)));
                                 if (window.setLanguage && window.currentLang) { setLanguage(window.currentLang); }
                                 // Change class from locked placeholder to the active styling
-                                univSlide.className = "w-full flex-shrink-0 snap-center bg-zinc-900 p-6 md:p-8 rounded-[2rem] shadow-md md:shadow-xl border border-tulip-500/30 flex flex-col items-start gap-4 relative overflow-hidden transition-all duration-700";
+                                univSlide.className = "w-full flex-shrink-0 snap-center bg-zinc-900 p-6 md:p-8 rounded-[2rem] shadow-xl border border-tulip-500/30 flex flex-col items-start gap-4 relative overflow-hidden transition-all duration-700";
                                 univSlide.style.minHeight = 'auto';
                             }
                         }
@@ -12071,7 +12071,7 @@
                         const game3Overlay = document.getElementById('game3-lock-overlay');
                         if (game3Card) {
                             game3Card.classList.remove('opacity-50', 'grayscale', 'duration-1000');
-                            game3Card.classList.add('cursor-pointer', 'hover:shadow-md md:shadow-2xl', 'hover:-translate-y-3', 'duration-400');
+                            game3Card.classList.add('cursor-pointer', 'hover:shadow-2xl', 'hover:-translate-y-3', 'duration-400');
                             game3Card.style.pointerEvents = 'auto';
                         }
                         if (game3Overlay) {
@@ -12160,7 +12160,7 @@
             <!-- Act I -->
             <div class="relative group">
                 <div class="absolute -left-[41px] md:-left-[57px] top-6 w-5 h-5 rounded-full bg-zinc-900 border-4 border-zinc-700 group-hover:border-amber-500 transition-colors duration-300"></div>
-                <div class="bg-white/5 md:backdrop-blur-sm border border-white/10 p-6 md:p-8 rounded-2xl shadow-md md:shadow-xl hover:shadow-md md:shadow-2xl hover:bg-white/10 transition-all duration-300">
+                <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-6 md:p-8 rounded-2xl shadow-xl hover:shadow-2xl hover:bg-white/10 transition-all duration-300">
                     <span class="text-amber-500 font-mono text-sm mb-2 block uppercase tracking-wider">Acto I ✦ El Origen</span>
                     <h3 class="text-white font-bold text-2xl mb-4">28 de Enero — Donde Todo Empezó</h3>
                     <p class="text-zinc-400 leading-relaxed text-base md:text-lg">Un cruce de palabras que cambió el eje de todo. Dos almas a 900 kilómetros de distancia descubrieron que la frecuencia del corazón no entiende de mapas. Ese día no solo nos conocimos — comenzamos a construir un universo que nadie más puede ver.</p>
@@ -12170,7 +12170,7 @@
             <!-- Act II -->
             <div class="relative group">
                 <div class="absolute -left-[41px] md:-left-[57px] top-6 w-5 h-5 rounded-full bg-zinc-900 border-4 border-zinc-700 group-hover:border-pink-500 transition-colors duration-300"></div>
-                <div class="bg-white/5 md:backdrop-blur-sm border border-white/10 p-6 md:p-8 rounded-2xl shadow-md md:shadow-xl hover:shadow-md md:shadow-2xl hover:bg-white/10 transition-all duration-300">
+                <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-6 md:p-8 rounded-2xl shadow-xl hover:shadow-2xl hover:bg-white/10 transition-all duration-300">
                     <span class="text-pink-500 font-mono text-sm mb-2 block uppercase tracking-wider">Acto II ✦ Raíces de Fuego</span>
                     <h3 class="text-white font-bold text-2xl mb-4">Las Tormentas que nos Forjaron</h3>
                     <p class="text-zinc-400 leading-relaxed text-base md:text-lg">Cada obstáculo se convirtió en cemento para nuestros cimientos. Donde otros hubieran corrido, nosotros cavamos más profundo. Aprendimos que el amor verdadero no evita el fuego — lo atraviesa de la mano y sale más fuerte del otro lado.</p>
@@ -12180,7 +12180,7 @@
             <!-- Act III -->
             <div class="relative group">
                 <div class="absolute -left-[41px] md:-left-[57px] top-6 w-5 h-5 rounded-full bg-zinc-900 border-4 border-zinc-700 group-hover:border-amber-500 transition-colors duration-300"></div>
-                <div class="bg-white/5 md:backdrop-blur-sm border border-white/10 p-6 md:p-8 rounded-2xl shadow-md md:shadow-xl hover:shadow-md md:shadow-2xl hover:bg-white/10 transition-all duration-300">
+                <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-6 md:p-8 rounded-2xl shadow-xl hover:shadow-2xl hover:bg-white/10 transition-all duration-300">
                     <span class="text-amber-500 font-mono text-sm mb-2 block uppercase tracking-wider">Acto III ✦ La Distancia es Mentira</span>
                     <h3 class="text-white font-bold text-2xl mb-4">900 km = 0 cm del Alma</h3>
                     <p class="text-zinc-400 leading-relaxed text-base md:text-lg">Las madrugadas se volvieron nuestro horario secreto. Cada nota de voz un abrazo encapsulado, cada videollamada un portal interdimensional. Hemos demostrado que la distancia es solo una ilusión óptica frente a la magnitud de lo que sentimos.</p>
@@ -12190,7 +12190,7 @@
             <!-- Act IV -->
             <div class="relative group">
                 <div class="absolute -left-[41px] md:-left-[57px] top-6 w-5 h-5 rounded-full bg-zinc-900 border-4 border-zinc-700 group-hover:border-pink-500 transition-colors duration-300"></div>
-                <div class="bg-white/5 md:backdrop-blur-sm border border-white/10 p-6 md:p-8 rounded-2xl shadow-md md:shadow-xl hover:shadow-md md:shadow-2xl hover:bg-white/10 transition-all duration-300">
+                <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-6 md:p-8 rounded-2xl shadow-xl hover:shadow-2xl hover:bg-white/10 transition-all duration-300">
                     <span class="text-pink-500 font-mono text-sm mb-2 block uppercase tracking-wider">Acto IV ✦ Las Cifras del Corazón</span>
                     <h3 class="text-white font-bold text-2xl mb-4">Seis Meses en Números</h3>
                     <p class="text-zinc-400 leading-relaxed text-base md:text-lg">182 amaneceres pensando en ti. 50,835 mensajes intercambiados donde cada uno de los 1,295 "te amo" pesa más que el anterior. 11,781 mensajes compartidos de madrugada junto a 654 risas, y 281,346 palabras escritas para acortar la distancia. No son solo estadísticas — son las huellas digitales de nuestra historia.</p>
@@ -12200,7 +12200,7 @@
             <!-- Act V -->
             <div class="relative group">
                 <div class="absolute -left-[41px] md:-left-[57px] top-6 w-5 h-5 rounded-full bg-zinc-900 border-4 border-zinc-700 group-hover:border-amber-500 transition-colors duration-300"></div>
-                <div class="bg-white/5 md:backdrop-blur-sm border border-white/10 p-6 md:p-8 rounded-2xl shadow-md md:shadow-xl hover:shadow-md md:shadow-2xl hover:bg-white/10 transition-all duration-300">
+                <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-6 md:p-8 rounded-2xl shadow-xl hover:shadow-2xl hover:bg-white/10 transition-all duration-300">
                     <span class="text-amber-500 font-mono text-sm mb-2 block uppercase tracking-wider">Acto V ✦ La Musa Infinita</span>
                     <h3 class="text-white font-bold text-2xl mb-4">Cada Línea de Código Lleva tu Nombre</h3>
                     <p class="text-zinc-400 leading-relaxed text-base md:text-lg">Esta plataforma existe porque tú existes. Cada animación, cada detalle, cada sorpresa escondida — todo fue creado pensando en tu sonrisa al descubrirlo. Eres la inspiración que no se agota, la razón detrás de cada pixel iluminado.</p>
@@ -12210,7 +12210,7 @@
             <!-- Act VI -->
             <div class="relative group">
                 <div class="absolute -left-[41px] md:-left-[57px] top-6 w-5 h-5 rounded-full bg-zinc-900 border-4 border-zinc-700 group-hover:border-pink-500 transition-colors duration-300"></div>
-                <div class="bg-white/5 md:backdrop-blur-sm border border-white/10 p-6 md:p-8 rounded-2xl shadow-md md:shadow-xl hover:shadow-md md:shadow-2xl hover:bg-white/10 transition-all duration-300">
+                <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-6 md:p-8 rounded-2xl shadow-xl hover:shadow-2xl hover:bg-white/10 transition-all duration-300">
                     <span class="text-pink-500 font-mono text-sm mb-2 block uppercase tracking-wider">Acto VI ✦ Lo que Viene</span>
                     <h3 class="text-white font-bold text-2xl mb-4">El Futuro nos Pertenece</h3>
                     <p class="text-zinc-400 leading-relaxed text-base md:text-lg">Medio año es solo el prólogo. Nos esperan viajes, abrazos en persona, risas que aún no hemos inventado y un "siempre" que construiremos día a día. Lo mejor de nuestra historia aún no ha sido escrito — y eso me emociona más que nada.</p>
@@ -12220,7 +12220,7 @@
             <!-- Act VII - GOLDEN FINALE -->
             <div class="relative group">
                 <div class="absolute -left-[41px] md:-left-[57px] top-6 w-5 h-5 rounded-full bg-zinc-900 border-4 transition-colors duration-300" style="background: #f59e0b; border-color: #f59e0b; box-shadow: 0 0 20px rgba(245,158,11,0.6);"></div>
-                <div class="md:backdrop-blur-md p-6 md:p-8 rounded-2xl shadow-md md:shadow-xl transition-all duration-300" style="border: 1px solid rgba(245,158,11,0.5); background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(236,72,153,0.05)); box-shadow: 0 0 40px rgba(245,158,11,0.12);">
+                <div class="backdrop-blur-md p-6 md:p-8 rounded-2xl shadow-xl transition-all duration-300" style="border: 1px solid rgba(245,158,11,0.5); background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(236,72,153,0.05)); box-shadow: 0 0 40px rgba(245,158,11,0.12);">
                     <span class="font-mono text-sm mb-2 block uppercase tracking-wider" style="color: #ec4899; text-shadow: 0 0 10px rgba(236,72,153,0.5);">Acto VII ✦ 28 de Julio 2026</span>
                     <h3 class="font-bold text-3xl mb-4" style="color: #f59e0b; text-shadow: 0 0 20px rgba(245,158,11,0.3);">Medio Año Oficial ✨</h3>
                     <p class="text-zinc-300 leading-relaxed text-base md:text-lg">Hoy sellamos el capítulo de oro: seis meses completos de amarnos sin tregua, sin condiciones, sin fronteras. Medio año que vale más que toda una vida cualquiera. Mantén presionado el sello inferior para desbloquear mi juramento de medio año.</p>
@@ -12269,7 +12269,7 @@
                 <!-- Timeline Cards Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
                     <!-- Mes 1: Enero -->
-                    <div class="group relative rounded-2xl p-5 border border-zinc-200/50 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 md:backdrop-blur-sm transition-all duration-500 hover:border-amber-500/30 hover:shadow-lg hover:shadow-amber-500/5">
+                    <div class="group relative rounded-2xl p-5 border border-zinc-200/50 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 backdrop-blur-sm transition-all duration-500 hover:border-amber-500/30 hover:shadow-lg hover:shadow-amber-500/5">
                         <div class="flex items-center gap-3 mb-3">
                             <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-lg">💫</div>
                             <div>
@@ -12282,7 +12282,7 @@
                         <div class="flex items-center gap-1.5 text-[10px] font-bold text-amber-500 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>28 de Enero — Día 1</div>
                     </div>
                     <!-- Mes 2: Febrero -->
-                    <div class="group relative rounded-2xl p-5 border border-zinc-200/50 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 md:backdrop-blur-sm transition-all duration-500 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/5">
+                    <div class="group relative rounded-2xl p-5 border border-zinc-200/50 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 backdrop-blur-sm transition-all duration-500 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/5">
                         <div class="flex items-center gap-3 mb-3">
                             <div class="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-lg">🔥</div>
                             <div>
@@ -12295,7 +12295,7 @@
                         <div class="flex items-center gap-1.5 text-[10px] font-bold text-pink-500 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-pink-500"></span>Primer Mes Oficial</div>
                     </div>
                     <!-- Mes 3: Marzo -->
-                    <div class="group relative rounded-2xl p-5 border border-zinc-200/50 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 md:backdrop-blur-sm transition-all duration-500 hover:border-violet-500/30 hover:shadow-lg hover:shadow-violet-500/5">
+                    <div class="group relative rounded-2xl p-5 border border-zinc-200/50 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 backdrop-blur-sm transition-all duration-500 hover:border-violet-500/30 hover:shadow-lg hover:shadow-violet-500/5">
                         <div class="flex items-center gap-3 mb-3">
                             <div class="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-lg">🌙</div>
                             <div>
@@ -12308,7 +12308,7 @@
                         <div class="flex items-center gap-1.5 text-[10px] font-bold text-violet-500 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-violet-500"></span>Segundo Mes Oficial</div>
                     </div>
                     <!-- Mes 4: Abril -->
-                    <div class="group relative rounded-2xl p-5 border border-zinc-200/50 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 md:backdrop-blur-sm transition-all duration-500 hover:border-emerald-500/30 hover:shadow-lg hover:shadow-emerald-500/5">
+                    <div class="group relative rounded-2xl p-5 border border-zinc-200/50 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 backdrop-blur-sm transition-all duration-500 hover:border-emerald-500/30 hover:shadow-lg hover:shadow-emerald-500/5">
                         <div class="flex items-center gap-3 mb-3">
                             <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-lg">🔓</div>
                             <div>
@@ -12321,7 +12321,7 @@
                         <div class="flex items-center gap-1.5 text-[10px] font-bold text-emerald-500 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>28E Desbloqueado</div>
                     </div>
                     <!-- Mes 5: Mayo -->
-                    <div class="group relative rounded-2xl p-5 border border-zinc-200/50 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 md:backdrop-blur-sm transition-all duration-500 hover:border-sky-500/30 hover:shadow-lg hover:shadow-sky-500/5">
+                    <div class="group relative rounded-2xl p-5 border border-zinc-200/50 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 backdrop-blur-sm transition-all duration-500 hover:border-sky-500/30 hover:shadow-lg hover:shadow-sky-500/5">
                         <div class="flex items-center gap-3 mb-3">
                             <div class="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-lg">💯</div>
                             <div>
@@ -12334,7 +12334,7 @@
                         <div class="flex items-center gap-1.5 text-[10px] font-bold text-sky-500 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>100 Días ✓</div>
                     </div>
                     <!-- Mes 6: Junio -->
-                    <div class="group relative rounded-2xl p-5 border border-zinc-200/50 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 md:backdrop-blur-sm transition-all duration-500 hover:border-rose-500/30 hover:shadow-lg hover:shadow-rose-500/5">
+                    <div class="group relative rounded-2xl p-5 border border-zinc-200/50 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 backdrop-blur-sm transition-all duration-500 hover:border-rose-500/30 hover:shadow-lg hover:shadow-rose-500/5">
                         <div class="flex items-center gap-3 mb-3">
                             <div class="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-lg">🎬</div>
                             <div>
@@ -12349,7 +12349,7 @@
                 </div>
 
                 <!-- Current Month — GOLDEN CARD -->
-                <div class="mt-5 relative rounded-2xl p-6 md:p-8 border border-amber-500/30 bg-gradient-to-r from-amber-500/5 via-pink-500/3 to-amber-500/5 md:backdrop-blur-sm overflow-hidden" style="box-shadow: 0 0 40px rgba(245,158,11,0.08);">
+                <div class="mt-5 relative rounded-2xl p-6 md:p-8 border border-amber-500/30 bg-gradient-to-r from-amber-500/5 via-pink-500/3 to-amber-500/5 backdrop-blur-sm overflow-hidden" style="box-shadow: 0 0 40px rgba(245,158,11,0.08);">
                     <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at center, rgba(245,158,11,0.06), transparent 70%);"></div>
                     <div class="relative z-10 flex flex-col md:flex-row items-center gap-5 md:gap-8">
                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-pink-500 flex items-center justify-center text-3xl shadow-lg flex-shrink-0" style="box-shadow: 0 0 30px rgba(245,158,11,0.3);">🏆</div>
@@ -12483,7 +12483,7 @@
                     </div>
                     
                     <!-- Curator Tag -->
-                    <div class="inline-flex items-center gap-4 bg-zinc-100/80 dark:bg-zinc-900/50 md:backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-2xl p-3 shadow-md md:shadow-xl">
+                    <div class="inline-flex items-center gap-4 bg-zinc-100/80 dark:bg-zinc-900/50 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-2xl p-3 shadow-xl">
                         <div class="flex -space-x-3 relative">
                             <div class="w-12 h-12 rounded-full border-2 border-white dark:border-zinc-900 bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center overflow-hidden shadow-lg z-10 text-white text-xl">
                                 🎧
@@ -12503,7 +12503,7 @@
                 <div class="w-full lg:w-7/12 relative flex justify-center lg:justify-end mt-10 lg:mt-0">
                     
                     <!-- Spinning Vinyl Background -->
-                    <div class="absolute top-1/2 right-1/2 translate-x-[20%] -translate-y-1/2 w-[350px] h-[350px] md:w-[450px] md:h-[450px] rounded-full border border-zinc-300 dark:border-zinc-800 bg-zinc-900 dark:bg-zinc-950 shadow-md md:shadow-2xl dark:shadow-[0_0_50px_rgba(0,0,0,0.8)] flex items-center justify-center animate-[spin_10s_linear_infinite]" style="z-index: 0;">
+                    <div class="absolute top-1/2 right-1/2 translate-x-[20%] -translate-y-1/2 w-[350px] h-[350px] md:w-[450px] md:h-[450px] rounded-full border border-zinc-300 dark:border-zinc-800 bg-zinc-900 dark:bg-zinc-950 shadow-2xl dark:shadow-[0_0_50px_rgba(0,0,0,0.8)] flex items-center justify-center animate-[spin_10s_linear_infinite]" style="z-index: 0;">
                         <!-- Vinyl Grooves -->
                         <div class="absolute inset-2 rounded-full border border-white/5 dark:border-zinc-800/50"></div>
                         <div class="absolute inset-6 rounded-full border border-white/5 dark:border-zinc-800/50"></div>
@@ -12529,7 +12529,7 @@
                         <div class="absolute -inset-2 bg-gradient-to-br from-emerald-500 to-teal-400 rounded-[32px] blur-xl opacity-30 group-hover:opacity-50 transition duration-700"></div>
                         
                         <!-- Glass Player Card -->
-                        <div class="relative bg-zinc-100/90 dark:bg-zinc-950/80 md:backdrop-blur-xl rounded-[28px] p-4 border border-white/50 dark:border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                        <div class="relative bg-zinc-100/90 dark:bg-zinc-950/80 backdrop-blur-xl rounded-[28px] p-4 border border-white/50 dark:border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
                             
                             <!-- Glass Reflection -->
                             <div class="absolute inset-0 rounded-[28px] bg-gradient-to-br from-white/40 dark:from-white/[0.05] to-transparent pointer-events-none"></div>
@@ -12565,7 +12565,7 @@
                 <!-- Header de la sección -->
                 <div class="text-center mb-12">
                     <span
-                        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/10 text-zinc-600 dark:text-zinc-300 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-6 shadow-sm md:backdrop-blur-md transform-gpu"
+                        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/10 text-zinc-600 dark:text-zinc-300 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-6 shadow-sm backdrop-blur-md transform-gpu"
                         data-i18n="secret_update_notice"><span
                             class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> Solo para sus ojos</span>
                     <h2 class="text-4xl md:text-6xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 tracking-tight drop-shadow-sm"
@@ -12577,7 +12577,7 @@
 
                 <!-- Glassmorphic Vault Container -->
                 <div
-                    class="relative max-w-2xl mx-auto rounded-[2.5rem] bg-white/50 dark:bg-black/20 md:backdrop-blur-md transform-gpu border border-white/40 dark:border-white/5 shadow-md md:shadow-2xl p-8 md:p-14 overflow-hidden group/vault">
+                    class="relative max-w-2xl mx-auto rounded-[2.5rem] bg-white/50 dark:bg-black/20 backdrop-blur-md transform-gpu border border-white/40 dark:border-white/5 shadow-2xl p-8 md:p-14 overflow-hidden group/vault">
 
                     <!-- Inner Container Glow -->
                     <div
@@ -12706,7 +12706,7 @@
                             <div
                                 class="absolute inset-0 flex items-center justify-center rounded-full opacity-0 group-hover/vault:opacity-100 transition-opacity duration-300 pointer-events-none z-20">
                                 <span
-                                    class="text-white text-xs font-bold tracking-widest uppercase bg-black/60 px-4 py-2 rounded-full md:backdrop-blur-md transform-gpu shadow-lg border border-white/10">Abrir</span>
+                                    class="text-white text-xs font-bold tracking-widest uppercase bg-black/60 px-4 py-2 rounded-full backdrop-blur-md transform-gpu shadow-lg border border-white/10">Abrir</span>
                             </div>
                         </div>
 
@@ -15614,7 +15614,7 @@
                 if (hint) {
                     const _sd = (typeof dictionary !== 'undefined' && dictionary[currentLang]) ? dictionary[currentLang] : {};
                     const _st = _sd.sunflower_success || '¡Siempre hacia ti! 🌻✨';
-                    hint.innerHTML = '<span class="text-white font-bold text-lg drop-shadow-md bg-black/30 inline-block px-5 py-2 rounded-full md:backdrop-blur-sm transform-gpu">' + _st + '</span>';
+                    hint.innerHTML = '<span class="text-white font-bold text-lg drop-shadow-md bg-black/30 inline-block px-5 py-2 rounded-full backdrop-blur-sm transform-gpu">' + _st + '</span>';
                     hint.style.opacity = '1';
                     hint.classList.remove('animate-pulse');
                     hint.classList.add('animate-bounce');
@@ -17025,10 +17025,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if (document.getElementById('cs-reward-modal')) return;
             const m = document.createElement('div');
             m.id = 'cs-reward-modal';
-            m.className = 'fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-6 bg-black/90 md:backdrop-blur-2xl overflow-y-auto';
+            m.className = 'fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-2xl overflow-y-auto';
             m.style.opacity = '0';
             m.innerHTML = `
-                  <div id="cs-modal-card" class="bg-zinc-950/80 md:backdrop-blur-3xl border border-amber-500/20 p-6 sm:p-8 rounded-[2rem] max-w-lg sm:max-w-2xl w-full max-h-[85vh] flex flex-col justify-between my-auto text-center shadow-[0_0_100px_rgba(245,158,11,0.15)] relative overflow-hidden transform-gpu">
+                  <div id="cs-modal-card" class="bg-zinc-950/80 backdrop-blur-3xl border border-amber-500/20 p-6 sm:p-8 rounded-[2rem] max-w-lg sm:max-w-2xl w-full max-h-[85vh] flex flex-col justify-between my-auto text-center shadow-[0_0_100px_rgba(245,158,11,0.15)] relative overflow-hidden transform-gpu">
                       
                       <!-- Decorative Orbs -->
                       <div class="absolute -right-32 -top-32 w-64 h-64 bg-pink-500/10 rounded-full blur-[80px] pointer-events-none animate-pulse"></div>
@@ -17051,7 +17051,7 @@ document.addEventListener("DOMContentLoaded", () => {
                           <div class="w-24 h-0.5 mx-auto bg-gradient-to-r from-transparent via-amber-500/50 to-transparent mb-4"></div>
                       </div>
                       
-                      <div class="relative z-10 flex-1 overflow-y-auto text-left bg-black/40 md:backdrop-blur-md border border-white/5 p-5 sm:p-7 rounded-2xl my-2 space-y-4 font-serif text-sm sm:text-base text-zinc-200/90 leading-relaxed custom-scrollbar shadow-inner">
+                      <div class="relative z-10 flex-1 overflow-y-auto text-left bg-black/40 backdrop-blur-md border border-white/5 p-5 sm:p-7 rounded-2xl my-2 space-y-4 font-serif text-sm sm:text-base text-zinc-200/90 leading-relaxed custom-scrollbar shadow-inner">
                           <p class="italic text-amber-300/90 text-base sm:text-lg tracking-wide font-medium">"Mi amada Yaire,</p>
                           
                           <p class="first-letter:text-4xl first-letter:font-bold first-letter:text-amber-400 first-letter:mr-1 first-letter:float-left">Hoy, 28 de junio, sellamos nuestro quinto mes oficial. Cinco meses desde que nuestros mundos colisionaron para nunca más separarse. Parece que fue ayer cuando una simple conversación encendió una chispa, y hoy esa chispa es el fuego que abriga mis madrugadas y le da sentido a cada uno de mis días.</p>
@@ -18616,7 +18616,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 msgs.forEach((m, idx) => {
                     const card = document.createElement('div');
                     // Glassmorphism card styles with masonry break-inside-avoid
-                    card.className = "break-inside-avoid inline-block w-full mb-6 bg-white/60 dark:bg-zinc-900/60 md:backdrop-blur-md border border-white/40 dark:border-zinc-700/40 rounded-3xl p-6 shadow-md md:shadow-xl shadow-zinc-200/30 dark:shadow-none hover:-translate-y-2 hover:shadow-md md:shadow-2xl hover:shadow-amber-500/10 transition-all duration-500 group relative overflow-hidden gb-card-anim";
+                    card.className = "break-inside-avoid inline-block w-full mb-6 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md border border-white/40 dark:border-zinc-700/40 rounded-3xl p-6 shadow-xl shadow-zinc-200/30 dark:shadow-none hover:-translate-y-2 hover:shadow-2xl hover:shadow-amber-500/10 transition-all duration-500 group relative overflow-hidden gb-card-anim";
                     card.style.opacity = '0';
                     card.style.transform = 'translateY(20px)';
 
@@ -18688,7 +18688,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <!-- NEXT SONG TOAST -->
     <div id="next-song-toast"
-        class="fixed bottom-6 left-6 bg-[#18181b]/95 md:backdrop-blur-md border border-brand-500/30 pr-5 pl-3 py-3 rounded-2xl shadow-[0_10px_40px_rgba(236,72,153,0.2)] flex items-center gap-3 z-[99999] opacity-0 pointer-events-none transform translate-y-[20px]">
+        class="fixed bottom-6 left-6 bg-[#18181b]/95 backdrop-blur-md border border-brand-500/30 pr-5 pl-3 py-3 rounded-2xl shadow-[0_10px_40px_rgba(236,72,153,0.2)] flex items-center gap-3 z-[99999] opacity-0 pointer-events-none transform translate-y-[20px]">
         <div id="next-song-toast-art-container"
             class="w-11 h-11 rounded-lg bg-brand-500/20 flex items-center justify-center text-brand-400 shrink-0 overflow-hidden">
             <i id="next-song-toast-fallback" class="ph-bold ph-music-notes text-xl"></i>
@@ -18750,7 +18750,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const toast = document.createElement('div');
             // Using pointer-events-auto so the toast can be clicked/hovered
-            toast.className = "transform transition-all duration-500 translate-y-10 opacity-0 pointer-events-auto flex items-center gap-4 bg-[#18181b]/95 md:backdrop-blur-md border rounded-2xl p-4 shadow-md md:shadow-xl w-80";
+            toast.className = "transform transition-all duration-500 translate-y-10 opacity-0 pointer-events-auto flex items-center gap-4 bg-[#18181b]/95 backdrop-blur-md border rounded-2xl p-4 shadow-xl w-80";
 
             let iconClass = '';
             let iconBgClass = '';
@@ -18832,8 +18832,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     <!-- Oath VI reveal Modal (hidden until unlocked) -->
-    <div id="cs6-oath" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 md:backdrop-blur-md transition-opacity duration-300" style="display:none; opacity:0;">
-        <div class="max-w-2xl w-full mx-auto px-6 py-10 rounded-3xl relative overflow-hidden bg-zinc-900 shadow-md md:shadow-2xl" style="border: 1px solid rgba(245,158,11,0.4);">
+    <div id="cs6-oath" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-opacity duration-300" style="display:none; opacity:0;">
+        <div class="max-w-2xl w-full mx-auto px-6 py-10 rounded-3xl relative overflow-hidden bg-zinc-900 shadow-2xl" style="border: 1px solid rgba(245,158,11,0.4);">
             <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at center, rgba(245,158,11,0.15), transparent 70%);"></div>
             
             <!-- Close button -->
