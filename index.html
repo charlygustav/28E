@@ -811,8 +811,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0.95);
-            width: min(600px, 96vw);
-            max-height: min(680px, 95vh);
+            width: min(520px, 92vw);
+            max-height: min(680px, 85vh);
             z-index: 100;
             opacity: 0;
             pointer-events: none;
@@ -826,6 +826,13 @@
             pointer-events: auto;
             transform: translate(-50%, -50%) scale(1);
         }
+        @media (max-width: 768px) {
+            #menu-panel {
+                width: 96vw !important;
+                max-height: 95vh !important;
+            }
+        }
+
 
         .menu-link.active {
             color: #f59e0b !important;
