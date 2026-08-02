@@ -2077,6 +2077,34 @@
 </style>
     <!-- GSAP ya cargado en <head> con defer — removido duplicado para evitar doble parse y doble descarga -->
     <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
+
+    <!-- EXTREME MOBILE OPTIMIZATION -->
+    <style>
+        @media (max-width: 768px) {
+            /* Disable continuous animations */
+            .animate-pulse, .animate-spin, .animate-bounce, .animate-spin-slow, .animate-ping {
+                animation: none !important;
+            }
+            
+            /* Remove transparencies (Force solid backgrounds) */
+            [class*="bg-zinc-950/"] { background-color: #09090b !important; }
+            [class*="bg-black/"] { background-color: #000000 !important; }
+            [class*="bg-white/"] { background-color: #ffffff !important; }
+            [class*="bg-zinc-900/"] { background-color: #18181b !important; }
+            [class*="bg-zinc-800/"] { background-color: #27272a !important; }
+            
+            /* Remove any remaining backdrop filters */
+            [class*="backdrop-blur"] {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+            #menu-panel {
+                background-color: #09090b !important; /* solid zinc-950 */
+            }
+        }
+    </style>
+    <!-- END EXTREME MOBILE OPTIMIZATION -->
+
 </head>
 
 <body
@@ -5907,6 +5935,7 @@
                     if (!container) return;
                     const petals = ['🌸', '🌷', '💮', '🏵️', '✿'];
                     function spawnPetal() {
+                        if (window.innerWidth < 768) return; // Mobile optimization: stop petal generation
                         if (container.children.length >= 25) return; // Cap to prevent memory leaks
                         const el = document.createElement('span');
                         el.className = 'tulip-petal';
