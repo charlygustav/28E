@@ -379,26 +379,10 @@
         iceServers: [
           { urls: 'stun:stun.l.google.com:19302' },
           { urls: 'stun:stun1.l.google.com:19302' },
-          { urls: 'stun:stun.relay.metered.ca:80' },
           {
-            urls: 'turn:global.relay.metered.ca:80',
-            username: '5187d4c4c5314e021d568c2d',
-            credential: 'Bb9ysI8BgTjn/dET'
-          },
-          {
-            urls: 'turn:global.relay.metered.ca:80?transport=tcp',
-            username: '5187d4c4c5314e021d568c2d',
-            credential: 'Bb9ysI8BgTjn/dET'
-          },
-          {
-            urls: 'turn:global.relay.metered.ca:443',
-            username: '5187d4c4c5314e021d568c2d',
-            credential: 'Bb9ysI8BgTjn/dET'
-          },
-          {
-            urls: 'turns:global.relay.metered.ca:443?transport=tcp',
-            username: '5187d4c4c5314e021d568c2d',
-            credential: 'Bb9ysI8BgTjn/dET'
+            urls: 'turn:3.93.72.200:3478',
+            username: 'charly',
+            credential: '12345678'
           }
         ]
       };
