@@ -41,9 +41,52 @@ function fetchPasswordFromFirebase() {
 }
 fetchPasswordFromFirebase();
 
-// socketId -> { displayName, muted, dnd }
 const users = new Map();
 const chatLog = [];
+
+// ── AWS NETWORK MONITORING ──────────────────────────────────────────────────
+const fs = require('fs');
+let lastNet = { rx: 0, tx: 0, time: Date.now() };
+let currentNetSpeed = { rx_bps: 0, tx_bps: 0, rx_mb: '0.00', tx_mb: '0.00' };
+
+function formatBytes(bytesPerSec) {
+  if (bytesPerSec === 0) return '0.00 KB/s';
+  const k = 1024;
+  if (bytesPerSec < k * k) return (bytesPerSec / k).toFixed(2) + ' KB/s';
+  return (bytesPerSec / (k * k)).toFixed(2) + ' MB/s';
+}
+
+function updateNetStats() {
+  try {
+    const data = fs.readFileSync('/proc/net/dev', 'utf8');
+    const lines = data.split('\n');
+    let totalRx = 0;
+    let totalTx = 0;
+    for (let i = 2; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (!line) continue;
+      const parts = line.split(/:|\s+/);
+      const iface = parts[0];
+      if (iface === 'lo') continue; // skip loopback
+      totalRx += parseInt(parts[1], 10) || 0;
+      totalTx += parseInt(parts[9], 10) || 0;
+    }
+    const now = Date.now();
+    const dt = (now - lastNet.time) / 1000;
+    if (dt > 0 && lastNet.time !== 0 && (totalRx >= lastNet.rx)) {
+      currentNetSpeed.rx_bps = (totalRx - lastNet.rx) / dt;
+      currentNetSpeed.tx_bps = (totalTx - lastNet.tx) / dt;
+      currentNetSpeed.rx_mb = formatBytes(currentNetSpeed.rx_bps);
+      currentNetSpeed.tx_mb = formatBytes(currentNetSpeed.tx_bps);
+    }
+    lastNet = { rx: totalRx, tx: totalTx, time: now };
+  } catch (e) {
+    // Only happens on non-linux OS (like Windows development), ignore
+    currentNetSpeed.rx_mb = 'N/A';
+    currentNetSpeed.tx_mb = 'N/A';
+  }
+}
+setInterval(updateNetStats, 2000);
 
 // ── MUSIC STATE ──────────────────────────────────────────────────────────────
 let musicQueue = [];
@@ -346,6 +389,7 @@ app.get('/api/status', (_, res) => {
     chatLog: chatLog,
     musicQueue: musicQueue,
     musicState: musicState,
+    awsNetwork: currentNetSpeed,
     timestamp: new Date().toISOString()
   });
 });
