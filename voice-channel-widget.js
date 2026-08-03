@@ -1468,6 +1468,26 @@
           this._closePeer(userId);
         });
 
+        this.socket.on('webrtc_offer', async ({ from, sdp }) => {
+          await this._handleOffer(from, sdp);
+        });
+
+        this.socket.on('webrtc_answer', async ({ from, sdp }) => {
+          const pc = this.peers.get(from);
+          if (pc) await pc.setRemoteDescription(new RTCSessionDescription(sdp));
+          this._flushIce(from);
+        });
+
+        this.socket.on('ice_candidate', async ({ from, candidate }) => {
+          const pc = this.peers.get(from);
+          if (pc && pc.remoteDescription) {
+            await pc.addIceCandidate(new RTCIceCandidate(candidate)).catch(() => {});
+          } else {
+            if (!this.pendingIce.has(from)) this.pendingIce.set(from, []);
+            this.pendingIce.get(from).push(candidate);
+          }
+        });
+
         this.socket.on('speaking_state', ({ from, speaking }) => {
           this._updateAvatar(from, speaking);
         });
@@ -1596,94 +1616,77 @@
     }
 
     // ── WebRTC ─────────────────────────────────────────────────────────────
-    // ── LIVEKIT ────────────────────────────────────────────────────────────
-    async _connectLiveKit(token, url) {
-      if (this.room) {
-        await this.room.disconnect();
+    _makePeer(peerId) {
+      const pc = new RTCPeerConnection(this.ice);
+      const streamToUse = this._processedStream || this.stream;
+      if (streamToUse) {
+        streamToUse.getTracks().forEach(t => pc.addTrack(t, streamToUse));
       }
+      this.peers.set(peerId, pc);
 
-      this.room = new window.LivekitClient.Room({
-        adaptiveStream: true,
-        dynacast: true,
-        publishDefaults: {
-          audioPreset: { maxBitrate: 128000 },
-          dtx: true,
-          red: true
+      pc.onicecandidate = ({ candidate }) => {
+        if (candidate && this.socket)
+          this.socket.emit('ice_candidate', { to: peerId, candidate });
+      };
+
+      pc.ontrack = ({ streams }) => {
+        if (!streams[0]) return;
+        let audio = this.audios.get(peerId);
+        if (!audio) {
+          audio = new Audio();
+          audio.autoplay = true;
+          audio.dataset.vcPeer = peerId;
+          audio.setAttribute('playsinline', '');
+          audio.setAttribute('webkit-playsinline', '');
+          document.body.appendChild(audio);
+          this.audios.set(peerId, audio);
         }
-      });
-
-      this.room.on(window.LivekitClient.RoomEvent.TrackSubscribed, (track, publication, participant) => {
-        const element = track.attach();
-        element.dataset.vcPeer = participant.identity;
-        element.setAttribute('playsinline', '');
-        element.setAttribute('webkit-playsinline', '');
-        document.body.appendChild(element);
-        this.audios.set(participant.identity, element);
-        element.volume = this.dnd ? 0 : 1;
-        const u = this.users.find(x => x.id === participant.identity);
-        element.muted = u && u.localMuted ? true : false;
-        this._robustPlay(element, participant.identity);
-      });
-
-      this.room.on(window.LivekitClient.RoomEvent.TrackUnsubscribed, (track, publication, participant) => {
-        track.detach();
-        const element = this.audios.get(participant.identity);
-        if (element) {
-          element.remove();
-          this.audios.delete(participant.identity);
-        }
-      });
-
-      this.room.on(window.LivekitClient.RoomEvent.ActiveSpeakersChanged, (speakers) => {
-        this.users.forEach(u => this._updateAvatar(u.id, false));
-        this._updateAvatar(this.myId, false);
-        speakers.forEach(speaker => this._updateAvatar(speaker.identity, true));
-      });
-
-      this.room.on(window.LivekitClient.RoomEvent.ConnectionQualityChanged, (quality, participant) => {
-        if (this._updatePingIndicator) {
-          this._updatePingIndicator(participant.identity, quality);
-        }
-      });
-
-      try {
-        await this.room.connect(url, token);
+        audio.srcObject = streams[0];
+        audio.volume = this.dnd ? 0 : 1;
+        const u = this.users.find(x => x.id === peerId);
+        audio.muted = u && u.localMuted ? true : false;
         
-        let krispFilter = null;
-        if (window.LivekitKrisp && window.LivekitKrisp.KrispNoiseFilter) {
-          krispFilter = window.LivekitKrisp.KrispNoiseFilter();
+        if (typeof this._robustPlay === 'function') {
+          this._robustPlay(audio, peerId);
+        } else {
+          audio.play().catch(e => console.error('[VC] Autoplay error:', e));
         }
+      };
 
-        const tracks = await window.LivekitClient.createLocalTracks({
-          audio: {
-            ...this._audioConstraints,
-            echoCancellation: true,
-            noiseSuppression: true,
-          },
-          video: false
-        });
+      return pc;
+    }
 
-        this._localAudioTrack = tracks[0];
-        
-        if (krispFilter) {
-          try {
-            await this._localAudioTrack.setProcessor(krispFilter);
-            console.log('[VC] 🔇 Krisp AI Noise Cancellation active');
-          } catch(e) {
-             console.error("Krisp failed", e);
-          }
-        }
+    async _createOffer(peerId) {
+      const pc = this._makePeer(peerId);
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+      this.socket.emit('webrtc_offer', { to: peerId, sdp: pc.localDescription });
+    }
 
-        await this.room.localParticipant.publishTrack(this._localAudioTrack);
-        
-        this.stream = new MediaStream([this._localAudioTrack.mediaStreamTrack]);
-        
-        if (this.muted) {
-          this._localAudioTrack.mute();
-        }
-      } catch (e) {
-        console.error('LiveKit connection failed', e);
-        this._render(this._tplLogin("Error de voz (LiveKit)"));
+    async _handleOffer(fromId, sdp) {
+      const pc = this._makePeer(fromId);
+      await pc.setRemoteDescription(new RTCSessionDescription(sdp));
+      const answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+      this.socket.emit('webrtc_answer', { to: fromId, sdp: pc.localDescription });
+      this._flushIce(fromId);
+    }
+
+    _flushIce(peerId) {
+      const pc = this.peers.get(peerId);
+      const queue = this.pendingIce.get(peerId) || [];
+      queue.forEach(c => pc.addIceCandidate(new RTCIceCandidate(c)).catch(() => {}));
+      this.pendingIce.delete(peerId);
+    }
+
+    _closePeer(peerId) {
+      const pc = this.peers.get(peerId);
+      if (pc) { pc.close(); this.peers.delete(peerId); }
+      const audio = this.audios.get(peerId);
+      if (audio) { 
+        audio.srcObject = null; 
+        audio.remove(); 
+        this.audios.delete(peerId); 
       }
     }
 
