@@ -780,16 +780,16 @@
                         </div>
                     </div>
 
-                    <!-- Última Actualización -->
+                    <!-- Consumo AWS -->
                     <div
                         class="md:col-span-3 p-5 rounded-2xl bg-gradient-to-b from-white/[0.04] to-transparent border border-white/10 hover:border-white/20 transition-all flex flex-col justify-between group">
                         <div class="flex items-center gap-3 mb-4">
-                            <i class="ph-fill ph-clock-counter-clockwise text-zinc-500 text-lg"></i>
-                            <span class="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">Panel Activo
-                                Desde</span>
+                            <i class="ph-fill ph-cloud-arrow-up text-zinc-500 text-lg"></i>
+                            <span class="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">Tráfico Servidor AWS</span>
                         </div>
-                        <div>
-                            <p class="text-xl font-black text-white" id="dash-lastupdate">Cargando...</p>
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm font-black text-white flex items-center gap-2"><i class="ph-bold ph-download-simple text-blue-400"></i> <span id="dash-aws-rx">0.00 KB/s</span></p>
+                            <p class="text-sm font-black text-white flex items-center gap-2"><i class="ph-bold ph-upload-simple text-amber-400"></i> <span id="dash-aws-tx">0.00 KB/s</span></p>
                         </div>
                     </div>
 
@@ -4902,6 +4902,13 @@
                     }
                     const dashVoiceUsers = document.getElementById('dash-voice-users');
                     if (dashVoiceUsers) { dashVoiceUsers.textContent = users.length; }
+
+                    if (d.awsNetwork) {
+                        const rxEl = document.getElementById('dash-aws-rx');
+                        const txEl = document.getElementById('dash-aws-tx');
+                        if (rxEl) rxEl.textContent = d.awsNetwork.rx_mb || '0.00 KB/s';
+                        if (txEl) txEl.textContent = d.awsNetwork.tx_mb || '0.00 KB/s';
+                    }
 
                     // Update Chat Logs in dedicated tab
                     const chatListStr = JSON.stringify(chatList);
