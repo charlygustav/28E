@@ -2711,6 +2711,14 @@
         this._analyser = an;
         this._analyserData = new Uint8Array(an.frequencyBinCount);
         this._checkSpeaking();
+
+        if (ctx.state === 'suspended') {
+          const resumeCtx = () => {
+            ctx.resume().catch(e => console.error(e));
+            ['click', 'touchstart'].forEach(e => document.removeEventListener(e, resumeCtx));
+          };
+          ['click', 'touchstart'].forEach(e => document.addEventListener(e, resumeCtx, { once: true }));
+        }
       } catch(e) {}
     }
 
