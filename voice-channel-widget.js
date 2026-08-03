@@ -626,7 +626,7 @@
                 <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center relative overflow-hidden [&>svg]:w-4 [&>svg]:h-4 [&>svg]:relative [&>svg]:z-10">${ICONS.sound}</div>
                 <div><div class="text-white font-bold text-[13px]">#principal</div><div class="text-white/40 text-[10px]">${_t('vc_sub')}</div></div>
               </div>
-              <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
+              <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close" style="background: transparent; -webkit-appearance: none; appearance: none; border: none; box-shadow: none;"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
             </div>
             
             <div class="relative z-10 py-4 px-6 text-center flex-1 flex flex-col justify-center items-center">
@@ -658,7 +658,7 @@
               <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center relative overflow-hidden [&>svg]:w-4 [&>svg]:h-4 [&>svg]:relative [&>svg]:z-10">${ICONS.sound}</div>
               <div><div class="text-white font-bold text-[13px]">#principal</div><div class="text-white/40 text-[10px]">${_t('vc_sub')}</div></div>
             </div>
-            <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
+            <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close" style="background: transparent; -webkit-appearance: none; appearance: none; border: none; box-shadow: none;"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
           </div>
           
           <div class="relative z-10 py-5 px-6 flex-1 flex flex-col items-center justify-center gap-5">
@@ -697,7 +697,7 @@
               <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5">${ICONS.sound}</div>
               <div><div class="text-white font-bold text-sm">#principal</div><div class="text-white/40 text-[11px]">${_t('st_conn')}</div></div>
             </div>
-            <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
+            <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close" style="background: transparent; -webkit-appearance: none; appearance: none; border: none; box-shadow: none;"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
           </div>
           
           <div class="relative z-10 p-10 flex-1 flex flex-col items-center justify-center">
@@ -721,7 +721,7 @@
               <div class="w-10 h-10 rounded-xl bg-red-500/10 text-red-500 flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5">${ICONS.sound}</div>
               <div><div class="text-white font-bold text-sm">#principal</div><div class="text-red-400 font-bold text-[11px] uppercase tracking-wider">${_t('st_disc')}</div></div>
             </div>
-            <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
+            <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close" style="background: transparent; -webkit-appearance: none; appearance: none; border: none; box-shadow: none;"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
           </div>
           
           <div class="relative z-10 p-8 flex-1 flex flex-col justify-center items-center text-center">
@@ -746,7 +746,7 @@
         const m = Math.floor(s.duration/60), sec = s.duration%60;
         return `<div class="flex justify-between text-[10px] py-1"><span class="text-white/70 font-medium">${s.name}</span><span class="text-white/30">${label} · ${m}m${sec}s</span></div>`;
       }).join('');
-      const moreBtn = h.length > 3 ? `<button id="vc-btn-ver-mas" class="w-full mt-2 text-[9px] text-amber-500/80 hover:text-amber-400 font-bold uppercase tracking-wider py-1 border border-white/5 rounded-md bg-white/5 hover:bg-white/10 transition-colors">${_t('vc_hist_more')}</button>` : '';
+      const moreBtn = h.length > 3 ? `<button id="vc-btn-ver-mas" class="w-full mt-2 text-[9px] text-amber-500/80 hover:text-amber-400 font-bold uppercase tracking-wider py-1 border border-white/5 rounded-md transition-colors" style="background-color: rgba(255,255,255,0.05); -webkit-appearance: none; appearance: none; border-style: solid; box-shadow: none;">${_t('vc_hist_more')}</button>` : '';
       return `<div class="relative z-10 px-5 pb-4 pt-2 bg-zinc-900/30 backdrop-blur-md border-t border-white/5"><div class="text-[9px] text-white/30 font-bold uppercase tracking-[0.15em] mb-1.5">${_t('hist_title')}</div>${rows}${moreBtn}</div>`;
     }
 
@@ -853,7 +853,7 @@
           </div>
           <div class="flex items-center gap-2">
 
-            <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close">✕</button>
+            <button class="text-white/30 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-colors" id="vc-close" style="background: transparent; -webkit-appearance: none; appearance: none; border: none; box-shadow: none;"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
           </div>
         </div>
 
