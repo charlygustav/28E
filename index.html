@@ -2063,15 +2063,11 @@
             }
         }
     
-        /* Mobile Optimization: Disable heavy backdrop filters */
+        /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
             [class*="backdrop-blur"] {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
-                background-color: rgba(9, 9, 11, 0.95) !important; /* Dark solid fallback */
-            }
-            #menu-panel {
-                background-color: rgba(9, 9, 11, 0.98) !important;
             }
         }
 </style>
@@ -2086,20 +2082,46 @@
                 animation: none !important;
             }
             
-            /* Remove transparencies (Force solid backgrounds) */
-            [class*="bg-zinc-950/"] { background-color: #09090b !important; }
-            [class*="bg-black/"] { background-color: #000000 !important; }
-            [class*="bg-white/"] { background-color: #ffffff !important; }
-            [class*="bg-zinc-900/"] { background-color: #18181b !important; }
-            [class*="bg-zinc-800/"] { background-color: #27272a !important; }
+            /* Remove transparencies (Force solid backgrounds) — DARK MODE */
+            .dark [class*="bg-zinc-950/"] { background-color: #09090b !important; }
+            .dark [class*="bg-black/"]    { background-color: #000000 !important; }
+            .dark [class*="bg-zinc-900/"] { background-color: #18181b !important; }
+            .dark [class*="bg-zinc-800/"] { background-color: #27272a !important; }
             
-            /* Remove any remaining backdrop filters */
+            /* In dark mode, bg-white/ fractional classes should use subtle tint, NOT solid white.
+               The dark:bg-* class on the same element will override via Tailwind specificity. */
+            .dark [class*="bg-white/"] {
+                background-color: rgba(255, 255, 255, 0.05) !important;
+            }
+            
+            /* Elements that combine bg-white/ WITH dark:bg-zinc-900 should use the dark bg */
+            .dark [class*="bg-white/"][class*="dark:bg-zinc-900"] {
+                background-color: #18181b !important;
+            }
+            .dark [class*="bg-white/"][class*="dark:bg-zinc-950"] {
+                background-color: #09090b !important;
+            }
+            .dark [class*="bg-white/"][class*="dark:bg-[#0e0e12]"] {
+                background-color: #0e0e12 !important;
+            }
+            
+            /* Light mode: solidify white fractional backgrounds */
+            html:not(.dark) [class*="bg-white/"] {
+                background-color: #ffffff !important;
+            }
+            
+            /* Remove any remaining backdrop filters (performance) */
             [class*="backdrop-blur"] {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
             }
-            #menu-panel {
-                background-color: #09090b !important; /* solid zinc-950 */
+            
+            /* Menu panel & overlay modals need solid dark fallback */
+            .dark #menu-panel {
+                background-color: #09090b !important;
+            }
+            .dark #auth-menu {
+                background-color: #09090b !important;
             }
         }
     </style>
@@ -2304,15 +2326,11 @@
                         letter-spacing: 0.01em;
                     }
                 
-        /* Mobile Optimization: Disable heavy backdrop filters */
+        /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
             [class*="backdrop-blur"] {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
-                background-color: rgba(9, 9, 11, 0.95) !important; /* Dark solid fallback */
-            }
-            #menu-panel {
-                background-color: rgba(9, 9, 11, 0.98) !important;
             }
         }
 </style>
@@ -3682,15 +3700,11 @@
             .sk-circle { border-radius: 50%; }
             .sk-pill { border-radius: 9999px; }
         
-        /* Mobile Optimization: Disable heavy backdrop filters */
+        /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
             [class*="backdrop-blur"] {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
-                background-color: rgba(9, 9, 11, 0.95) !important; /* Dark solid fallback */
-            }
-            #menu-panel {
-                background-color: rgba(9, 9, 11, 0.98) !important;
             }
         }
 </style>
@@ -3751,15 +3765,11 @@
         .fw-particle { position: absolute; border-radius: 50%; pointer-events: none; z-index: 1; }
         #celeb-enter-btn:hover { background: linear-gradient(135deg, rgba(245,158,11,0.25), rgba(236,72,153,0.25)) !important; box-shadow: 0 0 50px rgba(245,158,11,0.3), inset 0 0 30px rgba(245,158,11,0.1) !important; border-color: rgba(245,158,11,0.7) !important; }
     
-        /* Mobile Optimization: Disable heavy backdrop filters */
+        /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
             [class*="backdrop-blur"] {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
-                background-color: rgba(9, 9, 11, 0.95) !important; /* Dark solid fallback */
-            }
-            #menu-panel {
-                background-color: rgba(9, 9, 11, 0.98) !important;
             }
         }
 </style>
@@ -3924,8 +3934,7 @@
                 </svg>
                 <input id="menu-search" type="text" placeholder="Buscar sección..." autocomplete="off"
                     data-i18n-placeholder="search_placeholder"
-                    class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-white/50 dark:bg-white/5 backdrop-blur-md text-sm text-zinc-800 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-500 border border-white/30 dark:border-white/10 focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500/50 transition-all"
-                    autocomplete="off" />
+                    class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-white/50 dark:bg-white/5 backdrop-blur-md text-sm text-zinc-800 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-500 border border-white/30 dark:border-white/10 focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500/50 transition-all" />
                 <span
                     class="menu-shortcut absolute right-3 top-1/2 -translate-y-1/2 bg-zinc-200/80 dark:bg-zinc-700/80 text-zinc-500 dark:text-zinc-400 hidden md:flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-bold tracking-widest"><kbd
                         class="font-sans">ESC</kbd> <span class="opacity-50">|</span> <kbd
@@ -5213,7 +5222,7 @@
         </section>
         <!-- Section: Our Story & Time -->
         <section id="historia"
-            class="cv-section cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal-left scroll-mt-20">
+            class="cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal-left scroll-mt-20">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
                     <h2 class="text-sm font-bold tracking-widest uppercase text-brand-500 mb-4"
@@ -5589,14 +5598,13 @@
                                 display: none;
                             }
                         
-        /* Mobile Optimization: Disable heavy backdrop filters */
+        /* Mobile: Disable heavy backdrop filters (scoped to dark mode) */
         @media (max-width: 768px) {
-            [class*="backdrop-blur"] {
+            .dark [class*="backdrop-blur"]:not([class*="bg-gradient"]):not([class*="from-"]) {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
-                background-color: rgba(9, 9, 11, 0.95) !important; /* Dark solid fallback */
             }
-            #menu-panel {
+            .dark #menu-panel {
                 background-color: rgba(9, 9, 11, 0.98) !important;
             }
         }
@@ -5913,15 +5921,11 @@
                     background: var(--active-bg, rgba(236, 72, 153, 0.08));
                 }
             
-        /* Mobile Optimization: Disable heavy backdrop filters */
+        /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
             [class*="backdrop-blur"] {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
-                background-color: rgba(9, 9, 11, 0.95) !important; /* Dark solid fallback */
-            }
-            #menu-panel {
-                background-color: rgba(9, 9, 11, 0.98) !important;
             }
         }
 </style>
@@ -6049,7 +6053,7 @@
 
         <!-- NEW SECTION: SUNFLOWER QUIZ -->
         <section id="quiz-girasol"
-            class="cv-section cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal-left scroll-mt-20">
+            class="cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal-left scroll-mt-20">
             <div class="max-w-3xl mx-auto">
                 <div class="text-center mb-12">
                     <h2 class="text-sm font-bold tracking-widest uppercase text-brand-500 mb-2" data-i18n="quiz_label">
@@ -6411,15 +6415,11 @@
                     }
                 }
             
-        /* Mobile Optimization: Disable heavy backdrop filters */
+        /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
             [class*="backdrop-blur"] {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
-                background-color: rgba(9, 9, 11, 0.95) !important; /* Dark solid fallback */
-            }
-            #menu-panel {
-                background-color: rgba(9, 9, 11, 0.98) !important;
             }
         }
 </style>
@@ -6427,7 +6427,7 @@
 
         <!-- Gastronomy -->
         <section id="comida"
-            class="cv-section cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal-right scroll-mt-20">
+            class="cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal-right scroll-mt-20">
             <h2 class="text-sm font-bold tracking-widest uppercase text-brand-500 mb-2 text-center"
                 data-i18n="food_label">Gastronomía y Promesas</h2>
             <h3 class="text-3xl md:text-4xl font-bold mb-16 text-center" data-i18n="food_title">Entre Pechugas a la
@@ -6526,15 +6526,11 @@
                                     display: none;
                                 }
                             
-        /* Mobile Optimization: Disable heavy backdrop filters */
+        /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
             [class*="backdrop-blur"] {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
-                background-color: rgba(9, 9, 11, 0.95) !important; /* Dark solid fallback */
-            }
-            #menu-panel {
-                background-color: rgba(9, 9, 11, 0.98) !important;
             }
         }
 </style>
@@ -6711,7 +6707,7 @@
 
         <!-- Galería -->
         <section id="galeria"
-            class="cv-section cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal-fade scroll-mt-20">
+            class="cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal-fade scroll-mt-20">
             <div class="text-center mb-16 px-4">
                 <h2 class="text-sm font-bold tracking-widest uppercase text-brand-500 mb-2" data-i18n="gallery_label">La
                     Musa</h2>
@@ -6765,7 +6761,7 @@
 
         <!-- Minijuegos Hub -->
         <section id="minijuegos"
-            class="cv-section cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal scroll-mt-20"
+            class="cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal scroll-mt-20"
             style="overflow: visible;">
 
             <style>
@@ -6952,15 +6948,11 @@
                     }
                 }
             
-        /* Mobile Optimization: Disable heavy backdrop filters */
+        /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
             [class*="backdrop-blur"] {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
-                background-color: rgba(9, 9, 11, 0.95) !important; /* Dark solid fallback */
-            }
-            #menu-panel {
-                background-color: rgba(9, 9, 11, 0.98) !important;
             }
         }
 </style>
@@ -7455,7 +7447,7 @@
 
         <!-- Promesas -->
         <section id="promesas"
-            class="cv-section cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal-scale scroll-mt-20">
+            class="cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal-scale scroll-mt-20">
             <div class="text-center mb-16 px-4">
                 <h2 class="text-sm font-bold tracking-widest uppercase text-tulip-500 mb-4"
                     data-i18n="promises_subtitle">Compromisos de Vida</h2>
@@ -7713,15 +7705,11 @@
                     }
                 }
             
-        /* Mobile Optimization: Disable heavy backdrop filters */
+        /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
             [class*="backdrop-blur"] {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
-                background-color: rgba(9, 9, 11, 0.95) !important; /* Dark solid fallback */
-            }
-            #menu-panel {
-                background-color: rgba(9, 9, 11, 0.98) !important;
             }
         }
 </style>
@@ -7926,15 +7914,11 @@
                 transition: width .6s ease;
             }
         
-        /* Mobile Optimization: Disable heavy backdrop filters */
+        /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
             [class*="backdrop-blur"] {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
-                background-color: rgba(9, 9, 11, 0.95) !important; /* Dark solid fallback */
-            }
-            #menu-panel {
-                background-color: rgba(9, 9, 11, 0.98) !important;
             }
         }
 </style>
@@ -8694,15 +8678,11 @@
                 transition: stroke .2s ease;
             }
         
-        /* Mobile Optimization: Disable heavy backdrop filters */
+        /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
             [class*="backdrop-blur"] {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
-                background-color: rgba(9, 9, 11, 0.95) !important; /* Dark solid fallback */
-            }
-            #menu-panel {
-                background-color: rgba(9, 9, 11, 0.98) !important;
             }
         }
 </style>
@@ -9724,7 +9704,7 @@
             </script>
         </section>
         <section id="memorial"
-            class="cv-section cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal-scale scroll-mt-20 px-4 md:px-0 relative">
+            class="cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal-scale scroll-mt-20 px-4 md:px-0 relative">
             <div id="memorial-card"
                 class="max-w-3xl mx-auto rounded-[2.5rem] p-px relative overflow-hidden transition-all duration-700 isolate cursor-default"
                 style="--mouse-x: 50%; --mouse-y: 50%;">
@@ -9857,15 +9837,11 @@
                     filter: drop-shadow(0 0 25px rgba(245, 200, 100, 0.25));
                 }
             
-        /* Mobile Optimization: Disable heavy backdrop filters */
+        /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
             [class*="backdrop-blur"] {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
-                background-color: rgba(9, 9, 11, 0.95) !important; /* Dark solid fallback */
-            }
-            #menu-panel {
-                background-color: rgba(9, 9, 11, 0.98) !important;
             }
         }
 </style>
@@ -10039,7 +10015,7 @@
 
         <!-- Hype -->
         <section id="hype"
-            class="cv-section cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal-left scroll-mt-20">
+            class="cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal-left scroll-mt-20">
             <div class="max-w-5xl mx-auto px-4">
                 <!-- Header -->
                 <div class="text-center mb-14">
@@ -10221,15 +10197,11 @@
                     }
                 }
             
-        /* Mobile Optimization: Disable heavy backdrop filters */
+        /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
             [class*="backdrop-blur"] {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
-                background-color: rgba(9, 9, 11, 0.95) !important; /* Dark solid fallback */
-            }
-            #menu-panel {
-                background-color: rgba(9, 9, 11, 0.98) !important;
             }
         }
 </style>
@@ -10436,15 +10408,11 @@
                 }
             }
         
-        /* Mobile Optimization: Disable heavy backdrop filters */
+        /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
             [class*="backdrop-blur"] {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
-                background-color: rgba(9, 9, 11, 0.95) !important; /* Dark solid fallback */
-            }
-            #menu-panel {
-                background-color: rgba(9, 9, 11, 0.98) !important;
             }
         }
 </style>
@@ -11110,7 +11078,7 @@
 
         <!-- NEW SECTION: TOP 5 YAIRE -->
         <section id="top5yaire"
-            class="cv-section cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal-scale scroll-mt-20">
+            class="cv-section py-24 border-t border-zinc-200 dark:border-zinc-800 reveal-scale scroll-mt-20">
             <div class="max-w-5xl mx-auto px-4">
                 <!-- Header -->
                 <div class="text-center mb-14">
@@ -11766,15 +11734,11 @@
                 animation: countdown-tick 0.3s ease;
             }
         
-        /* Mobile Optimization: Disable heavy backdrop filters */
+        /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
             [class*="backdrop-blur"] {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
-                background-color: rgba(9, 9, 11, 0.95) !important; /* Dark solid fallback */
-            }
-            #menu-panel {
-                background-color: rgba(9, 9, 11, 0.98) !important;
             }
         }
 </style>
@@ -12768,15 +12732,11 @@
                     100% { transform: scaleY(1); opacity: 1; }
                 }
             
-        /* Mobile Optimization: Disable heavy backdrop filters */
+        /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
             [class*="backdrop-blur"] {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
-                background-color: rgba(9, 9, 11, 0.95) !important; /* Dark solid fallback */
-            }
-            #menu-panel {
-                background-color: rgba(9, 9, 11, 0.98) !important;
             }
         }
 </style>
@@ -17627,15 +17587,11 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     
-        /* Mobile Optimization: Disable heavy backdrop filters */
+        /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
             [class*="backdrop-blur"] {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
-                background-color: rgba(9, 9, 11, 0.95) !important; /* Dark solid fallback */
-            }
-            #menu-panel {
-                background-color: rgba(9, 9, 11, 0.98) !important;
             }
         }
 </style>
