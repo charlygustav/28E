@@ -591,6 +591,11 @@
         this._playSfx('jbl_begin', 0.5);
         this.panel.classList.remove('scale-95', 'sm:scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4', 'translate-y-full', 'sm:translate-y-4');
         this.panel.classList.add('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
+        
+        if (this.fab) {
+          this.fab.classList.add('scale-0', 'opacity-0', 'pointer-events-none');
+        }
+
         if (this.connected) {
           this._bar.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
           this._bar.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
@@ -603,6 +608,11 @@
         if (this._loginPollInt) { clearInterval(this._loginPollInt); this._loginPollInt = null; }
         this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
         this.panel.classList.add('sm:scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-full', 'sm:translate-y-4');
+        
+        if (this.fab) {
+          this.fab.classList.remove('scale-0', 'opacity-0', 'pointer-events-none');
+        }
+
         if (this.connected) {
           this._bar.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
           this._bar.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
