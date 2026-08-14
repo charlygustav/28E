@@ -271,6 +271,33 @@
   @keyframes vc-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
   .vc-marquee-container { display: flex; overflow: hidden; white-space: nowrap; mask-image: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent); width: 100%; }
   .vc-marquee-content { flex-shrink: 0; animation: vc-marquee 12s linear infinite; padding-right: 2rem; }
+  @media (max-width: 768px) {
+    .vc-panel-base {
+      bottom: 0 !important;
+      right: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      max-width: none !important;
+      height: 100% !important;
+      border-radius: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      border: none !important;
+      background-color: #09090b !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+    .vc-panel-base.scale-95.translate-y-4 {
+      transform: translateY(100%) !important;
+    }
+    .vc-panel-base.scale-100.translate-y-0 {
+      transform: translateY(0) !important;
+    }
+    .vc-main-content {
+       height: auto !important;
+       flex: 1 !important;
+    }
+  }
   `;
 
   // ── ICONS ─────────────────────────────────────────────────────────────────
@@ -489,7 +516,7 @@
 
       this.panel = document.createElement('div');
       this.panel.id = 'vc-panel';
-      this.panel.className = 'fixed inset-0 sm:top-auto sm:bottom-24 sm:left-auto sm:right-6 w-full sm:w-[315px] h-full sm:h-auto bg-zinc-950 sm:bg-zinc-950/85 sm:backdrop-blur-2xl sm:border border-white/10 sm:rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] overflow-hidden z-[9998] transition-all duration-300 transform sm:scale-95 opacity-0 pointer-events-none translate-y-full sm:translate-y-4 font-sans flex flex-col sm:block';
+      this.panel.className = 'fixed bottom-24 right-6 w-full max-w-[315px] bg-zinc-950/85 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] overflow-hidden z-[9998] transition-all duration-300 transform scale-95 opacity-0 pointer-events-none translate-y-4 font-sans vc-panel-base';
       this.panel.innerHTML = this._tplLogin();
 
       this._bar = document.createElement('div');
@@ -589,7 +616,7 @@
       
       if (willOpen) {
         this._playSfx('jbl_begin', 0.5);
-        this.panel.classList.remove('scale-95', 'sm:scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4', 'translate-y-full', 'sm:translate-y-4');
+        this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
         this.panel.classList.add('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
         
         if (this.fab) {
@@ -607,7 +634,7 @@
       } else {
         if (this._loginPollInt) { clearInterval(this._loginPollInt); this._loginPollInt = null; }
         this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
-        this.panel.classList.add('sm:scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-full', 'sm:translate-y-4');
+        this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
         
         if (this.fab) {
           this.fab.classList.remove('scale-0', 'opacity-0', 'pointer-events-none');
@@ -885,7 +912,7 @@
         </div>
 
         <!-- Main Content Area -->
-        <div class="flex-1 sm:flex-none sm:h-[250px] relative overflow-hidden">
+        <div class="h-[250px] relative overflow-hidden vc-main-content">
           
           <!-- ROOM TAB -->
           <div class="absolute inset-0 flex flex-col ${isRoom ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 -translate-x-8 pointer-events-none'}" id="vc-content-room">
