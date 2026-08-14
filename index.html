@@ -2065,64 +2065,13 @@
     
         /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
-            [class*="backdrop-blur"] {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-            }
+            /* backdrop-filter disabled intentionally removed to keep premium UI */
         }
 </style>
     <!-- GSAP ya cargado en <head> con defer — removido duplicado para evitar doble parse y doble descarga -->
     <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
 
-    <!-- EXTREME MOBILE OPTIMIZATION -->
-    <style>
-        @media (max-width: 768px) {
-            /* Disable continuous animations (REMOVED: Animaciones son esenciales para UX del Voice Channel) */
-            
-            /* Remove transparencies (Force solid backgrounds) — DARK MODE */
-            .dark [class*="bg-zinc-950/"] { background-color: #09090b !important; }
-            .dark [class*="bg-black/"]    { background-color: #000000 !important; }
-            .dark [class*="bg-zinc-900/"] { background-color: #18181b !important; }
-            .dark [class*="bg-zinc-800/"] { background-color: #27272a !important; }
-            
-            /* In dark mode, bg-white/ fractional classes should use subtle tint, NOT solid white.
-               The dark:bg-* class on the same element will override via Tailwind specificity. */
-            .dark [class*="bg-white/"] {
-                background-color: rgba(255, 255, 255, 0.05) !important;
-            }
-            
-            /* Elements that combine bg-white/ WITH dark:bg-zinc-900 should use the dark bg */
-            .dark [class*="bg-white/"][class*="dark:bg-zinc-900"] {
-                background-color: #18181b !important;
-            }
-            .dark [class*="bg-white/"][class*="dark:bg-zinc-950"] {
-                background-color: #09090b !important;
-            }
-            .dark [class*="bg-white/"][class*="dark:bg-[#0e0e12]"] {
-                background-color: #0e0e12 !important;
-            }
-            
-            /* Light mode: solidify white fractional backgrounds */
-            html:not(.dark) [class*="bg-white/"] {
-                background-color: #ffffff !important;
-            }
-            
-            /* Remove any remaining backdrop filters (performance) */
-            [class*="backdrop-blur"] {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-            }
-            
-            /* Menu panel & overlay modals need solid dark fallback */
-            .dark #menu-panel {
-                background-color: #09090b !important;
-            }
-            .dark #auth-menu {
-                background-color: #09090b !important;
-            }
-        }
-    </style>
-    <!-- END EXTREME MOBILE OPTIMIZATION -->
+    <!-- EXTREME MOBILE OPTIMIZATION REMOVED: El usuario prefiere mantener el diseño premium (glassmorphism/transparencias) en celular -->
 
 </head>
 
@@ -2325,10 +2274,7 @@
                 
         /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
-            [class*="backdrop-blur"] {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-            }
+            /* backdrop-filter disabled intentionally removed to keep premium UI */
         }
 </style>
 
@@ -3699,10 +3645,7 @@
         
         /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
-            [class*="backdrop-blur"] {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-            }
+            /* backdrop-filter disabled intentionally removed to keep premium UI */
         }
 </style>
         <!-- Fake Nav Bar -->
@@ -3764,10 +3707,7 @@
     
         /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
-            [class*="backdrop-blur"] {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-            }
+            /* backdrop-filter disabled intentionally removed to keep premium UI */
         }
 </style>
     <script>
@@ -5920,10 +5860,7 @@
             
         /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
-            [class*="backdrop-blur"] {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-            }
+            /* backdrop-filter disabled intentionally removed to keep premium UI */
         }
 </style>
 
@@ -6414,10 +6351,7 @@
             
         /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
-            [class*="backdrop-blur"] {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-            }
+            /* backdrop-filter disabled intentionally removed to keep premium UI */
         }
 </style>
         </section>
@@ -6525,10 +6459,7 @@
                             
         /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
-            [class*="backdrop-blur"] {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-            }
+            /* backdrop-filter disabled intentionally removed to keep premium UI */
         }
 </style>
 
@@ -6947,10 +6878,7 @@
             
         /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
-            [class*="backdrop-blur"] {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-            }
+            /* backdrop-filter disabled intentionally removed to keep premium UI */
         }
 </style>
 
@@ -7704,10 +7632,7 @@
             
         /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
-            [class*="backdrop-blur"] {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-            }
+            /* backdrop-filter disabled intentionally removed to keep premium UI */
         }
 </style>
         </section>
@@ -7913,10 +7838,7 @@
         
         /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
-            [class*="backdrop-blur"] {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-            }
+            /* backdrop-filter disabled intentionally removed to keep premium UI */
         }
 </style>
 
@@ -8677,10 +8599,7 @@
         
         /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
-            [class*="backdrop-blur"] {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-            }
+            /* backdrop-filter disabled intentionally removed to keep premium UI */
         }
 </style>
 
@@ -9836,10 +9755,7 @@
             
         /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
-            [class*="backdrop-blur"] {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-            }
+            /* backdrop-filter disabled intentionally removed to keep premium UI */
         }
 </style>
 
@@ -10196,10 +10112,7 @@
             
         /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
-            [class*="backdrop-blur"] {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-            }
+            /* backdrop-filter disabled intentionally removed to keep premium UI */
         }
 </style>
         </section>
@@ -10407,10 +10320,7 @@
         
         /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
-            [class*="backdrop-blur"] {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-            }
+            /* backdrop-filter disabled intentionally removed to keep premium UI */
         }
 </style>
 
@@ -11733,10 +11643,7 @@
         
         /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
-            [class*="backdrop-blur"] {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-            }
+            /* backdrop-filter disabled intentionally removed to keep premium UI */
         }
 </style>
 
@@ -12731,10 +12638,7 @@
             
         /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
-            [class*="backdrop-blur"] {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-            }
+            /* backdrop-filter disabled intentionally removed to keep premium UI */
         }
 </style>
         </section>
@@ -17586,10 +17490,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
         /* Mobile: Disable backdrop filters (perf) */
         @media (max-width: 768px) {
-            [class*="backdrop-blur"] {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-            }
+            /* backdrop-filter disabled intentionally removed to keep premium UI */
         }
 </style>
 
@@ -19053,4 +18954,5 @@ document.addEventListener("DOMContentLoaded", () => {
 </body>
 
 </html>
+
 
