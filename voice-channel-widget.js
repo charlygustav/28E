@@ -489,7 +489,7 @@
 
       this.panel = document.createElement('div');
       this.panel.id = 'vc-panel';
-      this.panel.className = 'fixed bottom-24 right-6 w-full max-w-[315px] bg-zinc-950/85 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] overflow-hidden z-[9998] transition-all duration-300 transform scale-95 opacity-0 pointer-events-none translate-y-4 font-sans';
+      this.panel.className = 'fixed bottom-24 right-4 sm:right-6 w-[calc(100%-2rem)] sm:w-full max-w-[315px] bg-zinc-950/85 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] overflow-hidden z-[9998] transition-all duration-300 transform scale-95 opacity-0 pointer-events-none translate-y-4 font-sans';
       this.panel.innerHTML = this._tplLogin();
 
       this._bar = document.createElement('div');
