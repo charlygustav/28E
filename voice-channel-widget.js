@@ -489,7 +489,7 @@
 
       this.panel = document.createElement('div');
       this.panel.id = 'vc-panel';
-      this.panel.className = 'fixed bottom-24 left-4 right-4 sm:left-auto sm:right-6 w-auto sm:w-[315px] bg-zinc-950/85 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] overflow-hidden z-[9998] transition-all duration-300 transform scale-95 opacity-0 pointer-events-none translate-y-4 font-sans';
+      this.panel.className = 'fixed inset-0 sm:top-auto sm:bottom-24 sm:left-auto sm:right-6 w-full sm:w-[315px] h-full sm:h-auto bg-zinc-950 sm:bg-zinc-950/85 sm:backdrop-blur-2xl sm:border border-white/10 sm:rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] overflow-hidden z-[9998] transition-all duration-300 transform sm:scale-95 opacity-0 pointer-events-none translate-y-full sm:translate-y-4 font-sans flex flex-col sm:block';
       this.panel.innerHTML = this._tplLogin();
 
       this._bar = document.createElement('div');
@@ -589,7 +589,7 @@
       
       if (willOpen) {
         this._playSfx('jbl_begin', 0.5);
-        this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
+        this.panel.classList.remove('scale-95', 'sm:scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4', 'translate-y-full', 'sm:translate-y-4');
         this.panel.classList.add('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
         if (this.connected) {
           this._bar.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
@@ -602,7 +602,7 @@
       } else {
         if (this._loginPollInt) { clearInterval(this._loginPollInt); this._loginPollInt = null; }
         this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
-        this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
+        this.panel.classList.add('sm:scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-full', 'sm:translate-y-4');
         if (this.connected) {
           this._bar.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
           this._bar.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
@@ -875,7 +875,7 @@
         </div>
 
         <!-- Main Content Area -->
-        <div class="h-[250px] relative overflow-hidden">
+        <div class="flex-1 sm:flex-none sm:h-[250px] relative overflow-hidden">
           
           <!-- ROOM TAB -->
           <div class="absolute inset-0 flex flex-col ${isRoom ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 -translate-x-8 pointer-events-none'}" id="vc-content-room">
