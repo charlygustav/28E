@@ -621,18 +621,20 @@
     }
 
     _toggle() {
-      const willOpen = !this.panel.classList.contains('scale-100') && !this.panel.classList.contains('vc-gsap-visible');
       const isMobile = window.innerWidth <= 768;
+      const isOpen = this._vcOpen === true;
       
-      if (willOpen) {
+      if (!isOpen) {
+        // ═══ OPEN ═══
+        this._vcOpen = true;
         this._playSfx('jbl_begin', 0.5);
 
-        // 1) Make panel structurally visible first
+        // Make panel visible for rendering
+        this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4', 'vc-gsap-hidden');
         if (isMobile) {
-          this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4', 'vc-gsap-hidden');
           this.panel.classList.add('vc-gsap-visible');
+          this.panel.style.opacity = '0';
         } else {
-          this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
           this.panel.classList.add('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
         }
         
@@ -640,7 +642,7 @@
           this.fab.classList.add('scale-0', 'opacity-0', 'pointer-events-none');
         }
 
-        // 2) Render content (this replaces innerHTML)
+        // Render content
         if (this.connected) {
           this._bar.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
           this._bar.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
@@ -650,57 +652,61 @@
           else this._render(this._tplLogin());
         }
 
-        // 3) NOW run GSAP on the final DOM (after render)
-        if (isMobile && typeof gsap !== 'undefined') {
+        // GSAP animation (mobile only, after render)
+        if (isMobile && window.gsap) {
           if (this._vcTl) { this._vcTl.kill(); this._vcTl = null; }
           
-          // Create backdrop overlay
+          // Backdrop
           if (!this._backdrop) {
             this._backdrop = document.createElement('div');
             this._backdrop.className = 'vc-backdrop';
+            this._backdrop.style.opacity = '0';
             this._backdrop.addEventListener('click', () => this._toggle());
             document.body.appendChild(this._backdrop);
           }
-          gsap.set(this._backdrop, { opacity: 0 });
           
-          // Initial state: panel invisible + slightly scaled down
-          gsap.set(this.panel, { opacity: 0, scale: 0.92, y: 40 });
+          const children = Array.from(this.panel.children);
           
-          // Children are now the real rendered content
-          const children = this.panel.querySelectorAll(':scope > div');
-          gsap.set(children, { opacity: 0, y: 24 });
+          const tl = gsap.timeline();
           
-          const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+          // Backdrop fade
+          tl.fromTo(this._backdrop, 
+            { opacity: 0 }, 
+            { opacity: 1, duration: 0.3, ease: 'power2.out' }, 0);
           
-          // Backdrop fades in
-          tl.to(this._backdrop, { opacity: 1, duration: 0.3, ease: 'power2.out' }, 0);
+          // Panel: scale up + fade in
+          tl.fromTo(this.panel, 
+            { opacity: 0, scale: 0.9, y: 60 }, 
+            { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'expo.out' }, 0.05);
           
-          // Panel scales up + fades in
-          tl.to(this.panel, { opacity: 1, scale: 1, y: 0, duration: 0.55 }, 0.05);
-          
-          // Stagger children reveal
+          // Children stagger
           if (children.length) {
-            tl.to(children, { opacity: 1, y: 0, duration: 0.4, stagger: 0.06 }, 0.2);
+            tl.fromTo(children, 
+              { opacity: 0, y: 30 }, 
+              { opacity: 1, y: 0, duration: 0.45, stagger: 0.08, ease: 'power3.out' }, 0.2);
           }
           
           this._vcTl = tl;
+        } else if (!isMobile) {
+          this.panel.style.opacity = '';
         }
+
       } else {
+        // ═══ CLOSE ═══
+        this._vcOpen = false;
         if (this._loginPollInt) { clearInterval(this._loginPollInt); this._loginPollInt = null; }
 
-        if (isMobile && typeof gsap !== 'undefined') {
-          // -- GSAP premium mobile close --
+        if (isMobile && window.gsap) {
           if (this._vcTl) { this._vcTl.kill(); this._vcTl = null; }
           
-          const children = this.panel.querySelectorAll(':scope > div');
+          const children = Array.from(this.panel.children);
           
           const tl = gsap.timeline({ 
-            defaults: { ease: 'power3.in' },
             onComplete: () => {
               this.panel.classList.remove('vc-gsap-visible', 'scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
               this.panel.classList.add('vc-gsap-hidden');
-              gsap.set(this.panel, { clearProps: 'opacity,scale,y,transform' });
-              gsap.set(children, { clearProps: 'opacity,y' });
+              this.panel.style.cssText = '';
+              children.forEach(c => c.style.cssText = '');
               if (this._backdrop) {
                 this._backdrop.remove();
                 this._backdrop = null;
@@ -708,18 +714,18 @@
             }
           });
           
-          // 1) Children fade out quickly
-          tl.to(children, { opacity: 0, y: -12, duration: 0.2, stagger: 0.02 }, 0);
-          // 2) Panel scales down + fades
-          tl.to(this.panel, { opacity: 0, scale: 0.92, y: 30, duration: 0.35 }, 0.08);
-          // 3) Backdrop fades out
+          // Children out
+          tl.to(children, { opacity: 0, y: -15, duration: 0.2, stagger: 0.02, ease: 'power2.in' }, 0);
+          // Panel out
+          tl.to(this.panel, { opacity: 0, scale: 0.9, y: 40, duration: 0.35, ease: 'power3.in' }, 0.1);
+          // Backdrop out
           if (this._backdrop) {
-            tl.to(this._backdrop, { opacity: 0, duration: 0.25, ease: 'power2.out' }, 0.1);
+            tl.to(this._backdrop, { opacity: 0, duration: 0.3, ease: 'power2.out' }, 0.05);
           }
           
           this._vcTl = tl;
         } else {
-          // -- Desktop: original CSS transition --
+          // Desktop: original
           this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
           this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
         }
