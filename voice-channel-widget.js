@@ -667,11 +667,12 @@
       
       if (!children.length) return;
       
-      const tl = gsap.timeline();
+      // Add delay so it happens AFTER the CSS slide-up
+      const tl = gsap.timeline({ delay: 0.25 }); 
       tl.fromTo(children, 
-        { opacity: 0, y: 30 }, 
-        { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power3.out',
-          clearProps: 'opacity,y,transform'
+        { opacity: 0, y: 60, scale: 0.95 }, 
+        { opacity: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.1, ease: 'back.out(1.4)',
+          clearProps: 'opacity,y,scale,transform'
         }
       );
       this._vcTl = tl;
