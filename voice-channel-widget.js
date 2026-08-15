@@ -287,10 +287,12 @@
       background-color: #09090b !important;
       backdrop-filter: none !important;
       -webkit-backdrop-filter: none !important;
-      transition: none !important;
     }
-    .vc-mobile-hide {
-      display: none !important;
+    .vc-panel-base.scale-95.translate-y-4 {
+      transform: translateY(100%) !important;
+    }
+    .vc-panel-base.scale-100.translate-y-0 {
+      transform: translateY(0) !important;
     }
     .vc-main-content {
        height: auto !important;
@@ -611,18 +613,14 @@
     }
 
     _toggle() {
-      const isMobile = window.innerWidth <= 768;
-      const willOpen = !this._vcOpen;
+      const willOpen = !this.panel.classList.contains('scale-100');
       
       if (willOpen) {
-        this._vcOpen = true;
         this._playSfx('jbl_begin', 0.5);
-        
-        // Desktop state classes
-        this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4', 'vc-mobile-hide');
+        this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
         this.panel.classList.add('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
         
-        if (this.fab && isMobile) {
+        if (this.fab && window.innerWidth <= 768) {
           this.fab.classList.add('scale-0', 'opacity-0', 'pointer-events-none');
         }
 
@@ -636,19 +634,13 @@
         }
 
         // GSAP entrance animation (mobile only)
-        if (isMobile && window.gsap) {
-          this._gsapEnterMobile();
+        if (window.innerWidth <= 768 && window.gsap) {
+          requestAnimationFrame(() => this._gsapEnterMobile());
         }
       } else {
-        this._vcOpen = false;
         if (this._loginPollInt) { clearInterval(this._loginPollInt); this._loginPollInt = null; }
-        
-        if (isMobile && window.gsap) {
-          this._gsapLeaveMobile();
-        } else {
-          this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
-          this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
-        }
+        this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
+        this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
         
         if (this.fab) {
           this.fab.classList.remove('scale-0', 'opacity-0', 'pointer-events-none');
@@ -665,49 +657,24 @@
     _gsapEnterMobile() {
       if (this._vcTl) { this._vcTl.kill(); this._vcTl = null; }
       
-      const tl = gsap.timeline();
+      let children = Array.from(this.panel.children);
       
-      // Backdrop
-      if (!this._backdrop) {
-        this._backdrop = document.createElement('div');
-        this._backdrop.className = 'vc-backdrop';
-        this._backdrop.addEventListener('click', () => this._toggle());
-        document.body.appendChild(this._backdrop);
+      // If there's only one child wrapper (like in login view), get its children instead
+      if (children.length === 1) {
+        // Filter out absolute background orbs, keep the actual content blocks
+        children = Array.from(children[0].children).filter(c => !c.classList.contains('absolute'));
       }
-      tl.fromTo(this._backdrop, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power2.out' }, 0);
       
-      // Panel animates up from the bottom like an iOS sheet
-      tl.fromTo(this.panel,
-        { y: window.innerHeight, opacity: 1, scale: 1 },
-        { y: 0, duration: 0.55, ease: 'expo.out', clearProps: 'transform' },
-        0.05
-      );
+      if (!children.length) return;
       
-      this._vcTl = tl;
-    }
-
-    _gsapLeaveMobile() {
-      if (this._vcTl) { this._vcTl.kill(); this._vcTl = null; }
-      
-      const tl = gsap.timeline({
-        onComplete: () => {
-          this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
-          this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4', 'vc-mobile-hide');
-          gsap.set(this.panel, { clearProps: 'all' });
-          if (this._backdrop) {
-            this._backdrop.remove();
-            this._backdrop = null;
-          }
+      // Add delay so it happens AFTER the CSS slide-up
+      const tl = gsap.timeline({ delay: 0.25 }); 
+      tl.fromTo(children, 
+        { opacity: 0, y: 60, scale: 0.95 }, 
+        { opacity: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.1, ease: 'back.out(1.4)',
+          clearProps: 'opacity,y,scale,transform'
         }
-      });
-      
-      // Panel slides down
-      tl.to(this.panel, { y: window.innerHeight, duration: 0.4, ease: 'power3.in' }, 0);
-      
-      if (this._backdrop) {
-        tl.to(this._backdrop, { opacity: 0, duration: 0.3, ease: 'power2.out' }, 0.1);
-      }
-      
+      );
       this._vcTl = tl;
     }
 
