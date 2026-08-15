@@ -276,6 +276,7 @@
       bottom: 0 !important;
       right: 0 !important;
       left: 0 !important;
+      top: 0 !important;
       width: 100% !important;
       max-width: none !important;
       height: 100% !important;
@@ -286,16 +287,26 @@
       background-color: #09090b !important;
       backdrop-filter: none !important;
       -webkit-backdrop-filter: none !important;
+      transition: none !important;
     }
-    .vc-panel-base.scale-95.translate-y-4 {
-      transform: translateY(100%) !important;
+    .vc-panel-base.vc-gsap-hidden {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transform: none !important;
     }
-    .vc-panel-base.scale-100.translate-y-0 {
-      transform: translateY(0) !important;
+    .vc-panel-base.vc-gsap-visible {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      transform: none !important;
     }
     .vc-main-content {
        height: auto !important;
        flex: 1 !important;
+    }
+    .vc-backdrop {
+      position: fixed; inset: 0; z-index: 9997;
+      background: rgba(0,0,0,0.6);
+      pointer-events: auto;
     }
   }
   `;
@@ -612,7 +623,7 @@
     }
 
     _toggle() {
-      const willOpen = !this.panel.classList.contains('scale-100');
+      const willOpen = !this.panel.classList.contains('scale-100') && !this.panel.classList.contains('vc-gsap-visible');
       const isMobile = window.innerWidth <= 768;
       
       if (willOpen) {
@@ -620,25 +631,39 @@
 
         if (isMobile && typeof gsap !== 'undefined') {
           // -- GSAP premium mobile open --
-          this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
-          this.panel.classList.add('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
-          
-          // Kill any running vc timeline
           if (this._vcTl) { this._vcTl.kill(); this._vcTl = null; }
-
-          // Force panel to start off-screen, then animate in
-          gsap.set(this.panel, { y: '100%', opacity: 1 });
           
-          const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+          // Remove CSS state classes, use GSAP classes instead
+          this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4', 'vc-gsap-hidden');
+          this.panel.classList.add('vc-gsap-visible');
           
-          // 1) Panel slides up
-          tl.to(this.panel, { y: '0%', duration: 0.5 });
+          // Create backdrop overlay
+          if (!this._backdrop) {
+            this._backdrop = document.createElement('div');
+            this._backdrop.className = 'vc-backdrop';
+            this._backdrop.addEventListener('click', () => this._toggle());
+            document.body.appendChild(this._backdrop);
+          }
+          gsap.set(this._backdrop, { opacity: 0 });
           
-          // 2) Stagger children: header, tabs, main content, controls
+          // Initial state: panel invisible + slightly scaled down
+          gsap.set(this.panel, { opacity: 0, scale: 0.92, y: 40 });
+          
+          // Set children invisible
           const children = this.panel.querySelectorAll(':scope > div');
+          gsap.set(children, { opacity: 0, y: 24 });
+          
+          const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+          
+          // 1) Backdrop fades in
+          tl.to(this._backdrop, { opacity: 1, duration: 0.3, ease: 'power2.out' }, 0);
+          
+          // 2) Panel scales up + fades in (like iOS sheet)
+          tl.to(this.panel, { opacity: 1, scale: 1, y: 0, duration: 0.55 }, 0.05);
+          
+          // 3) Stagger children with a subtle reveal
           if (children.length) {
-            gsap.set(children, { opacity: 0, y: 20 });
-            tl.to(children, { opacity: 1, y: 0, duration: 0.35, stagger: 0.07 }, '-=0.25');
+            tl.to(children, { opacity: 1, y: 0, duration: 0.4, stagger: 0.06 }, 0.2);
           }
           
           this._vcTl = tl;
@@ -668,23 +693,30 @@
           // -- GSAP premium mobile close --
           if (this._vcTl) { this._vcTl.kill(); this._vcTl = null; }
           
+          const children = this.panel.querySelectorAll(':scope > div');
+          
           const tl = gsap.timeline({ 
-            defaults: { ease: 'power2.in' },
+            defaults: { ease: 'power3.in' },
             onComplete: () => {
-              this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
-              this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
-              gsap.set(this.panel, { clearProps: 'all' });
-              // Restore children
-              const children = this.panel.querySelectorAll(':scope > div');
-              gsap.set(children, { clearProps: 'all' });
+              this.panel.classList.remove('vc-gsap-visible', 'scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
+              this.panel.classList.add('vc-gsap-hidden');
+              gsap.set(this.panel, { clearProps: 'opacity,scale,y,transform' });
+              gsap.set(children, { clearProps: 'opacity,y' });
+              if (this._backdrop) {
+                this._backdrop.remove();
+                this._backdrop = null;
+              }
             }
           });
           
-          // Fade children out quickly
-          const children = this.panel.querySelectorAll(':scope > div');
-          tl.to(children, { opacity: 0, y: -10, duration: 0.15, stagger: 0.03 });
-          // Slide panel down
-          tl.to(this.panel, { y: '100%', duration: 0.35 }, '-=0.05');
+          // 1) Children fade out quickly
+          tl.to(children, { opacity: 0, y: -12, duration: 0.2, stagger: 0.02 }, 0);
+          // 2) Panel scales down + fades
+          tl.to(this.panel, { opacity: 0, scale: 0.92, y: 30, duration: 0.35 }, 0.08);
+          // 3) Backdrop fades out
+          if (this._backdrop) {
+            tl.to(this._backdrop, { opacity: 0, duration: 0.25, ease: 'power2.out' }, 0.1);
+          }
           
           this._vcTl = tl;
         } else {
