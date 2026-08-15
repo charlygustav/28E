@@ -627,13 +627,32 @@
       if (willOpen) {
         this._playSfx('jbl_begin', 0.5);
 
-        if (isMobile && typeof gsap !== 'undefined') {
-          // -- GSAP premium mobile open --
-          if (this._vcTl) { this._vcTl.kill(); this._vcTl = null; }
-          
-          // Remove CSS state classes, use GSAP classes instead
+        // 1) Make panel structurally visible first
+        if (isMobile) {
           this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4', 'vc-gsap-hidden');
           this.panel.classList.add('vc-gsap-visible');
+        } else {
+          this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
+          this.panel.classList.add('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
+        }
+        
+        if (this.fab && isMobile) {
+          this.fab.classList.add('scale-0', 'opacity-0', 'pointer-events-none');
+        }
+
+        // 2) Render content (this replaces innerHTML)
+        if (this.connected) {
+          this._bar.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+          this._bar.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+        } else {
+          if (document.getElementById('vc-reconnect')) this._render(this._tplDisconnected());
+          else if (this.panel.querySelector('.animate-spin')) this._render(this._tplLoading());
+          else this._render(this._tplLogin());
+        }
+
+        // 3) NOW run GSAP on the final DOM (after render)
+        if (isMobile && typeof gsap !== 'undefined') {
+          if (this._vcTl) { this._vcTl.kill(); this._vcTl = null; }
           
           // Create backdrop overlay
           if (!this._backdrop) {
@@ -647,42 +666,24 @@
           // Initial state: panel invisible + slightly scaled down
           gsap.set(this.panel, { opacity: 0, scale: 0.92, y: 40 });
           
-          // Set children invisible
+          // Children are now the real rendered content
           const children = this.panel.querySelectorAll(':scope > div');
           gsap.set(children, { opacity: 0, y: 24 });
           
           const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
           
-          // 1) Backdrop fades in
+          // Backdrop fades in
           tl.to(this._backdrop, { opacity: 1, duration: 0.3, ease: 'power2.out' }, 0);
           
-          // 2) Panel scales up + fades in (like iOS sheet)
+          // Panel scales up + fades in
           tl.to(this.panel, { opacity: 1, scale: 1, y: 0, duration: 0.55 }, 0.05);
           
-          // 3) Stagger children with a subtle reveal
+          // Stagger children reveal
           if (children.length) {
             tl.to(children, { opacity: 1, y: 0, duration: 0.4, stagger: 0.06 }, 0.2);
           }
           
           this._vcTl = tl;
-
-        } else {
-          // -- Desktop: original CSS transition --
-          this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
-          this.panel.classList.add('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
-        }
-        
-        if (this.fab && isMobile) {
-          this.fab.classList.add('scale-0', 'opacity-0', 'pointer-events-none');
-        }
-
-        if (this.connected) {
-          this._bar.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
-          this._bar.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
-        } else {
-          if (document.getElementById('vc-reconnect')) this._render(this._tplDisconnected());
-          else if (this.panel.querySelector('.animate-spin')) this._render(this._tplLoading());
-          else this._render(this._tplLogin());
         }
       } else {
         if (this._loginPollInt) { clearInterval(this._loginPollInt); this._loginPollInt = null; }
