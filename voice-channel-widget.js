@@ -287,24 +287,16 @@
       background-color: #09090b !important;
       backdrop-filter: none !important;
       -webkit-backdrop-filter: none !important;
-      transition: none !important;
     }
-    .vc-panel-base.vc-gsap-hidden {
-      pointer-events: none !important;
-      visibility: hidden !important;
+    .vc-panel-base.scale-95.translate-y-4 {
+      transform: translateY(100%) !important;
     }
-    .vc-panel-base.vc-gsap-visible {
-      pointer-events: auto !important;
-      visibility: visible !important;
+    .vc-panel-base.scale-100.translate-y-0 {
+      transform: translateY(0) !important;
     }
     .vc-main-content {
        height: auto !important;
        flex: 1 !important;
-    }
-    .vc-backdrop {
-      position: fixed; inset: 0; z-index: 9997;
-      background: rgba(0,0,0,0.6);
-      pointer-events: auto;
     }
   }
   `;
@@ -621,28 +613,17 @@
     }
 
     _toggle() {
-      const isMobile = window.innerWidth <= 768;
-      const isOpen = this._vcOpen === true;
+      const willOpen = !this.panel.classList.contains('scale-100');
       
-      if (!isOpen) {
-        // ═══ OPEN ═══
-        this._vcOpen = true;
+      if (willOpen) {
         this._playSfx('jbl_begin', 0.5);
-
-        // Make panel visible for rendering
-        this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4', 'vc-gsap-hidden');
-        if (isMobile) {
-          this.panel.classList.add('vc-gsap-visible');
-          this.panel.style.opacity = '0';
-        } else {
-          this.panel.classList.add('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
-        }
+        this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
+        this.panel.classList.add('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
         
-        if (this.fab && isMobile) {
+        if (this.fab && window.innerWidth <= 768) {
           this.fab.classList.add('scale-0', 'opacity-0', 'pointer-events-none');
         }
 
-        // Render content
         if (this.connected) {
           this._bar.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
           this._bar.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
@@ -652,83 +633,14 @@
           else this._render(this._tplLogin());
         }
 
-        // GSAP animation (mobile only, after render)
-        if (isMobile && window.gsap) {
-          if (this._vcTl) { this._vcTl.kill(); this._vcTl = null; }
-          
-          // Backdrop
-          if (!this._backdrop) {
-            this._backdrop = document.createElement('div');
-            this._backdrop.className = 'vc-backdrop';
-            this._backdrop.style.opacity = '0';
-            this._backdrop.addEventListener('click', () => this._toggle());
-            document.body.appendChild(this._backdrop);
-          }
-          
-          const children = Array.from(this.panel.children);
-          
-          const tl = gsap.timeline();
-          
-          // Backdrop fade
-          tl.fromTo(this._backdrop, 
-            { opacity: 0 }, 
-            { opacity: 1, duration: 0.3, ease: 'power2.out' }, 0);
-          
-          // Panel: scale up + fade in
-          tl.fromTo(this.panel, 
-            { opacity: 0, scale: 0.9, y: 60 }, 
-            { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'expo.out' }, 0.05);
-          
-          // Children stagger
-          if (children.length) {
-            tl.fromTo(children, 
-              { opacity: 0, y: 30 }, 
-              { opacity: 1, y: 0, duration: 0.45, stagger: 0.08, ease: 'power3.out' }, 0.2);
-          }
-          
-          this._vcTl = tl;
-        } else if (!isMobile) {
-          this.panel.style.opacity = '';
+        // GSAP entrance animation (mobile only)
+        if (window.innerWidth <= 768 && window.gsap) {
+          requestAnimationFrame(() => this._gsapEnterMobile());
         }
-
       } else {
-        // ═══ CLOSE ═══
-        this._vcOpen = false;
         if (this._loginPollInt) { clearInterval(this._loginPollInt); this._loginPollInt = null; }
-
-        if (isMobile && window.gsap) {
-          if (this._vcTl) { this._vcTl.kill(); this._vcTl = null; }
-          
-          const children = Array.from(this.panel.children);
-          
-          const tl = gsap.timeline({ 
-            onComplete: () => {
-              this.panel.classList.remove('vc-gsap-visible', 'scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
-              this.panel.classList.add('vc-gsap-hidden');
-              this.panel.style.cssText = '';
-              children.forEach(c => c.style.cssText = '');
-              if (this._backdrop) {
-                this._backdrop.remove();
-                this._backdrop = null;
-              }
-            }
-          });
-          
-          // Children out
-          tl.to(children, { opacity: 0, y: -15, duration: 0.2, stagger: 0.02, ease: 'power2.in' }, 0);
-          // Panel out
-          tl.to(this.panel, { opacity: 0, scale: 0.9, y: 40, duration: 0.35, ease: 'power3.in' }, 0.1);
-          // Backdrop out
-          if (this._backdrop) {
-            tl.to(this._backdrop, { opacity: 0, duration: 0.3, ease: 'power2.out' }, 0.05);
-          }
-          
-          this._vcTl = tl;
-        } else {
-          // Desktop: original
-          this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
-          this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
-        }
+        this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
+        this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
         
         if (this.fab) {
           this.fab.classList.remove('scale-0', 'opacity-0', 'pointer-events-none');
@@ -740,6 +652,21 @@
         }
         this._playSfx('flyout', 0.4, false, 'fly');
       }
+    }
+
+    _gsapEnterMobile() {
+      if (this._vcTl) { this._vcTl.kill(); this._vcTl = null; }
+      const children = Array.from(this.panel.children);
+      if (!children.length) return;
+      
+      const tl = gsap.timeline();
+      tl.fromTo(children, 
+        { opacity: 0, y: 30 }, 
+        { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power3.out',
+          clearProps: 'opacity,y,transform'
+        }
+      );
+      this._vcTl = tl;
     }
 
     // ── TEMPLATES ──────────────────────────────────────────────────────────
