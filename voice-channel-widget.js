@@ -290,14 +290,12 @@
       transition: none !important;
     }
     .vc-panel-base.vc-gsap-hidden {
-      opacity: 0 !important;
       pointer-events: none !important;
-      transform: none !important;
+      visibility: hidden !important;
     }
     .vc-panel-base.vc-gsap-visible {
-      opacity: 1 !important;
       pointer-events: auto !important;
-      transform: none !important;
+      visibility: visible !important;
     }
     .vc-main-content {
        height: auto !important;
