@@ -656,7 +656,15 @@
 
     _gsapEnterMobile() {
       if (this._vcTl) { this._vcTl.kill(); this._vcTl = null; }
-      const children = Array.from(this.panel.children);
+      
+      let children = Array.from(this.panel.children);
+      
+      // If there's only one child wrapper (like in login view), get its children instead
+      if (children.length === 1) {
+        // Filter out absolute background orbs, keep the actual content blocks
+        children = Array.from(children[0].children).filter(c => !c.classList.contains('absolute'));
+      }
+      
       if (!children.length) return;
       
       const tl = gsap.timeline();
