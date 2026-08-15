@@ -613,13 +613,43 @@
 
     _toggle() {
       const willOpen = !this.panel.classList.contains('scale-100');
+      const isMobile = window.innerWidth <= 768;
       
       if (willOpen) {
         this._playSfx('jbl_begin', 0.5);
-        this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
-        this.panel.classList.add('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
+
+        if (isMobile && typeof gsap !== 'undefined') {
+          // -- GSAP premium mobile open --
+          this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
+          this.panel.classList.add('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
+          
+          // Kill any running vc timeline
+          if (this._vcTl) { this._vcTl.kill(); this._vcTl = null; }
+
+          // Force panel to start off-screen, then animate in
+          gsap.set(this.panel, { y: '100%', opacity: 1 });
+          
+          const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+          
+          // 1) Panel slides up
+          tl.to(this.panel, { y: '0%', duration: 0.5 });
+          
+          // 2) Stagger children: header, tabs, main content, controls
+          const children = this.panel.querySelectorAll(':scope > div');
+          if (children.length) {
+            gsap.set(children, { opacity: 0, y: 20 });
+            tl.to(children, { opacity: 1, y: 0, duration: 0.35, stagger: 0.07 }, '-=0.25');
+          }
+          
+          this._vcTl = tl;
+
+        } else {
+          // -- Desktop: original CSS transition --
+          this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
+          this.panel.classList.add('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
+        }
         
-        if (this.fab && window.innerWidth <= 768) {
+        if (this.fab && isMobile) {
           this.fab.classList.add('scale-0', 'opacity-0', 'pointer-events-none');
         }
 
@@ -633,8 +663,35 @@
         }
       } else {
         if (this._loginPollInt) { clearInterval(this._loginPollInt); this._loginPollInt = null; }
-        this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
-        this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
+
+        if (isMobile && typeof gsap !== 'undefined') {
+          // -- GSAP premium mobile close --
+          if (this._vcTl) { this._vcTl.kill(); this._vcTl = null; }
+          
+          const tl = gsap.timeline({ 
+            defaults: { ease: 'power2.in' },
+            onComplete: () => {
+              this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
+              this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
+              gsap.set(this.panel, { clearProps: 'all' });
+              // Restore children
+              const children = this.panel.querySelectorAll(':scope > div');
+              gsap.set(children, { clearProps: 'all' });
+            }
+          });
+          
+          // Fade children out quickly
+          const children = this.panel.querySelectorAll(':scope > div');
+          tl.to(children, { opacity: 0, y: -10, duration: 0.15, stagger: 0.03 });
+          // Slide panel down
+          tl.to(this.panel, { y: '100%', duration: 0.35 }, '-=0.05');
+          
+          this._vcTl = tl;
+        } else {
+          // -- Desktop: original CSS transition --
+          this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
+          this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
+        }
         
         if (this.fab) {
           this.fab.classList.remove('scale-0', 'opacity-0', 'pointer-events-none');
