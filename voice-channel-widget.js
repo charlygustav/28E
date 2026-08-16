@@ -288,11 +288,14 @@
       backdrop-filter: none !important;
       -webkit-backdrop-filter: none !important;
     }
-    .vc-panel-base.scale-95.translate-y-4 {
+    .vc-panel-base:not(.vc-gsap-active).scale-95.translate-y-4 {
       transform: translateY(100%) !important;
     }
-    .vc-panel-base.scale-100.translate-y-0 {
+    .vc-panel-base:not(.vc-gsap-active).scale-100.translate-y-0 {
       transform: translateY(0) !important;
+    }
+    .vc-panel-base.vc-gsap-active {
+      transition: none !important;
     }
     .vc-main-content {
        height: auto !important;
@@ -614,13 +617,19 @@
 
     _toggle() {
       const willOpen = !this.panel.classList.contains('scale-100');
+      const isMobile = window.innerWidth <= 768;
       
       if (willOpen) {
         this._playSfx('jbl_begin', 0.5);
+        
+        if (isMobile && window.gsap) {
+          this.panel.classList.add('vc-gsap-active');
+        }
+        
         this.panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
         this.panel.classList.add('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
         
-        if (this.fab && window.innerWidth <= 768) {
+        if (this.fab && isMobile) {
           this.fab.classList.add('scale-0', 'opacity-0', 'pointer-events-none');
         }
 
@@ -634,13 +643,18 @@
         }
 
         // GSAP entrance animation (mobile only)
-        if (window.innerWidth <= 768 && window.gsap) {
-          requestAnimationFrame(() => this._gsapEnterMobile());
+        if (isMobile && window.gsap) {
+          this._gsapEnterMobile();
         }
       } else {
         if (this._loginPollInt) { clearInterval(this._loginPollInt); this._loginPollInt = null; }
-        this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
-        this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
+        
+        if (isMobile && window.gsap) {
+          this._gsapLeaveMobile();
+        } else {
+          this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0');
+          this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
+        }
         
         if (this.fab) {
           this.fab.classList.remove('scale-0', 'opacity-0', 'pointer-events-none');
@@ -657,24 +671,63 @@
     _gsapEnterMobile() {
       if (this._vcTl) { this._vcTl.kill(); this._vcTl = null; }
       
-      let children = Array.from(this.panel.children);
+      const tl = gsap.timeline();
       
-      // If there's only one child wrapper (like in login view), get its children instead
+      // Backdrop
+      if (!this._backdrop) {
+        this._backdrop = document.createElement('div');
+        this._backdrop.className = 'vc-backdrop';
+        this._backdrop.addEventListener('click', () => this._toggle());
+        document.body.appendChild(this._backdrop);
+      }
+      tl.fromTo(this._backdrop, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power2.out' }, 0);
+      
+      // Panel animates up from the bottom like an iOS sheet
+      tl.fromTo(this.panel,
+        { y: window.innerHeight, opacity: 1, scale: 1 },
+        { y: 0, duration: 0.55, ease: 'expo.out', clearProps: 'transform' },
+        0.05
+      );
+      
+      // Inner children stagger
+      let children = Array.from(this.panel.children);
       if (children.length === 1) {
-        // Filter out absolute background orbs, keep the actual content blocks
         children = Array.from(children[0].children).filter(c => !c.classList.contains('absolute'));
       }
       
-      if (!children.length) return;
+      if (children.length) {
+        tl.fromTo(children, 
+          { opacity: 0, y: 30, scale: 0.95 }, 
+          { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.08, ease: 'back.out(1.2)', clearProps: 'all' },
+          0.2
+        );
+      }
       
-      // Add delay so it happens AFTER the CSS slide-up
-      const tl = gsap.timeline({ delay: 0.25 }); 
-      tl.fromTo(children, 
-        { opacity: 0, y: 60, scale: 0.95 }, 
-        { opacity: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.1, ease: 'back.out(1.4)',
-          clearProps: 'opacity,y,scale,transform'
+      this._vcTl = tl;
+    }
+
+    _gsapLeaveMobile() {
+      if (this._vcTl) { this._vcTl.kill(); this._vcTl = null; }
+      
+      const tl = gsap.timeline({
+        onComplete: () => {
+          this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0', 'vc-gsap-active');
+          this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
+          gsap.set(this.panel, { clearProps: 'all' });
+          if (this._backdrop) {
+            this._backdrop.remove();
+            this._backdrop = null;
+          }
         }
-      );
+      });
+      
+      // Panel slides down
+      tl.to(this.panel, { y: window.innerHeight, opacity: 0, duration: 0.35, ease: 'power3.in' }, 0);
+      
+      if (this._backdrop) {
+        tl.to(this._backdrop, { opacity: 0, duration: 0.25, ease: 'power2.out' }, 0.1);
+      }
+      
       this._vcTl = tl;
     }
 
@@ -1227,12 +1280,28 @@
       }
     }
 
+    _bindGsapButton(el) {
+      if (!el || !window.gsap) return;
+      el.addEventListener('pointerdown', () => {
+        gsap.to(el, { scale: 0.9, duration: 0.1, ease: 'power1.out' });
+      });
+      const up = () => {
+        gsap.to(el, { scale: 1, duration: 0.4, ease: 'back.out(2)' });
+      };
+      el.addEventListener('pointerup', up);
+      el.addEventListener('pointercancel', up);
+      el.addEventListener('pointerleave', up);
+    }
+
     _bindPanelEvents() {
       const btnVerMas = document.getElementById('vc-btn-ver-mas');
       if (btnVerMas) btnVerMas.addEventListener('click', () => this._showDetailedHistory());
 
       const xBtn = document.getElementById('vc-close');
-      if (xBtn) xBtn.addEventListener('click', () => this._toggle());
+      if (xBtn) {
+        xBtn.addEventListener('click', () => this._toggle());
+        this._bindGsapButton(xBtn);
+      }
 
       const vcGoogleBtn = document.getElementById('vc-google-login-btn');
       if (vcGoogleBtn) {
@@ -1240,8 +1309,7 @@
           const mainLogin = document.getElementById('auth-btn-login');
           if (mainLogin) mainLogin.click();
         });
-        vcGoogleBtn.addEventListener('mouseover', () => vcGoogleBtn.style.opacity = '0.9');
-        vcGoogleBtn.addEventListener('mouseout', () => vcGoogleBtn.style.opacity = '1');
+        this._bindGsapButton(vcGoogleBtn);
       }
 
       const joinBtn = document.getElementById('vc-join');
@@ -1252,37 +1320,47 @@
         this._playSfx('typing', 0.2);
       };
 
-        if (joinBtn) {
-          joinBtn.addEventListener('click', () => {
-             const name = document.getElementById('vc-name').value.trim();
-             joinBtn.disabled = true;
-             joinBtn.innerHTML = '<div class="vc-spin"></div>';
-             this._doJoin(name);
-          });
-        }
+      if (joinBtn) {
+        joinBtn.addEventListener('click', () => {
+           const name = document.getElementById('vc-name').value.trim();
+           joinBtn.disabled = true;
+           joinBtn.innerHTML = '<div class="vc-spin"></div>';
+           this._doJoin(name);
+        });
+        this._bindGsapButton(joinBtn);
+      }
 
       const reconnectBtn = document.getElementById('vc-reconnect');
-      if (reconnectBtn) reconnectBtn.addEventListener('click', () => {
-        if (this._savedName && this._savedPass) {
-          if (this.progNode) { this._stopSfx(this.progNode); this.progNode = null; }
-          this._render(this._tplLoading());
-          this.progNode = this._playSfx('jbl_latency', 0.3, true);
-          this._connectSocket(this._savedName, this._savedPass);
-        } else {
-          this._render(this._tplLogin());
-        }
-      });
+      if (reconnectBtn) {
+        reconnectBtn.addEventListener('click', () => {
+          if (this._savedName && this._savedPass) {
+            if (this.progNode) { this._stopSfx(this.progNode); this.progNode = null; }
+            this._render(this._tplLoading());
+            this.progNode = this._playSfx('jbl_latency', 0.3, true);
+            this._connectSocket(this._savedName, this._savedPass);
+          } else {
+            this._render(this._tplLogin());
+          }
+        });
+        this._bindGsapButton(reconnectBtn);
+      }
 
       const muteBtn  = document.getElementById('vc-mute');
       const dndBtn   = document.getElementById('vc-dnd');
       const leaveBtn = document.getElementById('vc-leave');
-      if (muteBtn)  muteBtn.addEventListener('click',  () => this._toggleMute());
-      if (dndBtn)   dndBtn.addEventListener('click',   () => this._toggleDND());
-      if (leaveBtn) leaveBtn.addEventListener('click', () => this._leave());
+      if (muteBtn) { muteBtn.addEventListener('click',  () => this._toggleMute()); this._bindGsapButton(muteBtn); }
+      if (dndBtn)  { dndBtn.addEventListener('click',   () => this._toggleDND()); this._bindGsapButton(dndBtn); }
+      if (leaveBtn) { leaveBtn.addEventListener('click', () => this._leave()); this._bindGsapButton(leaveBtn); }
 
       // Tabs logic
       const switchTab = (tab) => {
         if (this._activeTab === tab) return;
+        
+        const order = ['room', 'chat', 'music'];
+        const oldIndex = order.indexOf(this._activeTab);
+        const newIndex = order.indexOf(tab);
+        const direction = newIndex > oldIndex ? 1 : -1;
+
         this._activeTab = tab;
         if (tab === 'chat') {
           this._chatUnread = 0;
@@ -1291,16 +1369,16 @@
         } else {
           this._playSfx('toggleOff', 0.3);
         }
-        this._updateTabs();
+        this._updateTabs(direction);
       };
       
       const tabRoom = document.getElementById('vc-tab-room');
       const tabChat = document.getElementById('vc-tab-chat');
       const tabMusic = document.getElementById('vc-tab-music');
 
-      if (tabRoom) tabRoom.addEventListener('click', () => switchTab('room'));
-      if (tabChat) tabChat.addEventListener('click', () => switchTab('chat'));
-      if (tabMusic) tabMusic.addEventListener('click', () => switchTab('music'));
+      if (tabRoom) { tabRoom.addEventListener('click', () => switchTab('room')); this._bindGsapButton(tabRoom); }
+      if (tabChat) { tabChat.addEventListener('click', () => switchTab('chat')); this._bindGsapButton(tabChat); }
+      if (tabMusic) { tabMusic.addEventListener('click', () => switchTab('music')); this._bindGsapButton(tabMusic); }
 
 
 
@@ -1338,6 +1416,40 @@
       }
 
       this._bindMusicEvents();
+
+      // Swipe Gestures for Mobile
+      let touchStartX = 0;
+      let touchEndX = 0;
+      let touchStartY = 0;
+      let touchEndY = 0;
+
+      this.panel.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+      }, { passive: true });
+
+      this.panel.addEventListener('touchend', e => {
+        if (!this.connected) return;
+        touchEndX = e.changedTouches[0].screenX;
+        touchEndY = e.changedTouches[0].screenY;
+        
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+        
+        // Ensure swipe is mostly horizontal and significant enough (> 50px)
+        if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+          const order = ['room', 'chat', 'music'];
+          let currentIndex = order.indexOf(this._activeTab);
+          
+          if (deltaX < 0) {
+            // Swiped left -> next tab
+            if (currentIndex < order.length - 1) switchTab(order[currentIndex + 1]);
+          } else {
+            // Swiped right -> prev tab
+            if (currentIndex > 0) switchTab(order[currentIndex - 1]);
+          }
+        }
+      }, { passive: true });
     }
 
     updateTranslations() {
@@ -1357,7 +1469,7 @@
       }
     }
 
-    _updateTabs() {
+    _updateTabs(direction = 1) {
       if (this.connected) {
          this._render(this._tplConnected());
          this._updateBarChatState();
@@ -1373,8 +1485,8 @@
            const activeContent = document.getElementById(`vc-content-${this._activeTab}`);
            if (activeContent) {
              gsap.fromTo(activeContent, 
-               { opacity: 0, x: 20 },
-               { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }
+               { opacity: 0, x: 40 * direction },
+               { opacity: 1, x: 0, duration: 0.4, ease: "power3.out", clearProps: 'transform,opacity' }
              );
            }
          }
