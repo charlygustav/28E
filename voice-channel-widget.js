@@ -1429,13 +1429,23 @@
       }, { passive: true });
 
       this.panel.addEventListener('touchend', e => {
-        if (!this.connected) return;
         touchEndX = e.changedTouches[0].screenX;
         touchEndY = e.changedTouches[0].screenY;
         
         const deltaX = touchEndX - touchStartX;
         const deltaY = touchEndY - touchStartY;
         
+        // Swipe down to close
+        if (deltaY > 50 && Math.abs(deltaY) > Math.abs(deltaX) * 1.5) {
+          // If it's open, close it (we rely on _vcOpen state if available, or just call _toggle)
+          if (this.panel.classList.contains('scale-100') || this._vcOpen) {
+            this._toggle();
+          }
+          return;
+        }
+        
+        if (!this.connected) return;
+
         // Ensure swipe is mostly horizontal and significant enough (> 50px)
         if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
           const order = ['room', 'chat', 'music'];
