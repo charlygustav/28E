@@ -583,6 +583,49 @@
       this.panel.addEventListener('mousedown', () => { _panelMousedown = true; });
       document.addEventListener('mouseup', () => { requestAnimationFrame(() => { _panelMousedown = false; }); });
 
+      // Swipe Gestures for Mobile (Bind ONLY once in init)
+      let touchStartX = 0;
+      let touchEndX = 0;
+      let touchStartY = 0;
+      let touchEndY = 0;
+
+      this.panel.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+      }, { passive: true });
+
+      this.panel.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        touchEndY = e.changedTouches[0].screenY;
+        
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+        
+        // Swipe down to close
+        if (deltaY > 50 && Math.abs(deltaY) > Math.abs(deltaX) * 1.5) {
+          if (this.panel.classList.contains('scale-100') || this._vcOpen) {
+            this._toggle();
+          }
+          return;
+        }
+        
+        if (!this.connected) return;
+
+        // Ensure swipe is mostly horizontal and significant enough (> 50px)
+        if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+          const order = ['room', 'chat', 'music'];
+          let currentIndex = order.indexOf(this._activeTab);
+          
+          if (deltaX < 0) {
+            // Swiped left -> next tab
+            if (currentIndex < order.length - 1) this._doSwitchTab(order[currentIndex + 1]);
+          } else {
+            // Swiped right -> prev tab
+            if (currentIndex > 0) this._doSwitchTab(order[currentIndex - 1]);
+          }
+        }
+      }, { passive: true });
+
       document.addEventListener('click', (e) => {
         if (!this.panel.classList.contains('scale-100')) return;
         if (this.panel.contains(e.target) || this.fab.contains(e.target)) return;
@@ -1353,34 +1396,13 @@
       if (leaveBtn) { leaveBtn.addEventListener('click', () => this._leave()); this._bindGsapButton(leaveBtn); }
 
       // Tabs logic
-      const switchTab = (tab) => {
-        if (this._activeTab === tab) return;
-        
-        const order = ['room', 'chat', 'music'];
-        const oldIndex = order.indexOf(this._activeTab);
-        const newIndex = order.indexOf(tab);
-        const direction = newIndex > oldIndex ? 1 : -1;
-
-        this._activeTab = tab;
-        if (tab === 'chat') {
-          this._chatUnread = 0;
-          document.title = '28E';
-          this._playSfx('toggleOn', 0.3);
-        } else {
-          this._playSfx('toggleOff', 0.3);
-        }
-        this._updateTabs(direction);
-      };
-      
       const tabRoom = document.getElementById('vc-tab-room');
       const tabChat = document.getElementById('vc-tab-chat');
       const tabMusic = document.getElementById('vc-tab-music');
 
-      if (tabRoom) { tabRoom.addEventListener('click', () => switchTab('room')); this._bindGsapButton(tabRoom); }
-      if (tabChat) { tabChat.addEventListener('click', () => switchTab('chat')); this._bindGsapButton(tabChat); }
-      if (tabMusic) { tabMusic.addEventListener('click', () => switchTab('music')); this._bindGsapButton(tabMusic); }
-
-
+      if (tabRoom) { tabRoom.addEventListener('click', () => this._doSwitchTab('room')); this._bindGsapButton(tabRoom); }
+      if (tabChat) { tabChat.addEventListener('click', () => this._doSwitchTab('chat')); this._bindGsapButton(tabChat); }
+      if (tabMusic) { tabMusic.addEventListener('click', () => this._doSwitchTab('music')); this._bindGsapButton(tabMusic); }
 
       // Chat send & typing
       const chatSend = document.getElementById('vc-chat-send');
@@ -1416,50 +1438,25 @@
       }
 
       this._bindMusicEvents();
+    }
 
-      // Swipe Gestures for Mobile
-      let touchStartX = 0;
-      let touchEndX = 0;
-      let touchStartY = 0;
-      let touchEndY = 0;
+    _doSwitchTab(tab) {
+      if (this._activeTab === tab) return;
+      
+      const order = ['room', 'chat', 'music'];
+      const oldIndex = order.indexOf(this._activeTab);
+      const newIndex = order.indexOf(tab);
+      const direction = newIndex > oldIndex ? 1 : -1;
 
-      this.panel.addEventListener('touchstart', e => {
-        touchStartX = e.changedTouches[0].screenX;
-        touchStartY = e.changedTouches[0].screenY;
-      }, { passive: true });
-
-      this.panel.addEventListener('touchend', e => {
-        touchEndX = e.changedTouches[0].screenX;
-        touchEndY = e.changedTouches[0].screenY;
-        
-        const deltaX = touchEndX - touchStartX;
-        const deltaY = touchEndY - touchStartY;
-        
-        // Swipe down to close
-        if (deltaY > 50 && Math.abs(deltaY) > Math.abs(deltaX) * 1.5) {
-          // If it's open, close it (we rely on _vcOpen state if available, or just call _toggle)
-          if (this.panel.classList.contains('scale-100') || this._vcOpen) {
-            this._toggle();
-          }
-          return;
-        }
-        
-        if (!this.connected) return;
-
-        // Ensure swipe is mostly horizontal and significant enough (> 50px)
-        if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
-          const order = ['room', 'chat', 'music'];
-          let currentIndex = order.indexOf(this._activeTab);
-          
-          if (deltaX < 0) {
-            // Swiped left -> next tab
-            if (currentIndex < order.length - 1) switchTab(order[currentIndex + 1]);
-          } else {
-            // Swiped right -> prev tab
-            if (currentIndex > 0) switchTab(order[currentIndex - 1]);
-          }
-        }
-      }, { passive: true });
+      this._activeTab = tab;
+      if (tab === 'chat') {
+        this._chatUnread = 0;
+        document.title = '28E';
+        this._playSfx('toggleOn', 0.3);
+      } else {
+        this._playSfx('toggleOff', 0.3);
+      }
+      this._updateTabs(direction);
     }
 
     updateTranslations() {
