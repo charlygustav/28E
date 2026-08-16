@@ -1325,15 +1325,28 @@
 
     _bindGsapButton(el) {
       if (!el || !window.gsap) return;
-      el.addEventListener('pointerdown', () => {
-        gsap.to(el, { scale: 0.9, duration: 0.1, ease: 'power1.out' });
-      });
-      const up = () => {
-        gsap.to(el, { scale: 1, duration: 0.4, ease: 'back.out(2)' });
+      // Disable CSS transitions to prevent fighting with GSAP
+      el.style.transition = 'none';
+      
+      const down = () => {
+        gsap.to(el, { scale: 0.9, duration: 0.1, ease: 'power1.out', overwrite: 'auto' });
       };
+      const up = () => {
+        gsap.to(el, { scale: 1, duration: 0.4, ease: 'back.out(2)', overwrite: 'auto' });
+      };
+      
+      // Use both pointer and touch/mouse fallbacks for maximum compatibility
+      el.addEventListener('pointerdown', down);
       el.addEventListener('pointerup', up);
       el.addEventListener('pointercancel', up);
       el.addEventListener('pointerleave', up);
+      
+      // Legacy support just in case
+      el.addEventListener('touchstart', down, { passive: true });
+      el.addEventListener('touchend', up, { passive: true });
+      el.addEventListener('mousedown', down);
+      el.addEventListener('mouseup', up);
+      el.addEventListener('mouseleave', up);
     }
 
     _bindPanelEvents() {
@@ -1456,7 +1469,22 @@
       } else {
         this._playSfx('toggleOff', 0.3);
       }
-      this._updateTabs(direction);
+
+      const contentEl = this.panel.querySelector('.vc-main-content');
+      if (window.gsap && contentEl && window.innerWidth <= 768) {
+        // Slide out
+        gsap.to(contentEl, {
+          x: -40 * direction,
+          opacity: 0,
+          duration: 0.15,
+          ease: 'power2.in',
+          onComplete: () => {
+            this._updateTabs(direction);
+          }
+        });
+      } else {
+        this._updateTabs(direction);
+      }
     }
 
     updateTranslations() {
