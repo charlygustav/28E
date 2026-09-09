@@ -236,7 +236,10 @@
         content="https://i.ibb.co/cc0BqS8Q/Gemini-Generated-Image-mx0a57mx0a57mx0a-1-Picsart-Ai-Image-Enhancer.png" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="stylesheet" href="styles.css?v=1.0.2">
+    <!-- GSAP Core & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+    <link rel="stylesheet" href="styles.css?v=1.0.3">
     <script>
             (function () {
                 try {
@@ -4424,30 +4427,41 @@
                     expEl.style.background = isDark ? '#09090b' : '#ffffff';
 
                     if (isSpotlightExpanded) {
-                        // Make sure starting position is correct before animating
-                        gsap.set(expEl, { y: '100%', opacity: 0 });
                         expEl.classList.remove('pointer-events-none');
                         expEl.classList.add('pointer-events-auto');
                         // Sync UI only — never touch spotAudio.src here (would pause playback)
                         syncExpandedPlayerUI();
                         renderSpotlightPlaylist();
-                        gsap.to(expEl, {
-                            y: '0%',
-                            opacity: 1,
-                            duration: 0.4,
-                            ease: 'power2.out'
-                        });
+                        if (typeof gsap !== 'undefined') {
+                            gsap.set(expEl, { y: '100%', opacity: 0 });
+                            gsap.to(expEl, {
+                                y: '0%',
+                                opacity: 1,
+                                duration: 0.4,
+                                ease: 'power2.out'
+                            });
+                        } else {
+                            expEl.style.transform = 'translateY(0%)';
+                            expEl.style.opacity = '1';
+                        }
                     } else {
-                        gsap.to(expEl, {
-                            y: '100%',
-                            opacity: 0,
-                            duration: 0.35,
-                            ease: 'power2.in',
-                            onComplete: () => {
-                                expEl.classList.remove('pointer-events-auto');
-                                expEl.classList.add('pointer-events-none');
-                            }
-                        });
+                        if (typeof gsap !== 'undefined') {
+                            gsap.to(expEl, {
+                                y: '100%',
+                                opacity: 0,
+                                duration: 0.35,
+                                ease: 'power2.in',
+                                onComplete: () => {
+                                    expEl.classList.remove('pointer-events-auto');
+                                    expEl.classList.add('pointer-events-none');
+                                }
+                            });
+                        } else {
+                            expEl.style.transform = 'translateY(100%)';
+                            expEl.style.opacity = '0';
+                            expEl.classList.remove('pointer-events-auto');
+                            expEl.classList.add('pointer-events-none');
+                        }
                     }
                 }
 
@@ -13907,6 +13921,8 @@
                 AudioManager.play('flyin.wav', 0.6);
                 if (p) p.classList.add('open');
                 if (o) { o.classList.remove('hidden'); setTimeout(() => o.classList.remove('opacity-0'), 10); }
+                document.body.classList.add('menu-is-open');
+                
                 // Focus search ONLY if it remains open after 200ms (prevents fast Esc racing)
                 clearTimeout(menuFocusTimeout);
                 menuFocusTimeout = setTimeout(() => {
@@ -13922,6 +13938,8 @@
                 }
                 if (p) p.classList.remove('open');
                 if (o) { o.classList.add('opacity-0'); setTimeout(() => o.classList.add('hidden'), 300); }
+                document.body.classList.remove('menu-is-open');
+                
                 // Clear search and ensure focus is killed
                 clearTimeout(menuFocusTimeout);
                 const s = document.getElementById('menu-search'); if (s) { s.value = ''; s.blur(); }
@@ -18992,6 +19010,22 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         </div>
     </div>
+
+    <!-- Floating Action Button para la carta -->
+    <a href="para-yaire.html" class="fixed bottom-6 left-6 z-[9999] flex items-center justify-center cursor-pointer transition-all duration-500 ease-out rounded-full bg-zinc-900 border border-white/10 shadow-2xl hover:border-amber-500/50 w-14 h-14 group" aria-label="Mensaje especial">
+        <div class="absolute inset-0 rounded-full bg-amber-500/20 blur-xl opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-opacity duration-500 ease-out"></div>
+        <div class="absolute inset-0 rounded-full shadow-[0_0_0_0_rgba(245,158,11,0)] group-hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] transition-shadow duration-500 ease-out"></div>
+        <span class="relative z-10 text-amber-500 transition-all duration-500 ease-out group-hover:scale-125 group-hover:drop-shadow-[0_0_10px_rgba(245,158,11,0.8)] flex items-center justify-center w-6 h-6">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full"><path d="M21.2 8.4c.5.38.8.97.8 1.6v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10a2 2 0 0 1 .8-1.6l8-6a2 2 0 0 1 2.4 0l8 6Z"/><path d="m22 10-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 10"/></svg>
+        </span>
+        
+        <!-- Notification Dot -->
+        <div class="absolute top-0 right-0 w-3.5 h-3.5 flex items-center justify-center">
+            <span class="absolute inline-flex w-full h-full rounded-full bg-pink-500 opacity-75 animate-ping"></span>
+            <span class="relative inline-flex rounded-full w-2.5 h-2.5 bg-pink-500 border border-zinc-900"></span>
+        </div>
+    </a>
+
 </body>
 
 </html>

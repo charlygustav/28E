@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="es" class="dark scroll-smooth antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Yaire</title>
+    <link rel="icon" type="image/x-icon" href="tulip.ico?v=3">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #f4f4f5; /* zinc-100 */
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism utility */
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Ambient Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .orb-1 { width: 50vw; height: 50vw; background: rgba(236, 72, 153, 0.15); top: -10vw; left: -10vw; }
+        .orb-2 { width: 40vw; height: 40vw; background: rgba(245, 158, 11, 0.12); bottom: -10vw; right: -10vw; }
+
+        /* Premium Dark Background */
+        .premium-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.35;
+        }
+        .premium-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,1) 100%);
+        }
+
+        /* Fast touch response */
+        .pin-btn {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Content Z-index to sit above orbs */
+        .content-layer {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Text gradient for accents */
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(135deg, #fbbf24 0%, #ec4899 100%);
+        }
+
+        /* Hide elements initially for GSAP */
+        .gsap-reveal, .gsap-stagger > * {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+    </style>
+</head>
+<body class="selection:bg-pink-500/30 selection:text-pink-200 overflow-hidden">
+
+    <!-- Backgrounds -->
+    <div class="premium-bg"></div>
+    <div class="premium-overlay"></div>
+
+    <!-- Return Button (Top Left) always visible -->
+    <a href="index.html" class="fixed top-6 left-6 sm:top-8 sm:left-8 z-[999999] bg-white/10 hover:bg-white/20 border border-white/10 w-12 h-12 rounded-full flex items-center justify-center text-white/90 hover:text-white transition-all duration-300 group backdrop-blur-2xl" title="Volver a 28E">
+        <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+    </a>
+
+    <!-- Lock Screen Overlay -->
+    <div id="lockScreen" class="fixed inset-0 z-[99999] bg-black/40 backdrop-blur-2xl flex flex-col items-center justify-center transition-all duration-700 ease-out">
+        
+        <div class="lock-element text-center mt-2">
+            <svg class="w-6 h-6 sm:w-7 sm:h-7 text-white/90 mx-auto mb-3 sm:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            <h2 class="text-white text-lg sm:text-xl font-medium tracking-wide mb-6 sm:mb-10" id="pinTitle">Ingresar código</h2>
+        </div>
+        
+        <!-- PIN Dots -->
+        <div class="flex gap-5 mb-8 sm:mb-12 lock-element h-4 items-center justify-center" id="pinDots">
+            <div class="w-3.5 h-3.5 rounded-full border-[1.5px] border-white/50 transition-all duration-200"></div>
+            <div class="w-3.5 h-3.5 rounded-full border-[1.5px] border-white/50 transition-all duration-200"></div>
+            <div class="w-3.5 h-3.5 rounded-full border-[1.5px] border-white/50 transition-all duration-200"></div>
+            <div class="w-3.5 h-3.5 rounded-full border-[1.5px] border-white/50 transition-all duration-200"></div>
+        </div>
+
+        <!-- Keypad -->
+        <div class="grid grid-cols-3 gap-x-7 sm:gap-x-8 gap-y-4 sm:gap-y-6 max-w-[280px] sm:max-w-[320px] lock-element">
+            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-white/[0.08] active:bg-white/[0.25] text-white text-3xl font-light transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="enterPin('1')">1</button>
+            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-white/[0.08] active:bg-white/[0.25] text-white text-3xl font-light transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="enterPin('2')">2</button>
+            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-white/[0.08] active:bg-white/[0.25] text-white text-3xl font-light transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="enterPin('3')">3</button>
+            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-white/[0.08] active:bg-white/[0.25] text-white text-3xl font-light transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="enterPin('4')">4</button>
+            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-white/[0.08] active:bg-white/[0.25] text-white text-3xl font-light transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="enterPin('5')">5</button>
+            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-white/[0.08] active:bg-white/[0.25] text-white text-3xl font-light transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="enterPin('6')">6</button>
+            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-white/[0.08] active:bg-white/[0.25] text-white text-3xl font-light transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="enterPin('7')">7</button>
+            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-white/[0.08] active:bg-white/[0.25] text-white text-3xl font-light transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="enterPin('8')">8</button>
+            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-white/[0.08] active:bg-white/[0.25] text-white text-3xl font-light transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="enterPin('9')">9</button>
+            <div></div>
+            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-white/[0.08] active:bg-white/[0.25] text-white text-3xl font-light transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="enterPin('0')">0</button>
+            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-transparent active:bg-white/[0.1] text-white/80 transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="deletePin()">
+                <svg class="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="mainWrap" style="opacity: 0; pointer-events: none; transition: opacity 1s ease-in-out;">
+    <!-- Ambient Floating Orbs -->
+    <div class="orb orb-1" id="orb1"></div>
+    <div class="orb orb-2" id="orb2"></div>
+
+    <main class="content-layer max-w-3xl mx-auto px-6 sm:px-12 pb-32">
+        
+        <!-- Hero Section -->
+        <section class="relative min-h-screen flex flex-col justify-center items-start pt-20">
+            <div class="gsap-reveal mb-6">
+                <span class="text-xs font-bold tracking-[0.3em] text-pink-400 uppercase">28 de Enero</span>
+            </div>
+            
+            <h1 class="gsap-reveal text-5xl sm:text-6xl md:text-7xl font-semibold tracking-tighter leading-[1.1] mb-8 text-white max-w-2xl">
+                Antes de cualquier<br>otra cosa, <span class="text-gradient">esto.</span>
+            </h1>
+            
+            <p class="gsap-reveal text-lg sm:text-xl text-zinc-400 font-light leading-relaxed max-w-prose">
+                No es una disculpa perfecta. Es solo lo que de verdad, desde el fondo, necesito que sepas.
+            </p>
+
+            <div class="gsap-reveal mt-20 flex flex-col items-center gap-4 text-xs text-zinc-500 font-medium tracking-widest uppercase absolute bottom-12 left-1/2 -translate-x-1/2">
+                <span>Desliza despacio</span>
+                <div class="w-[1px] h-12 bg-gradient-to-b from-zinc-500 to-transparent"></div>
+            </div>
+        </section>
+
+        <!-- Spacer -->
+        <div class="h-32"></div>
+
+        <!-- Section 1: Me equivoqué feo -->
+        <section class="mb-40 gsap-section">
+            <h2 class="text-sm font-bold tracking-[0.2em] text-pink-500 uppercase mb-6">La culpa</h2>
+            <h3 class="text-3xl sm:text-4xl font-medium tracking-tight leading-snug text-white mb-8 max-w-xl">
+                Me equivoqué feo. Fui un completo idiota.
+            </h3>
+            <div class="space-y-6 text-lg text-zinc-400 font-light leading-relaxed max-w-2xl">
+                <p>Quiero empezar por aquí, sin excusas ni atajos. Sé que la cagué. No hay otra forma de decirlo y no quiero tratar de suavizarlo. He dejado que mi estupidez y mi falta de claridad te lastimen, y eso me está matando por dentro.</p>
+                <p>Verte sufrir, leer tus mensajes y saber que fui yo quien te hizo sentir mal, que fui yo quien te llenó de dudas... es una vaina que no me perdono. Y no espero que me perdones de un día para otro, porque no me lo he ganado. Solo quiero empezar asumiendo que el error es cien por ciento mío.</p>
+            </div>
+        </section>
+
+        <!-- Section 2: Lo primero -->
+        <section class="mb-40 gsap-section">
+            <h2 class="text-sm font-bold tracking-[0.2em] text-amber-500 uppercase mb-6">Lo primero</h2>
+            <h3 class="text-3xl sm:text-4xl font-medium tracking-tight leading-snug text-white mb-8 max-w-xl">
+                Te fallé en cómo te conté las cosas, no solo en lo que pasó.
+            </h3>
+            <div class="space-y-6 text-lg text-zinc-400 font-light leading-relaxed max-w-2xl">
+                <p>No fui claro contigo cuando debí serlo, y eso te dejó armando la historia sola, juntando piezas sueltas y escuchando lo que otros decían. Eso fue injusto para ti. Muy injusto.</p>
+                <p>No quiero seguir dándote explicaciones en pedazos. Quiero que sepas que lo entiendo a la perfección: <span class="text-zinc-200 font-medium">el gran problema no fue solo lo que pasó, fue que fui un cobarde al no decírtelo completo y a tiempo.</span></p>
+            </div>
+        </section>
+
+        <!-- Section 3: Lo que nos une -->
+        <section class="mb-40 gsap-section">
+            <h2 class="text-sm font-bold tracking-[0.2em] text-pink-500 uppercase mb-6">Lo que nos une</h2>
+            <h3 class="text-3xl sm:text-4xl font-medium tracking-tight leading-snug text-white mb-12">
+                Las pequeñas cosas que no me saco de la cabeza.
+            </h3>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 gsap-stagger">
+                <!-- Card 1 -->
+                <div class="glass p-8 rounded-3xl hover:bg-white/[0.05] transition-colors duration-500">
+                    <div class="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center mb-6">
+                        <div class="w-3 h-3 bg-pink-500 rounded-full shadow-[0_0_15px_#ec4899]"></div>
+                    </div>
+                    <h4 class="text-lg font-medium text-white mb-2">28 de enero</h4>
+                    <p class="text-zinc-400 font-light leading-relaxed">El día que empezó todo este desastre hermoso. Lo más real que tengo en mi vida ahora mismo.</p>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="glass p-8 rounded-3xl hover:bg-white/[0.05] transition-colors duration-500">
+                    <div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center mb-6">
+                        <div class="w-3 h-3 bg-amber-500 rounded-full shadow-[0_0_15px_#fbbf24]"></div>
+                    </div>
+                    <h4 class="text-lg font-medium text-white mb-2">San Valentín</h4>
+                    <p class="text-zinc-400 font-light leading-relaxed">Nuestro primero. Madrugadas con pancito y risas, hablando paja aunque estuviéramos lejos.</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass p-8 rounded-3xl hover:bg-white/[0.05] transition-colors duration-500">
+                    <div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center mb-6">
+                        <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 11h.01"/>
+                            <path d="M11 15h.01"/>
+                            <path d="M16 16h.01"/>
+                            <path d="m2 16 20 6-6-20A20 20 0 0 0 2 16"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-lg font-medium text-white mb-2">La Pizza</h4>
+                    <p class="text-zinc-400 font-light leading-relaxed">Cuando andaba de necio diciendo "quiero pizzaaaaa" y tú de linda me dijiste "te compro pizza pues". Al final, lo único que de verdad quería era comérmela contigo.</p>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="glass p-8 rounded-3xl hover:bg-white/[0.05] transition-colors duration-500">
+                    <div class="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center mb-6">
+                        <svg class="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    </div>
+                    <h4 class="text-lg font-medium text-white mb-2">Todos los días</h4>
+                    <p class="text-zinc-400 font-light leading-relaxed">Un "te amo" apenas al despertar y otro antes de dormir. Eso no ha faltado ni un solo día. Y nunca va a faltar.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: El 10 de febrero -->
+        <section class="mb-40 gsap-section">
+            <h2 class="text-sm font-bold tracking-[0.2em] text-pink-500 uppercase mb-6">El 10 de febrero</h2>
+            <h3 class="text-3xl sm:text-4xl font-medium tracking-tight leading-snug text-white mb-8 max-w-xl">
+                Lo que no se puede borrar.
+            </h3>
+            <div class="space-y-6 text-lg text-zinc-400 font-light leading-relaxed max-w-2xl">
+                <p>Esa vez que borré nuestro chat por accidente intentando ocultar estupideces de Hevvo... mrc, entré en pánico. Se me cayó el mundo encima. Te dije que no quería hacerlo, te juro que casi me muero porque sentí que había perdido la prueba de nuestros primeros mensajes.</p>
+                <p>Esos mensajes que yo siempre volvía a leer cuando necesitaba recordar cómo empezó todo. Lloré por perder ese chat, me dije a mí mismo: "qué hijo de puta soy".</p>
+                <p>Pero con el tiempo me di cuenta de algo gigante: <span class="text-zinc-200 font-medium">Nuestra historia no es un historial de WhatsApp.</span> No se borra con equivocarse de botón. Lo que tenemos está grabado en todo lo que hemos vivido nosotros, solos, sin que nadie más opine o se meta.</p>
+            </div>
+        </section>
+
+        <!-- Section 5: Lo que sí te debo -->
+        <section class="mb-40 gsap-section">
+            <h2 class="text-sm font-bold tracking-[0.2em] text-amber-500 uppercase mb-6">Lo que sí te debo</h2>
+            <h3 class="text-3xl sm:text-4xl font-medium tracking-tight leading-snug text-white mb-8 max-w-xl">
+                La verdad completa, sin filtros ni versiones a medias.
+            </h3>
+            <div class="space-y-6 text-lg text-zinc-400 font-light leading-relaxed max-w-2xl">
+                <p>Hubo un momento de quiebre donde sentí que lo nuestro no iba a dar para más, y en esa puta incertidumbre dejé que las cosas se enfriaran e hice idioteces de las que hoy me arrepiento con la vida. Y ojo, no te digo esto para buscar justificación. Nada lo justifica.</p>
+                <p>Solo necesito que sepas, y que te quede muy claro en la mente, que no fue mientras estábamos bien. Y que en el mismísimo segundo que volviste a mí, dejé toda esa estupidez atrás.</p>
+                <p>Sé que te dolió igual. Y entiendo perfectamente que sientas rabia, que llores, que te llenes de dudas. Tienes todo el derecho.</p>
+            </div>
+        </section>
+
+        <!-- Section 6: No es ella. Eres tú. -->
+        <section class="mb-40 gsap-section">
+            <h2 class="text-sm font-bold tracking-[0.2em] text-pink-500 uppercase mb-6">No es ella. Eres tú.</h2>
+            <h3 class="text-3xl sm:text-4xl font-medium tracking-tight leading-snug text-white mb-8 max-w-xl">
+                Cualquier persona quisiera estar con ella.<br><span class="text-pink-400">Yo no.</span>
+            </h3>
+            <div class="space-y-8 text-lg text-zinc-400 font-light leading-relaxed max-w-2xl">
+                <p>Sé la inseguridad horrible que te he provocado. Sé que dudaste de ti misma por estupideces que no debí hacer o decir con Saturn, con Sleiny o con "la nena de 17". Dejé que el orgullo y el faranduleo de amistades te hicieran dudar, cuando tú eres mil veces más que todas ellas juntas.</p>
+                <p>Leíste esas capturas y se te hizo fácil pensar que yo quería estar con otra. Hasta me escribiste con dolor: <em class="text-zinc-300 italic">"La chica es hermosa. Cualquier persona quisiera estar con ella. Incluyéndote."</em></p>
+                
+                <div class="py-6 my-10 border-l-4 border-pink-500 pl-8 bg-pink-500/5 rounded-r-3xl">
+                    <p class="text-2xl sm:text-3xl text-zinc-100 font-medium leading-snug">
+                        Te respondí ahí mismo, y te lo dejo sellado en esta página para que no se te vuelva a olvidar en la vida: <span class="text-pink-400">Yo no.</span>
+                    </p>
+                </div>
+
+                <p>A mí me vale verga quién sea "hermosa" o a quién le tiren los perros. A mí solo me importas tú. La única chama con la que de verdad quiero pasar hablando la madrugada entera, a la única que quiero subir y presumir ante el mundo entero, y la única mujer que amo, eres tú.</p>
+            </div>
+        </section>
+
+        <!-- Section 7: El miedo a perderte -->
+        <section class="mb-40 gsap-section">
+            <h2 class="text-sm font-bold tracking-[0.2em] text-amber-500 uppercase mb-6">El miedo</h2>
+            <h3 class="text-3xl sm:text-4xl font-medium tracking-tight leading-snug text-white mb-8 max-w-xl">
+                El terror absoluto de imaginarme sin ti.
+            </h3>
+            <div class="space-y-6 text-lg text-zinc-400 font-light leading-relaxed max-w-2xl">
+                <p>Cuando te vi distante, cuando sentí que de verdad te habías cansado de mí y que estabas a punto de mandarme al carajo... se me heló la sangre. Imaginar mi vida sin esos buenos días tuyos, sin nuestras llamadas, sin mandarte fotos random, sin saber qué comiste hoy... me destruyó.</p>
+                <p>No estoy listo para soltarte. Y no quiero soltarte nunca. Darme cuenta de que estuve a punto de destruir lo mejor que me ha pasado en los últimos años por pura inmadurez me enseñó la lección más ruda de mi vida. No quiero ser el imbécil que te perdió.</p>
+            </div>
+        </section>
+
+        <!-- Section 8: Lo que mereces -->
+        <section class="mb-40 gsap-section">
+            <h2 class="text-sm font-bold tracking-[0.2em] text-pink-500 uppercase mb-6">Lo que mereces</h2>
+            <h3 class="text-3xl sm:text-4xl font-medium tracking-tight leading-snug text-white mb-8 max-w-xl">
+                Mereces paz, no dudas.
+            </h3>
+            <div class="space-y-6 text-lg text-zinc-400 font-light leading-relaxed max-w-2xl">
+                <p>Tú no mereces a alguien que te ponga a dudar de ti misma ni de lo hermosa que eres. No mereces estar sobrepensando por culpa mía si ando o no con otra chama. Tú eres demasiado increíble, tienes una luz gigante, y mereces a alguien que te trate como su única prioridad.</p>
+                <p>Y yo quiero ser ese chamo para ti. Estoy dispuesto a hacer lo que sea necesario para demostrarte que puedo darte la exclusividad, la paz y el lugar que te corresponde.</p>
+            </div>
+        </section>
+
+        <!-- Section 9: Promesas -->
+        <section class="mb-40 gsap-section">
+            <h2 class="text-sm font-bold tracking-[0.2em] text-amber-500 uppercase mb-6">Desde ahora</h2>
+            <h3 class="text-3xl sm:text-4xl font-medium tracking-tight leading-snug text-white mb-12">
+                Son promesas reales, no más habladera de paja.
+            </h3>
+
+            <div class="space-y-4 gsap-stagger w-full max-w-2xl">
+                
+                <!-- Accordion 1 -->
+                <div class="glass rounded-3xl overflow-hidden group">
+                    <button class="w-full px-8 py-6 flex justify-between items-center text-left focus:outline-none" onclick="toggleAccordion(this)">
+                        <span class="text-xl font-medium text-zinc-100">Te lo cuento yo primero</span>
+                        <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center shrink-0 transition-transform duration-500 group-hover:bg-white/10 icon-wrapper">
+                            <svg class="w-4 h-4 text-zinc-400 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        </div>
+                    </button>
+                    <div class="content-wrapper h-0 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
+                        <div class="px-8 pb-6 text-zinc-400 font-light leading-relaxed">
+                            Si algo te va a generar duda, o pasa algo raro con alguien, te lo digo yo a ti primero. Apenas pase. No vas a tener que enterarte por capturas ajenas o por terceros nunca más.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion 2 -->
+                <div class="glass rounded-3xl overflow-hidden group">
+                    <button class="w-full px-8 py-6 flex justify-between items-center text-left focus:outline-none" onclick="toggleAccordion(this)">
+                        <span class="text-xl font-medium text-zinc-100">Cero historias a medias</span>
+                        <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center shrink-0 transition-transform duration-500 group-hover:bg-white/10 icon-wrapper">
+                            <svg class="w-4 h-4 text-zinc-400 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        </div>
+                    </button>
+                    <div class="content-wrapper h-0 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
+                        <div class="px-8 pb-6 text-zinc-400 font-light leading-relaxed">
+                            No más versiones que cambian según lo que me preguntes. A partir de hoy, si te cuento algo, te digo la verdad completa a la primera.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion 3 -->
+                <div class="glass rounded-3xl overflow-hidden group">
+                    <button class="w-full px-8 py-6 flex justify-between items-center text-left focus:outline-none" onclick="toggleAccordion(this)">
+                        <span class="text-xl font-medium text-zinc-100">Sin cabos sueltos</span>
+                        <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center shrink-0 transition-transform duration-500 group-hover:bg-white/10 icon-wrapper">
+                            <svg class="w-4 h-4 text-zinc-400 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        </div>
+                    </button>
+                    <div class="content-wrapper h-0 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
+                        <div class="px-8 pb-6 text-zinc-400 font-light leading-relaxed">
+                            A la verga el orgullo tonto. Cierro cualquier puerta que tenga que cerrar con otras personas, sin dejar nada a medias ni permitir ambigüedades. El único lugar seguro soy yo para ti.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Final Section -->
+        <section class="gsap-section min-h-[50vh] flex flex-col items-center justify-center text-center">
+            <h3 class="text-3xl sm:text-4xl font-medium tracking-tight leading-snug text-white mb-6">
+                Quiero seguir construyendo esto contigo.
+            </h3>
+            <p class="text-lg text-zinc-400 font-light leading-relaxed max-w-xl mb-16">
+                No te pido que esta carta arregle todo el desastre que armé hoy, ni que olvides mi estupidez rápido. Te pido, de corazón, la oportunidad de demostrarte con acciones que puedo ser el chamo en el que sí puedes confiar.
+            </p>
+
+            <button onclick="revealFinal()" id="revealBtn" class="group relative px-12 py-5 rounded-full bg-zinc-100 text-zinc-900 font-semibold tracking-wide hover:scale-105 active:scale-95 transition-all duration-500 overflow-hidden shadow-[0_0_40px_rgba(255,255,255,0.15)] hover:shadow-[0_0_60px_rgba(255,255,255,0.3)]">
+                <div class="absolute inset-0 bg-gradient-to-r from-pink-500/20 to-amber-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <span class="relative z-10 flex items-center justify-center gap-3">
+                    Toca aquí
+                    <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </span>
+            </button>
+
+            <div id="finalMsg" class="opacity-0 h-0 overflow-hidden transition-all duration-1000 ease-[cubic-bezier(0.4,0,0.2,1)]">
+                <p class="text-2xl sm:text-4xl font-medium tracking-tight text-white mt-12 mb-4 leading-snug">
+                    Te elijo hoy,<br>como aquel primer <span class="text-gradient">28 de enero.</span>
+                </p>
+                <p class="text-zinc-500 font-light mt-8">Con todo,<br>Charles.</p>
+            </div>
+        </section>
+
+    </main>
+    </div> <!-- End mainWrap -->
+
+    <script>
+        // --- 0. PIN Lock Logic ---
+        let currentPin = "";
+        const correctPin = "2801";
+
+        // Initial entrance animation
+        document.addEventListener('DOMContentLoaded', () => {
+            gsap.fromTo('.lock-element', 
+                { y: 30, opacity: 0 },
+                { y: 0, opacity: 1, duration: 1.2, stagger: 0.15, ease: 'power3.out', delay: 0.1 }
+            );
+        });
+
+        function hapticFeedback(type = 'light') {
+            if (!navigator.vibrate) return;
+            if (type === 'light') navigator.vibrate(15);
+            if (type === 'error') navigator.vibrate([50, 50, 50]);
+            if (type === 'success') navigator.vibrate(100);
+        }
+
+        function updateDots() {
+            const dots = document.querySelectorAll('#pinDots > div');
+            dots.forEach((dot, index) => {
+                if (index < currentPin.length) {
+                    dot.classList.remove('border-white/50');
+                    dot.classList.add('bg-white', 'border-white', 'scale-110');
+                } else {
+                    dot.classList.add('border-white/50');
+                    dot.classList.remove('bg-white', 'border-white', 'scale-110');
+                }
+            });
+        }
+
+        function enterPin(num) {
+            if (currentPin.length < 4) {
+                hapticFeedback('light');
+                currentPin += num;
+                updateDots();
+                
+                if (currentPin.length === 4) {
+                    checkPin();
+                }
+            }
+        }
+
+        function deletePin() {
+            if (currentPin.length > 0) {
+                hapticFeedback('light');
+                currentPin = currentPin.slice(0, -1);
+                updateDots();
+            }
+        }
+
+        function checkPin() {
+            if (currentPin === correctPin) {
+                hapticFeedback('success');
+                const lockScreen = document.getElementById('lockScreen');
+                const mainWrap = document.getElementById('mainWrap');
+                
+                gsap.to(lockScreen, {
+                    opacity: 0,
+                    scale: 1.05,
+                    duration: 0.8,
+                    ease: "power2.inOut",
+                    onComplete: () => {
+                        lockScreen.style.display = 'none';
+                        document.body.classList.remove('overflow-hidden');
+                        mainWrap.style.opacity = '1';
+                        mainWrap.style.pointerEvents = 'auto';
+                        initAnimations();
+                    }
+                });
+            } else {
+                hapticFeedback('error');
+                const title = document.getElementById('pinTitle');
+                const originalText = title.innerHTML;
+                title.textContent = "Código incorrecto";
+                title.classList.add('text-red-400');
+                
+                // GSAP Shake using keyframes (valid syntax)
+                gsap.to(["#pinDots", "#pinTitle"], {
+                    keyframes: [
+                        { x: -10, duration: 0.08 },
+                        { x: 10, duration: 0.08 },
+                        { x: -8, duration: 0.08 },
+                        { x: 8, duration: 0.08 },
+                        { x: -4, duration: 0.08 },
+                        { x: 4, duration: 0.08 },
+                        { x: 0, duration: 0.08 }
+                    ],
+                    ease: "sine.inOut",
+                    onComplete: () => {
+                        setTimeout(() => {
+                            currentPin = "";
+                            updateDots();
+                            title.innerHTML = originalText;
+                            title.classList.remove('text-red-400');
+                        }, 300);
+                    }
+                });
+            }
+        }
+
+        // --- 1. Accordion Logic ---
+        function toggleAccordion(btn) {
+            const wrapper = btn.nextElementSibling;
+            const icon = btn.querySelector('svg');
+            
+            const isOpen = wrapper.style.height && wrapper.style.height !== '0px';
+            
+            // Close all
+            document.querySelectorAll('.content-wrapper').forEach(el => {
+                el.style.height = '0px';
+                el.style.opacity = '0';
+            });
+            document.querySelectorAll('.icon-wrapper svg').forEach(el => {
+                el.style.transform = 'rotate(0deg)';
+            });
+
+            if (!isOpen) {
+                wrapper.style.height = wrapper.scrollHeight + 'px';
+                wrapper.style.opacity = '1';
+                icon.style.transform = 'rotate(45deg)';
+            }
+        }
+
+        // --- 2. Final Reveal Logic ---
+        function revealFinal() {
+            const btn = document.getElementById('revealBtn');
+            const msg = document.getElementById('finalMsg');
+            
+            btn.style.transform = 'scale(0.8)';
+            btn.style.opacity = '0';
+            setTimeout(() => {
+                btn.style.display = 'none';
+                msg.style.height = msg.scrollHeight + 'px';
+                msg.style.opacity = '1';
+            }, 300);
+        }
+
+        // --- 3. GSAP Animations ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        function initAnimations() {
+            // Ambient Orb Animation
+            gsap.to(".orb-1", {
+                x: "15vw", y: "10vh", duration: 20, ease: "sine.inOut", yoyo: true, repeat: -1
+            });
+            gsap.to(".orb-2", {
+                x: "-15vw", y: "-10vh", duration: 25, ease: "sine.inOut", yoyo: true, repeat: -1
+            });
+
+            // Hero Entrance
+            const heroTl = gsap.timeline();
+            heroTl.to(".gsap-reveal", {
+                y: 0,
+                opacity: 1,
+                duration: 1.2,
+                stagger: 0.2,
+                ease: "power3.out",
+                autoAlpha: 1, // handles visibility
+                onStart: function() {
+                    gsap.set(".gsap-reveal", { y: 30, opacity: 0 });
+                }
+            });
+
+            // Scroll Reveal Sections
+            gsap.utils.toArray('.gsap-section').forEach(section => {
+                // Direct children (titles, paragraphs)
+                const children = section.querySelectorAll('h2, h3, p');
+                if (children.length) {
+                    gsap.fromTo(children, 
+                        { y: 40, opacity: 0 },
+                        { 
+                            scrollTrigger: {
+                                trigger: section,
+                                start: "top 80%",
+                                toggleActions: "play none none reverse"
+                            },
+                            y: 0, 
+                            opacity: 1, 
+                            duration: 1, 
+                            stagger: 0.1, 
+                            ease: "power3.out" 
+                        }
+                    );
+                }
+
+                // Staggered elements (cards, accordions)
+                const staggers = section.querySelectorAll('.gsap-stagger > div');
+                if (staggers.length) {
+                    gsap.fromTo(staggers, 
+                        { y: 50, opacity: 0 },
+                        { 
+                            scrollTrigger: {
+                                trigger: section,
+                                start: "top 75%",
+                                toggleActions: "play none none reverse"
+                            },
+                            y: 0, 
+                            opacity: 1, 
+                            duration: 1, 
+                            stagger: 0.15, 
+                            ease: "power3.out",
+                            onStart: () => gsap.set(staggers, { visibility: "visible" })
+                        }
+                    );
+                }
+            });
+            
+            // Re-calc ScrollTrigger in case sizes changed during unlock
+            ScrollTrigger.refresh();
+        }
+    </script>
+</body>
+</html>

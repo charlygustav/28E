@@ -13224,3 +13224,21 @@ video {
 .\[\&\>svg\]\:w-5>svg {
   width: 1.25rem;
 }
+
+@media (max-width: 768px) {
+  #vc-fab,
+  #vc-wrapper,
+  #premium-toast-container,
+  a[href="para-yaire.html"].fixed {
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  body.menu-is-open #vc-fab,
+  body.menu-is-open #vc-wrapper,
+  body.menu-is-open #premium-toast-container,
+  body.menu-is-open a[href="para-yaire.html"].fixed {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateY(20px) scale(0.9) !important;
+  }
+}
