@@ -301,6 +301,18 @@
        height: auto !important;
        flex: 1 !important;
     }
+    body.vc-open #letter-fab,
+    body.vc-open a[href="para-yaire.html"].fixed,
+    body.vc-is-open #letter-fab,
+    body.vc-is-open a[href="para-yaire.html"].fixed,
+    body:has(.vc-panel-base.scale-100) #letter-fab,
+    body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed,
+    body:has(#vc-panel.scale-100) #letter-fab,
+    body:has(#vc-panel.scale-100) a[href="para-yaire.html"].fixed {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transform: translateY(20px) scale(0.9) !important;
+    }
   }
   `;
 
@@ -661,8 +673,10 @@
     _toggle() {
       const willOpen = !this.panel.classList.contains('scale-100');
       const isMobile = window.innerWidth <= 768;
+      const letterFab = document.getElementById('letter-fab') || document.querySelector('a[href="para-yaire.html"].fixed');
       
       if (willOpen) {
+        document.body.classList.add('vc-open', 'vc-is-open');
         this._playSfx('jbl_begin', 0.5);
         
         if (isMobile && window.gsap) {
@@ -674,6 +688,9 @@
         
         if (this.fab && isMobile) {
           this.fab.classList.add('scale-0', 'opacity-0', 'pointer-events-none');
+        }
+        if (letterFab && isMobile) {
+          letterFab.classList.add('scale-0', 'opacity-0', 'pointer-events-none');
         }
 
         if (this.connected) {
@@ -690,6 +707,7 @@
           this._gsapEnterMobile();
         }
       } else {
+        document.body.classList.remove('vc-open', 'vc-is-open');
         if (this._loginPollInt) { clearInterval(this._loginPollInt); this._loginPollInt = null; }
         
         if (isMobile && window.gsap) {
@@ -701,6 +719,9 @@
         
         if (this.fab) {
           this.fab.classList.remove('scale-0', 'opacity-0', 'pointer-events-none');
+        }
+        if (letterFab) {
+          letterFab.classList.remove('scale-0', 'opacity-0', 'pointer-events-none');
         }
 
         if (this.connected) {
@@ -760,6 +781,11 @@
           if (this._backdrop) {
             this._backdrop.remove();
             this._backdrop = null;
+          }
+          document.body.classList.remove('vc-open', 'vc-is-open');
+          const letterFab = document.getElementById('letter-fab') || document.querySelector('a[href="para-yaire.html"].fixed');
+          if (letterFab) {
+            letterFab.classList.remove('scale-0', 'opacity-0', 'pointer-events-none');
           }
         }
       });
@@ -2113,7 +2139,11 @@
       document.getElementById('vc-ring-join').addEventListener('click', () => {
         this._dismissRing();
         // Open the panel for the user to join
-        this.panel.classList.add('open');
+        if (!this.panel.classList.contains('scale-100')) {
+          this._toggle();
+        } else {
+          this.panel.classList.add('open');
+        }
         this._playSfx('flyin', 0.4, false, 'fly');
         // Focus on the password field
         setTimeout(() => {

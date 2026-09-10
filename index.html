@@ -239,7 +239,7 @@
     <!-- GSAP Core & ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-    <link rel="stylesheet" href="styles.css?v=1.0.3">
+    <link rel="stylesheet" href="styles.css?v=1.0.8">
     <script>
             (function () {
                 try {
@@ -333,7 +333,6 @@
         #secret-modal,
         #recipe-modal,
         #song-lock-overlay,
-        #drawer-overlay,
         #menu-panel,
         #game-active-area,
         #games-hub {
@@ -808,6 +807,36 @@
             z-index: 50;
         }
 
+        /* Immersive Spotlight Backdrop Overlay */
+        #drawer-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 90;
+            background: radial-gradient(circle at 50% 35%, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.78) 100%);
+            backdrop-filter: blur(16px) saturate(140%) brightness(0.85);
+            -webkit-backdrop-filter: blur(16px) saturate(140%) brightness(0.85);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .dark #drawer-overlay {
+            background: radial-gradient(circle at 50% 35%, rgba(10, 10, 16, 0.5) 0%, rgba(3, 3, 6, 0.85) 100%);
+        }
+
+        #drawer-overlay.open,
+        body.menu-is-open #drawer-overlay {
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+        }
+
+        body.menu-is-open main {
+            pointer-events: none;
+            user-select: none;
+        }
+
         /* Floating Menu Panel */
         #menu-panel {
             position: fixed;
@@ -819,7 +848,7 @@
             z-index: 100;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1), transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1), transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
             display: flex;
             flex-direction: column;
         }
@@ -828,12 +857,56 @@
             opacity: 1;
             pointer-events: auto;
             transform: translate(-50%, -50%) scale(1);
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.5), 0 0 50px rgba(245, 158, 11, 0.08);
         }
         @media (max-width: 768px) {
             #menu-panel {
                 width: 96vw !important;
                 max-height: 95vh !important;
             }
+        }
+
+        /* Sleek scrollbar for Spotlight Playlist */
+        .spotlight-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+        }
+        .spotlight-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .spotlight-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .spotlight-scroll::-webkit-scrollbar-thumb {
+            background-color: rgba(160, 160, 175, 0.25);
+            border-radius: 9999px;
+        }
+        .dark .spotlight-scroll::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Spotlight Playlist Item Styling & Smooth Dark Hover */
+        .spotlight-track-item {
+            background-color: transparent;
+            border-color: transparent;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .spotlight-track-item:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+        }
+        .dark .spotlight-track-item:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+        .spotlight-track-item.is-active {
+            background-color: rgba(245, 158, 11, 0.12);
+            border-color: rgba(245, 158, 11, 0.28);
+        }
+        .dark .spotlight-track-item.is-active {
+            background-color: rgba(245, 158, 11, 0.15);
+            border-color: rgba(245, 158, 11, 0.35);
+        }
+        .spotlight-track-item.is-active:hover {
+            background-color: rgba(245, 158, 11, 0.2);
         }
 
 
@@ -2108,9 +2181,6 @@
             }
             
             .dark #menu-panel {
-                background-color: #09090b !important;
-            }
-            .dark #auth-menu {
                 background-color: #09090b !important;
             }
         }
@@ -3877,7 +3947,7 @@
 
     <!-- Navegación — Floating Panel -->
     <div id="drawer-overlay"
-        class="fixed inset-0 bg-zinc-900/40 dark:bg-black/50 backdrop-blur-sm transform-gpu z-[90] hidden opacity-0 transition-opacity duration-300"
+        class="fixed inset-0 z-[90] hidden opacity-0"
         onclick="toggleMenu()"></div>
 
     <div id="menu-panel"
@@ -4029,28 +4099,24 @@
             <!-- Capítulo VI: 6 Meses — MEDIO AÑO -->
             <p class="menu-category-label text-zinc-400 dark:text-zinc-500 mt-6" data-i18n="menu_cat_6months">✦ MEDIO AÑO</p>
             <div class="menu-grid">
-                <a href="#mes-seis" class="menu-link menu-link-item text-amber-600 dark:text-amber-400">
-                    <span class="menu-link-icon bg-gradient-to-br from-amber-500 to-pink-500 text-black shadow-sm">🏆</span>
+                <a href="#mes-seis" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
+                    <span class="menu-link-icon bg-amber-50 dark:bg-amber-900/20">🎬</span>
                     <span>Capítulo VI</span>
-                    <span class="ml-auto bg-brand-500 text-white text-[8px] font-extrabold px-1 py-0.5 rounded-full uppercase tracking-wider animate-pulse shadow-sm" data-i18n="menu_new_badge">NUEVO</span>
                 </a>
 
                 <a href="#timeline-semestral" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
                     <span class="menu-link-icon bg-amber-50 dark:bg-amber-900/20">🗓️</span>
                     <span>Timeline Semestral</span>
-                    <span class="ml-auto bg-brand-500 text-white text-[8px] font-extrabold px-1 py-0.5 rounded-full uppercase tracking-wider animate-pulse shadow-sm" data-i18n="menu_new_badge">NUEVO</span>
                 </a>
                 
                 <a href="#logros" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
                     <span class="menu-link-icon bg-fuchsia-50 dark:bg-fuchsia-900/20">🏆</span>
                     <span>Logros</span>
-                    <span class="ml-auto bg-brand-500 text-white text-[8px] font-extrabold px-1 py-0.5 rounded-full uppercase tracking-wider animate-pulse shadow-sm" data-i18n="menu_new_badge">NUEVO</span>
                 </a>
 
                 <a href="#playlist-aniversario" class="menu-link menu-link-item text-zinc-600 dark:text-zinc-400">
                     <span class="menu-link-icon bg-emerald-50 dark:bg-emerald-900/20 text-emerald-500">🎵</span>
                     <span>Soundtrack</span>
-                    <span class="ml-auto bg-brand-500 text-white text-[8px] font-extrabold px-1 py-0.5 rounded-full uppercase tracking-wider animate-pulse shadow-sm" data-i18n="menu_new_badge">NUEVO</span>
                 </a>
             </div>
 
@@ -4061,9 +4127,6 @@
                     <span
                         class="menu-link-icon bg-white dark:bg-zinc-900 shadow-sm transition-transform duration-300 group-hover:scale-110">💌</span>
                     <span data-i18n="menu_secret">Bóveda Secreta</span>
-                    <span
-                        class="ml-auto bg-brand-500 text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full uppercase tracking-wider animate-pulse shadow-sm"
-                        data-i18n="menu_new_badge">NUEVO</span>
                 </a>
             </div>
         </div>
@@ -4386,6 +4449,16 @@
                 }
 
                 function updateAllArtwork(artUrl) {
+                    // Ambient artwork blur
+                    const ambientArt = document.getElementById('spotlight-ambient-art');
+                    if (ambientArt) {
+                        if (artUrl) {
+                            ambientArt.src = artUrl;
+                            ambientArt.style.opacity = '0.35';
+                        } else {
+                            ambientArt.style.opacity = '0';
+                        }
+                    }
                     // Vinyl (expanded player)
                     const vinylArt = document.getElementById('spotlight-vinyl-art');
                     const vinylIcon = document.getElementById('spotlight-expanded-icon');
@@ -4501,28 +4574,37 @@
                         const key = track.title + '|' + track.artist;
                         const cachedArt = spotArtworkCache[key];
                         const item = document.createElement('div');
-                        item.className = 'flex items-center gap-3 px-3 py-2 rounded-xl cursor-pointer transition-all duration-200 select-none ' + (
+                        item.className = 'spotlight-track-item flex items-center gap-3 px-3 py-2 rounded-2xl cursor-pointer select-none border ' + (
                             isCurrent
-                                ? 'bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 font-bold border border-brand-500/20 shadow-sm'
-                                : 'text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/50'
+                                ? 'is-active text-brand-500 font-bold shadow-sm'
+                                : 'text-zinc-700 dark:text-zinc-300'
                         );
                         const thumbHtml = cachedArt
-                            ? `<img src="${cachedArt}" class="w-8 h-8 rounded-lg object-cover flex-shrink-0" />`
-                            : `<span class="w-8 h-8 rounded-lg bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-sm flex-shrink-0">${isCurrent ? '🔊' : '🎵'}</span>`;
+                            ? `<img src="${cachedArt}" class="w-9 h-9 rounded-xl object-cover flex-shrink-0 shadow-sm" />`
+                            : `<span class="w-9 h-9 rounded-xl bg-zinc-200/80 dark:bg-zinc-800 flex items-center justify-center text-sm flex-shrink-0 border border-black/5 dark:border-white/5">${isCurrent ? '🔊' : '🎵'}</span>`;
                         item.innerHTML = thumbHtml +
-                            `<span class="text-xs truncate font-medium flex-1">${track.title}</span>` +
-                            (isCurrent ? '<span class="text-[10px] text-brand-500 flex-shrink-0 font-bold">▶</span>' : '');
+                            `<div class="flex-1 min-w-0 flex flex-col justify-center">` +
+                                `<span class="text-xs truncate font-semibold leading-tight ${isCurrent ? 'text-brand-500 dark:text-brand-400' : 'text-zinc-800 dark:text-zinc-200'}">${track.title}</span>` +
+                                `<span class="text-[10px] text-zinc-400 dark:text-zinc-500 truncate mt-0.5">${track.artist || '28E Spotlight'}</span>` +
+                            `</div>` +
+                            (isCurrent 
+                                ? `<span class="flex-shrink-0 text-brand-500 text-xs px-1 flex items-center gap-0.5">` +
+                                    `<span class="w-0.5 h-3 bg-brand-500 rounded-full animate-pulse"></span>` +
+                                    `<span class="w-0.5 h-4 bg-brand-500 rounded-full animate-pulse" style="animation-delay:0.15s"></span>` +
+                                    `<span class="w-0.5 h-2 bg-brand-500 rounded-full animate-pulse" style="animation-delay:0.3s"></span>` +
+                                  `</span>` 
+                                : '');
                         item.onclick = () => spotlightPlayTrack(index);
                         listEl.appendChild(item);
                         // Fetch art if not cached yet — update this item when ready
                         if (!cachedArt && cachedArt !== null) {
                             fetchSpotlightArtwork(track).then(artUrl => {
                                 if (artUrl) {
-                                    const thumbEl = item.querySelector('span.w-8');
+                                    const thumbEl = item.querySelector('span.w-9');
                                     if (thumbEl) {
                                         const img = document.createElement('img');
                                         img.src = artUrl;
-                                        img.className = 'w-8 h-8 rounded-lg object-cover flex-shrink-0';
+                                        img.className = 'w-9 h-9 rounded-xl object-cover flex-shrink-0 shadow-sm';
                                         item.replaceChild(img, thumbEl);
                                     }
                                 }
@@ -4756,6 +4838,48 @@
                     spotlightPlayTrack(next);
                 }
 
+                let isSpotLoop = false;
+                function spotlightToggleLoop() {
+                    isSpotLoop = !isSpotLoop;
+                    if (spotAudio) spotAudio.loop = isSpotLoop;
+                    const loopBtn = document.getElementById('spotlight-loop-btn');
+                    if (loopBtn) {
+                        if (isSpotLoop) {
+                            loopBtn.classList.add('text-brand-500', 'dark:text-brand-400', 'bg-brand-500/10');
+                            loopBtn.classList.remove('text-zinc-400', 'dark:text-zinc-500');
+                            loopBtn.setAttribute('title', 'Repetir canción: Activado');
+                        } else {
+                            loopBtn.classList.remove('text-brand-500', 'dark:text-brand-400', 'bg-brand-500/10');
+                            loopBtn.classList.add('text-zinc-400', 'dark:text-zinc-500');
+                            loopBtn.setAttribute('title', 'Repetir canción: Desactivado');
+                        }
+                    }
+                }
+
+                function spotlightToggleMute() {
+                    if (!spotAudio) return;
+                    spotAudio.muted = !spotAudio.muted;
+                    const muteBtn = document.getElementById('spotlight-mute-btn');
+                    if (muteBtn) {
+                        if (spotAudio.muted) {
+                            muteBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                            </svg>`;
+                            muteBtn.classList.add('text-red-500', 'dark:text-red-400');
+                            muteBtn.classList.remove('text-zinc-400', 'dark:text-zinc-500');
+                            muteBtn.setAttribute('title', 'Sonido silenciado');
+                        } else {
+                            muteBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                            </svg>`;
+                            muteBtn.classList.remove('text-red-500', 'dark:text-red-400');
+                            muteBtn.classList.add('text-zinc-400', 'dark:text-zinc-500');
+                            muteBtn.setAttribute('title', 'Silenciar sonido');
+                        }
+                    }
+                }
+
                 function setSpotlightMode(mode) {
                     if (spotlightMode === mode) return;
                     spotlightMode = mode;
@@ -4766,6 +4890,7 @@
                     const compactNext = document.getElementById('spotlight-compact-next');
                     const expPrev = document.getElementById('spotlight-expanded-prev');
                     const expNext = document.getElementById('spotlight-expanded-next');
+                    const expLoop = document.getElementById('spotlight-loop-btn');
                     const expProgress = document.getElementById('spotlight-progress-container');
                     const expTimeList = expProgress ? expProgress.previousElementSibling : null;
                     const expList = document.getElementById('spotlight-expanded-list');
@@ -4786,11 +4911,12 @@
 
                     if (mode === 'music') {
                         // Activate Music UI
-                        btnMusic.className = "px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all bg-white dark:bg-zinc-700 text-brand-500 shadow-sm";
-                        btnRadio.className = "px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300";
+                        btnMusic.className = "px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all bg-white dark:bg-zinc-700 text-brand-500 shadow-sm cursor-pointer";
+                        btnRadio.className = "px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 cursor-pointer";
                         if (compactNext) compactNext.style.display = '';
                         if (expPrev) expPrev.style.visibility = 'visible';
                         if (expNext) expNext.style.visibility = 'visible';
+                        if (expLoop) expLoop.style.visibility = 'visible';
                         if (expProgress) expProgress.style.display = '';
                         if (expTimeList) expTimeList.style.display = '';
                         if (expList) expList.style.display = '';
@@ -4810,11 +4936,12 @@
                         }
                     } else {
                         // Activate Radio UI
-                        btnRadio.className = "px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all bg-white dark:bg-zinc-700 text-brand-500 shadow-sm";
-                        btnMusic.className = "px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300";
+                        btnRadio.className = "px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all bg-white dark:bg-zinc-700 text-brand-500 shadow-sm cursor-pointer";
+                        btnMusic.className = "px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 cursor-pointer";
                         if (compactNext) compactNext.style.display = 'none';
                         if (expPrev) expPrev.style.visibility = 'hidden';
                         if (expNext) expNext.style.visibility = 'hidden';
+                        if (expLoop) expLoop.style.visibility = 'hidden';
                         if (expProgress) expProgress.style.display = 'none';
                         if (expTimeList) expTimeList.style.display = 'none';
                         if (expList) expList.style.display = 'none';
@@ -4922,7 +5049,7 @@
                     spotAudio.currentTime = percent * spotAudio.duration;
                 }
 
-                // Drag functionality for progress bar
+                // Drag functionality for progress bar (Mouse + Touch)
                 let isDraggingProgress = false;
                 function setupProgressDrag() {
                     const container = document.getElementById('spotlight-progress-container');
@@ -4944,6 +5071,25 @@
                     document.addEventListener('mouseup', () => {
                         isDraggingProgress = false;
                     });
+
+                    // Mobile Touch seek support
+                    container.addEventListener('touchstart', (e) => {
+                        if (e.touches && e.touches[0]) {
+                            isDraggingProgress = true;
+                            spotlightSeek(e.touches[0]);
+                        }
+                    }, { passive: true });
+
+                    document.addEventListener('touchmove', (e) => {
+                        if (isDraggingProgress && e.touches && e.touches[0]) {
+                            if (_docRaf) cancelAnimationFrame(_docRaf);
+                            _docRaf = requestAnimationFrame(() => spotlightSeek(e.touches[0]));
+                        }
+                    }, { passive: true });
+
+                    document.addEventListener('touchend', () => {
+                        isDraggingProgress = false;
+                    });
                 }
 
                 if (document.readyState === 'loading') {
@@ -4959,94 +5105,149 @@
             style="background: #ffffff; transform: translateY(100%); opacity: 0;">
             <!-- Header of expanded player -->
             <div
-                class="px-5 pt-5 pb-3 flex items-center justify-between flex-shrink-0 border-b border-zinc-100 dark:border-zinc-800/80">
-                <button onclick="toggleSpotlightExpand()"
-                    class="w-8 h-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-400 hover:text-zinc-700 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all text-sm border border-zinc-200/50 dark:border-zinc-700/50 cursor-pointer">
-                    ✕
+                class="px-5 pt-4 pb-3 flex items-center justify-between flex-shrink-0 border-b border-zinc-100 dark:border-zinc-800/80 select-none">
+                <!-- Close Button -->
+                <button onclick="toggleSpotlightExpand()" title="Cerrar reproductor"
+                    class="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-400 hover:text-zinc-700 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all border border-zinc-200/50 dark:border-zinc-700/50 cursor-pointer active:scale-95 shadow-sm">
+                    <svg style="width: 13px; height: 13px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                 </button>
+
+                <!-- Segmented Mode Switch (Music / Radio) -->
                 <div
                     class="flex bg-zinc-100 dark:bg-zinc-800/80 p-1 rounded-full border border-zinc-200/50 dark:border-zinc-700/50 select-none">
                     <button onclick="setSpotlightMode('music')" id="spot-mode-btn-music"
-                        class="px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all bg-white dark:bg-zinc-700 text-brand-500 shadow-sm"
+                        class="px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all bg-white dark:bg-zinc-700 text-brand-500 shadow-sm cursor-pointer"
                         data-i18n="spot_mode_music">Music</button>
                     <button onclick="setSpotlightMode('radio')" id="spot-mode-btn-radio"
-                        class="px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+                        class="px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest rounded-full transition-all text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 cursor-pointer"
                         data-i18n="spot_mode_radio">Radio</button>
                 </div>
+
+                <!-- Right spacer to keep center pill mathematically centered -->
                 <div class="w-8"></div>
             </div>
 
-            <!-- Playing Track & Controls -->
+            <!-- Playing Track & Controls (Redesigned Modern Deck) -->
             <div
-                class="p-4 pb-5 flex flex-col items-center justify-center border-b border-zinc-100 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/30">
-                <!-- Disk / Vinyl Animation -->
-                <div class="w-20 h-20 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center shadow-lg relative overflow-hidden mb-3 border-4 border-white dark:border-zinc-900"
+                class="relative px-4 py-3.5 sm:px-5 sm:py-4 flex-shrink-0 flex flex-col items-center justify-center border-b border-zinc-100 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/30 overflow-hidden">
+                
+                <!-- Ambient Aura Glow (Album art backdrop blur) -->
+                <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-48 h-48 rounded-full bg-amber-500/15 dark:bg-amber-500/20 blur-3xl pointer-events-none transition-all duration-700"></div>
+                <img id="spotlight-ambient-art" src="" alt="" class="absolute -top-10 left-1/2 -translate-x-1/2 w-44 h-44 rounded-full blur-2xl object-cover pointer-events-none transition-opacity duration-700 opacity-0" />
+
+                <!-- Realistic Vinyl Record Container -->
+                <div class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center mb-2 sm:mb-2.5 shadow-xl select-none"
                     id="spotlight-vinyl-container">
-                    <div class="absolute inset-2 rounded-full border-2 border-dashed border-zinc-400 dark:border-zinc-600 opacity-40 animate-spin"
-                        id="spotlight-vinyl-spin" style="animation-duration: 8s; animation-play-state: paused;"></div>
-                    <span class="text-2xl" id="spotlight-expanded-icon">🎵</span>
-                    <img id="spotlight-vinyl-art" src="" alt=""
-                        class="absolute inset-0 w-full h-full object-cover rounded-full" style="display:none;" />
+                    
+                    <!-- Vinyl Outer Shadow Ring -->
+                    <div class="absolute inset-0 rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.25)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.6)] pointer-events-none"></div>
+
+                    <!-- Spinning Vinyl Body -->
+                    <div class="relative w-full h-full rounded-full bg-zinc-950 border border-white/10 flex items-center justify-center animate-spin overflow-hidden"
+                        id="spotlight-vinyl-spin" style="animation-duration: 10s; animation-play-state: paused;">
+                        
+                        <!-- Concentric Vinyl Grooves -->
+                        <div class="absolute inset-0 rounded-full pointer-events-none opacity-40"
+                            style="background: repeating-radial-gradient(circle, transparent 0, transparent 2px, rgba(255,255,255,0.09) 3px, transparent 4px);"></div>
+                        
+                        <!-- Conic Sheen Reflection -->
+                        <div class="absolute inset-0 rounded-full pointer-events-none opacity-25"
+                            style="background: conic-gradient(from 35deg, transparent 0deg, rgba(255,255,255,0.22) 40deg, transparent 80deg, transparent 180deg, rgba(255,255,255,0.22) 220deg, transparent 260deg);"></div>
+                        
+                        <!-- Center Label / Album Artwork -->
+                        <div class="relative w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden border border-white/20 dark:border-white/10 shadow-inner flex items-center justify-center bg-zinc-900">
+                            <span class="text-base sm:text-xl select-none" id="spotlight-expanded-icon">🎵</span>
+                            <img id="spotlight-vinyl-art" src="" alt=""
+                                class="w-full h-full object-cover" style="display:none;" />
+                            
+                            <!-- Center Spindle Hole -->
+                            <div class="absolute w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-zinc-950 border border-white/30 shadow-inner z-10 pointer-events-none"></div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Detailed Title & Artist -->
-                <div class="text-center w-full max-w-xs mb-3">
-                    <h3 class="text-base font-extrabold text-zinc-800 dark:text-zinc-100 truncate"
+                <div class="text-center w-full max-w-xs mb-2 sm:mb-2.5 px-2">
+                    <h3 class="text-sm sm:text-base font-extrabold text-zinc-800 dark:text-zinc-100 truncate leading-tight tracking-tight"
                         id="spotlight-expanded-title">Título de la Canción</h3>
-                    <p class="text-xs text-zinc-400 dark:text-zinc-500 mt-1 truncate" id="spotlight-expanded-artist">
+                    <p class="text-[11px] sm:text-xs font-semibold text-brand-500 dark:text-brand-400 mt-0.5 truncate tracking-wide" id="spotlight-expanded-artist">
                         Artista</p>
                 </div>
 
-                <!-- Progress Bar -->
-                <div class="w-full max-w-xs mb-4 flex flex-col gap-1.5">
+                <!-- Progress Scrubber -->
+                <div class="w-full max-w-xs mb-2.5 sm:mb-3 flex flex-col gap-1">
                     <div
-                        class="flex items-center justify-between text-[10px] text-zinc-400 dark:text-zinc-500 font-mono font-medium tracking-wider px-1 select-none">
+                        class="flex items-center justify-between text-[10px] sm:text-[11px] text-zinc-400 dark:text-zinc-500 font-mono font-semibold tracking-wider px-0.5 select-none">
                         <span id="spotlight-current-time">0:00</span>
                         <span id="spotlight-total-time">0:00</span>
                     </div>
-                    <div class="relative w-full h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-full cursor-pointer group"
+                    <div class="relative w-full py-1.5 -my-1.5 cursor-pointer group flex items-center"
                         id="spotlight-progress-container">
-                        <div class="absolute top-0 left-0 h-full bg-brand-500 rounded-full pointer-events-none"
-                            id="spotlight-progress-fill" style="width: 0%;"></div>
-                        <div class="absolute top-1/2 -translate-y-1/2 -ml-2 w-4 h-4 bg-white dark:bg-zinc-200 rounded-full shadow border border-zinc-200 dark:border-zinc-700 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-                            id="spotlight-progress-thumb" style="left: 0%;"></div>
+                        <div class="w-full h-1.5 sm:h-2 bg-zinc-200/90 dark:bg-zinc-800/90 rounded-full overflow-hidden relative pointer-events-none">
+                            <div class="absolute top-0 left-0 h-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-full shadow-[0_0_8px_rgba(245,158,11,0.5)] transition-all pointer-events-none"
+                                id="spotlight-progress-fill" style="width: 0%;"></div>
+                        </div>
+                        <div class="absolute top-1/2 -translate-y-1/2 -ml-2 sm:-ml-2.5 w-4 h-4 sm:w-4.5 sm:h-4.5 bg-white dark:bg-zinc-100 rounded-full shadow-md border-2 border-amber-500 opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-110 transition-all pointer-events-none z-10 flex items-center justify-center"
+                            id="spotlight-progress-thumb" style="left: 0%;">
+                            <div class="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Big Player Controls -->
-                <div class="flex items-center gap-6">
-                    <!-- Prev button -->
+                <!-- Playback Controls Deck (Balanced 5-Button Deck) -->
+                <div class="flex items-center justify-between w-full max-w-[260px] sm:max-w-[280px] px-1">
+                    <!-- Repeat / Loop button -->
                     <button
-                        class="w-10 h-10 rounded-full flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:text-brand-500 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-all cursor-pointer"
-                        onclick="spotlightPrevTrack()" id="spotlight-expanded-prev">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        class="w-8 h-8 rounded-full flex items-center justify-center text-zinc-400 dark:text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 hover:bg-zinc-200/60 dark:hover:bg-zinc-800/60 active:scale-90 transition-all cursor-pointer"
+                        onclick="spotlightToggleLoop()" id="spotlight-loop-btn" title="Repetir canción">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                    </button>
+
+                    <!-- Previous Track button -->
+                    <button
+                        class="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/70 dark:hover:bg-zinc-800/80 active:scale-90 transition-all cursor-pointer"
+                        onclick="spotlightPrevTrack()" id="spotlight-expanded-prev" title="Canción anterior">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
                         </svg>
                     </button>
 
-                    <!-- Play/Pause big button -->
+                    <!-- Play / Pause Centerpiece button -->
                     <button
-                        class="w-14 h-14 rounded-full bg-brand-500 hover:bg-brand-600 text-white flex items-center justify-center shadow-lg hover:scale-105 transition-all cursor-pointer"
-                        onclick="spotlightTogglePlay()">
-                        <svg class="w-7 h-7 ml-0.5" fill="currentColor" viewBox="0 0 24 24"
+                        class="w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-gradient-to-tr from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:via-orange-400 hover:to-amber-500 text-white flex items-center justify-center shadow-lg shadow-orange-500/35 hover:shadow-orange-500/50 hover:scale-105 active:scale-95 transition-all cursor-pointer ring-4 ring-orange-500/20 dark:ring-orange-500/30"
+                        onclick="spotlightTogglePlay()" title="Reproducir / Pausar">
+                        <svg class="w-6 h-6 sm:w-6.5 sm:h-6.5 ml-0.5 transition-transform" fill="currentColor" viewBox="0 0 24 24"
                             id="spotlight-expanded-play-icon">
                             <path d="M8 5v14l11-7z" />
                         </svg>
                     </button>
 
-                    <!-- Next button -->
+                    <!-- Next Track button -->
                     <button
-                        class="w-10 h-10 rounded-full flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:text-brand-500 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-all cursor-pointer"
-                        onclick="spotlightNext()" id="spotlight-expanded-next">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        class="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/70 dark:hover:bg-zinc-800/80 active:scale-90 transition-all cursor-pointer"
+                        onclick="spotlightNext()" id="spotlight-expanded-next" title="Siguiente canción">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+                        </svg>
+                    </button>
+
+                    <!-- Mute / Unmute Volume button -->
+                    <button
+                        class="w-8 h-8 rounded-full flex items-center justify-center text-zinc-400 dark:text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 hover:bg-zinc-200/60 dark:hover:bg-zinc-800/60 active:scale-90 transition-all cursor-pointer"
+                        onclick="spotlightToggleMute()" id="spotlight-mute-btn" title="Silenciar sonido">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                         </svg>
                     </button>
                 </div>
             </div>
 
             <!-- Playlist Song List -->
-            <div class="flex-1 overflow-y-auto px-4 py-3 letter-scroll" id="spotlight-expanded-list">
+            <div class="flex-1 overflow-y-auto px-3 sm:px-4 py-2 sm:py-3 space-y-1.5 spotlight-scroll" id="spotlight-expanded-list">
                 <!-- Dynamic List -->
             </div>
 
@@ -5095,50 +5296,82 @@
                 <!-- Auth Toggle -->
                 <div class="relative" id="auth-wrapper">
                     <button id="auth-toggle"
-                        class="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors border border-zinc-200/50 dark:border-zinc-700/50 cursor-pointer overflow-hidden relative"
+                        class="w-9 h-9 rounded-full bg-black/5 dark:bg-white/[0.08] hover:bg-black/10 dark:hover:bg-white/[0.15] flex items-center justify-center text-sm border border-black/5 dark:border-white/15 transition-all duration-200 cursor-pointer overflow-hidden relative group active:scale-95"
                         title="Cuenta">
-                        <span id="auth-icon" class="text-zinc-500"><i class="ph-bold ph-user"></i></span>
+                        <span id="auth-icon" class="text-zinc-600 dark:text-zinc-300 transition-transform duration-200 group-hover:scale-105 flex items-center justify-center"><i class="ph-bold ph-user text-base"></i></span>
                         <img id="auth-avatar" src="" draggable="false" class="w-full h-full object-cover hidden"
                             alt="User Avatar" />
                     </button>
-                    <!-- Menú de autenticación -->
+                    <!-- Menú de autenticación Solid Minimalist -->
                     <div id="auth-menu"
-                        class="absolute right-0 top-full mt-5 w-56 rounded-[1.25rem] border border-black/5 dark:border-white/10 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-2xl transform-gpu shadow-xl py-2 z-[999] opacity-0 scale-95 pointer-events-none transition-all duration-300 origin-top-right overflow-hidden"
+                        class="absolute right-0 top-full mt-6 w-80 max-w-[calc(100vw-1.5rem)] z-[999] opacity-0 scale-95 pointer-events-none origin-top-right rounded-2xl p-6"
                         style="display:none;">
 
                         <!-- Estado desconectado -->
-                        <div id="auth-menu-logged-out" class="px-3 py-1 flex flex-col gap-3 relative z-10">
-                            <p
-                                class="text-[11px] font-medium text-zinc-600 dark:text-zinc-400 text-center mb-1 leading-relaxed">
-                                <span data-i18n="auth_prompt">Inicia sesión para entrar al canal de voz y guardar
-                                    progreso.</span></p>
+                        <div id="auth-menu-logged-out" class="relative z-10 flex flex-col gap-6">
+                            <!-- Header -->
+                            <div class="flex items-start justify-between gap-4">
+                                <div class="flex flex-col">
+                                    <h4 class="auth-card-title">28E Account</h4>
+                                    <p class="auth-card-desc mt-1">
+                                        <span data-i18n="auth_prompt">Inicia sesión para entrar al canal de voz y guardar progreso.</span>
+                                    </p>
+                                </div>
+                                <!-- Simple Avatar Icon -->
+                                <div class="auth-card-icon-wrap w-10 h-10 flex-shrink-0 rounded-full flex items-center justify-center">
+                                    <i class="ph-bold ph-user text-base"></i>
+                                </div>
+                            </div>
+
+                            <!-- Solid Minimalist Button -->
                             <button id="auth-btn-login"
-                                class="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-bold text-zinc-900 dark:text-white bg-white/50 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10 border border-black/5 dark:border-white/10 hover:border-black/10 dark:hover:border-white/20 transition-all rounded-xl shadow-sm group active:scale-[0.98]">
+                                class="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl cursor-pointer">
                                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                                    class="w-4 h-4 object-contain group-hover:scale-110 transition-transform"
-                                    alt="Google">
-                                <span data-i18n="auth_login_btn">Iniciar sesión</span>
+                                    class="w-5 h-5 object-contain" alt="Google">
+                                <span data-i18n="auth_login_btn" class="font-bold text-sm">Continuar con Google</span>
                             </button>
+
+                            <!-- Features List Minimalist -->
+                            <div class="auth-features-row pt-4 flex items-center justify-between px-1">
+                                <div class="flex items-center gap-1.5 auth-feature-tag">
+                                    <i class="ph-bold ph-broadcast text-sm"></i>
+                                    <span>Voz</span>
+                                </div>
+                                <div class="flex items-center gap-1.5 auth-feature-tag">
+                                    <i class="ph-bold ph-heart text-sm"></i>
+                                    <span>Recuerdos</span>
+                                </div>
+                                <div class="flex items-center gap-1.5 auth-feature-tag">
+                                    <i class="ph-bold ph-shield-check text-sm"></i>
+                                    <span>Seguro</span>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Estado conectado -->
-                        <div id="auth-menu-logged-in" class="hidden flex-col relative z-10">
-                            <div class="px-4 py-2.5 border-b border-black/5 dark:border-white/5 mb-1.5">
-                                <p id="auth-menu-name"
-                                    class="text-[0.9rem] font-bold text-zinc-900 dark:text-white tracking-tight truncate">
-                                </p>
-                                <p id="auth-menu-email"
-                                    class="text-[0.65rem] font-medium text-zinc-500 dark:text-zinc-400 truncate mt-0.5">
-                                </p>
+                        <div id="auth-menu-logged-in" class="hidden relative z-10 flex-col gap-4">
+                            <!-- User Profile Minimal -->
+                            <div class="flex items-center gap-3">
+                                <div class="relative flex-shrink-0">
+                                    <img id="auth-menu-avatar" src="" alt="Avatar" class="w-10 h-10 rounded-full object-cover ring-1 ring-white/10 hidden">
+                                    <div id="auth-menu-avatar-ph" class="auth-card-icon-wrap w-10 h-10 rounded-full flex items-center justify-center">
+                                        <i class="ph-bold ph-user"></i>
+                                    </div>
+                                    <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-zinc-900 rounded-full"></span>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p id="auth-menu-name" class="auth-user-name truncate"></p>
+                                    <p id="auth-menu-email" class="auth-user-email truncate"></p>
+                                </div>
                             </div>
-                            <div class="px-2.5">
-                                <button id="auth-btn-logout"
-                                    class="w-full flex items-center gap-2.5 px-3 py-2 text-[0.8rem] font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-500/10 dark:hover:bg-red-500/20 transition-colors rounded-xl group active:scale-[0.98]">
-                                    <i
-                                        class="ph-bold ph-sign-out text-base group-hover:-translate-x-0.5 transition-transform"></i>
-                                    <span data-i18n="auth_logout_btn">Cerrar sesión</span>
-                                </button>
-                            </div>
+
+                            <div class="auth-features-row my-2"></div>
+
+                            <button id="auth-btn-logout"
+                                class="w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg cursor-pointer">
+                                <i class="ph-bold ph-sign-out"></i>
+                                <span data-i18n="auth_logout_btn">Cerrar sesión</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -13914,17 +14147,23 @@
 
 
         let menuFocusTimeout = null;
+        let menuOverlayTimeout = null;
         function toggleMenu() {
             const p = document.getElementById('menu-panel'), o = document.getElementById('drawer-overlay');
             const isOpen = p && p.classList.contains('open');
+            clearTimeout(menuFocusTimeout);
+            clearTimeout(menuOverlayTimeout);
+
             if (!isOpen) {
                 AudioManager.play('flyin.wav', 0.6);
                 if (p) p.classList.add('open');
-                if (o) { o.classList.remove('hidden'); setTimeout(() => o.classList.remove('opacity-0'), 10); }
+                if (o) {
+                    o.classList.remove('hidden', 'opacity-0');
+                    o.classList.add('open');
+                }
                 document.body.classList.add('menu-is-open');
                 
                 // Focus search ONLY if it remains open after 200ms (prevents fast Esc racing)
-                clearTimeout(menuFocusTimeout);
                 menuFocusTimeout = setTimeout(() => {
                     if (p && p.classList.contains('open')) {
                         const s = document.getElementById('menu-search');
@@ -13937,11 +14176,18 @@
                     toggleSpotlightExpand();
                 }
                 if (p) p.classList.remove('open');
-                if (o) { o.classList.add('opacity-0'); setTimeout(() => o.classList.add('hidden'), 300); }
+                if (o) {
+                    o.classList.remove('open');
+                    menuOverlayTimeout = setTimeout(() => {
+                        const stillOpen = (p && p.classList.contains('open')) || document.body.classList.contains('menu-is-open');
+                        if (!stillOpen && o) {
+                            o.classList.add('hidden');
+                        }
+                    }, 300);
+                }
                 document.body.classList.remove('menu-is-open');
                 
                 // Clear search and ensure focus is killed
-                clearTimeout(menuFocusTimeout);
                 const s = document.getElementById('menu-search'); if (s) { s.value = ''; s.blur(); }
                 filterMenuLinks('');
             }
@@ -14261,7 +14507,7 @@
                         const target = document.getElementById(targetId);
                         // Force-hide overlay immediately so it doesn't block scroll events
                         const overlay = document.getElementById('drawer-overlay');
-                        if (overlay) { overlay.classList.add('opacity-0', 'hidden'); }
+                        if (overlay) { overlay.classList.remove('open'); overlay.classList.add('opacity-0', 'hidden'); }
                         // Close menu + scroll simultaneously
                         toggleMenu();
                         if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -18460,6 +18706,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 authAvatar.classList.remove('hidden');
                 authToggle.title = "Cuenta (" + user.displayName + ")";
 
+                const authMenuAvatar = document.getElementById('auth-menu-avatar');
+                const authMenuAvatarPh = document.getElementById('auth-menu-avatar-ph');
+                if (authMenuAvatar && user.photoURL) {
+                    authMenuAvatar.src = user.photoURL;
+                    authMenuAvatar.classList.remove('hidden');
+                    if (authMenuAvatarPh) authMenuAvatarPh.classList.add('hidden');
+                }
+
                 authMenuLoggedOut.classList.add('hidden');
                 authMenuLoggedOut.classList.remove('flex');
                 authMenuLoggedIn.classList.remove('hidden');
@@ -18487,6 +18741,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 authAvatar.classList.add('hidden');
                 authIcon.classList.remove('hidden');
                 authToggle.title = "Iniciar sesión";
+
+                const authMenuAvatar = document.getElementById('auth-menu-avatar');
+                const authMenuAvatarPh = document.getElementById('auth-menu-avatar-ph');
+                if (authMenuAvatar) authMenuAvatar.classList.add('hidden');
+                if (authMenuAvatarPh) authMenuAvatarPh.classList.remove('hidden');
 
                 authMenuLoggedIn.classList.add('hidden');
                 authMenuLoggedIn.classList.remove('flex');
@@ -19012,7 +19271,7 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
 
     <!-- Floating Action Button para la carta -->
-    <a href="para-yaire.html" class="fixed bottom-6 left-6 z-[9999] flex items-center justify-center cursor-pointer transition-all duration-500 ease-out rounded-full bg-zinc-900 border border-white/10 shadow-2xl hover:border-amber-500/50 w-14 h-14 group" aria-label="Mensaje especial">
+    <a href="para-yaire.html" id="letter-fab" class="fixed bottom-6 left-6 z-[9999] flex items-center justify-center cursor-pointer transition-all duration-500 ease-out rounded-full bg-zinc-900 border border-white/10 shadow-2xl hover:border-amber-500/50 w-14 h-14 group" aria-label="Mensaje especial">
         <div class="absolute inset-0 rounded-full bg-amber-500/20 blur-xl opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-opacity duration-500 ease-out"></div>
         <div class="absolute inset-0 rounded-full shadow-[0_0_0_0_rgba(245,158,11,0)] group-hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] transition-shadow duration-500 ease-out"></div>
         <span class="relative z-10 text-amber-500 transition-all duration-500 ease-out group-hover:scale-125 group-hover:drop-shadow-[0_0_10px_rgba(245,158,11,0.8)] flex items-center justify-center w-6 h-6">
