@@ -13,7 +13,7 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-09-10T08:38:28.191Z",
+  "lastUpdated": "2026-09-10T08:46:17.013Z",
   "maintDate": "2026-09-10T05:30",
   "maintMsg": "",
   "maintScreen": "cinematic",
@@ -23,14 +23,24 @@
   "refugeTitle": "Te escucho, mi amor",
   "songs": [
     {
-      "title": "Se Me Nota (Agarrame)",
-      "artist": "Chimbala, Omega",
-      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029480377_Chimbala_-_Se_Me_Nota__Agarrame___Prod_by_B-One_.mp3"
+      "title": "Impact",
+      "artist": "SG Lewis, Robyn, Channel Tres",
+      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029907758_SG_Lewis_-_Impact.mp3"
     },
     {
-      "title": "Flip The Coin",
+      "title": "Sweet Escape (Instrumental)",
+      "artist": "Kmpl3x",
+      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029901492_Kmpl3x_-_Sweet_Escape__Instrumental_.mp3"
+    },
+    {
+      "artist": "Chimbala, Omega",
+      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029480377_Chimbala_-_Se_Me_Nota__Agarrame___Prod_by_B-One_.mp3",
+      "title": "Se Me Nota (Agarrame)"
+    },
+    {
       "artist": "Softable",
-      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029075731_Softable_-_Flip_The_Coin.mp3"
+      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029075731_Softable_-_Flip_The_Coin.mp3",
+      "title": "Flip The Coin"
     },
     {
       "artist": "BNYX®, Bizarrap, Yeat, Peso Pluma",
