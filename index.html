@@ -3976,6 +3976,11 @@
                 </span>
             </div>
             <div class="flex items-center gap-2">
+                <!-- PWA Install button -->
+                <button id="pwa-header-install-btn" onclick="installPWA()" title="Instalar aplicación"
+                    class="w-8 h-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-amber-500/20 text-zinc-700 dark:text-zinc-200 hover:text-amber-400 flex items-center justify-center text-sm transition-all border border-zinc-200/50 dark:border-zinc-700/50 hover:border-amber-500/40 cursor-pointer shadow-sm">
+                    <span class="text-xs">📲</span>
+                </button>
                 <!-- Sound toggle -->
                 <button id="sound-toggle"
                     class="w-8 h-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors border border-zinc-200/50 dark:border-zinc-700/50 cursor-pointer"><span
@@ -4139,21 +4144,6 @@
                         class="menu-link-icon bg-white dark:bg-zinc-900 shadow-sm transition-transform duration-300 group-hover:scale-110">💌</span>
                     <span data-i18n="menu_secret">Bóveda Secreta</span>
                 </a>
-            </div>
-
-            <!-- PWA Install Button -->
-            <div class="mt-2 mb-1" id="pwa-install-container">
-                <button id="pwa-install-btn" onclick="installPWA()"
-                    class="w-full menu-link flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-amber-500/15 via-pink-500/10 to-transparent hover:from-amber-500/25 border border-amber-500/30 text-amber-500 dark:text-amber-400 group transition-all shadow-sm cursor-pointer">
-                    <div class="flex items-center gap-2.5">
-                        <span class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm shadow-inner group-hover:scale-110 transition-transform">📲</span>
-                        <div class="text-left leading-tight">
-                            <span class="block text-xs font-bold text-zinc-800 dark:text-white">Instalar Aplicación</span>
-                            <span class="block text-[10px] text-zinc-400 font-normal">28E App en pantalla completa</span>
-                        </div>
-                    </div>
-                    <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-500 text-black shadow-sm group-hover:bg-amber-400 transition-colors">Instalar</span>
-                </button>
             </div>
         </div>
 
@@ -19391,23 +19381,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // 2. Control de Instalación PWA (Android / Chrome / PC / iOS)
             var deferredPrompt = null;
-            var installContainer = document.getElementById('pwa-install-container');
+            var headerInstallBtn = document.getElementById('pwa-header-install-btn');
             var isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
                                window.navigator.standalone === true;
             var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
             if (isStandalone) {
-                if (installContainer) installContainer.style.display = 'none';
+                if (headerInstallBtn) headerInstallBtn.style.display = 'none';
             } else {
                 window.addEventListener('beforeinstallprompt', function (e) {
                     e.preventDefault();
                     deferredPrompt = e;
-                    if (installContainer) installContainer.classList.remove('hidden');
+                    if (headerInstallBtn) headerInstallBtn.style.display = 'flex';
                 });
 
-                // En iOS Safari no hay beforeinstallprompt, mostramos el botón con guía nativa
-                if (isIOS && installContainer) {
-                    installContainer.classList.remove('hidden');
+                // En iOS o navegadores que soportan instalación manual
+                if (headerInstallBtn) {
+                    headerInstallBtn.style.display = 'flex';
                 }
             }
 
@@ -19417,8 +19407,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     var choice = await deferredPrompt.userChoice;
                     console.log('[PWA] Elección de instalación:', choice.outcome);
                     deferredPrompt = null;
-                    if (choice.outcome === 'accepted' && installContainer) {
-                        installContainer.style.display = 'none';
+                    if (choice.outcome === 'accepted' && headerInstallBtn) {
+                        headerInstallBtn.style.display = 'none';
                     }
                 } else if (isIOS) {
                     if (typeof window.showPremiumAlert === 'function') {
@@ -19428,7 +19418,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 } else {
                     if (typeof window.showPremiumAlert === 'function') {
-                        window.showPremiumAlert('Instalación PWA', 'Abre el menú de tu navegador (⋮) y pulsa "Instalar aplicación" 📲', 'info');
+                        window.showPremiumAlert('Instalación PWA', 'Abre el menú de tu navegador (⋮) y pulsa "Instalar aplicación" o "Añadir a pantalla de inicio" 📲', 'info');
                     } else {
                         alert('Abre el menú de tu navegador y pulsa "Instalar aplicación" 📲');
                     }
@@ -19437,7 +19427,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             window.addEventListener('appinstalled', function () {
                 console.log('[PWA] 🎉 28E instalada.');
-                if (installContainer) installContainer.style.display = 'none';
+                if (headerInstallBtn) headerInstallBtn.style.display = 'none';
             });
         })();
     </script>
