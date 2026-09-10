@@ -13233,12 +13233,12 @@ video {
   position: absolute !important;
   right: 0 !important;
   top: 100% !important;
-  margin-top: 24px !important;
-  width: 320px !important;
+  margin-top: 18px !important;
+  width: 280px !important;
   max-width: calc(100vw - 1.5rem) !important;
   z-index: 999 !important;
-  border-radius: 20px !important;
-  padding: 22px !important;
+  border-radius: 18px !important;
+  padding: 16px !important;
   box-sizing: border-box !important;
   background-color: #ffffff !important;
   color: #09090b !important;
@@ -13271,7 +13271,7 @@ video {
 #auth-menu-logged-out {
   display: flex !important;
   flex-direction: column !important;
-  gap: 20px !important;
+  gap: 16px !important;
 }
 #auth-menu-logged-out.hidden {
   display: none !important;
@@ -13280,7 +13280,7 @@ video {
 #auth-menu-logged-in {
   display: flex !important;
   flex-direction: column !important;
-  gap: 16px !important;
+  gap: 12px !important;
 }
 #auth-menu-logged-in.hidden {
   display: none !important;
@@ -13419,12 +13419,19 @@ video {
 }
 
 /* User Info Logged-In */
+.auth-avatar-wrap {
+  position: relative !important;
+  width: 42px !important;
+  height: 42px !important;
+  flex-shrink: 0 !important;
+}
+
 #auth-menu-avatar,
 #auth-menu-avatar-ph {
   width: 42px !important;
   height: 42px !important;
   border-radius: 50% !important;
-  object-cover: cover !important;
+  object-fit: cover !important;
   flex-shrink: 0 !important;
 }
 #auth-menu-avatar.hidden,
@@ -13432,11 +13439,28 @@ video {
   display: none !important;
 }
 
+.auth-status-dot {
+  position: absolute !important;
+  bottom: 0px !important;
+  right: 0px !important;
+  width: 11px !important;
+  height: 11px !important;
+  background-color: #10b981 !important;
+  border: 2px solid #ffffff !important;
+  border-radius: 50% !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+}
+.dark .auth-status-dot {
+  border-color: #141416 !important;
+}
+
 .auth-user-name {
   color: #09090b !important;
   font-weight: 700 !important;
-  font-size: 0.925rem !important;
+  font-size: 0.9rem !important;
   margin: 0 !important;
+  line-height: 1.25 !important;
 }
 .dark .auth-user-name {
   color: #ffffff !important;
@@ -13444,11 +13468,22 @@ video {
 
 .auth-user-email {
   color: #71717a !important;
-  font-size: 0.775rem !important;
+  font-size: 0.75rem !important;
   margin: 2px 0 0 0 !important;
+  line-height: 1.2 !important;
 }
 .dark .auth-user-email {
   color: #a1a1aa !important;
+}
+
+.auth-divider {
+  width: 100% !important;
+  height: 1px !important;
+  background-color: #f4f4f5 !important;
+  margin: 2px 0 !important;
+}
+.dark .auth-divider {
+  background-color: rgba(255, 255, 255, 0.08) !important;
 }
 
 #auth-btn-logout {
@@ -13457,13 +13492,13 @@ video {
   justify-content: center !important;
   gap: 8px !important;
   width: 100% !important;
-  padding: 10px 14px !important;
+  padding: 8px 12px !important;
   border-radius: 10px !important;
   background-color: #fef2f2 !important;
   color: #dc2626 !important;
   border: 1px solid #fee2e2 !important;
   font-weight: 600 !important;
-  font-size: 0.85rem !important;
+  font-size: 0.825rem !important;
   transition: all 0.15s ease !important;
   cursor: pointer !important;
   box-sizing: border-box !important;

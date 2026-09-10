@@ -239,7 +239,7 @@
     <!-- GSAP Core & ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-    <link rel="stylesheet" href="styles.css?v=1.0.8">
+    <link rel="stylesheet" href="styles.css?v=1.0.9">
     <script>
             (function () {
                 try {
@@ -5349,15 +5349,15 @@
                         </div>
 
                         <!-- Estado conectado -->
-                        <div id="auth-menu-logged-in" class="hidden relative z-10 flex-col gap-4">
+                        <div id="auth-menu-logged-in" class="hidden relative z-10 flex-col gap-3">
                             <!-- User Profile Minimal -->
                             <div class="flex items-center gap-3">
-                                <div class="relative flex-shrink-0">
-                                    <img id="auth-menu-avatar" src="" alt="Avatar" class="w-10 h-10 rounded-full object-cover ring-1 ring-white/10 hidden">
-                                    <div id="auth-menu-avatar-ph" class="auth-card-icon-wrap w-10 h-10 rounded-full flex items-center justify-center">
+                                <div class="auth-avatar-wrap relative flex-shrink-0 w-[42px] h-[42px]">
+                                    <img id="auth-menu-avatar" src="" alt="Avatar" class="w-[42px] h-[42px] rounded-full object-cover ring-1 ring-white/10 hidden">
+                                    <div id="auth-menu-avatar-ph" class="auth-card-icon-wrap w-[42px] h-[42px] rounded-full flex items-center justify-center">
                                         <i class="ph-bold ph-user"></i>
                                     </div>
-                                    <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-zinc-900 rounded-full"></span>
+                                    <span class="auth-status-dot"></span>
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <p id="auth-menu-name" class="auth-user-name truncate"></p>
@@ -5365,10 +5365,10 @@
                                 </div>
                             </div>
 
-                            <div class="auth-features-row my-2"></div>
+                            <div class="auth-divider"></div>
 
                             <button id="auth-btn-logout"
-                                class="w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg cursor-pointer">
+                                class="w-full flex items-center gap-2.5 px-3 py-2 text-sm rounded-lg cursor-pointer">
                                 <i class="ph-bold ph-sign-out"></i>
                                 <span data-i18n="auth_logout_btn">Cerrar sesión</span>
                             </button>
@@ -18711,7 +18711,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (authMenuAvatar && user.photoURL) {
                     authMenuAvatar.src = user.photoURL;
                     authMenuAvatar.classList.remove('hidden');
-                    if (authMenuAvatarPh) authMenuAvatarPh.classList.add('hidden');
+                    authMenuAvatar.style.display = 'block';
+                    if (authMenuAvatarPh) {
+                        authMenuAvatarPh.classList.add('hidden');
+                        authMenuAvatarPh.style.display = 'none';
+                    }
                 }
 
                 authMenuLoggedOut.classList.add('hidden');
@@ -18744,8 +18748,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const authMenuAvatar = document.getElementById('auth-menu-avatar');
                 const authMenuAvatarPh = document.getElementById('auth-menu-avatar-ph');
-                if (authMenuAvatar) authMenuAvatar.classList.add('hidden');
-                if (authMenuAvatarPh) authMenuAvatarPh.classList.remove('hidden');
+                if (authMenuAvatar) {
+                    authMenuAvatar.classList.add('hidden');
+                    authMenuAvatar.style.display = 'none';
+                }
+                if (authMenuAvatarPh) {
+                    authMenuAvatarPh.classList.remove('hidden');
+                    authMenuAvatarPh.style.display = 'flex';
+                }
 
                 authMenuLoggedIn.classList.add('hidden');
                 authMenuLoggedIn.classList.remove('flex');
