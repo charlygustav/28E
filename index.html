@@ -4225,19 +4225,6 @@
                         }
                     }
                 };
-                window.transmitSpotlightToVoiceChannel = function () {
-                    if (window.yaireVoiceChannel && typeof window.yaireVoiceChannel.tuneIntoSpotlightLive === 'function') {
-                        window.yaireVoiceChannel.tuneIntoSpotlightLive();
-                    } else if (window.yaireVoiceChannel && typeof window.yaireVoiceChannel.open === 'function') {
-                        window.yaireVoiceChannel.open();
-                        setTimeout(() => {
-                            if (window.yaireVoiceChannel.tuneIntoSpotlightLive) window.yaireVoiceChannel.tuneIntoSpotlightLive();
-                        }, 500);
-                    } else {
-                        const fab = document.getElementById('vc-fab');
-                        if (fab) fab.click();
-                    }
-                };
 
                 function startFirebaseRadio() {
                     if (!window.yaireRadioFb) {

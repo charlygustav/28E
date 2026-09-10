@@ -2624,10 +2624,6 @@
         ? tracks.filter(t => (t.title && t.title.toLowerCase().includes(q)) || (t.artist && t.artist.toLowerCase().includes(q)))
         : tracks;
 
-      const spotState = typeof window.getSpotlightCurrentState === 'function' ? window.getSpotlightCurrentState() : null;
-      const isSpotLive = spotState && spotState.isPlaying;
-      const liveTrackTitle = spotState?.track?.title || spotState?.radioState?.title || 'Spotlight Radio';
-
       return `
         <div class="p-3 flex-1 flex flex-col h-full overflow-hidden">
           <!-- Header con botón Volver -->
@@ -2641,23 +2637,6 @@
               <span class="text-[10px] text-white/50 uppercase tracking-wider font-bold">Spotlight (${filtered.length})</span>
             </div>
           </div>
-
-          <!-- Si Spotlight está sonando en la página, banner para sintonizar en vivo con 1 clic -->
-          ${isSpotLive ? `
-            <button id="vc-spotlight-live-sync-btn" class="mb-2 p-2 rounded-xl bg-gradient-to-r from-red-500/15 via-amber-500/10 to-transparent border border-red-500/30 hover:border-red-500/50 transition-all flex items-center justify-between cursor-pointer group text-left flex-shrink-0 shadow-sm">
-              <div class="flex items-center gap-2 min-w-0">
-                <span class="relative flex h-2 w-2 flex-shrink-0">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-                </span>
-                <div class="min-w-0">
-                  <div class="text-[11px] font-bold text-red-300 flex items-center gap-1 truncate">Sintonizar en vivo: <span class="text-white font-medium">${this._escHtml(liveTrackTitle)}</span></div>
-                  <div class="text-[9px] text-white/40">Transmitir audio en tiempo real al canal</div>
-                </div>
-              </div>
-              <span class="px-2 py-0.5 rounded-md bg-red-500 text-white text-[10px] font-bold shadow flex-shrink-0">Sonar</span>
-            </button>
-          ` : ''}
 
           <!-- Buscador de canciones -->
           <div class="mb-2 flex-shrink-0">
@@ -2985,11 +2964,6 @@
           this._musicSpotlightView = false;
           this._updateMusicUI();
         });
-      }
-
-      const spotLiveBtn = document.getElementById('vc-spotlight-live-sync-btn');
-      if (spotLiveBtn) {
-        spotLiveBtn.addEventListener('click', () => this.tuneIntoSpotlightLive());
       }
 
       const spotSearchInput = document.getElementById('vc-spotlight-search-input');
@@ -3635,18 +3609,22 @@
         this._silentOsc = osc;
       } catch(e) {}
 
-      // 3. Silent HTML Audio Loop (Crucial for iOS background/locked screen)
-      if (!this._silentAudio) {
-        this._silentAudio = document.createElement('audio');
-        // Minimal 44-byte silent WAV
-        this._silentAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
-        this._silentAudio.loop = true;
-        this._silentAudio.playsInline = true;
-        this._silentAudio.setAttribute('playsinline', '');
-        this._silentAudio.setAttribute('webkit-playsinline', '');
-        document.body.appendChild(this._silentAudio);
+      // 3. Silent HTML Audio Loop (Crucial for iOS background/locked screen when idle)
+      const isExternalMusicPlaying = (typeof isSpotPlaying !== 'undefined' && isSpotPlaying) || 
+                                    (typeof spotAudio !== 'undefined' && spotAudio && !spotAudio.paused);
+      if (!isExternalMusicPlaying) {
+        if (!this._silentAudio) {
+          this._silentAudio = document.createElement('audio');
+          // Minimal 44-byte silent WAV
+          this._silentAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+          this._silentAudio.loop = true;
+          this._silentAudio.playsInline = true;
+          this._silentAudio.setAttribute('playsinline', '');
+          this._silentAudio.setAttribute('webkit-playsinline', '');
+          document.body.appendChild(this._silentAudio);
+        }
+        this._silentAudio.play().catch(() => {});
       }
-      this._silentAudio.play().catch(() => {});
 
       // 4. Web Locks API – prevents tab from being discarded by the browser
       if (navigator.locks) {
