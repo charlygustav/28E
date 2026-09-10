@@ -1587,6 +1587,9 @@
       const reconnectBtn = document.getElementById('vc-reconnect');
       if (reconnectBtn) {
         reconnectBtn.addEventListener('click', () => {
+          if (typeof window.stopSpotlightLocalPlayback === 'function') {
+            window.stopSpotlightLocalPlayback();
+          }
           if (this._savedName && this._savedPass) {
             if (this.progNode) { this._stopSfx(this.progNode); this.progNode = null; }
             this._render(this._tplLoading());
@@ -1740,6 +1743,11 @@
     async _doJoin(name) {
       if (!name) return this._setErr(_t('err_name'));
 
+      // Detener música de Spotlight si estaba sonando antes de entrar al canal
+      if (typeof window.stopSpotlightLocalPlayback === 'function') {
+        window.stopSpotlightLocalPlayback();
+      }
+
       this.myName = name;
       localStorage.setItem('28e_vc_name', name);
       this._savedName = name;
@@ -1805,6 +1813,9 @@
         });
 
         this.socket.on('joined', async ({ userId, existingUsers }) => {
+          if (typeof window.stopSpotlightLocalPlayback === 'function') {
+            window.stopSpotlightLocalPlayback();
+          }
           this._stopSfx(this.progNode); this.progNode = null;
           this._playSfx('jbl_success', 0.5);
 
@@ -2804,9 +2815,6 @@
       } else {
         nowPlaying = `<div class="text-center text-white/30 text-xs py-3 mb-2.5 bg-white/[0.03] rounded-2xl border border-white/5">${_t('vc_music_no_track')}</div>`;
       }
-      
-      const spotState = typeof window.getSpotlightCurrentState === 'function' ? window.getSpotlightCurrentState() : null;
-      const isSpotLive = spotState && spotState.isPlaying;
 
       const queueItems = this._musicQueue.length > 0
         ? this._musicQueue.map((t, i) => {
@@ -2852,11 +2860,6 @@
               </div>
             </div>
             <div class="flex items-center gap-1.5 flex-shrink-0 pl-1">
-              ${isSpotLive ? `
-                <span class="text-[9px] text-red-400 bg-red-500/10 border border-red-500/20 px-1.5 py-0.5 rounded-full flex items-center gap-1 font-bold animate-pulse">
-                  <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> EN VIVO
-                </span>
-              ` : ''}
               <span class="w-6 h-6 rounded-full bg-white/5 group-hover:bg-amber-500/20 text-white/40 group-hover:text-amber-300 flex items-center justify-center transition-all text-xs">
                 →
               </span>

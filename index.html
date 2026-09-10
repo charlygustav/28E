@@ -4215,15 +4215,23 @@
                     };
                 };
                 window.stopSpotlightLocalPlayback = function () {
-                    if (isSpotPlaying) {
-                        if (typeof spotlightMode !== 'undefined' && spotlightMode === 'radio') {
-                            if (typeof stopFirebaseRadio === 'function') stopFirebaseRadio();
-                        } else {
-                            if (spotAudio) spotAudio.pause();
-                            isSpotPlaying = false;
-                            if (typeof spotlightUpdateUI === 'function') spotlightUpdateUI();
-                        }
-                    }
+                    try {
+                        if (typeof stopFirebaseRadio === 'function') stopFirebaseRadio();
+                    } catch (e) {}
+                    try {
+                        if (typeof fbRadioAudio !== 'undefined' && fbRadioAudio) fbRadioAudio.pause();
+                    } catch (e) {}
+                    try {
+                        if (typeof spotAudio !== 'undefined' && spotAudio) spotAudio.pause();
+                    } catch (e) {}
+                    isSpotPlaying = false;
+                    try {
+                        if (typeof spotlightUpdateUI === 'function') spotlightUpdateUI();
+                    } catch (e) {}
+                    try {
+                        if (typeof spotlightUpdateTitle === 'function') spotlightUpdateTitle();
+                        else document.title = '28E';
+                    } catch (e) {}
                 };
 
                 function startFirebaseRadio() {
