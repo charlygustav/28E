@@ -109,15 +109,20 @@
     </a>
 
     <!-- Lock Screen Overlay -->
-    <div id="lockScreen" class="fixed inset-0 z-[99999] bg-black/40 backdrop-blur-2xl flex flex-col items-center justify-center transition-all duration-700 ease-out">
+    <div id="lockScreen" class="fixed inset-0 z-[99999] bg-black/60 backdrop-blur-2xl flex flex-col items-center justify-center transition-all duration-700 ease-out px-4 overflow-y-auto py-8">
         
-        <div class="lock-element text-center mt-2">
-            <svg class="w-6 h-6 sm:w-7 sm:h-7 text-white/90 mx-auto mb-3 sm:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-            <h2 class="text-white text-lg sm:text-xl font-medium tracking-wide mb-6 sm:mb-10" id="pinTitle">Ingresar código</h2>
+        <div class="lock-element text-center mt-2 flex flex-col items-center">
+            <div class="w-12 h-12 rounded-2xl bg-white/[0.06] border border-white/10 flex items-center justify-center mb-3 text-amber-400 shadow-lg shadow-black/20">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+            </div>
+            <h2 class="text-white text-lg sm:text-xl font-semibold tracking-tight mb-1" id="pinTitle">Para Yaire</h2>
+            <p class="text-xs sm:text-sm text-zinc-400 font-normal mb-5 sm:mb-6">Ingresa el código o accede con tu cuenta</p>
         </div>
         
         <!-- PIN Dots -->
-        <div class="flex gap-5 mb-8 sm:mb-12 lock-element h-4 items-center justify-center" id="pinDots">
+        <div class="flex gap-4 mb-6 sm:mb-7 lock-element h-4 items-center justify-center" id="pinDots">
             <div class="w-3.5 h-3.5 rounded-full border-[1.5px] border-white/50 transition-all duration-200"></div>
             <div class="w-3.5 h-3.5 rounded-full border-[1.5px] border-white/50 transition-all duration-200"></div>
             <div class="w-3.5 h-3.5 rounded-full border-[1.5px] border-white/50 transition-all duration-200"></div>
@@ -125,20 +130,36 @@
         </div>
 
         <!-- Keypad -->
-        <div class="grid grid-cols-3 gap-x-7 sm:gap-x-8 gap-y-4 sm:gap-y-6 max-w-[280px] sm:max-w-[320px] lock-element">
-            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-white/[0.08] active:bg-white/[0.25] text-white text-3xl font-light transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="enterPin('1')">1</button>
-            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-white/[0.08] active:bg-white/[0.25] text-white text-3xl font-light transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="enterPin('2')">2</button>
-            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-white/[0.08] active:bg-white/[0.25] text-white text-3xl font-light transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="enterPin('3')">3</button>
-            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-white/[0.08] active:bg-white/[0.25] text-white text-3xl font-light transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="enterPin('4')">4</button>
-            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-white/[0.08] active:bg-white/[0.25] text-white text-3xl font-light transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="enterPin('5')">5</button>
-            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-white/[0.08] active:bg-white/[0.25] text-white text-3xl font-light transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="enterPin('6')">6</button>
-            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-white/[0.08] active:bg-white/[0.25] text-white text-3xl font-light transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="enterPin('7')">7</button>
-            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-white/[0.08] active:bg-white/[0.25] text-white text-3xl font-light transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="enterPin('8')">8</button>
-            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-white/[0.08] active:bg-white/[0.25] text-white text-3xl font-light transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="enterPin('9')">9</button>
+        <div class="grid grid-cols-3 gap-x-6 sm:gap-x-8 gap-y-3 sm:gap-y-4 max-w-[280px] sm:max-w-[320px] lock-element">
+            <button class="pin-btn relative w-[68px] h-[68px] sm:w-[74px] sm:h-[74px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-light transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('1')">1</button>
+            <button class="pin-btn relative w-[68px] h-[68px] sm:w-[74px] sm:h-[74px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-light transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('2')">2</button>
+            <button class="pin-btn relative w-[68px] h-[68px] sm:w-[74px] sm:h-[74px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-light transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('3')">3</button>
+            <button class="pin-btn relative w-[68px] h-[68px] sm:w-[74px] sm:h-[74px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-light transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('4')">4</button>
+            <button class="pin-btn relative w-[68px] h-[68px] sm:w-[74px] sm:h-[74px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-light transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('5')">5</button>
+            <button class="pin-btn relative w-[68px] h-[68px] sm:w-[74px] sm:h-[74px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-light transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('6')">6</button>
+            <button class="pin-btn relative w-[68px] h-[68px] sm:w-[74px] sm:h-[74px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-light transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('7')">7</button>
+            <button class="pin-btn relative w-[68px] h-[68px] sm:w-[74px] sm:h-[74px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-light transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('8')">8</button>
+            <button class="pin-btn relative w-[68px] h-[68px] sm:w-[74px] sm:h-[74px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-light transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('9')">9</button>
             <div></div>
-            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-white/[0.08] active:bg-white/[0.25] text-white text-3xl font-light transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="enterPin('0')">0</button>
-            <button class="pin-btn relative w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] rounded-full bg-transparent active:bg-white/[0.1] text-white/80 transition-colors duration-150 flex items-center justify-center" ontouchstart="" onclick="deletePin()">
+            <button class="pin-btn relative w-[68px] h-[68px] sm:w-[74px] sm:h-[74px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-light transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('0')">0</button>
+            <button class="pin-btn relative w-[68px] h-[68px] sm:w-[74px] sm:h-[74px] rounded-full bg-transparent active:bg-white/[0.1] text-white/80 transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="deletePin()">
                 <svg class="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z"></path></svg>
+            </button>
+        </div>
+
+        <!-- 28E Account Method -->
+        <div class="lock-element mt-5 w-full max-w-[280px] sm:max-w-[320px] flex flex-col items-center">
+            <div class="flex items-center gap-3 w-full mb-3">
+                <div class="h-px flex-1 bg-white/10"></div>
+                <span class="text-[11px] uppercase tracking-wider text-white/40 font-medium">o bien</span>
+                <div class="h-px flex-1 bg-white/10"></div>
+            </div>
+            
+            <button id="googleAuthBtn" onclick="handleGoogleAuthUnlock()"
+                class="w-full py-2.5 px-4 rounded-xl bg-white/[0.08] hover:bg-white/[0.14] active:bg-white/[0.2] border border-white/10 hover:border-white/20 transition-all duration-200 flex items-center justify-center gap-2.5 text-white/90 hover:text-white text-sm font-medium cursor-pointer shadow-sm group active:scale-[0.98]">
+                <img id="googleAuthIcon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="w-4 h-4 object-contain">
+                <img id="googleAuthAvatar" src="" alt="Avatar" class="w-5 h-5 rounded-full object-cover hidden ring-1 ring-white/30">
+                <span id="googleAuthText" class="tracking-tight truncate">Desbloquear con 28E Account</span>
             </button>
         </div>
     </div>
@@ -403,16 +424,85 @@
     </main>
     </div> <!-- End mainWrap -->
 
+    <!-- Firebase SDK for 28E Account Auth -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDFkuktrXnsV9-jg2bv5dpJQRR-he8PT3g",
+            authDomain: window.location.hostname,
+            databaseURL: "https://yaire-591ca-default-rtdb.firebaseio.com",
+            projectId: "yaire-591ca",
+            storageBucket: "yaire-591ca.firebasestorage.app",
+            messagingSenderId: "450381430658",
+            appId: "1:450381430658:web:262d1bb7b1732c3990d99b"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
+
+        let currentAuthUser = null;
+        const googleAuthBtn = document.getElementById('googleAuthBtn');
+        const googleAuthText = document.getElementById('googleAuthText');
+        const googleAuthAvatar = document.getElementById('googleAuthAvatar');
+        const googleAuthIcon = document.getElementById('googleAuthIcon');
+
+        onAuthStateChanged(auth, (user) => {
+            currentAuthUser = user;
+            if (user) {
+                const firstName = user.displayName ? user.displayName.split(' ')[0] : 'tu cuenta';
+                if (googleAuthText) googleAuthText.textContent = `Continuar como ${firstName}`;
+                if (googleAuthAvatar && user.photoURL) {
+                    googleAuthAvatar.src = user.photoURL;
+                    googleAuthAvatar.classList.remove('hidden');
+                    if (googleAuthIcon) googleAuthIcon.classList.add('hidden');
+                }
+            } else {
+                if (googleAuthText) googleAuthText.textContent = "Desbloquear con 28E Account";
+                if (googleAuthAvatar) googleAuthAvatar.classList.add('hidden');
+                if (googleAuthIcon) googleAuthIcon.classList.remove('hidden');
+            }
+        });
+
+        window.handleGoogleAuthUnlock = async function() {
+            if (currentAuthUser) {
+                // Ya autenticado con 28E Account -> desbloquear directamente
+                if (typeof window.unlockLetter === 'function') {
+                    window.unlockLetter(`28E Account (${currentAuthUser.displayName})`);
+                }
+                return;
+            }
+
+            try {
+                if (googleAuthText) googleAuthText.textContent = "Conectando...";
+                const result = await signInWithPopup(auth, provider);
+                if (result && result.user) {
+                    currentAuthUser = result.user;
+                    if (typeof window.unlockLetter === 'function') {
+                        window.unlockLetter(`28E Account (${result.user.displayName})`);
+                    }
+                }
+            } catch (error) {
+                console.warn("Auth popup cerrado o error:", error);
+                if (googleAuthText) googleAuthText.textContent = "Desbloquear con 28E Account";
+            }
+        };
+    </script>
+
     <script>
         // --- 0. PIN Lock Logic ---
         let currentPin = "";
         const correctPin = "2801";
+        let isUnlocked = false;
 
         // Initial entrance animation
         document.addEventListener('DOMContentLoaded', () => {
             gsap.fromTo('.lock-element', 
                 { y: 30, opacity: 0 },
-                { y: 0, opacity: 1, duration: 1.2, stagger: 0.15, ease: 'power3.out', delay: 0.1 }
+                { y: 0, opacity: 1, duration: 1.2, stagger: 0.12, ease: 'power3.out', delay: 0.1 }
             );
         });
 
@@ -437,6 +527,7 @@
         }
 
         function enterPin(num) {
+            if (isUnlocked) return;
             if (currentPin.length < 4) {
                 hapticFeedback('light');
                 currentPin += num;
@@ -449,6 +540,7 @@
         }
 
         function deletePin() {
+            if (isUnlocked) return;
             if (currentPin.length > 0) {
                 hapticFeedback('light');
                 currentPin = currentPin.slice(0, -1);
@@ -456,25 +548,52 @@
             }
         }
 
+        // Teclado físico en PC
+        window.addEventListener('keydown', (e) => {
+            if (isUnlocked) return;
+            const lockScreen = document.getElementById('lockScreen');
+            if (!lockScreen || lockScreen.style.display === 'none') return;
+            
+            if (e.key >= '0' && e.key <= '9') {
+                enterPin(e.key);
+            } else if (e.key === 'Backspace') {
+                deletePin();
+            }
+        });
+
+        window.unlockLetter = function(method = 'PIN') {
+            if (isUnlocked) return;
+            isUnlocked = true;
+            hapticFeedback('success');
+
+            const lockScreen = document.getElementById('lockScreen');
+            const mainWrap = document.getElementById('mainWrap');
+            const title = document.getElementById('pinTitle');
+            
+            if (title) {
+                title.textContent = "¡Bienvenida! ✨";
+                title.classList.remove('text-red-400');
+                title.classList.add('text-amber-300');
+            }
+
+            gsap.to(lockScreen, {
+                opacity: 0,
+                scale: 1.05,
+                duration: 0.8,
+                ease: "power2.inOut",
+                onComplete: () => {
+                    lockScreen.style.display = 'none';
+                    document.body.classList.remove('overflow-hidden');
+                    mainWrap.style.opacity = '1';
+                    mainWrap.style.pointerEvents = 'auto';
+                    initAnimations();
+                }
+            });
+        };
+
         function checkPin() {
             if (currentPin === correctPin) {
-                hapticFeedback('success');
-                const lockScreen = document.getElementById('lockScreen');
-                const mainWrap = document.getElementById('mainWrap');
-                
-                gsap.to(lockScreen, {
-                    opacity: 0,
-                    scale: 1.05,
-                    duration: 0.8,
-                    ease: "power2.inOut",
-                    onComplete: () => {
-                        lockScreen.style.display = 'none';
-                        document.body.classList.remove('overflow-hidden');
-                        mainWrap.style.opacity = '1';
-                        mainWrap.style.pointerEvents = 'auto';
-                        initAnimations();
-                    }
-                });
+                window.unlockLetter('PIN');
             } else {
                 hapticFeedback('error');
                 const title = document.getElementById('pinTitle');
@@ -482,7 +601,7 @@
                 title.textContent = "Código incorrecto";
                 title.classList.add('text-red-400');
                 
-                // GSAP Shake using keyframes (valid syntax)
+                // GSAP Shake using keyframes
                 gsap.to(["#pinDots", "#pinTitle"], {
                     keyframes: [
                         { x: -10, duration: 0.08 },
