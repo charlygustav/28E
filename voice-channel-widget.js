@@ -2439,6 +2439,50 @@
       ];
     }
 
+    _getTrackArtwork(track) {
+      if (!track) return null;
+      if (track.cover) return track.cover;
+      if (track.artwork) return track.artwork;
+      const key = (track.title || '') + '|' + (track.artist || '');
+      if (window.spotArtworkCache && window.spotArtworkCache[key]) {
+        return window.spotArtworkCache[key];
+      }
+      return null;
+    }
+
+    _resolvePendingArtwork() {
+      const nodes = document.querySelectorAll('[data-spot-art-key]');
+      if (!nodes || nodes.length === 0) return;
+      nodes.forEach(el => {
+        const key = el.dataset.spotArtKey;
+        if (!key) return;
+        const parts = key.split('|');
+        const title = parts[0] || '';
+        const artist = parts[1] || '';
+
+        if (window.spotArtworkCache && window.spotArtworkCache[key]) {
+          const img = document.createElement('img');
+          img.src = window.spotArtworkCache[key];
+          img.className = 'w-full h-full object-cover';
+          img.loading = 'lazy';
+          el.replaceWith(img);
+          return;
+        }
+
+        if (typeof window.fetchSpotlightArtwork === 'function') {
+          window.fetchSpotlightArtwork({ title, artist }).then(artUrl => {
+            if (artUrl && el.isConnected) {
+              const img = document.createElement('img');
+              img.src = artUrl;
+              img.className = 'w-full h-full object-cover';
+              img.loading = 'lazy';
+              el.replaceWith(img);
+            }
+          }).catch(() => {});
+        }
+      });
+    }
+
     _renderSpotlightCatalog() {
       const tracks = this._getSpotlightTracks();
       const q = (this._spotlightSearchQuery || '').toLowerCase().trim();
@@ -2446,53 +2490,85 @@
         ? tracks.filter(t => (t.title && t.title.toLowerCase().includes(q)) || (t.artist && t.artist.toLowerCase().includes(q)))
         : tracks;
 
+      const spotState = typeof window.getSpotlightCurrentState === 'function' ? window.getSpotlightCurrentState() : null;
+      const isSpotLive = spotState && spotState.isPlaying;
+      const liveTrackTitle = spotState?.track?.title || spotState?.radioState?.title || 'Spotlight Radio';
+
       return `
         <div class="p-3 flex-1 flex flex-col h-full overflow-hidden">
           <!-- Header con botón Volver -->
-          <div class="flex items-center justify-between mb-2.5 pb-2 border-b border-white/10 flex-shrink-0">
+          <div class="flex items-center justify-between mb-2 pb-2 border-b border-white/10 flex-shrink-0">
             <button id="vc-spotlight-back-btn" class="flex items-center gap-1.5 text-xs text-amber-400 hover:text-amber-300 transition-colors font-semibold group cursor-pointer">
               <svg class="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
-              <span>${_t('vc_spotlight_back')}</span>
+              <span>Volver a la cola</span>
             </button>
             <div class="flex items-center gap-1.5">
-              <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
               <span class="text-[10px] text-white/50 uppercase tracking-wider font-bold">Spotlight (${filtered.length})</span>
             </div>
           </div>
+
+          <!-- Si Spotlight está sonando en la página, banner para sintonizar en vivo con 1 clic -->
+          ${isSpotLive ? `
+            <button id="vc-spotlight-live-sync-btn" class="mb-2 p-2 rounded-xl bg-gradient-to-r from-red-500/15 via-amber-500/10 to-transparent border border-red-500/30 hover:border-red-500/50 transition-all flex items-center justify-between cursor-pointer group text-left flex-shrink-0 shadow-sm">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="relative flex h-2 w-2 flex-shrink-0">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                </span>
+                <div class="min-w-0">
+                  <div class="text-[11px] font-bold text-red-300 flex items-center gap-1 truncate">Sintonizar en vivo: <span class="text-white font-medium">${this._escHtml(liveTrackTitle)}</span></div>
+                  <div class="text-[9px] text-white/40">Transmitir audio en tiempo real al canal</div>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-md bg-red-500 text-white text-[10px] font-bold shadow flex-shrink-0">Sonar</span>
+            </button>
+          ` : ''}
 
           <!-- Buscador de canciones -->
           <div class="mb-2 flex-shrink-0">
             <div class="relative flex items-center">
               <span class="absolute left-3 text-white/30 text-xs pointer-events-none">🔍</span>
               <input id="vc-spotlight-search-input" type="text" placeholder="${_t('vc_spotlight_search_ph')}" value="${this._escHtml(this._spotlightSearchQuery || '')}"
-                class="w-full bg-black/40 border border-white/10 focus:border-amber-500/50 rounded-xl pl-8 pr-7 py-2 text-white text-xs outline-none transition-colors" autocomplete="off" />
+                class="w-full bg-white/[0.04] border border-white/10 focus:border-amber-500/50 rounded-xl pl-8 pr-7 py-2 text-white text-xs outline-none transition-colors placeholder:text-white/30" autocomplete="off" />
               ${this._spotlightSearchQuery ? `<button id="vc-spotlight-search-clear" class="absolute right-2.5 text-white/40 hover:text-white text-xs cursor-pointer">✕</button>` : ''}
             </div>
           </div>
 
-          <!-- Lista scrollable de canciones -->
-          <div class="flex-1 overflow-y-auto space-y-1.5 pr-0.5 max-h-[220px]" id="vc-spotlight-track-list">
-            ${filtered.length > 0 ? filtered.map((t) => `
-              <div class="flex items-center justify-between p-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/5 hover:border-amber-500/20 transition-all group">
-                <div class="flex items-center gap-2.5 min-w-0 flex-1 mr-2">
-                  <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-xs flex-shrink-0">
-                    🎵
+          <!-- Lista de canciones estilo Apple Music / Spotify -->
+          <div class="flex-1 overflow-y-auto space-y-1 pr-0.5 max-h-[240px] vc-scroll" id="vc-spotlight-track-list">
+            ${filtered.length > 0 ? filtered.map((t, idx) => {
+              const art = this._getTrackArtwork(t);
+              const artKey = (t.title || '') + '|' + (t.artist || '');
+              return `
+              <div class="vc-spot-track-row flex items-center justify-between p-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] active:bg-white/[0.12] border border-white/5 hover:border-amber-500/25 transition-all group cursor-pointer" data-idx="${idx}" data-src="${this._escHtml(t.src)}" data-title="${this._escHtml(t.title)}" data-artist="${this._escHtml(t.artist || '')}">
+                <div class="flex items-center gap-2.5 min-w-0 flex-1 mr-2 pointer-events-none">
+                  <!-- Portada de la canción -->
+                  <div class="w-10 h-10 rounded-xl bg-zinc-800/80 border border-white/10 overflow-hidden flex items-center justify-center flex-shrink-0 shadow-sm relative group-hover:shadow-amber-500/10 transition-shadow">
+                    ${art ? `
+                      <img src="${this._escHtml(art)}" class="w-full h-full object-cover" loading="lazy" />
+                    ` : `
+                      <div class="w-full h-full flex items-center justify-center text-white/30 text-xs bg-gradient-to-br from-amber-500/10 to-zinc-800" data-spot-art-key="${this._escHtml(artKey)}">
+                        🎵
+                      </div>
+                    `}
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                      <span class="text-amber-400 text-xs font-bold">▶</span>
+                    </div>
                   </div>
+                  <!-- Título y artista -->
                   <div class="min-w-0 flex-1">
-                    <div class="text-xs font-semibold text-white truncate group-hover:text-amber-300 transition-colors">${this._escHtml(t.title)}</div>
-                    <div class="text-[10px] text-white/40 truncate">${this._escHtml(t.artist || '28E')}</div>
+                    <div class="text-xs font-semibold text-white truncate group-hover:text-amber-300 transition-colors leading-tight">${this._escHtml(t.title)}</div>
+                    <div class="text-[10px] text-white/50 truncate mt-0.5">${this._escHtml(t.artist || 'Spotlight')}</div>
                   </div>
                 </div>
-                <div class="flex items-center gap-1.5 flex-shrink-0">
-                  <button class="vc-spot-add-queue px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 active:scale-95 text-white text-[11px] font-semibold transition-all flex items-center gap-1 cursor-pointer" data-src="${this._escHtml(t.src)}" data-title="${this._escHtml(t.title)}" data-artist="${this._escHtml(t.artist || '')}" title="${_t('vc_spotlight_add_queue')}">
-                    <span>+</span><span>Cola</span>
-                  </button>
-                  <button class="vc-spot-play-now px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 active:scale-95 text-black text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer shadow-sm" data-src="${this._escHtml(t.src)}" data-title="${this._escHtml(t.title)}" data-artist="${this._escHtml(t.artist || '')}" title="${_t('vc_spotlight_play_now')}">
-                    <span>▶</span><span>Sonar</span>
-                  </button>
-                </div>
+
+                <!-- Botón sutil de Añadir a la cola -->
+                <button class="vc-spot-add-queue w-7 h-7 rounded-lg bg-white/5 hover:bg-white/15 text-white/50 hover:text-white flex items-center justify-center text-xs transition-colors flex-shrink-0 cursor-pointer" data-src="${this._escHtml(t.src)}" data-title="${this._escHtml(t.title)}" data-artist="${this._escHtml(t.artist || '')}" title="Añadir a la cola">
+                  +
+                </button>
               </div>
-            `).join('') : `
+            `;}).join('') : `
               <div class="text-center text-white/30 text-xs py-8">
                 No se encontraron canciones
               </div>
@@ -2543,27 +2619,44 @@
           ? 'bg-gradient-to-r from-amber-500/20 to-pink-500/20 text-amber-300 border border-amber-500/30'
           : (isSpotify ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-white/10 text-white/50');
 
-        const eqBars = isPlaying
-          ? `<div class="flex items-end gap-0.5 h-3"><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite]"></div><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite_0.2s]"></div><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite_0.4s]"></div></div>`
-          : `<span class="w-4 h-4 text-white/40 [&>svg]:w-4 [&>svg]:h-4 flex items-center justify-center">${ICONS.sound || '♪'}</span>`;
+        const currentArt = this._getTrackArtwork(track);
+        const artKey = (track.title || '') + '|' + (track.artist || '');
+
         nowPlaying = `
-          <div class="bg-white/5 border border-white/10 rounded-xl p-3 mb-2 relative overflow-hidden">
-            <div class="flex items-center gap-3 relative z-10 mb-2">
-              <div class="w-10 h-10 rounded-lg bg-black/40 flex items-center justify-center flex-shrink-0">
-                ${eqBars}
+          <div class="bg-white/[0.04] border border-white/10 rounded-2xl p-3 mb-2.5 relative overflow-hidden shadow-lg">
+            <div class="flex items-center gap-3 relative z-10 mb-2.5">
+              <!-- Portada con ecualizador animado superpuesto -->
+              <div class="w-12 h-12 rounded-xl bg-zinc-800/80 border border-white/10 overflow-hidden flex items-center justify-center flex-shrink-0 relative shadow-md">
+                ${currentArt ? `
+                  <img src="${this._escHtml(currentArt)}" class="w-full h-full object-cover" />
+                ` : `
+                  <div class="w-full h-full flex items-center justify-center text-amber-400 bg-gradient-to-br from-amber-500/20 to-purple-500/20 text-base" data-spot-art-key="${this._escHtml(artKey)}">
+                    🎵
+                  </div>
+                `}
+                ${isPlaying ? `
+                  <div class="absolute bottom-1 right-1 bg-black/70 backdrop-blur-sm rounded-md px-1 py-0.5 flex items-end gap-0.5">
+                    <div class="w-0.5 h-2 bg-amber-400 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite]"></div>
+                    <div class="w-0.5 h-3 bg-amber-400 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite_0.2s]"></div>
+                    <div class="w-0.5 h-1.5 bg-amber-400 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite_0.4s]"></div>
+                  </div>
+                ` : ''}
               </div>
+
               <div class="flex-1 min-w-0">
-                <div class="text-[9px] text-amber-500 font-bold uppercase tracking-wider mb-0.5">${_t('vc_music_now')}</div>
+                <div class="flex items-center gap-1.5 mb-0.5">
+                  <span class="text-[9px] text-amber-500 font-bold uppercase tracking-wider">${_t('vc_music_now')}</span>
+                  <span class="text-[8px] font-bold px-1.5 py-0.2 rounded ${badgeStyle}">${badgeLabel}</span>
+                </div>
                 ${this._cleanMusicTitle(track.title).length > 25 
-                  ? `<div class="vc-marquee-container text-sm font-bold text-white">
+                  ? `<div class="vc-marquee-container text-xs font-bold text-white">
                        <div class="vc-marquee-content">${this._escHtml(this._cleanMusicTitle(track.title))}</div>
                        <div class="vc-marquee-content" aria-hidden="true">${this._escHtml(this._cleanMusicTitle(track.title))}</div>
                      </div>` 
-                  : `<div class="text-sm font-bold text-white truncate">${this._escHtml(this._cleanMusicTitle(track.title))}</div>`
+                  : `<div class="text-xs font-bold text-white truncate">${this._escHtml(this._cleanMusicTitle(track.title))}</div>`
                 }
-                <div class="text-[10px] text-white/40 truncate">${track.addedByName ? `${_t('vc_music_by')} ${track.addedByName}` : ''}</div>
+                <div class="text-[10px] text-white/40 truncate mt-0.5">${this._escHtml(track.artist || (track.addedByName ? `${_t('vc_music_by')} ${track.addedByName}` : 'Spotlight'))}</div>
               </div>
-              <span class="text-[9px] font-bold px-1.5 py-0.5 rounded ${badgeStyle}">${badgeLabel}</span>
             </div>
             
             ${track.type === 'youtube' || track.type === 'spotlight' || track.type === 'audio' ? `
@@ -2596,9 +2689,12 @@
             </div>
           </div>`;
       } else {
-        nowPlaying = `<div class="text-center text-white/20 text-xs py-3 mb-2 bg-white/5 rounded-xl border border-white/5">${_t('vc_music_no_track')}</div>`;
+        nowPlaying = `<div class="text-center text-white/30 text-xs py-3 mb-2.5 bg-white/[0.03] rounded-2xl border border-white/5">${_t('vc_music_no_track')}</div>`;
       }
       
+      const spotState = typeof window.getSpotlightCurrentState === 'function' ? window.getSpotlightCurrentState() : null;
+      const isSpotLive = spotState && spotState.isPlaying;
+
       const queueItems = this._musicQueue.length > 0
         ? this._musicQueue.map((t, i) => {
             const isCur = i === this._musicState.currentIndex;
@@ -2606,14 +2702,19 @@
             const isSp = (t.source || t.type) === 'spotify';
             const qBadge = isSpot ? 'SPOTLIGHT' : (isSp ? 'SP' : 'YT');
             const qBadgeStyle = isSpot ? 'bg-amber-500/20 text-amber-300' : 'bg-white/10 text-white/30';
+            const qArt = this._getTrackArtwork(t);
+            const qArtKey = (t.title || '') + '|' + (t.artist || '');
             return `
-            <div class="flex items-center gap-3 p-2 rounded-lg transition-colors ${isCur ? 'bg-amber-500/10 border border-amber-500/20' : 'hover:bg-white/5'}">
-              <span class="w-4 text-center text-[10px] font-bold ${isCur ? 'text-amber-500' : 'text-white/30'}">${isCur && this._musicPlaying ? '♪' : (i + 1)}</span>
-              <div class="flex-1 min-w-0">
-                <div class="text-xs font-medium text-white truncate ${isCur ? 'text-amber-500' : ''}">${this._escHtml(this._cleanMusicTitle(t.title))}</div>
-                <div class="text-[10px] text-white/30 truncate">${t.addedByName || ''}</div>
+            <div class="flex items-center gap-2.5 p-1.5 rounded-xl transition-colors ${isCur ? 'bg-amber-500/10 border border-amber-500/20' : 'hover:bg-white/5'}">
+              <span class="w-3.5 text-center text-[10px] font-bold ${isCur ? 'text-amber-500' : 'text-white/30'}">${isCur && this._musicPlaying ? '♪' : (i + 1)}</span>
+              <div class="w-7 h-7 rounded-lg bg-zinc-800 border border-white/10 overflow-hidden flex items-center justify-center flex-shrink-0 text-xs">
+                ${qArt ? `<img src="${this._escHtml(qArt)}" class="w-full h-full object-cover" />` : `<div class="w-full h-full flex items-center justify-center text-white/40 text-[10px]" data-spot-art-key="${this._escHtml(qArtKey)}">${isSpot ? '🎵' : '🎬'}</div>`}
               </div>
-              <span class="text-[9px] font-bold px-1.5 py-0.5 rounded ${qBadgeStyle}">${qBadge}</span>
+              <div class="flex-1 min-w-0">
+                <div class="text-xs font-medium text-white truncate ${isCur ? 'text-amber-400 font-semibold' : ''}">${this._escHtml(this._cleanMusicTitle(t.title))}</div>
+                <div class="text-[9px] text-white/30 truncate">${t.addedByName ? `por ${t.addedByName}` : ''}</div>
+              </div>
+              <span class="text-[8px] font-bold px-1.5 py-0.5 rounded ${qBadgeStyle}">${qBadge}</span>
               ${!isCur ? `<button class="vc-music-track-rm w-6 h-6 flex items-center justify-center text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded transition-colors [&>svg]:w-3 [&>svg]:h-3 cursor-pointer" data-track-id="${t.id}">${ICONS.trash}</button>` : ''}
             </div>`;
           }).join('')
@@ -2623,23 +2724,34 @@
         <div class="p-3 flex-1 flex flex-col">
           ${nowPlaying}
 
-          <!-- Botones de Spotlight (Catálogo y En Vivo) -->
-          <div class="grid grid-cols-2 gap-2 mb-2">
-            <button id="vc-spotlight-open-btn" class="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] active:bg-white/[0.18] border border-white/10 text-white text-xs font-semibold transition-all cursor-pointer truncate">
-              <span class="text-amber-400 text-sm">🎵</span>
-              <span class="truncate">${_t('vc_spotlight_menu')}</span>
-            </button>
-            <button id="vc-spotlight-live-sync-btn" class="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-pink-500/20 hover:from-amber-500/30 hover:to-pink-500/30 active:scale-[0.98] border border-amber-500/30 text-amber-300 text-xs font-semibold transition-all cursor-pointer truncate">
-              <span class="relative flex h-2 w-2 flex-shrink-0">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+          <!-- Acceso limpio y elegante al Menú Spotlight -->
+          <button id="vc-spotlight-open-btn" class="w-full mb-2.5 p-2 rounded-xl bg-gradient-to-r from-amber-500/10 via-white/[0.03] to-transparent hover:from-amber-500/20 border border-amber-500/20 hover:border-amber-500/40 transition-all flex items-center justify-between group cursor-pointer shadow-sm">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center flex-shrink-0 text-sm font-bold shadow-inner">
+                🎵
+              </div>
+              <div class="min-w-0 text-left">
+                <div class="text-xs font-semibold text-white group-hover:text-amber-300 transition-colors flex items-center gap-1.5">
+                  <span>Música de Spotlight</span>
+                  <span class="text-[9px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded font-bold">28E</span>
+                </div>
+                <div class="text-[10px] text-white/40 truncate">Ver catálogo de canciones y reproducir</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-1.5 flex-shrink-0 pl-1">
+              ${isSpotLive ? `
+                <span class="text-[9px] text-red-400 bg-red-500/10 border border-red-500/20 px-1.5 py-0.5 rounded-full flex items-center gap-1 font-bold animate-pulse">
+                  <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> EN VIVO
+                </span>
+              ` : ''}
+              <span class="w-6 h-6 rounded-full bg-white/5 group-hover:bg-amber-500/20 text-white/40 group-hover:text-amber-300 flex items-center justify-center transition-all text-xs">
+                →
               </span>
-              <span class="truncate">${_t('vc_spotlight_live')}</span>
-            </button>
-          </div>
+            </div>
+          </button>
 
           <div class="text-[10px] text-white/30 font-bold uppercase tracking-wider mb-1 px-1">${_t('vc_music_queue')} ${this._musicQueue.length > 0 ? `(${this._musicQueue.length})` : ''}</div>
-          <div class="flex flex-col gap-1 mb-2 max-h-[120px] overflow-y-auto pr-0.5" id="vc-music-queue">${queueItems}</div>
+          <div class="flex flex-col gap-1 mb-2 max-h-[120px] overflow-y-auto pr-0.5 vc-scroll" id="vc-music-queue">${queueItems}</div>
           <div class="mt-auto pt-2">
             <div class="text-red-500 text-xs text-center mb-1 min-h-[16px]" id="vc-music-err"></div>
             <div class="flex gap-2">
@@ -2771,23 +2883,30 @@
         });
       }
 
-      document.querySelectorAll('.vc-spot-play-now').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const src = btn.dataset.src;
-          const title = btn.dataset.title;
-          const artist = btn.dataset.artist;
+      // Clic en la fila: Reproducir de inmediato
+      document.querySelectorAll('.vc-spot-track-row').forEach(row => {
+        row.addEventListener('click', (e) => {
+          if (e.target.closest('.vc-spot-add-queue')) return;
+          const src = row.dataset.src;
+          const title = row.dataset.title;
+          const artist = row.dataset.artist;
           this._addSpotlightTrack({ src, title, artist }, true);
         });
       });
 
+      // Clic en botón +: Añadir a la cola
       document.querySelectorAll('.vc-spot-add-queue').forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
           const src = btn.dataset.src;
           const title = btn.dataset.title;
           const artist = btn.dataset.artist;
           this._addSpotlightTrack({ src, title, artist }, false);
         });
       });
+
+      // Resolver portadas de canciones asíncronamente
+      this._resolvePendingArtwork();
     }
 
     tuneIntoSpotlightLive() {
@@ -2797,7 +2916,7 @@
       }
 
       if (!this.socket) {
-        this._showMusicError("Conéctate primero al canal de voz.");
+        this._toast("Únete al canal de voz primero para sintonizar en vivo", "info");
         return;
       }
       this._playSfx('toggleOn', 0.3);
@@ -2827,34 +2946,54 @@
       const tracks = this._getSpotlightTracks();
       const curTrack = (state && state.trackIndex >= 0 && tracks[state.trackIndex]) ? tracks[state.trackIndex] : tracks[0];
       if (curTrack) {
+        if (typeof window.stopSpotlightLocalPlayback === 'function') window.stopSpotlightLocalPlayback();
         this._addSpotlightTrack(curTrack, true);
         this._showMusicSuccess(`Reproduciendo ${curTrack.title} de Spotlight...`);
       }
     }
 
-    _addSpotlightTrack(track, playNow = false) {
-      if (!this.socket) return;
-      const fullUrl = new URL(track.src, document.baseURI).href;
+    async _addSpotlightTrack(track, playNow = false) {
+      if (!this.socket) {
+        this._toast('Únete al canal de voz primero para reproducir música con los demás', 'info');
+        return;
+      }
+      const fullUrl = track.src.startsWith('http') ? track.src : new URL(track.src, document.baseURI).href;
       const finalTitle = track.artist ? `${track.title} - ${track.artist}` : track.title;
+      const cover = this._getTrackArtwork(track);
 
-      const queueHandler = () => {
-        if (playNow && this._musicPlaying && this.socket) {
-          setTimeout(() => {
-            if (this.socket) this.socket.emit('music_skip');
-          }, 300);
-        }
-      };
-      this.socket.once('music_queue_update', queueHandler);
-      setTimeout(() => { this.socket.off('music_queue_update', queueHandler); }, 5000);
-
-      this.socket.emit('music_add', {
-        url: fullUrl,
-        title: finalTitle,
-        type: 'spotlight',
-        artist: track.artist || ''
-      });
       this._playSfx('toggleOn', 0.3);
-      this._musicSpotlightView = false;
+
+      if (playNow) {
+        this._showMusicSuccess(`Reproduciendo: ${track.title}`);
+        this._musicSpotlightView = false;
+
+        this.socket.emit('music_add', {
+          url: fullUrl,
+          title: finalTitle,
+          type: 'spotlight',
+          artist: track.artist || '',
+          cover: cover || null,
+          playNow: true
+        });
+
+        // Fallback for older signaling server: if no music starts in 500ms, resume
+        setTimeout(() => {
+          if (this.socket && !this._musicPlaying) {
+            this.socket.emit('music_resume');
+          }
+        }, 500);
+      } else {
+        this._showMusicSuccess(`Añadida a la cola: ${track.title}`);
+        this.socket.emit('music_add', {
+          url: fullUrl,
+          title: finalTitle,
+          type: 'spotlight',
+          artist: track.artist || '',
+          cover: cover || null,
+          playNow: false
+        });
+      }
+
       this._updateMusicUI();
     }
 
@@ -3027,17 +3166,17 @@
       }
 
       const audio = new Audio();
-      audio.crossOrigin = 'anonymous';
       audio.preload = 'auto';
       audio.volume = this.dnd ? 0 : (this._musicVolume / 100);
       this._audioPlayer = audio;
 
       audio.onended = () => this._onTrackEnded();
       audio.onerror = (e) => {
-        console.warn('[VC] Spotlight audio playback error:', e);
+        console.warn('[VC] Spotlight audio playback error:', e, audio.error);
+        this._toast('Error al reproducir audio de Spotlight', 'error');
       };
 
-      const fullUrl = new URL(src, document.baseURI).href;
+      const fullUrl = src.startsWith('http') ? src : new URL(src, document.baseURI).href;
       audio.src = fullUrl;
 
       if (seekTo > 0) {
@@ -3055,6 +3194,7 @@
       try {
         await audio.play();
         this._musicPlaying = true;
+        this._updateMusicUI();
       } catch (err) {
         console.warn('[VC] Spotlight autoplay blocked, waiting for interaction:', err);
         const resumeOnInteract = () => {
@@ -3083,6 +3223,7 @@
       } else if (track.type === 'spotlight' || track.type === 'audio' || track.source === 'spotlight') {
         await this._createAudioPlayer(track.url, seekTime);
         this._startMusicProgress();
+        this._updateMusicUI();
       }
     }
 
