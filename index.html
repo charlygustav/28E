@@ -239,7 +239,7 @@
     <!-- GSAP Core & ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-    <link rel="stylesheet" href="styles.css?v=1.0.9">
+    <link rel="stylesheet" href="styles.css?v=1.0.10">
     <script>
             (function () {
                 try {
@@ -18718,6 +18718,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }
 
+                const authMenu = document.getElementById('auth-menu');
+                if (authMenu) authMenu.classList.add('logged-in-view');
+
                 authMenuLoggedOut.classList.add('hidden');
                 authMenuLoggedOut.classList.remove('flex');
                 authMenuLoggedIn.classList.remove('hidden');
@@ -18745,6 +18748,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 authAvatar.classList.add('hidden');
                 authIcon.classList.remove('hidden');
                 authToggle.title = "Iniciar sesión";
+
+                const authMenu = document.getElementById('auth-menu');
+                if (authMenu) authMenu.classList.remove('logged-in-view');
 
                 const authMenuAvatar = document.getElementById('auth-menu-avatar');
                 const authMenuAvatarPh = document.getElementById('auth-menu-avatar-ph');

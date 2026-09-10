@@ -13233,12 +13233,12 @@ video {
   position: absolute !important;
   right: 0 !important;
   top: 100% !important;
-  margin-top: 18px !important;
-  width: 280px !important;
+  margin-top: 24px !important;
+  width: 320px !important;
   max-width: calc(100vw - 1.5rem) !important;
   z-index: 999 !important;
-  border-radius: 18px !important;
-  padding: 16px !important;
+  border-radius: 20px !important;
+  padding: 22px !important;
   box-sizing: border-box !important;
   background-color: #ffffff !important;
   color: #09090b !important;
@@ -13246,6 +13246,14 @@ video {
   box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.12), 0 4px 12px -2px rgba(0, 0, 0, 0.05) !important;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease !important;
   filter: none !important;
+}
+
+/* Solo en la ventana de cuenta (conectado) se aplica el tamaño compacto */
+#auth-menu:has(#auth-menu-logged-in:not(.hidden)),
+#auth-menu.logged-in-view {
+  width: 280px !important;
+  padding: 16px !important;
+  border-radius: 18px !important;
 }
 
 .dark #auth-menu {
@@ -13271,7 +13279,7 @@ video {
 #auth-menu-logged-out {
   display: flex !important;
   flex-direction: column !important;
-  gap: 16px !important;
+  gap: 20px !important;
 }
 #auth-menu-logged-out.hidden {
   display: none !important;
