@@ -8,19 +8,35 @@
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    }
+                }
+            }
+        };
+    </script>
     
-    <!-- Google Fonts: Inter -->
+    <!-- Google Fonts: Inter & Merriweather (exact matches with main site) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Merriweather:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
     
     <!-- GSAP & ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <style>
+        *, *::before, *::after, html, body, button, input, select, textarea {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
             background-color: #000000;
             color: #f4f4f5; /* zinc-100 */
             overflow-x: hidden;
@@ -133,17 +149,17 @@
 
                 <!-- Título y descripción (visible en PC) -->
                 <div class="hidden md:flex flex-col items-center mb-6">
-                    <h3 class="text-white text-lg sm:text-xl font-medium tracking-wide mb-1">28E Account</h3>
-                    <p class="text-xs sm:text-sm text-zinc-400 font-normal">Accede con tu cuenta verificada</p>
+                    <h3 class="text-white text-xl sm:text-2xl font-bold tracking-tight mb-1">28E Account</h3>
+                    <p class="text-sm text-zinc-400 font-normal tracking-tight">Accede con tu cuenta verificada</p>
                 </div>
 
                 <!-- Botón de autenticación Google / 28E Account -->
                 <div class="w-full max-w-[280px] sm:max-w-[300px]">
                     <button id="googleAuthBtn" onclick="handleGoogleAuthUnlock()"
-                        class="w-full py-3.5 px-5 rounded-2xl bg-white/[0.08] hover:bg-white/[0.14] active:bg-white/[0.22] border border-white/10 hover:border-white/20 transition-all duration-200 flex items-center justify-center gap-3 text-white/90 hover:text-white text-sm font-medium cursor-pointer shadow-sm group active:scale-[0.98]">
+                        class="w-full py-3 px-5 rounded-2xl bg-white/[0.08] hover:bg-white/[0.14] active:bg-white/[0.22] border border-white/10 hover:border-white/20 transition-all duration-200 flex items-center justify-center gap-3 text-white text-sm font-semibold cursor-pointer shadow-sm group active:scale-[0.98] tracking-tight">
                         <img id="googleAuthIcon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="w-4 h-4 object-contain">
                         <img id="googleAuthAvatar" src="" alt="Avatar" class="w-5 h-5 rounded-full object-cover hidden ring-1 ring-white/30">
-                        <span id="googleAuthText" class="tracking-tight truncate">Desbloquear con 28E Account</span>
+                        <span id="googleAuthText" class="tracking-tight truncate font-semibold">Desbloquear con 28E Account</span>
                     </button>
                 </div>
             </div>
@@ -158,7 +174,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                         </svg>
                     </div>
-                    <h2 class="text-white text-lg sm:text-xl font-medium tracking-wide mb-5 sm:mb-6" id="pinTitle">Ingresar código</h2>
+                    <h2 class="text-white text-xl sm:text-2xl font-bold tracking-tight mb-5 sm:mb-6" id="pinTitle">Ingresar código</h2>
                 </div>
                 
                 <!-- PIN Dots -->
@@ -171,24 +187,24 @@
 
                 <!-- Keypad -->
                 <div class="grid grid-cols-3 gap-x-6 sm:gap-x-7 gap-y-3 sm:gap-y-3.5 max-w-[280px] sm:max-w-[300px] lock-element">
-                    <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-light transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('1')">1</button>
-                    <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-light transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('2')">2</button>
-                    <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-light transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('3')">3</button>
-                    <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-light transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('4')">4</button>
-                    <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-light transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('5')">5</button>
-                    <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-light transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('6')">6</button>
-                    <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-light transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('7')">7</button>
-                    <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-light transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('8')">8</button>
-                    <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-light transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('9')">9</button>
+                    <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-normal tracking-tight transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('1')">1</button>
+                    <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-normal tracking-tight transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('2')">2</button>
+                    <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-normal tracking-tight transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('3')">3</button>
+                    <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-normal tracking-tight transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('4')">4</button>
+                    <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-normal tracking-tight transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('5')">5</button>
+                    <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-normal tracking-tight transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('6')">6</button>
+                    <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-normal tracking-tight transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('7')">7</button>
+                    <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-normal tracking-tight transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('8')">8</button>
+                    <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-normal tracking-tight transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('9')">9</button>
                     <div></div>
-                    <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-light transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('0')">0</button>
+                    <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-white/[0.08] active:bg-white/[0.22] text-white text-2xl sm:text-3xl font-normal tracking-tight transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="enterPin('0')">0</button>
                     <button class="pin-btn relative w-[66px] h-[66px] sm:w-[72px] sm:h-[72px] rounded-full bg-transparent active:bg-white/[0.1] text-white/80 transition-colors duration-150 flex items-center justify-center cursor-pointer select-none" ontouchstart="" onclick="deletePin()">
                         <svg class="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z"></path></svg>
                     </button>
                 </div>
 
                 <!-- Tip en PC -->
-                <p class="hidden md:block text-[11px] text-zinc-500 mt-4 font-mono">
+                <p class="hidden md:block text-xs text-zinc-500 mt-4 tracking-tight">
                     ⌨️ Puedes escribir el PIN con tu teclado
                 </p>
             </div>
