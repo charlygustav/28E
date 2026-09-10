@@ -220,14 +220,20 @@
 
     <!-- Gallery images load lazily — removed preloads to speed up critical path -->
 
+    <!-- ═══ PWA Manifest & Mobile App Capabilities ═══ -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#09090b">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="28E">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png">
+
     <!-- ═══ Blocking font load for loader screen ═══ -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Merriweather:ital@0;1&display=swap">
-    <meta name="theme-color" content="#09090b">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Yaire">
-    <link rel="apple-touch-icon" href="tulip.ico">
 
     <meta property="og:title" content="28E · Para Yaire 🌷" />
     <meta property="og:description"
@@ -4133,6 +4139,21 @@
                         class="menu-link-icon bg-white dark:bg-zinc-900 shadow-sm transition-transform duration-300 group-hover:scale-110">💌</span>
                     <span data-i18n="menu_secret">Bóveda Secreta</span>
                 </a>
+            </div>
+
+            <!-- PWA Install Button -->
+            <div class="mt-2 mb-1" id="pwa-install-container">
+                <button id="pwa-install-btn" onclick="installPWA()"
+                    class="w-full menu-link flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-amber-500/15 via-pink-500/10 to-transparent hover:from-amber-500/25 border border-amber-500/30 text-amber-500 dark:text-amber-400 group transition-all shadow-sm cursor-pointer">
+                    <div class="flex items-center gap-2.5">
+                        <span class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm shadow-inner group-hover:scale-110 transition-transform">📲</span>
+                        <div class="text-left leading-tight">
+                            <span class="block text-xs font-bold text-zinc-800 dark:text-white">Instalar Aplicación</span>
+                            <span class="block text-[10px] text-zinc-400 font-normal">28E App en pantalla completa</span>
+                        </div>
+                    </div>
+                    <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-500 text-black shadow-sm group-hover:bg-amber-400 transition-colors">Instalar</span>
+                </button>
             </div>
         </div>
 
@@ -19341,6 +19362,85 @@ document.addEventListener("DOMContentLoaded", () => {
             <span class="relative inline-flex rounded-full w-2.5 h-2.5 bg-pink-500 border border-zinc-900"></span>
         </div>
     </a>
+
+    <!-- ═══ PWA Service Worker & Installation Handler ═══ -->
+    <script>
+        (function () {
+            // 1. Registro del Service Worker
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function () {
+                    navigator.serviceWorker.register('./sw.js')
+                        .then(function (reg) {
+                            console.log('[PWA] ✅ Service Worker activo:', reg.scope);
+                            reg.addEventListener('updatefound', function () {
+                                var newWorker = reg.installing;
+                                if (newWorker) {
+                                    newWorker.addEventListener('statechange', function () {
+                                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                            console.log('[PWA] 🔄 Actualización de app lista.');
+                                        }
+                                    });
+                                }
+                            });
+                        })
+                        .catch(function (err) {
+                            console.warn('[PWA] ⚠️ Registro SW fallido:', err);
+                        });
+                });
+            }
+
+            // 2. Control de Instalación PWA (Android / Chrome / PC / iOS)
+            var deferredPrompt = null;
+            var installContainer = document.getElementById('pwa-install-container');
+            var isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                               window.navigator.standalone === true;
+            var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+            if (isStandalone) {
+                if (installContainer) installContainer.style.display = 'none';
+            } else {
+                window.addEventListener('beforeinstallprompt', function (e) {
+                    e.preventDefault();
+                    deferredPrompt = e;
+                    if (installContainer) installContainer.classList.remove('hidden');
+                });
+
+                // En iOS Safari no hay beforeinstallprompt, mostramos el botón con guía nativa
+                if (isIOS && installContainer) {
+                    installContainer.classList.remove('hidden');
+                }
+            }
+
+            window.installPWA = async function () {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    var choice = await deferredPrompt.userChoice;
+                    console.log('[PWA] Elección de instalación:', choice.outcome);
+                    deferredPrompt = null;
+                    if (choice.outcome === 'accepted' && installContainer) {
+                        installContainer.style.display = 'none';
+                    }
+                } else if (isIOS) {
+                    if (typeof window.showPremiumAlert === 'function') {
+                        window.showPremiumAlert('Instalar en iPhone / iPad', 'Toca el botón Compartir ⎋ abajo en Safari y selecciona "Añadir a pantalla de inicio" ➕', 'info');
+                    } else {
+                        alert('Para instalar en tu iPhone:\n1. Toca el botón Compartir ⎋ en Safari.\n2. Selecciona "Añadir a pantalla de inicio" ➕.');
+                    }
+                } else {
+                    if (typeof window.showPremiumAlert === 'function') {
+                        window.showPremiumAlert('Instalación PWA', 'Abre el menú de tu navegador (⋮) y pulsa "Instalar aplicación" 📲', 'info');
+                    } else {
+                        alert('Abre el menú de tu navegador y pulsa "Instalar aplicación" 📲');
+                    }
+                }
+            };
+
+            window.addEventListener('appinstalled', function () {
+                console.log('[PWA] 🎉 28E instalada.');
+                if (installContainer) installContainer.style.display = 'none';
+            });
+        })();
+    </script>
 
 </body>
 

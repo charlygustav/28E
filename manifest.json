@@ -1,0 +1,99 @@
+{
+  "id": "/28e-app",
+  "name": "28E · Para Yaire",
+  "short_name": "28E",
+  "description": "Para Yaire 🌷 — Mi lugar favorito es contigo. Plataforma interactiva con música, minijuegos y momentos especiales.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "orientation": "portrait",
+  "lang": "es",
+  "categories": [
+    "lifestyle",
+    "entertainment",
+    "social"
+  ],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Inicio",
+      "short_name": "Inicio",
+      "description": "Ir al inicio de 28E",
+      "url": "./index.html#hero",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Música Spotlight",
+      "short_name": "Música",
+      "description": "Escuchar música en Spotlight",
+      "url": "./index.html#universo",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Galería de Arte",
+      "short_name": "Galería",
+      "description": "Explorar las fotos y recuerdos",
+      "url": "./index.html#galeria",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Minijuegos",
+      "short_name": "Juegos",
+      "description": "Jugar minijuegos interactivos",
+      "url": "./index.html#minijuegos",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}
