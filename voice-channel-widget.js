@@ -392,6 +392,21 @@
       transform: translateY(20px) scale(0.9) !important;
     }
   }
+
+  /* Hide floating bar and widget elements when hamburger menu is open */
+  body.menu-is-open #vc-bar,
+  body.menu-is-open #vc-fab,
+  body.menu-is-open #vc-wrapper,
+  body:has(#drawer-overlay.open) #vc-bar,
+  body:has(#drawer-overlay:not(.hidden)) #vc-bar,
+  body:has(#menu-panel.open) #vc-bar,
+  body.menu-is-open #vc-panel,
+  body:has(#drawer-overlay.open) #vc-panel {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateY(20px) scale(0.9) !important;
+    visibility: hidden !important;
+  }
   `;
 
   // ── ICONS ─────────────────────────────────────────────────────────────────
@@ -658,6 +673,26 @@
       document.body.appendChild(this.panel);
       document.body.appendChild(this._bar);
 
+      // Hide connected floating bar immediately when hamburger menu / drawer is opened
+      const checkMenuState = () => {
+        const isMenuOpen = document.body.classList.contains('menu-is-open') ||
+                           document.querySelector('#drawer-overlay.open') !== null ||
+                           document.querySelector('#drawer-overlay:not(.hidden)') !== null ||
+                           document.querySelector('#menu-panel.open') !== null;
+        if (this._bar) {
+          if (isMenuOpen) {
+            this._bar.classList.add('opacity-0', 'pointer-events-none');
+            this._bar.classList.remove('opacity-100', 'pointer-events-auto');
+          } else if (this.connected && !this.panel.classList.contains('scale-100')) {
+            this._bar.classList.remove('opacity-0', 'pointer-events-none');
+            this._bar.classList.add('opacity-100', 'pointer-events-auto');
+          }
+        }
+      };
+
+      const bodyObserver = new MutationObserver(checkMenuState);
+      bodyObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
       this.panel.addEventListener('click', (e) => e.stopPropagation());
 
       document.addEventListener('keydown', (e) => {
@@ -808,8 +843,14 @@
         }
 
         if (this.connected) {
-          this._bar.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
-          this._bar.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+          const isMenuOpen = document.body.classList.contains('menu-is-open') || 
+                             document.querySelector('#drawer-overlay.open') !== null ||
+                             document.querySelector('#drawer-overlay:not(.hidden)') !== null ||
+                             document.querySelector('#menu-panel.open') !== null;
+          if (!isMenuOpen) {
+            this._bar.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+            this._bar.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+          }
         }
         this._playSfx('flyout', 0.4, false, 'fly');
       }
@@ -3520,6 +3561,10 @@
       this.muted = false;
       this.dnd = false;
       this.fab.classList.remove('connected');
+      if (this._bar) {
+        this._bar.classList.add('opacity-0', 'pointer-events-none');
+        this._bar.classList.remove('opacity-100', 'pointer-events-auto', 'show');
+      }
     }
 
     // ── ROBUST AUDIO PLAY (handles mobile autoplay restrictions) ──────────
@@ -3795,8 +3840,15 @@
         const barEl = document.getElementById('vc-bar-timer');
         if (el) el.textContent = str;
         if (barEl) barEl.textContent = str;
-        if (!this.panel.classList.contains('open') && this.connected) {
-          this._bar.classList.add('show');
+        if (!this.panel.classList.contains('scale-100') && this.connected) {
+          const isMenuOpen = document.body.classList.contains('menu-is-open') || 
+                             document.querySelector('#drawer-overlay.open') !== null ||
+                             document.querySelector('#drawer-overlay:not(.hidden)') !== null ||
+                             document.querySelector('#menu-panel.open') !== null;
+          if (!isMenuOpen) {
+            this._bar.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+            this._bar.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+          }
         }
       }, 1000);
     }

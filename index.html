@@ -505,12 +505,17 @@
         }
 
 
-        /* Voice widget hidden until loader completes */
-        #vc-fab {
-            transition: opacity 0.5s ease;
+        /* Voice widget hidden until loader completes or when menu is open */
+        #vc-fab, #vc-bar {
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
-        body:not(.page-ready) #vc-fab {
+        body:not(.page-ready) #vc-fab,
+        body:not(.page-ready) #vc-bar,
+        body.menu-is-open #vc-bar,
+        body.menu-is-open #vc-fab,
+        body:has(#drawer-overlay.open) #vc-bar,
+        body:has(#menu-panel.open) #vc-bar {
             opacity: 0 !important;
             pointer-events: none !important;
         }

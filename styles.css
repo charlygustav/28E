@@ -13563,6 +13563,7 @@ video {
 /* Floating Action Buttons transition & hide when menu or panels are open (PC and mobile) */
 #vc-fab,
 #vc-wrapper,
+#vc-bar,
 #premium-toast-container,
 #letter-fab,
 a[href="para-yaire.html"].fixed {
@@ -13571,9 +13572,15 @@ a[href="para-yaire.html"].fixed {
 
 body.menu-is-open #vc-fab,
 body.menu-is-open #vc-wrapper,
+body.menu-is-open #vc-bar,
 body.menu-is-open #premium-toast-container,
 body.menu-is-open #letter-fab,
 body.menu-is-open a[href="para-yaire.html"].fixed,
+body:has(#drawer-overlay.open) #vc-bar,
+body:has(#drawer-overlay:not(.hidden)) #vc-bar,
+body:has(#menu-panel.open) #vc-bar,
+body.menu-is-open #vc-panel,
+body:has(#drawer-overlay.open) #vc-panel,
 body.vc-open #letter-fab,
 body.vc-open a[href="para-yaire.html"].fixed,
 body.vc-is-open #letter-fab,
