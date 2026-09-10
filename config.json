@@ -13,7 +13,7 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-09-10T08:31:32.095Z",
+  "lastUpdated": "2026-09-10T08:38:28.191Z",
   "maintDate": "2026-09-10T05:30",
   "maintMsg": "",
   "maintScreen": "cinematic",
@@ -22,6 +22,11 @@
   "refugeText": "",
   "refugeTitle": "Te escucho, mi amor",
   "songs": [
+    {
+      "title": "Se Me Nota (Agarrame)",
+      "artist": "Chimbala, Omega",
+      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029480377_Chimbala_-_Se_Me_Nota__Agarrame___Prod_by_B-One_.mp3"
+    },
     {
       "title": "Flip The Coin",
       "artist": "Softable",
