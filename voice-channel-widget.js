@@ -63,7 +63,15 @@
       vc_person: "persona conectada",
       vc_persons: "personas conectadas",
       vc_tab_room: "Sala",
-      vc_hist_full: "Historial de Sesiones"
+      vc_hist_full: "Historial de Sesiones",
+      vc_spotlight_menu: "Menú Spotlight",
+      vc_spotlight_live: "Sintonizar en vivo",
+      vc_spotlight_title: "Canciones de Spotlight",
+      vc_spotlight_search_ph: "Buscar canción o artista…",
+      vc_spotlight_play_now: "Sonar",
+      vc_spotlight_add_queue: "Añadir a la cola",
+      vc_spotlight_back: "Volver a la cola",
+      vc_spotlight_live_hint: "Transmitiendo Spotlight en tiempo real"
     },
     en: {
       vc_title: "Voice Channel",
@@ -119,7 +127,15 @@
       vc_person: "person connected",
       vc_persons: "people connected",
       vc_tab_room: "Room",
-      vc_hist_full: "Session History"
+      vc_hist_full: "Session History",
+      vc_spotlight_menu: "Spotlight Menu",
+      vc_spotlight_live: "Tune in Live",
+      vc_spotlight_title: "Spotlight Songs",
+      vc_spotlight_search_ph: "Search song or artist…",
+      vc_spotlight_play_now: "Play",
+      vc_spotlight_add_queue: "Add to queue",
+      vc_spotlight_back: "Back to queue",
+      vc_spotlight_live_hint: "Streaming Spotlight in real-time"
     },
     pt: {
       vc_title: "Canal de Voz",
@@ -175,7 +191,15 @@
       vc_person: "pessoa conectada",
       vc_persons: "pessoas conectadas",
       vc_tab_room: "Sala",
-      vc_hist_full: "Histórico de Sessões"
+      vc_hist_full: "Histórico de Sessões",
+      vc_spotlight_menu: "Menu Spotlight",
+      vc_spotlight_live: "Sintonizar ao vivo",
+      vc_spotlight_title: "Músicas do Spotlight",
+      vc_spotlight_search_ph: "Buscar música ou artista…",
+      vc_spotlight_play_now: "Tocar",
+      vc_spotlight_add_queue: "Adicionar à fila",
+      vc_spotlight_back: "Voltar para a fila",
+      vc_spotlight_live_hint: "Transmitindo Spotlight em tempo real"
     },
     fr: {
       vc_title: "Canal Vocal",
@@ -231,7 +255,15 @@
       vc_person: "personne connectée",
       vc_persons: "personnes connectées",
       vc_tab_room: "Salon",
-      vc_hist_full: "Historique des Sessions"
+      vc_hist_full: "Historique des Sessions",
+      vc_spotlight_menu: "Menu Spotlight",
+      vc_spotlight_live: "Écouter en direct",
+      vc_spotlight_title: "Morceaux Spotlight",
+      vc_spotlight_search_ph: "Rechercher un titre ou artiste…",
+      vc_spotlight_play_now: "Écouter",
+      vc_spotlight_add_queue: "Ajouter à la file",
+      vc_spotlight_back: "Retour à la file",
+      vc_spotlight_live_hint: "Diffusion de Spotlight en direct"
     }
   };
 
@@ -392,6 +424,9 @@
       this._ytPlayer = null;
       this._ytApiLoading = false;
       this._ytApiCallbacks = [];
+      this._audioPlayer = null;
+      this._musicSpotlightView = false;
+      this._spotlightSearchQuery = '';
 
       // Audio constraints for getUserMedia
       this._audioConstraints = {
@@ -435,6 +470,8 @@
 
       // Precargar los archivos de audio para que suenen a la primera
       setTimeout(() => this._initAudio(), 500);
+
+      window.yaireVoiceChannel = this;
     }
 
     // ── CSS ────────────────────────────────────────────────────────────────
@@ -729,6 +766,18 @@
           this._bar.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
         }
         this._playSfx('flyout', 0.4, false, 'fly');
+      }
+    }
+
+    open() {
+      if (this.panel && !this.panel.classList.contains('scale-100')) {
+        this._toggle();
+      }
+    }
+
+    close() {
+      if (this.panel && this.panel.classList.contains('scale-100')) {
+        this._toggle();
       }
     }
 
@@ -1940,6 +1989,9 @@
       if (this._ytPlayer && typeof this._ytPlayer.setVolume === 'function') {
         this._ytPlayer.setVolume(this.dnd ? 0 : this._musicVolume);
       }
+      if (this._audioPlayer) {
+        this._audioPlayer.volume = this.dnd ? 0 : (this._musicVolume / 100);
+      }
       this.socket && this.socket.emit('dnd_state', { dnd: this.dnd });
       
       const btn = document.getElementById('vc-dnd');
@@ -2364,7 +2416,97 @@
       return c.trim();
     }
 
+    _getSpotlightTracks() {
+      if (typeof window.spotlightTracks !== 'undefined' && Array.isArray(window.spotlightTracks) && window.spotlightTracks.length > 0) {
+        return window.spotlightTracks;
+      }
+      return [
+        { title: "Bing Bong", artist: "Yailin la Mas Viral", src: "radio/Bing Bong - Yailin la Mas Viral - SpotubeDL.com.mp3" },
+        { title: "Brazilera - Remix", artist: "Chimbala", src: "radio/Brazilera - Remix - Chimbala - SpotubeDL.com.mp3" },
+        { title: "Como Panas", artist: "Bryant Myers", src: "radio/Como Panas - Bryant Myers - SpotubeDL.com.mp3" },
+        { title: "Delincuente", artist: "Tokischa", src: "radio/Delincuente - Tokischa - SpotubeDL.com.mp3" },
+        { title: "God is a woman", artist: "Ariana Grande", src: "radio/God is a woman - Ariana Grande - SpotubeDL.com.mp3" },
+        { title: "God's Plan", artist: "Drake", src: "radio/God's Plan - Drake - SpotubeDL.com.mp3" },
+        { title: "I Like It", artist: "Cardi B", src: "radio/I Like It - Cardi B - SpotubeDL.com.mp3" },
+        { title: "Inolvidable", artist: "Ovy On The Drums", src: "radio/Inolvidable - Ovy On The Drums - SpotubeDL.com.mp3" },
+        { title: "Oscar Winning Tears.", artist: "RAYE", src: "radio/Oscar Winning Tears. - RAYE - SpotubeDL.com.mp3" },
+        { title: "Pasao De Famarcia", artist: "Lil Naay", src: "radio/Pasao De Famarcia - Lil Naay - SpotubeDL.com.mp3" },
+        { title: "Thootie", artist: "Ice Spice ft. Tokischa", src: "radio/Thootie (feat. Tokischa) - Ice Spice - SpotubeDL.com.mp3" },
+        { title: "Toto Lindo", artist: "Huan62", src: "radio/Toto Lindo - Huan62 - SpotubeDL.com.mp3" },
+        { title: "Oro Fundido", artist: "Oblivion's Mighty Trash", src: "sounds/Oro Fundido - Oblivion's Mighty Trash - SpotubeDL.com.mp3" },
+        { title: "CRAZY (Live)", artist: "Otis McDonald", src: "sounds/Otis McDonald - CRAZY - Live (SPOTISAVER).mp3" },
+        { title: "O.Sky", artist: "Otis McDonald", src: "sounds/Otis McDonald - O.Sky.mp3" }
+      ];
+    }
+
+    _renderSpotlightCatalog() {
+      const tracks = this._getSpotlightTracks();
+      const q = (this._spotlightSearchQuery || '').toLowerCase().trim();
+      const filtered = q 
+        ? tracks.filter(t => (t.title && t.title.toLowerCase().includes(q)) || (t.artist && t.artist.toLowerCase().includes(q)))
+        : tracks;
+
+      return `
+        <div class="p-3 flex-1 flex flex-col h-full overflow-hidden">
+          <!-- Header con botón Volver -->
+          <div class="flex items-center justify-between mb-2.5 pb-2 border-b border-white/10 flex-shrink-0">
+            <button id="vc-spotlight-back-btn" class="flex items-center gap-1.5 text-xs text-amber-400 hover:text-amber-300 transition-colors font-semibold group cursor-pointer">
+              <svg class="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+              <span>${_t('vc_spotlight_back')}</span>
+            </button>
+            <div class="flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+              <span class="text-[10px] text-white/50 uppercase tracking-wider font-bold">Spotlight (${filtered.length})</span>
+            </div>
+          </div>
+
+          <!-- Buscador de canciones -->
+          <div class="mb-2 flex-shrink-0">
+            <div class="relative flex items-center">
+              <span class="absolute left-3 text-white/30 text-xs pointer-events-none">🔍</span>
+              <input id="vc-spotlight-search-input" type="text" placeholder="${_t('vc_spotlight_search_ph')}" value="${this._escHtml(this._spotlightSearchQuery || '')}"
+                class="w-full bg-black/40 border border-white/10 focus:border-amber-500/50 rounded-xl pl-8 pr-7 py-2 text-white text-xs outline-none transition-colors" autocomplete="off" />
+              ${this._spotlightSearchQuery ? `<button id="vc-spotlight-search-clear" class="absolute right-2.5 text-white/40 hover:text-white text-xs cursor-pointer">✕</button>` : ''}
+            </div>
+          </div>
+
+          <!-- Lista scrollable de canciones -->
+          <div class="flex-1 overflow-y-auto space-y-1.5 pr-0.5 max-h-[220px]" id="vc-spotlight-track-list">
+            ${filtered.length > 0 ? filtered.map((t) => `
+              <div class="flex items-center justify-between p-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/5 hover:border-amber-500/20 transition-all group">
+                <div class="flex items-center gap-2.5 min-w-0 flex-1 mr-2">
+                  <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-xs flex-shrink-0">
+                    🎵
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <div class="text-xs font-semibold text-white truncate group-hover:text-amber-300 transition-colors">${this._escHtml(t.title)}</div>
+                    <div class="text-[10px] text-white/40 truncate">${this._escHtml(t.artist || '28E')}</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 flex-shrink-0">
+                  <button class="vc-spot-add-queue px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 active:scale-95 text-white text-[11px] font-semibold transition-all flex items-center gap-1 cursor-pointer" data-src="${this._escHtml(t.src)}" data-title="${this._escHtml(t.title)}" data-artist="${this._escHtml(t.artist || '')}" title="${_t('vc_spotlight_add_queue')}">
+                    <span>+</span><span>Cola</span>
+                  </button>
+                  <button class="vc-spot-play-now px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 active:scale-95 text-black text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer shadow-sm" data-src="${this._escHtml(t.src)}" data-title="${this._escHtml(t.title)}" data-artist="${this._escHtml(t.artist || '')}" title="${_t('vc_spotlight_play_now')}">
+                    <span>▶</span><span>Sonar</span>
+                  </button>
+                </div>
+              </div>
+            `).join('') : `
+              <div class="text-center text-white/30 text-xs py-8">
+                No se encontraron canciones
+              </div>
+            `}
+          </div>
+        </div>
+      `;
+    }
+
     _renderMusicPanel() {
+      if (this._musicSpotlightView) {
+        return this._renderSpotlightCatalog();
+      }
+
       const track = this._musicCurrentTrack;
       const isPlaying = this._musicPlaying;
       let nowPlaying = '';
@@ -2372,21 +2514,34 @@
         let currentPct = 0;
         let cTimeFmt = '0:00';
         let tTimeFmt = '0:00';
+
+        const fmt = (secs) => {
+          if (!secs || isNaN(secs)) return '0:00';
+          const m = Math.floor(secs / 60);
+          const s = Math.floor(secs % 60);
+          return `${m}:${s < 10 ? '0'+s : s}`;
+        };
         
         if (track.type === 'youtube' && this._ytPlayer && typeof this._ytPlayer.getCurrentTime === 'function') {
           const cur = this._ytPlayer.getCurrentTime() || 0;
           const tot = this._ytPlayer.getDuration() || 0;
           if (tot > 0) currentPct = (cur / tot) * 100;
-          
-          const fmt = (secs) => {
-            if (!secs || isNaN(secs)) return '0:00';
-            const m = Math.floor(secs / 60);
-            const s = Math.floor(secs % 60);
-            return `${m}:${s < 10 ? '0'+s : s}`;
-          };
+          cTimeFmt = fmt(cur);
+          tTimeFmt = fmt(tot);
+        } else if ((track.type === 'spotlight' || track.type === 'audio') && this._audioPlayer) {
+          const cur = this._audioPlayer.currentTime || 0;
+          const tot = this._audioPlayer.duration || 0;
+          if (tot > 0) currentPct = (cur / tot) * 100;
           cTimeFmt = fmt(cur);
           tTimeFmt = fmt(tot);
         }
+
+        const isSpotlight = (track.source || track.type) === 'spotlight';
+        const isSpotify = (track.source || track.type) === 'spotify';
+        const badgeLabel = isSpotlight ? 'SPOTLIGHT' : (isSpotify ? 'SP' : 'YT');
+        const badgeStyle = isSpotlight 
+          ? 'bg-gradient-to-r from-amber-500/20 to-pink-500/20 text-amber-300 border border-amber-500/30'
+          : (isSpotify ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-white/10 text-white/50');
 
         const eqBars = isPlaying
           ? `<div class="flex items-end gap-0.5 h-3"><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite]"></div><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite_0.2s]"></div><div class="w-0.5 bg-amber-500 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite_0.4s]"></div></div>`
@@ -2408,12 +2563,12 @@
                 }
                 <div class="text-[10px] text-white/40 truncate">${track.addedByName ? `${_t('vc_music_by')} ${track.addedByName}` : ''}</div>
               </div>
-              <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-white/50">${(track.source || track.type) === 'youtube' ? 'YT' : 'SP'}</span>
+              <span class="text-[9px] font-bold px-1.5 py-0.5 rounded ${badgeStyle}">${badgeLabel}</span>
             </div>
             
-            ${track.type === 'youtube' ? `
+            ${track.type === 'youtube' || track.type === 'spotlight' || track.type === 'audio' ? `
               <div class="relative z-10 mb-3">
-                <div class="h-1 bg-black/50 rounded-full overflow-hidden relative" id="vc-music-progress">
+                <div class="h-1 bg-black/50 rounded-full overflow-hidden relative cursor-pointer" id="vc-music-progress" title="Saltar a posición">
                   <div class="absolute top-0 left-0 h-full bg-amber-500 transition-all duration-200" id="vc-music-progress-fill" style="width: ${currentPct}%"></div>
                 </div>
                 <div class="flex justify-between text-[9px] text-white/40 mt-1 font-mono">
@@ -2427,10 +2582,10 @@
             
             <div class="flex justify-between items-center relative z-10">
               <div class="flex items-center gap-2">
-                <button class="w-9 h-9 rounded-full bg-white text-black flex items-center justify-center hover:scale-105 transition-transform [&>svg]:w-4 [&>svg]:h-4 shadow-md" id="vc-music-playpause">
+                <button class="w-9 h-9 rounded-full bg-white text-black flex items-center justify-center hover:scale-105 transition-transform [&>svg]:w-4 [&>svg]:h-4 shadow-md cursor-pointer" id="vc-music-playpause">
                   ${isPlaying ? ICONS.pause : ICONS.play}
                 </button>
-                <button class="w-9 h-9 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors [&>svg]:w-4 [&>svg]:h-4" id="vc-music-skip">
+                <button class="w-9 h-9 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors [&>svg]:w-4 [&>svg]:h-4 cursor-pointer" id="vc-music-skip">
                   ${ICONS.skipFwd}
                 </button>
               </div>
@@ -2447,6 +2602,10 @@
       const queueItems = this._musicQueue.length > 0
         ? this._musicQueue.map((t, i) => {
             const isCur = i === this._musicState.currentIndex;
+            const isSpot = (t.source || t.type) === 'spotlight';
+            const isSp = (t.source || t.type) === 'spotify';
+            const qBadge = isSpot ? 'SPOTLIGHT' : (isSp ? 'SP' : 'YT');
+            const qBadgeStyle = isSpot ? 'bg-amber-500/20 text-amber-300' : 'bg-white/10 text-white/30';
             return `
             <div class="flex items-center gap-3 p-2 rounded-lg transition-colors ${isCur ? 'bg-amber-500/10 border border-amber-500/20' : 'hover:bg-white/5'}">
               <span class="w-4 text-center text-[10px] font-bold ${isCur ? 'text-amber-500' : 'text-white/30'}">${isCur && this._musicPlaying ? '♪' : (i + 1)}</span>
@@ -2454,8 +2613,8 @@
                 <div class="text-xs font-medium text-white truncate ${isCur ? 'text-amber-500' : ''}">${this._escHtml(this._cleanMusicTitle(t.title))}</div>
                 <div class="text-[10px] text-white/30 truncate">${t.addedByName || ''}</div>
               </div>
-              <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-white/30">${(t.source || t.type) === 'youtube' ? 'YT' : 'SP'}</span>
-              ${!isCur ? `<button class="vc-music-track-rm w-6 h-6 flex items-center justify-center text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded transition-colors [&>svg]:w-3 [&>svg]:h-3" data-track-id="${t.id}">${ICONS.trash}</button>` : ''}
+              <span class="text-[9px] font-bold px-1.5 py-0.5 rounded ${qBadgeStyle}">${qBadge}</span>
+              ${!isCur ? `<button class="vc-music-track-rm w-6 h-6 flex items-center justify-center text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded transition-colors [&>svg]:w-3 [&>svg]:h-3 cursor-pointer" data-track-id="${t.id}">${ICONS.trash}</button>` : ''}
             </div>`;
           }).join('')
         : `<div class="text-center text-white/20 text-xs py-4">${_t('vc_music_empty_q')}</div>`;
@@ -2463,13 +2622,29 @@
       return `
         <div class="p-3 flex-1 flex flex-col">
           ${nowPlaying}
+
+          <!-- Botones de Spotlight (Catálogo y En Vivo) -->
+          <div class="grid grid-cols-2 gap-2 mb-2">
+            <button id="vc-spotlight-open-btn" class="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] active:bg-white/[0.18] border border-white/10 text-white text-xs font-semibold transition-all cursor-pointer truncate">
+              <span class="text-amber-400 text-sm">🎵</span>
+              <span class="truncate">${_t('vc_spotlight_menu')}</span>
+            </button>
+            <button id="vc-spotlight-live-sync-btn" class="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-pink-500/20 hover:from-amber-500/30 hover:to-pink-500/30 active:scale-[0.98] border border-amber-500/30 text-amber-300 text-xs font-semibold transition-all cursor-pointer truncate">
+              <span class="relative flex h-2 w-2 flex-shrink-0">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+              </span>
+              <span class="truncate">${_t('vc_spotlight_live')}</span>
+            </button>
+          </div>
+
           <div class="text-[10px] text-white/30 font-bold uppercase tracking-wider mb-1 px-1">${_t('vc_music_queue')} ${this._musicQueue.length > 0 ? `(${this._musicQueue.length})` : ''}</div>
-          <div class="flex flex-col gap-1 mb-2" id="vc-music-queue">${queueItems}</div>
+          <div class="flex flex-col gap-1 mb-2 max-h-[120px] overflow-y-auto pr-0.5" id="vc-music-queue">${queueItems}</div>
           <div class="mt-auto pt-2">
             <div class="text-red-500 text-xs text-center mb-1 min-h-[16px]" id="vc-music-err"></div>
             <div class="flex gap-2">
               <input class="flex-1 bg-black/40 border border-white/10 rounded-xl px-3 py-2.5 text-white text-xs outline-none focus:border-amber-500/50 transition-colors" id="vc-music-url" type="text" placeholder="${_t('vc_music_ph')}" autocomplete="off"/>
-              <button class="bg-amber-500 text-black px-4 font-bold text-xs rounded-xl hover:bg-amber-400 transition-colors whitespace-nowrap" id="vc-music-add">+ ${_t('vc_music_add')}</button>
+              <button class="bg-amber-500 text-black px-4 font-bold text-xs rounded-xl hover:bg-amber-400 transition-colors whitespace-nowrap cursor-pointer" id="vc-music-add">+ ${_t('vc_music_add')}</button>
             </div>
           </div>
         </div>`;
@@ -2483,7 +2658,7 @@
         if (this._musicCurrentTrack?.type === 'spotify') {
           this._createSpotifyEmbed(this._musicCurrentTrack);
         }
-        if (this._musicPlaying && this._musicCurrentTrack?.type === 'youtube') {
+        if (this._musicPlaying && (this._musicCurrentTrack?.type === 'youtube' || this._musicCurrentTrack?.type === 'spotlight' || this._musicCurrentTrack?.type === 'audio')) {
           this._startMusicProgress();
         }
       }
@@ -2524,11 +2699,178 @@
         });
       });
       const progressBar = document.getElementById('vc-music-progress');
+      if (progressBar) {
+        progressBar.addEventListener('click', (e) => {
+          const rect = progressBar.getBoundingClientRect();
+          const clickX = e.clientX - rect.left;
+          const pct = Math.max(0, Math.min(1, clickX / rect.width));
+          let duration = 0;
+          if (this._ytPlayer && typeof this._ytPlayer.getDuration === 'function') {
+            duration = this._ytPlayer.getDuration();
+          } else if (this._audioPlayer && this._audioPlayer.duration) {
+            duration = this._audioPlayer.duration;
+          }
+          if (duration > 0) {
+            const seekTime = pct * duration;
+            if (this.socket) this.socket.emit('music_seek', { time: seekTime });
+            this._seekMusic(seekTime);
+          }
+        });
+      }
       const volSlider = document.getElementById('vc-music-vol-slider');
       if (volSlider) {
         volSlider.addEventListener('input', (e) => {
           this._setMusicVolume(e.target.value);
         });
+      }
+
+      // Spotlight buttons
+      const spotOpenBtn = document.getElementById('vc-spotlight-open-btn');
+      if (spotOpenBtn) {
+        spotOpenBtn.addEventListener('click', () => {
+          this._musicSpotlightView = true;
+          this._updateMusicUI();
+        });
+      }
+
+      const spotBackBtn = document.getElementById('vc-spotlight-back-btn');
+      if (spotBackBtn) {
+        spotBackBtn.addEventListener('click', () => {
+          this._musicSpotlightView = false;
+          this._updateMusicUI();
+        });
+      }
+
+      const spotLiveBtn = document.getElementById('vc-spotlight-live-sync-btn');
+      if (spotLiveBtn) {
+        spotLiveBtn.addEventListener('click', () => this.tuneIntoSpotlightLive());
+      }
+
+      const spotSearchInput = document.getElementById('vc-spotlight-search-input');
+      if (spotSearchInput) {
+        spotSearchInput.addEventListener('input', (e) => {
+          this._spotlightSearchQuery = e.target.value;
+          const body = document.getElementById('vc-music-inner');
+          if (body) {
+            body.innerHTML = this._renderMusicPanel();
+            this._bindMusicEvents();
+            const inputAgain = document.getElementById('vc-spotlight-search-input');
+            if (inputAgain) {
+              inputAgain.focus();
+              inputAgain.selectionStart = inputAgain.selectionEnd = inputAgain.value.length;
+            }
+          }
+        });
+      }
+
+      const spotSearchClear = document.getElementById('vc-spotlight-search-clear');
+      if (spotSearchClear) {
+        spotSearchClear.addEventListener('click', () => {
+          this._spotlightSearchQuery = '';
+          this._updateMusicUI();
+        });
+      }
+
+      document.querySelectorAll('.vc-spot-play-now').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const src = btn.dataset.src;
+          const title = btn.dataset.title;
+          const artist = btn.dataset.artist;
+          this._addSpotlightTrack({ src, title, artist }, true);
+        });
+      });
+
+      document.querySelectorAll('.vc-spot-add-queue').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const src = btn.dataset.src;
+          const title = btn.dataset.title;
+          const artist = btn.dataset.artist;
+          this._addSpotlightTrack({ src, title, artist }, false);
+        });
+      });
+    }
+
+    tuneIntoSpotlightLive() {
+      this.open();
+      if (this.connected) {
+        this._doSwitchTab('music');
+      }
+
+      if (!this.socket) {
+        this._showMusicError("Conéctate primero al canal de voz.");
+        return;
+      }
+      this._playSfx('toggleOn', 0.3);
+
+      const state = typeof window.getSpotlightCurrentState === 'function' ? window.getSpotlightCurrentState() : null;
+
+      if (state && state.isPlaying) {
+        if (state.mode === 'radio' && state.radioState) {
+          const r = state.radioState;
+          if (typeof window.stopSpotlightLocalPlayback === 'function') window.stopSpotlightLocalPlayback();
+          this._addSpotlightTrack({
+            src: r.src,
+            title: r.title || 'Spotlight Radio',
+            artist: r.artist || 'Live Broadcast'
+          }, true);
+          this._showMusicSuccess(`Sintonizando ${r.title || 'Radio'} en vivo...`);
+          return;
+        } else if (state.track) {
+          const t = state.track;
+          if (typeof window.stopSpotlightLocalPlayback === 'function') window.stopSpotlightLocalPlayback();
+          this._addSpotlightTrack(t, true);
+          this._showMusicSuccess(`Sintonizando ${t.title} en vivo...`);
+          return;
+        }
+      }
+
+      const tracks = this._getSpotlightTracks();
+      const curTrack = (state && state.trackIndex >= 0 && tracks[state.trackIndex]) ? tracks[state.trackIndex] : tracks[0];
+      if (curTrack) {
+        this._addSpotlightTrack(curTrack, true);
+        this._showMusicSuccess(`Reproduciendo ${curTrack.title} de Spotlight...`);
+      }
+    }
+
+    _addSpotlightTrack(track, playNow = false) {
+      if (!this.socket) return;
+      const fullUrl = new URL(track.src, document.baseURI).href;
+      const finalTitle = track.artist ? `${track.title} - ${track.artist}` : track.title;
+
+      const queueHandler = () => {
+        if (playNow && this._musicPlaying && this.socket) {
+          setTimeout(() => {
+            if (this.socket) this.socket.emit('music_skip');
+          }, 300);
+        }
+      };
+      this.socket.once('music_queue_update', queueHandler);
+      setTimeout(() => { this.socket.off('music_queue_update', queueHandler); }, 5000);
+
+      this.socket.emit('music_add', {
+        url: fullUrl,
+        title: finalTitle,
+        type: 'spotlight',
+        artist: track.artist || ''
+      });
+      this._playSfx('toggleOn', 0.3);
+      this._musicSpotlightView = false;
+      this._updateMusicUI();
+    }
+
+    _showMusicSuccess(msg) {
+      const err = document.getElementById('vc-music-err');
+      if (err) {
+        err.innerHTML = `<span class="text-amber-400 font-semibold flex items-center justify-center gap-1">✨ ${this._escHtml(msg)}</span>`;
+        setTimeout(() => { if (err.textContent.includes(msg)) err.innerHTML = ''; }, 4000);
+      }
+    }
+
+    _showMusicError(msg) {
+      const err = document.getElementById('vc-music-err');
+      if (err) {
+        err.textContent = msg;
+        setTimeout(() => { if (err.textContent === msg) err.textContent = ''; }, 3000);
       }
     }
 
@@ -2555,7 +2897,9 @@
 
       try {
         let finalTitle = '';
-        if (parsed.type === 'youtube') {
+        if (parsed.type === 'spotlight') {
+          finalTitle = parsed.title || 'Spotlight Track';
+        } else if (parsed.type === 'youtube') {
           if (errEl) errEl.innerHTML = `<span class="text-amber-500 flex items-center justify-center gap-1.5"><span class="w-2 h-2 rounded-full border border-amber-500 border-t-transparent animate-spin inline-block"></span> Cargando…</span>`;
           try { finalTitle = await this._fetchMusicTitle(parsed.url, 'youtube'); } catch(e) {}
           finalTitle = finalTitle || 'YouTube Video';
@@ -2571,7 +2915,10 @@
         }
 
         // The server will do the Spotify -> YouTube conversion
-        if (errEl) errEl.innerHTML = `<span class="text-amber-500 flex items-center justify-center gap-1.5"><span class="w-2 h-2 rounded-full border border-amber-500 border-t-transparent animate-spin inline-block"></span> ${parsed.type === 'spotify' ? 'Buscando en YouTube…' : 'Añadiendo…'}</span>`;
+        if (errEl) {
+          const loadingMsg = parsed.type === 'spotify' ? 'Buscando en YouTube…' : (parsed.type === 'spotlight' ? 'Añadiendo de Spotlight…' : 'Añadiendo…');
+          errEl.innerHTML = `<span class="text-amber-500 flex items-center justify-center gap-1.5"><span class="w-2 h-2 rounded-full border border-amber-500 border-t-transparent animate-spin inline-block"></span> ${loadingMsg}</span>`;
+        }
 
         if (this.socket) {
           const queueHandler = () => {
@@ -2602,12 +2949,32 @@
     }
 
     _parseMusicUrl(url) {
+      if (!url) return null;
       const ytRegex = /(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/)|youtu\.be\/|music\.youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/;
       const ytMatch = url.match(ytRegex);
       if (ytMatch) return { type: 'youtube', id: ytMatch[1], url: `https://www.youtube.com/watch?v=${ytMatch[1]}` };
       const spRegex = /open\.spotify\.com\/.*?(track|album|playlist)\/([a-zA-Z0-9]+)/;
       const spMatch = url.match(spRegex);
       if (spMatch) return { type: 'spotify', spotifyType: spMatch[1], id: spMatch[2], url: `https://open.spotify.com/${spMatch[1]}/${spMatch[2]}` };
+
+      // Direct audio file or relative radio/sounds URL
+      if (url.endsWith('.mp3') || url.includes('radio/') || url.includes('sounds/')) {
+        const full = new URL(url, document.baseURI).href;
+        return { type: 'spotlight', url: full, title: url.split('/').pop().replace(/\.mp3$/i, '') };
+      }
+
+      // Match by song title or artist from Spotlight catalog
+      const spotlightSongs = this._getSpotlightTracks();
+      const q = url.toLowerCase().trim();
+      const match = spotlightSongs.find(t => 
+        (t.title && t.title.toLowerCase().includes(q)) || 
+        (t.artist && t.artist.toLowerCase().includes(q))
+      );
+      if (match) {
+        const full = new URL(match.src, document.baseURI).href;
+        return { type: 'spotlight', url: full, title: `${match.title} - ${match.artist || 'Spotlight'}` };
+      }
+
       return null;
     }
 
@@ -2638,10 +3005,67 @@
       if (!this._musicCurrentTrack || !this.socket) return;
       if (this._musicPlaying) {
         let currentTime = 0;
-        if (this._ytPlayer && typeof this._ytPlayer.getCurrentTime === 'function') currentTime = this._ytPlayer.getCurrentTime();
+        if (this._ytPlayer && typeof this._ytPlayer.getCurrentTime === 'function') {
+          currentTime = this._ytPlayer.getCurrentTime();
+        } else if (this._audioPlayer) {
+          currentTime = this._audioPlayer.currentTime || 0;
+        }
         this.socket.emit('music_pause', { currentTime });
       } else {
         this.socket.emit('music_resume');
+      }
+    }
+
+    async _createAudioPlayer(src, seekTo = 0) {
+      if (this._audioPlayer) {
+        try {
+          this._audioPlayer.pause();
+          this._audioPlayer.src = '';
+          this._audioPlayer.load();
+        } catch (e) {}
+        this._audioPlayer = null;
+      }
+
+      const audio = new Audio();
+      audio.crossOrigin = 'anonymous';
+      audio.preload = 'auto';
+      audio.volume = this.dnd ? 0 : (this._musicVolume / 100);
+      this._audioPlayer = audio;
+
+      audio.onended = () => this._onTrackEnded();
+      audio.onerror = (e) => {
+        console.warn('[VC] Spotlight audio playback error:', e);
+      };
+
+      const fullUrl = new URL(src, document.baseURI).href;
+      audio.src = fullUrl;
+
+      if (seekTo > 0) {
+        const applySeek = () => {
+          try {
+            if (audio.duration && seekTo < audio.duration) {
+              audio.currentTime = seekTo;
+            }
+          } catch(e) {}
+        };
+        audio.addEventListener('loadedmetadata', applySeek, { once: true });
+        audio.addEventListener('canplay', applySeek, { once: true });
+      }
+
+      try {
+        await audio.play();
+        this._musicPlaying = true;
+      } catch (err) {
+        console.warn('[VC] Spotlight autoplay blocked, waiting for interaction:', err);
+        const resumeOnInteract = () => {
+          if (this._audioPlayer && this._musicPlaying) {
+            this._audioPlayer.play().catch(() => {});
+          }
+          window.removeEventListener('click', resumeOnInteract);
+          window.removeEventListener('touchstart', resumeOnInteract);
+        };
+        window.addEventListener('click', resumeOnInteract, { once: true });
+        window.addEventListener('touchstart', resumeOnInteract, { once: true });
       }
     }
 
@@ -2656,12 +3080,16 @@
           await this._createYTPlayer(ytId, seekTime);
           this._startMusicProgress();
         }
+      } else if (track.type === 'spotlight' || track.type === 'audio' || track.source === 'spotlight') {
+        await this._createAudioPlayer(track.url, seekTime);
+        this._startMusicProgress();
       }
     }
 
     _pauseMusic() {
       this._musicPlaying = false;
       if (this._ytPlayer && typeof this._ytPlayer.pauseVideo === 'function') this._ytPlayer.pauseVideo();
+      if (this._audioPlayer) this._audioPlayer.pause();
       this._stopMusicProgress();
       this._updateMusicUI();
     }
@@ -2669,6 +3097,7 @@
     _resumeMusic() {
       this._musicPlaying = true;
       if (this._ytPlayer && typeof this._ytPlayer.playVideo === 'function') this._ytPlayer.playVideo();
+      if (this._audioPlayer) this._audioPlayer.play().catch(e => console.warn('[VC] audio resume error:', e));
       this._startMusicProgress();
       this._updateMusicUI();
     }
@@ -2683,6 +3112,9 @@
 
     _seekMusic(time) {
       if (this._ytPlayer && typeof this._ytPlayer.seekTo === 'function') this._ytPlayer.seekTo(time, true);
+      if (this._audioPlayer) {
+        try { this._audioPlayer.currentTime = time; } catch (e) {}
+      }
     }
 
     _setMusicVolume(vol) {
@@ -2693,6 +3125,9 @@
         if (v > 0 && typeof this._ytPlayer.unMute === 'function') {
           this._ytPlayer.unMute();
         }
+      }
+      if (this._audioPlayer) {
+        this._audioPlayer.volume = this.dnd ? 0 : (v / 100);
       }
     }
 
@@ -2775,17 +3210,32 @@
     _startMusicProgress() {
       this._stopMusicProgress();
       this._musicProgressInt = setInterval(() => {
-        if (!this._musicPlaying || !this._ytPlayer) return;
-        if (typeof this._ytPlayer.getCurrentTime !== 'function') return;
-        const current = this._ytPlayer.getCurrentTime();
-        const duration = this._ytPlayer.getDuration();
+        if (!this._musicPlaying) return;
+        let current = 0;
+        let duration = 0;
+
+        if (this._ytPlayer && typeof this._ytPlayer.getCurrentTime === 'function') {
+          current = this._ytPlayer.getCurrentTime() || 0;
+          duration = this._ytPlayer.getDuration() || 0;
+        } else if (this._audioPlayer) {
+          current = this._audioPlayer.currentTime || 0;
+          duration = this._audioPlayer.duration || 0;
+        } else {
+          return;
+        }
+
         const fill = document.getElementById('vc-music-progress-fill');
         const timeCurrent = document.getElementById('vc-music-time-current');
         const timeTotal = document.getElementById('vc-music-time-total');
-        if (fill && duration > 0) fill.style.width = ((current / duration) * 100) + '%';
-        const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+        if (fill && duration > 0) fill.style.width = Math.min(100, ((current / duration) * 100)) + '%';
+        const fmt = (s) => {
+          if (!s || isNaN(s)) return '0:00';
+          const m = Math.floor(s / 60);
+          const sec = Math.floor(s % 60);
+          return `${m}:${sec < 10 ? '0' + sec : sec}`;
+        };
         if (timeCurrent) timeCurrent.textContent = fmt(current);
-        if (timeTotal) timeTotal.textContent = fmt(duration);
+        if (timeTotal && duration > 0) timeTotal.textContent = fmt(duration);
       }, 500);
     }
 
@@ -2796,6 +3246,14 @@
     _destroyMusicPlayer() {
       this._stopMusicProgress();
       if (this._ytPlayer) { try { this._ytPlayer.destroy(); } catch(e) {} this._ytPlayer = null; }
+      if (this._audioPlayer) {
+        try {
+          this._audioPlayer.pause();
+          this._audioPlayer.src = '';
+          this._audioPlayer.load();
+        } catch (e) {}
+        this._audioPlayer = null;
+      }
       const container = document.getElementById('vc-yt-container');
       if (container) container.innerHTML = '';
     }
@@ -3125,9 +3583,9 @@
 
   // ── INIT ─────────────────────────────────────────────────────────────────
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new VoiceChannel());
+    document.addEventListener('DOMContentLoaded', () => { window.yaireVoiceChannel = new VoiceChannel(); });
   } else {
-    new VoiceChannel();
+    window.yaireVoiceChannel = new VoiceChannel();
   }
 
 })();
