@@ -259,6 +259,18 @@
                 } catch (e) {
                     window.__PERF_LITE__ = false;
                 }
+
+                // Limpieza automática de hash #top para mantener URL super limpia
+                try {
+                    if (window.location.hash === '#top' || window.location.hash === '#top/') {
+                        history.replaceState(null, '', window.location.pathname + window.location.search);
+                    }
+                    window.addEventListener('hashchange', function () {
+                        if (window.location.hash === '#top' || window.location.hash === '#top/') {
+                            history.replaceState(null, '', window.location.pathname + window.location.search);
+                        }
+                    });
+                } catch (e) {}
             })();
     </script>
     <script>
@@ -5340,7 +5352,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
-                <a href="#top" onclick="if(window.scrollY > 50) { AudioManager.play('inicio.wav', 0.8); }"
+                <a href="javascript:void(0)" onclick="window.scrollTo({ top: 0, behavior: 'smooth' }); if(window.scrollY > 50) { AudioManager.play('inicio.wav', 0.8); } if(window.location.hash) { history.replaceState(null, '', window.location.pathname + window.location.search); }"
                     class="font-extrabold text-2xl tracking-tighter text-zinc-900 dark:text-white hover:text-brand-500 dark:hover:text-brand-400 transition-colors cursor-pointer select-none">28E</a>
             </div>
             <div class="flex items-center gap-2">
