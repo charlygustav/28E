@@ -306,13 +306,11 @@
 
   /* Modern participant group & row styles */
   .vc-users-group {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+    border: none !important;
     border-radius: 1.125rem;
     overflow: hidden;
-    box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.35);
   }
   .vc-user {
     position: relative;
@@ -331,7 +329,7 @@
     left: 4.1rem;
     right: 0.85rem;
     height: 1px;
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.04);
     pointer-events: none;
   }
   @media (hover: hover) {
@@ -375,8 +373,8 @@
     }
     .vc-users-group {
       border-radius: 1.25rem;
-      border-color: rgba(255, 255, 255, 0.09);
-      background: rgba(255, 255, 255, 0.035);
+      background: rgba(255, 255, 255, 0.04);
+      border: none !important;
     }
     .vc-user {
       padding: 0.85rem 1rem;
@@ -1101,17 +1099,17 @@
           ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" class="w-full h-full rounded-full object-cover" draggable="false" />` 
           : initials;
 
-        const micIcon = (isMuted || u.localMuted) ? `<span class="flex items-center justify-center w-6 h-6 rounded-lg bg-red-500/15 border border-red-500/25 text-red-400 vc-mico" title="${u.localMuted ? 'Silenciado localmente' : 'Silenciado'}"><span class="w-3.5 h-3.5 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5">${ICONS.micOff}</span></span>` : '';
-        const bellIcon = isDnd ? `<span class="flex items-center justify-center w-6 h-6 rounded-lg bg-purple-500/15 border border-purple-500/25 text-purple-400 vc-dico" title="${_t('btn_dnd')}"><span class="w-3.5 h-3.5 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5">${ICONS.dnd}</span></span>` : '';
+        const micIcon = (isMuted || u.localMuted) ? `<span class="flex items-center justify-center w-6 h-6 rounded-lg bg-red-500/15 text-red-400 vc-mico" title="${u.localMuted ? 'Silenciado localmente' : 'Silenciado'}"><span class="w-3.5 h-3.5 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5">${ICONS.micOff}</span></span>` : '';
+        const bellIcon = isDnd ? `<span class="flex items-center justify-center w-6 h-6 rounded-lg bg-purple-500/15 text-purple-400 vc-dico" title="${_t('btn_dnd')}"><span class="w-3.5 h-3.5 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5">${ICONS.dnd}</span></span>` : '';
 
         return `
           <div class="flex items-center gap-3.5 px-3.5 py-3 vc-user group select-none transition-colors" id="vc-u-${u.id}">
-            <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold transition-all relative border-2 ${isMe ? 'border-amber-500/40 bg-amber-500/20 text-amber-400' : 'border-pink-500/40 bg-pink-500/20 text-pink-400'} vc-av" id="vc-av-${u.id}">
+            <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold transition-all relative border-2 border-transparent ${isMe ? 'bg-amber-500/20 text-amber-400' : 'bg-pink-500/20 text-pink-400'} vc-av" id="vc-av-${u.id}">
               ${avatarHtml}
             </div>
             <div class="flex-1 min-w-0 flex items-center gap-2">
               <div class="text-white text-sm font-medium truncate">${u.displayName}</div>
-              ${isMe ? `<span class="text-[10px] font-semibold tracking-wider uppercase px-1.5 py-0.5 rounded-md bg-amber-500/15 text-amber-400 border border-amber-500/25 flex-shrink-0">${_t('tag_you')}</span>` : ''}
+              ${isMe ? `<span class="text-[10px] font-medium tracking-wide text-amber-400/90 bg-amber-500/15 px-2 py-0.5 rounded-full flex-shrink-0">${_t('tag_you')}</span>` : ''}
               <div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.6)] flex-shrink-0 transition-colors duration-300" id="vc-ping-${u.id}" title="Conexión excelente"></div>
             </div>
             <div class="flex items-center gap-1.5 pr-0.5 opacity-100 vc-icons-container">
@@ -1121,7 +1119,7 @@
       }).join('');
 
       const userRowsHtml = this.users.length > 0
-        ? `<div class="vc-users-group bg-white/[0.03] border border-white/[0.08] rounded-2xl overflow-hidden shadow-sm backdrop-blur-md" id="vc-users-group">
+        ? `<div class="vc-users-group bg-white/[0.04] rounded-2xl overflow-hidden shadow-sm" id="vc-users-group">
             ${userRows}
            </div>`
         : `<div class="text-center text-white/20 text-xs py-8 vc-empty">${_t('empty_chan')}</div>`;
@@ -1264,7 +1262,7 @@
       if (!usersGroup) {
         usersGroup = document.createElement('div');
         usersGroup.id = 'vc-users-group';
-        usersGroup.className = 'vc-users-group bg-white/[0.03] border border-white/[0.08] rounded-2xl overflow-hidden shadow-sm backdrop-blur-md';
+        usersGroup.className = 'vc-users-group bg-white/[0.04] rounded-2xl overflow-hidden shadow-sm';
         const lbl = container.querySelector('.vc-sect-lbl');
         if (lbl) lbl.insertAdjacentElement('afterend', usersGroup);
         else container.appendChild(usersGroup);
@@ -1286,12 +1284,12 @@
             : u.displayName.slice(0, 2).toUpperCase();
             
           node.innerHTML = `
-            <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold transition-all relative border-2 ${isMe ? 'border-amber-500/40 bg-amber-500/20 text-amber-400' : 'border-pink-500/40 bg-pink-500/20 text-pink-400'} vc-av" id="vc-av-${u.id}">
+            <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold transition-all relative border-2 border-transparent ${isMe ? 'bg-amber-500/20 text-amber-400' : 'bg-pink-500/20 text-pink-400'} vc-av" id="vc-av-${u.id}">
               ${avatarHtml}
             </div>
             <div class="flex-1 min-w-0 flex items-center gap-2">
               <div class="text-white text-sm font-medium truncate">${u.displayName}</div>
-              ${isMe ? `<span class="text-[10px] font-semibold tracking-wider uppercase px-1.5 py-0.5 rounded-md bg-amber-500/15 text-amber-400 border border-amber-500/25 flex-shrink-0">${_t('tag_you')}</span>` : ''}
+              ${isMe ? `<span class="text-[10px] font-medium tracking-wide text-amber-400/90 bg-amber-500/15 px-2 py-0.5 rounded-full flex-shrink-0">${_t('tag_you')}</span>` : ''}
               <div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.6)] flex-shrink-0 transition-colors duration-300" id="vc-ping-${u.id}" title="Conexión excelente"></div>
             </div>
             <div class="flex items-center gap-1.5 pr-0.5 opacity-100 vc-icons-container">
@@ -1320,7 +1318,7 @@
         
         const existingDnd = iconContainer.querySelector('.vc-dico');
         if (isDnd && !existingDnd) {
-          const dndHtml = `<span class="flex items-center justify-center w-6 h-6 rounded-lg bg-purple-500/15 border border-purple-500/25 text-purple-400 vc-dico" title="${_t('btn_dnd')}"><span class="w-3.5 h-3.5 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5">${ICONS.dnd}</span></span>`;
+          const dndHtml = `<span class="flex items-center justify-center w-6 h-6 rounded-lg bg-purple-500/15 text-purple-400 vc-dico" title="${_t('btn_dnd')}"><span class="w-3.5 h-3.5 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5">${ICONS.dnd}</span></span>`;
           const mico = iconContainer.querySelector('.vc-mico');
           if (mico) mico.insertAdjacentHTML('beforebegin', dndHtml);
           else iconContainer.insertAdjacentHTML('beforeend', dndHtml);
@@ -1330,7 +1328,7 @@
         
         const existingMic = iconContainer.querySelector('.vc-mico');
         if ((isMuted || u.localMuted) && !existingMic) {
-          const micHtml = `<span class="flex items-center justify-center w-6 h-6 rounded-lg bg-red-500/15 border border-red-500/25 text-red-400 vc-mico" title="${u.localMuted ? 'Silenciado localmente' : 'Silenciado'}"><span class="w-3.5 h-3.5 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5">${ICONS.micOff}</span></span>`;
+          const micHtml = `<span class="flex items-center justify-center w-6 h-6 rounded-lg bg-red-500/15 text-red-400 vc-mico" title="${u.localMuted ? 'Silenciado localmente' : 'Silenciado'}"><span class="w-3.5 h-3.5 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5">${ICONS.micOff}</span></span>`;
           iconContainer.insertAdjacentHTML('beforeend', micHtml);
         } else if (!isMuted && !u.localMuted && existingMic) {
           existingMic.remove();
