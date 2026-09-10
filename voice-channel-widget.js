@@ -299,10 +299,50 @@
   @keyframes vc-eq { 0%,100%{height:3px} 50%{height:12px} }
   .vc-scroll::-webkit-scrollbar { width:4px; }
   .vc-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
-  .vc-av.speaking { border-color: #10B981 !important; box-shadow: 0 0 12px rgba(16, 185, 129, 0.4); animation: vc-speak-pulse 1.5s infinite; }
+  .vc-av.speaking { border-color: #10B981 !important; box-shadow: 0 0 14px rgba(16, 185, 129, 0.45); animation: vc-speak-pulse 1.5s infinite; }
   @keyframes vc-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
   .vc-marquee-container { display: flex; overflow: hidden; white-space: nowrap; mask-image: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent); width: 100%; }
   .vc-marquee-content { flex-shrink: 0; animation: vc-marquee 12s linear infinite; padding-right: 2rem; }
+
+  /* Modern participant group & row styles */
+  .vc-users-group {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.125rem;
+    overflow: hidden;
+    box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .vc-user {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.75rem 0.95rem;
+    transition: background-color 0.15s ease;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .vc-user:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 4.1rem;
+    right: 0.85rem;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    pointer-events: none;
+  }
+  @media (hover: hover) {
+    .vc-user:hover {
+      background-color: rgba(255, 255, 255, 0.045);
+    }
+  }
+  .vc-user:active {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
   @media (max-width: 768px) {
     .vc-panel-base {
       bottom: 0 !important;
@@ -332,6 +372,14 @@
     .vc-main-content {
        height: auto !important;
        flex: 1 !important;
+    }
+    .vc-users-group {
+      border-radius: 1.25rem;
+      border-color: rgba(255, 255, 255, 0.09);
+      background: rgba(255, 255, 255, 0.035);
+    }
+    .vc-user {
+      padding: 0.85rem 1rem;
     }
     body.vc-open #letter-fab,
     body.vc-open a[href="para-yaire.html"].fixed,
@@ -1053,23 +1101,30 @@
           ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" class="w-full h-full rounded-full object-cover" draggable="false" />` 
           : initials;
 
-        const micIcon = isMuted ? `<span class="text-red-500 w-4 h-4 vc-mico">${ICONS.micOff}</span>` : '';
-        const bellIcon = isDnd ? `<span class="text-purple-400 w-4 h-4 vc-dico" title="DND">${ICONS.dnd}</span>` : '';
+        const micIcon = (isMuted || u.localMuted) ? `<span class="flex items-center justify-center w-6 h-6 rounded-lg bg-red-500/15 border border-red-500/25 text-red-400 vc-mico" title="${u.localMuted ? 'Silenciado localmente' : 'Silenciado'}"><span class="w-3.5 h-3.5 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5">${ICONS.micOff}</span></span>` : '';
+        const bellIcon = isDnd ? `<span class="flex items-center justify-center w-6 h-6 rounded-lg bg-purple-500/15 border border-purple-500/25 text-purple-400 vc-dico" title="${_t('btn_dnd')}"><span class="w-3.5 h-3.5 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5">${ICONS.dnd}</span></span>` : '';
 
         return `
-          <div class="flex items-center gap-3 p-2 hover:bg-white/5 rounded-xl transition-colors vc-user group" id="vc-u-${u.id}">
-            <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold transition-all relative ${isMe ? 'bg-amber-500/20 text-amber-500 border-2 border-transparent' : 'bg-pink-500/20 text-pink-500 border-2 border-transparent'} vc-av" id="vc-av-${u.id}">
+          <div class="flex items-center gap-3.5 px-3.5 py-3 vc-user group select-none transition-colors" id="vc-u-${u.id}">
+            <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold transition-all relative border-2 ${isMe ? 'border-amber-500/40 bg-amber-500/20 text-amber-400' : 'border-pink-500/40 bg-pink-500/20 text-pink-400'} vc-av" id="vc-av-${u.id}">
               ${avatarHtml}
             </div>
             <div class="flex-1 min-w-0 flex items-center gap-2">
-              <div class="text-white text-sm font-medium truncate">${u.displayName} ${isMe ? `<span class="text-white/30 text-[10px] ml-1 px-1.5 py-0.5 rounded-md bg-white/10">${_t('tag_you')}</span>` : ''}</div>
-              <div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.5)] transition-colors duration-300" id="vc-ping-${u.id}" title="Conexión excelente"></div>
+              <div class="text-white text-sm font-medium truncate">${u.displayName}</div>
+              ${isMe ? `<span class="text-[10px] font-semibold tracking-wider uppercase px-1.5 py-0.5 rounded-md bg-amber-500/15 text-amber-400 border border-amber-500/25 flex-shrink-0">${_t('tag_you')}</span>` : ''}
+              <div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.6)] flex-shrink-0 transition-colors duration-300" id="vc-ping-${u.id}" title="Conexión excelente"></div>
             </div>
-            <div class="flex items-center gap-2 pr-1 opacity-100 vc-icons-container">
+            <div class="flex items-center gap-1.5 pr-0.5 opacity-100 vc-icons-container">
                ${bellIcon}${micIcon}
             </div>
           </div>`;
       }).join('');
+
+      const userRowsHtml = this.users.length > 0
+        ? `<div class="vc-users-group bg-white/[0.03] border border-white/[0.08] rounded-2xl overflow-hidden shadow-sm backdrop-blur-md" id="vc-users-group">
+            ${userRows}
+           </div>`
+        : `<div class="text-center text-white/20 text-xs py-8 vc-empty">${_t('empty_chan')}</div>`;
 
       // Render tab contents based on _activeTab state
       const isRoom = this._activeTab === 'room';
@@ -1118,8 +1173,8 @@
           <!-- ROOM TAB -->
           <div class="absolute inset-0 flex flex-col ${isRoom ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 -translate-x-8 pointer-events-none'}" id="vc-content-room">
             <div class="flex-1 overflow-y-auto px-4 py-2 vc-scroll vc-sect">
-              <div class="text-[10px] text-white/30 font-bold uppercase tracking-wider mb-2 px-2 mt-2 vc-sect-lbl">${_t('sect_in')}</div>
-              ${userRows || `<div class="text-center text-white/20 text-xs py-8 vc-empty">${_t('empty_chan')}</div>`}
+              <div class="text-[10px] text-white/40 font-bold uppercase tracking-wider mb-2.5 px-1 mt-1 vc-sect-lbl">${_t('sect_in')}</div>
+              ${userRowsHtml}
             </div>
 
           </div>
@@ -1171,6 +1226,7 @@
       const container = document.querySelector('.vc-sect');
       if (!container) return;
       
+      let usersGroup = document.getElementById('vc-users-group');
       const currentIds = this.users.map(u => String(u.id));
       
       // Remove stale nodes
@@ -1178,23 +1234,41 @@
         const id = node.id.replace('vc-u-', '');
         if (!currentIds.includes(id)) {
           if (window.gsap) {
-            gsap.to(node, { x: 30, opacity: 0, scale: 0.9, duration: 0.3, ease: "power2.in", onComplete: () => node.remove() });
+            gsap.to(node, { x: 30, opacity: 0, scale: 0.9, duration: 0.3, ease: "power2.in", onComplete: () => {
+              node.remove();
+              if (usersGroup && usersGroup.querySelectorAll('.vc-user').length === 0) {
+                usersGroup.remove();
+              }
+            }});
           } else {
             node.remove();
+            if (usersGroup && usersGroup.querySelectorAll('.vc-user').length === 0) {
+              usersGroup.remove();
+            }
           }
         }
       });
       
       if (this.users.length === 0) {
+        if (usersGroup) usersGroup.remove();
         if (!container.querySelector('.vc-empty')) {
           const lbl = container.querySelector('.vc-sect-lbl');
-          if (lbl) lbl.insertAdjacentHTML('afterend', `<div class="vc-empty">${_t('empty_chan')}</div>`);
+          if (lbl) lbl.insertAdjacentHTML('afterend', `<div class="text-center text-white/20 text-xs py-8 vc-empty">${_t('empty_chan')}</div>`);
         }
         return;
       }
       
       const empty = container.querySelector('.vc-empty');
       if (empty) empty.remove();
+
+      if (!usersGroup) {
+        usersGroup = document.createElement('div');
+        usersGroup.id = 'vc-users-group';
+        usersGroup.className = 'vc-users-group bg-white/[0.03] border border-white/[0.08] rounded-2xl overflow-hidden shadow-sm backdrop-blur-md';
+        const lbl = container.querySelector('.vc-sect-lbl');
+        if (lbl) lbl.insertAdjacentElement('afterend', usersGroup);
+        else container.appendChild(usersGroup);
+      }
       
       this.users.forEach(u => {
         const isMe = u.id === this.myId;
@@ -1204,7 +1278,7 @@
         let node = document.getElementById(`vc-u-${u.id}`);
         if (!node) {
           node = document.createElement('div');
-          node.className = 'flex items-center gap-3 p-2 hover:bg-white/5 rounded-xl transition-colors vc-user group';
+          node.className = 'flex items-center gap-3.5 px-3.5 py-3 vc-user group select-none transition-colors';
           node.id = `vc-u-${u.id}`;
           
           const avatarHtml = (u.photoURL || (isMe && window.yaireCurrentUser?.photoURL)) 
@@ -1212,16 +1286,18 @@
             : u.displayName.slice(0, 2).toUpperCase();
             
           node.innerHTML = `
-            <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold transition-all relative ${isMe ? 'bg-amber-500/20 text-amber-500 border-2 border-transparent' : 'bg-pink-500/20 text-pink-500 border-2 border-transparent'} vc-av" id="vc-av-${u.id}">
+            <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold transition-all relative border-2 ${isMe ? 'border-amber-500/40 bg-amber-500/20 text-amber-400' : 'border-pink-500/40 bg-pink-500/20 text-pink-400'} vc-av" id="vc-av-${u.id}">
               ${avatarHtml}
             </div>
-            <div class="flex-1 min-w-0">
-              <div class="text-white text-sm font-medium truncate">${u.displayName} ${isMe ? `<span class="text-white/30 text-[10px] ml-1 px-1.5 py-0.5 rounded-md bg-white/10">${_t('tag_you')}</span>` : ''}</div>
+            <div class="flex-1 min-w-0 flex items-center gap-2">
+              <div class="text-white text-sm font-medium truncate">${u.displayName}</div>
+              ${isMe ? `<span class="text-[10px] font-semibold tracking-wider uppercase px-1.5 py-0.5 rounded-md bg-amber-500/15 text-amber-400 border border-amber-500/25 flex-shrink-0">${_t('tag_you')}</span>` : ''}
+              <div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.6)] flex-shrink-0 transition-colors duration-300" id="vc-ping-${u.id}" title="Conexión excelente"></div>
             </div>
-            <div class="flex items-center gap-2 pr-1 opacity-100 vc-icons-container">
+            <div class="flex items-center gap-1.5 pr-0.5 opacity-100 vc-icons-container">
             </div>
           `;
-          container.appendChild(node);
+          usersGroup.appendChild(node);
           
           if (window.gsap) {
             gsap.fromTo(node, 
@@ -1231,84 +1307,31 @@
           }
           
           if (!isMe) {
-            node.addEventListener('contextmenu', (e) => {
-              e.preventDefault();
-              
-              // Remove old menu if exists
-              const oldMenu = document.getElementById('vc-user-ctx-menu');
-              if (oldMenu) oldMenu.remove();
-              
-              const isLocallyMuted = u.localMuted;
-              const menu = document.createElement('div');
-              menu.id = 'vc-user-ctx-menu';
-              menu.className = 'fixed z-[9999] bg-zinc-900 border border-white/10 shadow-2xl shadow-black/50 rounded-xl py-1.5 px-1.5 flex flex-col min-w-[180px] transform-gpu backdrop-blur-xl';
-              
-              menu.style.left = e.clientX + 'px';
-              menu.style.top = e.clientY + 'px';
-              
-              menu.innerHTML = `
-                <div class="px-3 py-1.5 mb-1 border-b border-white/10">
-                  <div class="text-[10px] uppercase font-bold text-white/40 tracking-wider">${u.displayName}</div>
-                </div>
-                <button class="w-full text-left px-3 py-2 rounded-lg text-sm text-white/90 hover:bg-white/10 hover:text-white transition-colors flex items-center gap-2">
-                  <span class="w-4 h-4 flex items-center justify-center ${isLocallyMuted ? 'text-green-400' : 'text-red-400'}">${isLocallyMuted ? ICONS.mic : ICONS.micOff}</span>
-                  ${isLocallyMuted ? 'Desmutear localmente' : 'Silenciar localmente'}
-                </button>
-              `;
-              
-              document.body.appendChild(menu);
-              
-              // Ensure it stays inside the viewport
-              const rect = menu.getBoundingClientRect();
-              if (rect.right > window.innerWidth) menu.style.left = (window.innerWidth - rect.width - 10) + 'px';
-              if (rect.bottom > window.innerHeight) menu.style.top = (window.innerHeight - rect.height - 10) + 'px';
-              
-              // Action
-              menu.querySelector('button').addEventListener('click', () => {
-                u.localMuted = !u.localMuted;
-                const audio = this.audios.get(u.id);
-                if (audio) audio.muted = u.localMuted;
-                this._updateUsersDOM();
-                menu.remove();
-              });
-              
-              // Close handler
-              const closeMenu = (ev) => {
-                if (!menu.contains(ev.target)) {
-                  menu.remove();
-                  document.removeEventListener('click', closeMenu);
-                  document.removeEventListener('contextmenu', closeMenu);
-                }
-              };
-              
-              setTimeout(() => {
-                document.addEventListener('click', closeMenu);
-                document.addEventListener('contextmenu', closeMenu);
-              }, 10);
-            });
+            this._bindUserContextMenu(node, u);
           }
         }
         
         let iconContainer = node.querySelector('.vc-icons-container');
         if (!iconContainer) {
-            // Fallback for nodes that somehow lack the container
             iconContainer = document.createElement('div');
-            iconContainer.className = 'flex items-center gap-2 pr-1 opacity-100 vc-icons-container';
+            iconContainer.className = 'flex items-center gap-1.5 pr-0.5 opacity-100 vc-icons-container';
             node.appendChild(iconContainer);
         }
         
         const existingDnd = iconContainer.querySelector('.vc-dico');
         if (isDnd && !existingDnd) {
+          const dndHtml = `<span class="flex items-center justify-center w-6 h-6 rounded-lg bg-purple-500/15 border border-purple-500/25 text-purple-400 vc-dico" title="${_t('btn_dnd')}"><span class="w-3.5 h-3.5 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5">${ICONS.dnd}</span></span>`;
           const mico = iconContainer.querySelector('.vc-mico');
-          if (mico) mico.insertAdjacentHTML('beforebegin', `<span class="text-purple-400 w-4 h-4 vc-dico" title="${_t('btn_dnd')}">${ICONS.dnd}</span>`);
-          else iconContainer.insertAdjacentHTML('beforeend', `<span class="text-purple-400 w-4 h-4 vc-dico" title="${_t('btn_dnd')}">${ICONS.dnd}</span>`);
+          if (mico) mico.insertAdjacentHTML('beforebegin', dndHtml);
+          else iconContainer.insertAdjacentHTML('beforeend', dndHtml);
         } else if (!isDnd && existingDnd) {
           existingDnd.remove();
         }
         
         const existingMic = iconContainer.querySelector('.vc-mico');
         if ((isMuted || u.localMuted) && !existingMic) {
-          iconContainer.insertAdjacentHTML('beforeend', `<span class="text-red-500 w-4 h-4 vc-mico" title="${u.localMuted ? 'Silenciado localmente' : 'Silenciado'}">${ICONS.micOff}</span>`);
+          const micHtml = `<span class="flex items-center justify-center w-6 h-6 rounded-lg bg-red-500/15 border border-red-500/25 text-red-400 vc-mico" title="${u.localMuted ? 'Silenciado localmente' : 'Silenciado'}"><span class="w-3.5 h-3.5 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5">${ICONS.micOff}</span></span>`;
+          iconContainer.insertAdjacentHTML('beforeend', micHtml);
         } else if (!isMuted && !u.localMuted && existingMic) {
           existingMic.remove();
         } else if ((isMuted || u.localMuted) && existingMic) {
@@ -1317,6 +1340,67 @@
       });
       
       this._updateBarAvatars();
+    }
+
+    _bindUserContextMenu(node, u) {
+      if (!node || node._ctxBound) return;
+      node._ctxBound = true;
+      
+      node.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        
+        // Remove old menu if exists
+        const oldMenu = document.getElementById('vc-user-ctx-menu');
+        if (oldMenu) oldMenu.remove();
+        
+        const isLocallyMuted = u.localMuted;
+        const menu = document.createElement('div');
+        menu.id = 'vc-user-ctx-menu';
+        menu.className = 'fixed z-[9999] bg-zinc-900/95 border border-white/10 shadow-2xl shadow-black/80 rounded-2xl py-1.5 px-1.5 flex flex-col min-w-[190px] transform-gpu backdrop-blur-2xl';
+        
+        menu.style.left = e.clientX + 'px';
+        menu.style.top = e.clientY + 'px';
+        
+        menu.innerHTML = `
+          <div class="px-3 py-1.5 mb-1 border-b border-white/10 flex items-center justify-between">
+            <div class="text-[10px] uppercase font-bold text-white/50 tracking-wider truncate max-w-[150px]">${u.displayName}</div>
+          </div>
+          <button class="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-white/90 hover:bg-white/10 active:bg-white/15 hover:text-white transition-colors flex items-center gap-2.5">
+            <span class="w-5 h-5 rounded-lg flex items-center justify-center ${isLocallyMuted ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}">${isLocallyMuted ? ICONS.mic : ICONS.micOff}</span>
+            ${isLocallyMuted ? 'Desmutear localmente' : 'Silenciar localmente'}
+          </button>
+        `;
+        
+        document.body.appendChild(menu);
+        
+        // Ensure it stays inside the viewport
+        const rect = menu.getBoundingClientRect();
+        if (rect.right > window.innerWidth) menu.style.left = (window.innerWidth - rect.width - 10) + 'px';
+        if (rect.bottom > window.innerHeight) menu.style.top = (window.innerHeight - rect.height - 10) + 'px';
+        
+        // Action
+        menu.querySelector('button').addEventListener('click', () => {
+          u.localMuted = !u.localMuted;
+          const audio = this.audios.get(u.id);
+          if (audio) audio.muted = u.localMuted;
+          this._updateUsersDOM();
+          menu.remove();
+        });
+        
+        // Close handler
+        const closeMenu = (ev) => {
+          if (!menu.contains(ev.target)) {
+            menu.remove();
+            document.removeEventListener('click', closeMenu);
+            document.removeEventListener('contextmenu', closeMenu);
+          }
+        };
+        
+        setTimeout(() => {
+          document.addEventListener('click', closeMenu);
+          document.addEventListener('contextmenu', closeMenu);
+        }, 10);
+      });
     }
 
     _updatePingIndicator(userId, quality) {
@@ -1523,6 +1607,17 @@
         if (this._activeTab === 'chat' && document.activeElement !== chatIn) {
            setTimeout(() => chatIn.focus(), 50);
         }
+      }
+
+      // Context menu for pre-rendered participant nodes
+      if (this.panel) {
+        this.panel.querySelectorAll('.vc-user').forEach(node => {
+          const id = node.id.replace('vc-u-', '');
+          const u = this.users.find(x => String(x.id) === String(id));
+          if (u && u.id !== this.myId) {
+            this._bindUserContextMenu(node, u);
+          }
+        });
       }
 
       this._bindMusicEvents();
