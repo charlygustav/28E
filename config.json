@@ -13,8 +13,8 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-09-08T08:54:14.026Z",
-  "maintDate": "2026-09-08T10:29",
+  "lastUpdated": "2026-09-10T08:31:32.095Z",
+  "maintDate": "2026-09-10T05:30",
   "maintMsg": "",
   "maintScreen": "cinematic",
   "maintType": "scheduled",
@@ -22,6 +22,11 @@
   "refugeText": "",
   "refugeTitle": "Te escucho, mi amor",
   "songs": [
+    {
+      "title": "Flip The Coin",
+      "artist": "Softable",
+      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029075731_Softable_-_Flip_The_Coin.mp3"
+    },
     {
       "artist": "BNYX®, Bizarrap, Yeat, Peso Pluma",
       "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942588655_fu_go__feat._Bizarrap__Yeat__Peso_Pluma__-_BNYX___Bizarrap__Yeat__Peso_Pluma.mp3",
