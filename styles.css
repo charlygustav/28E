@@ -13595,8 +13595,8 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
 @media (max-width: 1024px), (pointer: coarse) {
   #letter-fab,
   #vc-fab {
-    width: 3.375rem !important;
-    height: 3.375rem !important;
+    width: 3.55rem !important;
+    height: 3.55rem !important;
     bottom: calc(1.15rem + env(safe-area-inset-bottom, 0px)) !important;
     border-radius: 9999px !important;
     background: rgba(18, 18, 22, 0.94) !important;
@@ -13617,14 +13617,14 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
 
   #letter-fab > span,
   #vc-fab > span {
-    width: 1.5rem !important;
-    height: 1.5rem !important;
+    width: 1.55rem !important;
+    height: 1.55rem !important;
   }
 
   #letter-fab > span svg,
   #vc-fab > span svg {
-    width: 1.5rem !important;
-    height: 1.5rem !important;
+    width: 1.55rem !important;
+    height: 1.55rem !important;
   }
 
   footer,
@@ -13639,17 +13639,17 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
     left: 50% !important;
     right: auto !important;
     top: auto !important;
-    height: 3.375rem !important;
-    max-height: 3.375rem !important;
+    height: 3.55rem !important;
+    max-height: 3.55rem !important;
     border-radius: 9999px !important;
     background: rgba(18, 18, 22, 0.94) !important;
     backdrop-filter: blur(24px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
     border: 1px solid rgba(255, 255, 255, 0.12) !important;
     box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
-    padding: 0 0.85rem !important;
-    gap: 0.45rem !important;
-    max-width: 220px !important;
+    padding: 0 0.95rem !important;
+    gap: 0.5rem !important;
+    max-width: 226px !important;
     width: auto !important;
     z-index: 9998 !important;
     cursor: pointer !important;
@@ -13789,17 +13789,17 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
     left: 50% !important;
     right: auto !important;
     top: auto !important;
-    height: 3.375rem !important;
-    max-height: 3.375rem !important;
+    height: 3.55rem !important;
+    max-height: 3.55rem !important;
     border-radius: 9999px !important;
     background: rgba(18, 18, 22, 0.94) !important;
     backdrop-filter: blur(24px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
     border: 1px solid rgba(245, 158, 11, 0.35) !important;
-    box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.75), 0 0 16px rgba(245, 158, 11, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
-    padding: 0 0.85rem !important;
-    gap: 0.5rem !important;
-    max-width: 215px !important;
+    box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.75), 0 0 18px rgba(245, 158, 11, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    padding: 0 0.95rem !important;
+    gap: 0.55rem !important;
+    max-width: 232px !important;
     width: auto !important;
     z-index: 9999 !important;
     transform-origin: center center !important;
@@ -13810,15 +13810,15 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
   /* Si el overlay de llamada está conectado y visible, elevar la notificación sobre la cápsula */
   body:has(#vc-bar.opacity-100) #next-song-toast,
   body:has(#vc-bar:not(.opacity-0)) #next-song-toast {
-    bottom: calc(5.1rem + env(safe-area-inset-bottom, 0px)) !important;
+    bottom: calc(5.3rem + env(safe-area-inset-bottom, 0px)) !important;
   }
 
   #next-song-toast #next-song-toast-art-container {
-    width: 2rem !important;
-    height: 2rem !important;
+    width: 2.25rem !important;
+    height: 2.25rem !important;
     border-radius: 9999px !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45) !important;
     overflow: hidden !important;
     flex-shrink: 0 !important;
   }
@@ -13832,7 +13832,7 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
 
   #next-song-toast .toast-text-group {
     min-width: 0 !important;
-    max-width: 112px !important;
+    max-width: 124px !important;
     flex: 1 1 auto !important;
     display: flex !important;
     flex-direction: column !important;
@@ -13841,34 +13841,34 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
   }
 
   #next-song-toast .toast-badge {
-    font-size: 7.5px !important;
+    font-size: 8px !important;
     font-weight: 700 !important;
     letter-spacing: 0.08em !important;
     text-transform: uppercase !important;
     color: #fbbf24 !important;
     display: flex !important;
     align-items: center !important;
-    gap: 0.25rem !important;
+    gap: 0.3rem !important;
     line-height: 1 !important;
-    margin-bottom: 0.15rem !important;
+    margin-bottom: 0.2rem !important;
   }
 
   #next-song-toast .toast-title-marquee-wrapper {
     position: relative !important;
     width: 100% !important;
-    max-width: 112px !important;
+    max-width: 124px !important;
     overflow: hidden !important;
     white-space: nowrap !important;
     display: block !important;
   }
 
   #next-song-toast .toast-title-marquee-wrapper.has-overflow {
-    mask-image: linear-gradient(to right, black 80%, transparent 100%) !important;
-    -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%) !important;
+    mask-image: linear-gradient(to right, black 82%, transparent 100%) !important;
+    -webkit-mask-image: linear-gradient(to right, black 82%, transparent 100%) !important;
   }
 
   #next-song-toast #next-song-toast-title {
-    font-size: 11px !important;
+    font-size: 12px !important;
     font-weight: 700 !important;
     color: #ffffff !important;
     line-height: 1.15 !important;
@@ -13883,8 +13883,8 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
   }
 
   #next-song-toast .toast-disc-icon {
-    width: 1.35rem !important;
-    height: 1.35rem !important;
+    width: 1.5rem !important;
+    height: 1.5rem !important;
     border-radius: 9999px !important;
     flex-shrink: 0 !important;
   }
@@ -13902,7 +13902,7 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
 
   body:has(#vc-bar.opacity-100) #premium-toast-container,
   body:has(#vc-bar:not(.opacity-0)) #premium-toast-container {
-    bottom: calc(5.1rem + env(safe-area-inset-bottom, 0px)) !important;
+    bottom: calc(5.3rem + env(safe-area-inset-bottom, 0px)) !important;
   }
 }
 
@@ -13912,17 +13912,17 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
   left: 50% !important;
   right: auto !important;
   top: auto !important;
-  height: 3.375rem !important;
-  max-height: 3.375rem !important;
+  height: 3.55rem !important;
+  max-height: 3.55rem !important;
   border-radius: 9999px !important;
   background: rgba(18, 18, 22, 0.94) !important;
   backdrop-filter: blur(24px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
   box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
-  padding: 0 0.85rem !important;
-  gap: 0.45rem !important;
-  max-width: 220px !important;
+  padding: 0 0.95rem !important;
+  gap: 0.5rem !important;
+  max-width: 226px !important;
   width: auto !important;
   z-index: 9998 !important;
   cursor: pointer !important;

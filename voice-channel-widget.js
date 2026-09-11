@@ -960,22 +960,22 @@
         this._bar.style.setProperty('left', '50%', 'important');
         this._bar.style.setProperty('right', 'auto', 'important');
         this._bar.style.setProperty('top', 'auto', 'important');
-        this._bar.style.setProperty('height', '3.375rem', 'important');
-        this._bar.style.setProperty('max-height', '3.375rem', 'important');
+        this._bar.style.setProperty('height', '3.55rem', 'important');
+        this._bar.style.setProperty('max-height', '3.55rem', 'important');
         this._bar.style.setProperty('border-radius', '9999px', 'important');
-        this._bar.style.setProperty('max-width', '220px', 'important');
-        this._bar.style.setProperty('padding', '0 0.85rem', 'important');
-        this._bar.style.setProperty('gap', '0.45rem', 'important');
+        this._bar.style.setProperty('max-width', '226px', 'important');
+        this._bar.style.setProperty('padding', '0 0.95rem', 'important');
+        this._bar.style.setProperty('gap', '0.5rem', 'important');
 
         if (this.fab) {
-          this.fab.style.setProperty('width', '3.375rem', 'important');
-          this.fab.style.setProperty('height', '3.375rem', 'important');
+          this.fab.style.setProperty('width', '3.55rem', 'important');
+          this.fab.style.setProperty('height', '3.55rem', 'important');
           this.fab.style.setProperty('bottom', 'calc(1.15rem + env(safe-area-inset-bottom, 0px))', 'important');
           this.fab.style.setProperty('right', '0.75rem', 'important');
         }
         if (letterFab) {
-          letterFab.style.setProperty('width', '3.375rem', 'important');
-          letterFab.style.setProperty('height', '3.375rem', 'important');
+          letterFab.style.setProperty('width', '3.55rem', 'important');
+          letterFab.style.setProperty('height', '3.55rem', 'important');
           letterFab.style.setProperty('bottom', 'calc(1.15rem + env(safe-area-inset-bottom, 0px))', 'important');
           letterFab.style.setProperty('left', '0.75rem', 'important');
         }
