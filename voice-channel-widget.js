@@ -640,27 +640,29 @@
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-title {
-    font-size: 8px !important;
-    letter-spacing: 0.12em !important;
+    font-size: 7.5px !important;
+    letter-spacing: 0.05em !important;
     line-height: 1 !important;
     margin-bottom: 2px !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-sub {
-    font-size: 10px !important;
+    font-size: 9.5px !important;
     font-weight: 600 !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     display: block !important;
     line-height: 1.1 !important;
+    max-width: 62px !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-avatars {
     position: static !important;
     display: flex !important;
     align-items: center !important;
-    margin: 0 !important;
+    margin-left: 0.65rem !important;
+    margin-right: 0.35rem !important;
     padding: 0 !important;
     background: transparent !important;
     border: none !important;
@@ -673,9 +675,9 @@
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-avatars > div {
-    width: 1.35rem !important;
-    height: 1.35rem !important;
-    font-size: 7.5px !important;
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    font-size: 7px !important;
     border-radius: 9999px !important;
     border: 1.5px solid #121216 !important;
     background: #18181b !important;
@@ -683,7 +685,7 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
     overflow: hidden !important;
     flex-shrink: 0 !important;
-    margin-left: -0.4rem !important;
+    margin-left: -0.35rem !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-avatars > div:first-child {
@@ -698,15 +700,15 @@
   }
 
   #vc-bar.vc-bar-mobile .vc-bar-divider {
-    height: 1.15rem !important;
-    margin-left: 0.1rem !important;
-    margin-right: 0.1rem !important;
+    height: 1.1rem !important;
+    margin-left: 0.35rem !important;
+    margin-right: 0.35rem !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-timer {
-    font-size: 12px !important;
+    font-size: 11px !important;
     font-weight: 700 !important;
-    letter-spacing: 0.01em !important;
+    letter-spacing: 0.02em !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-indicator-bg {
@@ -1048,9 +1050,9 @@
              <div class="w-1 bg-green-400 rounded-full animate-[vc-eq_0.5s_ease-in-out_infinite_0.2s]"></div>
           </div>
         </div>
-        <div class="flex flex-col justify-center min-w-[65px] vc-bar-text-group">
-          <div class="flex items-center gap-1.5 mb-1">
-             <span class="text-[9px] font-extrabold text-green-400 uppercase tracking-[0.2em] leading-none transition-colors duration-300" id="vc-bar-title">${_t('bar_conn').split(' · ')[0]}</span>
+        <div class="flex flex-col justify-center min-w-0 max-w-[65px] vc-bar-text-group">
+          <div class="flex items-center gap-1.5 mb-0.5">
+             <span class="text-[8px] font-extrabold text-green-400 uppercase tracking-wider leading-none transition-colors duration-300" id="vc-bar-title">${_t('bar_conn').split(' · ')[0]}</span>
              <div class="flex items-center gap-1" id="vc-bar-icons">
                <div id="vc-bar-music-icon" class="hidden text-amber-500 transition-opacity">
                  <svg class="w-3 h-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
@@ -1061,12 +1063,12 @@
                </div>
              </div>
           </div>
-          <span id="vc-bar-sub" class="text-[10px] text-white/50 font-medium leading-none">${_t('bar_conn').split(' · ')[1]}</span>
+          <span id="vc-bar-sub" class="text-[9.5px] text-white/50 font-medium leading-none">${_t('bar_conn').split(' · ')[1]}</span>
         </div>
         <div id="vc-bar-avatars" class="flex items-center -space-x-1.5 shrink-0 hidden"></div>
-        <div class="w-[1px] h-5 bg-white/15 mx-0.5 shrink-0 vc-bar-divider"></div>
+        <div class="w-[1px] h-4.5 bg-white/15 mx-1 shrink-0 vc-bar-divider"></div>
         <div class="flex items-center px-0.5 shrink-0">
-          <span id="vc-bar-timer" class="text-white font-mono text-[13px] font-bold tabular-nums tracking-wide">00:00</span>
+          <span id="vc-bar-timer" class="text-white font-mono text-xs font-bold tabular-nums tracking-wide">00:00</span>
         </div>
       `;
       this._bar.addEventListener('click', () => this._toggle());
