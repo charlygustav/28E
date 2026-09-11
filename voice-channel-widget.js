@@ -522,32 +522,21 @@
     }
 
     #vc-bar #vc-bar-indicator-bg {
-      width: 1.625rem !important;
-      height: 1.625rem !important;
+      width: 1.5rem !important;
+      height: 1.5rem !important;
       flex-shrink: 0 !important;
     }
 
     #vc-bar #vc-bar-avatars {
-      position: absolute !important;
-      bottom: calc(100% + 8px) !important;
-      left: 50% !important;
-      transform: translateX(-50%) !important;
+      position: static !important;
       display: flex !important;
       align-items: center !important;
-      justify-content: center !important;
-      gap: 5px !important;
       margin: 0 !important;
-      padding: 3px 6px !important;
-      background: rgba(18, 18, 22, 0.92) !important;
-      backdrop-filter: blur(20px) saturate(180%) !important;
-      -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-      border: 1px solid rgba(255, 255, 255, 0.12) !important;
-      border-radius: 9999px !important;
-      box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
-      z-index: 10002 !important;
-      pointer-events: auto !important;
-      white-space: nowrap !important;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      padding: 0 !important;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      flex-shrink: 0 !important;
     }
 
     #vc-bar #vc-bar-avatars.hidden {
@@ -555,15 +544,28 @@
     }
 
     #vc-bar #vc-bar-avatars > div {
-      width: 1.5rem !important;
-      height: 1.5rem !important;
-      font-size: 8.5px !important;
+      width: 1.35rem !important;
+      height: 1.35rem !important;
+      font-size: 7.5px !important;
       border-radius: 9999px !important;
-      border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+      border: 1.5px solid #121216 !important;
       background: #18181b !important;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.45) !important;
       transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
       overflow: hidden !important;
       flex-shrink: 0 !important;
+      margin-left: -0.4rem !important;
+    }
+
+    #vc-bar #vc-bar-avatars > div:first-child {
+      margin-left: 0 !important;
+    }
+
+    #vc-bar #vc-bar-avatars > div.ring-green-400 {
+      border-color: #22c55e !important;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.95), 0 0 0 1.5px #22c55e !important;
+      transform: scale(1.15) !important;
+      z-index: 20 !important;
     }
 
     #vc-bar #vc-bar-avatars > div.ring-green-400 {
@@ -633,19 +635,19 @@
 
   #vc-bar.vc-bar-mobile .vc-bar-text-group {
     min-width: 0 !important;
-    max-width: 90px !important;
+    max-width: 78px !important;
     flex-shrink: 1 !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-title {
-    font-size: 8.5px !important;
+    font-size: 8px !important;
     letter-spacing: 0.12em !important;
     line-height: 1 !important;
-    margin-bottom: 2.5px !important;
+    margin-bottom: 2px !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-sub {
-    font-size: 10.5px !important;
+    font-size: 10px !important;
     font-weight: 600 !important;
     white-space: nowrap !important;
     overflow: hidden !important;
@@ -654,45 +656,16 @@
     line-height: 1.1 !important;
   }
 
-  #vc-bar.vc-bar-mobile .vc-bar-divider {
-    height: 1.25rem !important;
-    margin-left: 0.1rem !important;
-    margin-right: 0.1rem !important;
-  }
-
-  #vc-bar.vc-bar-mobile #vc-bar-timer {
-    font-size: 12.5px !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.01em !important;
-  }
-
-  #vc-bar.vc-bar-mobile #vc-bar-indicator-bg {
-    width: 1.625rem !important;
-    height: 1.625rem !important;
-    flex-shrink: 0 !important;
-  }
-
   #vc-bar.vc-bar-mobile #vc-bar-avatars {
-    position: absolute !important;
-    bottom: calc(100% + 8px) !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
+    position: static !important;
     display: flex !important;
     align-items: center !important;
-    justify-content: center !important;
-    gap: 5px !important;
     margin: 0 !important;
-    padding: 3px 6px !important;
-    background: rgba(18, 18, 22, 0.92) !important;
-    backdrop-filter: blur(20px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    border-radius: 9999px !important;
-    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
-    z-index: 10002 !important;
-    pointer-events: auto !important;
-    white-space: nowrap !important;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    flex-shrink: 0 !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-avatars.hidden {
@@ -700,22 +673,46 @@
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-avatars > div {
-    width: 1.5rem !important;
-    height: 1.5rem !important;
-    font-size: 8.5px !important;
+    width: 1.35rem !important;
+    height: 1.35rem !important;
+    font-size: 7.5px !important;
     border-radius: 9999px !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+    border: 1.5px solid #121216 !important;
     background: #18181b !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.45) !important;
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
     overflow: hidden !important;
     flex-shrink: 0 !important;
+    margin-left: -0.4rem !important;
+  }
+
+  #vc-bar.vc-bar-mobile #vc-bar-avatars > div:first-child {
+    margin-left: 0 !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-avatars > div.ring-green-400 {
     border-color: #22c55e !important;
-    box-shadow: 0 0 12px rgba(34, 197, 94, 0.9), 0 0 0 2px #22c55e !important;
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.95), 0 0 0 1.5px #22c55e !important;
     transform: scale(1.15) !important;
     z-index: 20 !important;
+  }
+
+  #vc-bar.vc-bar-mobile .vc-bar-divider {
+    height: 1.15rem !important;
+    margin-left: 0.1rem !important;
+    margin-right: 0.1rem !important;
+  }
+
+  #vc-bar.vc-bar-mobile #vc-bar-timer {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.01em !important;
+  }
+
+  #vc-bar.vc-bar-mobile #vc-bar-indicator-bg {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    flex-shrink: 0 !important;
   }
 
   @media (max-width: 360px) {
@@ -966,9 +963,9 @@
         this._bar.style.setProperty('height', '3.375rem', 'important');
         this._bar.style.setProperty('max-height', '3.375rem', 'important');
         this._bar.style.setProperty('border-radius', '9999px', 'important');
-        this._bar.style.setProperty('max-width', '206px', 'important');
-        this._bar.style.setProperty('padding', '0 0.95rem', 'important');
-        this._bar.style.setProperty('gap', '0.55rem', 'important');
+        this._bar.style.setProperty('max-width', '220px', 'important');
+        this._bar.style.setProperty('padding', '0 0.85rem', 'important');
+        this._bar.style.setProperty('gap', '0.45rem', 'important');
 
         if (this.fab) {
           this.fab.style.setProperty('width', '3.375rem', 'important');
@@ -1062,9 +1059,9 @@
           </div>
           <span id="vc-bar-sub" class="text-[10px] text-white/50 font-medium leading-none">${_t('bar_conn').split(' · ')[1]}</span>
         </div>
-        <div class="w-[1px] h-6 bg-white/10 mx-1 shrink-0 vc-bar-divider"></div>
-        <div id="vc-bar-avatars" class="flex items-center -space-x-1.5 mx-1 hidden"></div>
-        <div class="flex items-center px-1 shrink-0">
+        <div id="vc-bar-avatars" class="flex items-center -space-x-1.5 shrink-0 hidden"></div>
+        <div class="w-[1px] h-5 bg-white/15 mx-0.5 shrink-0 vc-bar-divider"></div>
+        <div class="flex items-center px-0.5 shrink-0">
           <span id="vc-bar-timer" class="text-white font-mono text-[13px] font-bold tabular-nums tracking-wide">00:00</span>
         </div>
       `;
@@ -1920,7 +1917,8 @@
       }
 
       avatarsContainer.classList.remove('hidden');
-      const maxToShow = 4;
+      const isMobile = this._checkMobile();
+      const maxToShow = isMobile ? 2 : 4;
       const displayUsers = this.users.slice(0, maxToShow);
       const extraCount = Math.max(0, this.users.length - maxToShow);
 
@@ -1932,7 +1930,7 @@
           : initials;
 
         return `
-          <div id="vc-bar-av-${u.id}" class="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold bg-zinc-800 text-white border border-zinc-900 shadow-sm relative transition-all duration-300 overflow-hidden z-10" title="${u.displayName}">
+          <div id="vc-bar-av-${u.id}" class="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-[7.5px] md:text-[9px] font-bold bg-zinc-800 text-white border-2 border-zinc-950 shadow-sm relative transition-all duration-300 overflow-hidden z-10" title="${u.displayName}">
             ${avatarHtml}
           </div>
         `;
@@ -1940,7 +1938,7 @@
 
       if (extraCount > 0) {
         html += `
-          <div class="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold bg-zinc-800 text-white border border-zinc-900 shadow-sm z-0 relative">
+          <div class="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-[7.5px] md:text-[9px] font-bold bg-zinc-800 text-white border-2 border-zinc-950 shadow-sm z-0 relative">
             +${extraCount}
           </div>
         `;
