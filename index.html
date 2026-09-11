@@ -245,7 +245,7 @@
     <!-- GSAP Core & ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-    <link rel="stylesheet" href="styles.css?v=1.0.22">
+    <link rel="stylesheet" href="styles.css?v=1.0.23">
     <script>
         (function () {
             try {
@@ -4877,6 +4877,12 @@
                                 const artContainer = document.getElementById('next-song-toast-art-container');
 
                                 if (toast && titleEl) {
+                                    // Reset previous title marquee state
+                                    gsap.killTweensOf(titleEl);
+                                    gsap.set(titleEl, { x: 0 });
+                                    const marqueeWrapper = titleEl.closest('.toast-title-marquee-wrapper') || titleEl.parentElement;
+                                    if (marqueeWrapper) marqueeWrapper.classList.remove('has-overflow');
+
                                     titleEl.textContent = nextTrack.title;
 
                                     fetchSpotlightArtwork(nextTrack).then(artUrl => {
@@ -4897,18 +4903,50 @@
                                                 { y: 20, xPercent: -50, opacity: 0, scale: 0.92 },
                                                 { y: 0, xPercent: -50, opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.4)" }
                                             );
-                                            setTimeout(() => {
-                                                gsap.to(toast, { y: 20, xPercent: -50, opacity: 0, scale: 0.92, duration: 0.4, ease: "power2.in" });
-                                            }, 7000);
                                         } else {
                                             gsap.fromTo(toast,
                                                 { y: 20, x: -20, opacity: 0 },
                                                 { y: 0, x: 0, opacity: 1, duration: 0.6, ease: "back.out(1.5)" }
                                             );
-                                            setTimeout(() => {
-                                                gsap.to(toast, { y: 20, opacity: 0, duration: 0.5, ease: "power2.in" });
-                                            }, 7000);
                                         }
+
+                                        // Automatic marquee based on song title length
+                                        let hideDelay = 7500;
+                                        requestAnimationFrame(() => {
+                                            if (!titleEl || !marqueeWrapper) return;
+                                            const overflow = titleEl.scrollWidth - marqueeWrapper.clientWidth;
+                                            if (overflow > 4) {
+                                                marqueeWrapper.classList.add('has-overflow');
+                                                // Comfortable reading speed: ~22px per second, minimum 2.4s
+                                                const scrollDuration = Math.max(2.4, overflow / 22);
+                                                // Ensure toast stays open long enough to read the full title cycle
+                                                hideDelay = Math.max(8500, (scrollDuration * 2 + 3.2) * 1000);
+
+                                                gsap.to(titleEl, {
+                                                    x: -(overflow + 6),
+                                                    duration: scrollDuration,
+                                                    ease: "power1.inOut",
+                                                    delay: 1.2,
+                                                    repeat: -1,
+                                                    yoyo: true,
+                                                    repeatDelay: 1.2
+                                                });
+                                            }
+
+                                            if (window._nextSongToastTimer) clearTimeout(window._nextSongToastTimer);
+                                            window._nextSongToastTimer = setTimeout(() => {
+                                                if (isMobileToast) {
+                                                    gsap.to(toast, { y: 20, xPercent: -50, opacity: 0, scale: 0.92, duration: 0.45, ease: "power2.in" });
+                                                } else {
+                                                    gsap.to(toast, { y: 20, opacity: 0, duration: 0.5, ease: "power2.in" });
+                                                }
+                                                setTimeout(() => {
+                                                    gsap.killTweensOf(titleEl);
+                                                    gsap.set(titleEl, { x: 0 });
+                                                    if (marqueeWrapper) marqueeWrapper.classList.remove('has-overflow');
+                                                }, 500);
+                                            }, hideDelay);
+                                        });
                                     });
                                 }
                             }
@@ -19715,12 +19753,14 @@
             <i id="next-song-toast-fallback" class="ph-bold ph-music-notes text-sm"></i>
             <img id="next-song-toast-art" src="" class="w-full h-full object-cover rounded-full hidden" />
         </div>
-        <div class="toast-text-group flex-1 min-w-0 flex flex-col justify-center">
+        <div class="toast-text-group flex-1 min-w-0 flex flex-col justify-center overflow-hidden">
             <div class="toast-badge flex items-center gap-1 mb-0.5">
                 <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0 animate-pulse"></span>
                 <span class="text-[7.5px] font-bold text-amber-400 uppercase tracking-widest truncate">Siguiente canción</span>
             </div>
-            <p id="next-song-toast-title" class="text-[11px] font-bold text-white leading-tight truncate max-w-[125px]"></p>
+            <div class="toast-title-marquee-wrapper relative overflow-hidden w-full max-w-[112px]">
+                <p id="next-song-toast-title" class="text-[11px] font-bold text-white leading-tight whitespace-nowrap inline-block"></p>
+            </div>
         </div>
         <div class="toast-disc-icon shrink-0 flex items-center justify-center w-5 h-5 rounded-full bg-white/5 border border-white/10 text-amber-400/80">
             <i class="ph-bold ph-vinyl-record text-[10px] animate-[spin_4s_linear_infinite]"></i>
@@ -19940,7 +19980,7 @@
             // 1. Registro del Service Worker
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function () {
-                    navigator.serviceWorker.register('./sw.js?v=13')
+                    navigator.serviceWorker.register('./sw.js?v=14')
                         .then(function (reg) {
                             console.log('[PWA] ✅ Service Worker activo:', reg.scope);
                             reg.addEventListener('updatefound', function () {

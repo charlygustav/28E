@@ -13832,11 +13832,12 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
 
   #next-song-toast .toast-text-group {
     min-width: 0 !important;
-    max-width: 110px !important;
+    max-width: 112px !important;
     flex: 1 1 auto !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: center !important;
+    overflow: hidden !important;
   }
 
   #next-song-toast .toast-badge {
@@ -13852,16 +13853,33 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
     margin-bottom: 0.15rem !important;
   }
 
+  #next-song-toast .toast-title-marquee-wrapper {
+    position: relative !important;
+    width: 100% !important;
+    max-width: 112px !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    display: block !important;
+  }
+
+  #next-song-toast .toast-title-marquee-wrapper.has-overflow {
+    mask-image: linear-gradient(to right, black 80%, transparent 100%) !important;
+    -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%) !important;
+  }
+
   #next-song-toast #next-song-toast-title {
     font-size: 11px !important;
     font-weight: 700 !important;
     color: #ffffff !important;
     line-height: 1.15 !important;
     white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    max-width: 110px !important;
+    display: inline-block !important;
+    max-width: none !important;
+    width: auto !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
     margin: 0 !important;
+    will-change: transform !important;
   }
 
   #next-song-toast .toast-disc-icon {
