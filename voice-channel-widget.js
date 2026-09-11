@@ -345,7 +345,7 @@
     background-color: rgba(255, 255, 255, 0.08);
   }
 
-  @media (max-width: 1024px), (pointer: coarse) {
+  @media (max-width: 1024px) {
     .vc-panel-base {
       bottom: 0 !important;
       right: 0 !important;
@@ -425,154 +425,6 @@
     #vc-fab > span svg {
       width: 1.5rem !important;
       height: 1.5rem !important;
-    }
-
-    /* Mobile Call Overlay: Center pill dock between letter-fab & vc-fab */
-    #vc-bar {
-      bottom: calc(1.15rem + env(safe-area-inset-bottom, 0px)) !important;
-      left: 50% !important;
-      right: auto !important;
-      top: auto !important;
-      height: 3.375rem !important;
-      max-height: 3.375rem !important;
-      border-radius: 9999px !important;
-      background: rgba(18, 18, 22, 0.94) !important;
-      backdrop-filter: blur(24px) saturate(180%) !important;
-      -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-      border: 1px solid rgba(255, 255, 255, 0.12) !important;
-      box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
-      padding: 0 0.95rem !important;
-      gap: 0.55rem !important;
-      max-width: 206px !important;
-      width: auto !important;
-      z-index: 9998 !important;
-      cursor: pointer !important;
-      user-select: none !important;
-      -webkit-user-select: none !important;
-      -webkit-tap-highlight-color: transparent !important;
-      transform-origin: center center !important;
-      transform: translate(-50%, 20px) scale(0.92) !important;
-      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease !important;
-    }
-
-    #vc-bar:hover {
-      border-color: rgba(245, 158, 11, 0.45) !important;
-      box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.8), 0 0 20px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
-    }
-
-    #vc-bar:active {
-      transform: translate(-50%, 0) scale(0.96) !important;
-    }
-
-    #vc-bar.opacity-100,
-    #vc-bar.translate-y-0:not(.opacity-0) {
-      opacity: 1 !important;
-      pointer-events: auto !important;
-      transform: translate(-50%, 0) scale(1) !important;
-    }
-
-    #vc-bar.opacity-0,
-    #vc-bar.translate-y-4,
-    body.menu-is-open #vc-bar,
-    body:has(#drawer-overlay.open) #vc-bar,
-    body:has(#drawer-overlay:not(.hidden)) #vc-bar,
-    body:has(#menu-panel.open) #vc-bar,
-    body.vc-open #vc-bar,
-    body.vc-is-open #vc-bar,
-    body:has(#vc-panel.scale-100) #vc-bar,
-    body:has(.vc-panel-base.scale-100) #vc-bar {
-      opacity: 0 !important;
-      pointer-events: none !important;
-      transform: translate(-50%, 20px) scale(0.92) !important;
-    }
-
-    #vc-bar .vc-bar-text-group {
-      min-width: 0 !important;
-      max-width: 90px !important;
-      flex-shrink: 1 !important;
-    }
-
-    #vc-bar #vc-bar-title {
-      font-size: 8.5px !important;
-      letter-spacing: 0.12em !important;
-      line-height: 1 !important;
-      margin-bottom: 2.5px !important;
-    }
-
-    #vc-bar #vc-bar-sub {
-      font-size: 10.5px !important;
-      font-weight: 600 !important;
-      white-space: nowrap !important;
-      overflow: hidden !important;
-      text-overflow: ellipsis !important;
-      display: block !important;
-      line-height: 1.1 !important;
-    }
-
-    #vc-bar .vc-bar-divider {
-      height: 1.25rem !important;
-      margin-left: 0.1rem !important;
-      margin-right: 0.1rem !important;
-    }
-
-    #vc-bar #vc-bar-timer {
-      font-size: 12.5px !important;
-      font-weight: 700 !important;
-      letter-spacing: 0.01em !important;
-    }
-
-    #vc-bar #vc-bar-indicator-bg {
-      width: 1.5rem !important;
-      height: 1.5rem !important;
-      flex-shrink: 0 !important;
-    }
-
-    #vc-bar #vc-bar-avatars {
-      position: static !important;
-      display: flex !important;
-      align-items: center !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      background: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-      flex-shrink: 0 !important;
-    }
-
-    #vc-bar #vc-bar-avatars.hidden {
-      display: none !important;
-    }
-
-    #vc-bar #vc-bar-avatars > div {
-      width: 1.35rem !important;
-      height: 1.35rem !important;
-      font-size: 7.5px !important;
-      border-radius: 9999px !important;
-      border: 1.5px solid #121216 !important;
-      background: #18181b !important;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.45) !important;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
-      overflow: hidden !important;
-      flex-shrink: 0 !important;
-      margin-left: -0.4rem !important;
-    }
-
-    #vc-bar #vc-bar-avatars > div:first-child {
-      margin-left: 0 !important;
-    }
-
-    #vc-bar #vc-bar-avatars > div.ring-green-400 {
-      border-color: #22c55e !important;
-      box-shadow: 0 0 10px rgba(34, 197, 94, 0.95), 0 0 0 1.5px #22c55e !important;
-      transform: scale(1.15) !important;
-      z-index: 20 !important;
-    }
-
-    #vc-bar #vc-bar-avatars > div.ring-green-400 {
-      border-color: #22c55e !important;
-      box-shadow: 0 0 12px rgba(34, 197, 94, 0.9), 0 0 0 2px #22c55e !important;
-      transform: scale(1.15) !important;
-      z-index: 20 !important;
     }
   }
 
@@ -746,6 +598,164 @@
     }
     #vc-bar .vc-bar-text-group {
       max-width: 78px !important;
+    }
+  }
+
+  /* Desktop Voice Channel Floating Overlay: Sleek, compact & elegant */
+  @media (min-width: 1025px) {
+    #vc-bar:not(.vc-bar-mobile) {
+      position: fixed !important;
+      bottom: 5.75rem !important;
+      right: 1.5rem !important;
+      left: auto !important;
+      top: auto !important;
+      height: 2.5rem !important;
+      max-height: 2.5rem !important;
+      width: auto !important;
+      min-width: 0 !important;
+      max-width: none !important;
+      padding: 0 0.85rem !important;
+      gap: 0.5rem !important;
+      border-radius: 9999px !important;
+      background: rgba(18, 18, 22, 0.88) !important;
+      backdrop-filter: blur(20px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+      z-index: 9997 !important;
+      cursor: pointer !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      transform-origin: bottom right !important;
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease !important;
+    }
+
+    #vc-bar:not(.vc-bar-mobile):hover {
+      border-color: rgba(245, 158, 11, 0.4) !important;
+      box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.7), 0 0 18px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    }
+
+    #vc-bar:not(.vc-bar-mobile):active {
+      transform: scale(0.97) !important;
+    }
+
+    #vc-bar:not(.vc-bar-mobile).opacity-100,
+    #vc-bar:not(.vc-bar-mobile).translate-y-0:not(.opacity-0) {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      transform: translateY(0) scale(1) !important;
+    }
+
+    #vc-bar:not(.vc-bar-mobile).opacity-0,
+    #vc-bar:not(.vc-bar-mobile).translate-y-4 {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transform: translateY(12px) scale(0.95) !important;
+    }
+
+    #vc-bar:not(.vc-bar-mobile) #vc-bar-indicator-bg {
+      width: 1.35rem !important;
+      height: 1.35rem !important;
+      flex-shrink: 0 !important;
+    }
+
+    #vc-bar:not(.vc-bar-mobile) .vc-bar-text-group {
+      min-width: 0 !important;
+      max-width: none !important;
+      flex-shrink: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+    }
+
+    #vc-bar:not(.vc-bar-mobile) #vc-bar-title {
+      font-size: 7.5px !important;
+      font-weight: 800 !important;
+      letter-spacing: 0.05em !important;
+      line-height: 1 !important;
+      margin-bottom: 2px !important;
+      color: #4ade80 !important;
+      white-space: nowrap !important;
+    }
+
+    #vc-bar:not(.vc-bar-mobile) #vc-bar-sub {
+      font-size: 9.5px !important;
+      font-weight: 500 !important;
+      color: rgba(255, 255, 255, 0.6) !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      max-width: 110px !important;
+      line-height: 1.1 !important;
+    }
+
+    #vc-bar:not(.vc-bar-mobile) #vc-bar-icons {
+      gap: 0.25rem !important;
+    }
+
+    #vc-bar:not(.vc-bar-mobile) #vc-bar-chat-icon svg,
+    #vc-bar:not(.vc-bar-mobile) #vc-bar-music-icon svg {
+      width: 0.75rem !important;
+      height: 0.75rem !important;
+    }
+
+    #vc-bar:not(.vc-bar-mobile) #vc-bar-avatars {
+      position: static !important;
+      display: flex !important;
+      align-items: center !important;
+      margin-left: 0.4rem !important;
+      margin-right: 0.2rem !important;
+      padding: 0 !important;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      flex-shrink: 0 !important;
+    }
+
+    #vc-bar:not(.vc-bar-mobile) #vc-bar-avatars.hidden {
+      display: none !important;
+    }
+
+    #vc-bar:not(.vc-bar-mobile) #vc-bar-avatars > div {
+      width: 1.25rem !important;
+      height: 1.25rem !important;
+      font-size: 7.5px !important;
+      border-radius: 9999px !important;
+      border: 1.5px solid #121216 !important;
+      background: #18181b !important;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.45) !important;
+      overflow: hidden !important;
+      flex-shrink: 0 !important;
+      margin-left: -0.35rem !important;
+    }
+
+    #vc-bar:not(.vc-bar-mobile) #vc-bar-avatars > div:first-child {
+      margin-left: 0 !important;
+    }
+
+    #vc-bar:not(.vc-bar-mobile) #vc-bar-avatars > div.ring-green-400 {
+      border-color: #22c55e !important;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.9), 0 0 0 1.5px #22c55e !important;
+      transform: scale(1.1) !important;
+      z-index: 20 !important;
+    }
+
+    #vc-bar:not(.vc-bar-mobile) .vc-bar-divider {
+      height: 1rem !important;
+      width: 1px !important;
+      background: rgba(255, 255, 255, 0.15) !important;
+      margin: 0 0.2rem !important;
+      flex-shrink: 0 !important;
+    }
+
+    #vc-bar:not(.vc-bar-mobile) #vc-bar-timer {
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+      letter-spacing: 0.02em !important;
+      font-variant-numeric: tabular-nums !important;
+      color: rgba(255, 255, 255, 0.9) !important;
+      flex-shrink: 0 !important;
     }
   }
 
@@ -1014,6 +1024,8 @@
         this._bar.style.removeProperty('height');
         this._bar.style.removeProperty('max-height');
         this._bar.style.removeProperty('border-radius');
+        this._bar.style.removeProperty('width');
+        this._bar.style.removeProperty('min-width');
         this._bar.style.removeProperty('max-width');
         this._bar.style.removeProperty('padding');
         this._bar.style.removeProperty('gap');
@@ -1060,11 +1072,11 @@
       this._bar = document.createElement('div');
       this._bar.id = 'vc-bar';
       const isMobileInit = this._checkMobile();
-      this._bar.className = `fixed ${isMobileInit ? 'vc-bar-mobile' : 'bottom-24 right-6'} z-[9997] flex items-center gap-3 px-3.5 py-2.5 bg-zinc-950/80 backdrop-blur-xl border border-white/5 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] opacity-0 pointer-events-none transition-all duration-500 translate-y-4 scale-95 origin-bottom-right cursor-pointer select-none`;
+      this._bar.className = `fixed ${isMobileInit ? 'vc-bar-mobile' : 'bottom-24 right-6'} z-[9997] flex items-center gap-2 px-3 py-1.5 bg-zinc-950/85 backdrop-blur-xl border border-white/10 rounded-full shadow-2xl opacity-0 pointer-events-none transition-all duration-300 translate-y-4 scale-95 origin-bottom-right cursor-pointer select-none`;
       this._bar.innerHTML = `
-        <div class="flex items-center justify-center w-7 h-7 rounded-full bg-green-500/10 border border-green-500/20 relative shrink-0 transition-colors duration-300" id="vc-bar-indicator-bg">
-          <div class="absolute inset-0 rounded-full bg-green-500/20 animate-ping opacity-50 transition-all duration-300" id="vc-bar-indicator-ping"></div>
-          <div class="w-1.5 h-1.5 bg-green-500 rounded-full shadow-[0_0_10px_rgba(34,197,94,1)] transition-colors duration-300" id="vc-bar-indicator-dot"></div>
+        <div class="flex items-center justify-center w-5 h-5 rounded-full bg-green-500/10 border border-green-500/20 relative shrink-0 transition-colors duration-300" id="vc-bar-indicator-bg">
+          <div class="absolute inset-0 rounded-full bg-green-500/20 animate-ping opacity-40 transition-all duration-300" id="vc-bar-indicator-ping"></div>
+          <div class="w-1.5 h-1.5 bg-green-500 rounded-full shadow-[0_0_8px_rgba(34,197,94,1)] transition-colors duration-300" id="vc-bar-indicator-dot"></div>
           
           <div id="vc-bar-waveform" class="absolute inset-0 flex items-center justify-center gap-[2px] opacity-0 transition-opacity duration-300">
              <div class="w-1 bg-green-400 rounded-full animate-[vc-eq_0.5s_ease-in-out_infinite]"></div>
@@ -1072,7 +1084,7 @@
              <div class="w-1 bg-green-400 rounded-full animate-[vc-eq_0.5s_ease-in-out_infinite_0.2s]"></div>
           </div>
         </div>
-        <div class="flex flex-col justify-center min-w-0 shrink-0 vc-bar-text-group" style="max-width: 76px;">
+        <div class="flex flex-col justify-center min-w-0 shrink-0 vc-bar-text-group">
           <div class="flex items-center gap-1.5 mb-0.5">
              <span class="text-[7.5px] font-extrabold text-green-400 uppercase tracking-wider leading-none transition-colors duration-300" id="vc-bar-title">${_t('bar_conn').split(' · ')[0]}</span>
              <div class="flex items-center gap-1" id="vc-bar-icons">
@@ -1968,7 +1980,7 @@
       }
 
       const isMobile = this._checkMobile();
-      const maxToShow = isMobile ? 2 : 4;
+      const maxToShow = isMobile ? 2 : 3;
       const displayUsers = effectiveUsers.slice(0, maxToShow);
       const extraCount = Math.max(0, effectiveUsers.length - maxToShow);
 
@@ -1987,11 +1999,11 @@
         const photo = u.photoURL || (isMe ? window.yaireCurrentUser?.photoURL : null);
 
         const avatarHtml = photo
-          ? `<img src="${photo}" class="w-full h-full rounded-full object-cover" draggable="false" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';" /><span class="w-full h-full hidden items-center justify-center text-[7.5px] md:text-[9px] font-bold text-white uppercase">${initials}</span>`
-          : `<span class="w-full h-full flex items-center justify-center text-[7.5px] md:text-[9px] font-bold text-white uppercase">${initials}</span>`;
+          ? `<img src="${photo}" class="w-full h-full rounded-full object-cover" draggable="false" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';" /><span class="w-full h-full hidden items-center justify-center text-[7.5px] font-bold text-white uppercase">${initials}</span>`
+          : `<span class="w-full h-full flex items-center justify-center text-[7.5px] font-bold text-white uppercase">${initials}</span>`;
 
         return `
-          <div id="vc-bar-av-${u.id}" class="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-[7.5px] md:text-[9px] font-bold bg-zinc-800 text-white border-2 border-zinc-950 shadow-sm relative transition-all duration-300 overflow-hidden z-10" title="${displayName}">
+          <div id="vc-bar-av-${u.id}" class="w-5 h-5 rounded-full flex items-center justify-center text-[7.5px] font-bold bg-zinc-800 text-white border-2 border-zinc-950 shadow-sm relative transition-all duration-300 overflow-hidden z-10" title="${displayName}">
             ${avatarHtml}
           </div>
         `;
@@ -1999,7 +2011,7 @@
 
       if (extraCount > 0) {
         html += `
-          <div class="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-[7.5px] md:text-[9px] font-bold bg-zinc-800 text-white border-2 border-zinc-950 shadow-sm z-0 relative">
+          <div class="w-5 h-5 rounded-full flex items-center justify-center text-[7.5px] font-bold bg-zinc-800 text-white border-2 border-zinc-950 shadow-sm z-0 relative">
             +${extraCount}
           </div>
         `;
