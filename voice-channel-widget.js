@@ -960,24 +960,25 @@
         this._bar.style.setProperty('left', '50%', 'important');
         this._bar.style.setProperty('right', 'auto', 'important');
         this._bar.style.setProperty('top', 'auto', 'important');
-        this._bar.style.setProperty('height', '3rem', 'important');
-        this._bar.style.setProperty('max-height', '3rem', 'important');
+        this._bar.style.setProperty('height', '3.25rem', 'important');
+        this._bar.style.setProperty('max-height', '3.25rem', 'important');
         this._bar.style.setProperty('border-radius', '9999px', 'important');
-        this._bar.style.setProperty('max-width', '168px', 'important');
-        this._bar.style.setProperty('padding', '0 0.7rem', 'important');
+        this._bar.style.setProperty('width', 'calc(100vw - 152px)', 'important');
+        this._bar.style.setProperty('max-width', '204px', 'important');
+        this._bar.style.setProperty('padding', '0 0.75rem', 'important');
         this._bar.style.setProperty('gap', '0.45rem', 'important');
 
         if (this.fab) {
-          this.fab.style.setProperty('width', '3rem', 'important');
-          this.fab.style.setProperty('height', '3rem', 'important');
+          this.fab.style.setProperty('width', '3.25rem', 'important');
+          this.fab.style.setProperty('height', '3.25rem', 'important');
           this.fab.style.setProperty('bottom', 'calc(1.15rem + env(safe-area-inset-bottom, 0px))', 'important');
-          this.fab.style.setProperty('right', '0.75rem', 'important');
+          this.fab.style.setProperty('right', '0.65rem', 'important');
         }
         if (letterFab) {
-          letterFab.style.setProperty('width', '3rem', 'important');
-          letterFab.style.setProperty('height', '3rem', 'important');
+          letterFab.style.setProperty('width', '3.25rem', 'important');
+          letterFab.style.setProperty('height', '3.25rem', 'important');
           letterFab.style.setProperty('bottom', 'calc(1.15rem + env(safe-area-inset-bottom, 0px))', 'important');
-          letterFab.style.setProperty('left', '0.75rem', 'important');
+          letterFab.style.setProperty('left', '0.65rem', 'important');
         }
       } else {
         this._bar.classList.remove('vc-bar-mobile');
