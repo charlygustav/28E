@@ -13651,6 +13651,7 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
     gap: 0.3rem !important;
     width: calc(100vw - 142px) !important;
     max-width: 228px !important;
+    min-width: min(228px, calc(100vw - 142px)) !important;
     z-index: 9998 !important;
     cursor: pointer !important;
     user-select: none !important;
@@ -13777,8 +13778,8 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
     height: 1rem !important;
     width: 1px !important;
     background: rgba(255, 255, 255, 0.15) !important;
-    margin-left: 0.2rem !important;
-    margin-right: 0.2rem !important;
+    margin-left: auto !important;
+    margin-right: 0.25rem !important;
     flex-shrink: 0 !important;
   }
 
@@ -13933,10 +13934,11 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
   -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
   box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
-  padding: 0 0.75rem !important;
-  gap: 0.45rem !important;
-  width: calc(100vw - 152px) !important;
-  max-width: 204px !important;
+  padding: 0 0.65rem !important;
+  gap: 0.3rem !important;
+  width: calc(100vw - 142px) !important;
+  max-width: 228px !important;
+  min-width: min(228px, calc(100vw - 142px)) !important;
   z-index: 9998 !important;
   cursor: pointer !important;
   user-select: none !important;
@@ -14061,8 +14063,8 @@ body:has(.vc-panel-base.scale-100) #vc-bar.vc-bar-mobile {
   height: 1rem !important;
   width: 1px !important;
   background: rgba(255, 255, 255, 0.15) !important;
-  margin-left: 0.2rem !important;
-  margin-right: 0.2rem !important;
+  margin-left: auto !important;
+  margin-right: 0.25rem !important;
   flex-shrink: 0 !important;
 }
 

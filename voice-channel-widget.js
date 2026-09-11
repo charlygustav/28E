@@ -582,18 +582,19 @@
     left: 50% !important;
     right: auto !important;
     top: auto !important;
-    height: 3.375rem !important;
-    max-height: 3.375rem !important;
+    height: 3.25rem !important;
+    max-height: 3.25rem !important;
     border-radius: 9999px !important;
     background: rgba(18, 18, 22, 0.94) !important;
     backdrop-filter: blur(24px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
     border: 1px solid rgba(255, 255, 255, 0.12) !important;
     box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
-    padding: 0 0.95rem !important;
-    gap: 0.55rem !important;
-    max-width: 206px !important;
-    width: auto !important;
+    padding: 0 0.65rem !important;
+    gap: 0.3rem !important;
+    width: calc(100vw - 142px) !important;
+    max-width: 228px !important;
+    min-width: min(228px, calc(100vw - 142px)) !important;
     z-index: 9998 !important;
     cursor: pointer !important;
     user-select: none !important;
@@ -718,8 +719,8 @@
     height: 1rem !important;
     width: 1px !important;
     background: rgba(255, 255, 255, 0.15) !important;
-    margin-left: 0.2rem !important;
-    margin-right: 0.2rem !important;
+    margin-left: auto !important;
+    margin-right: 0.25rem !important;
     flex-shrink: 0 !important;
   }
 
@@ -987,6 +988,7 @@
         this._bar.style.setProperty('border-radius', '9999px', 'important');
         this._bar.style.setProperty('width', 'calc(100vw - 142px)', 'important');
         this._bar.style.setProperty('max-width', '228px', 'important');
+        this._bar.style.setProperty('min-width', 'min(228px, calc(100vw - 142px))', 'important');
         this._bar.style.setProperty('padding', '0 0.65rem', 'important');
         this._bar.style.setProperty('gap', '0.3rem', 'important');
 
