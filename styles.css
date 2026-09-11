@@ -13570,6 +13570,7 @@ body.menu-is-open #vc-fab,
 body.menu-is-open #vc-wrapper,
 body.menu-is-open #vc-bar,
 body.menu-is-open #premium-toast-container,
+body.menu-is-open #next-song-toast,
 body.menu-is-open #letter-fab,
 body.menu-is-open a[href="para-yaire.html"].fixed,
 body:has(#drawer-overlay.open) #vc-bar,
@@ -13780,6 +13781,110 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
     width: 1.5rem !important;
     height: 1.5rem !important;
     flex-shrink: 0 !important;
+  }
+
+  /* Mobile Next Song Toast: Pill Dock Matching Voice Channel Overlay */
+  #next-song-toast {
+    bottom: calc(1.15rem + env(safe-area-inset-bottom, 0px)) !important;
+    left: 50% !important;
+    right: auto !important;
+    top: auto !important;
+    height: 3.375rem !important;
+    max-height: 3.375rem !important;
+    border-radius: 9999px !important;
+    background: rgba(18, 18, 22, 0.94) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border: 1px solid rgba(245, 158, 11, 0.35) !important;
+    box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.75), 0 0 16px rgba(245, 158, 11, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    padding: 0 0.85rem !important;
+    gap: 0.5rem !important;
+    max-width: 215px !important;
+    width: auto !important;
+    z-index: 9999 !important;
+    transform-origin: center center !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  /* Si el overlay de llamada está conectado y visible, elevar la notificación sobre la cápsula */
+  body:has(#vc-bar.opacity-100) #next-song-toast,
+  body:has(#vc-bar:not(.opacity-0)) #next-song-toast {
+    bottom: calc(5.1rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  #next-song-toast #next-song-toast-art-container {
+    width: 2rem !important;
+    height: 2rem !important;
+    border-radius: 9999px !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4) !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
+  }
+
+  #next-song-toast #next-song-toast-art {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 9999px !important;
+  }
+
+  #next-song-toast .toast-text-group {
+    min-width: 0 !important;
+    max-width: 110px !important;
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+  }
+
+  #next-song-toast .toast-badge {
+    font-size: 7.5px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    color: #fbbf24 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.25rem !important;
+    line-height: 1 !important;
+    margin-bottom: 0.15rem !important;
+  }
+
+  #next-song-toast #next-song-toast-title {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    line-height: 1.15 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 110px !important;
+    margin: 0 !important;
+  }
+
+  #next-song-toast .toast-disc-icon {
+    width: 1.35rem !important;
+    height: 1.35rem !important;
+    border-radius: 9999px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Premium alerts container on mobile */
+  #premium-toast-container {
+    bottom: calc(1.15rem + env(safe-area-inset-bottom, 0px)) !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    width: auto !important;
+    max-width: 250px !important;
+    align-items: center !important;
+  }
+
+  body:has(#vc-bar.opacity-100) #premium-toast-container,
+  body:has(#vc-bar:not(.opacity-0)) #premium-toast-container {
+    bottom: calc(5.1rem + env(safe-area-inset-bottom, 0px)) !important;
   }
 }
 
