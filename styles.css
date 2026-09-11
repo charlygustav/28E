@@ -13788,43 +13788,44 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
     right: auto !important;
     top: auto !important;
     width: auto !important;
-    max-width: 320px !important;
+    max-width: 380px !important;
     height: auto !important;
     max-height: none !important;
     border-radius: 1rem !important;
-    background: rgba(24, 24, 27, 0.95) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-    border: 1px solid rgba(236, 72, 153, 0.3) !important;
-    box-shadow: 0 10px 40px rgba(236, 72, 153, 0.2) !important;
-    padding: 0.75rem 1.25rem 0.75rem 0.75rem !important;
-    gap: 0.75rem !important;
+    background: rgba(18, 18, 22, 0.94) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(245, 158, 11, 0.35) !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(245, 158, 11, 0.15) !important;
+    padding: 0.75rem 1.25rem 0.75rem 0.85rem !important;
+    gap: 0.85rem !important;
     transform-origin: bottom left !important;
     display: flex !important;
     align-items: center !important;
   }
 
   #next-song-toast #next-song-toast-art-container {
-    width: 2.75rem !important;
-    height: 2.75rem !important;
-    border-radius: 0.5rem !important;
-    background: rgba(236, 72, 153, 0.2) !important;
-    color: #f472b6 !important;
-    border: none !important;
-    box-shadow: none !important;
+    width: 2.85rem !important;
+    height: 2.85rem !important;
+    border-radius: 0.65rem !important;
+    background: rgba(245, 158, 11, 0.15) !important;
+    color: #fbbf24 !important;
+    border: 1px solid rgba(245, 158, 11, 0.25) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
     flex-shrink: 0 !important;
     overflow: hidden !important;
   }
 
   #next-song-toast #next-song-toast-fallback {
     font-size: 1.25rem !important;
+    color: #fbbf24 !important;
   }
 
   #next-song-toast #next-song-toast-art {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
-    border-radius: 0.5rem !important;
+    border-radius: 0.65rem !important;
   }
 
   #next-song-toast .toast-disc-icon {
@@ -13832,46 +13833,48 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
   }
 
   #next-song-toast .toast-desktop-header {
+    display: none !important;
+  }
+
+  #next-song-toast .toast-text-group {
+    min-width: 0 !important;
+    max-width: 280px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+  }
+
+  #next-song-toast .toast-badge {
     display: flex !important;
     align-items: center !important;
-    gap: 0.25rem !important;
-    font-size: 8px !important;
-    font-weight: 700 !important;
-    color: #a1a1aa !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.1em !important;
+    gap: 0.35rem !important;
     margin-bottom: 0.25rem !important;
     line-height: 1 !important;
   }
 
-  #next-song-toast .toast-text-group {
-    max-width: 200px !important;
-  }
-
-  #next-song-toast .toast-badge {
-    font-size: 10px !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.1em !important;
-    text-transform: uppercase !important;
-    color: #ec4899 !important;
-    margin-bottom: 0.15rem !important;
-    gap: 0 !important;
-  }
-
   #next-song-toast .toast-badge-text {
-    font-size: 10px !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.1em !important;
+    font-size: 9.5px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.08em !important;
     text-transform: uppercase !important;
-    color: #ec4899 !important;
+    color: #f59e0b !important;
+    line-height: 1 !important;
+    margin: 0 !important;
   }
 
   #next-song-toast .toast-mobile-pulse {
-    display: none !important;
+    display: block !important;
+    width: 0.35rem !important;
+    height: 0.35rem !important;
+    background-color: #fbbf24 !important;
+    border-radius: 9999px !important;
+    box-shadow: 0 0 6px rgba(251, 191, 36, 0.8) !important;
   }
 
   #next-song-toast .toast-title-marquee-wrapper {
-    max-width: 200px !important;
+    max-width: 280px !important;
+    position: relative !important;
+    overflow: hidden !important;
   }
 
   #next-song-toast #next-song-toast-title {
@@ -13879,7 +13882,8 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
     font-weight: 700 !important;
     color: #ffffff !important;
     line-height: 1.25 !important;
-    max-width: 200px !important;
+    max-width: 280px !important;
+    white-space: nowrap !important;
   }
 }
 

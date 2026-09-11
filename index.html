@@ -245,7 +245,7 @@
     <!-- GSAP Core & ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-    <link rel="stylesheet" href="styles.css?v=1.0.35">
+    <link rel="stylesheet" href="styles.css?v=1.0.36">
     <script>
         (function () {
             try {
@@ -4890,11 +4890,12 @@
                                             artImg.src = artUrl;
                                             artImg.classList.remove('hidden');
                                             fallbackIcon.classList.add('hidden');
-                                            artContainer.classList.remove('bg-brand-500/20', 'text-brand-400');
+                                            artContainer.classList.remove('bg-brand-500/20', 'text-brand-400', 'bg-amber-500/15', 'text-amber-400');
                                         } else {
                                             artImg.classList.add('hidden');
                                             fallbackIcon.classList.remove('hidden');
-                                            artContainer.classList.add('bg-brand-500/20', 'text-brand-400');
+                                            artContainer.classList.remove('bg-brand-500/20', 'text-brand-400');
+                                            artContainer.classList.add('bg-amber-500/15', 'text-amber-400');
                                         }
 
                                         const isMobileToast = window.innerWidth <= 1024 || window.matchMedia('(pointer: coarse)').matches;
@@ -19755,21 +19756,19 @@
 
     <!-- NEXT SONG TOAST -->
     <div id="next-song-toast"
-        class="fixed bottom-6 left-6 bg-[#18181b]/95 backdrop-blur-md border border-brand-500/30 pr-5 pl-3 py-3 rounded-2xl shadow-[0_10px_40px_rgba(236,72,153,0.2)] flex items-center gap-3 z-[99999] opacity-0 pointer-events-none transform translate-y-[20px]">
+        class="fixed bottom-6 left-6 bg-[#121216]/95 backdrop-blur-md border border-amber-500/35 pr-5 pl-3.5 py-3 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.6),0_0_20px_rgba(245,158,11,0.15)] flex items-center gap-3.5 z-[99999] opacity-0 pointer-events-none transform translate-y-[20px]">
         <div id="next-song-toast-art-container"
-            class="w-11 h-11 rounded-lg bg-brand-500/20 flex items-center justify-center text-brand-400 shrink-0 overflow-hidden">
-            <i id="next-song-toast-fallback" class="ph-bold ph-music-notes text-xl"></i>
-            <img id="next-song-toast-art" src="" class="w-full h-full object-cover hidden" />
+            class="w-12 h-12 rounded-xl bg-amber-500/15 border border-amber-500/25 flex items-center justify-center text-amber-400 shrink-0 overflow-hidden shadow-sm">
+            <i id="next-song-toast-fallback" class="ph-bold ph-music-notes text-xl text-amber-400"></i>
+            <img id="next-song-toast-art" src="" class="w-full h-full object-cover hidden rounded-xl" />
         </div>
-        <div class="toast-text-group flex-1 min-w-0 flex flex-col justify-center overflow-hidden">
-            <p class="toast-desktop-header hidden lg:flex items-center gap-1 text-[8px] font-bold text-zinc-400 uppercase tracking-widest mb-1"><i
-                    class="ph-bold ph-vinyl-record"></i> Spotlight Music</p>
-            <div class="toast-badge flex items-center gap-1 mb-0.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0 animate-pulse toast-mobile-pulse lg:hidden"></span>
-                <span class="toast-badge-text text-[10px] font-bold text-brand-500 uppercase tracking-widest mb-0.5">Siguiente canción</span>
+        <div class="toast-text-group flex-1 min-w-0 flex flex-col justify-center">
+            <div class="toast-badge flex items-center gap-1.5 mb-1 leading-none">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0 shadow-[0_0_6px_rgba(251,191,36,0.8)] toast-mobile-pulse"></span>
+                <span class="toast-badge-text text-[9.5px] font-extrabold text-amber-400 uppercase tracking-widest leading-none">Siguiente canción</span>
             </div>
-            <div class="toast-title-marquee-wrapper relative overflow-hidden w-full max-w-[200px]">
-                <p id="next-song-toast-title" class="text-sm font-bold text-white leading-tight truncate max-w-[200px]"></p>
+            <div class="toast-title-marquee-wrapper relative overflow-hidden w-full max-w-[280px]">
+                <p id="next-song-toast-title" class="text-[13.5px] font-bold text-white leading-tight truncate max-w-[280px]"></p>
             </div>
         </div>
         <div class="toast-disc-icon lg:hidden shrink-0 flex items-center justify-center w-5.5 h-5.5 rounded-full bg-white/5 border border-white/10 text-amber-400/80">
@@ -19990,7 +19989,7 @@
             // 1. Registro del Service Worker
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function () {
-                    navigator.serviceWorker.register('./sw.js?v=28')
+                    navigator.serviceWorker.register('./sw.js?v=29')
                         .then(function (reg) {
                             console.log('[PWA] ✅ Service Worker activo:', reg.scope);
                             reg.addEventListener('updatefound', function () {
