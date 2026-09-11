@@ -567,6 +567,18 @@
     z-index: 20 !important;
   }
 
+  /* Desktop Avatars: Dark sleek contour matching bar background */
+  #vc-bar:not(.vc-bar-mobile) #vc-bar-avatars > div {
+    border: 2px solid #09090b !important;
+    background: #18181b !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  #vc-bar:not(.vc-bar-mobile) #vc-bar-avatars > div.ring-green-400 {
+    border-color: #22c55e !important;
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.95), 0 0 0 1.5px #22c55e !important;
+  }
+
   #vc-bar.vc-bar-mobile .vc-bar-divider {
     height: 1rem !important;
     width: 1px !important;
@@ -1845,7 +1857,7 @@
           : `<span class="w-full h-full flex items-center justify-center text-[7.5px] md:text-[9px] font-bold text-white uppercase">${initials}</span>`;
 
         return `
-          <div id="vc-bar-av-${u.id}" class="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-[7.5px] md:text-[9px] font-bold bg-zinc-800 text-white border-2 border-zinc-950 shadow-sm relative transition-all duration-300 overflow-hidden z-10" title="${displayName}">
+          <div id="vc-bar-av-${u.id}" class="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-[7.5px] md:text-[9px] font-bold bg-zinc-800 text-white border-2 border-zinc-900 shadow-sm relative transition-all duration-300 overflow-hidden z-10" title="${displayName}">
             ${avatarHtml}
           </div>
         `;
@@ -1853,7 +1865,7 @@
 
       if (extraCount > 0) {
         html += `
-          <div class="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-[7.5px] md:text-[9px] font-bold bg-zinc-800 text-white border-2 border-zinc-950 shadow-sm z-0 relative">
+          <div class="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-[7.5px] md:text-[9px] font-bold bg-zinc-800 text-white border-2 border-zinc-900 shadow-sm z-0 relative">
             +${extraCount}
           </div>
         `;
