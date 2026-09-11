@@ -341,7 +341,7 @@
     background-color: rgba(255, 255, 255, 0.08);
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px), (pointer: coarse) {
     .vc-panel-base {
       bottom: 0 !important;
       right: 0 !important;
@@ -390,6 +390,228 @@
       opacity: 0 !important;
       pointer-events: none !important;
       transform: translateY(20px) scale(0.9) !important;
+    }
+
+    /* Mobile Call Overlay: Center pill dock between letter-fab & vc-fab */
+    #vc-bar {
+      bottom: 1.5rem !important;
+      left: 50% !important;
+      right: auto !important;
+      height: 3.5rem !important;
+      max-height: 3.5rem !important;
+      border-radius: 9999px !important;
+      background: rgba(24, 24, 27, 0.92) !important;
+      backdrop-filter: blur(24px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+      padding: 0 1.05rem !important;
+      gap: 0.625rem !important;
+      max-width: calc(100vw - 164px) !important;
+      width: auto !important;
+      z-index: 9998 !important;
+      cursor: pointer !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+      transform-origin: center center !important;
+      transform: translate(-50%, 20px) scale(0.92) !important;
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease !important;
+    }
+
+    #vc-bar:hover {
+      border-color: rgba(245, 158, 11, 0.45) !important;
+      box-shadow: 0 14px 40px -4px rgba(0, 0, 0, 0.8), 0 0 24px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    }
+
+    #vc-bar:active {
+      transform: translate(-50%, 0) scale(0.96) !important;
+    }
+
+    #vc-bar.opacity-100,
+    #vc-bar.translate-y-0:not(.opacity-0) {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      transform: translate(-50%, 0) scale(1) !important;
+    }
+
+    #vc-bar.opacity-0,
+    #vc-bar.translate-y-4,
+    body.menu-is-open #vc-bar,
+    body:has(#drawer-overlay.open) #vc-bar,
+    body:has(#drawer-overlay:not(.hidden)) #vc-bar,
+    body:has(#menu-panel.open) #vc-bar,
+    body.vc-open #vc-bar,
+    body.vc-is-open #vc-bar,
+    body:has(#vc-panel.scale-100) #vc-bar,
+    body:has(.vc-panel-base.scale-100) #vc-bar {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transform: translate(-50%, 20px) scale(0.92) !important;
+    }
+
+    #vc-bar .vc-bar-text-group {
+      min-width: 0 !important;
+      max-width: 85px !important;
+      flex-shrink: 1 !important;
+    }
+
+    #vc-bar #vc-bar-title {
+      font-size: 8.5px !important;
+      letter-spacing: 0.16em !important;
+      line-height: 1 !important;
+    }
+
+    #vc-bar #vc-bar-sub {
+      font-size: 9.5px !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      display: block !important;
+    }
+
+    #vc-bar .vc-bar-divider {
+      height: 1.25rem !important;
+      margin-left: 0.1rem !important;
+      margin-right: 0.1rem !important;
+    }
+
+    #vc-bar #vc-bar-timer {
+      font-size: 12px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.02em !important;
+    }
+
+    #vc-bar #vc-bar-indicator-bg {
+      width: 1.625rem !important;
+      height: 1.625rem !important;
+      flex-shrink: 0 !important;
+    }
+
+    #vc-bar #vc-bar-avatars {
+      margin: 0 !important;
+    }
+
+    #vc-bar #vc-bar-avatars > div {
+      width: 1.25rem !important;
+      height: 1.25rem !important;
+      font-size: 8px !important;
+    }
+  }
+
+  /* Explicit rule for vc-bar-mobile regardless of media query */
+  #vc-bar.vc-bar-mobile {
+    bottom: 1.5rem !important;
+    left: 50% !important;
+    right: auto !important;
+    top: auto !important;
+    height: 3.5rem !important;
+    max-height: 3.5rem !important;
+    border-radius: 9999px !important;
+    background: rgba(24, 24, 27, 0.92) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    padding: 0 1.05rem !important;
+    gap: 0.625rem !important;
+    max-width: calc(100vw - 164px) !important;
+    width: auto !important;
+    z-index: 9998 !important;
+    cursor: pointer !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    transform-origin: center center !important;
+  }
+
+  #vc-bar.vc-bar-mobile:hover {
+    border-color: rgba(245, 158, 11, 0.45) !important;
+    box-shadow: 0 14px 40px -4px rgba(0, 0, 0, 0.8), 0 0 24px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  }
+
+  #vc-bar.vc-bar-mobile:active {
+    transform: translate(-50%, 0) scale(0.96) !important;
+  }
+
+  #vc-bar.vc-bar-mobile.opacity-100,
+  #vc-bar.vc-bar-mobile.translate-y-0:not(.opacity-0) {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: translate(-50%, 0) scale(1) !important;
+  }
+
+  #vc-bar.vc-bar-mobile.opacity-0,
+  #vc-bar.vc-bar-mobile.translate-y-4,
+  body.menu-is-open #vc-bar.vc-bar-mobile,
+  body:has(#drawer-overlay.open) #vc-bar.vc-bar-mobile,
+  body:has(#drawer-overlay:not(.hidden)) #vc-bar.vc-bar-mobile,
+  body:has(#menu-panel.open) #vc-bar.vc-bar-mobile,
+  body.vc-open #vc-bar.vc-bar-mobile,
+  body.vc-is-open #vc-bar.vc-bar-mobile,
+  body:has(#vc-panel.scale-100) #vc-bar.vc-bar-mobile,
+  body:has(.vc-panel-base.scale-100) #vc-bar.vc-bar-mobile {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translate(-50%, 20px) scale(0.92) !important;
+  }
+
+  #vc-bar.vc-bar-mobile .vc-bar-text-group {
+    min-width: 0 !important;
+    max-width: 85px !important;
+    flex-shrink: 1 !important;
+  }
+
+  #vc-bar.vc-bar-mobile #vc-bar-title {
+    font-size: 8.5px !important;
+    letter-spacing: 0.16em !important;
+    line-height: 1 !important;
+  }
+
+  #vc-bar.vc-bar-mobile #vc-bar-sub {
+    font-size: 9.5px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+  }
+
+  #vc-bar.vc-bar-mobile .vc-bar-divider {
+    height: 1.25rem !important;
+    margin-left: 0.1rem !important;
+    margin-right: 0.1rem !important;
+  }
+
+  #vc-bar.vc-bar-mobile #vc-bar-timer {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em !important;
+  }
+
+  #vc-bar.vc-bar-mobile #vc-bar-indicator-bg {
+    width: 1.625rem !important;
+    height: 1.625rem !important;
+    flex-shrink: 0 !important;
+  }
+
+  #vc-bar.vc-bar-mobile #vc-bar-avatars {
+    margin: 0 !important;
+  }
+
+  #vc-bar.vc-bar-mobile #vc-bar-avatars > div {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    font-size: 8px !important;
+  }
+
+  @media (max-width: 360px) {
+    #vc-bar {
+      padding: 0 0.75rem !important;
+      gap: 0.45rem !important;
+      max-width: calc(100vw - 152px) !important;
+    }
+    #vc-bar .vc-bar-text-group {
+      max-width: 65px !important;
     }
   }
 
@@ -612,6 +834,36 @@
       } catch(e){}
     }
 
+    _checkMobile() {
+      return window.innerWidth <= 1024 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
+    _updateBarLayout() {
+      if (!this._bar) return;
+      const isMobile = this._checkMobile();
+      if (isMobile) {
+        this._bar.classList.add('vc-bar-mobile');
+        this._bar.classList.remove('bottom-24', 'right-6');
+        this._bar.style.setProperty('bottom', '1.5rem', 'important');
+        this._bar.style.setProperty('left', '50%', 'important');
+        this._bar.style.setProperty('right', 'auto', 'important');
+        this._bar.style.setProperty('top', 'auto', 'important');
+        this._bar.style.setProperty('height', '3.5rem', 'important');
+        this._bar.style.setProperty('max-height', '3.5rem', 'important');
+        this._bar.style.setProperty('border-radius', '9999px', 'important');
+      } else {
+        this._bar.classList.remove('vc-bar-mobile');
+        this._bar.classList.add('bottom-24', 'right-6');
+        this._bar.style.removeProperty('bottom');
+        this._bar.style.removeProperty('left');
+        this._bar.style.removeProperty('right');
+        this._bar.style.removeProperty('top');
+        this._bar.style.removeProperty('height');
+        this._bar.style.removeProperty('max-height');
+        this._bar.style.removeProperty('border-radius');
+      }
+    }
+
     // ── BUILD UI ───────────────────────────────────────────────────────────
     _buildUI() {
       const w = document.createElement('div');
@@ -635,7 +887,8 @@
 
       this._bar = document.createElement('div');
       this._bar.id = 'vc-bar';
-      this._bar.className = 'fixed bottom-24 right-6 z-[9997] flex items-center gap-3 px-3.5 py-2.5 bg-zinc-950/80 backdrop-blur-xl border border-white/5 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] opacity-0 pointer-events-none transition-all duration-500 translate-y-4 scale-95 origin-bottom-right';
+      const isMobileInit = this._checkMobile();
+      this._bar.className = `fixed ${isMobileInit ? 'vc-bar-mobile' : 'bottom-24 right-6'} z-[9997] flex items-center gap-3 px-3.5 py-2.5 bg-zinc-950/80 backdrop-blur-xl border border-white/5 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] opacity-0 pointer-events-none transition-all duration-500 translate-y-4 scale-95 origin-bottom-right cursor-pointer select-none`;
       this._bar.innerHTML = `
         <div class="flex items-center justify-center w-7 h-7 rounded-full bg-green-500/10 border border-green-500/20 relative shrink-0 transition-colors duration-300" id="vc-bar-indicator-bg">
           <div class="absolute inset-0 rounded-full bg-green-500/20 animate-ping opacity-50 transition-all duration-300" id="vc-bar-indicator-ping"></div>
@@ -647,7 +900,7 @@
              <div class="w-1 bg-green-400 rounded-full animate-[vc-eq_0.5s_ease-in-out_infinite_0.2s]"></div>
           </div>
         </div>
-        <div class="flex flex-col justify-center min-w-[65px]">
+        <div class="flex flex-col justify-center min-w-[65px] vc-bar-text-group">
           <div class="flex items-center gap-1.5 mb-1">
              <span class="text-[9px] font-extrabold text-green-400 uppercase tracking-[0.2em] leading-none transition-colors duration-300" id="vc-bar-title">${_t('bar_conn').split(' · ')[0]}</span>
              <div class="flex items-center gap-1" id="vc-bar-icons">
@@ -662,16 +915,21 @@
           </div>
           <span id="vc-bar-sub" class="text-[10px] text-white/50 font-medium leading-none">${_t('bar_conn').split(' · ')[1]}</span>
         </div>
-        <div class="w-[1px] h-6 bg-white/10 mx-1"></div>
+        <div class="w-[1px] h-6 bg-white/10 mx-1 shrink-0 vc-bar-divider"></div>
         <div id="vc-bar-avatars" class="flex items-center -space-x-1.5 mx-1 hidden"></div>
-        <div class="flex items-center px-1">
+        <div class="flex items-center px-1 shrink-0">
           <span id="vc-bar-timer" class="text-white font-mono text-[13px] font-bold tabular-nums tracking-wide">00:00</span>
         </div>
       `;
+      this._bar.addEventListener('click', () => this._toggle());
 
       document.body.appendChild(this.fab);
       document.body.appendChild(this.panel);
       document.body.appendChild(this._bar);
+
+      this._updateBarLayout();
+      window.addEventListener('resize', () => this._updateBarLayout());
+      window.addEventListener('orientationchange', () => this._updateBarLayout());
 
       // Hide connected floating bar immediately when hamburger menu / drawer is opened
       const checkMenuState = () => {
@@ -684,6 +942,7 @@
             this._bar.classList.add('opacity-0', 'pointer-events-none');
             this._bar.classList.remove('opacity-100', 'pointer-events-auto');
           } else if (this.connected && !this.panel.classList.contains('scale-100')) {
+            this._updateBarLayout();
             this._bar.classList.remove('opacity-0', 'pointer-events-none');
             this._bar.classList.add('opacity-100', 'pointer-events-auto');
           }
@@ -758,7 +1017,7 @@
 
       document.addEventListener('click', (e) => {
         if (!this.panel.classList.contains('scale-100')) return;
-        if (this.panel.contains(e.target) || this.fab.contains(e.target)) return;
+        if (this.panel.contains(e.target) || this.fab.contains(e.target) || (this._bar && this._bar.contains(e.target))) return;
         if (_panelMousedown) return;
         if (window.getSelection && window.getSelection().toString()) return;
         if (document.getElementById('vc-detailed-history')) return;
@@ -790,7 +1049,7 @@
 
     _toggle() {
       const willOpen = !this.panel.classList.contains('scale-100');
-      const isMobile = window.innerWidth <= 768;
+      const isMobile = this._checkMobile();
       const letterFab = document.getElementById('letter-fab') || document.querySelector('a[href="para-yaire.html"].fixed');
       
       if (willOpen) {
@@ -848,6 +1107,7 @@
                              document.querySelector('#drawer-overlay:not(.hidden)') !== null ||
                              document.querySelector('#menu-panel.open') !== null;
           if (!isMenuOpen) {
+            this._updateBarLayout();
             this._bar.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
             this._bar.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
           }
@@ -3827,6 +4087,7 @@
                              document.querySelector('#drawer-overlay:not(.hidden)') !== null ||
                              document.querySelector('#menu-panel.open') !== null;
           if (!isMenuOpen) {
+            this._updateBarLayout();
             this._bar.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
             this._bar.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
           }

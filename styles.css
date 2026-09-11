@@ -238,6 +238,7 @@ button,
 [type='reset'],
 [type='submit'] {
   -webkit-appearance: button;
+  appearance: button;
   /* 1 */
   background-color: transparent;
   /* 2 */
@@ -285,6 +286,7 @@ Correct the cursor style of increment and decrement buttons in Safari.
 
 [type='search'] {
   -webkit-appearance: textfield;
+  appearance: textfield;
   /* 1 */
   outline-offset: -2px;
   /* 2 */
@@ -423,9 +425,6 @@ iframe,
 embed,
 object {
   display: block;
-  /* 1 */
-  vertical-align: middle;
-  /* 2 */
 }
 
 /*
@@ -1642,6 +1641,7 @@ video {
   display: block;
   -webkit-box-orient: horizontal;
   -webkit-line-clamp: none;
+  line-clamp: none;
 }
 
 .block {
@@ -9676,10 +9676,6 @@ video {
   forced-color-adjust: none;
 }
 
-.\[engine\:node\@\>\=16\] {
-  engine: node@>=16;
-}
-
 .\[mask-image\:radial-gradient\(ellipse_60\%_60\%_at_50\%_50\%\2c \#000_70\%\2c transparent_100\%\)\] {
   -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 50%,#000 70%,transparent 100%);
           mask-image: radial-gradient(ellipse 60% 60% at 50% 50%,#000 70%,transparent 100%);
@@ -13593,4 +13589,230 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
   pointer-events: none !important;
   transform: translateY(20px) scale(0.9) !important;
 }
+
+/* Mobile Call Overlay: Center pill dock between letter-fab & vc-fab */
+@media (max-width: 1024px), (pointer: coarse) {
+  #vc-bar {
+    bottom: 1.5rem !important;
+    left: 50% !important;
+    right: auto !important;
+    top: auto !important;
+    height: 3.5rem !important;
+    max-height: 3.5rem !important;
+    border-radius: 9999px !important;
+    background: rgba(24, 24, 27, 0.92) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    padding: 0 1.05rem !important;
+    gap: 0.625rem !important;
+    max-width: calc(100vw - 164px) !important;
+    width: auto !important;
+    z-index: 9998 !important;
+    cursor: pointer !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    transform-origin: center center !important;
+    transform: translate(-50%, 20px) scale(0.92) !important;
+    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease !important;
+  }
+
+  #vc-bar:hover {
+    border-color: rgba(245, 158, 11, 0.45) !important;
+    box-shadow: 0 14px 40px -4px rgba(0, 0, 0, 0.8), 0 0 24px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  }
+
+  #vc-bar:active {
+    transform: translate(-50%, 0) scale(0.96) !important;
+  }
+
+  #vc-bar.opacity-100,
+  #vc-bar.translate-y-0:not(.opacity-0) {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: translate(-50%, 0) scale(1) !important;
+  }
+
+  #vc-bar.opacity-0,
+  #vc-bar.translate-y-4,
+  body.menu-is-open #vc-bar,
+  body:has(#drawer-overlay.open) #vc-bar,
+  body:has(#drawer-overlay:not(.hidden)) #vc-bar,
+  body:has(#menu-panel.open) #vc-bar,
+  body.vc-open #vc-bar,
+  body.vc-is-open #vc-bar,
+  body:has(#vc-panel.scale-100) #vc-bar,
+  body:has(.vc-panel-base.scale-100) #vc-bar {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translate(-50%, 20px) scale(0.92) !important;
+  }
+
+  #vc-bar .vc-bar-text-group {
+    min-width: 0 !important;
+    max-width: 85px !important;
+    flex-shrink: 1 !important;
+  }
+
+  #vc-bar #vc-bar-title {
+    font-size: 8.5px !important;
+    letter-spacing: 0.16em !important;
+    line-height: 1 !important;
+  }
+
+  #vc-bar #vc-bar-sub {
+    font-size: 9.5px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+  }
+
+  #vc-bar .vc-bar-divider {
+    height: 1.25rem !important;
+    margin-left: 0.1rem !important;
+    margin-right: 0.1rem !important;
+  }
+
+  #vc-bar #vc-bar-timer {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em !important;
+  }
+
+  #vc-bar #vc-bar-indicator-bg {
+    width: 1.625rem !important;
+    height: 1.625rem !important;
+    flex-shrink: 0 !important;
+  }
+
+  #vc-bar #vc-bar-avatars {
+    margin: 0 !important;
+  }
+
+  #vc-bar #vc-bar-avatars > div {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    font-size: 8px !important;
+  }
+}
+
+/* Explicit rule for vc-bar-mobile regardless of media query */
+#vc-bar.vc-bar-mobile {
+  bottom: 1.5rem !important;
+  left: 50% !important;
+  right: auto !important;
+  top: auto !important;
+  height: 3.5rem !important;
+  max-height: 3.5rem !important;
+  border-radius: 9999px !important;
+  background: rgba(24, 24, 27, 0.92) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+  padding: 0 1.05rem !important;
+  gap: 0.625rem !important;
+  max-width: calc(100vw - 164px) !important;
+  width: auto !important;
+  z-index: 9998 !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  transform-origin: center center !important;
+}
+
+#vc-bar.vc-bar-mobile:hover {
+  border-color: rgba(245, 158, 11, 0.45) !important;
+  box-shadow: 0 14px 40px -4px rgba(0, 0, 0, 0.8), 0 0 24px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+#vc-bar.vc-bar-mobile:active {
+  transform: translate(-50%, 0) scale(0.96) !important;
+}
+
+#vc-bar.vc-bar-mobile.opacity-100,
+#vc-bar.vc-bar-mobile.translate-y-0:not(.opacity-0) {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translate(-50%, 0) scale(1) !important;
+}
+
+#vc-bar.vc-bar-mobile.opacity-0,
+#vc-bar.vc-bar-mobile.translate-y-4,
+body.menu-is-open #vc-bar.vc-bar-mobile,
+body:has(#drawer-overlay.open) #vc-bar.vc-bar-mobile,
+body:has(#drawer-overlay:not(.hidden)) #vc-bar.vc-bar-mobile,
+body:has(#menu-panel.open) #vc-bar.vc-bar-mobile,
+body.vc-open #vc-bar.vc-bar-mobile,
+body.vc-is-open #vc-bar.vc-bar-mobile,
+body:has(#vc-panel.scale-100) #vc-bar.vc-bar-mobile,
+body:has(.vc-panel-base.scale-100) #vc-bar.vc-bar-mobile {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translate(-50%, 20px) scale(0.92) !important;
+}
+
+#vc-bar.vc-bar-mobile .vc-bar-text-group {
+  min-width: 0 !important;
+  max-width: 85px !important;
+  flex-shrink: 1 !important;
+}
+
+#vc-bar.vc-bar-mobile #vc-bar-title {
+  font-size: 8.5px !important;
+  letter-spacing: 0.16em !important;
+  line-height: 1 !important;
+}
+
+#vc-bar.vc-bar-mobile #vc-bar-sub {
+  font-size: 9.5px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: block !important;
+}
+
+#vc-bar.vc-bar-mobile .vc-bar-divider {
+  height: 1.25rem !important;
+  margin-left: 0.1rem !important;
+  margin-right: 0.1rem !important;
+}
+
+#vc-bar.vc-bar-mobile #vc-bar-timer {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+}
+
+#vc-bar.vc-bar-mobile #vc-bar-indicator-bg {
+  width: 1.625rem !important;
+  height: 1.625rem !important;
+  flex-shrink: 0 !important;
+}
+
+#vc-bar.vc-bar-mobile #vc-bar-avatars {
+  margin: 0 !important;
+}
+
+#vc-bar.vc-bar-mobile #vc-bar-avatars > div {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  font-size: 8px !important;
+}
+
+@media (max-width: 360px) {
+  #vc-bar {
+    padding: 0 0.75rem !important;
+    gap: 0.45rem !important;
+    max-width: calc(100vw - 152px) !important;
+  }
+  #vc-bar .vc-bar-text-group {
+    max-width: 65px !important;
+  }
+}
+
 
