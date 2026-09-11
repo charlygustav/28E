@@ -13896,6 +13896,11 @@ body:has(.vc-panel-base.scale-100) #vc-bar.vc-bar-mobile {
   z-index: 20 !important;
 }
 
+/* Desktop VC Bar: Passive floating status badge (no pointer cursor, no click) */
+#vc-bar:not(.vc-bar-mobile) {
+  cursor: default !important;
+}
+
 /* Desktop Avatars: Dark sleek contour matching bar background */
 #vc-bar:not(.vc-bar-mobile) #vc-bar-avatars > div {
   border: 2px solid #09090b !important;

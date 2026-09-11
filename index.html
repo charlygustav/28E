@@ -245,7 +245,7 @@
     <!-- GSAP Core & ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-    <link rel="stylesheet" href="styles.css?v=1.0.33">
+    <link rel="stylesheet" href="styles.css?v=1.0.34">
     <script>
         (function () {
             try {
@@ -19201,7 +19201,7 @@
         (function () {
             var loadVoiceWidget = function () {
                 if (window.__loadScriptOnce) {
-                    window.__loadScriptOnce('voice-channel-widget.js?v=35').catch(function () { });
+                    window.__loadScriptOnce('voice-channel-widget.js?v=36').catch(function () { });
                 }
             };
             if (window.__runWhenIdle) {
@@ -19988,7 +19988,7 @@
             // 1. Registro del Service Worker
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function () {
-                    navigator.serviceWorker.register('./sw.js?v=26')
+                    navigator.serviceWorker.register('./sw.js?v=27')
                         .then(function (reg) {
                             console.log('[PWA] ✅ Service Worker activo:', reg.scope);
                             reg.addEventListener('updatefound', function () {

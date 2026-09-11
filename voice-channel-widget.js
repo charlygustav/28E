@@ -567,6 +567,11 @@
     z-index: 20 !important;
   }
 
+  /* Desktop VC Bar: Passive floating status badge (no pointer cursor, no click) */
+  #vc-bar:not(.vc-bar-mobile) {
+    cursor: default !important;
+  }
+
   /* Desktop Avatars: Dark sleek contour matching bar background */
   #vc-bar:not(.vc-bar-mobile) #vc-bar-avatars > div {
     border: 2px solid #09090b !important;
@@ -926,7 +931,7 @@
       this._bar = document.createElement('div');
       this._bar.id = 'vc-bar';
       const isMobileInit = this._checkMobile();
-      this._bar.className = `fixed ${isMobileInit ? 'vc-bar-mobile' : 'bottom-24 right-6'} z-[9997] flex items-center gap-3 px-3.5 py-2.5 bg-zinc-950/80 backdrop-blur-xl border border-white/5 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] opacity-0 pointer-events-none transition-all duration-500 translate-y-4 scale-95 origin-bottom-right cursor-pointer select-none hover:border-amber-500/40 hover:shadow-amber-500/10 active:scale-95 group`;
+      this._bar.className = `fixed ${isMobileInit ? 'vc-bar-mobile' : 'bottom-24 right-6'} z-[9997] flex items-center gap-3 px-3.5 py-2.5 bg-zinc-950/80 backdrop-blur-xl border border-white/5 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] opacity-0 pointer-events-none transition-all duration-500 translate-y-4 scale-95 origin-bottom-right select-none`;
       this._bar.innerHTML = `
         <div class="flex items-center justify-center w-7 h-7 rounded-full bg-green-500/10 border border-green-500/20 relative shrink-0 transition-colors duration-300" id="vc-bar-indicator-bg">
           <div class="absolute inset-0 rounded-full bg-green-500/20 animate-ping opacity-50 transition-all duration-300" id="vc-bar-indicator-ping"></div>
@@ -959,7 +964,11 @@
           <span id="vc-bar-timer" class="text-white font-mono text-[13px] font-bold tabular-nums tracking-wide">00:00</span>
         </div>
       `;
-      this._bar.addEventListener('click', () => this._toggle());
+      this._bar.addEventListener('click', () => {
+        if (this._checkMobile() || (this._bar && this._bar.classList.contains('vc-bar-mobile'))) {
+          this._toggle();
+        }
+      });
 
       document.body.appendChild(this.fab);
       document.body.appendChild(this.panel);
