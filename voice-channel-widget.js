@@ -788,7 +788,7 @@
           music_end_all: 'siriSounds18Separate/VoiceTriggerTraining_FX_0.wav',
           jbl_begin: 'siriSounds18Separate/jbl_begin_sae.wav',
           jbl_latency: 'latency_experience_long.wav',
-          jbl_success: 'siriSounds18Separate/jbl_success_sae.wav',
+          jbl_success: 'latency_loop.wav',
           siri_end: 'siriSounds18Separate/siri-begin-improved.wav'
         };
         this.sfxBuf = this.sfxBuf || {};
@@ -885,17 +885,15 @@
       if (this.actx && this.sfxBuf && this.sfxBuf[k]) {
         playBuffer(this.sfxBuf[k]);
       } else if (this.sfxPromises && this.sfxPromises[k]) {
-        // If buffer is still downloading/decoding on mobile, start HTMLAudio immediately so there is zero silence
-        if (this._checkMobile()) {
+        this.sfxPromises[k].then(buf => {
+          if (controller.stopped) return;
+          if (buf) playBuffer(buf);
+          else playHtmlAudio();
+        }).catch(() => {
+          if (!controller.stopped) playHtmlAudio();
+        });
+        if (this._checkMobile() && (!this.actx || this.actx.state !== 'running')) {
           playHtmlAudio();
-        } else {
-          this.sfxPromises[k].then(buf => {
-            if (controller.stopped) return;
-            if (buf) playBuffer(buf);
-            else playHtmlAudio();
-          }).catch(() => {
-            if (!controller.stopped) playHtmlAudio();
-          });
         }
       } else {
         playHtmlAudio();
