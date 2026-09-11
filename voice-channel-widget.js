@@ -297,6 +297,10 @@
   @keyframes vc-ring-pulse { 0%,100% { box-shadow:0 0 0 0 rgba(245,158,11,.3); } 50% { box-shadow:0 0 0 18px rgba(245,158,11,0); } }
   @keyframes vc-music-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
   @keyframes vc-eq { 0%,100%{height:3px} 50%{height:12px} }
+  .vc-scroll {
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
   .vc-scroll::-webkit-scrollbar { width:4px; }
   .vc-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
   .vc-av.speaking { border-color: #10B981 !important; box-shadow: 0 0 14px rgba(16, 185, 129, 0.45); animation: vc-speak-pulse 1.5s infinite; }
@@ -1120,8 +1124,10 @@
       let touchEndX = 0;
       let touchStartY = 0;
       let touchEndY = 0;
+      let touchStartTarget = null;
 
       this.panel.addEventListener('touchstart', e => {
+        touchStartTarget = e.target;
         touchStartX = e.changedTouches[0].screenX;
         touchStartY = e.changedTouches[0].screenY;
       }, { passive: true });
@@ -1132,19 +1138,62 @@
         
         const deltaX = touchEndX - touchStartX;
         const deltaY = touchEndY - touchStartY;
-        
-        // Swipe down to close
-        if (deltaY > 50 && Math.abs(deltaY) > Math.abs(deltaX) * 1.5) {
-          if (this.panel.classList.contains('scale-100') || this._vcOpen) {
-            this._toggle();
+
+        // Detect if touch started inside any scrollable container (music spotlight, queue, chat, etc.)
+        const isInsideScrollable = (el) => {
+          let cur = el;
+          while (cur && cur !== this.panel) {
+            if (cur.classList && (
+              cur.classList.contains('vc-scroll') ||
+              cur.classList.contains('overflow-y-auto') ||
+              cur.classList.contains('overflow-y-scroll') ||
+              cur.id === 'vc-spotlight-track-list' ||
+              cur.id === 'vc-music-inner' ||
+              cur.id === 'vc-msgs' ||
+              cur.id === 'vc-music-queue' ||
+              cur.id === 'vc-users-group'
+            )) {
+              return true;
+            }
+            cur = cur.parentElement;
           }
-          return;
+          return false;
+        };
+
+        const startedInScrollable = isInsideScrollable(touchStartTarget);
+        const startedInHeader = touchStartTarget && (
+          touchStartTarget.closest('.vc-panel-header') ||
+          touchStartTarget.closest('#vc-panel-header') ||
+          touchStartTarget.closest('#vc-drag-handle')
+        );
+
+        // Swipe down to close:
+        // NEVER close if user touched or scrolled inside any scrollable content area (music spotlight, chat, queue, etc.)
+        // ONLY allow closing if initiated deliberately from the top header bar
+        if (!startedInScrollable && startedInHeader) {
+          if (deltaY > 60 && Math.abs(deltaY) > Math.abs(deltaX) * 2) {
+            if (this.panel.classList.contains('scale-100') || this._vcOpen) {
+              this._toggle();
+            }
+            return;
+          }
         }
         
         if (!this.connected) return;
 
-        // Ensure swipe is mostly horizontal and significant enough (> 50px)
-        if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+        // Ignore tab swipe if user touched inputs, buttons, sliders or scrollable lists
+        if (touchStartTarget && (
+          touchStartTarget.closest('input') ||
+          touchStartTarget.closest('button') ||
+          touchStartTarget.closest('select') ||
+          touchStartTarget.closest('#vc-spotlight-track-list') ||
+          touchStartTarget.closest('.vc-no-swipe')
+        )) {
+          return;
+        }
+
+        // Ensure swipe is mostly horizontal and significant enough (> 70px)
+        if (Math.abs(deltaX) > 70 && Math.abs(deltaX) > Math.abs(deltaY) * 2) {
           const order = ['room', 'chat', 'music'];
           let currentIndex = order.indexOf(this._activeTab);
           
@@ -1349,7 +1398,7 @@
             <div class="absolute top-0 right-0 w-48 h-48 bg-amber-500/10 rounded-full blur-[50px] pointer-events-none"></div>
             <div class="absolute bottom-0 left-0 w-48 h-48 bg-pink-500/10 rounded-full blur-[50px] pointer-events-none"></div>
 
-            <div class="relative z-10 flex items-center justify-between px-5 py-3 border-b border-white/5 bg-black/20 backdrop-blur-sm">
+            <div class="relative z-10 flex items-center justify-between px-5 py-3 border-b border-white/5 bg-black/20 backdrop-blur-sm vc-panel-header">
               <div class="flex items-center gap-3">
                 <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center relative overflow-hidden [&>svg]:w-4 [&>svg]:h-4 [&>svg]:relative [&>svg]:z-10">${ICONS.sound}</div>
                 <div><div class="text-white font-bold text-[13px]">#principal</div><div class="text-white/40 text-[10px]">${_t('vc_sub')}</div></div>
@@ -1381,7 +1430,7 @@
           <div class="absolute -top-20 -right-20 w-64 h-64 bg-amber-500/10 rounded-full blur-[60px] pointer-events-none"></div>
           <div class="absolute bottom-10 -left-10 w-48 h-48 bg-pink-500/10 rounded-full blur-[50px] pointer-events-none"></div>
 
-          <div class="relative z-10 flex items-center justify-between px-5 py-3 border-b border-white/5 bg-black/20 backdrop-blur-sm">
+          <div class="relative z-10 flex items-center justify-between px-5 py-3 border-b border-white/5 bg-black/20 backdrop-blur-sm vc-panel-header">
             <div class="flex items-center gap-3">
               <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center relative overflow-hidden [&>svg]:w-4 [&>svg]:h-4 [&>svg]:relative [&>svg]:z-10">${ICONS.sound}</div>
               <div><div class="text-white font-bold text-[13px]">#principal</div><div class="text-white/40 text-[10px]">${_t('vc_sub')}</div></div>
@@ -1420,7 +1469,7 @@
           <!-- Ambient Light Orbs -->
           <div class="absolute -top-10 -right-10 w-48 h-48 bg-amber-500/10 rounded-full blur-[50px] pointer-events-none animate-pulse"></div>
 
-          <div class="relative z-10 flex items-center justify-between px-5 py-4 border-b border-white/5 bg-black/20 backdrop-blur-sm">
+          <div class="relative z-10 flex items-center justify-between px-5 py-4 border-b border-white/5 bg-black/20 backdrop-blur-sm vc-panel-header">
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5">${ICONS.sound}</div>
               <div><div class="text-white font-bold text-sm">#principal</div><div class="text-white/40 text-[11px]">${_t('st_conn')}</div></div>
@@ -1444,7 +1493,7 @@
           <!-- Ambient Red Light Orbs -->
           <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-red-500/10 rounded-full blur-[60px] pointer-events-none"></div>
 
-          <div class="relative z-10 flex items-center justify-between px-5 py-4 border-b border-white/5 bg-black/20 backdrop-blur-sm">
+          <div class="relative z-10 flex items-center justify-between px-5 py-4 border-b border-white/5 bg-black/20 backdrop-blur-sm vc-panel-header">
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 rounded-xl bg-red-500/10 text-red-500 flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5">${ICONS.sound}</div>
               <div><div class="text-white font-bold text-sm">#principal</div><div class="text-red-400 font-bold text-[11px] uppercase tracking-wider">${_t('st_disc')}</div></div>
@@ -1575,7 +1624,7 @@
 
       return `
         <!-- Header -->
-        <div class="flex items-center justify-between px-5 py-4 bg-zinc-900/50">
+        <div class="flex items-center justify-between px-5 py-4 bg-zinc-900/50 vc-panel-header" id="vc-panel-header">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center relative overflow-hidden [&>svg]:w-5 [&>svg]:h-5 [&>svg]:relative [&>svg]:z-10">${ICONS.sound}</div>
             <div>

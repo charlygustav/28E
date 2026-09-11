@@ -13947,5 +13947,10 @@ body:has(.vc-panel-base.scale-100) #vc-bar.vc-bar-mobile {
   }
 }
 
+.vc-scroll {
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
 
 
