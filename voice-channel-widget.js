@@ -392,22 +392,54 @@
       transform: translateY(20px) scale(0.9) !important;
     }
 
-    /* Mobile Call Overlay: Center pill dock between letter-fab & vc-fab */
+    /* Mobile Action Buttons & Pill Dock: Generous Breathing Separation */
+    #letter-fab,
+    #vc-fab {
+      width: 2.875rem !important;
+      height: 2.875rem !important;
+      bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px)) !important;
+      border-radius: 9999px !important;
+      background: rgba(18, 18, 22, 0.94) !important;
+      backdrop-filter: blur(20px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+      z-index: 9999 !important;
+    }
+    #letter-fab {
+      left: 1rem !important;
+    }
+    #vc-fab {
+      right: 1rem !important;
+    }
+    #letter-fab > span,
+    #vc-fab > span {
+      width: 1.25rem !important;
+      height: 1.25rem !important;
+    }
+    #letter-fab > span svg,
+    #vc-fab > span svg {
+      width: 1.25rem !important;
+      height: 1.25rem !important;
+    }
+
+    /* Mobile Call Overlay: Compact Center pill dock between letter-fab & vc-fab */
     #vc-bar {
-      bottom: 1.5rem !important;
+      bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px)) !important;
       left: 50% !important;
       right: auto !important;
-      height: 3.5rem !important;
-      max-height: 3.5rem !important;
+      top: auto !important;
+      height: 2.875rem !important;
+      max-height: 2.875rem !important;
       border-radius: 9999px !important;
-      background: rgba(24, 24, 27, 0.92) !important;
+      background: rgba(18, 18, 22, 0.94) !important;
       backdrop-filter: blur(24px) saturate(180%) !important;
       -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
       border: 1px solid rgba(255, 255, 255, 0.12) !important;
-      box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
-      padding: 0 1.05rem !important;
-      gap: 0.625rem !important;
-      max-width: calc(100vw - 164px) !important;
+      box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+      padding: 0 0.85rem !important;
+      gap: 0.45rem !important;
+      max-width: 152px !important;
       width: auto !important;
       z-index: 9998 !important;
       cursor: pointer !important;
@@ -421,7 +453,7 @@
 
     #vc-bar:hover {
       border-color: rgba(245, 158, 11, 0.45) !important;
-      box-shadow: 0 14px 40px -4px rgba(0, 0, 0, 0.8), 0 0 24px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+      box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.8), 0 0 20px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
     }
 
     #vc-bar:active {
@@ -452,39 +484,40 @@
 
     #vc-bar .vc-bar-text-group {
       min-width: 0 !important;
-      max-width: 85px !important;
+      max-width: 60px !important;
       flex-shrink: 1 !important;
     }
 
     #vc-bar #vc-bar-title {
-      font-size: 8.5px !important;
-      letter-spacing: 0.16em !important;
+      font-size: 7.5px !important;
+      letter-spacing: 0.12em !important;
       line-height: 1 !important;
     }
 
     #vc-bar #vc-bar-sub {
-      font-size: 9.5px !important;
+      font-size: 9px !important;
       white-space: nowrap !important;
       overflow: hidden !important;
       text-overflow: ellipsis !important;
       display: block !important;
+      line-height: 1.1 !important;
     }
 
     #vc-bar .vc-bar-divider {
-      height: 1.25rem !important;
-      margin-left: 0.1rem !important;
-      margin-right: 0.1rem !important;
+      height: 1rem !important;
+      margin-left: 0.05rem !important;
+      margin-right: 0.05rem !important;
     }
 
     #vc-bar #vc-bar-timer {
-      font-size: 12px !important;
+      font-size: 11px !important;
       font-weight: 700 !important;
-      letter-spacing: 0.02em !important;
+      letter-spacing: 0.01em !important;
     }
 
     #vc-bar #vc-bar-indicator-bg {
-      width: 1.625rem !important;
-      height: 1.625rem !important;
+      width: 1.35rem !important;
+      height: 1.35rem !important;
       flex-shrink: 0 !important;
     }
 
@@ -493,29 +526,29 @@
     }
 
     #vc-bar #vc-bar-avatars > div {
-      width: 1.25rem !important;
-      height: 1.25rem !important;
-      font-size: 8px !important;
+      width: 1.15rem !important;
+      height: 1.15rem !important;
+      font-size: 7.5px !important;
     }
   }
 
   /* Explicit rule for vc-bar-mobile regardless of media query */
   #vc-bar.vc-bar-mobile {
-    bottom: 1.5rem !important;
+    bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px)) !important;
     left: 50% !important;
     right: auto !important;
     top: auto !important;
-    height: 3.5rem !important;
-    max-height: 3.5rem !important;
+    height: 2.875rem !important;
+    max-height: 2.875rem !important;
     border-radius: 9999px !important;
-    background: rgba(24, 24, 27, 0.92) !important;
+    background: rgba(18, 18, 22, 0.94) !important;
     backdrop-filter: blur(24px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
     border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
-    padding: 0 1.05rem !important;
-    gap: 0.625rem !important;
-    max-width: calc(100vw - 164px) !important;
+    box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    padding: 0 0.85rem !important;
+    gap: 0.45rem !important;
+    max-width: 152px !important;
     width: auto !important;
     z-index: 9998 !important;
     cursor: pointer !important;
@@ -527,7 +560,7 @@
 
   #vc-bar.vc-bar-mobile:hover {
     border-color: rgba(245, 158, 11, 0.45) !important;
-    box-shadow: 0 14px 40px -4px rgba(0, 0, 0, 0.8), 0 0 24px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.8), 0 0 20px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
   }
 
   #vc-bar.vc-bar-mobile:active {
@@ -558,39 +591,40 @@
 
   #vc-bar.vc-bar-mobile .vc-bar-text-group {
     min-width: 0 !important;
-    max-width: 85px !important;
+    max-width: 60px !important;
     flex-shrink: 1 !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-title {
-    font-size: 8.5px !important;
-    letter-spacing: 0.16em !important;
+    font-size: 7.5px !important;
+    letter-spacing: 0.12em !important;
     line-height: 1 !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-sub {
-    font-size: 9.5px !important;
+    font-size: 9px !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     display: block !important;
+    line-height: 1.1 !important;
   }
 
   #vc-bar.vc-bar-mobile .vc-bar-divider {
-    height: 1.25rem !important;
-    margin-left: 0.1rem !important;
-    margin-right: 0.1rem !important;
+    height: 1rem !important;
+    margin-left: 0.05rem !important;
+    margin-right: 0.05rem !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-timer {
-    font-size: 12px !important;
+    font-size: 11px !important;
     font-weight: 700 !important;
-    letter-spacing: 0.02em !important;
+    letter-spacing: 0.01em !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-indicator-bg {
-    width: 1.625rem !important;
-    height: 1.625rem !important;
+    width: 1.35rem !important;
+    height: 1.35rem !important;
     flex-shrink: 0 !important;
   }
 
@@ -599,19 +633,19 @@
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-avatars > div {
-    width: 1.25rem !important;
-    height: 1.25rem !important;
-    font-size: 8px !important;
+    width: 1.15rem !important;
+    height: 1.15rem !important;
+    font-size: 7.5px !important;
   }
 
   @media (max-width: 360px) {
     #vc-bar {
-      padding: 0 0.75rem !important;
-      gap: 0.45rem !important;
-      max-width: calc(100vw - 152px) !important;
+      padding: 0 0.65rem !important;
+      gap: 0.35rem !important;
+      max-width: 140px !important;
     }
     #vc-bar .vc-bar-text-group {
-      max-width: 65px !important;
+      max-width: 55px !important;
     }
   }
 
@@ -841,16 +875,33 @@
     _updateBarLayout() {
       if (!this._bar) return;
       const isMobile = this._checkMobile();
+      const letterFab = document.getElementById('letter-fab') || document.querySelector('a[href="para-yaire.html"].fixed');
       if (isMobile) {
         this._bar.classList.add('vc-bar-mobile');
         this._bar.classList.remove('bottom-24', 'right-6');
-        this._bar.style.setProperty('bottom', '1.5rem', 'important');
+        this._bar.style.setProperty('bottom', 'calc(1.25rem + env(safe-area-inset-bottom, 0px))', 'important');
         this._bar.style.setProperty('left', '50%', 'important');
         this._bar.style.setProperty('right', 'auto', 'important');
         this._bar.style.setProperty('top', 'auto', 'important');
-        this._bar.style.setProperty('height', '3.5rem', 'important');
-        this._bar.style.setProperty('max-height', '3.5rem', 'important');
+        this._bar.style.setProperty('height', '2.875rem', 'important');
+        this._bar.style.setProperty('max-height', '2.875rem', 'important');
         this._bar.style.setProperty('border-radius', '9999px', 'important');
+        this._bar.style.setProperty('max-width', '152px', 'important');
+        this._bar.style.setProperty('padding', '0 0.85rem', 'important');
+        this._bar.style.setProperty('gap', '0.45rem', 'important');
+
+        if (this.fab) {
+          this.fab.style.setProperty('width', '2.875rem', 'important');
+          this.fab.style.setProperty('height', '2.875rem', 'important');
+          this.fab.style.setProperty('bottom', 'calc(1.25rem + env(safe-area-inset-bottom, 0px))', 'important');
+          this.fab.style.setProperty('right', '1rem', 'important');
+        }
+        if (letterFab) {
+          letterFab.style.setProperty('width', '2.875rem', 'important');
+          letterFab.style.setProperty('height', '2.875rem', 'important');
+          letterFab.style.setProperty('bottom', 'calc(1.25rem + env(safe-area-inset-bottom, 0px))', 'important');
+          letterFab.style.setProperty('left', '1rem', 'important');
+        }
       } else {
         this._bar.classList.remove('vc-bar-mobile');
         this._bar.classList.add('bottom-24', 'right-6');
@@ -861,6 +912,22 @@
         this._bar.style.removeProperty('height');
         this._bar.style.removeProperty('max-height');
         this._bar.style.removeProperty('border-radius');
+        this._bar.style.removeProperty('max-width');
+        this._bar.style.removeProperty('padding');
+        this._bar.style.removeProperty('gap');
+
+        if (this.fab) {
+          this.fab.style.removeProperty('width');
+          this.fab.style.removeProperty('height');
+          this.fab.style.removeProperty('bottom');
+          this.fab.style.removeProperty('right');
+        }
+        if (letterFab) {
+          letterFab.style.removeProperty('width');
+          letterFab.style.removeProperty('height');
+          letterFab.style.removeProperty('bottom');
+          letterFab.style.removeProperty('left');
+        }
       }
     }
 
