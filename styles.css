@@ -13737,7 +13737,26 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
     width: 1.35rem !important;
     height: 1.35rem !important;
     border-radius: 9999px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     flex-shrink: 0 !important;
+  }
+
+  #next-song-toast .toast-desktop-header {
+    display: none !important;
+  }
+
+  #next-song-toast .toast-badge-text {
+    font-size: 7.5px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.04em !important;
+    text-transform: uppercase !important;
+    color: #fbbf24 !important;
+  }
+
+  #next-song-toast .toast-mobile-pulse {
+    display: block !important;
   }
 
   /* Premium alerts container on mobile */
@@ -13754,6 +13773,113 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
   body:has(#vc-bar.opacity-100) #premium-toast-container,
   body:has(#vc-bar:not(.opacity-0)) #premium-toast-container {
     bottom: calc(5rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* ==========================================================================
+   DESKTOP NEXT SONG TOAST (min-width: 1025px)
+   Restore original rectangular glass card design with brand pink accents
+   ========================================================================== */
+@media (min-width: 1025px) {
+  #next-song-toast {
+    position: fixed !important;
+    bottom: 1.5rem !important;
+    left: 1.5rem !important;
+    right: auto !important;
+    top: auto !important;
+    width: auto !important;
+    max-width: 320px !important;
+    height: auto !important;
+    max-height: none !important;
+    border-radius: 1rem !important;
+    background: rgba(24, 24, 27, 0.95) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(236, 72, 153, 0.3) !important;
+    box-shadow: 0 10px 40px rgba(236, 72, 153, 0.2) !important;
+    padding: 0.75rem 1.25rem 0.75rem 0.75rem !important;
+    gap: 0.75rem !important;
+    transform-origin: bottom left !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  #next-song-toast #next-song-toast-art-container {
+    width: 2.75rem !important;
+    height: 2.75rem !important;
+    border-radius: 0.5rem !important;
+    background: rgba(236, 72, 153, 0.2) !important;
+    color: #f472b6 !important;
+    border: none !important;
+    box-shadow: none !important;
+    flex-shrink: 0 !important;
+    overflow: hidden !important;
+  }
+
+  #next-song-toast #next-song-toast-fallback {
+    font-size: 1.25rem !important;
+  }
+
+  #next-song-toast #next-song-toast-art {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 0.5rem !important;
+  }
+
+  #next-song-toast .toast-disc-icon {
+    display: none !important;
+  }
+
+  #next-song-toast .toast-desktop-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.25rem !important;
+    font-size: 8px !important;
+    font-weight: 700 !important;
+    color: #a1a1aa !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    margin-bottom: 0.25rem !important;
+    line-height: 1 !important;
+  }
+
+  #next-song-toast .toast-text-group {
+    max-width: 200px !important;
+  }
+
+  #next-song-toast .toast-badge {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    color: #ec4899 !important;
+    margin-bottom: 0.15rem !important;
+    gap: 0 !important;
+  }
+
+  #next-song-toast .toast-badge-text {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    color: #ec4899 !important;
+  }
+
+  #next-song-toast .toast-mobile-pulse {
+    display: none !important;
+  }
+
+  #next-song-toast .toast-title-marquee-wrapper {
+    max-width: 200px !important;
+  }
+
+  #next-song-toast #next-song-toast-title {
+    font-size: 0.875rem !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    line-height: 1.25 !important;
+    max-width: 200px !important;
   }
 }
 
