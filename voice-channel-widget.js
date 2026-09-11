@@ -635,15 +635,20 @@
 
   #vc-bar.vc-bar-mobile .vc-bar-text-group {
     min-width: 0 !important;
-    max-width: 78px !important;
-    flex-shrink: 1 !important;
+    max-width: 76px !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-title {
     font-size: 7.5px !important;
-    letter-spacing: 0.05em !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.04em !important;
     line-height: 1 !important;
     margin-bottom: 2px !important;
+    white-space: nowrap !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-sub {
@@ -654,15 +659,15 @@
     text-overflow: ellipsis !important;
     display: block !important;
     line-height: 1.1 !important;
-    max-width: 62px !important;
+    max-width: 76px !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-avatars {
     position: static !important;
     display: flex !important;
     align-items: center !important;
-    margin-left: 0.65rem !important;
-    margin-right: 0.35rem !important;
+    margin-left: 0.5rem !important;
+    margin-right: 0.25rem !important;
     padding: 0 !important;
     background: transparent !important;
     border: none !important;
@@ -700,15 +705,20 @@
   }
 
   #vc-bar.vc-bar-mobile .vc-bar-divider {
-    height: 1.1rem !important;
-    margin-left: 0.35rem !important;
-    margin-right: 0.35rem !important;
+    height: 1.05rem !important;
+    width: 1px !important;
+    background: rgba(255, 255, 255, 0.15) !important;
+    margin-left: 0.25rem !important;
+    margin-right: 0.25rem !important;
+    flex-shrink: 0 !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-timer {
     font-size: 11px !important;
     font-weight: 700 !important;
-    letter-spacing: 0.02em !important;
+    letter-spacing: 0.01em !important;
+    font-variant-numeric: tabular-nums !important;
+    flex-shrink: 0 !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-indicator-bg {
@@ -965,10 +975,10 @@
         this._bar.style.setProperty('height', '3.25rem', 'important');
         this._bar.style.setProperty('max-height', '3.25rem', 'important');
         this._bar.style.setProperty('border-radius', '9999px', 'important');
-        this._bar.style.setProperty('width', 'calc(100vw - 152px)', 'important');
-        this._bar.style.setProperty('max-width', '204px', 'important');
-        this._bar.style.setProperty('padding', '0 0.75rem', 'important');
-        this._bar.style.setProperty('gap', '0.45rem', 'important');
+        this._bar.style.setProperty('width', 'calc(100vw - 148px)', 'important');
+        this._bar.style.setProperty('max-width', '212px', 'important');
+        this._bar.style.setProperty('padding', '0 0.65rem', 'important');
+        this._bar.style.setProperty('gap', '0.35rem', 'important');
 
         if (this.fab) {
           this.fab.style.setProperty('width', '3.25rem', 'important');
@@ -1050,9 +1060,9 @@
              <div class="w-1 bg-green-400 rounded-full animate-[vc-eq_0.5s_ease-in-out_infinite_0.2s]"></div>
           </div>
         </div>
-        <div class="flex flex-col justify-center min-w-0 max-w-[65px] vc-bar-text-group">
+        <div class="flex flex-col justify-center min-w-0 shrink-0 vc-bar-text-group" style="max-width: 76px;">
           <div class="flex items-center gap-1.5 mb-0.5">
-             <span class="text-[8px] font-extrabold text-green-400 uppercase tracking-wider leading-none transition-colors duration-300" id="vc-bar-title">${_t('bar_conn').split(' · ')[0]}</span>
+             <span class="text-[7.5px] font-extrabold text-green-400 uppercase tracking-wider leading-none transition-colors duration-300" id="vc-bar-title">${_t('bar_conn').split(' · ')[0]}</span>
              <div class="flex items-center gap-1" id="vc-bar-icons">
                <div id="vc-bar-music-icon" class="hidden text-amber-500 transition-opacity">
                  <svg class="w-3 h-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
@@ -1063,12 +1073,12 @@
                </div>
              </div>
           </div>
-          <span id="vc-bar-sub" class="text-[9.5px] text-white/50 font-medium leading-none">${_t('bar_conn').split(' · ')[1]}</span>
+          <span id="vc-bar-sub" class="text-[9.5px] text-white/50 font-medium leading-none truncate">${_t('bar_conn').split(' · ')[1]}</span>
         </div>
         <div id="vc-bar-avatars" class="flex items-center -space-x-1.5 shrink-0 hidden"></div>
-        <div class="w-[1px] h-4.5 bg-white/15 mx-1 shrink-0 vc-bar-divider"></div>
-        <div class="flex items-center px-0.5 shrink-0">
-          <span id="vc-bar-timer" class="text-white font-mono text-xs font-bold tabular-nums tracking-wide">00:00</span>
+        <div class="w-[1px] h-4 bg-white/15 shrink-0 vc-bar-divider"></div>
+        <div class="flex items-center shrink-0">
+          <span id="vc-bar-timer" class="text-white font-mono text-[11px] font-bold tabular-nums tracking-wide">00:00</span>
         </div>
       `;
       this._bar.addEventListener('click', () => this._toggle());
