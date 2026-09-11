@@ -13626,6 +13626,11 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
     height: 1.5rem !important;
   }
 
+  footer,
+  .page-footer {
+    padding-bottom: calc(8.5rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
   #vc-bar {
     bottom: calc(1.15rem + env(safe-area-inset-bottom, 0px)) !important;
     left: 50% !important;
