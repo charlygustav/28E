@@ -774,67 +774,156 @@
       this._audioReady = true;
       try {
         this.actx = new (window.AudioContext || window.webkitAudioContext)();
-        const load = async (k, u) => {
-          try {
-            const r = await fetch(u);
-            this.sfxBuf[k] = await this.actx.decodeAudioData(await r.arrayBuffer());
-          } catch(e){}
+        this.sfxUrls = {
+          flyin: 'sounds/flyin.wav',
+          flyout: 'sounds/flyout.wav',
+          typing: 'sounds/typing.wav',
+          toggleOn: 'SND01_sine/toggle_on.wav',
+          toggleOff: 'SND01_sine/toggle_off.wav',
+          act_end: 'sounds/activity_end.mp3',
+          act_join: 'sounds/activity_user_join.mp3',
+          act_left: 'sounds/activity_user_left.mp3',
+          music_start: 'siriSounds18Separate/VoiceTriggerTraining_FX_5.wav',
+          vc_chat_msg: 'sounds/nuevomensajeenelchatdevoz.wav',
+          music_end_all: 'siriSounds18Separate/VoiceTriggerTraining_FX_0.wav',
+          jbl_begin: 'siriSounds18Separate/jbl_begin_sae.wav',
+          jbl_latency: 'latency_experience_long.wav',
+          jbl_success: 'siriSounds18Separate/jbl_success_sae.wav',
+          siri_end: 'siriSounds18Separate/siri-begin-improved.wav'
         };
-        load('flyin', 'sounds/flyin.wav');
-        load('flyout', 'sounds/flyout.wav');
-        load('typing', 'sounds/typing.wav');
-        load('toggleOn', 'SND01_sine/toggle_on.wav');
-        load('toggleOff', 'SND01_sine/toggle_off.wav');
-        load('act_end', 'sounds/activity_end.mp3');
-        load('act_join', 'sounds/activity_user_join.mp3');
-        load('act_left', 'sounds/activity_user_left.mp3');
-        load('music_start', 'siriSounds18Separate/VoiceTriggerTraining_FX_5.wav');
-        load('vc_chat_msg', 'sounds/nuevomensajeenelchatdevoz.wav');
-        load('music_end_all', 'siriSounds18Separate/VoiceTriggerTraining_FX_0.wav');
-        
-        // New Siri JBL Sounds
-        load('jbl_begin', 'siriSounds18Separate/jbl_begin_sae.wav');
-        load('jbl_latency', 'siriSounds18Separate/jbl_latency_sae_v2.wav');
-        load('jbl_success', 'siriSounds18Separate/jbl_success_sae.wav');
-        load('siri_end', 'siriSounds18Separate/siri-begin-improved.wav');
+        this.sfxBuf = this.sfxBuf || {};
+        this.sfxPromises = this.sfxPromises || {};
+
+        const load = (k, u) => {
+          this.sfxPromises[k] = fetch(u)
+            .then(r => {
+              if (!r.ok) throw new Error('HTTP ' + r.status);
+              return r.arrayBuffer();
+            })
+            .then(ab => this.actx.decodeAudioData(ab))
+            .then(buf => {
+              this.sfxBuf[k] = buf;
+              return buf;
+            })
+            .catch(() => null);
+          return this.sfxPromises[k];
+        };
+
+        for (const [k, u] of Object.entries(this.sfxUrls)) {
+          load(k, u);
+        }
+
+        // Global unlocker for mobile devices (iOS Safari / Chrome Android)
+        const unlock = () => {
+          if (this.actx && (this.actx.state === 'suspended' || this.actx.state === 'interrupted')) {
+            this.actx.resume().catch(() => {});
+          }
+        };
+        ['click', 'touchstart', 'touchend', 'pointerdown'].forEach(evt => {
+          window.addEventListener(evt, unlock, { capture: true, passive: true });
+        });
       } catch(e) {}
     }
 
     _playSfx(k, vol=0.4, loop=false, excl=null) {
       this._initAudio();
-      if (!this.actx || !this.sfxBuf[k]) return null;
-      if (this.actx.state === 'suspended') this.actx.resume();
       if (excl && this.sfxNodes[excl]) this._stopSfx(this.sfxNodes[excl]);
       
-      try {
-        const src = this.actx.createBufferSource();
-        src.buffer = this.sfxBuf[k];
-        src.loop = loop;
-        const gain = this.actx.createGain();
-        
-        // Anti-pop fade in
-        const t = this.actx.currentTime;
-        gain.gain.setValueAtTime(0, t);
-        gain.gain.linearRampToValueAtTime(vol, t + 0.02);
-        
-        src.connect(gain);
-        gain.connect(this.actx.destination);
-        src.start(0);
-        const node = { src, gain };
-        if (excl) this.sfxNodes[excl] = node;
-        return node;
-      } catch(e) { return null; }
+      if (this.actx && (this.actx.state === 'suspended' || this.actx.state === 'interrupted')) {
+        this.actx.resume().catch(() => {});
+      }
+
+      const controller = {
+        key: k,
+        stopped: false,
+        src: null,
+        gain: null,
+        audio: null
+      };
+
+      if (excl) this.sfxNodes[excl] = controller;
+
+      const playBuffer = (buf) => {
+        if (controller.stopped || !this.actx) return;
+        try {
+          if (this.actx.state === 'suspended' || this.actx.state === 'interrupted') {
+            this.actx.resume().catch(() => {});
+          }
+          const src = this.actx.createBufferSource();
+          src.buffer = buf;
+          src.loop = loop;
+          const gain = this.actx.createGain();
+          const t = this.actx.currentTime;
+          gain.gain.setValueAtTime(0, t);
+          gain.gain.linearRampToValueAtTime(vol, t + 0.02);
+          src.connect(gain);
+          gain.connect(this.actx.destination);
+          src.start(0);
+          controller.src = src;
+          controller.gain = gain;
+        } catch(e) {
+          playHtmlAudio();
+        }
+      };
+
+      const playHtmlAudio = () => {
+        if (controller.stopped) return;
+        const url = this.sfxUrls && this.sfxUrls[k];
+        if (!url) return;
+        try {
+          const a = new Audio(url);
+          a.loop = loop;
+          a.volume = Math.max(0, Math.min(1, vol));
+          const p = a.play();
+          if (p && typeof p.catch === 'function') {
+            p.catch(() => {});
+          }
+          controller.audio = a;
+        } catch(e){}
+      };
+
+      if (this.actx && this.sfxBuf && this.sfxBuf[k]) {
+        playBuffer(this.sfxBuf[k]);
+      } else if (this.sfxPromises && this.sfxPromises[k]) {
+        // If buffer is still downloading/decoding on mobile, start HTMLAudio immediately so there is zero silence
+        if (this._checkMobile()) {
+          playHtmlAudio();
+        } else {
+          this.sfxPromises[k].then(buf => {
+            if (controller.stopped) return;
+            if (buf) playBuffer(buf);
+            else playHtmlAudio();
+          }).catch(() => {
+            if (!controller.stopped) playHtmlAudio();
+          });
+        }
+      } else {
+        playHtmlAudio();
+      }
+
+      return controller;
     }
 
     _stopSfx(node) {
-      if (!node || !this.actx) return;
-      try {
-        const t = this.actx.currentTime;
-        node.gain.gain.cancelScheduledValues(t);
-        // Exponential decay prevents pops better than linear ramp from current value
-        node.gain.gain.setTargetAtTime(0, t, 0.015);
-        node.src.stop(t + 0.1);
-      } catch(e){}
+      if (!node) return;
+      node.stopped = true;
+      if (node.audio) {
+        try {
+          node.audio.pause();
+          node.audio.currentTime = 0;
+          node.audio = null;
+        } catch(e){}
+      }
+      if (node.src && this.actx) {
+        try {
+          const t = this.actx.currentTime;
+          if (node.gain) {
+            node.gain.gain.cancelScheduledValues(t);
+            node.gain.gain.setTargetAtTime(0, t, 0.015);
+          }
+          node.src.stop(t + 0.1);
+        } catch(e){}
+      }
     }
 
     _checkMobile() {
@@ -1973,13 +2062,16 @@
       const reconnectBtn = document.getElementById('vc-reconnect');
       if (reconnectBtn) {
         reconnectBtn.addEventListener('click', () => {
+          if (this.actx && (this.actx.state === 'suspended' || this.actx.state === 'interrupted')) {
+            this.actx.resume().catch(() => {});
+          }
           if (typeof window.stopSpotlightLocalPlayback === 'function') {
             window.stopSpotlightLocalPlayback();
           }
           if (this._savedName && this._savedPass) {
             if (this.progNode) { this._stopSfx(this.progNode); this.progNode = null; }
             this._render(this._tplLoading());
-            this.progNode = this._playSfx('jbl_latency', 0.3, true);
+            this.progNode = this._playSfx('jbl_latency', 0.4, true);
             this._connectSocket(this._savedName, this._savedPass);
           } else {
             this._render(this._tplLogin());
@@ -2134,6 +2226,10 @@
     async _doJoin(name) {
       if (!name) return this._setErr(_t('err_name'));
 
+      if (this.actx && (this.actx.state === 'suspended' || this.actx.state === 'interrupted')) {
+        this.actx.resume().catch(() => {});
+      }
+
       // Detener música de Spotlight si estaba sonando antes de entrar al canal
       if (typeof window.stopSpotlightLocalPlayback === 'function') {
         window.stopSpotlightLocalPlayback();
@@ -2152,16 +2248,16 @@
       }
 
       this._render(this._tplLoading());
+      if (this.progNode) { this._stopSfx(this.progNode); this.progNode = null; }
+      this.progNode = this._playSfx('jbl_latency', 0.4, true);
       
       try {
         this.stream = await navigator.mediaDevices.getUserMedia({ audio: this._audioConstraints, video: false });
       } catch {
+        if (this.progNode) { this._stopSfx(this.progNode); this.progNode = null; }
         this._render(this._tplLogin(_t('err_mic')));
         return;
       }
-
-      if (this.progNode) { this._stopSfx(this.progNode); this.progNode = null; }
-      this.progNode = this._playSfx('jbl_latency', 0.3, true);
 
       // Create noise-cancelled processed stream
       this._processedStream = this._createProcessedStream();
