@@ -772,29 +772,53 @@
     _initAudio() {
       if (this._audioReady) return;
       this._audioReady = true;
-      try {
-        this.actx = new (window.AudioContext || window.webkitAudioContext)();
-        this.sfxUrls = {
-          flyin: 'sounds/flyin.wav',
-          flyout: 'sounds/flyout.wav',
-          typing: 'sounds/typing.wav',
-          toggleOn: 'SND01_sine/toggle_on.wav',
-          toggleOff: 'SND01_sine/toggle_off.wav',
-          act_end: 'sounds/activity_end.mp3',
-          act_join: 'sounds/activity_user_join.mp3',
-          act_left: 'sounds/activity_user_left.mp3',
-          music_start: 'siriSounds18Separate/VoiceTriggerTraining_FX_5.wav',
-          vc_chat_msg: 'sounds/nuevomensajeenelchatdevoz.wav',
-          music_end_all: 'siriSounds18Separate/VoiceTriggerTraining_FX_0.wav',
-          jbl_begin: 'siriSounds18Separate/jbl_begin_sae.wav',
-          jbl_latency: 'latency_experience_long.wav',
-          jbl_success: 'latency_loop.wav',
-          siri_end: 'siriSounds18Separate/siri-begin-improved.wav'
-        };
-        this.sfxBuf = this.sfxBuf || {};
-        this.sfxPromises = this.sfxPromises || {};
 
-        const load = (k, u) => {
+      this.sfxUrls = {
+        flyin: 'sounds/flyin.wav',
+        flyout: 'sounds/flyout.wav',
+        typing: 'sounds/typing.wav',
+        toggleOn: 'SND01_sine/toggle_on.wav',
+        toggleOff: 'SND01_sine/toggle_off.wav',
+        act_end: 'sounds/activity_end.mp3',
+        act_join: 'sounds/activity_user_join.mp3',
+        act_left: 'sounds/activity_user_left.mp3',
+        music_start: 'siriSounds18Separate/VoiceTriggerTraining_FX_5.wav',
+        vc_chat_msg: 'sounds/nuevomensajeenelchatdevoz.wav',
+        music_end_all: 'siriSounds18Separate/VoiceTriggerTraining_FX_0.wav',
+        jbl_begin: 'siriSounds18Separate/jbl_begin_sae.wav',
+        jbl_latency: 'latency_experience_long.wav',
+        jbl_success: 'latency_loop.wav',
+        siri_end: 'siriSounds18Separate/siri-begin-improved.wav'
+      };
+
+      this.sfxBuf = this.sfxBuf || {};
+      this.sfxPromises = this.sfxPromises || {};
+      this._audioPool = this._audioPool || {};
+
+      try {
+        const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtxClass) {
+          this.actx = new AudioCtxClass();
+        }
+      } catch(e) {
+        this.actx = null;
+      }
+
+      // 1. Preload dedicated HTMLAudio elements for high-reliability mobile playback
+      for (const [k, u] of Object.entries(this.sfxUrls)) {
+        try {
+          const a = new Audio();
+          a.preload = 'auto';
+          a.src = u;
+          a.setAttribute('playsinline', '');
+          a.setAttribute('webkit-playsinline', '');
+          this._audioPool[k] = a;
+        } catch(e){}
+      }
+
+      // 2. Preload Web Audio buffers for desktop
+      if (this.actx) {
+        const loadBuf = (k, u) => {
           this.sfxPromises[k] = fetch(u)
             .then(r => {
               if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -810,29 +834,47 @@
         };
 
         for (const [k, u] of Object.entries(this.sfxUrls)) {
-          load(k, u);
+          loadBuf(k, u);
         }
+      }
 
-        // Global unlocker for mobile devices (iOS Safari / Chrome Android)
-        const unlock = () => {
-          if (this.actx && (this.actx.state === 'suspended' || this.actx.state === 'interrupted')) {
+      // 3. User interaction unlocker for iOS Safari and mobile Chrome
+      const unlock = () => {
+        if (this.actx) {
+          if (this.actx.state === 'suspended' || this.actx.state === 'interrupted') {
             this.actx.resume().catch(() => {});
           }
-        };
-        ['click', 'touchstart', 'touchend', 'pointerdown'].forEach(evt => {
-          window.addEventListener(evt, unlock, { capture: true, passive: true });
-        });
-      } catch(e) {}
+          if (!this._unlocked) {
+            try {
+              const b = this.actx.createBuffer(1, 1, 22050);
+              const s = this.actx.createBufferSource();
+              s.buffer = b;
+              s.connect(this.actx.destination);
+              s.start(0);
+              this._unlocked = true;
+            } catch(e){}
+          }
+        }
+        if (!this._poolUnlocked && this._audioPool) {
+          this._poolUnlocked = true;
+          try {
+            ['jbl_latency', 'jbl_success'].forEach(key => {
+              if (this._audioPool[key]) this._audioPool[key].load();
+            });
+          } catch(e){}
+        }
+      };
+
+      ['click', 'touchstart', 'touchend', 'pointerdown'].forEach(evt => {
+        window.addEventListener(evt, unlock, { capture: true, passive: true });
+      });
     }
 
     _playSfx(k, vol=0.4, loop=false, excl=null) {
       this._initAudio();
       if (excl && this.sfxNodes[excl]) this._stopSfx(this.sfxNodes[excl]);
-      
-      if (this.actx && (this.actx.state === 'suspended' || this.actx.state === 'interrupted')) {
-        this.actx.resume().catch(() => {});
-      }
 
+      const isMobile = this._checkMobile();
       const controller = {
         key: k,
         stopped: false,
@@ -843,6 +885,44 @@
 
       if (excl) this.sfxNodes[excl] = controller;
 
+      // Play via HTMLAudioElement (Bulletproof for mobile devices & loop streams)
+      const playHtmlAudio = () => {
+        if (controller.stopped) return;
+        const url = this.sfxUrls && this.sfxUrls[k];
+        if (!url) return;
+        try {
+          let a;
+          if (loop) {
+            a = this._audioPool && this._audioPool[k] ? this._audioPool[k] : new Audio(url);
+            a.src = url;
+            a.loop = true;
+            a.volume = Math.max(0, Math.min(1, vol));
+            a.currentTime = 0;
+          } else {
+            // For one-shot sounds, create or clone a clean instance so rapid taps don't collide
+            a = new Audio(url);
+            a.loop = false;
+            a.volume = Math.max(0, Math.min(1, vol));
+            a.currentTime = 0;
+          }
+          a.setAttribute('playsinline', '');
+          a.setAttribute('webkit-playsinline', '');
+          const p = a.play();
+          if (p && typeof p.catch === 'function') {
+            p.catch(err => {
+              console.warn('[VC SFX] HTMLAudio playback error:', err);
+              if (!isMobile && this.actx && this.sfxBuf && this.sfxBuf[k]) {
+                playBuffer(this.sfxBuf[k]);
+              }
+            });
+          }
+          controller.audio = a;
+        } catch(e) {
+          console.warn('[VC SFX] Audio init error:', e);
+        }
+      };
+
+      // Play via Web Audio buffer source (for Desktop)
       const playBuffer = (buf) => {
         if (controller.stopped || !this.actx) return;
         try {
@@ -866,37 +946,23 @@
         }
       };
 
-      const playHtmlAudio = () => {
-        if (controller.stopped) return;
-        const url = this.sfxUrls && this.sfxUrls[k];
-        if (!url) return;
-        try {
-          const a = new Audio(url);
-          a.loop = loop;
-          a.volume = Math.max(0, Math.min(1, vol));
-          const p = a.play();
-          if (p && typeof p.catch === 'function') {
-            p.catch(() => {});
-          }
-          controller.audio = a;
-        } catch(e){}
-      };
-
-      if (this.actx && this.sfxBuf && this.sfxBuf[k]) {
-        playBuffer(this.sfxBuf[k]);
-      } else if (this.sfxPromises && this.sfxPromises[k]) {
-        this.sfxPromises[k].then(buf => {
-          if (controller.stopped) return;
-          if (buf) playBuffer(buf);
-          else playHtmlAudio();
-        }).catch(() => {
-          if (!controller.stopped) playHtmlAudio();
-        });
-        if (this._checkMobile() && (!this.actx || this.actx.state !== 'running')) {
+      // In Mobile browsers, HTMLAudioElement is vastly more resilient to mic/WebRTC resets
+      if (isMobile) {
+        playHtmlAudio();
+      } else {
+        if (this.actx && this.sfxBuf && this.sfxBuf[k]) {
+          playBuffer(this.sfxBuf[k]);
+        } else if (this.sfxPromises && this.sfxPromises[k]) {
+          this.sfxPromises[k].then(buf => {
+            if (controller.stopped) return;
+            if (buf) playBuffer(buf);
+            else playHtmlAudio();
+          }).catch(() => {
+            if (!controller.stopped) playHtmlAudio();
+          });
+        } else {
           playHtmlAudio();
         }
-      } else {
-        playHtmlAudio();
       }
 
       return controller;
@@ -907,8 +973,9 @@
       node.stopped = true;
       if (node.audio) {
         try {
-          node.audio.pause();
-          node.audio.currentTime = 0;
+          const a = node.audio;
+          a.pause();
+          a.currentTime = 0;
           node.audio = null;
         } catch(e){}
       }
@@ -917,7 +984,7 @@
           const t = this.actx.currentTime;
           if (node.gain) {
             node.gain.gain.cancelScheduledValues(t);
-            node.gain.gain.setTargetAtTime(0, t, 0.015);
+            node.gain.gain.setTargetAtTime(0, t, 0.02);
           }
           node.src.stop(t + 0.1);
         } catch(e){}
@@ -2301,24 +2368,20 @@
           if (typeof window.stopSpotlightLocalPlayback === 'function') {
             window.stopSpotlightLocalPlayback();
           }
-          this._stopSfx(this.progNode); this.progNode = null;
-          this._playSfx('jbl_success', 0.5);
 
-          // Clean up old peers from previous session (reconnect scenario)
+          // 1. Detener el sonido de latencia/espera
+          if (this.progNode) {
+            this._stopSfx(this.progNode);
+            this.progNode = null;
+          }
+
+          // 2. Reproducir inmediatamente el sonido de éxito a buen volumen
+          this._playSfx('jbl_success', 0.6);
+
+          // 3. Limpiar peers antiguos de la sesión previa
           this.peers.forEach((_, id) => this._closePeer(id));
           this.peers.clear();
           this.pendingIce.clear();
-
-          // Re-acquire microphone if stream was lost
-          if (!this.stream || this.stream.getAudioTracks().every(t => t.readyState === 'ended')) {
-            try {
-              this.stream = await navigator.mediaDevices.getUserMedia({ audio: this._audioConstraints, video: false });
-              this._processedStream = this._createProcessedStream();
-              console.log('[VC] ✅ Microphone re-acquired with noise cancellation');
-            } catch(e) {
-              console.error('[VC] ❌ Could not re-acquire microphone:', e);
-            }
-          }
 
           this.myId = userId;
           this.connected = true;
@@ -2326,19 +2389,39 @@
           this.fab.classList.add('connected');
           this._updateBarAvatars();
 
-          // Prevent duplicate timers/speakers
           if (!this._timerInt) this._startTimer();
-          if (!this._analyser) this._setupSpeaking();
-          if (!this._wakeLock && !this._silentAudio) this._startKeepAlive();
 
-          for (const u of existingUsers) await this._createOffer(u.id);
+          // 4. Inicializar micrófono y WebRTC
+          const initMicAndWebRTC = async () => {
+            if (!this.stream || this.stream.getAudioTracks().every(t => t.readyState === 'ended')) {
+              try {
+                this.stream = await navigator.mediaDevices.getUserMedia({ audio: this._audioConstraints, video: false });
+                this._processedStream = this._createProcessedStream();
+                console.log('[VC] ✅ Microphone re-acquired with noise cancellation');
+              } catch(e) {
+                console.error('[VC] ❌ Could not re-acquire microphone:', e);
+              }
+            }
 
-          // Ring other users and clear invite state
-          this.socket.emit('ring_channel');
-          this._inviterName = null;
-          this._chatMsgs = [];
-          this._chatUnread = 0;
-          this.socket.emit('music_sync_request');
+            if (!this._analyser) this._setupSpeaking();
+            if (!this._wakeLock && !this._silentAudio) this._startKeepAlive();
+
+            for (const u of existingUsers) await this._createOffer(u.id);
+
+            this.socket.emit('ring_channel');
+            this._inviterName = null;
+            this._chatMsgs = [];
+            this._chatUnread = 0;
+            this.socket.emit('music_sync_request');
+          };
+
+          if (this._checkMobile()) {
+            // En celular, diferir la activación del micrófono 350ms para que el hardware de audio
+            // no corte el sonido de éxito ni lo enmudezca al cambiar de modo
+            setTimeout(initMicAndWebRTC, 350);
+          } else {
+            await initMicAndWebRTC();
+          }
         });
 
         this.socket.on('channel_users', ({ users }) => {
@@ -2916,6 +2999,11 @@
     // ── NOISE CANCELLATION PIPELINE ──────────────────────────────────────
     _createProcessedStream() {
       if (!this.stream) return null;
+
+      if (this._noiseCtx) {
+        try { this._noiseCtx.close(); } catch(e){}
+        this._noiseCtx = null;
+      }
 
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
@@ -4094,6 +4182,10 @@
 
       // 2. Silent audio loop (AudioContext)
       try {
+        if (this._silentCtx) {
+          try { this._silentCtx.close(); } catch(e){}
+          this._silentCtx = null;
+        }
         const silentCtx = new (window.AudioContext || window.webkitAudioContext)();
         const osc = silentCtx.createOscillator();
         const gain = silentCtx.createGain();
@@ -4159,7 +4251,12 @@
     // ── SPEAKING DETECTION ────────────────────────────────────────────────
     _setupSpeaking() {
       try {
+        if (this._speakingCtx) {
+          try { this._speakingCtx.close(); } catch(e){}
+          this._speakingCtx = null;
+        }
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        this._speakingCtx = ctx;
         const src = ctx.createMediaStreamSource(this.stream);
         const an  = ctx.createAnalyser();
         an.fftSize = 256;
