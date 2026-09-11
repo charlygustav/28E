@@ -1006,6 +1006,9 @@
           letterFab.style.removeProperty('left');
         }
       }
+      if (this.connected) {
+        this._updateBarAvatars();
+      }
     }
 
     // ── BUILD UI ───────────────────────────────────────────────────────────
@@ -1230,6 +1233,8 @@
           if (document.getElementById('vc-reconnect')) this._render(this._tplDisconnected());
           else if (this.panel.querySelector('.animate-spin')) this._render(this._tplLoading());
           else this._render(this._tplLogin());
+        } else {
+          this._updateBarAvatars();
         }
       });
 
@@ -1297,6 +1302,7 @@
                              document.querySelector('#menu-panel.open') !== null;
           if (!isMenuOpen) {
             this._updateBarLayout();
+            this._updateBarAvatars();
             this._bar.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
             this._bar.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
           }
@@ -1916,21 +1922,51 @@
         return;
       }
 
-      avatarsContainer.classList.remove('hidden');
+      // Ensure effective users list is never empty while connected
+      let effectiveUsers = (this.users && this.users.length > 0) ? [...this.users] : [];
+      if (effectiveUsers.length === 0 && (this.myId || window.yaireCurrentUser)) {
+        effectiveUsers.push({
+          id: this.myId || 'me',
+          displayName: window.yaireCurrentUser?.displayName || 'Tú',
+          photoURL: window.yaireCurrentUser?.photoURL || null
+        });
+      }
+
+      // If current user is missing photoURL in this.users, enrich it from window.yaireCurrentUser
+      if (window.yaireCurrentUser?.photoURL) {
+        effectiveUsers = effectiveUsers.map(u => {
+          if ((u.id === this.myId || !u.photoURL) && window.yaireCurrentUser?.photoURL) {
+            return { ...u, photoURL: u.photoURL || window.yaireCurrentUser.photoURL };
+          }
+          return u;
+        });
+      }
+
       const isMobile = this._checkMobile();
       const maxToShow = isMobile ? 2 : 4;
-      const displayUsers = this.users.slice(0, maxToShow);
-      const extraCount = Math.max(0, this.users.length - maxToShow);
+      const displayUsers = effectiveUsers.slice(0, maxToShow);
+      const extraCount = Math.max(0, effectiveUsers.length - maxToShow);
+
+      if (displayUsers.length === 0) {
+        avatarsContainer.classList.add('hidden');
+        avatarsContainer.innerHTML = '';
+        return;
+      }
+
+      avatarsContainer.classList.remove('hidden');
 
       let html = displayUsers.map(u => {
         const isMe = u.id === this.myId;
-        const initials = u.displayName.slice(0, 2).toUpperCase();
-        const avatarHtml = (u.photoURL || (isMe && window.yaireCurrentUser?.photoURL))
-          ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" class="w-full h-full rounded-full object-cover" />`
-          : initials;
+        const displayName = u.displayName || (isMe ? (window.yaireCurrentUser?.displayName || 'Tú') : 'Usuario');
+        const initials = displayName.slice(0, 2).toUpperCase();
+        const photo = u.photoURL || (isMe ? window.yaireCurrentUser?.photoURL : null);
+
+        const avatarHtml = photo
+          ? `<img src="${photo}" class="w-full h-full rounded-full object-cover" draggable="false" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';" /><span class="w-full h-full hidden items-center justify-center text-[7.5px] md:text-[9px] font-bold text-white uppercase">${initials}</span>`
+          : `<span class="w-full h-full flex items-center justify-center text-[7.5px] md:text-[9px] font-bold text-white uppercase">${initials}</span>`;
 
         return `
-          <div id="vc-bar-av-${u.id}" class="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-[7.5px] md:text-[9px] font-bold bg-zinc-800 text-white border-2 border-zinc-950 shadow-sm relative transition-all duration-300 overflow-hidden z-10" title="${u.displayName}">
+          <div id="vc-bar-av-${u.id}" class="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-[7.5px] md:text-[9px] font-bold bg-zinc-800 text-white border-2 border-zinc-950 shadow-sm relative transition-all duration-300 overflow-hidden z-10" title="${displayName}">
             ${avatarHtml}
           </div>
         `;
@@ -2289,6 +2325,7 @@
           this.connected = true;
           this._reconnects = 0;
           this.fab.classList.add('connected');
+          this._updateBarAvatars();
 
           // Prevent duplicate timers/speakers
           if (!this._timerInt) this._startTimer();
@@ -2317,6 +2354,7 @@
             } else {
               this._updateUsersDOM();
             }
+            this._updateBarAvatars();
           }
         });
 
@@ -2325,6 +2363,7 @@
           if (typeof window.showToast === 'function') {
             window.showToast(`${displayName} ${_t('toast_join')}`, "var(--accent-green)", ICONS.sound);
           }
+          this._updateBarAvatars();
         });
 
         this.socket.on('user_left', ({ userId }) => {
@@ -2334,6 +2373,7 @@
             window.showToast(`${u.displayName} ${_t('toast_left')}`, "var(--accent-red)", ICONS.phone);
           }
           this._closePeer(userId);
+          this._updateBarAvatars();
         });
 
         this.socket.on('webrtc_offer', async ({ from, sdp }) => {
