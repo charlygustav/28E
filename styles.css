@@ -13628,7 +13628,9 @@ body:has(.vc-panel-base.scale-100) a[href="para-yaire.html"].fixed {
 
   footer,
   .page-footer {
+    padding-top: 4.5rem !important;
     padding-bottom: calc(8.5rem + env(safe-area-inset-bottom, 0px)) !important;
+    margin-top: 2rem !important;
   }
 
   #vc-bar {
