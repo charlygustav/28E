@@ -601,164 +601,6 @@
     }
   }
 
-  /* Desktop Voice Channel Floating Overlay: Sleek, compact & elegant */
-  @media (min-width: 1025px) {
-    #vc-bar:not(.vc-bar-mobile) {
-      position: fixed !important;
-      bottom: 5.75rem !important;
-      right: 1.5rem !important;
-      left: auto !important;
-      top: auto !important;
-      height: 2.5rem !important;
-      max-height: 2.5rem !important;
-      width: auto !important;
-      min-width: 0 !important;
-      max-width: none !important;
-      padding: 0 0.85rem !important;
-      gap: 0.5rem !important;
-      border-radius: 9999px !important;
-      background: rgba(18, 18, 22, 0.88) !important;
-      backdrop-filter: blur(20px) saturate(180%) !important;
-      -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-      border: 1px solid rgba(255, 255, 255, 0.1) !important;
-      box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
-      z-index: 9997 !important;
-      cursor: pointer !important;
-      user-select: none !important;
-      -webkit-user-select: none !important;
-      transform-origin: bottom right !important;
-      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease !important;
-    }
-
-    #vc-bar:not(.vc-bar-mobile):hover {
-      border-color: rgba(245, 158, 11, 0.4) !important;
-      box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.7), 0 0 18px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
-    }
-
-    #vc-bar:not(.vc-bar-mobile):active {
-      transform: scale(0.97) !important;
-    }
-
-    #vc-bar:not(.vc-bar-mobile).opacity-100,
-    #vc-bar:not(.vc-bar-mobile).translate-y-0:not(.opacity-0) {
-      opacity: 1 !important;
-      pointer-events: auto !important;
-      transform: translateY(0) scale(1) !important;
-    }
-
-    #vc-bar:not(.vc-bar-mobile).opacity-0,
-    #vc-bar:not(.vc-bar-mobile).translate-y-4 {
-      opacity: 0 !important;
-      pointer-events: none !important;
-      transform: translateY(12px) scale(0.95) !important;
-    }
-
-    #vc-bar:not(.vc-bar-mobile) #vc-bar-indicator-bg {
-      width: 1.35rem !important;
-      height: 1.35rem !important;
-      flex-shrink: 0 !important;
-    }
-
-    #vc-bar:not(.vc-bar-mobile) .vc-bar-text-group {
-      min-width: 0 !important;
-      max-width: none !important;
-      flex-shrink: 0 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: center !important;
-    }
-
-    #vc-bar:not(.vc-bar-mobile) #vc-bar-title {
-      font-size: 7.5px !important;
-      font-weight: 800 !important;
-      letter-spacing: 0.05em !important;
-      line-height: 1 !important;
-      margin-bottom: 2px !important;
-      color: #4ade80 !important;
-      white-space: nowrap !important;
-    }
-
-    #vc-bar:not(.vc-bar-mobile) #vc-bar-sub {
-      font-size: 9.5px !important;
-      font-weight: 500 !important;
-      color: rgba(255, 255, 255, 0.6) !important;
-      white-space: nowrap !important;
-      overflow: hidden !important;
-      text-overflow: ellipsis !important;
-      max-width: 110px !important;
-      line-height: 1.1 !important;
-    }
-
-    #vc-bar:not(.vc-bar-mobile) #vc-bar-icons {
-      gap: 0.25rem !important;
-    }
-
-    #vc-bar:not(.vc-bar-mobile) #vc-bar-chat-icon svg,
-    #vc-bar:not(.vc-bar-mobile) #vc-bar-music-icon svg {
-      width: 0.75rem !important;
-      height: 0.75rem !important;
-    }
-
-    #vc-bar:not(.vc-bar-mobile) #vc-bar-avatars {
-      position: static !important;
-      display: flex !important;
-      align-items: center !important;
-      margin-left: 0.4rem !important;
-      margin-right: 0.2rem !important;
-      padding: 0 !important;
-      background: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-      flex-shrink: 0 !important;
-    }
-
-    #vc-bar:not(.vc-bar-mobile) #vc-bar-avatars.hidden {
-      display: none !important;
-    }
-
-    #vc-bar:not(.vc-bar-mobile) #vc-bar-avatars > div {
-      width: 1.25rem !important;
-      height: 1.25rem !important;
-      font-size: 7.5px !important;
-      border-radius: 9999px !important;
-      border: 1.5px solid #121216 !important;
-      background: #18181b !important;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.45) !important;
-      overflow: hidden !important;
-      flex-shrink: 0 !important;
-      margin-left: -0.35rem !important;
-    }
-
-    #vc-bar:not(.vc-bar-mobile) #vc-bar-avatars > div:first-child {
-      margin-left: 0 !important;
-    }
-
-    #vc-bar:not(.vc-bar-mobile) #vc-bar-avatars > div.ring-green-400 {
-      border-color: #22c55e !important;
-      box-shadow: 0 0 10px rgba(34, 197, 94, 0.9), 0 0 0 1.5px #22c55e !important;
-      transform: scale(1.1) !important;
-      z-index: 20 !important;
-    }
-
-    #vc-bar:not(.vc-bar-mobile) .vc-bar-divider {
-      height: 1rem !important;
-      width: 1px !important;
-      background: rgba(255, 255, 255, 0.15) !important;
-      margin: 0 0.2rem !important;
-      flex-shrink: 0 !important;
-    }
-
-    #vc-bar:not(.vc-bar-mobile) #vc-bar-timer {
-      font-size: 11px !important;
-      font-weight: 700 !important;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
-      letter-spacing: 0.02em !important;
-      font-variant-numeric: tabular-nums !important;
-      color: rgba(255, 255, 255, 0.9) !important;
-      flex-shrink: 0 !important;
-    }
-  }
-
   /* Hide floating bar and widget elements when hamburger menu is open */
   body.menu-is-open #vc-bar,
   body.menu-is-open #vc-fab,
@@ -1072,11 +914,11 @@
       this._bar = document.createElement('div');
       this._bar.id = 'vc-bar';
       const isMobileInit = this._checkMobile();
-      this._bar.className = `fixed ${isMobileInit ? 'vc-bar-mobile' : 'bottom-24 right-6'} z-[9997] flex items-center gap-2 px-3 py-1.5 bg-zinc-950/85 backdrop-blur-xl border border-white/10 rounded-full shadow-2xl opacity-0 pointer-events-none transition-all duration-300 translate-y-4 scale-95 origin-bottom-right cursor-pointer select-none`;
+      this._bar.className = `fixed ${isMobileInit ? 'vc-bar-mobile' : 'bottom-24 right-6'} z-[9997] flex items-center gap-3 px-3.5 py-2.5 bg-zinc-950/80 backdrop-blur-xl border border-white/5 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] opacity-0 pointer-events-none transition-all duration-500 translate-y-4 scale-95 origin-bottom-right cursor-pointer select-none hover:border-amber-500/40 hover:shadow-amber-500/10 active:scale-95 group`;
       this._bar.innerHTML = `
-        <div class="flex items-center justify-center w-5 h-5 rounded-full bg-green-500/10 border border-green-500/20 relative shrink-0 transition-colors duration-300" id="vc-bar-indicator-bg">
-          <div class="absolute inset-0 rounded-full bg-green-500/20 animate-ping opacity-40 transition-all duration-300" id="vc-bar-indicator-ping"></div>
-          <div class="w-1.5 h-1.5 bg-green-500 rounded-full shadow-[0_0_8px_rgba(34,197,94,1)] transition-colors duration-300" id="vc-bar-indicator-dot"></div>
+        <div class="flex items-center justify-center w-7 h-7 rounded-full bg-green-500/10 border border-green-500/20 relative shrink-0 transition-colors duration-300" id="vc-bar-indicator-bg">
+          <div class="absolute inset-0 rounded-full bg-green-500/20 animate-ping opacity-50 transition-all duration-300" id="vc-bar-indicator-ping"></div>
+          <div class="w-1.5 h-1.5 bg-green-500 rounded-full shadow-[0_0_10px_rgba(34,197,94,1)] transition-colors duration-300" id="vc-bar-indicator-dot"></div>
           
           <div id="vc-bar-waveform" class="absolute inset-0 flex items-center justify-center gap-[2px] opacity-0 transition-opacity duration-300">
              <div class="w-1 bg-green-400 rounded-full animate-[vc-eq_0.5s_ease-in-out_infinite]"></div>
@@ -1084,9 +926,9 @@
              <div class="w-1 bg-green-400 rounded-full animate-[vc-eq_0.5s_ease-in-out_infinite_0.2s]"></div>
           </div>
         </div>
-        <div class="flex flex-col justify-center min-w-0 shrink-0 vc-bar-text-group">
-          <div class="flex items-center gap-1.5 mb-0.5">
-             <span class="text-[7.5px] font-extrabold text-green-400 uppercase tracking-wider leading-none transition-colors duration-300" id="vc-bar-title">${_t('bar_conn').split(' · ')[0]}</span>
+        <div class="flex flex-col justify-center min-w-[65px] vc-bar-text-group">
+          <div class="flex items-center gap-1.5 mb-1">
+             <span class="text-[9px] font-extrabold text-green-400 uppercase tracking-[0.2em] leading-none transition-colors duration-300" id="vc-bar-title">${_t('bar_conn').split(' · ')[0]}</span>
              <div class="flex items-center gap-1" id="vc-bar-icons">
                <div id="vc-bar-music-icon" class="hidden text-amber-500 transition-opacity">
                  <svg class="w-3 h-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
@@ -1097,12 +939,12 @@
                </div>
              </div>
           </div>
-          <span id="vc-bar-sub" class="text-[9.5px] text-white/50 font-medium leading-none truncate">${_t('bar_conn').split(' · ')[1]}</span>
+          <span id="vc-bar-sub" class="text-[10px] text-white/50 font-medium leading-none">${_t('bar_conn').split(' · ')[1]}</span>
         </div>
         <div id="vc-bar-avatars" class="flex items-center -space-x-1.5 shrink-0 hidden"></div>
-        <div class="w-[1px] h-4 bg-white/15 shrink-0 vc-bar-divider"></div>
-        <div class="flex items-center shrink-0">
-          <span id="vc-bar-timer" class="text-white font-mono text-[11px] font-bold tabular-nums tracking-wide">00:00</span>
+        <div class="w-[1px] h-6 bg-white/10 shrink-0 vc-bar-divider"></div>
+        <div class="flex items-center px-1 shrink-0">
+          <span id="vc-bar-timer" class="text-white font-mono text-[13px] font-bold tabular-nums tracking-wide">00:00</span>
         </div>
       `;
       this._bar.addEventListener('click', () => this._toggle());
@@ -1980,7 +1822,7 @@
       }
 
       const isMobile = this._checkMobile();
-      const maxToShow = isMobile ? 2 : 3;
+      const maxToShow = isMobile ? 2 : 4;
       const displayUsers = effectiveUsers.slice(0, maxToShow);
       const extraCount = Math.max(0, effectiveUsers.length - maxToShow);
 
@@ -1999,11 +1841,11 @@
         const photo = u.photoURL || (isMe ? window.yaireCurrentUser?.photoURL : null);
 
         const avatarHtml = photo
-          ? `<img src="${photo}" class="w-full h-full rounded-full object-cover" draggable="false" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';" /><span class="w-full h-full hidden items-center justify-center text-[7.5px] font-bold text-white uppercase">${initials}</span>`
-          : `<span class="w-full h-full flex items-center justify-center text-[7.5px] font-bold text-white uppercase">${initials}</span>`;
+          ? `<img src="${photo}" class="w-full h-full rounded-full object-cover" draggable="false" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';" /><span class="w-full h-full hidden items-center justify-center text-[7.5px] md:text-[9px] font-bold text-white uppercase">${initials}</span>`
+          : `<span class="w-full h-full flex items-center justify-center text-[7.5px] md:text-[9px] font-bold text-white uppercase">${initials}</span>`;
 
         return `
-          <div id="vc-bar-av-${u.id}" class="w-5 h-5 rounded-full flex items-center justify-center text-[7.5px] font-bold bg-zinc-800 text-white border-2 border-zinc-950 shadow-sm relative transition-all duration-300 overflow-hidden z-10" title="${displayName}">
+          <div id="vc-bar-av-${u.id}" class="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-[7.5px] md:text-[9px] font-bold bg-zinc-800 text-white border-2 border-zinc-950 shadow-sm relative transition-all duration-300 overflow-hidden z-10" title="${displayName}">
             ${avatarHtml}
           </div>
         `;
@@ -2011,7 +1853,7 @@
 
       if (extraCount > 0) {
         html += `
-          <div class="w-5 h-5 rounded-full flex items-center justify-center text-[7.5px] font-bold bg-zinc-800 text-white border-2 border-zinc-950 shadow-sm z-0 relative">
+          <div class="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-[7.5px] md:text-[9px] font-bold bg-zinc-800 text-white border-2 border-zinc-950 shadow-sm z-0 relative">
             +${extraCount}
           </div>
         `;
