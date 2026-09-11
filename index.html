@@ -19201,7 +19201,7 @@
         (function () {
             var loadVoiceWidget = function () {
                 if (window.__loadScriptOnce) {
-                    window.__loadScriptOnce('voice-channel-widget.js?v=27').catch(function () { });
+                    window.__loadScriptOnce('voice-channel-widget.js?v=28').catch(function () { });
                 }
             };
             if (window.__runWhenIdle) {
@@ -19988,7 +19988,7 @@
             // 1. Registro del Service Worker
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function () {
-                    navigator.serviceWorker.register('./sw.js?v=18')
+                    navigator.serviceWorker.register('./sw.js?v=19')
                         .then(function (reg) {
                             console.log('[PWA] ✅ Service Worker activo:', reg.scope);
                             reg.addEventListener('updatefound', function () {

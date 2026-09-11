@@ -2132,9 +2132,14 @@
           }
         });
         
-        // Auto focus if chat tab was just opened
+        // Auto focus if chat tab was just opened (ONLY on desktop)
         if (this._activeTab === 'chat' && document.activeElement !== chatIn) {
-           setTimeout(() => chatIn.focus(), 50);
+          const isMobile = this._checkMobile() || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.matchMedia && window.matchMedia('(max-width: 1024px)').matches);
+          if (!isMobile) {
+            setTimeout(() => chatIn.focus(), 50);
+          } else {
+            chatIn.blur();
+          }
         }
       }
 
@@ -2709,7 +2714,12 @@
       this._appendChatMsg(this.myId, this.myName, text, Date.now());
       
       input.value = '';
-      input.focus();
+      const isMobile = this._checkMobile() || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.matchMedia && window.matchMedia('(max-width: 1024px)').matches);
+      if (!isMobile) {
+        input.focus();
+      } else {
+        input.blur();
+      }
     }
 
     _appendChatMsg(from, name, text, ts) {
