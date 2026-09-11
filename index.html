@@ -18658,9 +18658,14 @@ document.addEventListener("DOMContentLoaded", () => {
         import { getDatabase, ref, push, onValue, onDisconnect, set, serverTimestamp, get, remove, update, runTransaction } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js';
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
 
+        // Redirección de 127.0.0.1 a localhost para compatibilidad con dominios autorizados de Firebase Auth
+        if (window.location.hostname === '127.0.0.1') {
+            window.location.replace(window.location.href.replace('127.0.0.1', 'localhost'));
+        }
+
         const firebaseConfig = {
             apiKey: "AIzaSyDFkuktrXnsV9-jg2bv5dpJQRR-he8PT3g",
-            authDomain: window.location.hostname,
+            authDomain: "yaire-591ca.firebaseapp.com",
             databaseURL: "https://yaire-591ca-default-rtdb.firebaseio.com",
             projectId: "yaire-591ca",
             storageBucket: "yaire-591ca.firebasestorage.app",
@@ -18906,6 +18911,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 return "Hubo un problema de conexión. Verifica tu internet e inténtalo de nuevo.";
             } else if (code === 'auth/account-exists-with-different-credential') {
                 return "Ese correo ya está registrado de otra forma. Intenta iniciar sesión con el método original que usaste.";
+            } else if (code === 'auth/invalid-credential') {
+                return "Google rechazó la credencial o el dominio no coincide. Si estás en entorno local, asegúrate de ingresar desde http://localhost:5500; si estás en la web, verifica que tu cuenta tenga acceso.";
+            } else if (code === 'auth/unauthorized-domain') {
+                return "Este dominio no está autorizado en Firebase. Para desarrollo local, utiliza http://localhost:5500.";
             } else {
                 return "Ocurrió un error inesperado al conectar con Google. (Detalle técnico: " + (code || err.message) + ")";
             }
@@ -18915,7 +18924,7 @@ document.addEventListener("DOMContentLoaded", () => {
             signInWithPopup(auth, provider).then(() => {
                 toggleAuthMenu();
             }).catch(err => {
-                console.error("Error logging in:", err);
+                console.error("Error logging in:", err, err.code, err.message, err.customData);
                 const friendlyMsg = getFriendlyAuthError(err);
                 if (window.showPremiumAlert) window.showPremiumAlert("No se pudo iniciar sesión", friendlyMsg, "error"); else alert("Error: " + friendlyMsg);
             });
