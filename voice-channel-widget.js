@@ -635,7 +635,7 @@
 
   #vc-bar.vc-bar-mobile .vc-bar-text-group {
     min-width: 0 !important;
-    max-width: 76px !important;
+    max-width: 74px !important;
     flex-shrink: 0 !important;
     display: flex !important;
     flex-direction: column !important;
@@ -645,29 +645,39 @@
   #vc-bar.vc-bar-mobile #vc-bar-title {
     font-size: 7.5px !important;
     font-weight: 800 !important;
-    letter-spacing: 0.04em !important;
+    letter-spacing: 0.03em !important;
     line-height: 1 !important;
     margin-bottom: 2px !important;
     white-space: nowrap !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-sub {
-    font-size: 9.5px !important;
+    font-size: 9px !important;
     font-weight: 600 !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     display: block !important;
     line-height: 1.1 !important;
-    max-width: 76px !important;
+    max-width: 74px !important;
+  }
+
+  #vc-bar.vc-bar-mobile #vc-bar-icons {
+    gap: 0.2rem !important;
+  }
+
+  #vc-bar.vc-bar-mobile #vc-bar-chat-icon svg,
+  #vc-bar.vc-bar-mobile #vc-bar-music-icon svg {
+    width: 0.65rem !important;
+    height: 0.65rem !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-avatars {
     position: static !important;
     display: flex !important;
     align-items: center !important;
-    margin-left: 0.5rem !important;
-    margin-right: 0.25rem !important;
+    margin-left: 0.35rem !important;
+    margin-right: 0.15rem !important;
     padding: 0 !important;
     background: transparent !important;
     border: none !important;
@@ -705,16 +715,16 @@
   }
 
   #vc-bar.vc-bar-mobile .vc-bar-divider {
-    height: 1.05rem !important;
+    height: 1rem !important;
     width: 1px !important;
     background: rgba(255, 255, 255, 0.15) !important;
-    margin-left: 0.25rem !important;
-    margin-right: 0.25rem !important;
+    margin-left: 0.2rem !important;
+    margin-right: 0.2rem !important;
     flex-shrink: 0 !important;
   }
 
   #vc-bar.vc-bar-mobile #vc-bar-timer {
-    font-size: 11px !important;
+    font-size: 10.5px !important;
     font-weight: 700 !important;
     letter-spacing: 0.01em !important;
     font-variant-numeric: tabular-nums !important;
@@ -975,10 +985,10 @@
         this._bar.style.setProperty('height', '3.25rem', 'important');
         this._bar.style.setProperty('max-height', '3.25rem', 'important');
         this._bar.style.setProperty('border-radius', '9999px', 'important');
-        this._bar.style.setProperty('width', 'calc(100vw - 148px)', 'important');
-        this._bar.style.setProperty('max-width', '212px', 'important');
+        this._bar.style.setProperty('width', 'calc(100vw - 142px)', 'important');
+        this._bar.style.setProperty('max-width', '228px', 'important');
         this._bar.style.setProperty('padding', '0 0.65rem', 'important');
-        this._bar.style.setProperty('gap', '0.35rem', 'important');
+        this._bar.style.setProperty('gap', '0.3rem', 'important');
 
         if (this.fab) {
           this.fab.style.setProperty('width', '3.25rem', 'important');
