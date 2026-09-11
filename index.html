@@ -14778,13 +14778,21 @@
                 }
                 document.body.classList.add('menu-is-open');
 
-                // Focus search ONLY if it remains open after 200ms (prevents fast Esc racing)
-                menuFocusTimeout = setTimeout(() => {
-                    if (p && p.classList.contains('open')) {
-                        const s = document.getElementById('menu-search');
-                        if (s) s.focus();
-                    }
-                }, 200);
+                // Focus search ONLY on desktop with physical keyboard.
+                // On mobile devices, avoid autofocusing so the virtual keyboard does not pop up
+                // and the search bar does not appear highlighted in orange until tapped.
+                const isMobileDevice = window.matchMedia('(max-width: 1024px)').matches || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.innerWidth <= 1024);
+                if (!isMobileDevice) {
+                    menuFocusTimeout = setTimeout(() => {
+                        if (p && p.classList.contains('open')) {
+                            const s = document.getElementById('menu-search');
+                            if (s) s.focus();
+                        }
+                    }, 200);
+                } else {
+                    const s = document.getElementById('menu-search');
+                    if (s) s.blur();
+                }
             } else {
                 AudioManager.play('flyout.wav', 0.6);
                 if (typeof isSpotlightExpanded !== 'undefined' && isSpotlightExpanded) {
@@ -19980,7 +19988,7 @@
             // 1. Registro del Service Worker
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function () {
-                    navigator.serviceWorker.register('./sw.js?v=17')
+                    navigator.serviceWorker.register('./sw.js?v=18')
                         .then(function (reg) {
                             console.log('[PWA] ✅ Service Worker activo:', reg.scope);
                             reg.addEventListener('updatefound', function () {

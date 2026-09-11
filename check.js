@@ -3195,14 +3195,20 @@ const dictionary = {
                 AudioManager.play('flyin.wav', 0.6);
                 if (p) p.classList.add('open');
                 if (o) { o.classList.remove('hidden'); setTimeout(() => o.classList.remove('opacity-0'), 10); }
-                // Focus search ONLY if it remains open after 200ms (prevents fast Esc racing)
+                // Focus search ONLY on desktop with physical keyboard.
                 clearTimeout(menuFocusTimeout);
-                menuFocusTimeout = setTimeout(() => {
-                    if (p && p.classList.contains('open')) {
-                        const s = document.getElementById('menu-search');
-                        if (s) s.focus();
-                    }
-                }, 200);
+                const isMobileDevice = window.matchMedia('(max-width: 1024px)').matches || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.innerWidth <= 1024);
+                if (!isMobileDevice) {
+                    menuFocusTimeout = setTimeout(() => {
+                        if (p && p.classList.contains('open')) {
+                            const s = document.getElementById('menu-search');
+                            if (s) s.focus();
+                        }
+                    }, 200);
+                } else {
+                    const s = document.getElementById('menu-search');
+                    if (s) s.blur();
+                }
             } else {
                 AudioManager.play('flyout.wav', 0.6);
                 if (typeof isSpotlightExpanded !== 'undefined' && isSpotlightExpanded) {
