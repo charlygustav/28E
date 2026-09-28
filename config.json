@@ -13,24 +13,24 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-09-10T08:46:17.013Z",
-  "maintDate": "2026-09-10T05:30",
+  "lastUpdated": "2026-09-28T10:59:54.253Z",
+  "maintDate": "2026-09-28T22:00",
   "maintMsg": "",
   "maintScreen": "cinematic",
   "maintType": "scheduled",
-  "mantenimiento": false,
+  "mantenimiento": true,
   "refugeText": "",
   "refugeTitle": "Te escucho, mi amor",
   "songs": [
     {
-      "title": "Impact",
       "artist": "SG Lewis, Robyn, Channel Tres",
-      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029907758_SG_Lewis_-_Impact.mp3"
+      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029907758_SG_Lewis_-_Impact.mp3",
+      "title": "Impact"
     },
     {
-      "title": "Sweet Escape (Instrumental)",
       "artist": "Kmpl3x",
-      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029901492_Kmpl3x_-_Sweet_Escape__Instrumental_.mp3"
+      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029901492_Kmpl3x_-_Sweet_Escape__Instrumental_.mp3",
+      "title": "Sweet Escape (Instrumental)"
     },
     {
       "artist": "Chimbala, Omega",
