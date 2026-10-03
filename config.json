@@ -2,7 +2,7 @@
   "gal1": "https://raw.githubusercontent.com/charlygustav/yaire/main/gallery/1779487399736_IMG-20260125-WA0097.jpg",
   "gal2": "https://i.ibb.co/DDHBsJy2/IMG-20260127-WA0067.jpg",
   "gal3": "https://i.ibb.co/SDfLGvby/IMG-20260301-WA0027.jpg",
-  "heroBadge": "¡Felices 7 Meses!",
+  "heroBadge": "¡Felices 8 Meses!",
   "heroBadgeEmoji1": "✨",
   "heroBadgeEmoji2": "🎉",
   "heroBadgeLinkText": "",
@@ -13,24 +13,29 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-09-10T08:46:17.013Z",
-  "maintDate": "2026-09-10T05:30",
+  "lastUpdated": "2026-10-03T13:33:57.568Z",
+  "maintDate": "2026-10-04T17:00",
   "maintMsg": "",
   "maintScreen": "cinematic",
   "maintType": "scheduled",
-  "mantenimiento": false,
+  "mantenimiento": true,
   "refugeText": "",
   "refugeTitle": "Te escucho, mi amor",
   "songs": [
     {
-      "title": "Impact",
-      "artist": "SG Lewis, Robyn, Channel Tres",
-      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029907758_SG_Lewis_-_Impact.mp3"
+      "artist": "Otis McDonald, Mani Draper, Joni Inez",
+      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1791032398767_Otis_McDonald_-_EAT.mp3",
+      "title": " EAT"
     },
     {
-      "title": "Sweet Escape (Instrumental)",
+      "artist": "SG Lewis, Robyn, Channel Tres",
+      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029907758_SG_Lewis_-_Impact.mp3",
+      "title": "Impact"
+    },
+    {
       "artist": "Kmpl3x",
-      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029901492_Kmpl3x_-_Sweet_Escape__Instrumental_.mp3"
+      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029901492_Kmpl3x_-_Sweet_Escape__Instrumental_.mp3",
+      "title": "Sweet Escape (Instrumental)"
     },
     {
       "artist": "Chimbala, Omega",
