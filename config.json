@@ -13,7 +13,7 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-10-03T13:00:07.812Z",
+  "lastUpdated": "2026-10-03T13:00:47.330Z",
   "maintDate": "2026-10-04T17:00",
   "maintMsg": "",
   "maintScreen": "cinematic",
@@ -23,9 +23,9 @@
   "refugeTitle": "Te escucho, mi amor",
   "songs": [
     {
-      "title": "Otis McDonald - EAT",
-      "artist": "Desconocido",
-      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1791032398767_Otis_McDonald_-_EAT.mp3"
+      "artist": "Otis McDonald, Mani Draper, Joni Inez",
+      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1791032398767_Otis_McDonald_-_EAT.mp3",
+      "title": " EAT"
     },
     {
       "artist": "SG Lewis, Robyn, Channel Tres",
