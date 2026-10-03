@@ -902,7 +902,7 @@
                                         <p class="text-xs text-zinc-600 mb-4">Elige qué verán los usuarios mientras el
                                             sitio está en mantenimiento.</p>
                                         <input type="hidden" id="maint-screen" value="cinematic">
-                                        <div class="grid grid-cols-2 gap-3">
+                                        <div class="grid grid-cols-3 gap-3">
                                             <!-- Card: Cinemática -->
                                             <div id="maint-screen-card-cinematic" onclick="setMaintScreen('cinematic')"
                                                 class="relative p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 maint-screen-card border-amber-500 bg-amber-500/5"
@@ -934,6 +934,21 @@
                                                 <div class="text-sm font-bold text-white">Especial 6 Meses</div>
                                                 <div class="text-[11px] text-zinc-500 mt-0.5">Estadísticas y Wrapped
                                                 </div>
+                                            </div>
+                                            <!-- Card: Tráiler Yaire -->
+                                            <div id="maint-screen-card-trailer" onclick="setMaintScreen('trailer')"
+                                                class="relative p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 maint-screen-card border-white/5 bg-white/[0.02]"
+                                                data-screen="trailer">
+                                                <div
+                                                    class="maint-check absolute top-3 right-3 w-5 h-5 rounded-full flex items-center justify-center bg-transparent">
+
+                                                </div>
+                                                <div
+                                                    class="maint-icon w-10 h-10 rounded-xl flex items-center justify-center mb-3 bg-white/5 text-zinc-600">
+                                                    <i class="ph-fill ph-plant text-xl"></i>
+                                                </div>
+                                                <div class="text-sm font-bold text-white">Tráiler Yaire</div>
+                                                <div class="text-[11px] text-zinc-500 mt-0.5">Jardín 3D + música</div>
                                             </div>
                                         </div>
                                     </div>
