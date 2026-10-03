@@ -1,4 +1,4 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>28E — Donde Crecen las Flores</title><style>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>28E — Donde Crecen las Flores</title><script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script><style>
 *{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;font-family:system-ui,sans-serif;background:#accfd2;color:#29483e;overscroll-behavior:none}body{touch-action:none}canvas{display:block;width:100%;height:100%;image-rendering:pixelated}button{font:inherit;cursor:pointer;touch-action:manipulation;border:2px solid #fff;background:#efa5c0;color:#493043;border-radius:14px;padding:11px 16px;font-weight:800}button:disabled{opacity:.5}button:focus-visible{outline:3px solid #3467dd}.card{background:#fff8eced;border:2px solid #fff;border-radius:15px;padding:10px 13px;box-shadow:0 4px 0 #35544525;font-size:13px}#hud{position:fixed;inset:0;pointer-events:none;padding:max(12px,env(safe-area-inset-top)) 12px}.top{display:flex;justify-content:space-between;gap:8px}.tools{display:flex;gap:6px;pointer-events:auto}.tools button{padding:8px 12px;background:#fff8ec;align-self:start}.quest{margin-top:9px;max-width:260px}.bar{height:7px;background:#d5dfc7;border-radius:8px;margin:8px 0;overflow:hidden}.bar div{height:100%;background:#d778a3}#hint{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);max-width:46%;text-align:center;font-size:12px}#actbox{position:absolute;right:max(17px,env(safe-area-inset-right));bottom:max(23px,env(safe-area-inset-bottom));pointer-events:auto;display:flex;flex-direction:column;gap:8px;align-items:center}#action{min-width:138px;min-height:61px;font-size:16px;box-shadow:0 5px 0 #8e577b70}#target{font-size:12px;max-width:180px;text-align:center;padding:6px 9px}.cam{display:flex;gap:9px}.cam button{padding:6px 13px;background:#fff8ec}#joy{position:absolute;left:max(25px,env(safe-area-inset-left));bottom:max(29px,env(safe-area-inset-bottom));width:120px;height:120px;border:3px solid #fff8edb0;background:#29453c30;border-radius:50%;pointer-events:auto;touch-action:none;display:none}#stick{position:absolute;left:30px;top:30px;width:54px;height:54px;background:#efa5c0c9;border:3px solid #fff8ed;border-radius:50%;pointer-events:none}.touch #joy{display:block}.touch #hint{bottom:180px;max-width:90%}#toast{position:absolute;top:27%;left:50%;transform:translateX(-50%);max-width:85%;width:max-content;text-align:center;padding:12px 17px;color:#fff8ec;background:#29483eef;border-radius:14px;opacity:0;transition:opacity .2s;font-size:14px}#toast.show{opacity:1}.overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;background:#29483e66;backdrop-filter:blur(4px);z-index:5;touch-action:pan-y}.panel{background:#fff8ec;border:3px solid white;max-width:520px;width:100%;border-radius:26px;padding:26px;text-align:center;box-shadow:0 12px 0 #29483e55;max-height:calc(100dvh - 36px);overflow:auto}h1{font-size:clamp(32px,7vw,47px);line-height:1.05;margin:15px 0}h2{margin:8px 0;font-size:28px}p{font-size:14px;line-height:1.5}.eyebrow{letter-spacing:3px;text-transform:uppercase;font-size:11px;font-weight:800;color:#71835a}.instructions{text-align:left;background:#e9eddb;border-radius:14px;padding:12px;font-size:13px;line-height:1.6}.big{width:100%;margin-top:11px;font-size:16px;box-shadow:0 4px 0 #c387a5}.secondary{background:#dce8cc;box-shadow:0 4px 0 #b1c39b;font-size:14px}.small{font-size:11px;color:#697b66}.row{display:flex;gap:10px}.item{display:flex;justify-content:space-between;gap:9px;text-align:left;align-items:center;background:#e9eddb;border-radius:13px;padding:12px;margin:10px 0;font-size:14px}.item small{display:block;font-size:11px;margin-top:4px}.item button{min-width:90px}.hidden{display:none!important}@media(max-width:600px){.card{font-size:12px;padding:8px 10px}.quest{max-width:230px}.panel{padding:19px}#action{min-width:120px;font-size:14px}.tools{gap:4px}.tools button{padding:8px 10px}}@media(max-height:500px){.panel{padding:16px}h1{font-size:32px;margin:9px 0}.instructions{font-size:12px;padding:8px}.touch #hint{bottom:14px;max-width:44%}.quest{margin-top:5px}#joy{bottom:19px}#actbox{bottom:15px}}
 
 /* HUD limpio: información esencial, ayuda bajo demanda y zonas táctiles amplias. */
@@ -109,6 +109,19 @@
 .welcome-cinema-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;background:rgba(255,255,255,.45);color:#3e6555;border:1px solid #acbba2!important;border-radius:8px;padding:8px 14px;min-height:42px;box-shadow:none;transition:background .15s ease,border-color .15s ease,color .15s ease,transform .1s ease}
 .welcome-cinema-btn:hover{background:#edf2e5;border-color:#8ba281!important;color:#244234}
 .welcome-cinema-btn:active{transform:scale(.98);background:#e2ebda}
+.overlay{will-change:opacity}
+.panel,.phone-shell,#toast{will-change:transform,opacity}
+@media(hover:hover) and (pointer:fine){
+ .phone-apps button{transition:transform 180ms cubic-bezier(0.23, 1, 0.32, 1),box-shadow .2s ease}
+ .phone-apps button:hover{transform:translateY(-2px) scale(1.02)}
+ .film-card,.journey-card,.story-card{transition:transform 180ms cubic-bezier(0.23, 1, 0.32, 1),box-shadow .2s ease}
+ .film-card:hover,.journey-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(41,72,62,0.08)}
+ .story-card:hover{transform:translateY(-1px)}
+ .arrival-nav button,.journal-tabs button{transition:color .15s ease,transform .15s ease}
+ .arrival-nav button:hover,.journal-tabs button:hover{transform:translateY(-1px)}
+ .tools .tool-button:hover{transform:scale(1.06)}
+ .welcome #start:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(160,71,112,0.28)}
+}
 .arrival-bottom{display:grid;grid-template-columns:1.7fr 1fr;gap:32px;border-top:1px solid #29483e18;margin-top:36px;padding-top:22px}.arrival-bottom .welcome-guide{margin:12px 0 0;gap:18px}.arrival-bottom .welcome-step p{font-size:12px}.arrival-note strong{font-family:Georgia,serif;font-weight:400;font-size:18px}.arrival-note p{font-size:12px;color:#74806d;line-height:1.7}
 .arrival-aside{align-self:stretch;display:flex;flex-direction:column;justify-content:center;padding-left:30px;border-left:1px solid #29483e1a}.arrival-aside .welcome-objective{border:0;flex-wrap:wrap;padding:18px 0 8px;align-items:flex-start}.arrival-aside .welcome-counter{font-size:48px;width:100%;font-family:Georgia,serif;font-weight:400;order:-1;margin-bottom:10px}.arrival-aside .welcome-counter small{font-family:system-ui,sans-serif;font-size:14px}.arrival-aside .welcome-objective strong{font-size:18px;font-family:Georgia,serif;font-weight:400;display:block}.arrival-aside .welcome-objective p{font-size:12px;line-height:1.7;margin-top:10px}.arrival-aside .welcome-track{height:4px;margin-top:16px}.aside-divider{height:1px;background:#29483e18;margin:22px 0}.aside-caption,.aside-caption p{font-size:12px;color:#7d8876;line-height:1.7}.current-chapter{font-size:12px;color:#9b5374;line-height:1.7}.welcome-resources{font-size:13px;line-height:1.7;padding:0}
 .arrival-footer{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-shrink:0;padding:16px max(32px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(32px,env(safe-area-inset-left));border-top:1px solid #29483e18;background:#faf7ef;box-shadow:0 -8px 24px #faf7ef80}
@@ -630,7 +643,7 @@ html,body{height:100%;height:100dvh}#world{height:100dvh;touch-action:none}
 
 <script>
 'use strict';(()=>{
-const $=id=>document.getElementById(id),canvas=$('world');let gl;function fail(){ $('fatal').classList.remove('hidden') }try{gl=canvas.getContext('webgl',{alpha:false,antialias:false})}catch(e){}if(!gl){fail();return}
+const $=id=>document.getElementById(id),canvas=$('world');const hasGSAP=()=>typeof gsap!=='undefined'&&!matchMedia('(prefers-reduced-motion: reduce)').matches;let gl;function fail(){ $('fatal').classList.remove('hidden') }try{gl=canvas.getContext('webgl',{alpha:false,antialias:false})}catch(e){}if(!gl){fail();return}
 const vs=`attribute vec3 p;attribute vec3 n;attribute vec3 c;uniform mat4 vp;uniform vec3 eye;varying vec3 col;varying float fog;void main(){col=c*(0.57+0.43*max(dot(n,normalize(vec3(-0.5,1.0,0.4))),0.0));fog=clamp((distance(p,eye)-18.0)/32.0,0.0,0.85);gl_Position=vp*vec4(p,1.0);}`,fs=`precision mediump float;varying vec3 col;varying float fog;uniform vec3 sky;void main(){vec3 v=mix(col,sky,fog);v+=(mod(gl_FragCoord.x+mod(gl_FragCoord.y,2.0)*2.0,4.0)-1.5)/340.0;gl_FragColor=vec4(v,1.0);}`;
 function shader(t,src){let s=gl.createShader(t);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw Error('shader');return s}let pr;try{pr=gl.createProgram();gl.attachShader(pr,shader(gl.VERTEX_SHADER,vs));gl.attachShader(pr,shader(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr);if(!gl.getProgramParameter(pr,gl.LINK_STATUS))throw Error('link')}catch(e){fail();return}gl.useProgram(pr);gl.enable(gl.DEPTH_TEST);const at=['p','n','c'].map(n=>gl.getAttribLocation(pr,n)),uv=gl.getUniformLocation(pr,'vp'),ue=gl.getUniformLocation(pr,'eye'),us=gl.getUniformLocation(pr,'sky');
 const C={grass:[.45,.65,.38],soil:[.42,.28,.21],wet:[.27,.21,.17],wood:[.57,.38,.25],tan:[.75,.56,.37],leaf:[.28,.51,.31],lime:[.47,.67,.37],pink:[1,.48,.70],rose:[1,.70,.81],cream:[.98,.91,.76],water:[.26,.69,.84],stone:[.64,.69,.64],yellow:[.97,.79,.38],skin:[.85,.61,.45],hair:[.19,.15,.17],dress:[.87,.39,.60],boot:[.30,.23,.23],dark:[.22,.33,.27]};
@@ -725,7 +738,11 @@ function ensurePhone(){if(phoneStateRef!==state){phoneStateRef=state;state.phone
 function load(){try{let s=JSON.parse(localStorage.getItem(KEY)||'null');if(!s||s.version!==1)return;let d=s.state;if(!d||!Array.isArray(s.plots)||s.plots.length!==12||s.plots.some(p=>!p||typeof p!=='object'))return;for(let k of ['coins','seeds','water','harvest','time'])if(!Number.isFinite(d[k])||d[k]<0)return;state=fresh();for(let k of ['coins','seeds','harvest'])state[k]=clamp(Math.floor(d[k]),0,9999999);state.time=clamp(d.time,0,1e9);for(let k of ['can','fert','boots','won'])state[k]=d[k]===true;state.water=clamp(d.water,0,state.can?150:100);state.journey=safeJourney(d.journey);state.phone=safePhone(d.phone);state.cinema={seen:d.cinema&&Array.isArray(d.cinema.seen)?d.cinema.seen.filter(x=>typeof x==='string'&&/^(intro|chapter[1-8]|side(0[1-9]|1[0-9]|2[0-4]))$/.test(x)).slice(0,33):['intro',...Array.from({length:state.journey.stage},(_,i)=>'chapter'+(i+1))],auto:!d.cinema||d.cinema.auto!==false,extrasAuto:!!(d.cinema&&d.cinema.extrasAuto),subtitles:!d.cinema||d.cinema.subtitles!==false,reduced:d.cinema&&typeof d.cinema.reduced==='boolean'?d.cinema.reduced:matchMedia('(prefers-reduced-motion: reduce)').matches};s.plots.forEach((p,i)=>{plots[i].planted=p.planted===true;plots[i].growth=Number.isFinite(p.growth)?clamp(p.growth,0,1):0;plots[i].moisture=Number.isFinite(p.moisture)?clamp(p.moisture,0,1):0});savedAvailable=true;$('start').textContent='Continuar mi jardín'}catch(e){storageOK=false}}
 function save(){if(!started)return;checkJourney();try{localStorage.setItem(KEY,JSON.stringify({version:1,state,plots:plots.map(p=>({planted:p.planted,growth:p.growth,moisture:p.moisture}))}));storageOK=true}catch(e){storageOK=false}$('saveNote').textContent=storageOK?'Progreso guardado en este navegador.':'El navegador no permite guardar: conserva esta pestaña abierta.'}load();if(!storageOK)$('saveInfo').textContent='Guardado local no disponible en este navegador. Puedes jugar igualmente.';
 const touch=matchMedia('(pointer:coarse)').matches||navigator.maxTouchPoints>0;if(touch){document.body.classList.add('touch');$('hint').textContent='Palanca: caminar · Botón de acción: actuar · ↶ / ↷: cámara'}
-function toast(s){$('toast').textContent=s;$('toast').classList.add('show');toastTime=3.3}function clearInput(){cameraTurn=0;keys.clear();joyX=joyY=0;joyID=null;$('stick').style.transform='translate(0,0)'}function setMode(m){mode=m;clearInput();$('hud').classList.remove('help-open');$('help').setAttribute('aria-expanded','false');$('help').setAttribute('aria-label','Mostrar controles');for(let id of ['title','paused','shop','win'])$(id).classList.toggle('hidden',id!==m);$('hud').classList.toggle('hidden',(m==='title'||m==='cinematic'));if(started)save();$('hud').inert=m!=='play';if(m==='paused'){updateDiary();selectDiaryTab('paneGarden');$('resume').focus()}else if(m==='play'&&started){$('pause').focus({preventScroll:true})}}
+let toastTween=null;
+function bumpResource(id,color){if(!hasGSAP())return;const el=$(id);if(!el)return;gsap.killTweensOf(el);gsap.fromTo(el,{scale:1.3,color:color||'#b55780'},{scale:1,color:'inherit',duration:.32,ease:'back.out(2)'})}
+function toast(s){const el=$('toast');el.textContent=s;el.classList.add('show');toastTime=3.3;if(hasGSAP()){if(toastTween)toastTween.kill();gsap.killTweensOf(el);toastTween=gsap.timeline();toastTween.fromTo(el,{y:22,opacity:0,scale:.93},{y:0,opacity:1,scale:1,duration:.32,ease:'back.out(1.4)'}).to(el,{y:-12,opacity:0,scale:.96,duration:.24,ease:'power2.in',delay:2.7,onComplete:()=>el.classList.remove('show')})}}
+function clearInput(){cameraTurn=0;keys.clear();joyX=joyY=0;joyID=null;$('stick').style.transform='translate(0,0)'}
+function setMode(m){const prevMode=mode;mode=m;clearInput();$('hud').classList.remove('help-open');$('help').setAttribute('aria-expanded','false');$('help').setAttribute('aria-label','Mostrar controles');const overlayIds=['title','paused','shop','win'];overlayIds.forEach(id=>{const el=$(id);if(!el)return;if(id===m){el.classList.remove('hidden');if(hasGSAP()){gsap.killTweensOf(el);gsap.fromTo(el,{opacity:0},{opacity:1,duration:.28,ease:'power2.out'});const p=el.querySelector('.panel');if(p){gsap.killTweensOf(p);gsap.fromTo(p,{scale:.95,y:16,opacity:0},{scale:1,y:0,opacity:1,duration:.34,ease:'power3.out'})}if(id==='shop'){const items=el.querySelectorAll('.item');if(items.length)gsap.fromTo(items,{x:-16,opacity:0},{x:0,opacity:1,duration:.28,stagger:.04,ease:'power2.out',delay:.06})}else if(id==='win'){const spark=el.querySelector('div[style*="font-size:44px"]');if(spark)gsap.fromTo(spark,{scale:.4,rotation:-14,opacity:0},{scale:1,rotation:0,opacity:1,duration:.6,ease:'elastic.out(1,.4)',delay:.12})}else if(id==='paused'){gsap.fromTo('.journal-header > *',{y:-8,opacity:0},{y:0,opacity:1,duration:.28,stagger:.04,ease:'power2.out',delay:.04});gsap.fromTo('.journal-tabs button',{y:-6,opacity:0},{y:0,opacity:1,duration:.26,stagger:.025,ease:'power2.out',delay:.08})}}}else{if(!el.classList.contains('hidden')){if(hasGSAP()&&prevMode===id&&m==='play'){gsap.killTweensOf(el);gsap.to(el,{opacity:0,duration:.18,ease:'power2.in',onComplete:()=>{el.classList.add('hidden');gsap.set(el,{clearProps:'all'});const p=el.querySelector('.panel');if(p)gsap.set(p,{clearProps:'all'})}})}else{el.classList.add('hidden')}}}});$('hud').classList.toggle('hidden',(m==='title'||m==='cinematic'));if(started)save();$('hud').inert=m!=='play';if(m==='play'&&(prevMode==='title'||prevMode==='paused'||prevMode==='shop')){if(hasGSAP()){gsap.killTweensOf(['#resources','#hud .tools','#hud .quest','#actbox']);gsap.fromTo('#resources',{y:-20,opacity:0},{y:0,opacity:1,duration:.32,ease:'power2.out'});gsap.fromTo('#hud .tools',{y:-20,opacity:0},{y:0,opacity:1,duration:.32,ease:'power2.out',delay:.04});gsap.fromTo('#hud .quest',{y:-15,opacity:0},{y:0,opacity:1,duration:.32,ease:'power2.out',delay:.06});gsap.fromTo('#actbox',{y:20,opacity:0},{y:0,opacity:1,duration:.32,ease:'power2.out',delay:.08})}}if(m==='paused'){updateDiary();selectDiaryTab('paneGarden');$('resume').focus()}else if(m==='play'&&started){$('pause').focus({preventScroll:true})}}
 function tone(f=440,d=.12){if(!soundOn)return;try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume().catch(()=>{});let o=audio.createOscillator(),g=audio.createGain();o.type='triangle';o.frequency.value=f;g.gain.setValueAtTime(.06,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+d);o.connect(g);g.connect(audio.destination);o.start();o.stop(audio.currentTime+d)}catch(e){}}
 
 function updateDiary(){
@@ -744,7 +761,31 @@ function updateDiary(){
  $('diarySaveTitle').textContent=storageOK?'Tu jardín está guardado':'Guardado no disponible';
 }
 function selectDiaryTab(pane){
- document.querySelectorAll('.journal-tabs [role="tab"]').forEach(tab=>{let selected=tab.dataset.pane===pane;tab.setAttribute('aria-selected',String(selected));tab.tabIndex=selected?0:-1;$(tab.dataset.pane).classList.toggle('hidden',!selected)});
+ document.querySelectorAll('.journal-tabs [role="tab"]').forEach(tab=>{
+  let selected=tab.dataset.pane===pane;
+  tab.setAttribute('aria-selected',String(selected));
+  tab.tabIndex=selected?0:-1;
+  const p=$(tab.dataset.pane);
+  if(!p)return;
+  if(selected){
+   p.classList.remove('hidden');
+   if(hasGSAP()){
+    const items=p.querySelectorAll('.diary-grid > div, .diary-stat, .diary-plots li, .journey-card, .film-card, .setting-line, .control-grid > div, .reading-head');
+    if(items.length>0){
+     gsap.fromTo(items,{opacity:0,y:12},{opacity:1,y:0,duration:.3,stagger:.025,ease:'power2.out'});
+    }else{
+     gsap.fromTo(p,{opacity:0,y:8},{opacity:1,y:0,duration:.25,ease:'power2.out'});
+    }
+    const meter=p.querySelector('.diary-meter span, .journey-meter span');
+    if(meter&&meter.style.width){
+     const w=meter.style.width;
+     gsap.fromTo(meter,{width:'0%'},{width:w,duration:.45,ease:'power2.out'});
+    }
+   }
+  }else{
+   p.classList.add('hidden');
+  }
+ });
 }
 document.querySelectorAll('.journal-tabs [role="tab"]').forEach(tab=>{
  tab.onclick=()=>selectDiaryTab(tab.dataset.pane);
@@ -757,14 +798,17 @@ $('pauseSound').onclick=toggleSound;syncSoundUI();
 $('paused').addEventListener('keydown',e=>{if(mode!=='paused'||e.key!=='Tab')return;const nodes=[...$('paused').querySelectorAll('button:not(:disabled),[tabindex="0"]')].filter(el=>el.getClientRects().length>0);if(!nodes.length)return;let first=nodes[0],last=nodes[nodes.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}});
 
 $('help').onclick=()=>{let open=$('hud').classList.toggle('help-open');$('help').setAttribute('aria-expanded',String(open));$('help').setAttribute('aria-label',open?'Ocultar controles':'Mostrar controles');$('help').title=open?'Ocultar controles':'Mostrar controles'};
-$('sound').onclick=toggleSound;$('start').onclick=()=>{started=true;setMode('play');toast(savedAvailable?'¡Bienvenida de nuevo, Yaire!':'El jardín de San Francisco de Macorís te espera. Empieza por un bancal.')};$('pause').onclick=()=>{if(mode==='play')setMode('paused')};$('resume').onclick=()=>setMode('play');$('closeShop').onclick=()=>setMode('play');$('continue').onclick=()=>setMode('play');$('reset').onclick=()=>{if(!confirm('¿Borrar el progreso y empezar un jardín nuevo?'))return;state=fresh();plots.forEach(p=>{p.planted=false;p.growth=p.moisture=0});player={x:0,z:6.5,a:Math.PI};angle=0;setMode('play');toast('Un nuevo comienzo para Yaire.')};$('quality').onclick=()=>{low=!low;$('quality').textContent='Gráficos: '+(low?'ligeros':'normal');resize()};
-function shopUI(){ $('balance').textContent='Tus monedas: '+state.coins+' ●';$('buySeeds').disabled=state.coins<10;for(let [id,key,cost] of [['buyCan','can',50],['buyFert','fert',80],['buyBoots','boots',65]]){$(id).disabled=state[key]||state.coins<cost;$(id).textContent=state[key]?'Comprado':cost+' ●'}}
-$('buySeeds').onclick=()=>{if(mode!=='shop'||state.coins<10)return;state.coins-=10;state.seeds+=5;recordJourney('packets');tone(660);shopUI();save()};for(let [id,key,cost] of [['buyCan','can',50],['buyFert','fert',80],['buyBoots','boots',65]])$(id).onclick=()=>{if(mode!=='shop'||state[key]||state.coins<cost)return;state.coins-=cost;state[key]=true;if(key==='can')state.water=150;tone(740);shopUI();save()};
+$('sound').onclick=toggleSound;
+$('start').onclick=()=>{started=true;if(hasGSAP()){gsap.to('#title .welcome',{scale:1.02,opacity:0,y:-10,duration:.32,ease:'power2.inOut',onComplete:()=>{setMode('play');gsap.set('#title .welcome',{clearProps:'all'});toast(savedAvailable?'¡Bienvenida de nuevo, Yaire!':'El jardín de San Francisco de Macorís te espera. Empieza por un bancal.')}})}else{setMode('play');toast(savedAvailable?'¡Bienvenida de nuevo, Yaire!':'El jardín de San Francisco de Macorís te espera. Empieza por un bancal.')}};
+$('pause').onclick=()=>{if(mode==='play')setMode('paused')};$('resume').onclick=()=>setMode('play');$('closeShop').onclick=()=>setMode('play');$('continue').onclick=()=>setMode('play');$('reset').onclick=()=>{if(!confirm('¿Borrar el progreso y empezar un jardín nuevo?'))return;state=fresh();plots.forEach(p=>{p.planted=false;p.growth=p.moisture=0});player={x:0,z:6.5,a:Math.PI};angle=0;setMode('play');toast('Un nuevo comienzo para Yaire.')};$('quality').onclick=()=>{low=!low;$('quality').textContent='Gráficos: '+(low?'ligeros':'normal');resize()};
+function shopUI(){ $('balance').textContent='Tus monedas: '+state.coins+' ●';if(hasGSAP())gsap.fromTo('#balance',{scale:1.08},{scale:1,duration:.2,ease:'power2.out'});$('buySeeds').disabled=state.coins<10;for(let [id,key,cost] of [['buyCan','can',50],['buyFert','fert',80],['buyBoots','boots',65]]){$(id).disabled=state[key]||state.coins<cost;$(id).textContent=state[key]?'Comprado':cost+' ●'}}
+$('buySeeds').onclick=()=>{if(mode!=='shop'||state.coins<10)return;state.coins-=10;state.seeds+=5;bumpResource('seedsValue','#71895b');bumpResource('coinsValue','#d49b29');recordJourney('packets');tone(660);shopUI();save()};for(let [id,key,cost] of [['buyCan','can',50],['buyFert','fert',80],['buyBoots','boots',65]])$(id).onclick=()=>{if(mode!=='shop'||state[key]||state.coins<cost)return;state.coins-=cost;state[key]=true;if(key==='can')state.water=150;bumpResource('coinsValue','#d49b29');tone(740);shopUI();save()};
 function nearest(){let best=null,dist=Infinity;for(let p of plots){let d=Math.hypot(player.x-p.x,player.z-p.z);if(d<1.62&&d<dist){best={type:'plot',p};dist=d}}for(let [type,p,range] of [['well',well,2],['shop',shop,2.2],['sign',sign,1.75]]){let d=Math.hypot(player.x-p.x,player.z-p.z);if(d<range&&d<dist){best={type,p};dist=d}}return best}
 const particles=[];function burst(x,z,c,n=10){for(let i=0;i<n;i++)particles.push({x,y:.5,z,vx:(Math.random()-.5)*1.5,vy:1+Math.random(),vz:(Math.random()-.5)*1.5,life:.8+Math.random()*.5,c})}
-function act(){if(mode!=='play')return;target=nearest();if(!target){toast('Acércate a un bancal, a la fuente o al puesto.');return}let p=target.p;if(target.type==='well'){if(state.water<(state.can?150:100)-.01)recordJourney('refills');state.water=state.can?150:100;toast('¡Regadera llena!');tone(520);burst(p.x,p.z,C.water);save();return}if(target.type==='sign'){recordJourney('signRead');save();setMode('paused');selectDiaryTab('paneMissions');return}if(target.type==='shop'){recordJourney('shopVisit');if(state.seeds===0&&!plots.some(p=>p.planted)&&state.coins<10){state.seeds=1;toast('Una semilla de regalo. ¡No te rindas, Yaire!')}shopUI();setMode('shop');return}if(!p.planted){if(state.seeds<=0){toast('Necesitas semillas: visita el puesto amarillo.');return}state.seeds--;recordJourney('planted',3);p.planted=true;p.growth=.02;p.moisture=0;toast('Semilla plantada. Ahora dale un poco de agua.');tone(420);burst(p.x,p.z,C.tan,5)}else if(p.growth>=1){p.planted=false;p.growth=p.moisture=0;state.coins+=15;state.harvest++;state.journey.xp+=10;state.journey.stats.earned+=15;tone(880,.2);burst(p.x,p.z,C.pink,16);toast([3,6,9,12].includes(state.harvest)?'Nueva página del cuaderno · Diario → Historia':'¡Tulipán rosa cosechado! +15 monedas');if(state.harvest>=12&&!state.won){state.won=true;$('winStats').textContent='12 tulipanes cosechados · '+Math.floor(state.time/60)+' min de jardín';setMode('win')}}else{let cost=state.can?12:20;if(p.moisture>.55){toast('La tierra sigue húmeda. Dale tiempo para crecer.');return}if(state.water<cost){toast('Te falta agua. Llena la regadera en la fuente azul.');return}state.water-=cost;recordJourney('watered',2);p.moisture=1;burst(p.x,p.z,C.water);tone(560);toast('¡Regado! La flor crecerá mientras la tierra esté húmeda.')}save()}
+function act(){if(mode!=='play')return;target=nearest();if(!target){toast('Acércate a un bancal, a la fuente o al puesto.');return}let p=target.p;if(target.type==='well'){if(state.water<(state.can?150:100)-.01)recordJourney('refills');state.water=state.can?150:100;bumpResource('waterValue','#2690b8');toast('¡Regadera llena!');tone(520);burst(p.x,p.z,C.water);save();return}if(target.type==='sign'){recordJourney('signRead');save();setMode('paused');selectDiaryTab('paneMissions');return}if(target.type==='shop'){recordJourney('shopVisit');if(state.seeds===0&&!plots.some(p=>p.planted)&&state.coins<10){state.seeds=1;bumpResource('seedsValue','#71895b');toast('Una semilla de regalo. ¡No te rindas, Yaire!')}shopUI();setMode('shop');return}if(!p.planted){if(state.seeds<=0){toast('Necesitas semillas: visita el puesto amarillo.');return}state.seeds--;bumpResource('seedsValue','#71895b');recordJourney('planted',3);p.planted=true;p.growth=.02;p.moisture=0;toast('Semilla plantada. Ahora dale un poco de agua.');tone(420);burst(p.x,p.z,C.tan,5)}else if(p.growth>=1){p.planted=false;p.growth=p.moisture=0;state.coins+=15;state.harvest++;bumpResource('coinsValue','#d49b29');bumpResource('progress','#b55780');state.journey.xp+=10;state.journey.stats.earned+=15;tone(880,.2);burst(p.x,p.z,C.pink,16);toast([3,6,9,12].includes(state.harvest)?'Nueva página del cuaderno · Diario → Historia':'¡Tulipán rosa cosechado! +15 monedas');if(state.harvest>=12&&!state.won){state.won=true;$('winStats').textContent='12 tulipanes cosechados · '+Math.floor(state.time/60)+' min de jardín';setMode('win')}}else{let cost=state.can?12:20;if(p.moisture>.55){toast('La tierra sigue húmeda. Dale tiempo para crecer.');return}if(state.water<cost){toast('Te falta agua. Llena la regadera en la fuente azul.');return}state.water-=cost;bumpResource('waterValue','#2690b8');recordJourney('watered',2);p.moisture=1;burst(p.x,p.z,C.water);tone(560);toast('¡Regado! La flor crecerá mientras la tierra esté húmeda.')}save()}
 $('action').onclick=act;
-function hud(){ $('coinsValue').textContent=state.coins;$('seedsValue').textContent=state.seeds;$('waterValue').textContent=Math.round(state.water);$('waterCapacity').textContent='/'+(state.can?150:100);$('progress').style.width=Math.min(100,state.harvest/12*100)+'%';$('count').textContent=state.won?state.harvest+' ✿':state.harvest+' / 12';$('goal').textContent=state.won?'Cultivo libre':'Tulipanes rosas';$('questText').textContent=state.won?'Sigue cultivando a tu ritmo.':'Cosecha 12 tulipanes rosas.';target=nearest();let label='Interactuar',text='Acércate a un bancal';if(target){let p=target.p;if(target.type==='well'){label='Llenar agua';text='Fuente del jardín'}else if(target.type==='shop'){label='Abrir puesto';text='Semillas y mejoras'}else if(target.type==='sign'){label='Leer cartel';text='Consejos de cultivo'}else if(!p.planted){label='Sembrar';text='Bancal vacío · 1 semilla'}else if(p.growth>=1){label='Cosechar';text='¡Tulipán listo! · +15 ●'}else{label=p.moisture>.55?'Creciendo…':'Regar';text='Crecimiento: '+Math.floor(p.growth*100)+'% · '+(p.moisture>0?'húmedo':'seco')}}$('action').textContent=label;$('target').textContent=text;$('action').disabled=!target||(target.type==='plot'&&target.p.planted&&target.p.growth<1&&target.p.moisture>.55);journeyHUD()}
+let lastTargetKey=null;
+function hud(){ $('coinsValue').textContent=state.coins;$('seedsValue').textContent=state.seeds;$('waterValue').textContent=Math.round(state.water);$('waterCapacity').textContent='/'+(state.can?150:100);$('progress').style.width=Math.min(100,state.harvest/12*100)+'%';$('count').textContent=state.won?state.harvest+' ✿':state.harvest+' / 12';$('goal').textContent=state.won?'Cultivo libre':'Tulipanes rosas';$('questText').textContent=state.won?'Sigue cultivando a tu ritmo.':'Cosecha 12 tulipanes rosas.';target=nearest();const curTargetKey=target?(target.type+(target.p?target.p.x+','+target.p.z:'')):null;if(curTargetKey!==lastTargetKey){lastTargetKey=curTargetKey;if(target&&hasGSAP()){gsap.fromTo('#action',{scale:1.05},{scale:1,duration:.22,ease:'back.out(2)'})}}let label='Interactuar',text='Acércate a un bancal';if(target){let p=target.p;if(target.type==='well'){label='Llenar agua';text='Fuente del jardín'}else if(target.type==='shop'){label='Abrir puesto';text='Semillas y mejoras'}else if(target.type==='sign'){label='Leer cartel';text='Consejos de cultivo'}else if(!p.planted){label='Sembrar';text='Bancal vacío · 1 semilla'}else if(p.growth>=1){label='Cosechar';text='¡Tulipán listo! · +15 ●'}else{label=p.moisture>.55?'Creciendo…':'Regar';text='Crecimiento: '+Math.floor(p.growth*100)+'% · '+(p.moisture>0?'húmedo':'seco')}}$('action').textContent=label;$('target').textContent=text;$('action').disabled=!target||(target.type==='plot'&&target.p.planted&&target.p.growth<1&&target.p.moisture>.55);journeyHUD()}
 const controlKeys=['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','KeyE','Space','KeyQ','KeyC','ShiftLeft','ShiftRight'];window.addEventListener('keydown',e=>{if(e.code==='Escape'){e.preventDefault();if(mode==='title'&&started)setMode('play');else if(mode==='play')setMode('paused');else if(['paused','shop'].includes(mode))setMode('play');return}if(mode!=='play')return;if(controlKeys.includes(e.code)){e.preventDefault();keys.add(e.code)}if(!e.repeat&&(e.code==='KeyE'||e.code==='Space'))act()});window.addEventListener('keyup',e=>keys.delete(e.code));window.addEventListener('blur',()=>{clearInput();if(mode==='play')setMode('paused')});document.addEventListener('visibilitychange',()=>{if(document.hidden){clearInput();if(mode==='play')setMode('paused');save()}});window.addEventListener('pagehide',save);
 const joy=$('joy');function joyMove(e){let r=joy.getBoundingClientRect(),x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2,limit=38,len=Math.hypot(x,y);if(len>limit){x*=limit/len;y*=limit/len}joyX=x/limit;joyY=y/limit;if(Math.hypot(joyX,joyY)<.13)joyX=joyY=0;$('stick').style.transform='translate('+x+'px,'+y+'px)'}joy.addEventListener('pointerdown',e=>{if(mode!=='play'||joyID!==null)return;joyID=e.pointerId;joy.setPointerCapture(e.pointerId);joyMove(e);e.preventDefault()});joy.addEventListener('pointermove',e=>{if(e.pointerId===joyID){joyMove(e);e.preventDefault()}});function joyEnd(e){if(e.pointerId!==joyID)return;joyID=null;joyX=joyY=0;$('stick').style.transform='translate(0,0)'}for(let type of ['pointerup','pointercancel','lostpointercapture'])joy.addEventListener(type,joyEnd);
 function resolve(){const radius=.27;player.x=clamp(player.x,-9.55,9.55);player.z=clamp(player.z,-9.55,9.55);for(let pass=0;pass<3;pass++)for(let o of obstacles){if(o.r){let dx=player.x-o.x,dz=player.z-o.z,d=Math.hypot(dx,dz),min=o.r+radius;if(d<min){if(d<.00001){player.x=o.x+min;player.z=o.z}else{player.x=o.x+dx/d*min;player.z=o.z+dz/d*min}}}else{let lx=o.x-o.w/2,hx=o.x+o.w/2,lz=o.z-o.d/2,hz=o.z+o.d/2,cx=clamp(player.x,lx,hx),cz=clamp(player.z,lz,hz),dx=player.x-cx,dz=player.z-cz,d=Math.hypot(dx,dz);if(d>0&&d<radius){player.x=cx+dx/d*radius;player.z=cz+dz/d*radius}else if(d===0){let choices=[{d:player.x-lx,x:lx-radius,z:player.z},{d:hx-player.x,x:hx+radius,z:player.z},{d:player.z-lz,x:player.x,z:lz-radius},{d:hz-player.z,x:player.x,z:hz+radius}].sort((a,b)=>a.d-b.d);player.x=choices[0].x;player.z=choices[0].z}}}player.x=clamp(player.x,-9.55,9.55);player.z=clamp(player.z,-9.55,9.55)}
@@ -825,9 +869,23 @@ function renderLore(){
  }).join('')+'</div>';
 }
 function selectStory(pane){
- document.querySelectorAll('.arrival-pane').forEach(el=>el.classList.toggle('hidden',el.id!==pane));
+ const prev=document.querySelector('.arrival-pane:not(.hidden)');
  document.querySelectorAll('.arrival-nav button').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.story===pane)));
- $('arrivalScroll').scrollTop=0;
+ if(hasGSAP()&&prev&&prev.id!==pane){
+  gsap.killTweensOf('.arrival-pane');
+  gsap.to(prev,{opacity:0,y:-8,duration:.16,ease:'power2.in',onComplete:()=>{
+   prev.classList.add('hidden');gsap.set(prev,{clearProps:'all'});
+   const target=$(pane);if(!target)return;
+   target.classList.remove('hidden');$('arrivalScroll').scrollTop=0;
+   const cards=target.querySelectorAll('.story-card, .reading-head, .chapter-list > article, .timeline-list > article, .guide-layout > *, .welcome-hero, .arrival-bottom, .arrival-aside');
+   if(cards.length>0){gsap.fromTo(cards,{opacity:0,y:16},{opacity:1,y:0,duration:.38,stagger:.04,ease:'power2.out'})}
+   else{gsap.fromTo(target,{opacity:0,y:10},{opacity:1,y:0,duration:.3,ease:'power2.out'})}
+  }});
+ }else{
+  document.querySelectorAll('.arrival-pane').forEach(el=>el.classList.toggle('hidden',el.id!==pane));
+  $('arrivalScroll').scrollTop=0;
+  if(hasGSAP()){const target=$(pane);if(target)gsap.fromTo(target,{opacity:0},{opacity:1,duration:.25})}
+ }
 }
 document.querySelectorAll('.arrival-nav button').forEach(btn=>{btn.onclick=()=>selectStory(btn.dataset.story);btn.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const tabs=[...document.querySelectorAll('.arrival-nav button')],i=tabs.indexOf(btn),n=e.key==='Home'?0:e.key==='End'?tabs.length-1:(i+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;selectStory(tabs[n].dataset.story);tabs[n].focus();tabs[n].scrollIntoView({block:'nearest',inline:'nearest'});});});
 $('readPrologue').onclick=()=>{selectStory('storyPrologue');$('navPrologue').focus({preventScroll:true})};
@@ -1072,11 +1130,18 @@ function openPhone(){
  if(mode==='phone'||mode==='photo'){closePhone();return}
  if(mode!=='play')return;
  try{
-  // Construir primero: un fallo de contenido no debe pausar el jardín.
   ensurePhone();renderPhone('home');clearInput();runEnd();cameraTouch=null;
   mode='phone';syncPhoneLayers();
   for(const id of ['title','paused','shop','win'])$(id).classList.add('hidden');
   $('hud').inert=true;focusSafe($('phoneClose'));
+  if(hasGSAP()){
+   const shell=$('yairePhone').querySelector('.phone-shell');
+   if(shell){
+    gsap.killTweensOf(shell);
+    gsap.fromTo(shell,{y:60,scale:.95,opacity:0},{y:0,scale:1,opacity:1,duration:.38,ease:'power3.out'});
+    gsap.fromTo('.phone-apps button',{scale:.86,opacity:0,y:10},{scale:1,opacity:1,y:0,duration:.3,stagger:.035,ease:'back.out(1.4)',delay:.08});
+   }
+  }
   clearTimeout(phoneLayerCheck);
   phoneLayerCheck=setTimeout(()=>{
    if(mode==='phone'&&!document.hidden&&!phoneIsVisible())recoverPhone(new Error('La pantalla del teléfono no es visible o está tapada'));
@@ -1088,15 +1153,28 @@ function closePhone(){
  try{endPhoneCall(false)}catch(error){console.error(error);phoneCall=null}
  clearInput();runEnd();cameraTouch=null;mode='play';
  const panel=$('yairePhone');
- try{if(panel.open&&typeof panel.close==='function')panel.close()}catch(error){console.error(error)}
- panel.classList.add('hidden');panel.hidden=true;panel.inert=true;panel.setAttribute('aria-hidden','true');
- $('photoChrome').classList.add('hidden');document.body.classList.remove('phone-open');
- phoneBtn.setAttribute('aria-expanded','false');
- $('hud').inert=false;$('hud').classList.remove('hidden');
- for(const id of ['title','paused','shop','win'])$(id).classList.add('hidden');
- filmAutoWait=Math.max(filmAutoWait,3);
- try{save()}catch(error){console.error(error)}
- focusSafe(phoneBtn);
+ const finishClose=()=>{
+  try{if(panel.open&&typeof panel.close==='function')panel.close()}catch(error){console.error(error)}
+  panel.classList.add('hidden');panel.hidden=true;panel.inert=true;panel.setAttribute('aria-hidden','true');
+  $('photoChrome').classList.add('hidden');document.body.classList.remove('phone-open');
+  phoneBtn.setAttribute('aria-expanded','false');
+  $('hud').inert=false;$('hud').classList.remove('hidden');
+  for(const id of ['title','paused','shop','win'])$(id).classList.add('hidden');
+  filmAutoWait=Math.max(filmAutoWait,3);
+  try{save()}catch(error){console.error(error)}
+  focusSafe(phoneBtn);
+  if(hasGSAP()){
+   const shell=panel.querySelector('.phone-shell');if(shell)gsap.set(shell,{clearProps:'all'});
+   gsap.fromTo('#hud',{opacity:.6},{opacity:1,duration:.25});
+  }
+ };
+ if(hasGSAP()&&panel.open){
+  const shell=panel.querySelector('.phone-shell');
+  if(shell)gsap.to(shell,{y:50,scale:.96,opacity:0,duration:.22,ease:'power2.in',onComplete:finishClose});
+  else finishClose();
+ }else{
+  finishClose();
+ }
 }
 $('yairePhone').addEventListener('cancel',e=>{e.preventDefault();closePhone()});
 $('yairePhone').addEventListener('close',()=>{if(mode==='phone')closePhone()});
@@ -1110,7 +1188,20 @@ if(app==='music'){page.innerHTML='<div class="phone-card"><h3>Radio del jardín<
 if(app==='settings'){page.innerHTML='<div class="phone-card"><h3>Tu ritmo, tu pantalla</h3>Controles grandes, joystick multitáctil, cámara por arrastre y menús a pantalla completa en móvil. Funciona en vertical y horizontal.</div><button id="phoneQuality" class="phone-track">Gráficos: '+(low?'ligeros':'normal')+'</button><button id="phoneFullscreen" class="phone-track">Pantalla completa, si el navegador permite</button><button id="phoneVoice" class="phone-track" aria-pressed="'+p.voice+'">Voz sintetizada en llamadas: '+(p.voice?'activada':'desactivada')+'</button><p class="phone-note">PC: P teléfono · WASD movimiento · Mayús correr · Q / C cámara.<br>Móvil: palanca izquierda · botón de acción · mantén Correr · desliza sobre el jardín para girar la cámara.<br>Fotos guardadas en este navegador cuando IndexedDB está disponible; si no, permanecen solo durante la sesión.</p>'}
 if(app==='gallery'){renderPhoneGallery();return}
 if(app==='photo'&&photoSelected){page.innerHTML='<img class="phone-photo" src="'+photoSelected.url+'" alt="Fotografía del jardín de Yaire"><p class="phone-note">'+escPhone(photoSelected.at)+' · '+photoSelected.harvest+' cosechas</p><div class="phone-inline"><button id="downloadPhonePhoto" class="primary">Guardar imagen</button><button id="deletePhonePhoto">Eliminar</button></div>'}
-updatePhoneBadge();page.scrollTop=0;bindPhonePage();}
+updatePhoneBadge();page.scrollTop=0;bindPhonePage();
+if(hasGSAP()){
+ if(app==='home'){
+  gsap.fromTo('.phone-apps button',{scale:.88,opacity:0,y:10},{scale:1,opacity:1,y:0,duration:.28,stagger:.03,ease:'back.out(1.4)'});
+ }else if(app==='thread'){
+  gsap.fromTo('.phone-bubble',{y:12,scale:.96,opacity:0},{y:0,scale:1,opacity:1,duration:.26,stagger:.03,ease:'back.out(1.2)'});
+  gsap.fromTo('.phone-replies button',{y:8,opacity:0},{y:0,opacity:1,duration:.22,stagger:.03,ease:'power2.out',delay:.08});
+ }else if(app==='contacts'||app==='messages'){
+  gsap.fromTo('.phone-contact',{x:14,opacity:0},{x:0,opacity:1,duration:.25,stagger:.03,ease:'power2.out'});
+ }else{
+  gsap.fromTo(page.children,{y:10,opacity:0},{y:0,opacity:1,duration:.25,stagger:.03,ease:'power2.out'});
+ }
+}
+}
 function bindPhonePage(){const page=$('phonePage');page.querySelectorAll('[data-phone-app]').forEach(b=>b.onclick=()=>b.dataset.phoneApp==='camera'?startGardenCamera():renderPhone(b.dataset.phoneApp));page.querySelectorAll('[data-contact]').forEach(b=>b.onclick=()=>{phoneContact=b.dataset.contact;if(b.dataset.kind==='contacts')startPhoneCall(phoneContact);else renderPhone('thread')});page.querySelectorAll('[data-call]').forEach(b=>b.onclick=()=>startPhoneCall(b.dataset.call));page.querySelectorAll('[data-reply]').forEach(b=>b.onclick=()=>sendPhoneMessage(b.textContent,b.dataset.reply));if($('phoneCompose'))$('phoneCompose').onsubmit=e=>{e.preventDefault();let text=$('phoneDraft').value.trim();if(text)sendPhoneMessage(text,'custom')};if($('callHangup')){$('callHangup').onclick=()=>{endPhoneCall(true);renderPhone('contacts')};$('callNext').onclick=nextPhoneCall;$('callVoice').onclick=()=>{state.phone.voice=!state.phone.voice;if(!state.phone.voice&&window.speechSynthesis)speechSynthesis.cancel();renderPhone('call');if(state.phone.voice)speakCall();save()}}
 page.querySelectorAll('[data-track]').forEach(b=>b.onclick=()=>{stopPhoneMusic();musicFile=null;musicTrack=Number(b.dataset.track);startPhoneMusic();renderPhone('music')});if($('musicToggle')){$('musicToggle').onclick=()=>{if(musicPlaying)stopPhoneMusic();else startPhoneMusic();renderPhone('music')};$('musicStop').onclick=()=>{stopPhoneMusic();renderPhone('music')};$('phoneVolume').oninput=e=>{state.phone.volume=Number(e.target.value);localMusic.volume=state.phone.volume;if(musicGain)musicGain.gain.value=state.phone.volume};$('phoneVolume').onchange=save;$('phoneAudioFile').onchange=e=>{let f=e.target.files[0];if(!f)return;stopPhoneMusic();if(musicFile)URL.revokeObjectURL(musicFile.url);musicFile={name:f.name,url:URL.createObjectURL(f)};localMusic.src=musicFile.url;startPhoneMusic();renderPhone('music')}}
 if($('phoneQuality')){$('phoneQuality').onclick=()=>{low=!low;$('quality').textContent='Gráficos: '+(low?'ligeros':'normal');resize();renderPhone('settings')};$('phoneFullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else if(document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen();else phoneNotice('Este navegador no permite pantalla completa.')}catch(e){phoneNotice('El navegador no permite pantalla completa en este contexto.')}};$('phoneVoice').onclick=()=>{state.phone.voice=!state.phone.voice;save();renderPhone('settings')}}
@@ -1349,6 +1440,20 @@ for(const event of ['loadedmetadata','durationchange','timeupdate','play','pause
 // Sin navegación redundante mientras hay una llamada activa.
 const c9RenderBase=renderPhone;
 renderPhone=function(app=phoneApp){c9RenderBase(app);$('yairePhone').classList.toggle('phone-call-active',!!phoneCall&&phoneApp==='call')};
+
+function introAnimation(){
+ if(!hasGSAP())return;
+ const tl=gsap.timeline({defaults:{ease:'power3.out'}});
+ tl.fromTo('.arrival-header',{y:-20,opacity:0},{y:0,opacity:1,duration:.45})
+   .fromTo('.arrival-nav button',{y:-10,opacity:0},{y:0,opacity:1,duration:.35,stagger:.03},'-=0.25')
+   .fromTo(['.welcome-copy .eyebrow','#welcomeTitle','#welcomeStory','.arrival-quote','.welcome-actions'],{y:22,opacity:0},{y:0,opacity:1,duration:.55,stagger:.06},'-=0.2')
+   .fromTo('.arrival-art',{scale:.9,opacity:0,y:15},{scale:1,opacity:1,y:0,duration:.65,ease:'back.out(1.2)'},'-=0.35')
+   .fromTo('.arrival-aside > *',{x:20,opacity:0},{x:0,opacity:1,duration:.45,stagger:.05},'-=0.4')
+   .fromTo('.arrival-bottom',{y:20,opacity:0},{y:0,opacity:1,duration:.4},'-=0.3')
+   .fromTo('.arrival-footer',{y:20,opacity:0},{y:0,opacity:1,duration:.4},'-=0.3');
+ gsap.to('.arrival-art svg',{y:-5,duration:3.2,repeat:-1,yoyo:true,ease:'sine.inOut'});
+}
+introAnimation();
 
 requestAnimationFrame(loop);
 
