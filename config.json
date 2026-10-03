@@ -13,8 +13,8 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-09-29T02:09:12.215Z",
-  "maintDate": "2026-09-29T22:09",
+  "lastUpdated": "2026-10-03T11:27:03.590Z",
+  "maintDate": "2026-10-04T17:00",
   "maintMsg": "",
   "maintScreen": "cinematic",
   "maintType": "scheduled",
@@ -23,149 +23,149 @@
   "refugeTitle": "Te escucho, mi amor",
   "songs": [
     {
+      "title": "Impact",
       "artist": "SG Lewis, Robyn, Channel Tres",
-      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029907758_SG_Lewis_-_Impact.mp3",
-      "title": "Impact"
+      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029907758_SG_Lewis_-_Impact.mp3"
     },
     {
+      "title": "Sweet Escape (Instrumental)",
       "artist": "Kmpl3x",
-      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029901492_Kmpl3x_-_Sweet_Escape__Instrumental_.mp3",
-      "title": "Sweet Escape (Instrumental)"
+      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029901492_Kmpl3x_-_Sweet_Escape__Instrumental_.mp3"
     },
     {
+      "title": "Se Me Nota (Agarrame)",
       "artist": "Chimbala, Omega",
-      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029480377_Chimbala_-_Se_Me_Nota__Agarrame___Prod_by_B-One_.mp3",
-      "title": "Se Me Nota (Agarrame)"
+      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029480377_Chimbala_-_Se_Me_Nota__Agarrame___Prod_by_B-One_.mp3"
     },
     {
+      "title": "Flip The Coin",
       "artist": "Softable",
-      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029075731_Softable_-_Flip_The_Coin.mp3",
-      "title": "Flip The Coin"
+      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029075731_Softable_-_Flip_The_Coin.mp3"
     },
     {
+      "title": "fuëgo",
       "artist": "BNYX®, Bizarrap, Yeat, Peso Pluma",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942588655_fu_go__feat._Bizarrap__Yeat__Peso_Pluma__-_BNYX___Bizarrap__Yeat__Peso_Pluma.mp3",
-      "title": "fuëgo"
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942588655_fu_go__feat._Bizarrap__Yeat__Peso_Pluma__-_BNYX___Bizarrap__Yeat__Peso_Pluma.mp3"
     },
     {
+      "title": "MAMI 100PRE SABE (INTERLUDE)",
       "artist": "Alvaro Díaz, Nsqk",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779506420904_Alvaro_D_az_-_MAMI_100PRE_SABE__INTERLUDE_.mp3",
-      "title": "MAMI 100PRE SABE (INTERLUDE)"
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779506420904_Alvaro_D_az_-_MAMI_100PRE_SABE__INTERLUDE_.mp3"
     },
     {
+      "title": "worry - Slowed",
       "artist": "LONOWN, riserayss",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942600398_worry_-_Slowed_-_LONOWN__riserayss.mp3",
-      "title": "worry - Slowed"
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942600398_worry_-_Slowed_-_LONOWN__riserayss.mp3"
     },
     {
+      "title": "Bon Bon",
       "artist": "Fcukers",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942990131_Bon_Bon_-_Fcukers.mp3",
-      "title": "Bon Bon"
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942990131_Bon_Bon_-_Fcukers.mp3"
     },
     {
+      "title": "MALASNOTICIAS.",
       "artist": "Alvaro Diaz, LATIN MAFIA",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942999880_MALASNOTICIAS_-_Alvaro_Diaz__LATIN_MAFIA.mp3",
-      "title": "MALASNOTICIAS."
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942999880_MALASNOTICIAS_-_Alvaro_Diaz__LATIN_MAFIA.mp3"
     },
     {
+      "title": "Bing Bong",
       "artist": "Yailin la Mas Viral, Puyalo Pantera",
-      "src": "radio/Bing Bong - Yailin la Mas Viral - SpotubeDL.com.mp3",
-      "title": "Bing Bong"
+      "src": "radio/Bing Bong - Yailin la Mas Viral - SpotubeDL.com.mp3"
     },
     {
+      "title": "Brazilera - Remix",
       "artist": "Chimbala, Fetti031, Chucky73",
-      "src": "radio/Brazilera - Remix - Chimbala - SpotubeDL.com.mp3",
-      "title": "Brazilera - Remix"
+      "src": "radio/Brazilera - Remix - Chimbala - SpotubeDL.com.mp3"
     },
     {
+      "title": "Como Panas",
       "artist": "Bryant Myers",
-      "src": "radio/Como Panas - Bryant Myers - SpotubeDL.com.mp3",
-      "title": "Como Panas"
+      "src": "radio/Como Panas - Bryant Myers - SpotubeDL.com.mp3"
     },
     {
+      "title": "Delincuente",
       "artist": "Tokischa",
-      "src": "radio/Delincuente - Tokischa - SpotubeDL.com.mp3",
-      "title": "Delincuente"
+      "src": "radio/Delincuente - Tokischa - SpotubeDL.com.mp3"
     },
     {
+      "title": "God is a woman",
       "artist": "Ariana Grande",
-      "src": "radio/God is a woman - Ariana Grande - SpotubeDL.com.mp3",
-      "title": "God is a woman"
+      "src": "radio/God is a woman - Ariana Grande - SpotubeDL.com.mp3"
     },
     {
+      "title": "God's Plan",
       "artist": "Drake",
-      "src": "radio/God's Plan - Drake - SpotubeDL.com.mp3",
-      "title": "God's Plan"
+      "src": "radio/God's Plan - Drake - SpotubeDL.com.mp3"
     },
     {
+      "title": "I Like It",
       "artist": "Cardi B, Bad Bunny, J Balvin",
-      "src": "radio/I Like It - Cardi B - SpotubeDL.com.mp3",
-      "title": "I Like It"
+      "src": "radio/I Like It - Cardi B - SpotubeDL.com.mp3"
     },
     {
+      "title": "Inolvidable",
       "artist": "Ovy On The Drums, Beéle",
-      "src": "radio/Inolvidable - Ovy On The Drums - SpotubeDL.com.mp3",
-      "title": "Inolvidable"
+      "src": "radio/Inolvidable - Ovy On The Drums - SpotubeDL.com.mp3"
     },
     {
+      "title": "Oscar Winning Tears.",
       "artist": "RAYE",
-      "src": "radio/Oscar Winning Tears. - RAYE - SpotubeDL.com.mp3",
-      "title": "Oscar Winning Tears."
+      "src": "radio/Oscar Winning Tears. - RAYE - SpotubeDL.com.mp3"
     },
     {
+      "title": "Pasao De Famarcia",
       "artist": "Lil Naay",
-      "src": "radio/Pasao De Famarcia - Lil Naay - SpotubeDL.com.mp3",
-      "title": "Pasao De Famarcia"
+      "src": "radio/Pasao De Famarcia - Lil Naay - SpotubeDL.com.mp3"
     },
     {
+      "title": "Thootie",
       "artist": "Ice Spice, Tokischa",
-      "src": "radio/Thootie (feat. Tokischa) - Ice Spice - SpotubeDL.com.mp3",
-      "title": "Thootie"
+      "src": "radio/Thootie (feat. Tokischa) - Ice Spice - SpotubeDL.com.mp3"
     },
     {
+      "title": "Toto Lindo",
       "artist": "Huan62, Tokischa",
-      "src": "radio/Toto Lindo - Huan62 - SpotubeDL.com.mp3",
-      "title": "Toto Lindo"
+      "src": "radio/Toto Lindo - Huan62 - SpotubeDL.com.mp3"
     },
     {
+      "title": "Oro Fundido",
       "artist": "Oblivion's Mighty Trash, Nimaca",
-      "src": "sounds/Oro Fundido - Oblivion's Mighty Trash - SpotubeDL.com.mp3",
-      "title": "Oro Fundido"
+      "src": "sounds/Oro Fundido - Oblivion's Mighty Trash - SpotubeDL.com.mp3"
     },
     {
+      "title": "CRAZY (Live)",
       "artist": "Otis McDonald",
-      "src": "sounds/Otis McDonald - CRAZY - Live (SPOTISAVER).mp3",
-      "title": "CRAZY (Live)"
+      "src": "sounds/Otis McDonald - CRAZY - Live (SPOTISAVER).mp3"
     },
     {
+      "title": "O.Sky",
       "artist": "Otis McDonald",
-      "src": "sounds/Otis McDonald - O.Sky.mp3",
-      "title": "O.Sky"
+      "src": "sounds/Otis McDonald - O.Sky.mp3"
     },
     {
+      "title": "Heaven Can Wait",
       "artist": "Michael Jackson",
-      "src": "radio/1779975688545_Michael_Jackson_-_Heaven_Can_Wait.mp3",
-      "title": "Heaven Can Wait"
+      "src": "radio/1779975688545_Michael_Jackson_-_Heaven_Can_Wait.mp3"
     },
     {
+      "title": "Slow Burn",
       "artist": "Corbyn Kites",
-      "src": "radio/1779443980848_Slow_Burn_-_Corbyn_Kites.mp3",
-      "title": "Slow Burn"
+      "src": "radio/1779443980848_Slow_Burn_-_Corbyn_Kites.mp3"
     },
     {
+      "title": "No Pole",
       "artist": "Don Toliver",
-      "src": "radio/Don Toliver - No Pole.mp3",
-      "title": "No Pole"
+      "src": "radio/Don Toliver - No Pole.mp3"
     },
     {
+      "title": "Crowd Go Crazy",
       "artist": "John Legend",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779958727306_John_Legend_-_Crowd_Go_Crazy.mp3",
-      "title": "Crowd Go Crazy"
+      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779958727306_John_Legend_-_Crowd_Go_Crazy.mp3"
     },
     {
+      "title": "BLOCKKIDS",
       "artist": "THIZZY52",
-      "src": "sounds/THIZZY52 - BLOCKKIDS.mp3",
-      "title": "BLOCKKIDS"
+      "src": "sounds/THIZZY52 - BLOCKKIDS.mp3"
     }
   ],
   "spotlightTips": {
