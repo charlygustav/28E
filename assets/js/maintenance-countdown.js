@@ -11,6 +11,10 @@
 
             // Función para iniciar la cuenta regresiva e inyectar el Toast
             function startMaintenanceCountdown(targetPage = 'mantenimiento') {
+                if (!document.body) {
+                    window.addEventListener('DOMContentLoaded', () => startMaintenanceCountdown(targetPage), { once: true });
+                    return;
+                }
                 if (document.getElementById('maintenance-countdown-overlay')) return;
 
                 // Detener el polling
