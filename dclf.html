@@ -797,7 +797,7 @@ function journeyDecor(m){
 
 let phoneApp='home',phoneContact='daniela',phoneCall=null,phonePulse=0,phoneStateRef=null,phoneMessage='',photoZoom=12,photoPitch=8,photoBusy=false;
 let photoDB=null,photoDBPromise=null,phonePhotos=[],photoLoaded=false,photoURLs=[],photoSelected=null;
-let musicContext=null,musicGain=null,musicPlaying=false,musicTrack=0,musicTimer=null,musicNote=0,musicNodes=new Set(),musicFile=null;
+let musicContext=null,musicGain=null,musicPlaying=false,musicTrack=0,musicTimer=null,musicNote=0,musicNodes=new Set(),musicFile=null,musicStarting=false,musicWasPlayingBeforePause=false;
 const localMusic=new Audio();localMusic.loop=false;
 let state,player={x:0,z:6.5,a:Math.PI},angle=0,mode='title',started=false,low=false,target=null,savedAvailable=false,storageOK=true,soundOn=false,audio=null,toastTime=0,saveTime=0,walk=0,joyX=0,joyY=0,joyID=null,moving=false;
 let cameraTurn=0;const KEY='yaire-tulipanes-v1',keys=new Set();function fresh(){return {coins:15,seeds:10,water:100,harvest:0,can:false,fert:false,boots:false,won:false,time:0,journey:freshJourney(),cinema:{seen:[],auto:true,extrasAuto:false,subtitles:true,reduced:matchMedia('(prefers-reduced-motion: reduce)').matches}}}state=fresh();
@@ -925,7 +925,7 @@ $('paused').addEventListener('keydown',e=>{if(mode!=='paused'||e.key!=='Tab')ret
 $('help').onclick=()=>{let open=$('hud').classList.toggle('help-open');$('help').setAttribute('aria-expanded',String(open));$('help').setAttribute('aria-label',open?'Ocultar controles':'Mostrar controles');$('help').title=open?'Ocultar controles':'Mostrar controles'};
 $('sound').onclick=toggleSound;
 $('start').onclick=()=>{started=true;if(hasGSAP()){gsap.to('#title .welcome',{scale:1.02,opacity:0,y:-10,duration:.32,ease:'power2.inOut',onComplete:()=>{setMode('play');gsap.set('#title .welcome',{clearProps:'all'});toast(savedAvailable?'¡Bienvenida de nuevo, Yaire!':'El jardín de San Francisco de Macorís te espera. Empieza por un bancal.')}})}else{setMode('play');toast(savedAvailable?'¡Bienvenida de nuevo, Yaire!':'El jardín de San Francisco de Macorís te espera. Empieza por un bancal.')}};
-$('pause').onclick=()=>{if(mode==='play')setMode('paused')};$('resume').onclick=()=>setMode('play');$('closeShop').onclick=()=>setMode('play');$('continue').onclick=()=>setMode('play');$('reset').onclick=()=>{if(!confirm('¿Borrar el progreso y empezar un jardín nuevo?'))return;state=fresh();plots.forEach(p=>{p.planted=false;p.growth=p.moisture=0});player={x:0,z:6.5,a:Math.PI};angle=0;setMode('play');toast('Un nuevo comienzo para Yaire.')};$('quality').onclick=()=>{low=!low;$('quality').textContent='Gráficos: '+(low?'ligeros':'normal');resize()};
+$('pause').onclick=()=>{if(mode==='play'){if(musicPlaying){musicWasPlayingBeforePause=true;stopPhoneMusic(true);}setMode('paused');}};$('resume').onclick=()=>{setMode('play');if(musicWasPlayingBeforePause){musicWasPlayingBeforePause=false;startPhoneMusic();}};$('closeShop').onclick=()=>{setMode('play');if(musicWasPlayingBeforePause){musicWasPlayingBeforePause=false;startPhoneMusic();}};$('continue').onclick=()=>{setMode('play');if(musicWasPlayingBeforePause){musicWasPlayingBeforePause=false;startPhoneMusic();}};$('reset').onclick=()=>{if(!confirm('¿Borrar el progreso y empezar un jardín nuevo?'))return;stopPhoneMusic();state=fresh();plots.forEach(p=>{p.planted=false;p.growth=p.moisture=0});player={x:0,z:6.5,a:Math.PI};angle=0;setMode('play');toast('Un nuevo comienzo para Yaire.')};$('quality').onclick=()=>{low=!low;$('quality').textContent='Gráficos: '+(low?'ligeros':'normal');resize()};
 function shopUI(){ $('balance').textContent='Tus monedas: '+state.coins+' ●';if(hasGSAP())gsap.fromTo('#balance',{scale:1.08},{scale:1,duration:.2,ease:'power2.out'});$('buySeeds').disabled=state.coins<10;for(let [id,key,cost] of [['buyCan','can',50],['buyFert','fert',80],['buyBoots','boots',65]]){$(id).disabled=state[key]||state.coins<cost;$(id).textContent=state[key]?'Comprado':cost+' ●'}}
 $('buySeeds').onclick=()=>{if(mode!=='shop'||state.coins<10)return;state.coins-=10;state.seeds+=5;bumpResource('seedsValue','#71895b');bumpResource('coinsValue','#d49b29');recordJourney('packets');tone(660);shopUI();save()};for(let [id,key,cost] of [['buyCan','can',50],['buyFert','fert',80],['buyBoots','boots',65]])$(id).onclick=()=>{if(mode!=='shop'||state[key]||state.coins<cost)return;state.coins-=cost;state[key]=true;if(key==='can')state.water=150;bumpResource('coinsValue','#d49b29');tone(740);shopUI();save()};
 function nearest(){let best=null,dist=Infinity;for(let p of plots){let d=Math.hypot(player.x-p.x,player.z-p.z);if(d<1.62&&d<dist){best={type:'plot',p};dist=d}}for(let [type,p,range] of [['well',well,2],['shop',shop,2.2],['sign',sign,1.75]]){let d=Math.hypot(player.x-p.x,player.z-p.z);if(d<range&&d<dist){best={type,p};dist=d}}return best}
@@ -934,7 +934,7 @@ function act(){if(mode!=='play')return;target=nearest();if(!target){toast('Acér
 $('action').onclick=act;
 let lastTargetKey=null;
 function hud(){ $('coinsValue').textContent=state.coins;$('seedsValue').textContent=state.seeds;$('waterValue').textContent=Math.round(state.water);$('waterCapacity').textContent='/'+(state.can?150:100);$('progress').style.width=Math.min(100,state.harvest/12*100)+'%';$('count').textContent=state.won?state.harvest+' ✿':state.harvest+' / 12';$('goal').textContent=state.won?'Cultivo libre':'Tulipanes rosas';$('questText').textContent=state.won?'Sigue cultivando a tu ritmo.':'Cosecha 12 tulipanes rosas.';target=nearest();const curTargetKey=target?(target.type+(target.p?target.p.x+','+target.p.z:'')):null;if(curTargetKey!==lastTargetKey){lastTargetKey=curTargetKey;if(target&&hasGSAP()){gsap.fromTo('#action',{scale:1.05},{scale:1,duration:.22,ease:'back.out(2)'})}}let label='Interactuar',text='Acércate a un bancal';if(target){let p=target.p;if(target.type==='well'){label='Llenar agua';text='Fuente del jardín'}else if(target.type==='shop'){label='Abrir puesto';text='Semillas y mejoras'}else if(target.type==='sign'){label='Leer cartel';text='Consejos de cultivo'}else if(!p.planted){label='Sembrar';text='Bancal vacío · 1 semilla'}else if(p.growth>=1){label='Cosechar';text='¡Tulipán listo! · +15 ●'}else{label=p.moisture>.55?'Creciendo…':'Regar';text='Crecimiento: '+Math.floor(p.growth*100)+'% · '+(p.moisture>0?'húmedo':'seco')}}$('action').textContent=label;$('target').textContent=text;$('action').disabled=!target||(target.type==='plot'&&target.p.planted&&target.p.growth<1&&target.p.moisture>.55);journeyHUD();if(typeof hudSyncMusic==='function')hudSyncMusic()}
-const controlKeys=['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','KeyE','Space','KeyQ','KeyC','ShiftLeft','ShiftRight'];window.addEventListener('keydown',e=>{if(e.code==='Escape'){e.preventDefault();if(mode==='title'&&started)setMode('play');else if(mode==='play')setMode('paused');else if(['paused','shop'].includes(mode))setMode('play');return}if(mode!=='play')return;if(controlKeys.includes(e.code)){e.preventDefault();keys.add(e.code)}if(!e.repeat&&(e.code==='KeyE'||e.code==='Space'))act()});window.addEventListener('keyup',e=>keys.delete(e.code));window.addEventListener('blur',()=>{clearInput();if(mode==='play')setMode('paused')});document.addEventListener('visibilitychange',()=>{if(document.hidden){clearInput();if(mode==='play')setMode('paused');save()}});window.addEventListener('pagehide',save);
+const controlKeys=['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','KeyE','Space','KeyQ','KeyC','ShiftLeft','ShiftRight'];window.addEventListener('keydown',e=>{if(e.code==='Escape'){e.preventDefault();if(mode==='title'&&started)setMode('play');else if(mode==='play'){if(musicPlaying){musicWasPlayingBeforePause=true;stopPhoneMusic(true);}setMode('paused');}else if(['paused','shop'].includes(mode)){setMode('play');if(musicWasPlayingBeforePause){musicWasPlayingBeforePause=false;startPhoneMusic();}}return}if(mode!=='play')return;if(controlKeys.includes(e.code)){e.preventDefault();keys.add(e.code)}if(!e.repeat&&(e.code==='KeyE'||e.code==='Space'))act()});window.addEventListener('keyup',e=>keys.delete(e.code));window.addEventListener('blur',()=>{clearInput();if(mode==='play'){if(musicPlaying){musicWasPlayingBeforePause=true;stopPhoneMusic(true);}setMode('paused');}});document.addEventListener('visibilitychange',()=>{if(document.hidden){clearInput();if(musicPlaying){musicWasPlayingBeforePause=true;stopPhoneMusic(true);}if(mode==='play')setMode('paused');save();}else{if((mode==='play'||mode==='phone')&&musicWasPlayingBeforePause){musicWasPlayingBeforePause=false;startPhoneMusic();}}});window.addEventListener('pagehide',save);
 const joy=$('joy');function joyMove(e){let r=joy.getBoundingClientRect(),x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2,limit=38,len=Math.hypot(x,y);if(len>limit){x*=limit/len;y*=limit/len}joyX=x/limit;joyY=y/limit;if(Math.hypot(joyX,joyY)<.13)joyX=joyY=0;$('stick').style.transform='translate('+x+'px,'+y+'px)'}joy.addEventListener('pointerdown',e=>{if(mode!=='play'||joyID!==null)return;joyID=e.pointerId;joy.setPointerCapture(e.pointerId);joyMove(e);e.preventDefault()});joy.addEventListener('pointermove',e=>{if(e.pointerId===joyID){joyMove(e);e.preventDefault()}});function joyEnd(e){if(e.pointerId!==joyID)return;joyID=null;joyX=joyY=0;$('stick').style.transform='translate(0,0)'}for(let type of ['pointerup','pointercancel','lostpointercapture'])joy.addEventListener(type,joyEnd);
 function resolve(){const radius=.27;player.x=clamp(player.x,-9.55,9.55);player.z=clamp(player.z,-9.55,9.55);for(let pass=0;pass<3;pass++)for(let o of obstacles){if(o.r){let dx=player.x-o.x,dz=player.z-o.z,d=Math.hypot(dx,dz),min=o.r+radius;if(d<min){if(d<.00001){player.x=o.x+min;player.z=o.z}else{player.x=o.x+dx/d*min;player.z=o.z+dz/d*min}}}else{let lx=o.x-o.w/2,hx=o.x+o.w/2,lz=o.z-o.d/2,hz=o.z+o.d/2,cx=clamp(player.x,lx,hx),cz=clamp(player.z,lz,hz),dx=player.x-cx,dz=player.z-cz,d=Math.hypot(dx,dz);if(d>0&&d<radius){player.x=cx+dx/d*radius;player.z=cz+dz/d*radius}else if(d===0){let choices=[{d:player.x-lx,x:lx-radius,z:player.z},{d:hx-player.x,x:hx+radius,z:player.z},{d:player.z-lz,x:player.x,z:lz-radius},{d:hz-player.z,x:player.x,z:hz+radius}].sort((a,b)=>a.d-b.d);player.x=choices[0].x;player.z=choices[0].z}}}player.x=clamp(player.x,-9.55,9.55);player.z=clamp(player.z,-9.55,9.55)}
 function step(dt){state.time+=dt;clock+=dt;let x=joyX,y=joyY;if(keys.has('KeyA')||keys.has('ArrowLeft'))x--;if(keys.has('KeyD')||keys.has('ArrowRight'))x++;if(keys.has('KeyW')||keys.has('ArrowUp'))y--;if(keys.has('KeyS')||keys.has('ArrowDown'))y++;let len=Math.hypot(x,y);if(len>1){x/=len;y/=len}if(keys.has('KeyQ'))angle+=dt*1.8;if(keys.has('KeyC'))angle-=dt*1.8;angle+=cameraTurn*dt*1.8;angle=((angle+Math.PI)%(Math.PI*2)+Math.PI*2)%(Math.PI*2)-Math.PI;let co=Math.cos(angle),si=Math.sin(angle),dx=x*co+y*si,dz=-x*si+y*co,speed=(state.boots?3.6:2.9)*(keys.has('ShiftLeft')||keys.has('ShiftRight')?1.5:1);moving=len>.05;if(moving){let dist=Math.hypot(dx,dz)*speed*dt,n=Math.max(1,Math.ceil(dist/.07));for(let i=0;i<n;i++){player.x+=dx*speed*dt/n;player.z+=dz*speed*dt/n;resolve()}player.a=Math.atan2(dx,dz);walk+=dt*speed*3.6}
@@ -1122,17 +1122,19 @@ function showFilmShot(){
 function playFilm(id,returnMode='play'){
  if(filmPlayback)return;const scene=filmScenes.find(f=>f.id===id);if(!scene||!filmUnlocked(scene))return;
  const savedFocus=document.activeElement;
- filmPlayback={scene,index:0,time:0,total:0,paused:false,returnMode,savedFocus};
- stopPhoneMusic();setMode('cinematic');document.body.classList.add('in-cinema');$('cinema').setAttribute('aria-label',scene.title);
+ filmPlayback={scene,index:0,time:0,total:0,paused:false,returnMode,savedFocus,resumeMusic:musicPlaying};
+ if(musicPlaying)stopPhoneMusic(true);setMode('cinematic');document.body.classList.add('in-cinema');$('cinema').setAttribute('aria-label',scene.title);
  $('cinePause').textContent='Pausar';$('cinePause').setAttribute('aria-pressed','false');showFilmShot();$('cineSkip').focus({preventScroll:true});revealCinema(3);$('cinema').classList.toggle('no-subtitles',state.cinema.subtitles===false);syncCineIcons();
  for(const el of document.querySelectorAll('.overlay'))el.inert=true;
 }
 function endFilm(){
  const p=filmPlayback;if(!p)return;
  if(!state.cinema.seen.includes(p.scene.id))state.cinema.seen.push(p.scene.id);
+ const shouldResume=p.resumeMusic;
  filmPlayback=null;filmAutoWait=12;document.body.classList.remove('in-cinema');
  for(const el of document.querySelectorAll('.overlay'))el.inert=false;
  setMode(p.returnMode);renderFilmGallery();
+ if(shouldResume&&p.returnMode==='play')startPhoneMusic();
  if(p.returnMode==='paused'){selectDiaryTab('paneCinema');$('tabCinema').focus({preventScroll:true})}
  else if(p.returnMode==='title'){updateWelcome();if(p.savedFocus&&p.savedFocus.isConnected)p.savedFocus.focus({preventScroll:true})}
  else toast('El jardín te espera. Puedes volver a ver la escena desde el diario.');
@@ -1341,49 +1343,114 @@ function synthNote(freq,start,duration,gain=.065,wave='sine'){let ctx=getMusicCo
 function ringPhone(){if(!soundOn)return;try{const ctx=getMusicContext();synthNote(659.25,ctx.currentTime,.13,.05);synthNote(783.99,ctx.currentTime+.18,.16,.05)}catch(e){}}
 function startPhoneMusic(){
  ensurePhone();
+ musicStarting=true;
  musicPlaying=true;
+ if(typeof m8Sync==='function')m8Sync();
  if(typeof hudSyncMusic==='function')hudSyncMusic();
  if(musicFile){
   localMusic.volume=state.phone.volume;
-  localMusic.play().catch(()=>{musicPlaying=false;phoneNotice('Este archivo no se pudo reproducir. Prueba MP3, WAV u OGG.');if(typeof hudSyncMusic==='function')hudSyncMusic();});
+  localMusic.play().then(()=>{
+   musicStarting=false;
+   musicPlaying=true;
+   if(typeof m8Sync==='function')m8Sync();
+   if(typeof hudSyncMusic==='function')hudSyncMusic();
+  }).catch(()=>{
+   musicStarting=false;
+   musicPlaying=false;
+   phoneNotice('Este archivo no se pudo reproducir. Prueba MP3, WAV u OGG.');
+   if(typeof m8Sync==='function')m8Sync();
+   if(typeof hudSyncMusic==='function')hudSyncMusic();
+  });
   return;
  }
  const t=phoneTracks[musicTrack];
- if(!t)return;
+ if(!t){
+  musicStarting=false;
+  musicPlaying=false;
+  return;
+ }
  if(t.src){
   if(musicTimer){clearInterval(musicTimer);musicTimer=null;}
   for(const n of musicNodes){try{n.stop()}catch(e){}}
   musicNodes.clear();
   const targetUrl=new URL(t.src,document.baseURI).href;
-  if(localMusic.src!==targetUrl){
+  const needsReload=localMusic.src!==targetUrl||localMusic.error||localMusic.readyState===0;
+  if(needsReload){
+   const prevTime=(localMusic.src===targetUrl&&!localMusic.error&&Number.isFinite(localMusic.currentTime)&&localMusic.currentTime>0)?localMusic.currentTime:0;
    localMusic.src=t.src;
    localMusic.load();
+   if(prevTime>0){
+    try{localMusic.currentTime=prevTime;}catch(ignore){}
+   }
   }
   localMusic.volume=state.phone.volume;
-  localMusic.play().catch(e=>{
+  localMusic.play().then(()=>{
+   musicStarting=false;
+   musicPlaying=true;
+   if(typeof m8Sync==='function')m8Sync();
+   if(typeof hudSyncMusic==='function')hudSyncMusic();
+  }).catch(e=>{
+   musicStarting=false;
    console.warn('Spotlight audio play error:',e);
+   if(e.name!=='AbortError'){
+    musicPlaying=false;
+    if(typeof m8Sync==='function')m8Sync();
+    if(typeof hudSyncMusic==='function')hudSyncMusic();
+   }
   });
   return;
  }
  localMusic.pause();
  try{
   const ctx=getMusicContext();
-  const play=()=>{
-   if(!musicPlaying||document.hidden||mode==='cinematic'||phoneCall)return;
-   const beat=60/(t.bpm||80);
-   synthNote(t.notes[musicNote%t.notes.length],ctx.currentTime,beat*.9,.065,t.wave||'sine');
-   if(musicNote%4===0)synthNote(t.notes[0]/2,ctx.currentTime,beat*3.4,.035,'sine');
-   musicNote++;
+  const startSynth=()=>{
+   if(musicTimer){clearInterval(musicTimer);musicTimer=null;}
+   const play=()=>{
+    if(!musicPlaying||document.hidden||mode==='cinematic'||phoneCall)return;
+    const beat=60/(t.bpm||80);
+    synthNote(t.notes[musicNote%t.notes.length],ctx.currentTime,beat*.9,.065,t.wave||'sine');
+    if(musicNote%4===0)synthNote(t.notes[0]/2,ctx.currentTime,beat*3.4,.035,'sine');
+    musicNote++;
+   };
+   play();
+   musicTimer=setInterval(play,60000/(t.bpm||80));
+   musicStarting=false;
+   if(typeof m8Sync==='function')m8Sync();
+   if(typeof hudSyncMusic==='function')hudSyncMusic();
   };
-  play();
-  musicTimer=setInterval(play,60000/(t.bpm||80));
+  if(ctx.state==='suspended'){
+   ctx.resume().then(startSynth).catch(()=>{
+    musicStarting=false;
+    musicPlaying=false;
+    phoneNotice('Toca Reproducir para permitir el audio.');
+    if(typeof m8Sync==='function')m8Sync();
+    if(typeof hudSyncMusic==='function')hudSyncMusic();
+   });
+  }else{
+   startSynth();
+  }
  }catch(e){
+  musicStarting=false;
   musicPlaying=false;
   phoneNotice('El audio no está disponible en este navegador.');
+  if(typeof m8Sync==='function')m8Sync();
   if(typeof hudSyncMusic==='function')hudSyncMusic();
  }
 }
-function stopPhoneMusic(){musicPlaying=false;if(musicTimer)clearInterval(musicTimer);musicTimer=null;localMusic.pause();for(const n of musicNodes){try{n.stop()}catch(e){}}musicNodes.clear();if(typeof hudSyncMusic==='function')hudSyncMusic();}
+function stopPhoneMusic(saveResumeState=false){
+ if(saveResumeState){
+  musicWasPlayingBeforePause=musicPlaying;
+ }
+ musicStarting=false;
+ musicPlaying=false;
+ if(musicTimer)clearInterval(musicTimer);
+ musicTimer=null;
+ try{localMusic.pause();}catch(e){}
+ for(const n of musicNodes){try{n.stop()}catch(e){}}
+ musicNodes.clear();
+ if(typeof m8Sync==='function')m8Sync();
+ if(typeof hudSyncMusic==='function')hudSyncMusic();
+}
 function openPhotoDatabase(){if(photoDB)return Promise.resolve(photoDB);if(photoDBPromise)return photoDBPromise;photoDBPromise=new Promise((resolve,reject)=>{if(!window.indexedDB){reject(Error('No IndexedDB'));return}const req=indexedDB.open('yaire-phone-photos-v1',1);req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains('photos'))req.result.createObjectStore('photos',{keyPath:'id'})};req.onerror=()=>reject(req.error);req.onblocked=()=>reject(Error('Blocked'));req.onsuccess=()=>{photoDB=req.result;resolve(photoDB)}});return photoDBPromise}
 function photoTransaction(db,mode,action){return new Promise((resolve,reject)=>{const tx=db.transaction('photos',mode),req=action(tx.objectStore('photos'));tx.oncomplete=()=>resolve(req&&req.result);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error)})}
 async function loadPhonePhotos(){if(photoLoaded)return;photoLoaded=true;try{let db=await openPhotoDatabase();const rows=await photoTransaction(db,'readonly',store=>store.getAll());phonePhotos=rows.filter(p=>p&&p.blob instanceof Blob).sort((a,b)=>b.id-a.id).slice(0,30)}catch(e){}}
@@ -1616,7 +1683,7 @@ function m8Sync(){
  if(phoneApp!=='music'||!$('m8Play'))return;
  const t=phoneTracks[musicTrack];
  const isAudio=musicFile||(t&&t.src);
- const playing=musicPlaying&&(!isAudio||!localMusic.paused);
+ const playing=(musicPlaying||musicStarting)&&(!isAudio||!localMusic.paused||musicStarting);
  const play=$('m8Play');play.innerHTML=uxIcon(playing?'pause':'play');
  play.setAttribute('aria-label',playing?'Pausar música':'Reproducir música');play.title=playing?'Pausar':'Reproducir';
  $('m8Status').textContent=playing?'Reproduciendo':(isAudio&&localMusic.error?'No se pudo leer este audio':'En pausa');
@@ -1724,7 +1791,16 @@ function m8Render(){
   else m8Select(musicTrack+1);
  };
 
- $('m8Play').onclick=()=>{if(musicPlaying)stopPhoneMusic();else startPhoneMusic();m8Sync();};
+ $('m8Play').onclick=()=>{
+  const t=phoneTracks[musicTrack];
+  const isAudio=musicFile||(t&&t.src);
+  const currentlyPlaying=isAudio?(!localMusic.paused&&musicPlaying):(musicPlaying&&!!musicTimer);
+  if(currentlyPlaying){
+   stopPhoneMusic(false);
+  }else{
+   startPhoneMusic();
+  }
+ };
 
  const seek=$('m8Seek');
  seek.oninput=()=>{
@@ -1788,7 +1864,7 @@ function hudSyncMusic(){
  if(!el||typeof musicPlaying==='undefined'||typeof phoneTracks==='undefined'||typeof mode==='undefined'||mode==='title')return;
  const t=musicFile?{name:musicFile.name,sub:'Audio local'}:(phoneTracks[musicTrack]||phoneTracks[0]);
  const isAudio=musicFile||(t&&t.src);
- const isPlaying=musicPlaying&&(!isAudio||!localMusic.paused);
+ const isPlaying=(musicPlaying||musicStarting)&&(!isAudio||!localMusic.paused||musicStarting);
 
  const inPlayMode=(mode==='play'||mode==='photo')&&!document.body.classList.contains('phone-open')&&!document.body.classList.contains('in-cinema');
 
@@ -1849,7 +1925,11 @@ bindHudMusic();
 renderPhone=function(app=phoneApp){m8RenderBase(app);$('yairePhone').classList.toggle('phone-music-active',phoneApp==='music');hudSyncMusic()};
 const m8TickBase=phoneTick;let m8Clock=0;
 phoneTick=function(dt){m8TickBase(dt);m8Clock+=dt;if(m8Clock>=.25){m8Clock=0;m8Sync();hudSyncMusic()}};
-for(const event of ['loadedmetadata','durationchange','timeupdate','play','pause','error'])localMusic.addEventListener(event,()=>{m8Sync();hudSyncMusic()});
+localMusic.addEventListener('play',()=>{musicPlaying=true;musicStarting=false;m8Sync();hudSyncMusic();});
+localMusic.addEventListener('playing',()=>{musicPlaying=true;musicStarting=false;m8Sync();hudSyncMusic();});
+localMusic.addEventListener('pause',()=>{if(!musicStarting){musicPlaying=false;}m8Sync();hudSyncMusic();});
+localMusic.addEventListener('error',()=>{musicStarting=false;musicPlaying=false;m8Sync();hudSyncMusic();});
+for(const event of ['loadedmetadata','durationchange','timeupdate'])localMusic.addEventListener(event,()=>{m8Sync();hudSyncMusic();});
 
 
 // Sin navegación redundante mientras hay una llamada activa.
