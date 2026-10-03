@@ -1,0 +1,2336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js"
+    }
+  }
+</script>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1e342b">
+<title>El jardín de Yaire · Una aventura entre tulipanes</title>
+<style>
+:root{
+  --ink:#1e342b;
+  --muted:#546e60;
+  --rose:#e289a3;
+  --cream:#fdfbf7;
+  --glass:rgba(253,251,247,.88);
+  --line:rgba(30,52,43,.12);
+  --gold:#d99849;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#1e342b;color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button{font:inherit;cursor:pointer;border:0}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #d46b8a;outline-offset:3px}
+#scene{position:fixed;inset:0;touch-action:none}
+canvas{display:block}
+#vignette{position:fixed;inset:0;pointer-events:none;box-shadow:inset 0 0 160px rgba(18,36,26,.28),inset 0 0 40px rgba(0,0,0,.15)}
+#hud{position:fixed;inset:0;pointer-events:none;display:none;padding:max(22px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(22px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left))}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.glass{background:var(--glass);border:1px solid rgba(255,255,255,.9);box-shadow:0 12px 40px rgba(22,44,32,.14);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.quest{border-radius:24px;padding:18px 22px;width:290px}
+.eyebrow{text-transform:uppercase;letter-spacing:.22em;font-weight:700;font-size:10px;color:var(--muted)}
+.quest-title{font-family:Georgia,serif;font-size:22px;margin-top:4px;color:#183023}
+.quest-row{display:flex;align-items:center;justify-content:space-between;margin-top:12px;font-size:13px;font-weight:500}
+.bar{height:6px;border-radius:12px;background:#d8e2d4;margin-top:10px;overflow:hidden}
+.bar span{display:block;height:100%;background:linear-gradient(90deg,#d46b8a,#f7a8be);width:0;transition:width .45s cubic-bezier(.4,0,.2,1);box-shadow:0 0 8px rgba(226,137,163,.6)}
+.tools{display:flex;gap:10px;pointer-events:auto}
+.icon{height:46px;width:46px;border-radius:50%;color:var(--ink);display:grid;place-items:center;font-size:20px;transition:transform .15s,background .2s}
+.icon:hover{transform:scale(1.06)}
+.icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2}
+.bottom{position:absolute;bottom:max(25px,env(safe-area-inset-bottom));left:24px;right:24px;display:flex;align-items:flex-end;justify-content:space-between}
+.hint{border-radius:18px;padding:14px 20px;max-width:390px;font-size:12px;line-height:1.75;color:#284235}
+.hint kbd{background:#e2e9dd;border:1px solid #c9d6c2;border-radius:5px;padding:2px 6px;font-size:10px;font-weight:600;margin:0 2px;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.map-wrap{border-radius:24px;padding:10px;position:relative}
+.map-wrap canvas{width:136px;height:136px;border-radius:18px;box-shadow:inset 0 0 10px rgba(0,0,0,.06)}
+.map-label{text-align:center;font-size:9px;letter-spacing:.22em;margin:6px 0 2px;color:var(--muted);font-weight:700}
+#toast{position:absolute;top:175px;left:50%;transform:translate(-50%,-10px);background:var(--glass);border:1px solid rgba(255,255,255,.95);border-radius:40px;padding:12px 26px;opacity:0;transition:opacity .3s,transform .3s cubic-bezier(.34,1.56,.64,1);text-align:center;white-space:nowrap;font-size:13px;font-weight:500;box-shadow:0 10px 35px rgba(22,44,32,.18)}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#zone{position:absolute;top:190px;left:26px;color:#233d2e;font-family:Georgia,serif;font-style:italic;font-size:16px;text-shadow:0 2px 10px rgba(255,255,255,.9)}
+.screen{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at center,rgba(21,43,33,.78),rgba(12,25,19,.92));backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.screen { transition: opacity 400ms cubic-bezier(0.77, 0, 0.175, 1), transform 400ms cubic-bezier(0.77, 0, 0.175, 1); }
+.screen.fade-out { opacity: 0 !important; transform: scale(1.02) !important; pointer-events: none; }
+.screen[hidden]{display:none}
+.panel{width:min(520px,100%);background:var(--cream);padding:44px;border-radius:32px;box-shadow:0 30px 120px rgba(10,22,16,.45);border:1px solid rgba(255,255,255,.9)}
+.welcome{width:min(580px,100%);padding:50px}
+.ornament{display:flex;align-items:center;gap:12px;color:#c96383;margin-bottom:26px}
+.ornament:after{content:"";height:1px;width:75px;background:#e5b4c4}
+.brand{font-size:10px;letter-spacing:.25em;font-weight:700}
+.panel h1,.panel h2{font-family:Georgia,"Times New Roman",serif;font-weight:normal;line-height:1.06;letter-spacing:-.04em;margin:0 0 20px;color:#183224}
+.panel h1{font-size:clamp(44px,6vw,70px)}
+.panel h2{font-size:42px}
+.panel h1 em{color:#c76082;font-style:italic}
+.panel p{color:var(--muted);font-size:14px;line-height:1.85;margin:0 0 24px}
+.pill-row{display:flex;flex-wrap:wrap;gap:9px;margin:24px 0}
+.pill{border:1px solid #d4ded0;background:rgba(255,255,255,.7);border-radius:20px;padding:7px 13px;font-size:11px;color:#536453;font-weight:500}
+.primary{border-radius:16px;background:linear-gradient(135deg,#2e4c3b,#1f382a);color:#fffbf4;padding:16px 24px;min-height:52px;box-shadow:0 8px 24px rgba(32,58,44,.28);transition:all .2s;width:100%;font-weight:600;font-size:14px;letter-spacing:.04em}
+.primary:hover{background:linear-gradient(135deg,#3c614c,#294837);transform:translateY(-2px);box-shadow:0 12px 28px rgba(32,58,44,.35)}
+.primary:active{transform:scale(0.97);transition:transform 160ms cubic-bezier(0.23, 1, 0.32, 1)}
+.primary:disabled{opacity:.55;cursor:wait;transform:none}
+.secondary{background:transparent;border:1.5px solid #c9d6c4;color:var(--ink);box-shadow:none;margin-top:12px}
+.secondary:hover{background:rgba(215,228,211,.3);color:#1b3325}
+.tiny{font-size:11px!important;margin:16px 0 0!important;line-height:1.6!important;color:#778b7e}
+.status{font-size:12px;color:#6d8071;margin-bottom:14px;min-height:18px;font-weight:500}
+.row{display:flex;justify-content:space-between;gap:15px;align-items:center;border-bottom:1px solid var(--line);padding:15px 0;font-size:13px}
+.row select{border:1px solid #ccd8c7;border-radius:10px;background:#fff;padding:8px 12px;color:var(--ink);font-weight:500}
+.row input{accent-color:#345541;width:18px;height:18px}
+.helptext{font-size:12px!important;color:#6b7f71}
+.stats{display:flex;gap:14px;margin:24px 0}
+.stat{flex:1;border:1px solid #d8e2d4;background:rgba(255,255,255,.5);border-radius:18px;padding:16px;text-align:center}
+.stat b{display:block;font-family:Georgia,serif;font-size:32px;font-weight:normal;color:#203b2c}
+.stat small{font-size:10px;color:var(--muted);letter-spacing:.1em;font-weight:600}
+#touch{position:fixed;inset:0;pointer-events:none;display:none;z-index:4}
+#joystick{position:absolute;left:max(28px,env(safe-area-inset-left));bottom:max(42px,env(safe-area-inset-bottom));width:125px;height:125px;border-radius:50%;background:rgba(255,255,255,.65);border:2px solid rgba(255,255,255,.9);box-shadow:0 8px 36px rgba(22,44,32,.16);pointer-events:auto;touch-action:none;backdrop-filter:blur(10px)}
+#stick{position:absolute;width:52px;height:52px;left:calc(50% - 26px);top:calc(50% - 26px);background:linear-gradient(135deg,#5f7d6a,#44614e);border:2px solid #fff;border-radius:50%;box-shadow:0 4px 14px rgba(28,48,36,.3);pointer-events:none}
+#run{position:absolute;right:max(30px,env(safe-area-inset-right));bottom:max(58px,env(safe-area-inset-bottom));width:76px;height:76px;border-radius:50%;background:rgba(255,255,255,.8);color:#2b4636;border:2px solid #fff;pointer-events:auto;touch-action:none;font-size:12px;font-weight:700;box-shadow:0 8px 32px rgba(22,44,32,.18);backdrop-filter:blur(8px)}
+#run.active{background:#b8d6b8;transform:scale(.95)}
+#cameraHint{position:absolute;right:24px;bottom:150px;color:#274332;font-size:11px;text-shadow:0 1px 6px #fff;opacity:.85;font-weight:500}
+.touchMode .hint{display:none}
+.touchMode .map-wrap{position:absolute;right:0;bottom:180px}
+.touchMode .map-wrap canvas{width:90px;height:90px}
+.touchMode .map-label{display:none}
+.touchMode #touch.visible{display:block}
+.touchMode .quest{width:235px;padding:14px 16px}
+.touchMode .quest-title{font-size:19px}
+.touchMode .bottom{bottom:22px}
+.touchMode #zone{top:160px}
+.touchMode #toast{top:158px;font-size:12px;max-width:90%;white-space:normal}
+.touchMode #hud{padding:16px}
+.touchMode .tools{gap:6px}
+.touchMode .icon{width:40px;height:40px}
+#flash{position:fixed;inset:0;background:radial-gradient(circle,rgba(255,230,240,.7) 0%,rgba(247,168,190,.15) 80%);pointer-events:none;opacity:0;transition:opacity .25s;z-index:5}
+@media(max-width:600px){
+  .panel,.welcome{padding:30px 24px;border-radius:26px}
+  .ornament{margin-bottom:18px}
+  .panel h1{font-size:44px}
+  .panel h2{font-size:34px}
+  .panel p{font-size:13px;margin-bottom:18px}
+  .pill-row{margin:16px 0}
+  .screen{padding:16px}
+}
+
+
+
+/* ============================================================
+   GTA PHONE (iFruit Ultra Music Player)
+   ============================================================ */
+:root {
+  --track-accent: #c084fc;
+  --track-glow: rgba(192, 132, 252, 0.28);
+}
+#gta-phone {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 260px;
+  height: 504px;
+  background: #111317;
+  border-radius: 44px;
+  padding: 3px;
+  box-shadow: 
+    0 25px 65px -10px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(255, 255, 255, 0.14),
+    inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  z-index: 90;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+  transform: translateY(120%) scale(0.92);
+  opacity: 0;
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+  user-select: none;
+  color: #fff;
+}
+#gta-phone.open {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Side hardware button accents */
+#gta-phone::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: 90px;
+  width: 3px;
+  height: 28px;
+  background: #242730;
+  border-radius: 2px 0 0 2px;
+  box-shadow: 0 38px 0 #242730;
+}
+#gta-phone::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: 105px;
+  width: 3px;
+  height: 42px;
+  background: #242730;
+  border-radius: 0 2px 2px 0;
+}
+
+/* Phone Screen */
+.phone-inner {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  border-radius: 41px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Dynamic Ambient Glow */
+.phone-ambient-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 28%, var(--track-glow) 0%, rgba(10, 12, 16, 0.95) 65%, #050608 100%);
+  pointer-events: none;
+  transition: background 0.8s ease;
+  z-index: 1;
+}
+
+/* Dynamic Island */
+.phone-island {
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 78px;
+  height: 20px;
+  background: #000;
+  border-radius: 20px;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+.island-lens {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #0e1520;
+  box-shadow: inset 0 0 2px #29476b;
+}
+.island-audio-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.island-audio-dot.active {
+  opacity: 1;
+}
+
+/* Status Bar */
+.phone-status-bar {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 18px 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: -0.01em;
+}
+.status-icons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.status-icons svg {
+  display: block;
+}
+
+/* Music App Header */
+.phone-header {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 14px 2px;
+}
+.header-btn {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.15s, transform 0.15s;
+}
+.header-btn:hover {
+  color: #fff;
+  transform: translateY(1px);
+}
+.header-title-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Equalizer Bars in Header */
+.eq-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+  padding: 0 4px;
+}
+.eq-bar {
+  width: 2px;
+  height: 4px;
+  background: var(--track-accent);
+  border-radius: 1px;
+  transition: height 0.2s ease, background 0.5s;
+}
+.eq-bars.playing .eq-bar:nth-child(1) { animation: eqJump 0.8s ease infinite alternate; }
+.eq-bars.playing .eq-bar:nth-child(2) { animation: eqJump 0.6s ease infinite alternate 0.2s; }
+.eq-bars.playing .eq-bar:nth-child(3) { animation: eqJump 0.9s ease infinite alternate 0.4s; }
+@keyframes eqJump {
+  0% { height: 3px; }
+  100% { height: 12px; }
+}
+
+/* Music Player Content Area */
+.phone-content {
+  position: relative;
+  z-index: 20;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 16px 0;
+}
+
+/* Album Art Card */
+.phone-cover-box {
+  width: 162px;
+  height: 162px;
+  margin: 4px auto 14px;
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 16px 36px -6px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s;
+}
+.phone-cover-box.playing {
+  transform: scale(1.02);
+  box-shadow: 
+    0 20px 42px -4px rgba(0, 0, 0, 0.8),
+    0 0 20px var(--track-glow),
+    0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+.album-art-canvas {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: background 0.6s ease;
+}
+.vinyl-grooves {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 
+    inset 0 0 0 18px rgba(0,0,0,0.22),
+    inset 0 0 0 36px rgba(255,255,255,0.03),
+    inset 0 0 0 54px rgba(0,0,0,0.3);
+  pointer-events: none;
+}
+.album-icon-badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+}
+.album-icon-badge svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--track-accent);
+  fill: none;
+  stroke-width: 1.8;
+  filter: drop-shadow(0 0 8px var(--track-accent));
+  transition: stroke 0.5s;
+}
+
+/* Track Metadata */
+.phone-track-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 0 4px;
+}
+.meta-text {
+  flex: 1;
+  min-width: 0;
+}
+.phone-track-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+}
+.phone-track-artist {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.heart-btn {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 6px;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.heart-btn:hover {
+  transform: scale(1.15);
+  color: rgba(255, 255, 255, 0.8);
+}
+.heart-btn.liked {
+  color: #f43f5e;
+}
+.heart-btn.liked svg {
+  fill: #f43f5e;
+  stroke: #f43f5e;
+}
+
+/* Progress Scrubber */
+.phone-scrubber-wrap {
+  margin-bottom: 14px;
+  padding: 0 4px;
+}
+.phone-track-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 99px;
+  position: relative;
+  cursor: pointer;
+  transition: height 0.15s ease;
+}
+.phone-track-bar:hover {
+  height: 6px;
+}
+.phone-track-progress {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0%;
+  background: #ffffff;
+  border-radius: 99px;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+}
+.phone-track-thumb {
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%) scale(0);
+  width: 11px;
+  height: 11px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+  transition: transform 0.15s ease;
+  pointer-events: none;
+}
+.phone-track-bar:hover .phone-track-thumb {
+  transform: translateY(-50%) scale(1);
+}
+.phone-time-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 6px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+/* Player Controls Row */
+.phone-controls-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+  margin-bottom: 14px;
+}
+.phone-ctrl-btn {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 8px;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.phone-ctrl-btn:hover {
+  color: #ffffff;
+  transform: scale(1.12);
+}
+.phone-ctrl-btn:active {
+  transform: scale(0.92);
+}
+.phone-ctrl-btn.active {
+  color: var(--track-accent);
+}
+.phone-ctrl-btn svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+/* Master Play/Pause Button */
+.phone-play-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #090a0f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.22);
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.15s, box-shadow 0.2s;
+}
+.phone-play-btn:hover {
+  transform: scale(1.08);
+  background: #f4f4f5;
+  box-shadow: 0 10px 28px rgba(255, 255, 255, 0.3);
+}
+.phone-play-btn:active {
+  transform: scale(0.94);
+}
+.phone-play-btn svg {
+  width: 22px;
+  height: 22px;
+  fill: #000;
+}
+#phonePlayIcon {
+  transform: translateX(1.5px);
+}
+
+/* Volume Slider Row */
+.phone-volume-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 6px;
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.4);
+}
+.phone-volume-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 99px;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.phone-volume-slider:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+.phone-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+
+/* Home Indicator Area (Dedicated non-overlapping footer) */
+.phone-home-area {
+  margin-top: auto;
+  padding: 6px 0 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 25;
+}
+.phone-home-pill {
+  width: 86px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 99px;
+  transition: background 0.2s, transform 0.2s;
+}
+.phone-home-area:hover .phone-home-pill {
+  background: rgba(255, 255, 255, 0.85);
+  transform: translateY(-1px);
+}
+
+/* Responsive adjustment */
+@media (max-width: 600px) {
+  #gta-phone {
+    width: 280px;
+    height: 520px;
+    bottom: 12px;
+    right: 12px;
+  }
+}
+</style>
+</head>
+<body>
+<div id="scene" aria-label="Jardín tridimensional de Yaire"></div>
+<div id="vignette"></div>
+<div id="flash"></div>
+
+<div id="hud">
+ <div class="top">
+   <div class="quest glass">
+     <div class="eyebrow">Un ramo para recordar</div>
+     <div class="quest-title" id="questTitle">Tulipanes de primavera</div>
+     <div class="quest-row">
+       <span id="objective">Recoge los tulipanes rosas</span>
+       <strong id="count">0 / 24</strong>
+     </div>
+     <div class="bar"><span id="progress"></span></div>
+   </div>
+   <div class="tools">
+     
+     <button class="icon glass" id="phoneBtn" aria-label="Abrir Teléfono" title="Música · M">
+       <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+     </button>
+
+     <button class="icon glass" id="soundBtn" aria-label="Activar sonido" title="Sonido">♪</button>
+     <button class="icon glass" id="pauseBtn" aria-label="Pausar" title="Pausa · Esc">
+       <svg viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></svg>
+     </button>
+   </div>
+ </div>
+ <div id="zone">El sendero de los primeros pasos</div>
+ <div id="toast" role="status" aria-live="polite"></div>
+ <div class="bottom">
+   <div class="hint glass">
+     <kbd>W A S D</kbd> o <kbd>↑ ↓ ← →</kbd> moverte · <kbd>Shift</kbd> correr<br>
+     Arrastra con el ratón para rotar la cámara · Rueda para hacer zoom<br>
+     Acércate a un tulipán para recogerlo · <kbd>Esc</kbd> menú de pausa
+   </div>
+   <div class="map-wrap glass">
+     <canvas id="map" width="264" height="264" aria-label="Mapa del jardín"></canvas>
+     <div class="map-label">EL JARDÍN</div>
+   </div>
+ </div>
+</div>
+
+<div id="touch">
+  <div id="joystick" role="group" aria-label="Control táctil de movimiento"><div id="stick"></div></div>
+  <button id="run" aria-label="Mantener para correr">Correr<br>↟</button>
+  <div id="cameraHint">Desliza para girar la cámara</div>
+</div>
+
+
+<div id="gta-phone">
+  <div class="phone-inner">
+    <div class="phone-ambient-glow" id="phoneGlow"></div>
+    
+    <!-- Dynamic Island -->
+    <div class="phone-island">
+      <div class="island-lens"></div>
+      <div class="island-audio-dot" id="islandDot"></div>
+    </div>
+    
+    <!-- Status Bar -->
+    <div class="phone-status-bar">
+      <span id="phoneClock">9:41</span>
+      <div class="status-icons">
+        <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor">
+          <rect x="0" y="7" width="2.5" height="3" rx="0.5"/>
+          <rect x="3.8" y="5" width="2.5" height="5" rx="0.5"/>
+          <rect x="7.6" y="2.5" width="2.5" height="7.5" rx="0.5"/>
+          <rect x="11.4" y="0" width="2.5" height="10" rx="0.5"/>
+        </svg>
+        <span style="font-size:9px; font-weight:700; opacity:0.85; margin:0 1px;">5G</span>
+        <svg width="20" height="10" viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="1" y="1" width="18" height="10" rx="3"/>
+          <path d="M21 4v4" stroke-linecap="round"/>
+          <rect x="2.5" y="2.5" width="13" height="7" rx="1.5" fill="currentColor" stroke="none"/>
+        </svg>
+      </div>
+    </div>
+    
+    <!-- App Header -->
+    <div class="phone-header">
+      <button class="header-btn" id="minimizePhoneBtn" title="Ocultar (M)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 9l6 6 6-6"/>
+        </svg>
+      </button>
+      <span class="header-title-badge">iFruit Music</span>
+      <div class="eq-bars" id="eqBars">
+        <span class="eq-bar"></span>
+        <span class="eq-bar"></span>
+        <span class="eq-bar"></span>
+      </div>
+    </div>
+    
+    <!-- Player Content -->
+    <div class="phone-content">
+      <!-- Cover Box -->
+      <div class="phone-cover-box" id="phoneCoverBox">
+        <div class="album-art-canvas" id="albumArtCanvas">
+          <div class="vinyl-grooves"></div>
+          <div class="album-icon-badge">
+            <svg id="albumSvgIcon" viewBox="0 0 24 24"></svg>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Track Meta -->
+      <div class="phone-track-meta">
+        <div class="meta-text">
+          <div class="phone-track-name" id="trackName">Cargando...</div>
+          <div class="phone-track-artist" id="trackArtist">iFruit Radio</div>
+        </div>
+        <button class="heart-btn" id="favBtn" title="Favorito">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Scrubber -->
+      <div class="phone-scrubber-wrap">
+        <div class="phone-track-bar" id="phoneProgressBar">
+          <div class="phone-track-progress" id="phoneProgressFill"></div>
+          <div class="phone-track-thumb"></div>
+        </div>
+        <div class="phone-time-row">
+          <span id="phoneTimeCurrent">0:00</span>
+          <span id="phoneTimeTotal">-:--</span>
+        </div>
+      </div>
+      
+      <!-- Controls -->
+      <div class="phone-controls-row">
+        <button class="phone-ctrl-btn" id="shuffleBtn" title="Aleatorio">
+          <svg viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        </button>
+        <button class="phone-ctrl-btn" id="prevBtn" title="Anterior">
+          <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+        </button>
+        <button class="phone-play-btn" id="playMusicBtn" title="Reproducir">
+          <svg id="phonePlayIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="phonePauseIcon" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
+        <button class="phone-ctrl-btn" id="nextBtn" title="Siguiente">
+          <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+        </button>
+        <button class="phone-ctrl-btn" id="loopBtn" title="Repetir">
+          <svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
+        </button>
+      </div>
+      
+      <!-- Volume Slider -->
+      <div class="phone-volume-row">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        </svg>
+        <input type="range" id="phoneVolumeSlider" class="phone-volume-slider" min="0" max="1" step="0.02" value="0.4" title="Volumen">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+        </svg>
+      </div>
+    </div>
+    
+    <!-- Home Bar / Dismiss Area -->
+    <div class="phone-home-area" id="closePhoneBtn" title="Deslizar para cerrar">
+      <div class="phone-home-pill"></div>
+    </div>
+  </div>
+</div>
+<div class="screen" id="intro">
+  <div class="panel welcome">
+    <div class="ornament"><span style="font-size:32px">❀</span><span class="brand">UNA EXPERIENCIA 3D ILUSTRADA</span></div>
+    <h1>El jardín<br>de <em>Yaire.</em></h1>
+    <p>Entre senderos de luz dorada, árboles en flor y un estanque de aguas calmas, un ramo te espera. Explora cada rincón, encuentra <strong>24 tulipanes rosas</strong> y llévalos al pabellón.</p>
+    <div class="pill-row">
+      <span class="pill">🌸 Gráficos Mejorados</span>
+      <span class="pill">🍃 Viento & Agua Viva</span>
+      <span class="pill">✨ Resplandor Cálido</span>
+    </div>
+    <div class="status" id="loadStatus" role="status">Cargando la magia del jardín…</div>
+    <button class="primary" id="startBtn" disabled>Entrar al jardín →</button>
+    <button class="primary secondary" onclick="window.location.href='index.html#minijuegos'" style="margin-top:12px;">Volver al Games Hub</button>
+    <p class="tiny">Diseñado con cariño especialmente para Yaire. Sonido procedimental opcional sin descargas pesadas.</p>
+  </div>
+</div>
+
+<div class="screen" id="pause" hidden>
+  <div class="panel">
+    <div class="eyebrow" style="margin-bottom:14px">Un momento de calma</div>
+    <h2>Tu jardín te espera.</h2>
+    <p>La aventura está en pausa.</p>
+    <div class="row">
+      <label for="quality">Calidad gráfica</label>
+      <select id="quality">
+        <option value="high" selected>Alta (Bloom & Efectos)</option>
+        <option value="auto">Automática</option>
+        <option value="low">Ligera (Bajo consumo)</option>
+      </select>
+    </div>
+    <div class="row">
+      <label for="audioToggle">Sonidos del jardín</label>
+      <input type="checkbox" id="audioToggle">
+    </div>
+    <p class="helptext" style="margin-top:16px">PC: WASD / Flechas, Shift para correr, arrastrar para rotar y rueda para acercar. Móvil: joystick izquierdo y deslizar pantalla para mirar.</p>
+    <button class="primary" id="resumeBtn">Volver al jardín</button>
+    <button class="primary secondary" id="restartBtn">Empezar de nuevo</button>
+    <button class="primary secondary" onclick="window.location.href='index.html#minijuegos'" style="margin-top:12px;">Volver al Games Hub</button>
+  </div>
+</div>
+
+<div class="screen" id="finish" hidden>
+  <div class="panel">
+    <div class="ornament"><span style="font-size:32px">❀</span><span class="brand">EL JARDÍN FLORECE CONTIGO</span></div>
+    <h2>Un ramo lleno<br>de momentos especiales.</h2>
+    <p>Has reunido los 24 tulipanes y llegado al pabellón de los recuerdos. Cada flor representa un detalle único en tu camino.</p>
+    <div class="stats">
+      <div class="stat"><b>24</b><small>TULIPANES</small></div>
+      <div class="stat"><b id="elapsed">—</b><small>TIEMPO EN EL JARDÍN</small></div>
+    </div>
+    <button class="primary" id="exploreBtn">Seguir paseando</button>
+    <button class="primary secondary" id="playAgainBtn">Recoger otro ramo</button>
+    <button class="primary secondary" onclick="window.location.href='index.html#minijuegos'" style="margin-top:12px;">Volver al Games Hub</button>
+    <p class="tiny" id="record"></p>
+  </div>
+</div>
+
+<script type="module">
+const $=id=>document.getElementById(id);
+let THREE;
+try {
+  THREE = await import('three');
+} catch(e) {
+  try {
+    THREE = await import('https://unpkg.com/three@0.160.1/build/three.module.js');
+  } catch(e2) {
+    $('loadStatus').textContent='No se pudo cargar el motor 3D. Comprueba tu conexión.';
+    $('startBtn').textContent='Recargar';$('startBtn').disabled=false;$('startBtn').onclick=()=>location.reload();
+    throw e2;
+  }
+}
+
+try {
+const touch = matchMedia('(pointer:coarse)').matches || navigator.maxTouchPoints > 0;
+if(touch) document.body.classList.add('touchMode');
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Escena con niebla suave y cálida en vez de gris
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#dcebe0');
+scene.fog = new THREE.Fog('#d5e3d7', 55, 140);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, touch ? 1.0 : 1.5));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.08;
+$('scene').appendChild(renderer.domElement);
+
+const camera = new THREE.PerspectiveCamera(48, innerWidth / innerHeight, 0.1, 200);
+
+// --- Post-Processing Cinemático (pmndrs/postprocessing) ---
+let composer = null;
+try {
+  // Desactivar el auto-render estándar
+  renderer.autoClear = false;
+  
+  // Importar la librería de alto rendimiento
+  const { EffectComposer, EffectPass, RenderPass, SMAAEffect, BloomEffect, VignetteEffect, BrightnessContrastEffect, SSAOEffect, NormalPass } = await import('https://cdn.jsdelivr.net/npm/postprocessing@6.34.4/build/postprocessing.esm.js');
+  
+  composer = new EffectComposer(renderer, {
+    multisampling: 0 // Disable MSAA as we use SMAA, saves huge GPU overhead
+  });
+  
+  const renderPass = new RenderPass(scene, camera);
+  composer.addPass(renderPass);
+  
+  // Ambient Occlusion (OLED Contact Shadows)
+  const normalPass = new NormalPass(scene, camera);
+  composer.addPass(normalPass);
+  const ssao = new SSAOEffect(camera, normalPass.texture, {
+    intensity: touch ? 1.5 : 2.5,
+    radius: 0.08,
+    samples: touch ? 5 : 11,
+    rings: touch ? 2 : 4,
+    distanceFalloff: 0.02
+  });
+  
+  // Bloom Mágico Cinemático
+  const bloom = new BloomEffect({
+    intensity: 1.8,
+    luminanceThreshold: 0.15,
+    luminanceSmoothing: 0.8,
+    radius: 0.7
+  });
+  
+  // SMAA (Anti-Aliasing de alta calidad)
+  const smaa = new SMAAEffect();
+  
+  // Vignette y Contraste OLED
+  const vignette = new VignetteEffect({ eskil: false, offset: 0.3, darkness: 0.5 });
+  const bc = new BrightnessContrastEffect({ brightness: 0.0, contrast: 0.1 });
+  
+  const effectPass = new EffectPass(camera, ssao, smaa, bloom, vignette, bc);
+  composer.addPass(effectPass);
+  
+} catch(e) {
+  console.warn('Fallo al cargar pmndrs/postprocessing, usando WebGL directo', e);
+}
+
+// --- Iluminación Rica de "Golden Hour" ---
+const hemiLight = new THREE.HemisphereLight('#fff3df', '#3f663c', 1.85);
+scene.add(hemiLight);
+
+const sun = new THREE.DirectionalLight('#fff1d0', 2.85);
+sun.position.set(-20, 30, 18);
+sun.castShadow = true;
+sun.shadow.mapSize.set(touch ? 512 : 1024, touch ? 512 : 1024);
+Object.assign(sun.shadow.camera, { left: -34, right: 34, top: 34, bottom: -34, near: 1, far: 85 });
+sun.shadow.bias = -0.0004;
+sun.shadow.normalBias = 0.035;
+scene.add(sun);
+scene.add(sun.target);
+
+const fillLight = new THREE.DirectionalLight('#b0d5e8', 0.85);
+fillLight.position.set(22, 14, -20);
+scene.add(fillLight);
+
+// --- Domo Celeste con Degradado Rico y Sol Visible ---
+const skyMat = new THREE.ShaderMaterial({
+  side: THREE.BackSide,
+  depthWrite: false,
+  uniforms: {
+    top: { value: new THREE.Color('#4c8eb5') },
+    mid: { value: new THREE.Color('#aedbec') },
+    bottom: { value: new THREE.Color('#faebd2') },
+    sunDir: { value: new THREE.Vector3(-20, 30, 18).normalize() }
+  },
+  vertexShader: `
+    varying vec3 vWorldP;
+    void main(){
+      vWorldP = position;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+  fragmentShader: `
+    uniform vec3 top;
+    uniform vec3 mid;
+    uniform vec3 bottom;
+    uniform vec3 sunDir;
+    varying vec3 vWorldP;
+    void main(){
+      vec3 n = normalize(vWorldP);
+      float h = clamp(n.y * 1.1 + 0.1, 0.0, 1.0);
+      vec3 col = mix(bottom, mix(mid, top, smoothstep(0.18, 0.85, h)), smoothstep(0.0, 0.35, h));
+      float sunDot = max(dot(n, sunDir), 0.0);
+      vec3 sunCorona = vec3(1.0, 0.92, 0.72) * pow(sunDot, 16.0) * 0.75 + vec3(1.0, 0.82, 0.6) * pow(sunDot, 64.0) * 1.5;
+      gl_FragColor = vec4(col + sunCorona, 1.0);
+    }
+  `
+});
+const sky = new THREE.Mesh(new THREE.SphereGeometry(125, 32, 20), skyMat);
+scene.add(sky);
+
+// Nubes esponjosas 3D que flotan suavemente en el horizonte
+const cloudsGroup = new THREE.Group();
+scene.add(cloudsGroup);
+const cloudMat = new THREE.MeshStandardMaterial({
+  color: '#ffffff',
+  roughness: 0.95,
+  metalness: 0,
+  flatShading: true
+});
+const cloudGeo = new THREE.DodecahedronGeometry(1, 1);
+const clouds = [];
+for (let i = 0; i < 9; i++) {
+  const c = new THREE.Group();
+  const nPuffs = 4 + Math.floor(Math.random() * 4);
+  for (let j = 0; j < nPuffs; j++) {
+    const puff = new THREE.Mesh(cloudGeo, cloudMat);
+    puff.position.set((j - nPuffs/2) * 2.2 + (Math.random() - 0.5) * 1.2, (Math.random() - 0.5) * 0.9, (Math.random() - 0.5) * 1.5);
+    puff.scale.set(1.8 + Math.random() * 1.2, 1.1 + Math.random() * 0.8, 1.6 + Math.random() * 1.1);
+    c.add(puff);
+  }
+  const ang = (i / 9) * Math.PI * 2;
+  const dist = 65 + Math.random() * 25;
+  c.position.set(Math.cos(ang) * dist, 28 + Math.random() * 14, Math.sin(ang) * dist);
+  cloudsGroup.add(c);
+  clouds.push({ g: c, speed: 0.15 + Math.random() * 0.25, radius: dist, ang });
+}
+
+// Generador pseudo-aleatorio estable
+let seed = 86491;
+function rng(){ seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }
+const rand = (a, b) => a + (b - a) * rng();
+
+// --- Materiales de Paleta Curada ---
+const mat = (c, rough = 0.82, metal = 0.04) => new THREE.MeshStandardMaterial({ color: c, roughness: rough, metalness: metal });
+const M = {
+  grass: mat('#88ad77', 0.88),
+  trunk: mat('#6e5340', 0.9),
+  leaf1: mat('#7ea974', 0.75),
+  leaf2: mat('#94be89', 0.72),
+  leafSakura: mat('#eda5bc', 0.65),
+  sakuraPetal: mat('#f7bfd0', 0.6),
+  skin: mat('#cb987b', 0.72),
+  hair: mat('#40292c', 0.8),
+  glasses: new THREE.MeshStandardMaterial({ color: '#2b1b1d', roughness: 0.25, metalness: 0.3 }),
+  dress: mat('#8bb39c', 0.75), // Blusa verde menta / pistacho elegante
+  skirt: mat('#f1ece0', 0.82), // Falda marfil
+  shoe: mat('#e8dcce', 0.7),
+  wood: mat('#ddcaa5', 0.85),
+  roof: mat('#6e8e74', 0.75),
+  stem: mat('#548a53', 0.8),
+  stone: mat('#ded6c2', 0.9),
+  basket: mat('#a8794c', 0.88),
+  eye: mat('#24191a', 0.3),
+  white: mat('#fffcf5', 0.4),
+  lip: mat('#c26e7a', 0.4)
+};
+
+const geoSphere = new THREE.SphereGeometry(1, 14, 12);
+const geoCylinder = new THREE.CylinderGeometry(1, 1, 1, 14);
+const geoBox = new THREE.BoxGeometry(1, 1, 1);
+
+function mesh(g, m, parent = scene, x = 0, y = 0, z = 0, sx = 1, sy = sx, sz = sx, shadow = true){
+  const o = new THREE.Mesh(g, m);
+  o.position.set(x, y, z);
+  o.scale.set(sx, sy, sz);
+  o.castShadow = shadow;
+  o.receiveShadow = true;
+  parent.add(o);
+  return o;
+}
+const sph = (m, p, x, y, z, sx, sy = sx, sz = sx, sh = true) => mesh(geoSphere, m, p, x, y, z, sx, sy, sz, sh);
+const cyl = (m, p, x, y, z, sx, sy, sz = sx, sh = true) => mesh(geoCylinder, m, p, x, y, z, sx, sy, sz, sh);
+
+// Terreno principal y borde
+const ground = mesh(new THREE.CircleGeometry(54, 96), M.grass, scene, 0, -0.025, 0, 1, 1, 1, false);
+ground.rotation.x = -Math.PI / 2;
+const outer = mesh(new THREE.CylinderGeometry(54, 56.5, 2.5, 96), mat('#799665', 0.95), scene, 0, -1.3, 0, 1, 1, 1, false);
+
+// Sendero orgánico de tierra cálida con extremos redondeados
+const pathPts = [];
+const pathSteps = 74;
+for (let i = 0; i <= pathSteps; i++) {
+  const z = 18.5 - i * 0.68;
+  pathPts.push(new THREE.Vector3(3.8 * Math.sin((z + 4) * 0.12), 0.012, z));
+}
+const positions = [], idx = [];
+for (let i = 0; i < pathPts.length; i++) {
+  const p = pathPts[i];
+  const n = pathPts[Math.min(i + 1, pathPts.length - 1)].clone().sub(pathPts[Math.max(0, i - 1)]).normalize();
+  const side = new THREE.Vector3(n.z, 0, -n.x);
+  const taper = Math.sin((i / pathSteps) * Math.PI) > 0.15 ? Math.min(1, Math.min(i, pathSteps - i) * 0.45) : 0.2;
+  const w = 1.35 * Math.max(0.2, taper);
+  positions.push(p.x + side.x * w, p.y, p.z + side.z * w, p.x - side.x * w, p.y, p.z - side.z * w);
+  if (i < pathPts.length - 1) {
+    const j = i * 2;
+    idx.push(j, j + 1, j + 2, j + 1, j + 3, j + 2);
+  }
+}
+const pathGeo = new THREE.BufferGeometry();
+pathGeo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+pathGeo.setIndex(idx);
+pathGeo.computeVertexNormals();
+const path = mesh(pathGeo, new THREE.MeshStandardMaterial({ color: '#dccfae', roughness: 0.92, side: THREE.DoubleSide }), scene, 0, 0, 0, 1, 1, 1, false);
+
+// --- Hierba con Animación de Viento mediante Shader ---
+const grassUniforms = { uTime: { value: 0 } };
+const grassMat = new THREE.MeshStandardMaterial({
+  color: '#6e9e5d',
+  roughness: 0.72,
+  metalness: 0.02,
+  side: THREE.DoubleSide
+});
+grassMat.onBeforeCompile = shader => {
+  shader.uniforms.uTime = grassUniforms.uTime;
+  shader.vertexShader = `
+    uniform float uTime;
+    ` + shader.vertexShader;
+  shader.vertexShader = shader.vertexShader.replace(
+    '#include <begin_vertex>',
+    `
+    #include <begin_vertex>
+    float h = clamp(position.y * 3.0, 0.0, 1.0);
+    float wind = sin(uTime * 3.0 + transformed.x * 0.42 + transformed.z * 0.35) * 0.15;
+    float windZ = cos(uTime * 2.2 + transformed.x * 0.3) * 0.1;
+    transformed.x += wind * h;
+    transformed.z += windZ * h;
+    `
+  );
+};
+
+const dummy = new THREE.Object3D();
+const grassGeo = new THREE.ConeGeometry(0.045, 0.36, 4);
+const grassCount = touch ? 1300 : 2500;
+const grass = new THREE.InstancedMesh(grassGeo, grassMat, grassCount);
+grass.castShadow = false;
+grass.receiveShadow = true;
+let gi = 0;
+while (gi < grass.count) {
+  const x = rand(-44, 44), z = rand(-44, 44);
+  if (x * x + z * z > 44 * 44 || Math.abs(x - 3.8 * Math.sin((z + 4) * 0.12)) < 1.9) continue;
+  dummy.position.set(x, 0.12, z);
+  dummy.rotation.set(0, rand(0, 6.28), rand(-0.25, 0.25));
+  dummy.scale.setScalar(rand(0.7, 1.9));
+  dummy.updateMatrix();
+  grass.setMatrixAt(gi++, dummy.matrix);
+}
+scene.add(grass);
+
+// Flores silvestres decorativas
+const decorN = 380;
+const decorStem = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.018, 0.022, 0.3, 5), M.stem, decorN);
+const decorFlower = new THREE.InstancedMesh(new THREE.SphereGeometry(0.085, 8, 6), mat('#fff5dc', 0.65), decorN);
+for (let i = 0; i < decorN; i++) {
+  const a = rand(0, 6.28), r = rand(4, 38);
+  dummy.position.set(Math.cos(a) * r, 0.15, Math.sin(a) * r);
+  dummy.scale.setScalar(rand(0.7, 1.25));
+  dummy.updateMatrix();
+  decorStem.setMatrixAt(i, dummy.matrix);
+  dummy.position.y = 0.32;
+  dummy.scale.set(1, 0.65, 1);
+  dummy.updateMatrix();
+  decorFlower.setMatrixAt(i, dummy.matrix);
+}
+scene.add(decorStem, decorFlower);
+
+// --- Árboles y Vegetación Estilizada ---
+const obstacles = [];
+const shadowDecalGeo = new THREE.CircleGeometry(1, 24);
+const shadowDecalMat = new THREE.MeshBasicMaterial({ color: '#253d2b', transparent: true, opacity: 0.16, depthWrite: false });
+
+function tree(x, z, s = 1, flower = false) {
+  const g = new THREE.Group();
+  g.position.set(x, 0, z);
+  g.scale.setScalar(s);
+  scene.add(g);
+  
+  // Sombra de contacto suave bajo cada árbol
+  const sh = new THREE.Mesh(shadowDecalGeo, shadowDecalMat);
+  sh.rotation.x = -Math.PI / 2;
+  sh.position.set(x, 0.008, z);
+  sh.scale.setScalar(2.6 * s);
+  scene.add(sh);
+
+  cyl(M.trunk, g, 0, 1.4, 0, 0.18, 2.8);
+  const b1 = cyl(M.trunk, g, 0.3, 2.3, 0, 0.11, 1.3);
+  b1.rotation.z = -0.55;
+  const b2 = cyl(M.trunk, g, -0.22, 2.5, 0.1, 0.09, 1.0);
+  b2.rotation.z = 0.45;
+  
+  const c1 = flower ? M.leafSakura : M.leaf1;
+  const c2 = flower ? M.sakuraPetal : M.leaf2;
+  
+  for (let i = 0; i < 6; i++) {
+    sph(i % 2 === 0 ? c1 : c2, g, Math.sin(i * 2.2) * 0.9, 2.8 + (i === 5 ? 0.9 : rand(0, 0.6)), Math.cos(i * 2.2) * 0.85, rand(1.1, 1.6), rand(0.9, 1.25), rand(1.1, 1.5));
+  }
+  obstacles.push({ x, z, r: 0.45 * s });
+}
+
+for (let i = 0; i < 42; i++) {
+  const a = i / 42 * Math.PI * 2, r = rand(32, 44);
+  tree(Math.cos(a) * r, Math.sin(a) * r, rand(0.95, 1.55), i % 3 === 0);
+}
+[[12,12,1.2],[-14,9,1.15],[16,-7,1.35],[-17,-14,1.25],[10,-25,0.95],[-11,-28,1.15],[-23,-3,1.35],[25,11,1.25],[-6,21,1.2]].forEach((v, i) => tree(...v, i % 2 === 0));
+
+// Rocas y arbustos con sombreado rico
+for (let i = 0; i < 40; i++) {
+  const a = rand(0, Math.PI * 2), r = rand(29, 46);
+  sph(i % 3 ? M.leaf1 : M.stone, scene, Math.cos(a) * r, 0.28, Math.sin(a) * r, rand(0.45, 1.15), rand(0.25, 0.65), rand(0.45, 1.05), false);
+}
+
+// --- Estanque de Nenúfares con Agua Viva y Ondas ---
+const pond = new THREE.Group();
+pond.position.set(20, 0, -17);
+scene.add(pond);
+
+const waterUniforms = {
+  uTime: { value: 0 },
+  deepCol: { value: new THREE.Color('#388a80') },
+  shallowCol: { value: new THREE.Color('#95e4d7') },
+  sunDir: { value: new THREE.Vector3(-20, 30, 18).normalize() }
+};
+
+const waterMat = new THREE.ShaderMaterial({
+  transparent: true,
+  uniforms: waterUniforms,
+  vertexShader: `
+    uniform float uTime;
+    varying vec2 vUv;
+    varying vec3 vNormal;
+    varying vec3 vWorldPos;
+    void main() {
+      vUv = uv;
+      vec3 pos = position;
+      float d = length(pos.xy);
+      float ripple = sin(d * 9.0 - uTime * 2.8) * 0.035 + cos(pos.x * 6.0 + uTime * 1.6) * 0.02;
+      pos.z += ripple * smoothstep(4.7, 1.0, d);
+      vNormal = normalize(vec3(cos(d * 8.0 - uTime * 2.5) * 0.15, sin(d * 8.0 - uTime * 2.5) * 0.15, 1.0));
+      vec4 worldP = modelMatrix * vec4(pos, 1.0);
+      vWorldPos = worldP.xyz;
+      gl_Position = projectionMatrix * viewMatrix * worldP;
+    }
+  `,
+  fragmentShader: `
+    uniform float uTime;
+    uniform vec3 deepCol;
+    uniform vec3 shallowCol;
+    uniform vec3 sunDir;
+    varying vec2 vUv;
+    varying vec3 vNormal;
+    varying vec3 vWorldPos;
+    void main() {
+      float d = length(vUv - 0.5) * 2.0;
+      vec3 water = mix(deepCol, shallowCol, smoothstep(0.2, 0.95, d));
+      vec3 viewDir = normalize(cameraPosition - vWorldPos);
+      vec3 halfDir = normalize(sunDir + viewDir);
+      float spec = pow(max(dot(vNormal, halfDir), 0.0), 28.0) * 0.85;
+      float foam = smoothstep(0.86, 0.98, d) * (0.3 + 0.18 * sin(uTime * 4.0 + vUv.x * 32.0));
+      gl_FragColor = vec4(water + vec3(spec) + vec3(foam), 0.86);
+    }
+  `
+});
+
+const waterMesh = mesh(new THREE.CircleGeometry(4.7, 54), waterMat, pond, 0, 0.035, 0, 1, 1, 1, false);
+waterMesh.rotation.x = -Math.PI / 2;
+waterMesh.scale.set(1, 0.72, 1);
+
+for (let i = 0; i < 28; i++) {
+  const a = i / 28 * 6.28;
+  sph(M.stone, pond, Math.cos(a) * 4.75, 0.12, Math.sin(a) * 3.42, 0.42, 0.22, 0.33, false);
+}
+const lilyPads = [];
+for (let i = 0; i < 10; i++) {
+  const a = rand(0, 6.28), r = rand(0.8, 3.2);
+  const padGroup = new THREE.Group();
+  padGroup.position.set(Math.cos(a) * r, 0.05, Math.sin(a) * r * 0.72);
+  pond.add(padGroup);
+  const pad = mesh(new THREE.CircleGeometry(0.26, 16), mat('#5c8d67', 0.8), padGroup, 0, 0, 0, 1, 1, 1, false);
+  pad.rotation.x = -Math.PI / 2;
+  sph(M.sakuraPetal, padGroup, 0, 0.04, 0, 0.11, 0.06, 0.11, false);
+  lilyPads.push({ g: padGroup, baseY: 0.05, phase: rand(0, 6.28) });
+}
+
+// --- Pabellón Final (Gazebo) ---
+const goal = new THREE.Vector3(0, 0, -29);
+const gazebo = new THREE.Group();
+gazebo.position.copy(goal);
+scene.add(gazebo);
+
+cyl(M.stone, gazebo, 0, 0.12, 0, 3.1, 0.25, 3.1, false);
+for (let i = 0; i < 6; i++) {
+  const a = i * 6.28 / 6;
+  const x = Math.sin(a) * 2.5, z = Math.cos(a) * 2.5;
+  cyl(M.wood, gazebo, x, 1.8, z, 0.12, 3.3);
+  cyl(M.wood, gazebo, x, 3.36, z, 0.22, 0.13);
+}
+const roof = mesh(new THREE.ConeGeometry(3.6, 1.45, 6), M.roof, gazebo, 0, 4.05, 0);
+roof.rotation.y = Math.PI / 6;
+sph(M.wood, gazebo, 0, 4.86, 0, 0.18);
+cyl(M.wood, gazebo, 0, 0.85, 0, 0.85, 0.16);
+cyl(M.wood, gazebo, 0, 0.45, 0, 0.13, 0.75);
+mesh(new THREE.CylinderGeometry(0.24, 0.17, 0.48, 12), mat('#f6eedf', 0.8), gazebo, 0, 1.15, 0);
+
+const goalRing = mesh(new THREE.RingGeometry(3.1, 3.25, 64), new THREE.MeshBasicMaterial({ color: '#f7bed0', transparent: true, opacity: 0, side: THREE.DoubleSide }), gazebo, 0, 0.15, 0, 1, 1, 1, false);
+goalRing.rotation.x = -Math.PI / 2;
+
+// Bancos de madera
+for (const [x, z] of [[-5, 4], [7, -14]]) {
+  const b = new THREE.Group();
+  b.position.set(x, 0, z);
+  scene.add(b);
+  mesh(geoBox, M.wood, b, 0, 0.58, 0, 1.8, 0.12, 0.55);
+  mesh(geoBox, M.wood, b, 0, 1.05, -0.25, 1.8, 0.55, 0.1);
+  for (const xx of [-0.65, 0.65]) mesh(geoBox, M.roof, b, xx, 0.27, 0, 0.09, 0.54, 0.45);
+  obstacles.push({ x, z, r: 1.0 });
+}
+
+// --- PERSONAJE REDISEÑADO: YAIRE ---
+// Con sus lentes característicos, peinado ondulado con volumen, sonrisa cálida y blusa con mangas abullonadas
+const player = new THREE.Group();
+player.position.set(1.8, 0, 15);
+scene.add(player);
+
+// Sombra de contacto dinámica en el suelo para evitar que parezca que flota
+const playerShadow = new THREE.Mesh(shadowDecalGeo, new THREE.MeshBasicMaterial({ color: '#1a3324', transparent: true, opacity: 0.32, depthWrite: false }));
+playerShadow.rotation.x = -Math.PI / 2;
+playerShadow.scale.set(0.48, 0.48, 0.48);
+scene.add(playerShadow);
+
+const body = new THREE.Group();
+player.add(body);
+
+// Torso con blusa de escote amplio y mangas abullonadas
+const torso = mesh(new THREE.CylinderGeometry(0.24, 0.29, 0.52, 16), M.dress, body, 0, 1.15, 0);
+// Falda marfil con caída suave
+mesh(new THREE.CylinderGeometry(0.28, 0.52, 0.62, 20), M.skirt, body, 0, 0.72, 0);
+cyl(mat('#dfd7c5', 0.9), body, 0, 0.41, 0, 0.52, 0.04); // Dobladillo
+cyl(M.skin, body, 0, 1.48, 0, 0.12, 0.18); // Cuello
+
+// Cabeza y Rostro Expresivo
+const head = new THREE.Group();
+head.position.y = 1.78;
+body.add(head);
+sph(M.skin, head, 0, 0, 0, 0.32, 0.38, 0.29);
+
+// Cabello castaño ondulado con volumen natural y raya al medio
+sph(M.hair, head, 0, 0.11, -0.05, 0.335, 0.30, 0.30);
+sph(M.hair, body, 0, 1.45, -0.19, 0.36, 0.55, 0.16); // Melena trasera con caída
+
+// Mechones laterales sueltos que enmarcan su rostro con caída natural
+for (const side of [-1, 1]) {
+  const strand = sph(M.hair, head, side * 0.26, -0.14, 0.11, 0.075, 0.30, 0.10);
+  strand.rotation.z = side * -0.08;
+  strand.rotation.x = 0.08;
+}
+
+// Ojos grandes, delineados y con brillo
+for (const side of [-1, 1]) {
+  sph(M.skin, head, side * 0.32, -0.01, 0, 0.046, 0.075, 0.04); // Orejas
+  sph(M.white, head, side * 0.11, 0.02, 0.26, 0.065, 0.042, 0.03, false); // Esclerótica
+  sph(M.eye, head, side * 0.11, 0.02, 0.282, 0.034, 0.035, 0.015, false); // Iris castaño oscuro
+  sph(M.white, head, side * 0.102, 0.032, 0.294, 0.012, 0.012, 0.008, false); // Brillo de mirada
+  // Cejas arqueadas y expresivas
+  const brow = sph(M.hair, head, side * 0.115, 0.095, 0.27, 0.075, 0.016, 0.018, false);
+  brow.rotation.z = side * -0.18;
+  // Mejillas sonrosadas
+  sph(new THREE.MeshStandardMaterial({ color: '#df8986', transparent: true, opacity: 0.38 }), head, side * 0.185, -0.07, 0.23, 0.07, 0.04, 0.02, false);
+}
+
+// Nariz sutil y bonita
+sph(M.skin, head, 0, -0.035, 0.288, 0.038, 0.048, 0.045, false);
+
+// Sonrisa cálida y labios con forma (no una línea neutra)
+const mouth = sph(M.lip, head, 0, -0.135, 0.262, 0.082, 0.024, 0.024, false);
+mouth.rotation.x = 0.12;
+
+// --- GAFAS CARACTERÍSTICAS DE YAIRE ---
+// Montura elegante que resalta sus ojos
+const glassesGroup = new THREE.Group();
+head.add(glassesGroup);
+glassesGroup.position.set(0, 0.02, 0.28);
+
+for (const side of [-1, 1]) {
+  // Marco de cada lente
+  const frame = mesh(new THREE.TorusGeometry(0.082, 0.014, 8, 20), M.glasses, glassesGroup, side * 0.115, 0, 0);
+  frame.scale.set(1.05, 0.85, 1);
+  // Cristal con reflejo sutil
+  const lens = mesh(new THREE.CircleGeometry(0.075, 16), new THREE.MeshStandardMaterial({ color: '#e8f4f8', transparent: true, opacity: 0.18, roughness: 0.1 }), glassesGroup, side * 0.115, 0, 0, 1.05, 0.85, 1, false);
+  // Patillas hacia las orejas
+  const temple = cyl(M.glasses, glassesGroup, side * 0.21, 0, -0.14, 0.012, 0.28);
+  temple.rotation.x = Math.PI / 2;
+  temple.rotation.y = side * 0.18;
+}
+// Puente central de las gafas
+cyl(M.glasses, glassesGroup, 0, 0.015, 0.01, 0.012, 0.06).rotation.z = Math.PI / 2;
+
+// --- Tatuaje de Mariposa en la clavícula / hombro ---
+const tattoo = new THREE.Group();
+tattoo.position.set(0.18, 1.38, 0.15);
+body.add(tattoo);
+for (const side of [-1, 1]) {
+  const wing = sph(mat('#44727d', 0.6), tattoo, side * 0.018, 0, 0, 0.022, 0.014, 0.008, false);
+  wing.rotation.z = side * 0.45;
+}
+
+// Brazos con Mangas Abullonadas (Puff Sleeves)
+const arms = [];
+for (const side of [-1, 1]) {
+  const a = new THREE.Group();
+  a.position.set(side * 0.31, 1.33, 0);
+  body.add(a);
+  // Manga bombacha
+  sph(M.dress, a, 0, -0.02, 0, 0.16, 0.18, 0.16);
+  cyl(M.skin, a, 0, -0.27, 0, 0.068, 0.36);
+  sph(M.skin, a, 0, -0.48, 0.015, 0.073, 0.09, 0.071);
+  a.rotation.z = side * 0.1;
+  arms.push(a);
+}
+
+// Piernas y zapatos
+const legs = [];
+for (const side of [-1, 1]) {
+  const l = new THREE.Group();
+  l.position.set(side * 0.145, 0.49, 0);
+  body.add(l);
+  cyl(M.skin, l, 0, -0.19, 0, 0.08, 0.36);
+  sph(M.shoe, l, 0, -0.4, 0.06, 0.11, 0.078, 0.17);
+  legs.push(l);
+}
+
+// Cestita para recolectar
+const basket = new THREE.Group();
+arms[1].add(basket);
+basket.position.set(0.04, -0.48, 0);
+cyl(M.basket, basket, 0, -0.13, 0, 0.17, 0.26);
+const handle = mesh(new THREE.TorusGeometry(0.18, 0.022, 6, 16, Math.PI), M.basket, basket, 0, 0, 0);
+
+// --- Tulipanes Coleccionables con Resplandor (Bloom) ---
+const flowerGeo = new THREE.SphereGeometry(1, 10, 8);
+const tulipMat = new THREE.MeshStandardMaterial({
+  color: '#f096b2',
+  emissive: '#d64d78',
+  emissiveIntensity: 0.28,
+  roughness: 0.5
+});
+const petalMat = new THREE.MeshStandardMaterial({
+  color: '#f7b6cb',
+  emissive: '#d64d78',
+  emissiveIntensity: 0.18,
+  roughness: 0.55
+});
+
+function tulip(parent, x, y, z, scale = 1) {
+  const g = new THREE.Group();
+  g.position.set(x, y, z);
+  g.scale.setScalar(scale);
+  parent.add(g);
+  cyl(M.stem, g, 0, 0.33, 0, 0.025, 0.66, 0.025, false);
+  for (const side of [-1, 1]) {
+    const leaf = sph(M.stem, g, side * 0.11, 0.28, 0, 0.055, 0.23, 0.024, false);
+    leaf.rotation.z = -side * 0.45;
+  }
+  sph(tulipMat, g, 0, 0.72, 0, 0.14, 0.16, 0.14);
+  for (let j = 0; j < 5; j++) {
+    const a = j * 6.28 / 5;
+    const petal = mesh(flowerGeo, j % 2 ? tulipMat : petalMat, g, Math.cos(a) * 0.093, 0.77, Math.sin(a) * 0.093, 0.082, 0.17, 0.08);
+    petal.rotation.z = -Math.cos(a) * 0.22;
+    petal.rotation.x = Math.sin(a) * 0.22;
+  }
+  return g;
+}
+
+const flowerPositions = [
+  [-3, 12], [6, 10], [-8, 14], [10, 6], [-6, 4], [4, 1], [-11, -1], [9, -4],
+  [-4, -5], [2, -9], [-10, -10], [13, -12], [-6, -15], [6, -17], [-14, -20], [10, -22],
+  [-4, -23], [3, -25], [-18, 5], [19, 2], [-21, -8], [24, -11], [-18, -26], [17, -27]
+];
+
+const flowers = flowerPositions.map(([x, z], i) => {
+  const g = tulip(scene, x, 0, z, 1.18);
+  const ring = mesh(new THREE.RingGeometry(0.3, 0.36, 24), new THREE.MeshBasicMaterial({ color: '#f7bed0', transparent: true, opacity: 0.65, side: THREE.DoubleSide }), g, 0, 0.018, 0, 1, 1, 1, false);
+  ring.rotation.x = -Math.PI / 2;
+  // Destello resplandeciente en la flor
+  const sparkle = sph(new THREE.MeshBasicMaterial({ color: '#fff9ed' }), g, 0, 1.2, 0, 0.05, 0.05, 0.05, false);
+  return { g, x, z, ring, sparkle, taken: false, phase: i * 0.75 };
+});
+
+const bouquet = new THREE.Group();
+gazebo.add(bouquet);
+bouquet.position.set(0, 1.35, 0);
+for (let i = 0; i < 11; i++) {
+  const a = i * 2.4;
+  tulip(bouquet, Math.cos(a) * 0.2, 0, Math.sin(a) * 0.2, 0.52);
+}
+bouquet.visible = false;
+
+const carried = new THREE.Group();
+basket.add(carried);
+carried.position.y = -0.01;
+for (let i = 0; i < 5; i++) {
+  const a = i * 2.4;
+  tulip(carried, Math.cos(a) * 0.085, -0.13, Math.sin(a) * 0.085, 0.35);
+}
+carried.visible = false;
+
+// --- Atmósfera: Partículas de Luz Dorada y Pétalos ---
+const motesCount = touch ? 40 : 80;
+const motesPositions = new Float32Array(motesCount * 3);
+for (let i = 0; i < motesCount; i++) {
+  motesPositions[i * 3] = rand(-34, 34);
+  motesPositions[i * 3 + 1] = rand(0.5, 9);
+  motesPositions[i * 3 + 2] = rand(-38, 28);
+}
+const motesGeo = new THREE.BufferGeometry();
+motesGeo.setAttribute('position', new THREE.BufferAttribute(motesPositions, 3));
+const motes = new THREE.Points(motesGeo, new THREE.PointsMaterial({
+  color: '#ffeab3',
+  size: 0.09,
+  transparent: true,
+  opacity: 0.85,
+  depthWrite: false
+}));
+scene.add(motes);
+
+// Pétalos de cerezo danzando
+const petalCount = touch ? 45 : 90;
+const petalPositions = new Float32Array(petalCount * 3);
+for (let i = 0; i < petalCount; i++) {
+  petalPositions[i * 3] = rand(-32, 32);
+  petalPositions[i * 3 + 1] = rand(1, 10);
+  petalPositions[i * 3 + 2] = rand(-35, 25);
+}
+const petalsGeo = new THREE.BufferGeometry();
+petalsGeo.setAttribute('position', new THREE.BufferAttribute(petalPositions, 3));
+const ambientPetals = new THREE.Points(petalsGeo, new THREE.PointsMaterial({
+  color: '#f9cad6',
+  size: 0.08,
+  transparent: true,
+  opacity: 0.8,
+  depthWrite: false
+}));
+scene.add(ambientPetals);
+
+// Mariposa que revolotea
+const butterfly = new THREE.Group();
+scene.add(butterfly);
+sph(M.hair, butterfly, 0, 0, 0, 0.02, 0.08, 0.02, false);
+const wings = [];
+for (const side of [-1, 1]) wings.push(sph(M.sakuraPetal, butterfly, side * 0.08, 0, 0, 0.09, 0.11, 0.014, false));
+
+// Pool de partículas de confeti/brillo
+const burstPool = [];
+const burstGeometry = new THREE.SphereGeometry(0.045, 6, 5);
+const burstMaterial = new THREE.MeshBasicMaterial({ color: '#f7b6cb' });
+for (let i = 0; i < 70; i++) {
+  const o = new THREE.Mesh(burstGeometry, burstMaterial);
+  o.visible = false;
+  scene.add(o);
+  burstPool.push({ o, v: new THREE.Vector3(), life: 0 });
+}
+function burst(x, y, z, large = false) {
+  let n = large ? 60 : 20;
+  for (const p of burstPool) {
+    if (p.life > 0) continue;
+    p.o.position.set(x, y, z);
+    p.v.set(rand(-1.5, 1.5) * (large ? 2.2 : 1), rand(1.5, 3.8), rand(-1.5, 1.5) * (large ? 2.2 : 1));
+    p.life = rand(0.8, 1.5);
+    p.o.visible = true;
+    p.o.scale.setScalar(1);
+    if (--n === 0) break;
+  }
+}
+
+// --- Audio Procedimental con Web Audio API ---
+let audio = null, audioEnabled = false, nextBird = 0;
+function getAudio() {
+  if (!audio) {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    audio = new AC();
+  }
+  if (audio.state === 'suspended') audio.resume().catch(() => {});
+  return audio;
+}
+function tone(freq, delay = 0, len = 0.25, vol = 0.04) {
+  if (!audioEnabled || !audio) return;
+  const osc = audio.createOscillator(), gain = audio.createGain(), t = audio.currentTime + delay;
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(freq, t);
+  gain.gain.setValueAtTime(0, t);
+  gain.gain.linearRampToValueAtTime(vol, t + 0.014);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + len);
+  osc.connect(gain);
+  gain.connect(audio.destination);
+  osc.start(t);
+  osc.stop(t + len + 0.03);
+}
+function chime() {
+  [523.25, 659.25, 783.99].forEach((n, i) => tone(n, i * 0.065, 0.36, 0.045));
+}
+function setAudio(on) {
+  audioEnabled = !!on;
+  if (on && !getAudio()) audioEnabled = false;
+  $('soundBtn').textContent = audioEnabled ? '♫' : '♪';
+  $('soundBtn').setAttribute('aria-label', audioEnabled ? 'Desactivar sonido' : 'Activar sonido');
+  $('soundBtn').style.background = audioEnabled ? '#d5e6cb' : 'var(--glass)';
+  $('audioToggle').checked = audioEnabled;
+}
+
+// --- Estado de Juego ---
+let state = 'intro', collected = 0, elapsed = 0, completed = false, time = 0, walk = 0, toasting = 0, lastZone = '';
+let best = null;
+try { best = Number(localStorage.getItem('yaire-garden-best') || localStorage.getItem('lisbeth-garden-best')) || null; } catch {}
+
+const keys = new Set(), joy = { x: 0, y: 0 }, pointer = { id: null, x: 0, y: 0 }, joystick = { id: null, x: 0, y: 0 }, orbit = { yaw: 0, pitch: 0.47, distance: 6.5 }, camTarget = new THREE.Vector3();
+let runTouch = false;
+
+function notify(text) {
+  $('toast').textContent = text;
+  $('toast').classList.add('show');
+  toasting = 3.3;
+}
+function clearInput() {
+  keys.clear(); joy.x = joy.y = 0; runTouch = false;
+  $('run').classList.remove('active');
+  $('stick').style.transform = '';
+  pointer.id = null; joystick.id = null;
+}
+function setState(s) {
+  state = s; clearInput();
+  const screens = ['intro', 'pause', 'finish'];
+  screens.forEach(id => {
+    const el = $(id);
+    if (s !== id && !el.hidden && !el.classList.contains('fade-out')) {
+      el.classList.add('fade-out');
+      setTimeout(() => { el.hidden = true; el.classList.remove('fade-out'); }, 400);
+    } else if (s === id) {
+      el.hidden = false;
+      el.classList.remove('fade-out');
+    }
+  });
+  $('hud').style.display = (s === 'playing' || s === 'paused') ? 'block' : 'none';
+  $('touch').classList.toggle('visible', s === 'playing');
+  if($('gta-phone')) {
+    if(s !== 'playing') {
+      $('gta-phone').classList.remove('open');
+      $('gta-phone').style.pointerEvents = 'none';
+      $('gta-phone').style.opacity = '0';
+    } else {
+      $('gta-phone').style.pointerEvents = 'auto';
+      $('gta-phone').style.opacity = '';
+    }
+  }
+}
+function reset() {
+  collected = 0; elapsed = 0; completed = false;
+  player.position.set(1.8, 0, 15);
+  player.rotation.y = Math.PI;
+  orbit.yaw = 0; orbit.pitch = 0.47; orbit.distance = 6.5;
+  carried.visible = false; bouquet.visible = false;
+  goalRing.material.opacity = 0;
+  for (const f of flowers) { f.taken = false; f.g.visible = true; }
+  for (const p of burstPool) { p.life = 0; p.o.visible = false; }
+  $('questTitle').textContent = 'Tulipanes de primavera';
+  $('objective').textContent = 'Recoge los tulipanes rosas';
+  updateCount();
+  lastZone = '';
+  setState('playing');
+  snapCamera();
+  notify('Tu aventura comienza. Sigue los tulipanes rosas.');
+}
+function updateCount() {
+  $('count').textContent = collected + ' / 24';
+  $('progress').style.width = (collected / 24 * 100) + '%';
+}
+function collect(f) {
+  f.taken = true; f.g.visible = false; collected++;
+  carried.visible = true;
+  updateCount();
+  burst(f.x, 0.85, f.z);
+  chime();
+  if (navigator.vibrate && touch) navigator.vibrate(15);
+  $('flash').style.opacity = '.7';
+  setTimeout(() => $('flash').style.opacity = '0', 160);
+
+  if (collected === 24) {
+    $('questTitle').textContent = 'Un ramo para Yaire';
+    $('objective').textContent = 'Llévalo al pabellón del norte';
+    notify('¡Ramo completo! El pabellón te espera al norte.');
+  } else if (collected === 1) {
+    notify('¡Tu primer tulipán! Acércate a los demás para recogerlos.');
+  } else if (collected % 6 === 0) {
+    notify(['', 'Un cuarto del jardín en tus manos.', 'Ya tienes la mitad del ramo.', '¡Sólo faltan seis tulipanes!'][collected / 6]);
+  }
+}
+function win() {
+  completed = true;
+  bouquet.visible = true;
+  carried.visible = false;
+  burst(goal.x, 1.8, goal.z, true);
+  [523, 659, 784, 1046].forEach((n, i) => tone(n, i * 0.13, 0.65, 0.06));
+  $('elapsed').textContent = formatTime(elapsed);
+  let msg = 'Cada flor, un pequeño recuerdo.';
+  if (!best || elapsed < best) {
+    best = elapsed;
+    try { localStorage.setItem('yaire-garden-best', String(best)); } catch {}
+    msg = '¡Nuevo récord personal! ' + formatTime(best) + '.';
+  } else {
+    msg = 'Tu mejor paseo: ' + formatTime(best) + '.';
+  }
+  $('record').textContent = msg;
+  setState('finished');
+}
+function formatTime(s) {
+  return Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+}
+
+// Botones UI
+$('startBtn').onclick = () => reset();
+$('pauseBtn').onclick = () => setState('paused');
+$('resumeBtn').onclick = () => setState('playing');
+$('restartBtn').onclick = () => { if (confirm('¿Quieres reiniciar y recoger un nuevo ramo?')) reset(); };
+$('playAgainBtn').onclick = reset;
+$('exploreBtn').onclick = () => {
+  setState('playing');
+  $('objective').textContent = 'Disfruta de tu jardín';
+  notify('El jardín es todo tuyo. Pasea con calma.');
+};
+$('soundBtn').onclick = () => { setAudio(!audioEnabled); if (audioEnabled) chime(); };
+$('audioToggle').onchange = e => setAudio(e.target.checked);
+
+$('quality').onchange = e => {
+  const val = e.target.value;
+  const low = val === 'low' || (val === 'auto' && touch);
+  renderer.setPixelRatio(Math.min(devicePixelRatio, low ? 1.0 : 1.5));
+  renderer.shadowMap.enabled = !low;
+  if (composer && composer.passes.length > 2) composer.passes[2].enabled = !low;
+  ambientPetals.visible = !low;
+  motes.visible = !low;
+  scene.traverse(o => {
+    if (o.isMesh && o.material) {
+      const mats = Array.isArray(o.material) ? o.material : [o.material];
+      mats.forEach(m => m.needsUpdate = true);
+    }
+  });
+};
+
+// Teclado
+window.addEventListener('keydown', e => {
+  if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'Escape'].includes(e.key)) e.preventDefault();
+  if (e.code === 'Escape' && !e.repeat) {
+    if (state === 'playing') setState('paused');
+    else if (state === 'paused') setState('playing');
+    return;
+  }
+  if (state === 'playing') keys.add(e.code);
+});
+window.addEventListener('keyup', e => keys.delete(e.code));
+window.addEventListener('blur', () => { if (state === 'playing') setState('paused'); else clearInput(); });
+document.addEventListener('visibilitychange', () => { if (document.hidden && state === 'playing') setState('paused'); });
+
+// Cámara con mouse / touch
+const canvas = renderer.domElement;
+canvas.addEventListener('pointerdown', e => {
+  if (state !== 'playing' || pointer.id !== null) return;
+  pointer.id = e.pointerId;
+  pointer.x = e.clientX; pointer.y = e.clientY;
+  canvas.setPointerCapture(e.pointerId);
+});
+canvas.addEventListener('pointermove', e => {
+  if (pointer.id !== e.pointerId || state !== 'playing') return;
+  orbit.yaw -= (e.clientX - pointer.x) * 0.005;
+  orbit.pitch = Math.max(0.18, Math.min(0.9, orbit.pitch + (e.clientY - pointer.y) * 0.003));
+  pointer.x = e.clientX; pointer.y = e.clientY;
+});
+function releaseCamera(e) { if (pointer.id === e.pointerId) pointer.id = null; }
+canvas.addEventListener('pointerup', releaseCamera);
+canvas.addEventListener('pointercancel', releaseCamera);
+canvas.addEventListener('wheel', e => {
+  if (state === 'playing') {
+    e.preventDefault();
+    orbit.distance = Math.max(3.8, Math.min(10.5, orbit.distance + e.deltaY * 0.006));
+  }
+}, { passive: false });
+canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+// Controles Táctiles (Joystick virtual)
+const pad = $('joystick');
+pad.addEventListener('pointerdown', e => {
+  if (state !== 'playing' || joystick.id !== null) return;
+  e.preventDefault();
+  joystick.id = e.pointerId;
+  const r = pad.getBoundingClientRect();
+  joystick.x = r.left + r.width / 2;
+  joystick.y = r.top + r.height / 2;
+  pad.setPointerCapture(e.pointerId);
+  moveJoy(e);
+});
+function moveJoy(e) {
+  if (e.pointerId !== joystick.id) return;
+  const max = pad.clientWidth * 0.34, dx = e.clientX - joystick.x, dy = e.clientY - joystick.y, l = Math.hypot(dx, dy), scale = l > max ? max / l : 1;
+  joy.x = dx * scale / max;
+  joy.y = -dy * scale / max;
+  $('stick').style.transform = `translate(${dx * scale}px,${dy * scale}px)`;
+}
+pad.addEventListener('pointermove', moveJoy);
+function releaseJoy(e) {
+  if (e.pointerId !== joystick.id) return;
+  joystick.id = null; joy.x = joy.y = 0;
+  $('stick').style.transform = '';
+}
+pad.addEventListener('pointerup', releaseJoy);
+pad.addEventListener('pointercancel', releaseJoy);
+
+$('run').addEventListener('pointerdown', e => {
+  e.preventDefault(); runTouch = true;
+  $('run').classList.add('active');
+  $('run').setPointerCapture(e.pointerId);
+});
+function releaseRun() { runTouch = false; $('run').classList.remove('active'); }
+$('run').addEventListener('pointerup', releaseRun);
+$('run').addEventListener('pointercancel', releaseRun);
+
+window.addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+  if (composer) composer.setSize(innerWidth, innerHeight);
+});
+
+function desiredCamera() {
+  return new THREE.Vector3(
+    player.position.x + Math.sin(orbit.yaw) * Math.cos(orbit.pitch) * orbit.distance,
+    1.15 + Math.sin(orbit.pitch) * orbit.distance,
+    player.position.z + Math.cos(orbit.yaw) * Math.cos(orbit.pitch) * orbit.distance
+  );
+}
+function snapCamera() {
+  camera.position.copy(desiredCamera());
+  camTarget.copy(player.position).y = 1.18;
+  camera.lookAt(camTarget);
+}
+snapCamera();
+
+// --- Minimapa ---
+const mapctx = $('map').getContext('2d');
+let mapTimer = 0;
+function drawMap() {
+  const c = mapctx, w = 264, scale = 3.6, ox = 132, oy = 140;
+  c.clearRect(0, 0, w, w);
+  c.fillStyle = '#eaf0e3';
+  c.fillRect(0, 0, w, w);
+  c.beginPath();
+  c.arc(ox, oy, 117, 0, 6.28);
+  c.fillStyle = '#c5d8b8';
+  c.fill();
+  c.save();
+  c.beginPath();
+  c.arc(ox, oy, 117, 0, 6.28);
+  c.clip();
+  c.strokeStyle = '#eee5cb';
+  c.lineWidth = 8;
+  c.beginPath();
+  for (const p of pathPts) c.lineTo(ox + p.x * scale, oy + p.z * scale);
+  c.stroke();
+  c.fillStyle = '#89c1b6';
+  c.beginPath();
+  c.ellipse(ox + 20 * scale, oy - 17 * scale, 17, 12, 0, 0, 6.28);
+  c.fill();
+  for (const f of flowers) {
+    if (f.taken) continue;
+    c.fillStyle = '#d4658a';
+    c.beginPath();
+    c.arc(ox + f.x * scale, oy + f.z * scale, 3.4, 0, 6.28);
+    c.fill();
+  }
+  c.fillStyle = collected === 24 ? '#d4658a' : '#57785c';
+  c.fillRect(ox - 6, oy - 29 * scale - 6, 12, 12);
+  if (collected === 24 && !completed) {
+    c.strokeStyle = '#d4658a';
+    c.lineWidth = 2;
+    c.beginPath();
+    c.arc(ox, oy - 29 * scale, 10 + Math.sin(time * 3) * 2, 0, 6.28);
+    c.stroke();
+  }
+  const px = ox + player.position.x * scale, py = oy + player.position.z * scale;
+  c.save();
+  c.translate(px, py);
+  c.rotate(-player.rotation.y + Math.PI);
+  c.fillStyle = '#264230';
+  c.beginPath();
+  c.moveTo(0, -7);
+  c.lineTo(-5, 5);
+  c.lineTo(5, 5);
+  c.closePath();
+  c.fill();
+  c.restore();
+  c.restore();
+  c.fillStyle = '#556957';
+  c.font = '13px system-ui';
+  c.textAlign = 'center';
+  c.fillText('N', 132, 18);
+}
+
+// --- Físicas y Movimiento ---
+const movement = new THREE.Vector3(), targetPos = new THREE.Vector3();
+const clock = new THREE.Clock();
+let zone = '';
+
+function move(dt) {
+  let x = joy.x + (keys.has('KeyD') || keys.has('ArrowRight') ? 1 : 0) - (keys.has('KeyA') || keys.has('ArrowLeft') ? 1 : 0);
+  let y = joy.y + (keys.has('KeyW') || keys.has('ArrowUp') ? 1 : 0) - (keys.has('KeyS') || keys.has('ArrowDown') ? 1 : 0);
+  const magnitude = Math.hypot(x, y);
+  const moving = magnitude > 0.08;
+  const speed = (keys.has('ShiftLeft') || keys.has('ShiftRight') || runTouch) ? 4.8 : 2.95;
+
+  if (moving) {
+    if (magnitude > 1) { x /= magnitude; y /= magnitude; }
+    movement.set(Math.cos(orbit.yaw) * x - Math.sin(orbit.yaw) * y, 0, -Math.sin(orbit.yaw) * x - Math.cos(orbit.yaw) * y);
+    targetPos.copy(player.position).addScaledVector(movement, dt * speed);
+    
+    // Colisiones con árboles y bancos
+    for (const o of obstacles) {
+      let dx = targetPos.x - o.x, dz = targetPos.z - o.z, dist = Math.hypot(dx, dz), min = o.r + 0.32;
+      if (dist < min) {
+        if (dist < 0.001) { dx = 1; dz = 0; dist = 1; }
+        targetPos.x = o.x + dx / dist * min;
+        targetPos.z = o.z + dz / dist * min;
+      }
+    }
+    const radius = Math.hypot(targetPos.x, targetPos.z);
+    if (radius > 39) {
+      targetPos.x *= 39 / radius;
+      targetPos.z *= 39 / radius;
+    }
+    player.position.copy(targetPos);
+    
+    // Orientación suave
+    const angle = Math.atan2(movement.x, movement.z);
+    const delta = Math.atan2(Math.sin(angle - player.rotation.y), Math.cos(angle - player.rotation.y));
+    player.rotation.y += delta * (1 - Math.exp(-dt * 12));
+    walk += dt * speed * 3.4;
+  }
+
+  // Sombra dinámica bajo los pies
+  playerShadow.position.set(player.position.x, 0.015, player.position.z);
+
+  // Animaciones de cuerpo
+  const a = moving ? Math.sin(walk) * 0.45 : 0;
+  legs[0].rotation.x = THREE.MathUtils.lerp(legs[0].rotation.x, a, Math.min(1, dt * 14));
+  legs[1].rotation.x = THREE.MathUtils.lerp(legs[1].rotation.x, -a, Math.min(1, dt * 14));
+  arms[0].rotation.x = -a * 0.7;
+  arms[1].rotation.x = a * 0.45 - 0.14;
+  body.position.y = moving ? Math.abs(Math.sin(walk)) * 0.038 : Math.sin(time * 1.8) * 0.014;
+  head.rotation.z = moving ? Math.sin(walk) * 0.016 : Math.sin(time * 0.8) * 0.025;
+
+  if (!completed) {
+    elapsed += dt;
+    for (const f of flowers) {
+      if (!f.taken && Math.hypot(player.position.x - f.x, player.position.z - f.z) < 0.95) collect(f);
+    }
+    if (collected === 24 && player.position.distanceTo(goal) < 2.5) win();
+  }
+
+  zone = player.position.z < -22 ? 'El pabellón de los recuerdos' :
+         player.position.x > 13 && player.position.z < -8 ? 'La orilla de los nenúfares' :
+         player.position.x < -12 ? 'El rincón de los cerezos' :
+         player.position.z < 0 ? 'El sendero de la luz dorada' : 'El sendero de los primeros pasos';
+  if (lastZone !== zone) {
+    lastZone = zone;
+    $('zone').textContent = zone;
+  }
+}
+
+// --- Bucle Principal de Render ---
+function frame() {
+  requestAnimationFrame(frame);
+  const dt = Math.min(clock.getDelta(), 0.04);
+  const active = state === 'playing' || state === 'intro';
+
+  if (active) {
+    time += dt;
+    grassUniforms.uTime.value = time;
+    waterUniforms.uTime.value = time;
+
+    // Nubes flotando lentamente
+    for (const cl of clouds) {
+      cl.ang += dt * cl.speed * 0.015;
+      cl.g.position.x = Math.cos(cl.ang) * cl.radius;
+      cl.g.position.z = Math.sin(cl.ang) * cl.radius;
+    }
+
+    // Nenúfares flotando suavemente
+    for (const lp of lilyPads) {
+      lp.g.position.y = lp.baseY + Math.sin(time * 2.0 + lp.phase) * 0.012;
+      lp.g.rotation.y += dt * 0.08;
+    }
+
+    if (state === 'playing') move(dt);
+
+    // Animación de tulipanes coleccionables
+    for (const f of flowers) {
+      if (f.taken) continue;
+      f.g.rotation.z = reduced ? 0 : Math.sin(time * 1.5 + f.phase) * 0.038;
+      f.sparkle.position.y = 1.2 + Math.sin(time * 2.2 + f.phase) * 0.08;
+      f.ring.material.opacity = 0.38 + Math.sin(time * 2.2 + f.phase) * 0.2;
+    }
+    goalRing.material.opacity = (collected === 24 && !completed) ? 0.48 + Math.sin(time * 3) * 0.25 : 0;
+
+    // Partículas atmosféricas
+    if (!reduced) {
+      // Pétalos
+      const arr = petalsGeo.attributes.position.array;
+      for (let i = 0; i < petalCount; i++) {
+        arr[i * 3] += dt * (0.24 + Math.sin(time * 0.5 + i) * 0.08);
+        arr[i * 3 + 1] -= dt * 0.17;
+        arr[i * 3 + 2] += Math.sin(time * 0.3 + i) * dt * 0.08;
+        if (arr[i * 3 + 1] < 0.15) arr[i * 3 + 1] = 9.5;
+        if (arr[i * 3] > 35) arr[i * 3] = -35;
+      }
+      petalsGeo.attributes.position.needsUpdate = true;
+
+      // Motes de luz dorada
+      const mArr = motesGeo.attributes.position.array;
+      for (let i = 0; i < motesCount; i++) {
+        mArr[i * 3 + 1] += Math.sin(time * 1.2 + i) * dt * 0.12;
+        mArr[i * 3] += Math.cos(time * 0.8 + i) * dt * 0.06;
+      }
+      motesGeo.attributes.position.needsUpdate = true;
+
+      // Mariposa
+      butterfly.position.set(Math.sin(time * 0.38) * 4 - 4, 1.6 + Math.sin(time * 0.9) * 0.45, Math.cos(time * 0.38) * 3 - 2);
+      butterfly.rotation.y = time * 0.38;
+      wings.forEach((w, i) => w.rotation.y = Math.sin(time * 18) * (i ? 1 : -1) * 0.85);
+    }
+
+    // Partículas de estallido
+    for (const p of burstPool) {
+      if (p.life <= 0) continue;
+      p.life -= dt;
+      p.v.y -= dt * 3.2;
+      p.o.position.addScaledVector(p.v, dt);
+      p.o.scale.setScalar(Math.min(1, p.life * 2));
+      p.o.visible = p.life > 0;
+    }
+
+    if (toasting > 0) {
+      toasting -= dt;
+      if (toasting <= 0) $('toast').classList.remove('show');
+    }
+
+    // Canto aleatorio de pájaros
+    if (state === 'playing' && audioEnabled && time > nextBird) {
+      nextBird = time + rand(5, 10);
+      tone(rand(1600, 2300), 0, 0.1, 0.008);
+      tone(rand(2300, 2800), 0.13, 0.09, 0.006);
+    }
+  }
+
+  // Cámara
+  if (state === 'intro') {
+    const t = time * 0.045;
+    camera.position.set(9 + Math.sin(t) * 3.5, 7.8, 22 + Math.cos(t) * 2.5);
+    camera.lookAt(0, 1.1, 3);
+  } else {
+    camera.position.lerp(desiredCamera(), 1 - Math.exp(-dt * 6.5));
+    camTarget.lerp(new THREE.Vector3(player.position.x, 1.18, player.position.z), 1 - Math.exp(-dt * 10));
+    camera.lookAt(camTarget);
+  }
+
+  // Actualizar minimapa cada 100ms
+  mapTimer += dt;
+  if (mapTimer > 0.1) {
+    drawMap();
+    mapTimer = 0;
+  }
+
+  // Renderizado con Bloom o WebGL estándar
+  const isHighQuality = $('quality').value !== 'low';
+  if (composer && isHighQuality) {
+    composer.render(dt);
+  } else {
+    renderer.render(scene, camera);
+  }
+}
+
+$('loadStatus').textContent = 'Todo listo. El jardín florece para ti.';
+$('startBtn').disabled = false;
+drawMap();
+frame();
+
+} catch(e) {
+  console.error(e);
+  $('loadStatus').textContent = 'Tu navegador no pudo iniciar el jardín 3D. Asegúrate de tener WebGL activado.';
+  $('startBtn').textContent = 'Recargar';
+  $('startBtn').disabled = false;
+  $('startBtn').onclick = () => location.reload();
+}
+
+// --- Lógica del Teléfono GTA (iFruit Ultra Music Player) ---
+const playlist = [
+  {
+    file: 'radio/Don Toliver - No Pole.mp3',
+    title: 'No Pole',
+    artist: 'Don Toliver',
+    accent: '#c084fc',
+    glow: 'rgba(192, 132, 252, 0.32)',
+    bg: 'linear-gradient(135deg, #1b0a2a 0%, #0d1b2a 50%, #1e1b4b 100%)',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>'
+  },
+  {
+    file: 'radio/Girl Ultra - Tomás.mp3',
+    title: 'Tomás',
+    artist: 'Girl Ultra',
+    accent: '#fb7185',
+    glow: 'rgba(251, 113, 133, 0.32)',
+    bg: 'linear-gradient(135deg, #4c0519 0%, #831843 50%, #fb7185 100%)',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>'
+  },
+  {
+    file: "radio/God's Plan - Drake - SpotubeDL.com.mp3",
+    title: "God's Plan",
+    artist: 'Drake',
+    accent: '#facc15',
+    glow: 'rgba(250, 204, 21, 0.28)',
+    bg: 'linear-gradient(135deg, #09090b 0%, #1c1917 50%, #292524 100%)',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>'
+  },
+  {
+    file: 'radio/I Like It - Cardi B - SpotubeDL.com.mp3',
+    title: 'I Like It',
+    artist: 'Cardi B',
+    accent: '#fb923c',
+    glow: 'rgba(251, 146, 60, 0.32)',
+    bg: 'linear-gradient(135deg, #701a75 0%, #be185d 50%, #f97316 100%)',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/>'
+  },
+  {
+    file: 'radio/1778942990131_Bon_Bon_-_Fcukers.mp3',
+    title: 'Bon Bon',
+    artist: 'Fcukers',
+    accent: '#34d399',
+    glow: 'rgba(52, 211, 153, 0.32)',
+    bg: 'linear-gradient(135deg, #022c22 0%, #064e3b 50%, #10b981 100%)',
+    icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>'
+  }
+];
+
+let currentSongIdx = 0;
+const bgMusic = new Audio();
+bgMusic.volume = 0.4;
+let musicPlaying = false;
+let isShuffle = false;
+let isLoop = false;
+
+// Actualizar reloj status bar
+function updatePhoneClock() {
+  const d = new Date();
+  const timeStr = d.getHours() + ':' + d.getMinutes().toString().padStart(2, '0');
+  if ($('phoneClock')) $('phoneClock').textContent = timeStr;
+}
+setInterval(updatePhoneClock, 1000);
+updatePhoneClock();
+
+// Cargar canción y aplicar estética dinámica
+function loadSong(autoPlay = false) {
+  const song = playlist[currentSongIdx];
+  if (!song) return;
+  
+  if ($('trackName')) $('trackName').textContent = song.title;
+  if ($('trackArtist')) $('trackArtist').textContent = song.artist;
+  
+  // Actualizar tema dinámico del teléfono
+  document.documentElement.style.setProperty('--track-accent', song.accent);
+  document.documentElement.style.setProperty('--track-glow', song.glow);
+  if ($('albumArtCanvas')) $('albumArtCanvas').style.background = song.bg;
+  if ($('albumSvgIcon')) $('albumSvgIcon').innerHTML = song.icon;
+  
+  const encodedPath = song.file.split('/').map(encodeURIComponent).join('/');
+  if (!bgMusic.src.includes(encodedPath) && !bgMusic.src.endsWith(song.file)) {
+    bgMusic.src = song.file;
+  }
+  
+  if (autoPlay) {
+    playMusic();
+  }
+}
+
+function playMusic() {
+  bgMusic.play().then(() => {
+    musicPlaying = true;
+    updatePlayStateUI(true);
+  }).catch(err => {
+    console.warn('Audio play prevented:', err);
+    musicPlaying = false;
+    updatePlayStateUI(false);
+  });
+}
+
+function pauseMusic() {
+  bgMusic.pause();
+  musicPlaying = false;
+  updatePlayStateUI(false);
+}
+
+function togglePlay() {
+  if (musicPlaying) {
+    pauseMusic();
+  } else {
+    playMusic();
+  }
+}
+
+function updatePlayStateUI(playing) {
+  if ($('phonePlayIcon')) $('phonePlayIcon').style.display = playing ? 'none' : 'block';
+  if ($('phonePauseIcon')) $('phonePauseIcon').style.display = playing ? 'block' : 'none';
+  if ($('islandDot')) $('islandDot').classList.toggle('active', playing);
+  if ($('eqBars')) $('eqBars').classList.toggle('playing', playing);
+  if ($('phoneCoverBox')) $('phoneCoverBox').classList.toggle('playing', playing);
+}
+
+// Abrir / Cerrar Teléfono
+function togglePhone() {
+  const phone = $('gta-phone');
+  if (!phone) return;
+  phone.classList.toggle('open');
+  if (phone.classList.contains('open')) {
+    loadSong(false);
+  }
+}
+
+function closePhone() {
+  if ($('gta-phone')) $('gta-phone').classList.remove('open');
+}
+
+$('phoneBtn')?.addEventListener('click', togglePhone);
+$('closePhoneBtn')?.addEventListener('click', closePhone);
+$('minimizePhoneBtn')?.addEventListener('click', closePhone);
+
+window.addEventListener('keydown', (e) => {
+  if (e.key.toLowerCase() === 'm' && !e.repeat && document.activeElement.tagName !== 'INPUT') {
+    togglePhone();
+  }
+});
+
+// Controles principales
+$('playMusicBtn')?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  togglePlay();
+});
+
+function nextTrack() {
+  if (isShuffle) {
+    let nextIdx = Math.floor(Math.random() * playlist.length);
+    if (nextIdx === currentSongIdx) nextIdx = (currentSongIdx + 1) % playlist.length;
+    currentSongIdx = nextIdx;
+  } else {
+    currentSongIdx = (currentSongIdx + 1) % playlist.length;
+  }
+  loadSong(true);
+}
+
+function prevTrack() {
+  if (bgMusic.currentTime > 3) {
+    bgMusic.currentTime = 0;
+  } else {
+    currentSongIdx = (currentSongIdx - 1 + playlist.length) % playlist.length;
+    loadSong(true);
+  }
+}
+
+$('nextBtn')?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  nextTrack();
+});
+
+$('prevBtn')?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  prevTrack();
+});
+
+bgMusic.addEventListener('ended', () => {
+  if (isLoop) {
+    bgMusic.currentTime = 0;
+    playMusic();
+  } else {
+    nextTrack();
+  }
+});
+
+// Scrubber / Barra de Progreso interactiva
+bgMusic.addEventListener('timeupdate', () => {
+  if (!bgMusic.duration) return;
+  const pct = (bgMusic.currentTime / bgMusic.duration) * 100;
+  if ($('phoneProgressFill')) $('phoneProgressFill').style.width = pct + '%';
+  
+  const mC = Math.floor(bgMusic.currentTime / 60);
+  const sC = Math.floor(bgMusic.currentTime % 60).toString().padStart(2, '0');
+  if ($('phoneTimeCurrent')) $('phoneTimeCurrent').textContent = mC + ':' + sC;
+  
+  const remain = Math.max(0, bgMusic.duration - bgMusic.currentTime);
+  const mR = Math.floor(remain / 60);
+  const sR = Math.floor(remain % 60).toString().padStart(2, '0');
+  if ($('phoneTimeTotal')) $('phoneTimeTotal').textContent = '-' + mR + ':' + sR;
+});
+
+$('phoneProgressBar')?.addEventListener('click', (e) => {
+  if (!bgMusic.duration) return;
+  const rect = e.currentTarget.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
+  const pct = Math.max(0, Math.min(1, clickX / rect.width));
+  bgMusic.currentTime = pct * bgMusic.duration;
+});
+
+// Slider de volumen
+$('phoneVolumeSlider')?.addEventListener('input', (e) => {
+  bgMusic.volume = parseFloat(e.target.value);
+});
+
+// Shuffle & Loop toggles
+$('shuffleBtn')?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  isShuffle = !isShuffle;
+  $('shuffleBtn').classList.toggle('active', isShuffle);
+});
+
+$('loopBtn')?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  isLoop = !isLoop;
+  $('loopBtn').classList.toggle('active', isLoop);
+});
+
+// Favorito con efecto pop
+$('favBtn')?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  $('favBtn').classList.toggle('liked');
+});
+
+// Canción inicial
+loadSong(false);
+
+</script>
+</body>
+</html>
