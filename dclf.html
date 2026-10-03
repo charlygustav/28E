@@ -522,16 +522,33 @@ html,body{height:100%;height:100dvh}#world{height:100dvh;touch-action:none}
 #yairePhone .phone-page[data-app=music]{padding:12px 16px max(14px,env(safe-area-inset-bottom));overflow-y:auto;background:linear-gradient(180deg,#f8faf6,#edf3ed)}
 #yairePhone .m8-player{display:flex;flex-direction:column;gap:10px;max-width:430px;margin:auto}
 #yairePhone .m8-hero{display:flex;align-items:center;gap:14px;min-width:0}
-#yairePhone .m8-art{width:90px;height:90px;flex:0 0 90px;border-radius:22px;background:radial-gradient(circle at 24% 20%,#f6d2df,#c1d9c7 68%,#82ab98);display:grid;place-items:center;color:#365f4c;box-shadow:0 5px 14px #28473712}
-#yairePhone .m8-art svg{width:42px;height:42px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+#yairePhone .m8-art{width:86px;height:86px;flex:0 0 86px;border-radius:18px;background:radial-gradient(circle at 24% 20%,#3e6552,#213a2f 70%,#162a22);display:grid;place-items:center;color:#e8f4ec;box-shadow:0 6px 18px rgba(33,58,47,0.18);overflow:hidden;position:relative;transition:box-shadow .3s,transform .3s}
+#yairePhone .m8-art.is-playing{box-shadow:0 8px 24px rgba(49,94,75,0.35);transform:scale(1.02)}
+#yairePhone .m8-art img{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}
+#yairePhone .m8-art svg{width:38px;height:38px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 #yairePhone .m8-title{min-width:0;flex:1}
-#yairePhone .m8-title h3{font-size:17px;line-height:1.3;margin:0 0 4px;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-#yairePhone .m8-title p{font-size:11px;color:#65796e;margin:0;line-height:1.45}
-#yairePhone #m8Status{font-size:11px;color:#557265;display:block;margin-top:5px}
-#yairePhone .m8-transport{display:flex;align-items:center;justify-content:center;gap:22px;margin:2px 0}
-#yairePhone .m8-transport button{width:48px;height:48px;min-height:48px;padding:12px;display:grid;place-items:center;border:0;border-radius:50%;background:transparent;color:#294f40}
-#yairePhone .m8-transport #m8Play{width:58px;height:58px;background:#315e4b;color:white;padding:17px;box-shadow:0 4px 12px #315e4b25}
-#yairePhone .m8-transport svg,#yairePhone .m8-volume svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#yairePhone .m8-title-row{display:flex;align-items:center;gap:6px;margin:0 0 3px}
+#yairePhone .m8-title h3{font-size:16px;font-weight:700;line-height:1.25;margin:0;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:1;line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+#yairePhone .m8-title p{font-size:11.5px;color:#65796e;margin:0 0 4px;line-height:1.35;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+#yairePhone .m8-status-wrap{display:flex;align-items:center;gap:6px;font-size:10.5px;color:#4f7060}
+#yairePhone .m8-eq{display:none;align-items:flex-end;gap:2px;height:11px;width:11px}
+#yairePhone .m8-hero:has(.m8-art.is-playing) .m8-eq,#yairePhone .m8-art.is-playing ~ .m8-title .m8-eq{display:inline-flex}
+#yairePhone .m8-eq span{width:2.5px;background:#315e4b;border-radius:1px;animation:m8Eq .8s ease-in-out infinite alternate}
+#yairePhone .m8-eq span:nth-child(1){height:40%;animation-delay:0s}
+#yairePhone .m8-eq span:nth-child(2){height:90%;animation-delay:.25s}
+#yairePhone .m8-eq span:nth-child(3){height:60%;animation-delay:.45s}
+@keyframes m8Eq{0%{height:25%}100%{height:100%}}
+#yairePhone .m8-tag{font-size:9px;font-weight:750;padding:2px 7px;border-radius:6px;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0}
+#yairePhone .m8-tag.spotlight{background:#e8def5;color:#5a2d82}
+#yairePhone .m8-tag.garden{background:#ddede2;color:#2c5b43}
+#yairePhone .m8-transport{display:flex;align-items:center;justify-content:center;gap:12px;margin:2px 0}
+#yairePhone .m8-transport button{width:42px;height:42px;min-height:42px;padding:9px;display:grid;place-items:center;border:0;border-radius:50%;background:transparent;color:#294f40;cursor:pointer;transition:transform .12s,background .15s}
+#yairePhone .m8-transport button:hover{background:rgba(49,94,75,0.08);transform:scale(1.06)}
+#yairePhone .m8-transport button:active{transform:scale(.94)}
+#yairePhone .m8-transport button.active{color:#763b9c;background:#eddff5}
+#yairePhone .m8-transport #m8Play{width:56px;height:56px;min-height:56px;background:#315e4b;color:white;padding:16px;box-shadow:0 4px 14px rgba(49,94,75,0.3)}
+#yairePhone .m8-transport #m8Play:hover{background:#284f3f;transform:scale(1.05)}
+#yairePhone .m8-transport svg,#yairePhone .m8-volume svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 #yairePhone .m8-progress{display:grid;gap:1px}
 #yairePhone .m8-progress div{display:flex;justify-content:space-between;font-size:10px;color:#687b70;font-variant-numeric:tabular-nums}
 #yairePhone .m8-player input[type=range]{display:block;width:100%;height:32px;min-height:32px;accent-color:#315e4b;margin:0;padding:0;cursor:pointer;background:transparent;box-shadow:none;border:0;touch-action:pan-y}
@@ -545,17 +562,29 @@ html,body{height:100%;height:100dvh}#world{height:100dvh;touch-action:none}
 #yairePhone .m8-library summary::after{content:'＋';font-size:20px;font-weight:400}
 #yairePhone .m8-library[open] summary::after{content:'−'}
 #yairePhone .m8-library summary:focus-visible{outline:2px solid #a64b75;outline-offset:2px}
-#yairePhone .m8-list{display:grid;gap:4px}
-#yairePhone .m8-track{display:flex;align-items:center;gap:10px;min-height:48px;width:100%;padding:8px 10px;border:0;border-radius:12px;text-align:left;background:transparent;color:#345444}
-#yairePhone .m8-track[aria-pressed=true]{background:#dcebe0}
-#yairePhone .m8-track i{font-style:normal;font-size:12px;width:20px;flex:0 0 20px;text-align:center;color:#71877a}
+#yairePhone .m8-filters-row{display:flex;flex-direction:column;gap:8px;margin:6px 0 10px}
+#yairePhone .m8-filter-tabs{display:flex;gap:6px;overflow-x:auto}
+#yairePhone .m8-tab-btn{padding:5px 12px;font-size:11px;font-weight:650;border-radius:14px;background:#e5eee7;color:#2d5440;border:0;cursor:pointer;white-space:nowrap;transition:background .15s,color .15s}
+#yairePhone .m8-tab-btn:hover{background:#d5e5d8}
+#yairePhone .m8-tab-btn.active{background:#315e4b;color:#fff}
+#yairePhone .m8-search-box input{width:100%;height:36px;padding:0 12px;border-radius:12px;border:1px solid #c8dcd0;background:#ffffff;font-size:12px;color:#234435;box-sizing:border-box;outline:none}
+#yairePhone .m8-search-box input:focus{border-color:#315e4b;box-shadow:0 0 0 2px rgba(49,94,75,0.15)}
+#yairePhone .m8-list{display:grid;gap:4px;max-height:260px;overflow-y:auto;padding-right:2px}
+#yairePhone .m8-track{display:flex;align-items:center;gap:10px;min-height:48px;width:100%;padding:8px 10px;border:0;border-radius:12px;text-align:left;background:transparent;color:#345444;cursor:pointer;transition:background .12s}
+#yairePhone .m8-track:hover{background:#e8f1ea}
+#yairePhone .m8-track.active{background:#dbece0;font-weight:600}
+#yairePhone .m8-track i{font-style:normal;font-size:12px;width:20px;flex:0 0 20px;text-align:center;color:#6b8275}
 #yairePhone .m8-track span{min-width:0;flex:1}
 #yairePhone .m8-track b{display:block;font-size:12px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-#yairePhone .m8-track small{display:block;font-size:10px;color:#708376;margin-top:2px}
-#yairePhone .m8-import{display:flex;align-items:center;justify-content:center;min-height:44px;width:100%;border:1px dashed #bbd0c0;border-radius:12px;background:transparent;color:#3d6651;margin-top:8px;font-size:12px}
-#yairePhone .m8-library p{font-size:10px;color:#718377;line-height:1.45;margin:8px 2px 0}
+#yairePhone .m8-track small{display:block;font-size:10px;color:#6f8376;margin-top:1px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+#yairePhone .m8-track-tag{font-size:8.5px;font-weight:700;padding:2px 6px;border-radius:6px;text-transform:uppercase;flex-shrink:0}
+#yairePhone .m8-track-tag.spotlight{background:#eae0f5;color:#5c2f86}
+#yairePhone .m8-track-tag.garden{background:#dbece1;color:#275b41}
+#yairePhone .m8-empty{padding:18px 10px;text-align:center;font-size:12px;color:#6d8477}
+#yairePhone .m8-import{display:flex;align-items:center;justify-content:center;min-height:44px;width:100%;border:1px dashed #bbd0c0;border-radius:12px;background:transparent;color:#3d6651;margin-top:8px;font-size:12px;cursor:pointer}
+#yairePhone .m8-note{font-size:10px;color:#718377;line-height:1.45;margin:8px 2px 0}
 #yairePhone #m8File[hidden]{display:none!important}
-@media(max-height:530px){#yairePhone .phone-page[data-app=music]{padding-top:7px}#yairePhone .m8-player{gap:4px}#yairePhone .m8-art{width:60px;height:60px;flex-basis:60px;border-radius:16px}#yairePhone .m8-art svg{width:30px;height:30px}#yairePhone .m8-title h3{font-size:14px}#yairePhone .m8-transport #m8Play{width:48px;height:48px;padding:12px}}
+@media(max-height:530px){#yairePhone .phone-page[data-app=music]{padding-top:7px}#yairePhone .m8-player{gap:4px}#yairePhone .m8-art{width:60px;height:60px;flex-basis:60px;border-radius:14px}#yairePhone .m8-art svg{width:28px;height:28px}#yairePhone .m8-title h3{font-size:14px}#yairePhone .m8-transport #m8Play{width:48px;height:48px;padding:12px}}
 @media(prefers-reduced-motion:reduce){#yairePhone .m8-player button{transition:none}}
 
 
@@ -752,7 +781,53 @@ const phoneContacts=[
 {id:'luis',name:'Luis',initials:'L',role:'Papá · El cuidado del agua',hello:'Estoy revisando las herramientas. Si necesitas agua o una mano con el jardín, puedes avisarme.'},
 {id:'valentina',name:'Laura Valentina',initials:'LV',role:'Un vínculo distante · sin presión',hello:'Por ahora prefiero mantener algo de distancia. Gracias por respetar mi espacio.'}
 ];
-const phoneTracks=[{name:'Un jardín al amanecer',sub:'Piano electrónico · calma',bpm:76,notes:[261.63,329.63,392,523.25,440,392,329.63,293.66],wave:'sine'},{name:'Camino a la fuente',sub:'Arpegio suave · paseo',bpm:100,notes:[293.66,369.99,440,587.33,493.88,440,369.99,329.63],wave:'triangle'},{name:'La página en blanco',sub:'Ambiente cálido · recuerdos',bpm:62,notes:[220,261.63,329.63,392,349.23,329.63,261.63,246.94],wave:'sine'}];
+const spotlightSongs=[
+ {name:'EAT',sub:'Otis McDonald, Mani Draper, Joni Inez',src:'https://raw.githubusercontent.com/charlygustav/28E/main/radio/1791032398767_Otis_McDonald_-_EAT.mp3',tag:'Spotlight'},
+ {name:'Impact',sub:'SG Lewis, Robyn, Channel Tres',src:'https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029907758_SG_Lewis_-_Impact.mp3',tag:'Spotlight'},
+ {name:'Sweet Escape (Instrumental)',sub:'Kmpl3x',src:'https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029901492_Kmpl3x_-_Sweet_Escape__Instrumental_.mp3',tag:'Spotlight'},
+ {name:'Se Me Nota (Agarrame)',sub:'Chimbala, Omega',src:'https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029480377_Chimbala_-_Se_Me_Nota__Agarrame___Prod_by_B-One_.mp3',tag:'Spotlight'},
+ {name:'Flip The Coin',sub:'Softable',src:'https://raw.githubusercontent.com/charlygustav/28E/main/radio/1789029075731_Softable_-_Flip_The_Coin.mp3',tag:'Spotlight'},
+ {name:'fuëgo',sub:'BNYX®, Bizarrap, Yeat, Peso Pluma',src:'https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942588655_fu_go__feat._Bizarrap__Yeat__Peso_Pluma__-_BNYX___Bizarrap__Yeat__Peso_Pluma.mp3',tag:'Spotlight'},
+ {name:'MAMI 100PRE SABE (INTERLUDE)',sub:'Alvaro Díaz, Nsqk',src:'https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779506420904_Alvaro_D_az_-_MAMI_100PRE_SABE__INTERLUDE_.mp3',tag:'Spotlight'},
+ {name:'worry - Slowed',sub:'LONOWN, riserayss',src:'https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942600398_worry_-_Slowed_-_LONOWN__riserayss.mp3',tag:'Spotlight'},
+ {name:'Bon Bon',sub:'Fcukers',src:'https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942990131_Bon_Bon_-_Fcukers.mp3',tag:'Spotlight'},
+ {name:'MALASNOTICIAS.',sub:'Alvaro Diaz, LATIN MAFIA',src:'https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1778942999880_MALASNOTICIAS_-_Alvaro_Diaz__LATIN_MAFIA.mp3',tag:'Spotlight'},
+ {name:'Bing Bong',sub:'Yailin la Mas Viral, Puyalo Pantera',src:'radio/Bing Bong - Yailin la Mas Viral - SpotubeDL.com.mp3',tag:'Spotlight'},
+ {name:'Brazilera - Remix',sub:'Chimbala, Fetti031, Chucky73',src:'radio/Brazilera - Remix - Chimbala - SpotubeDL.com.mp3',tag:'Spotlight'},
+ {name:'Como Panas',sub:'Bryant Myers',src:'radio/Como Panas - Bryant Myers - SpotubeDL.com.mp3',tag:'Spotlight'},
+ {name:'Delincuente',sub:'Tokischa',src:'radio/Delincuente - Tokischa - SpotubeDL.com.mp3',tag:'Spotlight'},
+ {name:'God is a woman',sub:'Ariana Grande',src:'radio/God is a woman - Ariana Grande - SpotubeDL.com.mp3',tag:'Spotlight'},
+ {name:'God\'s Plan',sub:'Drake',src:'radio/God\'s Plan - Drake - SpotubeDL.com.mp3',tag:'Spotlight'},
+ {name:'I Like It',sub:'Cardi B, Bad Bunny, J Balvin',src:'radio/I Like It - Cardi B - SpotubeDL.com.mp3',tag:'Spotlight'},
+ {name:'Inolvidable',sub:'Ovy On The Drums, Beéle',src:'radio/Inolvidable - Ovy On The Drums - SpotubeDL.com.mp3',tag:'Spotlight'},
+ {name:'Oscar Winning Tears.',sub:'RAYE',src:'radio/Oscar Winning Tears. - RAYE - SpotubeDL.com.mp3',tag:'Spotlight'},
+ {name:'Pasao De Famarcia',sub:'Lil Naay',src:'radio/Pasao De Famarcia - Lil Naay - SpotubeDL.com.mp3',tag:'Spotlight'},
+ {name:'Thootie',sub:'Ice Spice, Tokischa',src:'radio/Thootie (feat. Tokischa) - Ice Spice - SpotubeDL.com.mp3',tag:'Spotlight'},
+ {name:'Toto Lindo',sub:'Huan62, Tokischa',src:'radio/Toto Lindo - Huan62 - SpotubeDL.com.mp3',tag:'Spotlight'},
+ {name:'Oro Fundido',sub:'Oblivion\'s Mighty Trash, Nimaca',src:'sounds/Oro Fundido - Oblivion\'s Mighty Trash - SpotubeDL.com.mp3',tag:'Spotlight'},
+ {name:'CRAZY (Live)',sub:'Otis McDonald',src:'sounds/Otis McDonald - CRAZY - Live (SPOTISAVER).mp3',tag:'Spotlight'},
+ {name:'O.Sky',sub:'Otis McDonald',src:'sounds/Otis McDonald - O.Sky.mp3',tag:'Spotlight'},
+ {name:'Heaven Can Wait',sub:'Michael Jackson',src:'radio/1779975688545_Michael_Jackson_-_Heaven_Can_Wait.mp3',tag:'Spotlight'},
+ {name:'Slow Burn',sub:'Corbyn Kites',src:'radio/1779443980848_Slow_Burn_-_Corbyn_Kites.mp3',tag:'Spotlight'},
+ {name:'No Pole',sub:'Don Toliver',src:'radio/Don Toliver - No Pole.mp3',tag:'Spotlight'},
+ {name:'Crowd Go Crazy',sub:'John Legend',src:'https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779958727306_John_Legend_-_Crowd_Go_Crazy.mp3',tag:'Spotlight'},
+ {name:'BLOCKKIDS',sub:'THIZZY52',src:'sounds/THIZZY52 - BLOCKKIDS.mp3',tag:'Spotlight'}
+];
+const gardenSynthTracks=[
+ {name:'Un jardín al amanecer',sub:'Piano electrónico · calma',bpm:76,notes:[261.63,329.63,392,523.25,440,392,329.63,293.66],wave:'sine',tag:'Jardín'},
+ {name:'Camino a la fuente',sub:'Arpegio suave · paseo',bpm:100,notes:[293.66,369.99,440,587.33,493.88,440,369.99,329.63],wave:'triangle',tag:'Jardín'},
+ {name:'La página en blanco',sub:'Ambiente cálido · recuerdos',bpm:62,notes:[220,261.63,329.63,392,349.23,329.63,261.63,246.94],wave:'sine',tag:'Jardín'}
+];
+let phoneTracks=[...spotlightSongs,...gardenSynthTracks];
+function syncSpotlightSongs(songs){
+ if(!Array.isArray(songs)||!songs.length)return;
+ const mapped=songs.map(s=>({name:(s.title||'').trim(),sub:(s.artist||'').trim(),src:s.src,tag:'Spotlight'}));
+ phoneTracks=[...mapped,...gardenSynthTracks];
+ if(phoneApp==='music')renderPhone('music');
+}
+try{const cached=localStorage.getItem('yaire_config');if(cached){const cfg=JSON.parse(cached);if(cfg.songs)syncSpotlightSongs(cfg.songs);}}catch(e){}
+window.addEventListener('storage',e=>{if(e.key==='yaire_config'&&e.newValue){try{const cfg=JSON.parse(e.newValue);if(cfg.songs)syncSpotlightSongs(cfg.songs);}catch(e){}}});
+fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config/songs.json').then(r=>r.json()).then(songs=>{if(Array.isArray(songs)&&songs.length)syncSpotlightSongs(songs);}).catch(()=>{});
 const phoneIcons={contacts:'<circle cx="12" cy="8" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/>',messages:'<path d="M3 4h18v13H9l-6 4Z"/><path d="M7 8h10M7 12h7"/>',music:'<path d="M9 18V5l11-2v13M9 5l11-2"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="17" cy="16" rx="3" ry="2"/>',camera:'<path d="M3 7h4l2-3h6l2 3h4v14H3Z"/><circle cx="12" cy="14" r="4"/>',gallery:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8" cy="8" r="1"/><path d="m3 18 6-6 4 4 4-6 4 8"/>',settings:'<circle cx="12" cy="12" r="4"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2"/>'};
 function escPhone(x){return String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function contactOf(id){return phoneContacts.find(c=>c.id===id)||phoneContacts[0]}
@@ -1114,7 +1189,8 @@ renderFilmGallery();
 let phoneApp='home',phoneContact='daniela',phoneCall=null,phonePulse=0,phoneStateRef=null,phoneMessage='',photoZoom=12,photoPitch=8,photoBusy=false;
 let photoDB=null,photoDBPromise=null,phonePhotos=[],photoLoaded=false,photoURLs=[],photoSelected=null;
 let musicContext=null,musicGain=null,musicPlaying=false,musicTrack=0,musicTimer=null,musicNote=0,musicNodes=new Set(),musicFile=null;
-const localMusic=new Audio();localMusic.loop=true;
+const localMusic=new Audio();localMusic.loop=false;
+localMusic.addEventListener('ended',()=>{if(typeof m8RepeatOne!=='undefined'&&m8RepeatOne){localMusic.currentTime=0;localMusic.play().catch(()=>{});}else if(typeof m8Shuffle!=='undefined'&&m8Shuffle){m8Select(Math.floor(Math.random()*phoneTracks.length));}else{m8Select(musicTrack+1);}});
 function phoneNotice(text){phoneMessage=text;if(mode==='phone'){let old=$('phoneAlert');if(old)old.remove();const el=document.createElement('div');el.id='phoneAlert';el.className='phone-toast';el.setAttribute('role','status');el.textContent=text;$('phonePage').prepend(el)}else if(mode==='photo')$('photoHint').textContent=text;else if(mode==='play')toast(text)}
 function updatePhoneBadge(){const p=ensurePhone(),n=Object.values(p.unread).reduce((a,b)=>a+b,0);$('phoneNotify').classList.toggle('hidden',!n);$('phoneButton').setAttribute('aria-label','Abrir teléfono'+(n?' · '+n+' mensajes sin leer':''));$('phoneTime').textContent=gameTime().text;if($('homePhoneClock'))$('homePhoneClock').textContent=gameTime().text;if($('homePhoneDay'))$('homePhoneDay').textContent='Día '+gameTime().day+' · San Francisco de Macorís'}
 const phoneBtn=document.createElement('button');phoneBtn.id='phoneButton';phoneBtn.className='tool-button';phoneBtn.title='Teléfono · P';phoneBtn.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10 5h4m-3 14h2"/></svg><span id="phoneNotify"></span><span class="tool-tip">Teléfono · P</span>';$('pause').before(phoneBtn);
@@ -1241,7 +1317,48 @@ function endPhoneCall(record){if(!phoneCall)return;if(record){ensurePhone().hist
 function getMusicContext(){musicContext=musicContext||new(window.AudioContext||window.webkitAudioContext)();if(!musicGain){musicGain=musicContext.createGain();musicGain.gain.value=ensurePhone().volume;musicGain.connect(musicContext.destination)}if(musicContext.state==='suspended')musicContext.resume().catch(()=>phoneNotice('Toca Reproducir para permitir el audio.'));return musicContext}
 function synthNote(freq,start,duration,gain=.065,wave='sine'){let ctx=getMusicContext(),o=ctx.createOscillator(),g=ctx.createGain();o.type=wave;o.frequency.value=freq;g.gain.setValueAtTime(0,start);g.gain.linearRampToValueAtTime(gain,start+.025);g.gain.exponentialRampToValueAtTime(.0001,start+duration);o.connect(g);g.connect(musicGain);musicNodes.add(o);o.onended=()=>{musicNodes.delete(o);o.disconnect();g.disconnect()};o.start(start);o.stop(start+duration+.05)}
 function ringPhone(){if(!soundOn)return;try{const ctx=getMusicContext();synthNote(659.25,ctx.currentTime,.13,.05);synthNote(783.99,ctx.currentTime+.18,.16,.05)}catch(e){}}
-function startPhoneMusic(){ensurePhone();musicPlaying=true;if(musicFile){localMusic.volume=state.phone.volume;localMusic.play().catch(()=>{musicPlaying=false;phoneNotice('Este archivo no se pudo reproducir. Prueba MP3, WAV u OGG.')});return}try{const ctx=getMusicContext();const play=()=>{if(!musicPlaying||document.hidden||mode==='cinematic'||phoneCall)return;const t=phoneTracks[musicTrack],beat=60/t.bpm;synthNote(t.notes[musicNote%t.notes.length],ctx.currentTime,beat*.9,.065,t.wave);if(musicNote%4===0)synthNote(t.notes[0]/2,ctx.currentTime,beat*3.4,.035,'sine');musicNote++};play();musicTimer=setInterval(play,60000/phoneTracks[musicTrack].bpm)}catch(e){musicPlaying=false;phoneNotice('El audio no está disponible en este navegador.')}}
+function startPhoneMusic(){
+ ensurePhone();
+ musicPlaying=true;
+ if(musicFile){
+  localMusic.volume=state.phone.volume;
+  localMusic.play().catch(()=>{musicPlaying=false;phoneNotice('Este archivo no se pudo reproducir. Prueba MP3, WAV u OGG.')});
+  return;
+ }
+ const t=phoneTracks[musicTrack];
+ if(!t)return;
+ if(t.src){
+  if(musicTimer){clearInterval(musicTimer);musicTimer=null;}
+  for(const n of musicNodes){try{n.stop()}catch(e){}}
+  musicNodes.clear();
+  const targetUrl=new URL(t.src,document.baseURI).href;
+  if(localMusic.src!==targetUrl){
+   localMusic.src=t.src;
+   localMusic.load();
+  }
+  localMusic.volume=state.phone.volume;
+  localMusic.play().catch(e=>{
+   console.warn('Spotlight audio play error:',e);
+  });
+  return;
+ }
+ localMusic.pause();
+ try{
+  const ctx=getMusicContext();
+  const play=()=>{
+   if(!musicPlaying||document.hidden||mode==='cinematic'||phoneCall)return;
+   const beat=60/(t.bpm||80);
+   synthNote(t.notes[musicNote%t.notes.length],ctx.currentTime,beat*.9,.065,t.wave||'sine');
+   if(musicNote%4===0)synthNote(t.notes[0]/2,ctx.currentTime,beat*3.4,.035,'sine');
+   musicNote++;
+  };
+  play();
+  musicTimer=setInterval(play,60000/(t.bpm||80));
+ }catch(e){
+  musicPlaying=false;
+  phoneNotice('El audio no está disponible en este navegador.');
+ }
+}
 function stopPhoneMusic(){musicPlaying=false;if(musicTimer)clearInterval(musicTimer);musicTimer=null;localMusic.pause();for(const n of musicNodes){try{n.stop()}catch(e){}}musicNodes.clear()}
 function openPhotoDatabase(){if(photoDB)return Promise.resolve(photoDB);if(photoDBPromise)return photoDBPromise;photoDBPromise=new Promise((resolve,reject)=>{if(!window.indexedDB){reject(Error('No IndexedDB'));return}const req=indexedDB.open('yaire-phone-photos-v1',1);req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains('photos'))req.result.createObjectStore('photos',{keyPath:'id'})};req.onerror=()=>reject(req.error);req.onblocked=()=>reject(Error('Blocked'));req.onsuccess=()=>{photoDB=req.result;resolve(photoDB)}});return photoDBPromise}
 function photoTransaction(db,mode,action){return new Promise((resolve,reject)=>{const tx=db.transaction('photos',mode),req=action(tx.objectStore('photos'));tx.oncomplete=()=>resolve(req&&req.result);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error)})}
@@ -1366,7 +1483,7 @@ state.phone=safePhone(state.phone);phoneStateRef=state;
 
 
 // Interfaz v6: conserva los datos y la simulación; reorganiza la navegación.
-const uxPaths={back:'<path d="m14 5-7 7 7 7"/>',home:'<path d="m3 11 9-8 9 8v10h-6v-7H9v7H3z"/>',close:'<path d="m6 6 12 12M18 6 6 18"/>',call:'<path d="M5 3h4l2 5-3 2a15 15 0 0 0 6 6l2-3 5 2v4a2 2 0 0 1-2 2C10 21 3 14 3 5a2 2 0 0 1 2-2Z"/>',hangup:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" transform="rotate(135 12 12)"/>',send:'<path d="m3 3 18 9-18 9 4-9-4-9ZM7 12h14"/>',mute:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8"/>',speaker:'<path d="M3 9h4l5-4v14l-5-4H3zM16 8a6 6 0 0 1 0 8M19 5a10 10 0 0 1 0 14"/>',pause:'<path d="M8 5v14M16 5v14"/>',play:'<path d="m8 4 12 8-12 8z"/>',prev:'<path d="M5 5v14M19 5 7 12l12 7z"/>',next:'<path d="M19 5v14M5 5l12 7-12 7z"/>'};
+const uxPaths={back:'<path d="m14 5-7 7 7 7"/>',home:'<path d="m3 11 9-8 9 8v10h-6v-7H9v7H3z"/>',close:'<path d="m6 6 12 12M18 6 6 18"/>',call:'<path d="M5 3h4l2 5-3 2a15 15 0 0 0 6 6l2-3 5 2v4a2 2 0 0 1-2 2C10 21 3 14 3 5a2 2 0 0 1 2-2Z"/>',hangup:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" transform="rotate(135 12 12)"/>',send:'<path d="m3 3 18 9-18 9 4-9-4-9ZM7 12h14"/>',mute:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8"/>',speaker:'<path d="M3 9h4l5-4v14l-5-4H3zM16 8a6 6 0 0 1 0 8M19 5a10 10 0 0 1 0 14"/>',pause:'<path d="M8 5v14M16 5v14"/>',play:'<path d="m8 4 12 8-12 8z"/>',prev:'<path d="M5 5v14M19 5 7 12l12 7z"/>',next:'<path d="M19 5v14M5 5l12 7-12 7z"/>',loop:'<path d="m17 2 4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>',shuffle:'<path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.6-8.6c.8-1.1 2-1.7 3.3-1.7H22M18 2l4 4-4 4M2 6h1.4c1.3 0 2.5.6 3.3 1.7l2.2 2.9M14.7 14.4l1.9 2.5c.8 1.1 2 1.7 3.3 1.7H22M18 22l4-4-4-4"/>'};
 function uxIcon(name){return '<svg viewBox="0 0 24 24" aria-hidden="true">'+(uxPaths[name]||phoneIcons[name]||uxPaths.home)+'</svg>'}
 let uxContactTab='all',uxToastTimeout=0;
 function uxBack(){if(phoneCall){phoneNotice('La llamada sigue activa. Usa Colgar para terminarla.');return}renderPhone(({thread:'messages',contact:'contacts',photo:'gallery',lock:'home'})[phoneApp]||'home')}
@@ -1448,43 +1565,231 @@ const compactRenderBase=renderPhone;
 renderPhone=function(app=phoneApp){compactRenderBase(app);compactChatHeader()};
 
 
-// Reproductor compacto: se integra con el audio y las llamadas existentes.
-let m8LibraryOpen=false,m8Seeking=false;
+// Reproductor Spotlight y Jardín: biblioteca completa, filtros, búsqueda y carátulas.
+let m8LibraryOpen=true,m8Seeking=false,m8Filter='all',m8SearchQuery='',m8RepeatOne=false,m8Shuffle=false;
+const m8ArtCache={};
+
+async function m8GetArtwork(track){
+ if(!track)return null;
+ const key=(track.name+' '+(track.sub||'')).trim().toLowerCase();
+ if(m8ArtCache[key])return m8ArtCache[key];
+ if(track.tag==='Jardín')return null;
+ try{
+  const cleanName=track.name.replace(/^\d+[\s_]*/,'').replace(/\(prod.*?\)/i,'').replace(/\[.*?\]/g,'').trim();
+  const cleanSub=(track.sub||'').split(',')[0].trim();
+  const q=encodeURIComponent(cleanName+' '+cleanSub);
+  const res=await fetch('https://itunes.apple.com/search?term='+q+'&entity=song&limit=1');
+  const data=await res.json();
+  if(data.results&&data.results.length>0&&data.results[0].artworkUrl100){
+   const url=data.results[0].artworkUrl100.replace('100x100bb','300x300bb');
+   m8ArtCache[key]=url;
+   return url;
+  }
+ }catch(e){}
+ return null;
+}
+
 function m8Sync(){
  if(phoneApp!=='music'||!$('m8Play'))return;
- const playing=musicPlaying&&(!musicFile||!localMusic.paused);
+ const t=phoneTracks[musicTrack];
+ const isAudio=musicFile||(t&&t.src);
+ const playing=musicPlaying&&(!isAudio||!localMusic.paused);
  const play=$('m8Play');play.innerHTML=uxIcon(playing?'pause':'play');
  play.setAttribute('aria-label',playing?'Pausar música':'Reproducir música');play.title=playing?'Pausar':'Reproducir';
- $('m8Status').textContent=playing?'Reproduciendo':(musicFile&&localMusic.error?'No se pudo leer este audio':'En pausa');
- const current=musicFile?localMusic.currentTime:musicNote*60/phoneTracks[musicTrack].bpm;
+ $('m8Status').textContent=playing?'Reproduciendo':(isAudio&&localMusic.error?'No se pudo leer este audio':'En pausa');
+ const current=isAudio?localMusic.currentTime:musicNote*60/(t?t.bpm:76);
  $('m8Time').textContent=phoneDuration(Number.isFinite(current)?current:0);
- const duration=musicFile?localMusic.duration:NaN,seek=$('m8Seek');
+ const duration=isAudio?localMusic.duration:NaN,seek=$('m8Seek');
  seek.disabled=!(Number.isFinite(duration)&&duration>0);
- $('m8Length').textContent=musicFile?(Number.isFinite(duration)?phoneDuration(duration):'Cargando…'):'En bucle';
+ $('m8Length').textContent=isAudio?(Number.isFinite(duration)?phoneDuration(duration):'Cargando…'):'En bucle';
  if(!m8Seeking)seek.value=seek.disabled?0:Math.min(100,current/duration*100);
  seek.setAttribute('aria-valuetext',phoneDuration(current||0));
+ const art=$('m8Art');
+ if(art)art.classList.toggle('is-playing',playing);
 }
+
 function m8ReleaseFile(){if(musicFile){localMusic.removeAttribute('src');localMusic.load();URL.revokeObjectURL(musicFile.url);musicFile=null}}
-function m8Select(index){stopPhoneMusic();m8ReleaseFile();musicTrack=(index+phoneTracks.length)%phoneTracks.length;musicNote=0;startPhoneMusic();renderPhone('music')}
+function m8Select(index){stopPhoneMusic();m8ReleaseFile();musicTrack=(index+phoneTracks.length)%phoneTracks.length;musicNote=0;startPhoneMusic();if(phoneApp==='music')renderPhone('music');else m8Sync()}
+
 function m8Render(){
- const page=$('phonePage'),title=musicFile?musicFile.name:phoneTracks[musicTrack].name;
- page.innerHTML='<section class="m8-player" aria-label="Reproductor de música"><div class="m8-hero"><div class="m8-art" aria-hidden="true">'+uxIcon('music')+'</div><div class="m8-title"><h3>'+escPhone(title)+'</h3><p>'+escPhone(musicFile?'Audio de tu dispositivo':phoneTracks[musicTrack].sub)+'</p><span id="m8Status" role="status"></span></div></div><div class="m8-progress"><input id="m8Seek" type="range" min="0" max="100" step="0.1" value="0" aria-label="Posición de la canción"><div><span id="m8Time">00:00</span><span id="m8Length">En bucle</span></div></div><div class="m8-transport"><button type="button" id="m8Previous" aria-label="Melodía anterior" title="Melodía anterior">'+uxIcon('prev')+'</button><button type="button" id="m8Play" aria-label="Reproducir música"></button><button type="button" id="m8Next" aria-label="Melodía siguiente" title="Melodía siguiente">'+uxIcon('next')+'</button></div><div class="m8-volume">'+uxIcon('speaker')+'<input id="m8Volume" type="range" min="0" max="1" step=".01" value="'+ensurePhone().volume+'" aria-label="Volumen de música"><output id="m8VolumeValue" for="m8Volume"></output></div><details class="m8-library" '+(m8LibraryOpen?'open':'')+'><summary>Biblioteca · '+(musicFile?'4':'3')+' pistas</summary><div class="m8-list">'+phoneTracks.map((t,i)=>'<button type="button" class="m8-track" data-m8-track="'+i+'" aria-pressed="'+(!musicFile&&musicTrack===i)+'"><i aria-hidden="true">'+(!musicFile&&musicTrack===i?'♫':String(i+1).padStart(2,'0'))+'</i><span><b>'+escPhone(t.name)+'</b><small>'+escPhone(t.sub)+'</small></span></button>').join('')+(musicFile?'<button type="button" class="m8-track" aria-pressed="true" id="m8Local"><i aria-hidden="true">♫</i><span><b>'+escPhone(musicFile.name)+'</b><small>Audio local · seleccionado</small></span></button>':'')+'</div><button type="button" id="m8Import" class="m8-import">＋ Añadir audio del dispositivo</button><input id="m8File" type="file" accept="audio/*" hidden><p>Tus audios no se suben. Vuelve a seleccionarlos al recargar. Las melodías del jardín se repiten; anterior y siguiente cambian entre ellas.</p></details></section>';
+ const page=$('phonePage'),t=musicFile?{name:musicFile.name,sub:'Audio de tu dispositivo',tag:'Local'}:(phoneTracks[musicTrack]||phoneTracks[0]);
+ const curIndex=musicFile?-1:musicTrack;
+
+ function getFiltered(){
+  return phoneTracks.map((item,idx)=>({item,idx})).filter(({item})=>{
+   if(m8Filter==='spotlight'&&item.tag!=='Spotlight')return false;
+   if(m8Filter==='garden'&&item.tag!=='Jardín')return false;
+   if(m8SearchQuery){
+    const q=m8SearchQuery.toLowerCase();
+    return item.name.toLowerCase().includes(q)||(item.sub||'').toLowerCase().includes(q);
+   }
+   return true;
+  });
+ }
+
+ function buildListHTML(list){
+  let h='';
+  if(musicFile){
+   h+='<button type="button" class="m8-track active" id="m8Local"><i aria-hidden="true">♫</i><span><b>'+escPhone(musicFile.name)+'</b><small>Audio local seleccionado</small></span><span class="m8-track-tag">Local</span></button>';
+  }
+  if(!list.length){
+   h+='<div class="m8-empty">No se encontraron canciones.</div>';
+  }else{
+   h+=list.map(({item,idx})=>{
+    const isActive=!musicFile&&musicTrack===idx;
+    return '<button type="button" class="m8-track '+(isActive?'active':'')+'" data-m8-track="'+idx+'" aria-pressed="'+isActive+'">'+
+     '<i aria-hidden="true">'+(isActive?'♫':String(idx+1).padStart(2,'0'))+'</i>'+
+     '<span><b>'+escPhone(item.name)+'</b><small>'+escPhone(item.sub)+'</small></span>'+
+     '<span class="m8-track-tag '+(item.tag==='Spotlight'?'spotlight':'garden')+'">'+escPhone(item.tag)+'</span>'+
+    '</button>';
+   }).join('');
+  }
+  return h;
+ }
+
+ page.innerHTML='<section class="m8-player" aria-label="Reproductor de música">'+
+ '<div class="m8-hero">'+
+  '<div class="m8-art" id="m8Art" aria-hidden="true">'+
+   '<img id="m8ArtImg" class="m8-art-img hidden" alt="">'+
+   '<span id="m8ArtIcon">'+uxIcon('music')+'</span>'+
+  '</div>'+
+  '<div class="m8-title">'+
+   '<div class="m8-title-row"><h3>'+escPhone(t.name)+'</h3><span class="m8-tag '+(t.tag==='Spotlight'?'spotlight':'garden')+'">'+escPhone(t.tag||'Spotlight')+'</span></div>'+
+   '<p>'+escPhone(t.sub)+'</p>'+
+   '<div class="m8-status-wrap"><div class="m8-eq" aria-hidden="true"><span></span><span></span><span></span></div><span id="m8Status" role="status"></span></div>'+
+  '</div>'+
+ '</div>'+
+ '<div class="m8-progress">'+
+  '<input id="m8Seek" type="range" min="0" max="100" step="0.1" value="0" aria-label="Posición de la canción">'+
+  '<div><span id="m8Time">00:00</span><span id="m8Length">Cargando…</span></div>'+
+ '</div>'+
+ '<div class="m8-transport">'+
+  '<button type="button" id="m8Repeat" class="'+(m8RepeatOne?'active':'')+'" aria-label="'+(m8RepeatOne?'Repetir canción':'Repetir lista')+'" title="'+(m8RepeatOne?'Repetir canción':'Repetir lista')+'">'+uxIcon('loop')+'</button>'+
+  '<button type="button" id="m8Previous" aria-label="Canción anterior" title="Canción anterior">'+uxIcon('prev')+'</button>'+
+  '<button type="button" id="m8Play" aria-label="Reproducir música"></button>'+
+  '<button type="button" id="m8Next" aria-label="Canción siguiente" title="Canción siguiente">'+uxIcon('next')+'</button>'+
+  '<button type="button" id="m8Shuffle" class="'+(m8Shuffle?'active':'')+'" aria-label="Modo aleatorio" title="Modo aleatorio">'+uxIcon('shuffle')+'</button>'+
+ '</div>'+
+ '<div class="m8-volume">'+
+  uxIcon('speaker')+
+  '<input id="m8Volume" type="range" min="0" max="1" step=".01" value="'+ensurePhone().volume+'" aria-label="Volumen de música">'+
+  '<output id="m8VolumeValue" for="m8Volume"></output>'+
+ '</div>'+
+ '<details class="m8-library" '+(m8LibraryOpen?'open':'')+'>'+
+  '<summary><span>Biblioteca · '+phoneTracks.length+' canciones</span></summary>'+
+  '<div class="m8-filters-row">'+
+   '<div class="m8-filter-tabs">'+
+    '<button type="button" class="m8-tab-btn '+(m8Filter==='all'?'active':'')+'" data-filter="all">Todas ('+phoneTracks.length+')</button>'+
+    '<button type="button" class="m8-tab-btn '+(m8Filter==='spotlight'?'active':'')+'" data-filter="spotlight">Spotlight (30)</button>'+
+    '<button type="button" class="m8-tab-btn '+(m8Filter==='garden'?'active':'')+'" data-filter="garden">Jardín (3)</button>'+
+   '</div>'+
+   '<div class="m8-search-box">'+
+    '<input id="m8Search" type="search" placeholder="Buscar canción o artista…" value="'+escPhone(m8SearchQuery)+'" autocomplete="off">'+
+   '</div>'+
+  '</div>'+
+  '<div class="m8-list" id="m8List">'+
+   buildListHTML(getFiltered())+
+  '</div>'+
+  '<button type="button" id="m8Import" class="m8-import">＋ Añadir audio del dispositivo</button>'+
+  '<input id="m8File" type="file" accept="audio/*" hidden>'+
+  '<p class="m8-note">Canciones de Spotlight sincronizadas con audio real y carátulas. Toca cualquier pista para escucharla.</p>'+
+ '</details>'+
+ '</section>';
+
  page.querySelector('.m8-library').ontoggle=e=>{m8LibraryOpen=e.target.open};
- page.querySelectorAll('[data-m8-track]').forEach(b=>b.onclick=()=>m8Select(Number(b.dataset.m8Track)));
- $('m8Previous').onclick=()=>m8Select(musicTrack-1);$('m8Next').onclick=()=>m8Select(musicTrack+1);
- $('m8Play').onclick=()=>{if(musicPlaying)stopPhoneMusic();else startPhoneMusic();m8Sync()};
- if($('m8Local'))$('m8Local').onclick=()=>{if(!musicPlaying)startPhoneMusic();m8Sync()};
- const seek=$('m8Seek');seek.oninput=()=>{m8Seeking=true;if(musicFile&&Number.isFinite(localMusic.duration))localMusic.currentTime=Number(seek.value)*localMusic.duration/100};
- const seekEnd=()=>{m8Seeking=false;m8Sync()};seek.onchange=seekEnd;seek.onpointerup=seekEnd;seek.onpointercancel=seekEnd;seek.onblur=seekEnd;
- const volume=$('m8Volume'),out=$('m8VolumeValue');out.value=Math.round(ensurePhone().volume*100)+'%';
- volume.oninput=()=>{const v=Number(volume.value);ensurePhone().volume=v;localMusic.volume=v;if(musicGain)musicGain.gain.value=v;out.value=Math.round(v*100)+'%'};volume.onchange=()=>phoneCommit();
+
+ function bindListActions(){
+  page.querySelectorAll('[data-m8-track]').forEach(b=>b.onclick=()=>m8Select(Number(b.dataset.m8Track)));
+  if($('m8Local'))$('m8Local').onclick=()=>{if(!musicPlaying)startPhoneMusic();m8Sync();};
+ }
+ bindListActions();
+
+ page.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{m8Filter=b.dataset.filter;renderPhone('music');});
+
+ const searchInput=$('m8Search');
+ if(searchInput){
+  searchInput.oninput=()=>{
+   m8SearchQuery=searchInput.value;
+   $('m8List').innerHTML=buildListHTML(getFiltered());
+   bindListActions();
+  };
+ }
+
+ $('m8Repeat').onclick=()=>{
+  m8RepeatOne=!m8RepeatOne;
+  $('m8Repeat').classList.toggle('active',m8RepeatOne);
+  toast(m8RepeatOne?'Repetir canción actual':'Repetir lista completa');
+ };
+
+ $('m8Shuffle').onclick=()=>{
+  m8Shuffle=!m8Shuffle;
+  $('m8Shuffle').classList.toggle('active',m8Shuffle);
+  toast(m8Shuffle?'Modo aleatorio activado':'Modo secuencial');
+ };
+
+ $('m8Previous').onclick=()=>{
+  if(m8Shuffle)m8Select(Math.floor(Math.random()*phoneTracks.length));
+  else m8Select(musicTrack-1);
+ };
+ $('m8Next').onclick=()=>{
+  if(m8Shuffle)m8Select(Math.floor(Math.random()*phoneTracks.length));
+  else m8Select(musicTrack+1);
+ };
+
+ $('m8Play').onclick=()=>{if(musicPlaying)stopPhoneMusic();else startPhoneMusic();m8Sync();};
+
+ const seek=$('m8Seek');
+ seek.oninput=()=>{
+  m8Seeking=true;
+  const isAudio=musicFile||(phoneTracks[musicTrack]&&phoneTracks[musicTrack].src);
+  if(isAudio&&Number.isFinite(localMusic.duration)){
+   localMusic.currentTime=Number(seek.value)*localMusic.duration/100;
+  }
+ };
+ const seekEnd=()=>{m8Seeking=false;m8Sync();};
+ seek.onchange=seekEnd;seek.onpointerup=seekEnd;seek.onpointercancel=seekEnd;seek.onblur=seekEnd;
+
+ const volume=$('m8Volume'),out=$('m8VolumeValue');
+ out.value=Math.round(ensurePhone().volume*100)+'%';
+ volume.oninput=()=>{
+  const v=Number(volume.value);
+  ensurePhone().volume=v;
+  localMusic.volume=v;
+  if(musicGain)musicGain.gain.value=v;
+  out.value=Math.round(v*100)+'%';
+ };
+ volume.onchange=()=>phoneCommit();
+
  $('m8Import').onclick=()=>$('m8File').click();
- $('m8File').onchange=e=>{const f=e.target.files[0];if(!f)return;stopPhoneMusic();m8ReleaseFile();musicFile={name:f.name,url:URL.createObjectURL(f)};localMusic.src=musicFile.url;startPhoneMusic();renderPhone('music')};
- page.scrollTop=0;m8Sync();
+ $('m8File').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  stopPhoneMusic();m8ReleaseFile();
+  musicFile={name:f.name,url:URL.createObjectURL(f)};
+  localMusic.src=musicFile.url;
+  startPhoneMusic();
+  renderPhone('music');
+ };
+
+ const img=$('m8ArtImg'),ico=$('m8ArtIcon');
+ if(!musicFile&&t.tag==='Spotlight'){
+  m8GetArtwork(t).then(url=>{
+   if(url&&t===phoneTracks[musicTrack]&&img&&ico){
+    img.src=url;img.classList.remove('hidden');ico.classList.add('hidden');
+   }else if(img&&ico){
+    img.classList.add('hidden');ico.classList.remove('hidden');
+   }
+  });
+ }else if(img&&ico){
+  img.classList.add('hidden');ico.classList.remove('hidden');
+ }
+
+ page.scrollTop=0;
+ m8Sync();
+
  if(hasGSAP()){
-  gsap.fromTo('.m8-art',{scale:.75,opacity:0},{scale:1,opacity:1,duration:.4,ease:'back.out(1.5)'});
-  gsap.fromTo('.m8-title, .m8-progress, .m8-volume',{y:10,opacity:0},{y:0,opacity:1,duration:.3,stagger:.04,ease:'power2.out',delay:.06});
-  gsap.fromTo('.m8-transport button',{scale:.8,opacity:0},{scale:1,opacity:1,duration:.3,stagger:.04,ease:'back.out(1.6)',delay:.1});
+  gsap.fromTo('.m8-art',{scale:.8,opacity:0},{scale:1,opacity:1,duration:.35,ease:'back.out(1.4)'});
+  gsap.fromTo('.m8-title, .m8-progress, .m8-volume',{y:10,opacity:0},{y:0,opacity:1,duration:.3,stagger:.03,ease:'power2.out',delay:.05});
+  gsap.fromTo('.m8-transport button',{scale:.85,opacity:0},{scale:1,opacity:1,duration:.3,stagger:.03,ease:'back.out(1.5)',delay:.08});
  }
 }
 const m8RenderBase=renderPhone;
