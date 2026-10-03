@@ -647,7 +647,52 @@ html,body{height:100%;height:100dvh}#world{height:100dvh;touch-action:none}
  #yairePhone .c9-end-row{min-width:170px}
 }
 
-</style></head><body><canvas id="world" aria-label="Jardín 3D de Yaire"></canvas><div id="hud" class="hidden"><div class="top"><div><div class="card" id="resources" role="group" aria-label="Recursos del jardín"><span class="resource" title="Monedas" aria-label="Monedas"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5"/><path d="M10 6v8m2-7H9a1.5 1.5 0 0 0 0 3h2a1.5 1.5 0 0 1 0 3H8"/></svg><span id="coinsValue">0</span></span><span class="resource" title="Semillas" aria-label="Semillas"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15C2 8 8 3 16 3c1 8-3 14-11 12Z"/><path d="M4 17 12 9"/></svg><span id="seedsValue">0</span></span><span class="resource" title="Agua" aria-label="Agua"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2C8 6 4 10 4 13a6 6 0 0 0 12 0c0-3-4-7-6-11Z"/></svg><span id="waterValue">0</span><small id="waterCapacity"></small></span></div><div class="card quest"><button id="journeyHudButton" aria-label="Abrir misiones del jardín" title="Ver misiones, logros y niveles"><span class="mission-heading"><b id="goal">Una fiesta entre flores</b><span id="count"></span></span><span id="questText">Cosecha 12 tulipanes rosas.</span><span class="bar" aria-hidden="true"><span id="progress"></span></span><span id="rankHud" class="progress-status"></span></button></div></div><div class="tools" role="group" aria-label="Controles del jardín"><button id="help" class="tool-button" aria-label="Mostrar controles" aria-expanded="false" aria-controls="hint" title="Mostrar controles"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 .4c0 1.8-2.5 2-2.5 3.6"/><path d="M12 17h.01"/></svg><span class="tool-tip">Ayuda</span></button><button id="sound" class="tool-button" aria-label="Activar efectos de sonido" aria-pressed="false" title="Activar efectos de sonido"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m11 5-6 4H2v6h3l6 4Z"/><path d="m16 9 6 6m0-6-6 6"/></svg><span class="tool-tip">Sonido apagado</span></button><button id="pause" class="tool-button" aria-label="Abrir diario y pausar" aria-haspopup="dialog" title="Pausar · Esc"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg><span class="tool-tip">Pausa · Esc</span></button></div></div><div id="toast" role="status" aria-live="polite"></div><div id="hint" class="card" role="note">WASD / flechas · E: actuar · Mayús: correr · Q / C: cámara</div><div id="joy" aria-label="Palanca de movimiento"><div id="stick"></div></div><div id="actbox"><div class="card" id="target">Acércate a un bancal</div><button id="action">Interactuar</button><div class="cam"><button id="left" aria-label="Girar cámara a la izquierda">↶</button><button id="right" aria-label="Girar cámara a la derecha">↷</button></div></div></div>
+/* Indicador de música en el HUD (Now Playing) */
+.hud-music{position:absolute;top:max(16px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:6px;padding:4px 6px 4px 5px;background:var(--ui-bg,rgba(255,253,249,.94));border:1px solid var(--ui-line,rgba(48,70,62,.14));border-radius:999px;box-shadow:0 4px 18px rgba(32,56,45,.12),0 1px 3px rgba(32,56,45,.06);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);pointer-events:auto;z-index:3;max-width:min(340px,calc(100vw - 32px));transition:opacity .25s ease,transform .25s cubic-bezier(.2,.8,.2,1)}
+.hud-music.hidden{opacity:0;pointer-events:none;transform:translateX(-50%) translateY(-12px) scale(.96);visibility:hidden}
+.hud-music-main{display:flex;align-items:center;gap:8px;background:transparent;border:0;padding:0 4px 0 0;margin:0;color:inherit;font:inherit;cursor:pointer;border-radius:999px;min-height:34px;min-width:0;text-align:left}
+.hud-music-main:hover{opacity:.9}
+.hud-music-main:focus-visible{outline:2px solid var(--ui-accent,#a84472);outline-offset:2px}
+.hud-music-art{position:relative;width:32px;height:32px;border-radius:50%;background:#f1ede4;display:grid;place-items:center;overflow:hidden;flex-shrink:0;border:1px solid rgba(48,70,62,.1)}
+.hud-music-img{width:100%;height:100%;object-fit:cover;border-radius:50%;animation:hudSpin 14s linear infinite}
+.hud-music.is-paused .hud-music-img{animation-play-state:paused}
+@keyframes hudSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.hud-music-eq{display:inline-flex;align-items:flex-end;justify-content:center;gap:2.5px;width:16px;height:14px}
+.hud-music-eq span{width:2.5px;background:var(--ui-accent,#a84472);border-radius:1.5px;height:40%;transition:height .15s ease}
+.hud-music.is-playing .hud-music-eq span:nth-child(1){animation:hudEq1 .75s ease-in-out infinite alternate}
+.hud-music.is-playing .hud-music-eq span:nth-child(2){animation:hudEq2 .65s ease-in-out infinite alternate .15s}
+.hud-music.is-playing .hud-music-eq span:nth-child(3){animation:hudEq3 .8s ease-in-out infinite alternate .25s}
+@keyframes hudEq1{0%{height:25%}100%{height:95%}}
+@keyframes hudEq2{0%{height:40%}100%{height:100%}}
+@keyframes hudEq3{0%{height:20%}100%{height:85%}}
+.hud-music-info{display:flex;flex-direction:column;justify-content:center;min-width:0;line-height:1.25;padding-right:4px}
+.hud-music-title{font-size:12px;font-weight:700;color:var(--ui-ink,#29483e);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px}
+.hud-music-sub{font-size:10px;color:var(--ui-muted,#68786f);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px}
+.hud-music-play{display:grid;place-items:center;width:28px;height:28px;min-height:28px;padding:0;margin:0;border:0;border-radius:50%;background:#eef2e6;color:#29483e;cursor:pointer;flex-shrink:0;transition:background .15s,transform .15s,color .15s}
+.hud-music-play:hover{background:#e2e8d7;color:var(--ui-accent,#a84472)}
+.hud-music-play:active{transform:scale(.9)}
+.hud-music-play svg{width:14px;height:14px;fill:currentColor}
+#phoneButton.music-active{color:var(--ui-accent,#a84472);background:#f6e8ee;border-color:rgba(168,68,114,.4);box-shadow:0 0 0 2px rgba(168,68,114,.18)}
+#phoneButton.music-active #phoneNotify{background:#a84472;box-shadow:0 0 0 2px rgba(168,68,114,.35);animation:phoneMusicPulse 1.6s ease-in-out infinite}
+@keyframes phoneMusicPulse{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.35);opacity:1}}
+@media(max-width:767px){
+ .hud-music{top:max(64px,calc(env(safe-area-inset-top) + 52px));left:auto;right:max(16px,env(safe-area-inset-right));transform:none;max-width:min(260px,calc(100vw - 32px))}
+ .hud-music.hidden{transform:translateY(-8px) scale(.95)}
+ .hud-music-title,.hud-music-sub{max-width:120px}
+}
+@media(max-width:460px){
+ .hud-music{top:max(116px,calc(env(safe-area-inset-top) + 104px));right:max(12px,env(safe-area-inset-right));max-width:calc(100vw - 24px)}
+}
+@media(max-height:500px){
+ .hud-music{top:max(8px,env(safe-area-inset-top));left:50%;right:auto;transform:translateX(-50%);padding:2px 6px 2px 4px}
+ .hud-music.hidden{transform:translateX(-50%) translateY(-8px)}
+ .hud-music-art{width:26px;height:26px}
+ .hud-music-play{width:24px;height:24px;min-height:24px}
+ .hud-music-play svg{width:12px;height:12px}
+ .hud-music-title{font-size:11px;max-width:110px}
+ .hud-music-sub{font-size:9px;max-width:110px}
+}
+</style></head><body><canvas id="world" aria-label="Jardín 3D de Yaire"></canvas><div id="hud" class="hidden"><div class="top"><div><div class="card" id="resources" role="group" aria-label="Recursos del jardín"><span class="resource" title="Monedas" aria-label="Monedas"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5"/><path d="M10 6v8m2-7H9a1.5 1.5 0 0 0 0 3h2a1.5 1.5 0 0 1 0 3H8"/></svg><span id="coinsValue">0</span></span><span class="resource" title="Semillas" aria-label="Semillas"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 15C2 8 8 3 16 3c1 8-3 14-11 12Z"/><path d="M4 17 12 9"/></svg><span id="seedsValue">0</span></span><span class="resource" title="Agua" aria-label="Agua"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2C8 6 4 10 4 13a6 6 0 0 0 12 0c0-3-4-7-6-11Z"/></svg><span id="waterValue">0</span><small id="waterCapacity"></small></span></div><div class="card quest"><button id="journeyHudButton" aria-label="Abrir misiones del jardín" title="Ver misiones, logros y niveles"><span class="mission-heading"><b id="goal">Una fiesta entre flores</b><span id="count"></span></span><span id="questText">Cosecha 12 tulipanes rosas.</span><span class="bar" aria-hidden="true"><span id="progress"></span></span><span id="rankHud" class="progress-status"></span></button></div></div><div class="tools" role="group" aria-label="Controles del jardín"><button id="help" class="tool-button" aria-label="Mostrar controles" aria-expanded="false" aria-controls="hint" title="Mostrar controles"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 .4c0 1.8-2.5 2-2.5 3.6"/><path d="M12 17h.01"/></svg><span class="tool-tip">Ayuda</span></button><button id="sound" class="tool-button" aria-label="Activar efectos de sonido" aria-pressed="false" title="Activar efectos de sonido"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m11 5-6 4H2v6h3l6 4Z"/><path d="m16 9 6 6m0-6-6 6"/></svg><span class="tool-tip">Sonido apagado</span></button><button id="pause" class="tool-button" aria-label="Abrir diario y pausar" aria-haspopup="dialog" title="Pausar · Esc"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg><span class="tool-tip">Pausa · Esc</span></button></div></div><div id="hudMusic" class="hud-music hidden" role="region" aria-label="Reproduciendo ahora en el teléfono"><button type="button" id="hudMusicMain" class="hud-music-main" title="Abrir reproductor de música en el teléfono"><div class="hud-music-art"><img id="hudMusicImg" class="hud-music-img hidden" alt=""><div id="hudMusicEq" class="hud-music-eq" aria-hidden="true"><span></span><span></span><span></span></div></div><div class="hud-music-info"><span class="hud-music-title" id="hudMusicTitle"></span><span class="hud-music-sub" id="hudMusicSub"></span></div></button><button type="button" id="hudMusicPlay" class="hud-music-play" aria-label="Pausar música" title="Pausar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg></button></div><div id="toast" role="status" aria-live="polite"></div><div id="hint" class="card" role="note">WASD / flechas · E: actuar · Mayús: correr · Q / C: cámara</div><div id="joy" aria-label="Palanca de movimiento"><div id="stick"></div></div><div id="actbox"><div class="card" id="target">Acércate a un bancal</div><button id="action">Interactuar</button><div class="cam"><button id="left" aria-label="Girar cámara a la izquierda">↶</button><button id="right" aria-label="Girar cámara a la derecha">↷</button></div></div></div>
 <div id="title" class="overlay"><div class="panel welcome" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle" tabindex="-1">
 <header class="arrival-header"><a class="arrival-brand" href="#" id="brandHome" aria-label="Volver a la bienvenida"><span class="brand-flower" aria-hidden="true">✳</span><span>28E<small>Donde crecen las flores</small></span></a><span class="welcome-tag" id="welcomeTag">Un nuevo comienzo</span><button type="button" class="welcome-sound" id="introSound" aria-pressed="false">Efectos de sonido: apagados</button></header>
 <nav class="arrival-nav" aria-label="Explorar la introducción"><button type="button" id="navWelcome" data-story="storyWelcome" aria-controls="storyWelcome" aria-pressed="true">Bienvenida</button><button type="button" id="navPrologue" data-story="storyPrologue" aria-controls="storyPrologue" aria-pressed="false">Prólogo</button><button type="button" id="navWorld" data-story="storyWorld" aria-controls="storyWorld" aria-pressed="false">El valle</button><button type="button" id="navPeople" data-story="storyPeople" aria-controls="storyPeople" aria-pressed="false">Personajes</button><button type="button" id="navTimeline" data-story="storyTimeline" aria-controls="storyTimeline" aria-pressed="false">Cronología</button><button type="button" id="navChapters" data-story="storyChapters" aria-controls="storyChapters" aria-pressed="false">Mi cuaderno</button><button type="button" id="navGuide" data-story="storyGuide" aria-controls="storyGuide" aria-pressed="false">Cómo jugar</button></nav>
@@ -892,7 +937,7 @@ const particles=[];function burst(x,z,c,n=10){for(let i=0;i<n;i++)particles.push
 function act(){if(mode!=='play')return;target=nearest();if(!target){toast('Acércate a un bancal, a la fuente o al puesto.');return}let p=target.p;if(target.type==='well'){if(state.water<(state.can?150:100)-.01)recordJourney('refills');state.water=state.can?150:100;bumpResource('waterValue','#2690b8');toast('¡Regadera llena!');tone(520);burst(p.x,p.z,C.water);save();return}if(target.type==='sign'){recordJourney('signRead');save();setMode('paused');selectDiaryTab('paneMissions');return}if(target.type==='shop'){recordJourney('shopVisit');if(state.seeds===0&&!plots.some(p=>p.planted)&&state.coins<10){state.seeds=1;bumpResource('seedsValue','#71895b');toast('Una semilla de regalo. ¡No te rindas, Yaire!')}shopUI();setMode('shop');return}if(!p.planted){if(state.seeds<=0){toast('Necesitas semillas: visita el puesto amarillo.');return}state.seeds--;bumpResource('seedsValue','#71895b');recordJourney('planted',3);p.planted=true;p.growth=.02;p.moisture=0;toast('Semilla plantada. Ahora dale un poco de agua.');tone(420);burst(p.x,p.z,C.tan,5)}else if(p.growth>=1){p.planted=false;p.growth=p.moisture=0;state.coins+=15;state.harvest++;bumpResource('coinsValue','#d49b29');bumpResource('progress','#b55780');state.journey.xp+=10;state.journey.stats.earned+=15;tone(880,.2);burst(p.x,p.z,C.pink,16);toast([3,6,9,12].includes(state.harvest)?'Nueva página del cuaderno · Diario → Historia':'¡Tulipán rosa cosechado! +15 monedas');if(state.harvest>=12&&!state.won){state.won=true;$('winStats').textContent='12 tulipanes cosechados · '+Math.floor(state.time/60)+' min de jardín';setMode('win')}}else{let cost=state.can?12:20;if(p.moisture>.55){toast('La tierra sigue húmeda. Dale tiempo para crecer.');return}if(state.water<cost){toast('Te falta agua. Llena la regadera en la fuente azul.');return}state.water-=cost;bumpResource('waterValue','#2690b8');recordJourney('watered',2);p.moisture=1;burst(p.x,p.z,C.water);tone(560);toast('¡Regado! La flor crecerá mientras la tierra esté húmeda.')}save()}
 $('action').onclick=act;
 let lastTargetKey=null;
-function hud(){ $('coinsValue').textContent=state.coins;$('seedsValue').textContent=state.seeds;$('waterValue').textContent=Math.round(state.water);$('waterCapacity').textContent='/'+(state.can?150:100);$('progress').style.width=Math.min(100,state.harvest/12*100)+'%';$('count').textContent=state.won?state.harvest+' ✿':state.harvest+' / 12';$('goal').textContent=state.won?'Cultivo libre':'Tulipanes rosas';$('questText').textContent=state.won?'Sigue cultivando a tu ritmo.':'Cosecha 12 tulipanes rosas.';target=nearest();const curTargetKey=target?(target.type+(target.p?target.p.x+','+target.p.z:'')):null;if(curTargetKey!==lastTargetKey){lastTargetKey=curTargetKey;if(target&&hasGSAP()){gsap.fromTo('#action',{scale:1.05},{scale:1,duration:.22,ease:'back.out(2)'})}}let label='Interactuar',text='Acércate a un bancal';if(target){let p=target.p;if(target.type==='well'){label='Llenar agua';text='Fuente del jardín'}else if(target.type==='shop'){label='Abrir puesto';text='Semillas y mejoras'}else if(target.type==='sign'){label='Leer cartel';text='Consejos de cultivo'}else if(!p.planted){label='Sembrar';text='Bancal vacío · 1 semilla'}else if(p.growth>=1){label='Cosechar';text='¡Tulipán listo! · +15 ●'}else{label=p.moisture>.55?'Creciendo…':'Regar';text='Crecimiento: '+Math.floor(p.growth*100)+'% · '+(p.moisture>0?'húmedo':'seco')}}$('action').textContent=label;$('target').textContent=text;$('action').disabled=!target||(target.type==='plot'&&target.p.planted&&target.p.growth<1&&target.p.moisture>.55);journeyHUD()}
+function hud(){ $('coinsValue').textContent=state.coins;$('seedsValue').textContent=state.seeds;$('waterValue').textContent=Math.round(state.water);$('waterCapacity').textContent='/'+(state.can?150:100);$('progress').style.width=Math.min(100,state.harvest/12*100)+'%';$('count').textContent=state.won?state.harvest+' ✿':state.harvest+' / 12';$('goal').textContent=state.won?'Cultivo libre':'Tulipanes rosas';$('questText').textContent=state.won?'Sigue cultivando a tu ritmo.':'Cosecha 12 tulipanes rosas.';target=nearest();const curTargetKey=target?(target.type+(target.p?target.p.x+','+target.p.z:'')):null;if(curTargetKey!==lastTargetKey){lastTargetKey=curTargetKey;if(target&&hasGSAP()){gsap.fromTo('#action',{scale:1.05},{scale:1,duration:.22,ease:'back.out(2)'})}}let label='Interactuar',text='Acércate a un bancal';if(target){let p=target.p;if(target.type==='well'){label='Llenar agua';text='Fuente del jardín'}else if(target.type==='shop'){label='Abrir puesto';text='Semillas y mejoras'}else if(target.type==='sign'){label='Leer cartel';text='Consejos de cultivo'}else if(!p.planted){label='Sembrar';text='Bancal vacío · 1 semilla'}else if(p.growth>=1){label='Cosechar';text='¡Tulipán listo! · +15 ●'}else{label=p.moisture>.55?'Creciendo…':'Regar';text='Crecimiento: '+Math.floor(p.growth*100)+'% · '+(p.moisture>0?'húmedo':'seco')}}$('action').textContent=label;$('target').textContent=text;$('action').disabled=!target||(target.type==='plot'&&target.p.planted&&target.p.growth<1&&target.p.moisture>.55);journeyHUD();if(typeof hudSyncMusic==='function')hudSyncMusic()}
 const controlKeys=['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','KeyE','Space','KeyQ','KeyC','ShiftLeft','ShiftRight'];window.addEventListener('keydown',e=>{if(e.code==='Escape'){e.preventDefault();if(mode==='title'&&started)setMode('play');else if(mode==='play')setMode('paused');else if(['paused','shop'].includes(mode))setMode('play');return}if(mode!=='play')return;if(controlKeys.includes(e.code)){e.preventDefault();keys.add(e.code)}if(!e.repeat&&(e.code==='KeyE'||e.code==='Space'))act()});window.addEventListener('keyup',e=>keys.delete(e.code));window.addEventListener('blur',()=>{clearInput();if(mode==='play')setMode('paused')});document.addEventListener('visibilitychange',()=>{if(document.hidden){clearInput();if(mode==='play')setMode('paused');save()}});window.addEventListener('pagehide',save);
 const joy=$('joy');function joyMove(e){let r=joy.getBoundingClientRect(),x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2,limit=38,len=Math.hypot(x,y);if(len>limit){x*=limit/len;y*=limit/len}joyX=x/limit;joyY=y/limit;if(Math.hypot(joyX,joyY)<.13)joyX=joyY=0;$('stick').style.transform='translate('+x+'px,'+y+'px)'}joy.addEventListener('pointerdown',e=>{if(mode!=='play'||joyID!==null)return;joyID=e.pointerId;joy.setPointerCapture(e.pointerId);joyMove(e);e.preventDefault()});joy.addEventListener('pointermove',e=>{if(e.pointerId===joyID){joyMove(e);e.preventDefault()}});function joyEnd(e){if(e.pointerId!==joyID)return;joyID=null;joyX=joyY=0;$('stick').style.transform='translate(0,0)'}for(let type of ['pointerup','pointercancel','lostpointercapture'])joy.addEventListener(type,joyEnd);
 function resolve(){const radius=.27;player.x=clamp(player.x,-9.55,9.55);player.z=clamp(player.z,-9.55,9.55);for(let pass=0;pass<3;pass++)for(let o of obstacles){if(o.r){let dx=player.x-o.x,dz=player.z-o.z,d=Math.hypot(dx,dz),min=o.r+radius;if(d<min){if(d<.00001){player.x=o.x+min;player.z=o.z}else{player.x=o.x+dx/d*min;player.z=o.z+dz/d*min}}}else{let lx=o.x-o.w/2,hx=o.x+o.w/2,lz=o.z-o.d/2,hz=o.z+o.d/2,cx=clamp(player.x,lx,hx),cz=clamp(player.z,lz,hz),dx=player.x-cx,dz=player.z-cz,d=Math.hypot(dx,dz);if(d>0&&d<radius){player.x=cx+dx/d*radius;player.z=cz+dz/d*radius}else if(d===0){let choices=[{d:player.x-lx,x:lx-radius,z:player.z},{d:hx-player.x,x:hx+radius,z:player.z},{d:player.z-lz,x:player.x,z:lz-radius},{d:hz-player.z,x:player.x,z:hz+radius}].sort((a,b)=>a.d-b.d);player.x=choices[0].x;player.z=choices[0].z}}}player.x=clamp(player.x,-9.55,9.55);player.z=clamp(player.z,-9.55,9.55)}
@@ -1305,9 +1350,10 @@ function ringPhone(){if(!soundOn)return;try{const ctx=getMusicContext();synthNot
 function startPhoneMusic(){
  ensurePhone();
  musicPlaying=true;
+ if(typeof hudSyncMusic==='function')hudSyncMusic();
  if(musicFile){
   localMusic.volume=state.phone.volume;
-  localMusic.play().catch(()=>{musicPlaying=false;phoneNotice('Este archivo no se pudo reproducir. Prueba MP3, WAV u OGG.')});
+  localMusic.play().catch(()=>{musicPlaying=false;phoneNotice('Este archivo no se pudo reproducir. Prueba MP3, WAV u OGG.');if(typeof hudSyncMusic==='function')hudSyncMusic();});
   return;
  }
  const t=phoneTracks[musicTrack];
@@ -1342,9 +1388,10 @@ function startPhoneMusic(){
  }catch(e){
   musicPlaying=false;
   phoneNotice('El audio no está disponible en este navegador.');
+  if(typeof hudSyncMusic==='function')hudSyncMusic();
  }
 }
-function stopPhoneMusic(){musicPlaying=false;if(musicTimer)clearInterval(musicTimer);musicTimer=null;localMusic.pause();for(const n of musicNodes){try{n.stop()}catch(e){}}musicNodes.clear()}
+function stopPhoneMusic(){musicPlaying=false;if(musicTimer)clearInterval(musicTimer);musicTimer=null;localMusic.pause();for(const n of musicNodes){try{n.stop()}catch(e){}}musicNodes.clear();if(typeof hudSyncMusic==='function')hudSyncMusic();}
 function openPhotoDatabase(){if(photoDB)return Promise.resolve(photoDB);if(photoDBPromise)return photoDBPromise;photoDBPromise=new Promise((resolve,reject)=>{if(!window.indexedDB){reject(Error('No IndexedDB'));return}const req=indexedDB.open('yaire-phone-photos-v1',1);req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains('photos'))req.result.createObjectStore('photos',{keyPath:'id'})};req.onerror=()=>reject(req.error);req.onblocked=()=>reject(Error('Blocked'));req.onsuccess=()=>{photoDB=req.result;resolve(photoDB)}});return photoDBPromise}
 function photoTransaction(db,mode,action){return new Promise((resolve,reject)=>{const tx=db.transaction('photos',mode),req=action(tx.objectStore('photos'));tx.oncomplete=()=>resolve(req&&req.result);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error)})}
 async function loadPhonePhotos(){if(photoLoaded)return;photoLoaded=true;try{let db=await openPhotoDatabase();const rows=await photoTransaction(db,'readonly',store=>store.getAll());phonePhotos=rows.filter(p=>p&&p.blob instanceof Blob).sort((a,b)=>b.id-a.id).slice(0,30)}catch(e){}}
@@ -1742,10 +1789,112 @@ function m8Render(){
  }
 }
 const m8RenderBase=renderPhone;
-renderPhone=function(app=phoneApp){m8RenderBase(app);$('yairePhone').classList.toggle('phone-music-active',phoneApp==='music')};
+let hudMusicHideTimer=null,lastHudTrackKey=null;
+
+function hudSyncMusic(){
+ const el=$('hudMusic');
+ if(!el)return;
+ const t=musicFile?{name:musicFile.name,sub:'Audio de tu dispositivo'}:(phoneTracks[musicTrack]||phoneTracks[0]);
+ const isAudio=musicFile||(t&&t.src);
+ const isPlaying=musicPlaying&&(!isAudio||!localMusic.paused);
+
+ // El indicador solo se muestra en el modo de juego si el teléfono no está abierto
+ const inPlayMode=(mode==='play'||mode==='photo')&&!document.body.classList.contains('phone-open')&&!document.body.classList.contains('in-cinema');
+
+ if(!inPlayMode){
+  el.classList.add('hidden');
+  return;
+ }
+
+ if(isPlaying){
+  if(hudMusicHideTimer){clearTimeout(hudMusicHideTimer);hudMusicHideTimer=null;}
+  el.classList.remove('hidden','is-paused');
+  el.classList.add('is-playing');
+
+  const titleEl=$('hudMusicTitle'),subEl=$('hudMusicSub'),playBtn=$('hudMusicPlay');
+  const trackKey=(t.name+'|'+(t.sub||''));
+
+  if(titleEl&&titleEl.textContent!==t.name)titleEl.textContent=t.name;
+  if(subEl&&subEl.textContent!==(t.sub||''))subEl.textContent=t.sub||'';
+  if(playBtn){
+   playBtn.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>';
+   playBtn.setAttribute('aria-label','Pausar '+t.name);
+   playBtn.title='Pausar música';
+  }
+
+  const img=$('hudMusicImg'),eq=$('hudMusicEq');
+  if(!musicFile&&t&&t.src){
+   const key=(t.name+' '+(t.sub||'')).trim().toLowerCase();
+   if(m8ArtCache[key]){
+    if(img&&eq){img.src=m8ArtCache[key];img.classList.remove('hidden');eq.classList.add('hidden');}
+   }else{
+    m8GetArtwork(t).then(url=>{
+     if(url&&img&&eq&&t===phoneTracks[musicTrack]){
+      img.src=url;img.classList.remove('hidden');eq.classList.add('hidden');
+     }
+    });
+   }
+  }else if(img&&eq){
+   img.classList.add('hidden');eq.classList.remove('hidden');
+  }
+
+  if(trackKey!==lastHudTrackKey){
+   lastHudTrackKey=trackKey;
+   if(hasGSAP()){
+    gsap.fromTo(el,{scale:.9,y:-6,opacity:.7},{scale:1,y:0,opacity:1,duration:.32,ease:'back.out(1.5)'});
+   }
+  }
+
+  const pBtn=$('phoneButton');
+  if(pBtn)pBtn.classList.add('music-active');
+ }else{
+  el.classList.remove('is-playing');
+  el.classList.add('is-paused');
+  const pBtn=$('phoneButton');
+  if(pBtn)pBtn.classList.remove('music-active');
+
+  const playBtn=$('hudMusicPlay');
+  if(playBtn){
+   playBtn.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l12 7-12 7z"/></svg>';
+   playBtn.setAttribute('aria-label','Reanudar música');
+   playBtn.title='Reanudar música';
+  }
+
+  if(!hudMusicHideTimer&&!el.classList.contains('hidden')){
+   hudMusicHideTimer=setTimeout(()=>{
+    el.classList.add('hidden');
+    hudMusicHideTimer=null;
+   },3200);
+  }else if(!hudMusicHideTimer){
+   el.classList.add('hidden');
+  }
+ }
+}
+
+function bindHudMusic(){
+ const main=$('hudMusicMain'),play=$('hudMusicPlay');
+ if(main){
+  main.onclick=()=>{
+   openPhone();
+   renderPhone('music');
+  };
+ }
+ if(play){
+  play.onclick=e=>{
+   e.stopPropagation();
+   if(musicPlaying)stopPhoneMusic();
+   else startPhoneMusic();
+   m8Sync();
+   hudSyncMusic();
+  };
+ }
+}
+bindHudMusic();
+
+renderPhone=function(app=phoneApp){m8RenderBase(app);$('yairePhone').classList.toggle('phone-music-active',phoneApp==='music');hudSyncMusic()};
 const m8TickBase=phoneTick;let m8Clock=0;
-phoneTick=function(dt){m8TickBase(dt);m8Clock+=dt;if(m8Clock>=.25){m8Clock=0;m8Sync()}};
-for(const event of ['loadedmetadata','durationchange','timeupdate','play','pause','error'])localMusic.addEventListener(event,m8Sync);
+phoneTick=function(dt){m8TickBase(dt);m8Clock+=dt;if(m8Clock>=.25){m8Clock=0;m8Sync();hudSyncMusic()}};
+for(const event of ['loadedmetadata','durationchange','timeupdate','play','pause','error'])localMusic.addEventListener(event,()=>{m8Sync();hudSyncMusic()});
 
 
 // Sin navegación redundante mientras hay una llamada activa.
