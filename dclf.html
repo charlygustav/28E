@@ -803,6 +803,10 @@ function journeyDecor(m){
  if(state.journey.stage>=8){for(let x of [-1.5,1.5])m.box(x,0,8,.1,2.5,.1,C.tan);m.line([-1.5,2.5,8],[1.5,2.5,8],.08,C.tan);for(let i=0;i<9;i++)m.blob(-1.4+i*.35,2.5,8,.18,.16,.15,i%2?C.pink:C.cream,6)}
 }
 
+let phoneApp='home',phoneContact='daniela',phoneCall=null,phonePulse=0,phoneStateRef=null,phoneMessage='',photoZoom=12,photoPitch=8,photoBusy=false;
+let photoDB=null,photoDBPromise=null,phonePhotos=[],photoLoaded=false,photoURLs=[],photoSelected=null;
+let musicContext=null,musicGain=null,musicPlaying=false,musicTrack=0,musicTimer=null,musicNote=0,musicNodes=new Set(),musicFile=null;
+const localMusic=new Audio();localMusic.loop=false;
 let state,player={x:0,z:6.5,a:Math.PI},angle=0,mode='title',started=false,low=false,target=null,savedAvailable=false,storageOK=true,soundOn=false,audio=null,toastTime=0,saveTime=0,walk=0,joyX=0,joyY=0,joyID=null,moving=false;
 let cameraTurn=0;const KEY='yaire-tulipanes-v1',keys=new Set();function fresh(){return {coins:15,seeds:10,water:100,harvest:0,can:false,fert:false,boots:false,won:false,time:0,journey:freshJourney(),cinema:{seen:[],auto:true,extrasAuto:false,subtitles:true,reduced:matchMedia('(prefers-reduced-motion: reduce)').matches}}}state=fresh();
 const phoneContacts=[
@@ -1215,11 +1219,7 @@ const preview=$('previewCinema')||document.createElement('button');if(!preview.p
 renderFilmGallery();
 
 
-// TELÉFONO NARRATIVO: datos locales, sin llamadas, SMS ni WhatsApp reales.
-let phoneApp='home',phoneContact='daniela',phoneCall=null,phonePulse=0,phoneStateRef=null,phoneMessage='',photoZoom=12,photoPitch=8,photoBusy=false;
-let photoDB=null,photoDBPromise=null,phonePhotos=[],photoLoaded=false,photoURLs=[],photoSelected=null;
-let musicContext=null,musicGain=null,musicPlaying=false,musicTrack=0,musicTimer=null,musicNote=0,musicNodes=new Set(),musicFile=null;
-const localMusic=new Audio();localMusic.loop=false;
+// TELÉFONO NARRATIVO: datos locales, sin llamadas, SMS ni WhatsApp reales (variables de estado inicializadas arriba).
 localMusic.addEventListener('ended',()=>{if(typeof m8RepeatOne!=='undefined'&&m8RepeatOne){localMusic.currentTime=0;localMusic.play().catch(()=>{});}else if(typeof m8Shuffle!=='undefined'&&m8Shuffle){m8Select(Math.floor(Math.random()*phoneTracks.length));}else{m8Select(musicTrack+1);}});
 function phoneNotice(text){phoneMessage=text;if(mode==='phone'){let old=$('phoneAlert');if(old)old.remove();const el=document.createElement('div');el.id='phoneAlert';el.className='phone-toast';el.setAttribute('role','status');el.textContent=text;$('phonePage').prepend(el)}else if(mode==='photo')$('photoHint').textContent=text;else if(mode==='play')toast(text)}
 function updatePhoneBadge(){const p=ensurePhone(),n=Object.values(p.unread).reduce((a,b)=>a+b,0);$('phoneNotify').classList.toggle('hidden',!n);$('phoneButton').setAttribute('aria-label','Abrir teléfono'+(n?' · '+n+' mensajes sin leer':''));$('phoneTime').textContent=gameTime().text;if($('homePhoneClock'))$('homePhoneClock').textContent=gameTime().text;if($('homePhoneDay'))$('homePhoneDay').textContent='Día '+gameTime().day+' · San Francisco de Macorís'}
@@ -1793,7 +1793,7 @@ let hudMusicHideTimer=null,lastHudTrackKey=null;
 
 function hudSyncMusic(){
  const el=$('hudMusic');
- if(!el)return;
+ if(!el||typeof musicPlaying==='undefined'||typeof phoneTracks==='undefined'||typeof mode==='undefined'||mode==='title')return;
  const t=musicFile?{name:musicFile.name,sub:'Audio de tu dispositivo'}:(phoneTracks[musicTrack]||phoneTracks[0]);
  const isAudio=musicFile||(t&&t.src);
  const isPlaying=musicPlaying&&(!isAudio||!localMusic.paused);
