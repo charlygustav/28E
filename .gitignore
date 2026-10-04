@@ -9,3 +9,8 @@ ios/
 
 *.pem
 WhatsApp Chat with*.txt
+
+scratch/
+.codex/
+.impeccable/
+video.mp4

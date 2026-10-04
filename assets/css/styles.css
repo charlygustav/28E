@@ -2492,9 +2492,7 @@
                     transition: none;
                 }
 
-                .ghub-card:hover::after {
-                    
-                }
+
 
                 @keyframes ghubShimmer {
                     to {
@@ -3622,9 +3620,7 @@
                 }
             }
 
-            .ticker-track {
-                
-            }
+
 
             .ticker-track:hover {
                 animation-play-state: paused;
@@ -4461,6 +4457,12 @@
         border-color: #6ee7b7;
         box-shadow: 0 0 25px rgba(16,185,129,0.5), inset 0 1px 0 rgba(255,255,255,0.4);
     }
+    .ghub-card-v3.rose:hover .ghub-v3-btn {
+        background: #e11d48;
+        color: #fff;
+        border-color: #fda4af;
+        box-shadow: 0 0 25px rgba(225,29,72,0.5), inset 0 1px 0 rgba(255,255,255,0.4);
+    }
 }
 
 .ghub-v3-tag {
@@ -4512,6 +4514,12 @@
     box-shadow: inset 0 1px 0 rgba(16,185,129,0.2), 0 25px 50px -12px rgba(0,0,0,0.8);
 }
 .ghub-card-v3.emerald .bg-glow { background: radial-gradient(circle at 50% 25%, rgba(16,185,129,0.4) 0%, transparent 70%); }
+
+.ghub-card-v3.rose {
+    background: linear-gradient(160deg, #321121 0%, #121214 60%);
+    box-shadow: inset 0 1px 0 rgba(225,29,72,0.25), 0 25px 50px -12px rgba(0,0,0,0.8);
+}
+.ghub-card-v3.rose .bg-glow { background: radial-gradient(circle at 50% 25%, rgba(225,29,72,0.45) 0%, transparent 70%); }
 
 /* High-end SVG Noise overlay */
 .ghub-card-v3::after {

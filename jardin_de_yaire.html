@@ -796,42 +796,33 @@ canvas{display:block}
 </div>
 <div class="screen" id="intro">
   <div class="panel welcome">
-    <div class="ornament"><span style="font-size:32px">❀</span><span class="brand">UNA EXPERIENCIA 3D ILUSTRADA</span></div>
-    <h1>El jardín<br>de <em>Yaire.</em></h1>
-    <p>Entre senderos de luz dorada, árboles en flor y un estanque de aguas calmas, un ramo te espera. Explora cada rincón, encuentra <strong>24 tulipanes rosas</strong> y llévalos al pabellón.</p>
-    <div class="pill-row">
-      <span class="pill">🌸 Gráficos Mejorados</span>
-      <span class="pill">🍃 Viento & Agua Viva</span>
-      <span class="pill">✨ Resplandor Cálido</span>
-    </div>
-    <div class="status" id="loadStatus" role="status">Cargando la magia del jardín…</div>
+    <div class="ornament"><span style="font-size:24px">❀</span><span class="brand">El jardín de Yaire</span></div>
+    <h1>Encuentra<br>los <em>tulipanes.</em></h1>
+    <p>Explora el jardín, recoge <strong>24 tulipanes rosas</strong> y llévalos al pabellón.</p>
+    <div class="status" id="loadStatus" role="status">Cargando…</div>
     <button class="primary" id="startBtn" disabled>Entrar al jardín →</button>
-    <button class="primary secondary" onclick="window.location.href='index.html#minijuegos'" style="margin-top:12px;">Volver al Games Hub</button>
-    <p class="tiny">Diseñado con cariño especialmente para Yaire. Sonido procedimental opcional sin descargas pesadas.</p>
+    <button class="primary secondary" onclick="window.location.href='index.html#minijuegos'" style="margin-top:10px;">← Volver</button>
   </div>
 </div>
 
 <div class="screen" id="pause" hidden>
   <div class="panel">
-    <div class="eyebrow" style="margin-bottom:14px">Un momento de calma</div>
-    <h2>Tu jardín te espera.</h2>
-    <p>La aventura está en pausa.</p>
+    <h2>En pausa.</h2>
     <div class="row">
-      <label for="quality">Calidad gráfica</label>
+      <label for="quality">Calidad</label>
       <select id="quality">
-        <option value="high" selected>Alta (Bloom & Efectos)</option>
+        <option value="high" selected>Alta</option>
         <option value="auto">Automática</option>
-        <option value="low">Ligera (Bajo consumo)</option>
+        <option value="low">Ligera</option>
       </select>
     </div>
     <div class="row">
-      <label for="audioToggle">Sonidos del jardín</label>
+      <label for="audioToggle">Sonido</label>
       <input type="checkbox" id="audioToggle">
     </div>
-    <p class="helptext" style="margin-top:16px">PC: WASD / Flechas, Shift para correr, arrastrar para rotar y rueda para acercar. Móvil: joystick izquierdo y deslizar pantalla para mirar.</p>
-    <button class="primary" id="resumeBtn">Volver al jardín</button>
-    <button class="primary secondary" id="restartBtn">Empezar de nuevo</button>
-    <button class="primary secondary" onclick="window.location.href='index.html#minijuegos'" style="margin-top:12px;">Volver al Games Hub</button>
+    <button class="primary" id="resumeBtn">Continuar →</button>
+    <button class="primary secondary" id="restartBtn" style="margin-top:10px;">Empezar de nuevo</button>
+    <button class="primary secondary" onclick="window.location.href='index.html#minijuegos'" style="margin-top:8px;">← Volver</button>
   </div>
 </div>
 

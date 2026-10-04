@@ -883,72 +883,70 @@
 
                                     <!-- PANTALLA DE ESPERA -->
                                     <div>
-                                        <div class="flex items-center justify-between mb-2">
-                                            <label
-                                                class="block text-[11px] font-bold text-zinc-500 uppercase tracking-widest">Pantalla
-                                                de Espera</label>
-                                            <div class="flex items-center gap-4">
+                                        <!-- Header -->
+                                        <div class="flex items-center justify-between mb-3">
+                                            <div>
+                                                <label class="block text-[11px] font-bold text-zinc-500 uppercase tracking-widest mb-0.5">Pantalla de Espera</label>
+                                                <p class="text-xs text-zinc-600">Qué verán los usuarios durante el mantenimiento.</p>
+                                            </div>
+                                            <div class="flex items-center gap-1">
                                                 <button type="button"
                                                     onclick="window.open('https://www.yaire.site/?dev=1', '_blank')"
-                                                    class="flex items-center gap-1.5 text-[11px] font-bold text-zinc-500 hover:text-emerald-400 transition-colors">
-                                                    <i class="ph-bold ph-key text-sm"></i>Bypass
+                                                    class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-bold text-zinc-500 hover:text-emerald-400 hover:bg-emerald-500/10 transition-all">
+                                                    <i class="ph-bold ph-key text-xs"></i>Bypass
                                                 </button>
                                                 <button type="button" onclick="openMaintPreview()"
-                                                    class="flex items-center gap-1.5 text-[11px] font-bold text-zinc-500 hover:text-amber-400 transition-colors">
-                                                    <i class="ph-bold ph-arrow-square-out text-sm"></i>Preview
+                                                    class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-bold text-zinc-500 hover:text-amber-400 hover:bg-amber-500/10 transition-all">
+                                                    <i class="ph-bold ph-arrow-square-out text-xs"></i>Preview
                                                 </button>
                                             </div>
                                         </div>
-                                        <p class="text-xs text-zinc-600 mb-4">Elige qué verán los usuarios mientras el
-                                            sitio está en mantenimiento.</p>
                                         <input type="hidden" id="maint-screen" value="cinematic">
-                                        <div class="grid grid-cols-3 gap-3">
+                                        <!-- Cards horizontales -->
+                                        <div class="flex flex-col gap-2">
                                             <!-- Card: Cinemática -->
                                             <div id="maint-screen-card-cinematic" onclick="setMaintScreen('cinematic')"
-                                                class="relative p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 maint-screen-card border-amber-500 bg-amber-500/5"
+                                                class="relative flex items-center gap-4 px-4 py-3.5 rounded-xl border-2 cursor-pointer transition-all duration-200 maint-screen-card border-amber-500/60 bg-amber-500/[0.06] hover:bg-amber-500/10"
                                                 data-screen="cinematic">
-                                                <div
-                                                    class="maint-check absolute top-3 right-3 w-5 h-5 rounded-full flex items-center justify-center bg-amber-500">
-                                                    <i class="ph-bold ph-check text-black text-[10px]"></i>
+                                                <div class="maint-icon w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 bg-amber-500/20 text-amber-400">
+                                                    <i class="ph-fill ph-film-strip text-lg"></i>
                                                 </div>
-                                                <div
-                                                    class="maint-icon w-10 h-10 rounded-xl flex items-center justify-center mb-3 bg-amber-500/15 text-amber-400">
-                                                    <i class="ph-fill ph-film-strip text-xl"></i>
+                                                <div class="flex-1 min-w-0">
+                                                    <div class="text-sm font-bold text-white leading-tight">Cinemática</div>
+                                                    <div class="text-[11px] text-zinc-500 mt-0.5">Fondo de video, animaciones premium</div>
                                                 </div>
-                                                <div class="text-sm font-bold text-white">Cinemática</div>
-                                                <div class="text-[11px] text-zinc-500 mt-0.5">Fondo de video,
-                                                    animaciones premium</div>
+                                                <div class="flex items-center gap-2 flex-shrink-0">
+                                                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 uppercase tracking-wide">Activo</span>
+                                                    <div class="maint-check w-5 h-5 rounded-full flex items-center justify-center bg-amber-500">
+                                                        <i class="ph-bold ph-check text-black text-[10px]"></i>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <!-- Card: Especial 6 Meses -->
                                             <div id="maint-screen-card-special" onclick="setMaintScreen('special')"
-                                                class="relative p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 maint-screen-card border-white/5 bg-white/[0.02]"
+                                                class="relative flex items-center gap-4 px-4 py-3.5 rounded-xl border-2 cursor-pointer transition-all duration-200 maint-screen-card border-white/5 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10"
                                                 data-screen="special">
-                                                <div
-                                                    class="maint-check absolute top-3 right-3 w-5 h-5 rounded-full flex items-center justify-center bg-transparent">
-
+                                                <div class="maint-icon w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 bg-white/5 text-zinc-500">
+                                                    <i class="ph-fill ph-confetti text-lg"></i>
                                                 </div>
-                                                <div
-                                                    class="maint-icon w-10 h-10 rounded-xl flex items-center justify-center mb-3 bg-white/5 text-zinc-600">
-                                                    <i class="ph-fill ph-confetti text-xl"></i>
+                                                <div class="flex-1 min-w-0">
+                                                    <div class="text-sm font-bold text-zinc-300 leading-tight">Especial 6 Meses</div>
+                                                    <div class="text-[11px] text-zinc-600 mt-0.5">Estadísticas y Wrapped</div>
                                                 </div>
-                                                <div class="text-sm font-bold text-white">Especial 6 Meses</div>
-                                                <div class="text-[11px] text-zinc-500 mt-0.5">Estadísticas y Wrapped
-                                                </div>
+                                                <div class="maint-check w-5 h-5 rounded-full flex items-center justify-center border border-white/10 bg-transparent flex-shrink-0"></div>
                                             </div>
                                             <!-- Card: Tráiler Yaire -->
                                             <div id="maint-screen-card-trailer" onclick="setMaintScreen('trailer')"
-                                                class="relative p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 maint-screen-card border-white/5 bg-white/[0.02]"
+                                                class="relative flex items-center gap-4 px-4 py-3.5 rounded-xl border-2 cursor-pointer transition-all duration-200 maint-screen-card border-white/5 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10"
                                                 data-screen="trailer">
-                                                <div
-                                                    class="maint-check absolute top-3 right-3 w-5 h-5 rounded-full flex items-center justify-center bg-transparent">
-
+                                                <div class="maint-icon w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 bg-white/5 text-zinc-500">
+                                                    <i class="ph-fill ph-plant text-lg"></i>
                                                 </div>
-                                                <div
-                                                    class="maint-icon w-10 h-10 rounded-xl flex items-center justify-center mb-3 bg-white/5 text-zinc-600">
-                                                    <i class="ph-fill ph-plant text-xl"></i>
+                                                <div class="flex-1 min-w-0">
+                                                    <div class="text-sm font-bold text-zinc-300 leading-tight">Tráiler Yaire</div>
+                                                    <div class="text-[11px] text-zinc-600 mt-0.5">Jardín 3D + música</div>
                                                 </div>
-                                                <div class="text-sm font-bold text-white">Tráiler Yaire</div>
-                                                <div class="text-[11px] text-zinc-500 mt-0.5">Jardín 3D + música</div>
+                                                <div class="maint-check w-5 h-5 rounded-full flex items-center justify-center border border-white/10 bg-transparent flex-shrink-0"></div>
                                             </div>
                                         </div>
                                     </div>
