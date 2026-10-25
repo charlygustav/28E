@@ -13,19 +13,19 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-10-21T05:14:49.586Z",
+  "lastUpdated": "2026-10-25T11:18:38.390Z",
   "maintDate": "2026-10-28T18:00",
   "maintMsg": "",
   "maintScreen": "trailer",
   "maintType": "scheduled",
-  "mantenimiento": true,
+  "mantenimiento": false,
   "refugeText": "",
   "refugeTitle": "Te escucho, mi amor",
   "songs": [
     {
-      "title": "Loko",
       "artist": "Lawd Ito, Nicolas Rengifo",
-      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1792559637795_ES_Loko_-_Lawd_Ito.mp3"
+      "src": "https://raw.githubusercontent.com/charlygustav/28E/main/radio/1792559637795_ES_Loko_-_Lawd_Ito.mp3",
+      "title": "Loko"
     },
     {
       "artist": "Otis McDonald, Mani Draper, Joni Inez",
