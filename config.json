@@ -13,7 +13,7 @@
   "heroBadge_en": "Happy 3 Months!",
   "heroBadge_fr": "Joyeux 3 mois !",
   "heroBadge_pt": "Feliz 3 meses!",
-  "lastUpdated": "2026-10-27T10:20:14.599Z",
+  "lastUpdated": "2026-10-27T10:21:09.360Z",
   "maintDate": "2026-10-28T18:00",
   "maintMsg": "",
   "maintScreen": "special",
@@ -166,11 +166,6 @@
       "artist": "Don Toliver",
       "src": "radio/Don Toliver - No Pole.mp3",
       "title": "No Pole"
-    },
-    {
-      "artist": "John Legend",
-      "src": "https://raw.githubusercontent.com/charlygustav/yaire/main/radio/1779958727306_John_Legend_-_Crowd_Go_Crazy.mp3",
-      "title": "Crowd Go Crazy"
     },
     {
       "artist": "THIZZY52",
