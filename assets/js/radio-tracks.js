@@ -70,12 +70,10 @@
                     } catch (e) { }
                 };
 
-                // ── YOUTUBE LIVE STREAM RADIO ENGINE ─────────────────────────
+                // ── YOUTUBE LIVE STREAM RADIO ENGINE (AUDIO PURO + METADATOS EN VIVO) ──
                 const YOUTUBE_STREAM_ID = 'Gfnj_4BU9cs';
-                const YOUTUBE_STREAM_THUMB = 'https://i.ytimg.com/vi/Gfnj_4BU9cs/hqdefault.jpg';
                 let ytRadioPlayer = null;
                 let ytRadioReady = false;
-
                 function loadYouTubeAPI(callback) {
                     if (window.YT && window.YT.Player) {
                         callback();
@@ -96,16 +94,6 @@
                 }
 
                 function initYouTubeRadio(autoplay = false) {
-                    const container = document.getElementById('spotlight-yt-stream-container');
-                    if (container) {
-                        container.classList.remove('hidden');
-                        container.style.display = 'block';
-                    }
-                    const vinylContainer = document.getElementById('spotlight-vinyl-container');
-                    if (vinylContainer) {
-                        vinylContainer.style.display = 'none';
-                    }
-
                     if (ytRadioPlayer && typeof ytRadioPlayer.playVideo === 'function') {
                         if (autoplay) {
                             try { ytRadioPlayer.playVideo(); } catch (e) { }
@@ -120,7 +108,7 @@
                                 videoId: YOUTUBE_STREAM_ID,
                                 playerVars: {
                                     autoplay: autoplay ? 1 : 0,
-                                    controls: 1,
+                                    controls: 0,
                                     playsinline: 1,
                                     rel: 0,
                                     modestbranding: 1,
@@ -138,7 +126,7 @@
                                         if (event.data === YT.PlayerState.PLAYING) {
                                             isSpotPlaying = true;
                                             spotlightUpdateUI();
-                                            document.title = '28E · Radio en Vivo';
+                                            document.title = currentRadioState && currentRadioState.title ? `28E Radio · ${currentRadioState.title}` : '28E · Radio en Vivo';
                                         } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
                                             isSpotPlaying = false;
                                             spotlightUpdateUI();
@@ -153,11 +141,54 @@
                     });
                 }
 
+                function updateRadioTrackUI(state) {
+                    if (!state) return;
+                    const expTitle = document.getElementById('spotlight-expanded-title');
+                    const expArtist = document.getElementById('spotlight-expanded-artist');
+                    const compactArtist = document.getElementById('spotlight-artist');
+                    const compactTitle = document.getElementById('spotlight-title');
+
+                    const titleText = state.title || '28E Radio';
+                    const artistText = state.artist || 'Transmisión en Vivo';
+
+                    if (expTitle) expTitle.textContent = titleText;
+                    if (compactTitle) compactTitle.textContent = titleText;
+                    if (expArtist) expArtist.innerHTML = `<span class="text-rose-500 font-bold tracking-widest uppercase animate-pulse">🔴 EN VIVO</span> · ${artistText}`;
+                    if (compactArtist) compactArtist.innerHTML = `<span class="text-rose-500 font-bold tracking-wider animate-pulse">🔴 EN VIVO</span> · ${artistText}`;
+
+                    if (state.title && state.artist) {
+                        fetchSpotlightArtwork({ title: state.title, artist: state.artist }).then(url => {
+                            if (spotlightMode === 'radio') {
+                                updateAllArtwork(url || 'tulip.ico?v=3');
+                            }
+                        });
+                    } else {
+                        updateAllArtwork('tulip.ico?v=3');
+                    }
+                }
+
+                function subscribeToRadioState() {
+                    if (!window.yaireRadioFb) {
+                        setTimeout(subscribeToRadioState, 250);
+                        return;
+                    }
+                    const { db, ref, onValue } = window.yaireRadioFb;
+                    onValue(ref(db, 'radio_state/current'), snap => {
+                        const state = snap.val();
+                        currentRadioState = state;
+                        if (!state) return;
+                        if (spotlightMode === 'radio') {
+                            updateRadioTrackUI(state);
+                        }
+                    });
+                }
+                subscribeToRadioState();
+
                 function startYouTubeRadio() {
                     if (spotAudio) spotAudio.pause();
                     isSpotPlaying = true;
                     spotlightUpdateUI();
-                    document.title = '28E · Radio en Vivo';
+                    document.title = currentRadioState && currentRadioState.title ? `28E Radio · ${currentRadioState.title}` : '28E · Radio en Vivo';
 
                     if (ytRadioPlayer && typeof ytRadioPlayer.playVideo === 'function') {
                         try { ytRadioPlayer.playVideo(); } catch (e) { }
@@ -820,6 +851,7 @@
 
                     if (mode === 'music') {
                         // Activate Music UI
+                        stopYouTubeRadio();
                         btnMusic.className = "px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full transition-all bg-white shadow-sm cursor-pointer";
                         btnRadio.className = "px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full transition-all text-zinc-400 hover:text-white cursor-pointer";
                         btnMusic.setAttribute('data-active', 'true');
@@ -838,30 +870,22 @@
                             radioVis.classList.remove('flex');
                         }
 
-                        stopYouTubeRadio();
-                        const ytContainer = document.getElementById('spotlight-yt-stream-container');
-                        if (ytContainer) {
-                            ytContainer.classList.add('hidden');
-                            ytContainer.style.display = 'none';
-                        }
-                        const vinylContainer = document.getElementById('spotlight-vinyl-container');
-                        if (vinylContainer) {
-                            vinylContainer.style.display = '';
-                        }
-                        const vinylArt = document.getElementById('spotlight-vinyl-art');
-                        if (vinylArt) vinylArt.classList.remove('scale-[0.8]');
-
-                        // Restore track info
+                        // Restore music track info
                         const t = spotlightTracks[currentSpotTrack];
                         if (t) {
                             if (compactTitle) compactTitle.textContent = t.title;
                             if (compactArtist) compactArtist.textContent = t.artist;
                             if (expTitle) expTitle.textContent = t.title;
                             if (expArtist) expArtist.textContent = t.artist;
-                            fetchSpotlightArtwork(t).then(artUrl => updateAllArtwork(artUrl));
+                            fetchSpotlightArtwork(t).then(artUrl => {
+                                if (spotlightMode === 'music') updateAllArtwork(artUrl);
+                            });
                         }
                     } else {
-                        // Activate Radio UI
+                        // Activate Radio UI (Pure Audio Stream + Live Metadata & Artwork)
+                        if (spotAudio) spotAudio.pause();
+                        initYouTubeRadio(isSpotPlaying);
+
                         btnRadio.className = "px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full transition-all bg-rose-500 shadow-sm cursor-pointer";
                         btnMusic.className = "px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full transition-all text-zinc-400 hover:text-white cursor-pointer";
                         btnRadio.setAttribute('data-active', 'true');
@@ -880,34 +904,16 @@
                             radioVis.classList.add('flex');
                         }
 
-                        const vinylArt = document.getElementById('spotlight-vinyl-art');
-                        if (vinylArt) vinylArt.classList.add('scale-[0.8]', 'transition-transform', 'duration-300');
-
-                        const dict = typeof dictionary !== 'undefined' && typeof currentLang !== 'undefined' && dictionary[currentLang] ? dictionary[currentLang] : {
-                            radio_live_badge: '🔴 EN VIVO',
-                            radio_live_title: '🔴 Transmisión en Vivo'
-                        };
-
-                        if (spotAudio) spotAudio.pause();
-                        const ytContainer = document.getElementById('spotlight-yt-stream-container');
-                        if (ytContainer) {
-                            ytContainer.classList.remove('hidden');
-                            ytContainer.style.display = 'block';
+                        // Set live track info from Firebase stream state
+                        if (currentRadioState) {
+                            updateRadioTrackUI(currentRadioState);
+                        } else {
+                            if (compactTitle) compactTitle.textContent = '28E Radio';
+                            if (compactArtist) compactArtist.innerHTML = `<span class="text-rose-500 font-bold tracking-wider animate-pulse">🔴 EN VIVO</span>`;
+                            if (expTitle) expTitle.textContent = '28E Radio';
+                            if (expArtist) expArtist.innerHTML = `<span class="text-rose-500 font-bold tracking-widest uppercase animate-pulse">🔴 TRANSMISIÓN EN VIVO</span>`;
+                            updateAllArtwork('tulip.ico?v=3');
                         }
-                        const vinylContainer = document.getElementById('spotlight-vinyl-container');
-                        if (vinylContainer) {
-                            vinylContainer.style.display = 'none';
-                        }
-                        initYouTubeRadio(isSpotPlaying);
-
-                        // Set live text
-                        if (compactTitle) compactTitle.textContent = '28E Radio';
-                        if (compactArtist) compactArtist.innerHTML = `<span class="text-rose-500 font-bold tracking-wider animate-pulse">🔴 EN DIRECTO</span>`;
-                        if (expTitle) expTitle.textContent = '28E Radio';
-                        if (expArtist) expArtist.innerHTML = `<span class="text-rose-500 font-bold tracking-widest uppercase animate-pulse">🔴 TRANSMISIÓN EN VIVO</span>`;
-
-                        // Use YouTube stream thumbnail
-                        updateAllArtwork(YOUTUBE_STREAM_THUMB);
                     }
                 }
 
