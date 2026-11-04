@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 115 48" width="115" height="48" fill="none">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&amp;display=swap');
+      .brand-28e {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-weight: 900;
+        font-size: 44px;
+        letter-spacing: -0.055em;
+        fill: #ffffff;
+      }
+    </style>
+  </defs>
+  <text x="2" y="38" class="brand-28e">28E</text>
+</svg>

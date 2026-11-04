@@ -1,0 +1,510 @@
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+const cors = require('cors');
+const { AccessToken } = require('livekit-server-sdk');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: { origin: '*', methods: ['GET', 'POST'] },
+  pingTimeout: 60000,
+  pingInterval: 25000
+});
+
+let CHANNEL_PASSWORD = process.env.CHANNEL_PASSWORD || 'changeme123';
+const MAX_USERS = 4;
+const CHANNEL = 'principal';
+
+const https = require('https');
+function fetchPasswordFromFirebase() {
+  https.get('https://yaire-591ca-default-rtdb.firebaseio.com/config/voicePassword.json', (res) => {
+    let data = '';
+    res.on('data', chunk => data += chunk);
+    res.on('end', () => {
+      try {
+        const pwd = JSON.parse(data);
+        if (pwd && typeof pwd === 'string' && pwd.trim().length > 0) {
+          CHANNEL_PASSWORD = pwd.trim();
+          console.log(`[Firebase] Loaded voice password: ${CHANNEL_PASSWORD}`);
+        }
+      } catch (e) {
+        console.error('[Firebase] Error parsing voice password:', e);
+      }
+    });
+  }).on('error', (err) => {
+    console.error('[Firebase] Error fetching voice password:', err);
+  });
+}
+fetchPasswordFromFirebase();
+
+const users = new Map();
+const chatLog = [];
+
+// ── AWS NETWORK MONITORING ──────────────────────────────────────────────────
+const fs = require('fs');
+let lastNet = { rx: 0, tx: 0, time: Date.now() };
+let currentNetSpeed = { rx_bps: 0, tx_bps: 0, rx_mb: '0.00', tx_mb: '0.00' };
+
+function formatBytes(bytesPerSec) {
+  if (bytesPerSec === 0) return '0.00 KB/s';
+  const k = 1024;
+  if (bytesPerSec < k * k) return (bytesPerSec / k).toFixed(2) + ' KB/s';
+  return (bytesPerSec / (k * k)).toFixed(2) + ' MB/s';
+}
+
+function updateNetStats() {
+  try {
+    const data = fs.readFileSync('/proc/net/dev', 'utf8');
+    const lines = data.split('\n');
+    let totalRx = 0;
+    let totalTx = 0;
+    for (let i = 2; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (!line) continue;
+      const parts = line.split(/:|\s+/);
+      const iface = parts[0];
+      if (iface === 'lo') continue; // skip loopback
+      totalRx += parseInt(parts[1], 10) || 0;
+      totalTx += parseInt(parts[9], 10) || 0;
+    }
+    const now = Date.now();
+    const dt = (now - lastNet.time) / 1000;
+    if (dt > 0 && lastNet.time !== 0 && (totalRx >= lastNet.rx)) {
+      currentNetSpeed.rx_bps = (totalRx - lastNet.rx) / dt;
+      currentNetSpeed.tx_bps = (totalTx - lastNet.tx) / dt;
+      currentNetSpeed.rx_mb = formatBytes(currentNetSpeed.rx_bps);
+      currentNetSpeed.tx_mb = formatBytes(currentNetSpeed.tx_bps);
+    }
+    lastNet = { rx: totalRx, tx: totalTx, time: now };
+  } catch (e) {
+    // Only happens on non-linux OS (like Windows development), ignore
+    currentNetSpeed.rx_mb = 'N/A';
+    currentNetSpeed.tx_mb = 'N/A';
+  }
+}
+setInterval(updateNetStats, 2000);
+
+// ── MUSIC STATE ──────────────────────────────────────────────────────────────
+let musicQueue = [];
+let musicState = { currentIndex: -1, isPlaying: false, startedAt: null, pausedAt: null, pausedTime: 0 };
+
+function broadcastUsers() {
+  const list = Array.from(users.entries()).map(([id, u]) => ({
+    id,
+    displayName: u.displayName,
+    photoURL: u.photoURL,
+    muted: u.muted,
+    dnd: u.dnd
+  }));
+  io.to(CHANNEL).emit('channel_users', { users: list });
+}
+
+function handleLeave(socket) {
+  if (!users.has(socket.id)) return;
+  const { displayName } = users.get(socket.id);
+  users.delete(socket.id);
+  socket.to(CHANNEL).emit('user_left', { userId: socket.id });
+  broadcastUsers();
+  if (users.size === 0) {
+    musicQueue = [];
+    musicState = { currentIndex: -1, isPlaying: false, startedAt: null, pausedAt: null, pausedTime: 0 };
+  }
+  console.log(`[-] ${displayName} left  (total: ${users.size})`);
+}
+
+io.on('connection', (socket) => {
+  console.log(`[~] New socket: ${socket.id}`);
+
+  // ── JOIN ──────────────────────────────────────────────────────────────────
+  socket.on('get_room_status', () => {
+    socket.emit('room_status', { 
+      users: Array.from(users.values()), 
+      musicQueue: musicQueue 
+    });
+  });
+
+  socket.on('join_channel', ({ password, displayName, photoURL }) => {
+    // if (password !== CHANNEL_PASSWORD) {
+    //   return socket.emit('join_error', { message: 'Contraseña incorrecta.' });
+    // }
+    if (users.size >= MAX_USERS) {
+      return socket.emit('join_error', { message: 'Canal lleno (máx. 4 usuarios).' });
+    }
+    if (!displayName || displayName.trim().length < 1) {
+      return socket.emit('join_error', { message: 'Escribe tu nombre.' });
+    }
+
+    // Evict any ghost session with the same display name
+    for (const [oldId, oldUser] of users.entries()) {
+      if (oldUser.displayName === displayName.trim() && oldId !== socket.id) {
+        users.delete(oldId);
+        io.to(oldId).emit('join_error', { message: 'Nueva sesión iniciada en otro lugar.' });
+        io.sockets.sockets.get(oldId)?.disconnect(true);
+        io.to(CHANNEL).emit('user_left', { userId: oldId });
+      }
+    }
+
+    // Add user
+    users.set(socket.id, { displayName: displayName.trim(), photoURL, muted: false, dnd: false, camEnabled: false });
+    socket.join(CHANNEL);
+
+    const existingUsers = Array.from(users.entries())
+      .filter(([id]) => id !== socket.id)
+      .map(([id, u]) => ({ id, displayName: u.displayName, photoURL: u.photoURL, muted: u.muted, dnd: u.dnd, camEnabled: u.camEnabled }));
+
+    // Tell the joiner who's already here
+    socket.emit('joined', { userId: socket.id, existingUsers });
+
+    // Tell everyone else a new user arrived
+    socket.to(CHANNEL).emit('user_joined', {
+      userId: socket.id,
+      displayName: displayName.trim(),
+      photoURL,
+      camEnabled: false
+    });
+
+    broadcastUsers();
+    console.log(`[+] ${displayName} joined (total: ${users.size})`);
+  });
+
+  // ── WebRTC RELAY ──────────────────────────────────────────────────────────
+  socket.on('webrtc_offer', ({ to, sdp }) => socket.to(to).emit('webrtc_offer', { from: socket.id, sdp }));
+  socket.on('webrtc_answer', ({ to, sdp }) => socket.to(to).emit('webrtc_answer', { from: socket.id, sdp }));
+  socket.on('ice_candidate', ({ to, candidate }) => socket.to(to).emit('ice_candidate', { from: socket.id, candidate }));
+
+  // ── MUTE STATE ────────────────────────────────────────────────────────────
+  socket.on('mute_state', ({ muted }) => {
+    if (users.has(socket.id)) {
+      users.get(socket.id).muted = muted;
+      socket.to(CHANNEL).emit('user_mute_state', { userId: socket.id, muted });
+    }
+  });
+
+  // ── CAM STATE ─────────────────────────────────────────────────────────────
+  socket.on('cam_state', ({ camEnabled }) => {
+    if (users.has(socket.id)) {
+      users.get(socket.id).camEnabled = camEnabled;
+      socket.to(CHANNEL).emit('user_cam_state', { userId: socket.id, camEnabled });
+    }
+  });
+
+  // ── DND STATE ─────────────────────────────────────────────────────────────
+  socket.on('dnd_state', ({ dnd }) => {
+    if (users.has(socket.id)) {
+      users.get(socket.id).dnd = dnd;
+      socket.to(CHANNEL).emit('user_dnd_state', { userId: socket.id, dnd });
+    }
+  });
+
+  // ── SPEAKING STATE ────────────────────────────────────────────────────────
+  socket.on('speaking_state', ({ speaking }) => {
+    socket.to(CHANNEL).emit('speaking_state', { from: socket.id, speaking });
+  });
+
+  // ── REACTIONS ─────────────────────────────────────────────────────────────
+  socket.on('reaction', ({ emoji }) => {
+    socket.to(CHANNEL).emit('reaction', { from: socket.id, emoji });
+  });
+
+  // ── CHAT MESSAGE ─────────────────────────────────────────────────────────
+  socket.on('chat_message', ({ text }) => {
+    const user = users.get(socket.id);
+    if (!user || !text?.trim()) return;
+    const msg = {
+      from: socket.id,
+      name: user.displayName,
+      text: text.trim().slice(0, 500),
+      ts: Date.now()
+    };
+    chatLog.push(msg);
+    if (chatLog.length > 50) chatLog.shift(); // Keep last 50 messages
+    io.to(CHANNEL).emit('chat_message', msg);
+  });
+
+  // ── CHAT TYPING ──────────────────────────────────────────────────────────
+  socket.on('chat_typing', ({ isTyping }) => {
+    const user = users.get(socket.id);
+    if (!user) return;
+    socket.to(CHANNEL).emit('chat_typing', {
+      from: socket.id,
+      name: user.displayName,
+      isTyping
+    });
+  });
+  // ── RING CHANNEL (notify others of incoming call) ────────────────────────
+  socket.on('ring_channel', () => {
+    const user = users.get(socket.id);
+    if (!user) return;
+    socket.to(CHANNEL).emit('incoming_ring', {
+      from: socket.id,
+      name: user.displayName
+    });
+  });
+
+  // ── MUSIC ─────────────────────────────────────────────────────────────────
+  socket.on('music_add', async ({ url, title, type, playNow, cover, artist }) => {
+    const user = users.get(socket.id);
+    if (!user) return;
+    
+    let trackUrl = url;
+    let trackType = type;
+    let trackTitle = title || url;
+    
+    // Fallback: if client still sends spotify type, try server-side conversion
+    if (type === 'spotify') {
+      try {
+        let searchTitle = trackTitle;
+        if (searchTitle === 'Spotify Track' || !searchTitle || searchTitle.trim() === '') {
+          try {
+            const res = await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(trackUrl)}`);
+            const data = await res.json();
+            const artist = data.author_name || '';
+            const t = data.title || 'Spotify Track';
+            searchTitle = artist ? `${t} - ${artist}` : t;
+          } catch(e) {}
+        }
+        console.log('[Spotify] Searching YouTube for:', searchTitle + ' audio');
+        const yts = require('yt-search');
+        const r = await yts(searchTitle + ' audio');
+        if (r && r.videos.length > 0) {
+          trackUrl = r.videos[0].url;
+          trackType = 'youtube';
+          trackTitle = r.videos[0].title;
+        }
+      } catch (e) {
+        console.error('yt-search error:', e);
+      }
+    }
+
+    const track = {
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2,5),
+      url: trackUrl,
+      title: trackTitle,
+      type: trackType,
+      source: type,
+      cover: cover || null,
+      artist: artist || null,
+      addedBy: socket.id,
+      addedByName: user.displayName
+    };
+
+    if (playNow) {
+      if (musicState.currentIndex === -1 || musicQueue.length === 0 || !musicState.isPlaying) {
+        musicQueue.push(track);
+        musicState = { currentIndex: musicQueue.length - 1, isPlaying: true, startedAt: Date.now(), pausedAt: null, pausedTime: 0 };
+      } else {
+        musicQueue.splice(musicState.currentIndex + 1, 0, track);
+        musicState.currentIndex++;
+        musicState.isPlaying = true;
+        musicState.startedAt = Date.now();
+        musicState.pausedAt = null;
+        musicState.pausedTime = 0;
+      }
+      io.to(CHANNEL).emit('music_queue_update', { queue: musicQueue, state: musicState });
+      io.to(CHANNEL).emit('music_play', { track, state: musicState });
+      return;
+    }
+
+    musicQueue.push(track);
+    io.to(CHANNEL).emit('music_queue_update', { queue: musicQueue, state: musicState });
+    if (musicState.currentIndex === -1 || !musicState.isPlaying) {
+      musicState = { currentIndex: musicQueue.length - 1, isPlaying: true, startedAt: Date.now(), pausedAt: null, pausedTime: 0 };
+      io.to(CHANNEL).emit('music_play', { track: musicQueue[musicState.currentIndex], state: musicState });
+    }
+  });
+
+  socket.on('music_play_index', ({ index }) => {
+    if (typeof index === 'number' && index >= 0 && index < musicQueue.length) {
+      musicState = { currentIndex: index, isPlaying: true, startedAt: Date.now(), pausedAt: null, pausedTime: 0 };
+      io.to(CHANNEL).emit('music_play', { track: musicQueue[index], state: musicState });
+      io.to(CHANNEL).emit('music_queue_update', { queue: musicQueue, state: musicState });
+    }
+  });
+
+  socket.on('music_clear', () => {
+    musicQueue = [];
+    musicState = { currentIndex: -1, isPlaying: false, startedAt: null, pausedAt: null, pausedTime: 0 };
+    io.to(CHANNEL).emit('music_stop', {});
+    io.to(CHANNEL).emit('music_queue_update', { queue: musicQueue, state: musicState });
+  });
+
+  socket.on('music_remove', ({ trackId }) => {
+    const idx = musicQueue.findIndex(t => t.id === trackId);
+    if (idx === -1) return;
+    const wasPlaying = idx === musicState.currentIndex;
+    musicQueue.splice(idx, 1);
+    if (musicQueue.length === 0) {
+      musicState = { currentIndex: -1, isPlaying: false, startedAt: null, pausedAt: null, pausedTime: 0 };
+      io.to(CHANNEL).emit('music_stop', {});
+    } else if (idx < musicState.currentIndex) {
+      musicState.currentIndex--;
+    } else if (wasPlaying) {
+      if (musicState.currentIndex < musicQueue.length) {
+        musicState = { ...musicState, isPlaying: true, startedAt: Date.now(), pausedTime: 0, pausedAt: null };
+        io.to(CHANNEL).emit('music_play', { track: musicQueue[musicState.currentIndex], state: musicState });
+      } else {
+        musicState = { currentIndex: -1, isPlaying: false, startedAt: null, pausedAt: null, pausedTime: 0 };
+        io.to(CHANNEL).emit('music_stop', {});
+      }
+    }
+    io.to(CHANNEL).emit('music_queue_update', { queue: musicQueue, state: musicState });
+  });
+
+  socket.on('music_pause', ({ currentTime }) => {
+    if (!musicState.isPlaying) return;
+    musicState.isPlaying = false;
+    musicState.pausedAt = Date.now();
+    musicState.pausedTime = currentTime || 0;
+    io.to(CHANNEL).emit('music_state_update', { state: musicState });
+  });
+
+  socket.on('music_resume', () => {
+    if (musicState.isPlaying || musicState.currentIndex === -1) return;
+    musicState.isPlaying = true;
+    musicState.startedAt = Date.now() - (musicState.pausedTime * 1000);
+    musicState.pausedAt = null;
+    io.to(CHANNEL).emit('music_state_update', { state: musicState });
+  });
+
+  const handleNextTrack = () => {
+    if (musicQueue.length === 0) return;
+    if (musicState.currentIndex !== -1) {
+      musicQueue.splice(musicState.currentIndex, 1);
+      if (musicState.currentIndex >= musicQueue.length) {
+        musicState.currentIndex = musicQueue.length > 0 ? 0 : -1;
+      }
+    }
+    if (musicState.currentIndex !== -1 && musicQueue[musicState.currentIndex]) {
+      musicState = { ...musicState, isPlaying: true, startedAt: Date.now(), pausedAt: null, pausedTime: 0 };
+      io.to(CHANNEL).emit('music_play', { track: musicQueue[musicState.currentIndex], state: musicState });
+    } else {
+      musicState = { currentIndex: -1, isPlaying: false, startedAt: null, pausedAt: null, pausedTime: 0 };
+      io.to(CHANNEL).emit('music_stop', {});
+    }
+    io.to(CHANNEL).emit('music_queue_update', { queue: musicQueue, state: musicState });
+  };
+
+  socket.on('music_skip', handleNextTrack);
+  socket.on('music_ended', handleNextTrack);
+
+  socket.on('music_seek', ({ time }) => {
+    if (musicState.currentIndex === -1) return;
+    musicState.startedAt = Date.now() - (time * 1000);
+    musicState.pausedTime = time;
+    socket.to(CHANNEL).emit('music_seek', { time });
+  });
+
+  socket.on('music_sync_request', () => {
+    const track = (musicState.currentIndex >= 0 && musicState.currentIndex < musicQueue.length) ? musicQueue[musicState.currentIndex] : null;
+    let currentTime = 0;
+    if (track && musicState.isPlaying && musicState.startedAt) {
+      currentTime = (Date.now() - musicState.startedAt) / 1000;
+    } else if (track) {
+      currentTime = musicState.pausedTime || 0;
+    }
+    socket.emit('music_sync', { queue: musicQueue, state: musicState, currentTrack: track, currentTime });
+  });
+
+  // ── LEAVE / DISCONNECT ────────────────────────────────────────────────────
+  socket.on('leave_channel', () => handleLeave(socket));
+  socket.on('disconnect', () => handleLeave(socket));
+});
+
+// Health check
+app.get('/health', (_, res) => res.json({ status: 'ok', users: users.size, max: MAX_USERS }));
+
+// Status API for Admin Panel
+app.get('/api/status', (_, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.json({
+    channel: CHANNEL,
+    users: Array.from(users.entries()).map(([id, u]) => ({ 
+      id, 
+      displayName: u.displayName, 
+      muted: u.muted,
+      dnd: u.dnd || false
+    })),
+    max: MAX_USERS,
+    chatLog: chatLog,
+    musicQueue: musicQueue,
+    musicState: musicState,
+    awsNetwork: currentNetSpeed,
+    timestamp: new Date().toISOString()
+  });
+});
+const ADMIN_KEY = process.env.ADMIN_KEY || 'admin-secret-2025';
+
+app.options('/api/kick', (_, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.sendStatus(204);
+});
+
+app.post('/api/kick', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const { userId, adminKey } = req.body;
+  if (adminKey !== ADMIN_KEY) return res.status(403).json({ error: 'No autorizado.' });
+  const user = users.get(userId);
+  if (!user) return res.status(404).json({ error: 'Usuario no encontrado.' });
+  const targetSocket = io.sockets.sockets.get(userId);
+  users.delete(userId);
+  if (targetSocket) {
+    targetSocket.emit('join_error', { message: '\u26d4 Has sido expulsado por el administrador.' });
+    targetSocket.disconnect(true);
+  }
+  io.to(CHANNEL).emit('user_left', { userId });
+  broadcastUsers();
+  console.log(`[KICK] ${user.displayName} was kicked by admin`);
+  res.json({ success: true, kicked: user.displayName });
+});
+
+app.options('/api/password', (_, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.sendStatus(204);
+});
+
+app.post('/api/password', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const { password, adminKey } = req.body;
+  if (adminKey !== ADMIN_KEY) return res.status(403).json({ error: 'No autorizado.' });
+  if (!password || password.trim().length < 1) return res.status(400).json({ error: 'Contraseña no válida.' });
+  
+  CHANNEL_PASSWORD = password.trim();
+  console.log(`[API] Voice password updated by admin to: ${CHANNEL_PASSWORD}`);
+  res.json({ success: true });
+});
+
+// ── LIVEKIT TOKEN ENDPOINT ───────────────────────────────────────────────────
+app.get('/api/livekit-token', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const { participantName } = req.query;
+  
+  if (!participantName) {
+    return res.status(400).json({ error: 'Falta participantName' });
+  }
+
+  // Claves por defecto para evitar crashes en desarrollo si no están configuradas
+  const API_KEY = process.env.LIVEKIT_API_KEY || 'devkey';
+  const API_SECRET = process.env.LIVEKIT_API_SECRET || 'secret';
+  const LK_URL = process.env.LIVEKIT_URL || 'wss://your-livekit-url.livekit.cloud';
+
+  const at = new AccessToken(API_KEY, API_SECRET, {
+    identity: participantName,
+    name: participantName,
+  });
+
+  at.addGrant({ roomJoin: true, room: CHANNEL, canPublish: true, canSubscribe: true });
+
+  const token = at.toJwt();
+  res.json({ token, url: LK_URL });
+});
+
+const PORT = process.env.PORT || 3001;
+server.listen(PORT, () => console.log(`\u2705 Signaling server on port ${PORT}`));

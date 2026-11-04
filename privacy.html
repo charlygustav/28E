@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Privacidad - 28E</title>
+    <meta name="description"
+        content="Política de privacidad de 28E. Conoce cómo protegemos tu información personal en nuestra plataforma interactiva.">
+    <link rel="icon" type="image/x-icon" href="tulip.ico?v=3">
+    <meta name="theme-color" content="#09090b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Merriweather:ital@0;1&display=swap">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        /* ═══ Reset & Base ═══ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --brand-500: #f59e0b;
+            --brand-400: #fbbf24;
+            --tulip-400: #f472b6;
+            --tulip-500: #ec4899;
+            --tulip-600: #db2777;
+            --bg: #09090b;
+            --bg-elevated: rgba(255, 255, 255, 0.025);
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --bg-card-hover: rgba(255, 255, 255, 0.055);
+            --border: rgba(255, 255, 255, 0.06);
+            --border-hover: rgba(255, 255, 255, 0.14);
+            --text: #f4f4f5;
+            --text-secondary: #a1a1aa;
+            --muted: #71717a;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        /* ═══ Scrollbar ═══ */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(245, 158, 11, 0.3); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(245, 158, 11, 0.5); }
+
+        /* ═══ Animated Background ═══ */
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(140px);
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        .orb-1 {
+            width: 700px; height: 700px;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.15) 0%, transparent 70%);
+            top: -15%; left: -10%;
+            animation: orbFloat1 20s ease-in-out infinite alternate;
+        }
+
+        .orb-2 {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.12) 0%, transparent 70%);
+            bottom: -15%; right: -8%;
+            animation: orbFloat2 25s ease-in-out infinite alternate;
+        }
+
+        .orb-3 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+            top: 40%; left: 50%;
+            animation: orbFloat3 18s ease-in-out infinite alternate;
+        }
+
+        .orb-4 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, transparent 70%);
+            top: 70%; left: 10%;
+            animation: orbFloat1 22s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes orbFloat1 {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(100px, 80px) scale(1.2); }
+            100% { transform: translate(-50px, 120px) scale(0.9); }
+        }
+
+        @keyframes orbFloat2 {
+            0% { transform: translate(0, 0) scale(1.1); }
+            50% { transform: translate(-140px, -100px) scale(0.8); }
+            100% { transform: translate(80px, -60px) scale(1.25); }
+        }
+
+        @keyframes orbFloat3 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-80px, 50px) scale(1.15); }
+        }
+
+        /* Noise overlay */
+        .bg-canvas::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        /* ═══ Layout ═══ */
+        .page-wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* ═══ Navigation ═══ */
+        .nav-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            backdrop-filter: blur(20px);
+            animation: fadeDown 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: none; }
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            color: var(--text);
+            transition: opacity 0.2s;
+        }
+
+        .nav-logo:hover { opacity: 0.8; }
+
+        .nav-logo-text {
+            font-size: 1.3rem;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            background: linear-gradient(135deg, var(--brand-500), var(--tulip-500));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-badge {
+            font-size: 0.55rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 0.25rem 0.7rem;
+        }
+
+        .nav-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--muted);
+            text-decoration: none;
+            padding: 0.5rem 1.1rem;
+            border-radius: 0.75rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            transition: all 0.25s ease;
+        }
+
+        .nav-back:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--border-hover);
+            transform: translateX(-3px);
+        }
+
+        .nav-back i { transition: transform 0.25s; }
+        .nav-back:hover i { transform: translateX(-3px); }
+
+        /* ═══ Hero ═══ */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 3rem 2rem;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            animation: fadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.4), rgba(236, 72, 153, 0.4), transparent);
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 200px;
+            background: radial-gradient(ellipse, rgba(245, 158, 11, 0.1), transparent 70%);
+            pointer-events: none;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); filter: blur(6px); }
+            to { opacity: 1; transform: none; filter: none; }
+        }
+
+        .hero-shield {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            border-radius: 1.25rem;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(236, 72, 153, 0.15));
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 0 40px rgba(245, 158, 11, 0.1), 0 0 80px rgba(236, 72, 153, 0.05);
+            animation: shieldPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes shieldPulse {
+            0%, 100% { box-shadow: 0 0 40px rgba(245, 158, 11, 0.1), 0 0 80px rgba(236, 72, 153, 0.05); }
+            50% { box-shadow: 0 0 60px rgba(245, 158, 11, 0.2), 0 0 100px rgba(236, 72, 153, 0.1); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 20%, var(--brand-400) 50%, var(--tulip-400) 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-subtitle {
+            font-size: 0.95rem;
+            color: var(--muted);
+            max-width: 50ch;
+            margin: 0 auto;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-subtitle em {
+            font-family: 'Merriweather', serif;
+            color: var(--tulip-400);
+            font-style: italic;
+        }
+
+        .hero-meta-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            position: relative;
+            z-index: 1;
+            flex-wrap: wrap;
+        }
+
+        .hero-meta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            font-size: 0.68rem;
+            font-weight: 600;
+            color: var(--muted);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 0.35rem 0.9rem;
+        }
+
+        .hero-meta i { color: var(--brand-400); font-size: 0.8rem; }
+
+        .hero-meta-dot {
+            width: 4px; height: 4px;
+            border-radius: 50%;
+            background: var(--brand-400);
+            animation: dotBlink 2s ease-in-out infinite;
+        }
+
+        @keyframes dotBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
+
+        /* ═══ Table of Contents ═══ */
+        .toc {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 1.25rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            animation: fadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .toc::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 2rem; right: 2rem;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.2), transparent);
+        }
+
+        .toc-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.6rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--brand-400);
+            margin-bottom: 1rem;
+        }
+
+        .toc-title i { font-size: 0.9rem; }
+
+        .toc-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.35rem 1rem;
+        }
+
+        .toc-list a {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.45rem 0.65rem;
+            border-radius: 0.6rem;
+            transition: all 0.25s;
+            border: 1px solid transparent;
+        }
+
+        .toc-list a:hover {
+            color: var(--brand-400);
+            background: rgba(245, 158, 11, 0.06);
+            border-color: rgba(245, 158, 11, 0.1);
+        }
+
+        .toc-num {
+            font-size: 0.6rem;
+            font-weight: 900;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--brand-400);
+            width: 1.5rem;
+            text-align: center;
+            flex-shrink: 0;
+            opacity: 0.7;
+        }
+
+        /* ═══ Section Cards ═══ */
+        .sections-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .section-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 1.25rem;
+            padding: 2rem 2.2rem;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.4s, border-color 0.4s, transform 0.4s, box-shadow 0.4s;
+            opacity: 0;
+            transform: translateY(24px);
+        }
+
+        .section-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), background 0.4s, border-color 0.4s, box-shadow 0.4s;
+        }
+
+        .section-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.03), rgba(236, 72, 153, 0.03));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .section-card:hover {
+            border-color: rgba(245, 158, 11, 0.15);
+            background: var(--bg-card-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 20px 60px -20px rgba(245, 158, 11, 0.08);
+        }
+
+        .section-card:hover::before { opacity: 1; }
+
+        /* Top accent glow */
+        .section-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 2rem; right: 2rem;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-color, rgba(245, 158, 11, 0.3)), transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .section-card:hover::after { opacity: 1; }
+
+        /* Accent colors per section */
+        .section-card[data-accent="pink"] { --accent-color: rgba(236, 72, 153, 0.4); }
+        .section-card[data-accent="amber"] { --accent-color: rgba(245, 158, 11, 0.4); }
+        .section-card[data-accent="indigo"] { --accent-color: rgba(99, 102, 241, 0.4); }
+        .section-card[data-accent="purple"] { --accent-color: rgba(168, 85, 247, 0.4); }
+        .section-card[data-accent="teal"] { --accent-color: rgba(20, 184, 166, 0.4); }
+        .section-card[data-accent="emerald"] { --accent-color: rgba(16, 185, 129, 0.4); }
+        .section-card[data-accent="sky"] { --accent-color: rgba(56, 189, 248, 0.4); }
+        .section-card[data-accent="red"] { --accent-color: rgba(239, 68, 68, 0.4); }
+        .section-card[data-accent="rose"] { --accent-color: rgba(251, 113, 133, 0.4); }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-icon {
+            width: 46px; height: 46px;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .section-icon::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 1.15rem;
+            background: inherit;
+            opacity: 0.3;
+            filter: blur(10px);
+            z-index: -1;
+        }
+
+        .icon-pink { background: rgba(236, 72, 153, 0.12); border: 1px solid rgba(236, 72, 153, 0.25); color: #f472b6; }
+        .icon-amber { background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.25); color: #fbbf24; }
+        .icon-indigo { background: rgba(99, 102, 241, 0.12); border: 1px solid rgba(99, 102, 241, 0.25); color: #818cf8; }
+        .icon-emerald { background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); color: #34d399; }
+        .icon-purple { background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.25); color: #c084fc; }
+        .icon-red { background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.25); color: #f87171; }
+        .icon-teal { background: rgba(20, 184, 166, 0.12); border: 1px solid rgba(20, 184, 166, 0.25); color: #2dd4bf; }
+        .icon-sky { background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.25); color: #38bdf8; }
+        .icon-rose { background: rgba(251, 113, 133, 0.12); border: 1px solid rgba(251, 113, 133, 0.25); color: #fb7185; }
+
+        .section-number {
+            font-size: 0.55rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .section-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--text);
+        }
+
+        .section-body {
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-body p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 0.8rem;
+        }
+
+        .section-body p:last-child { margin-bottom: 0; }
+
+        .section-body ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+
+        .section-body li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 0.84rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            padding: 0.6rem 0.9rem;
+            background: rgba(255, 255, 255, 0.018);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 0.85rem;
+            transition: all 0.25s;
+        }
+
+        .section-body li:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.08);
+            transform: translateX(3px);
+        }
+
+        .li-icon {
+            flex-shrink: 0;
+            width: 26px; height: 26px;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            margin-top: 1px;
+        }
+
+        .li-pink { background: rgba(236, 72, 153, 0.1); border: 1px solid rgba(236, 72, 153, 0.2); }
+        .li-amber { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); }
+        .li-indigo { background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.2); }
+        .li-emerald { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); }
+        .li-red { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); }
+        .li-purple { background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.2); }
+        .li-teal { background: rgba(20, 184, 166, 0.1); border: 1px solid rgba(20, 184, 166, 0.2); }
+        .li-sky { background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.2); }
+        .li-rose { background: rgba(251, 113, 133, 0.1); border: 1px solid rgba(251, 113, 133, 0.2); }
+
+        .highlight {
+            color: var(--tulip-400);
+            font-weight: 600;
+        }
+
+        .highlight-amber {
+            color: var(--brand-400);
+            font-weight: 600;
+        }
+
+        /* ═══ Callout ═══ */
+        .callout {
+            margin-top: 1rem;
+            padding: 1rem 1.2rem;
+            border-radius: 0.85rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.7rem;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .callout-amber { background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.12); }
+        .callout-pink { background: rgba(236, 72, 153, 0.05); border: 1px solid rgba(236, 72, 153, 0.12); }
+        .callout-emerald { background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.12); }
+
+        .callout-icon {
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* ═══ Credits Section ═══ */
+        .credits-section {
+            margin-top: 2.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 1.25rem;
+            padding: 2rem 2.2rem;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(24px);
+        }
+
+        .credits-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .credits-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 2rem; right: 2rem;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.3), rgba(236, 72, 153, 0.3), transparent);
+        }
+
+        .credits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.6rem;
+            margin-top: 1rem;
+        }
+
+        .credit-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 0.6rem;
+            padding: 0.85rem 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .credit-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.04), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .credit-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(245, 158, 11, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px -12px rgba(245, 158, 11, 0.12);
+        }
+
+        .credit-card:hover::before { opacity: 1; }
+
+        .credit-label {
+            font-size: 0.55rem;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 0.3rem;
+            display: block;
+        }
+
+        .credit-value {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+            display: block;
+        }
+
+        /* ═══ Footer ═══ */
+        .page-footer {
+            margin-top: 3rem;
+            padding: 2.5rem 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .page-footer.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            background: linear-gradient(135deg, var(--brand-500), var(--tulip-500));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-text {
+            font-size: 0.75rem;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .footer-date {
+            font-size: 0.7rem;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: rgba(113, 113, 122, 0.6);
+            margin-top: 0.4rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .footer-links a {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            text-decoration: none;
+            opacity: 0.5;
+            transition: all 0.25s;
+        }
+
+        .footer-links a:hover {
+            color: var(--brand-400);
+            opacity: 1;
+        }
+
+        /* ═══ Scroll Progress ═══ */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--brand-500), var(--tulip-500));
+            z-index: 100;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px var(--brand-500);
+        }
+
+        /* ═══ Responsive ═══ */
+        @media (max-width: 640px) {
+            .page-wrapper { padding: 1rem 0.85rem 3rem; }
+            .nav-bar { padding: 0.9rem 1rem; margin-bottom: 1.5rem; border-radius: 0.85rem; }
+            .hero { padding: 2rem 1.2rem; margin-bottom: 2rem; border-radius: 1rem; }
+            .hero h1 { font-size: 1.7rem; }
+            .hero-shield { width: 64px; height: 64px; font-size: 1.8rem; border-radius: 1rem; }
+            .section-card { padding: 1.4rem 1.2rem; border-radius: 1rem; }
+            .section-icon { width: 38px; height: 38px; font-size: 1.1rem; border-radius: 0.75rem; }
+            .section-title { font-size: 1rem; }
+            .toc-list { grid-template-columns: 1fr; }
+            .toc { padding: 1.2rem 1.2rem; border-radius: 1rem; }
+            .orb-1 { width: 350px; height: 350px; }
+            .orb-2 { width: 300px; height: 300px; }
+            .orb-3, .orb-4 { display: none; }
+            .hero-meta-row { gap: 0.5rem; }
+            .credits-grid { grid-template-columns: 1fr 1fr; }
+            .nav-badge { display: none; }
+        }
+
+        /* ═══ Reduced Motion ═══ */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .section-card { opacity: 1; transform: none; }
+            .credits-section { opacity: 1; transform: none; }
+            .page-footer { opacity: 1; transform: none; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scroll-progress"></div>
+
+    <!-- ═══ Animated Background ═══ -->
+    <div class="bg-canvas" aria-hidden="true">
+        <div class="bg-orb orb-1"></div>
+        <div class="bg-orb orb-2"></div>
+        <div class="bg-orb orb-3"></div>
+        <div class="bg-orb orb-4"></div>
+    </div>
+
+    <!-- ═══ Page Content ═══ -->
+    <div class="page-wrapper">
+
+        <!-- Navigation -->
+        <nav class="nav-bar" id="nav-bar">
+            <div class="nav-logo" style="cursor: default; pointer-events: none;">
+                <span class="nav-logo-text">28E</span>
+                <span class="nav-badge">Privacidad</span>
+            </div>
+            <a href="/" class="nav-back" id="btn-back">
+                <i class="ph-bold ph-arrow-left"></i>
+                Volver
+            </a>
+        </nav>
+
+        <!-- Hero -->
+        <header class="hero">
+            <div class="hero-shield">🛡️</div>
+            <h1>Política de Privacidad</h1>
+            <p class="hero-subtitle">
+                Tu privacidad es importante para nosotros. Aquí explicamos <em>de forma transparente</em> cómo tratamos tu información en cada rincón de la plataforma.
+            </p>
+            <div class="hero-meta-row">
+                <span class="hero-meta">
+                    <i class="ph-bold ph-calendar"></i>
+                    <span>Junio 2026</span>
+                </span>
+                <span class="hero-meta">
+                    <span class="hero-meta-dot"></span>
+                    <span>Documento Vigente</span>
+                </span>
+                <span class="hero-meta">
+                    <i class="ph-bold ph-scroll"></i>
+                    <span>9 Secciones</span>
+                </span>
+            </div>
+        </header>
+
+        <!-- Table of Contents -->
+        <nav class="toc" id="toc">
+            <div class="toc-title">
+                <i class="ph-bold ph-list-bullets"></i>
+                Índice de contenido
+            </div>
+            <ul class="toc-list">
+                <li><a href="#section-info"><span class="toc-num">01</span> Información que recopilamos</a></li>
+                <li><a href="#section-auth"><span class="toc-num">02</span> Autenticación con Google</a></li>
+                <li><a href="#section-uso"><span class="toc-num">03</span> Uso de la información</a></li>
+                <li><a href="#section-voice"><span class="toc-num">04</span> Canal de Voz y Micrófono</a></li>
+                <li><a href="#section-guestbook"><span class="toc-num">05</span> Muro de Dedicatorias</a></li>
+                <li><a href="#section-storage"><span class="toc-num">06</span> Almacenamiento local</a></li>
+                <li><a href="#section-proteccion"><span class="toc-num">07</span> Protección de datos</a></li>
+                <li><a href="#section-terceros"><span class="toc-num">08</span> Servicios de terceros</a></li>
+                <li><a href="#section-contacto"><span class="toc-num">09</span> Contacto y derechos</a></li>
+            </ul>
+        </nav>
+
+        <!-- Content Sections -->
+        <main class="sections-grid" id="sections">
+
+            <!-- Section 1 -->
+            <article class="section-card" id="section-info" data-accent="pink">
+                <div class="section-header">
+                    <div class="section-icon icon-pink">📋</div>
+                    <div>
+                        <span class="section-number">Sección 01</span>
+                        <h2 class="section-title">Información que recopilamos</h2>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>
+                        En <span class="highlight">28E</span>, recopilamos la menor cantidad de información posible. Solo accedemos a los datos básicos que Google nos proporciona al momento de iniciar sesión, a los datos que tú generas dentro de la plataforma, y a cierta información técnica de forma automática.
+                    </p>
+                    <ul>
+                        <li>
+                            <span class="li-icon li-pink">📧</span>
+                            <span>Tu <strong>dirección de correo electrónico</strong> asociada a tu cuenta de Google.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-pink">👤</span>
+                            <span>Tu <strong>nombre de perfil</strong> público de Google.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-pink">📸</span>
+                            <span>Tu <strong>foto de perfil</strong> de Google (URL pública de la imagen).</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">🌐</span>
+                            <span><strong>Dirección IP</strong>: se registra una vez por sesión en Firebase para el panel de administración interno. También se usa para obtener tu ubicación aproximada (ciudad y país).</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">📍</span>
+                            <span><strong>Ubicación aproximada</strong>: ciudad y país derivados de tu IP mediante GeoJS.io (no se usa GPS ni geolocalización del dispositivo).</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">📱</span>
+                            <span><strong>Tipo de dispositivo</strong>: se detecta si estás en Mobile o Desktop a través del User-Agent del navegador.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">👁️</span>
+                            <span><strong>Presencia en tiempo real</strong>: la sección que estás visitando se envía a Firebase para mostrar actividad en el panel de administración. Se borra automáticamente al cerrar la página.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">🏆</span>
+                            <span><strong>Puntuaciones de minijuegos</strong> (Atrapa Mariposas, Memory de Emojis).</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">⚙️</span>
+                            <span><strong>Preferencias de usuario</strong>: tema visual (oscuro/claro) y ajustes de audio.</span>
+                        </li>
+                    </ul>
+                    <div class="callout callout-emerald">
+                        <span class="callout-icon">✅</span>
+                        <span><strong>No</strong> recopilamos contraseñas, datos bancarios, contactos ni accedemos a GPS, cámara u otra información sensible de tu dispositivo más allá de lo descrito aquí.</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Section 2 -->
+            <article class="section-card" id="section-auth" data-accent="amber">
+                <div class="section-header">
+                    <div class="section-icon icon-amber">🔐</div>
+                    <div>
+                        <span class="section-number">Sección 02</span>
+                        <h2 class="section-title">Autenticación con Google</h2>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>
+                        28E utiliza <span class="highlight-amber">Firebase Authentication</span> de Google para gestionar el inicio de sesión. Cuando te autenticas con "Continuar con Google", ocurre lo siguiente:
+                    </p>
+                    <ul>
+                        <li>
+                            <span class="li-icon li-amber">🌐</span>
+                            <span>Eres redirigido a los servidores de Google para verificar tu identidad. <strong>28E nunca ve ni almacena tu contraseña de Google.</strong></span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">🎟️</span>
+                            <span>Google nos envía un <strong>token de autenticación</strong> y los datos de perfil (nombre, email, foto) previamente mencionados.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">🛡️</span>
+                            <span>La sesión se gestiona a través de los <strong>SDK de Firebase</strong>. No almacenamos credenciales en nuestro servidor.</span>
+                        </li>
+                    </ul>
+                    <div class="callout callout-amber">
+                        <span class="callout-icon">💡</span>
+                        <span>Puedes revocar el acceso de 28E en cualquier momento desde la <strong>configuración de tu cuenta de Google</strong> → Seguridad → Aplicaciones de terceros.</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Section 3 -->
+            <article class="section-card" id="section-uso" data-accent="indigo">
+                <div class="section-header">
+                    <div class="section-icon icon-indigo">⚙️</div>
+                    <div>
+                        <span class="section-number">Sección 03</span>
+                        <h2 class="section-title">Uso de la información</h2>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>Utilizamos tu información <strong>únicamente</strong> para las siguientes funciones internas de la plataforma:</p>
+                    <ul>
+                        <li>
+                            <span class="li-icon li-indigo">🔑</span>
+                            <span><strong>Autenticación:</strong> Verificar tu identidad para acceder a funciones protegidas como el Canal de Voz y el Muro de Dedicatorias.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-indigo">🎙️</span>
+                            <span><strong>Canal de Voz:</strong> Mostrar tu nombre y foto de perfil a los demás participantes del canal.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-indigo">💬</span>
+                            <span><strong>Chat del Canal de Voz:</strong> Mostrar tu nombre junto a los mensajes que envías durante una sesión.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-indigo">📝</span>
+                            <span><strong>Muro de Dedicatorias:</strong> Publicar mensajes con tu nombre y foto de perfil visibles para otros visitantes.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-indigo">👁️</span>
+                            <span><strong>Presencia y estadísticas:</strong> Registrar visitas y presencia activa para el panel de administración interno (no es visible públicamente).</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-indigo">🎵</span>
+                            <span><strong>Spotlight Radio:</strong> Sincronizar la reproducción musical en tiempo real entre visitantes.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-indigo">🎨</span>
+                            <span><strong>Personalización:</strong> Recordar tu tema visual (oscuro/claro) y preferencias de audio.</span>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- Section 4 -->
+            <article class="section-card" id="section-voice" data-accent="purple">
+                <div class="section-header">
+                    <div class="section-icon icon-purple">🎧</div>
+                    <div>
+                        <span class="section-number">Sección 04</span>
+                        <h2 class="section-title">Canal de Voz y Micrófono</h2>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>
+                        28E incluye un <span class="highlight">Canal de Voz en tiempo real</span> basado en tecnología WebRTC. Esto implica el uso de tu micrófono con las siguientes condiciones:
+                    </p>
+                    <ul>
+                        <li>
+                            <span class="li-icon li-purple">🎤</span>
+                            <span>El acceso al micrófono se solicita <strong>únicamente cuando decides unirte al canal</strong>. Nunca se activa automáticamente.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-purple">📡</span>
+                            <span>El audio se transmite <strong>directamente entre participantes (P2P)</strong> a través de WebRTC. No pasa por nuestros servidores ni se almacena.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-purple">🚫</span>
+                            <span><strong>No grabamos, almacenamos ni analizamos</strong> ningún audio del Canal de Voz. Las conversaciones son efímeras.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-purple">🔕</span>
+                            <span>Puedes <strong>silenciarte</strong> en cualquier momento con un botón dentro del canal.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-purple">🔄</span>
+                            <span>Se utiliza un servidor de señalización (<strong>Socket.IO</strong>) solo para coordinar la conexión inicial entre pares. No transmite audio.</span>
+                        </li>
+                    </ul>
+                    <div class="callout callout-pink">
+                        <span class="callout-icon">🔒</span>
+                        <span>Las conexiones de audio utilizan <strong>servidores TURN de Metered.ca</strong> como respaldo cuando la conexión directa no es posible. Estos servidores solo retransmiten datos cifrados sin capacidad de descifrarlos.</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Section 5 -->
+            <article class="section-card" id="section-guestbook" data-accent="rose">
+                <div class="section-header">
+                    <div class="section-icon icon-rose">📝</div>
+                    <div>
+                        <span class="section-number">Sección 05</span>
+                        <h2 class="section-title">Muro de Dedicatorias</h2>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>
+                        28E incluye un <span class="highlight-amber">Muro de Dedicatorias</span> (guestbook) donde los visitantes pueden dejar mensajes públicos. Al publicar un mensaje:
+                    </p>
+                    <ul>
+                        <li>
+                            <span class="li-icon li-rose">✍️</span>
+                            <span>Tu <strong>nombre</strong> y <strong>mensaje</strong> se almacenan en Firebase y son visibles para todos los visitantes del sitio.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-rose">📸</span>
+                            <span>Si iniciaste sesión con Google, tu <strong>foto de perfil</strong> se muestra junto a tu mensaje.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-rose">✏️</span>
+                            <span>Puedes <strong>editar o eliminar</strong> tus propios mensajes en cualquier momento si estás autenticado con la misma cuenta.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-rose">👤</span>
+                            <span>También es posible publicar <strong>sin iniciar sesión</strong>, ingresando un nombre manualmente. En ese caso no se asocia ninguna cuenta.</span>
+                        </li>
+                    </ul>
+                    <div class="callout callout-amber">
+                        <span class="callout-icon">⚠️</span>
+                        <span>Los mensajes del Muro de Dedicatorias son <strong>públicos</strong>. No incluyas información personal sensible en tus mensajes.</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Section 6 -->
+            <article class="section-card" id="section-storage" data-accent="teal">
+                <div class="section-header">
+                    <div class="section-icon icon-teal">💾</div>
+                    <div>
+                        <span class="section-number">Sección 06</span>
+                        <h2 class="section-title">Almacenamiento local</h2>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>
+                        28E utiliza <span class="highlight-amber">localStorage</span> y <span class="highlight-amber">sessionStorage</span> del navegador para guardar ciertos datos en tu dispositivo. Estos datos <strong>nunca salen de tu navegador</strong> y no son accesibles por nosotros.
+                    </p>
+                    <ul>
+                        <li>
+                            <span class="li-icon li-teal">🎨</span>
+                            <span><strong>Tema visual</strong> (theme): tu preferencia de modo oscuro o claro.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-teal">🔇</span>
+                            <span><strong>Estado de audio</strong> (yaire-muted): si silenciaste los efectos de sonido de la interfaz.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-teal">📋</span>
+                            <span><strong>Configuración remota</strong> (yaire_config): copia local de la configuración del sitio para detectar cambios del administrador.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-teal">🏆</span>
+                            <span><strong>Puntuación máxima</strong> (yaire_hs): tu récord personal en los minijuegos.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-teal">🔄</span>
+                            <span><strong>Flag de restauración</strong> (yaire_restore): indicador temporal para recargar la página tras un cambio de configuración.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-teal">👁️</span>
+                            <span><strong>Visita registrada</strong> (yaire_visited, sessionStorage): evita contar visitas duplicadas en la misma sesión del navegador.</span>
+                        </li>
+                    </ul>
+                    <div class="callout callout-emerald">
+                        <span class="callout-icon">🧹</span>
+                        <span>Puedes borrar todos estos datos en cualquier momento limpiando los datos del sitio desde la configuración de tu navegador, sin afectar tu cuenta.</span>
+                    </div>
+                    <div class="callout callout-amber" style="margin-top: 0.5rem;">
+                        <span class="callout-icon">📌</span>
+                        <span>El <strong>historial de sesiones del Canal de Voz</strong> se almacena en Firebase bajo tu cuenta de usuario (no en localStorage). Solo es accesible si has iniciado sesión.</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Section 7 -->
+            <article class="section-card" id="section-proteccion" data-accent="emerald">
+                <div class="section-header">
+                    <div class="section-icon icon-emerald">🔒</div>
+                    <div>
+                        <span class="section-number">Sección 07</span>
+                        <h2 class="section-title">Protección de datos</h2>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>
+                        Nos tomamos la seguridad de tu información muy en serio. Estas son las medidas que implementamos:
+                    </p>
+                    <ul>
+                        <li>
+                            <span class="li-icon li-emerald">☁️</span>
+                            <span>Los datos remotos se almacenan en <strong>Firebase Realtime Database</strong>, protegida por los estándares de seguridad de Google Cloud Platform.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-emerald">🔐</span>
+                            <span>Todas las conexiones a la plataforma se realizan sobre <strong>HTTPS (TLS)</strong>, garantizando que los datos viajan cifrados.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-emerald">🛡️</span>
+                            <span>La autenticación está gestionada íntegramente por <strong>Firebase Auth</strong>, un servicio con certificación SOC 2 e ISO 27001.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-emerald">🕐</span>
+                            <span>Los datos de <strong>presencia son efímeros</strong>: se eliminan automáticamente al cerrar la página o perder conexión.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-red">🚫</span>
+                            <span><strong>No vendemos</strong> tu información personal a terceros bajo ninguna circunstancia.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-red">🤝</span>
+                            <span><strong>No alquilamos ni compartimos</strong> tus datos con empresas, anunciantes o intermediarios.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-red">📊</span>
+                            <span><strong>No utilizamos</strong> tus datos para publicidad, análisis de comportamiento ni perfilado comercial.</span>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- Section 8 -->
+            <article class="section-card" id="section-terceros" data-accent="sky">
+                <div class="section-header">
+                    <div class="section-icon icon-sky">🌐</div>
+                    <div>
+                        <span class="section-number">Sección 08</span>
+                        <h2 class="section-title">Servicios de terceros</h2>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>
+                        28E utiliza los siguientes servicios externos para su funcionamiento. Cada uno tiene su propia política de privacidad:
+                    </p>
+                    <ul>
+                        <li>
+                            <span class="li-icon li-amber">🔥</span>
+                            <span><strong>Firebase (Google)</strong> — Autenticación, base de datos en tiempo real, presencia y configuración remota.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">📝</span>
+                            <span><strong>Google Fonts</strong> — Carga de tipografías Inter y Merriweather. Google puede recopilar direcciones IP según su política.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">🚂</span>
+                            <span><strong>Railway</strong> — Hosting del servidor de señalización para el Canal de Voz (Socket.IO).</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">📡</span>
+                            <span><strong>Metered.ca</strong> — Servidores TURN/STUN para conexiones WebRTC cuando la conexión P2P directa falla.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">🖼️</span>
+                            <span><strong>ImgBB / GitHub Raw</strong> — Hospedaje de imágenes de la galería y archivos multimedia.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-amber">▶️</span>
+                            <span><strong>Vercel</strong> — Hosting principal de la plataforma web.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-sky">🌍</span>
+                            <span><strong>GeoJS.io</strong> — Geolocalización aproximada por IP (ciudad y país) para el sistema de presencia.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-sky">🔢</span>
+                            <span><strong>ipify</strong> — Obtención de tu dirección IP pública para registro de visitas.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-sky">📊</span>
+                            <span><strong>CounterAPI</strong> — Contador global de visitas al sitio (anónimo, sin datos personales).</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-sky">🎵</span>
+                            <span><strong>Deezer API / iTunes API</strong> — Búsqueda de portadas de álbumes para la radio Spotlight (no se envían datos personales).</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-sky">📦</span>
+                            <span><strong>CDNs</strong> — jsDelivr, cdnjs (Cloudflare) y unpkg para cargar librerías: GSAP, Chart.js, Canvas Confetti, Phosphor Icons y Socket.IO.</span>
+                        </li>
+                    </ul>
+                    <div class="callout callout-amber">
+                        <span class="callout-icon">📖</span>
+                        <span>Te recomendamos revisar las políticas de privacidad de estos servicios si deseas más detalles sobre cómo manejan la información.</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Section 9 -->
+            <article class="section-card" id="section-contacto" data-accent="red">
+                <div class="section-header">
+                    <div class="section-icon icon-red">💬</div>
+                    <div>
+                        <span class="section-number">Sección 09</span>
+                        <h2 class="section-title">Contacto y tus derechos</h2>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>
+                        Tienes derecho a conocer, corregir o eliminar cualquier dato personal que 28E almacene sobre ti. Si tienes cualquier duda, pregunta o solicitud, puedes contactar al administrador del sitio.
+                    </p>
+                    <ul>
+                        <li>
+                            <span class="li-icon li-pink">📩</span>
+                            <span><strong>Solicitar información:</strong> puedes preguntar qué datos tenemos almacenados sobre tu cuenta.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-pink">✏️</span>
+                            <span><strong>Corrección:</strong> si algún dato es incorrecto, puedes solicitar su modificación.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-pink">🗑️</span>
+                            <span><strong>Eliminación:</strong> puedes solicitar la eliminación completa de tus datos de nuestra base de datos.</span>
+                        </li>
+                        <li>
+                            <span class="li-icon li-pink">🔌</span>
+                            <span><strong>Revocar acceso:</strong> puedes desconectar tu cuenta de Google desde la configuración de seguridad de Google.</span>
+                        </li>
+                    </ul>
+                    <div class="callout callout-pink">
+                        <span class="callout-icon">🌷</span>
+                        <span>28E es un proyecto personal creado con amor. Tu confianza y privacidad son sagradas para nosotros. Ante cualquier inquietud, no dudes en comunicarte.</span>
+                    </div>
+                </div>
+            </article>
+
+        </main>
+
+        <!-- Credits -->
+        <section class="credits-section" id="credits-section">
+            <div class="section-header" style="margin-bottom: 0.6rem;">
+                <div class="section-icon icon-amber">⚡</div>
+                <div>
+                    <span class="section-number">Créditos</span>
+                    <h2 class="section-title">Equipo detrás de 28E</h2>
+                </div>
+            </div>
+            <div class="credits-grid">
+                <div class="credit-card">
+                    <span class="credit-label">Dirección Creativa</span>
+                    <span class="credit-value">Charles Gustav</span>
+                </div>
+                <div class="credit-card">
+                    <span class="credit-label">Inspiración Absoluta</span>
+                    <span class="credit-value">Yaire Alvarado</span>
+                </div>
+                <div class="credit-card">
+                    <span class="credit-label">Desarrollo UI/UX & Código</span>
+                    <span class="credit-value">Antigravity AI</span>
+                </div>
+                <div class="credit-card">
+                    <span class="credit-label">Agradecimiento Especial</span>
+                    <span class="credit-value">Key</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="page-footer" id="page-footer">
+            <span class="footer-logo">28E</span>
+            <span class="footer-text">Copyright &copy; 2026 Twenty Eight Experience. Todos los derechos reservados y dedicados exclusivamente a Yaire Alvarado.</span>
+            <span class="footer-date">28.01.2026 — ∞</span>
+            <div class="footer-links">
+                <a href="/">Volver al inicio</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- ═══ Scripts ═══ -->
+    <script>
+        // Scroll Progress Bar
+        const progressBar = document.getElementById('scroll-progress');
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const progress = (scrollTop / scrollHeight) * 100;
+            progressBar.style.width = progress + '%';
+        }, { passive: true });
+
+        // Intersection Observer for scroll-triggered animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px 0px -60px 0px',
+            threshold: 0.08
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    // Stagger animation based on order
+                    const delay = entry.target.classList.contains('section-card')
+                        ? Array.from(document.querySelectorAll('.section-card')).indexOf(entry.target) * 80
+                        : 0;
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, Math.min(delay, 400));
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animatable elements
+        document.querySelectorAll('.section-card, .credits-section, .page-footer').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for TOC links
+        document.querySelectorAll('.toc-list a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    const offset = 80;
+                    const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                    window.scrollTo({ top, behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

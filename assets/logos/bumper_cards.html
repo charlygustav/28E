@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: transparent;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Plus Jakarta Sans', 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .bumper-overlay {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+  }
+  .bumper-overlay.active {
+    display: flex;
+  }
+  .ch-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(10, 15, 20, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 8px 20px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  }
+  .pill-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+  .logo-img {
+    height: 84px;
+    width: auto;
+    filter: drop-shadow(0 14px 36px rgba(0, 0, 0, 0.8));
+    margin-bottom: 28px;
+  }
+  .ch-title {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: #ffffff;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+    margin-bottom: 10px;
+  }
+  .ch-sub {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    color: rgba(255, 255, 255, 0.85);
+    text-transform: uppercase;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+  }
+</style>
+</head>
+<body>
+
+  <!-- 1. Bumper Overlay Canal 01 -->
+  <div class="bumper-overlay" id="overlay-1">
+    <div class="ch-pill" style="border-color: rgba(16,185,129,0.35); color: #10b981;">
+      <span class="pill-dot" style="background: #10b981; box-shadow: 0 0 10px #10b981;"></span>
+      <span>01 · 28E UNO</span>
+    </div>
+    <img src="logo_28e_uno.svg" class="logo-img">
+    <div class="ch-title">28E UNO</div>
+    <div class="ch-sub">CINE · SERIES · VAULT DE ENTRETENIMIENTO</div>
+  </div>
+
+  <!-- 2. Bumper Overlay Canal 02 -->
+  <div class="bumper-overlay" id="overlay-2">
+    <div class="ch-pill" style="border-color: rgba(192,132,252,0.35); color: #c084fc;">
+      <span class="pill-dot" style="background: #c084fc; box-shadow: 0 0 10px #c084fc;"></span>
+      <span>02 · 28E FLOW</span>
+    </div>
+    <img src="logo_28e_flow.svg" class="logo-img">
+    <div class="ch-title">28E FLOW</div>
+    <div class="ch-sub">FLOW URBANO · VIDEOCLIPS 24/7</div>
+  </div>
+
+  <!-- 3. Bumper Overlay Canal 03 -->
+  <div class="bumper-overlay" id="overlay-3">
+    <div class="ch-pill" style="border-color: rgba(244,114,182,0.35); color: #f472b6;">
+      <span class="pill-dot" style="background: #f472b6; box-shadow: 0 0 10px #f472b6;"></span>
+      <span>03 · DCLF TV</span>
+    </div>
+    <img src="logo_dclf_tv.svg" class="logo-img" style="height: 94px;">
+    <div class="ch-title">DCLF TV</div>
+    <div class="ch-sub">DONDE CRECEN LAS FLORES · RELAX & MÚSICA</div>
+  </div>
+
+  <script>
+    function showOverlay(ch) {
+      document.querySelectorAll('.bumper-overlay').forEach(el => el.classList.remove('active'));
+      const target = document.getElementById('overlay-' + ch);
+      if (target) target.classList.add('active');
+    }
+    const params = new URLSearchParams(window.location.search);
+    const initialCh = params.get('ch') || '1';
+    showOverlay(initialCh);
+  </script>
+</body>
+</html>

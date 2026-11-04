@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>28E - Mantenimiento</title>
+  <meta name="description" content="La página está temporalmente en mantenimiento. Volvemos pronto.">
+  <link rel="icon" type="image/x-icon" href="dclf_game.ico?v=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --tulip-400: #ec4899;
+      --tulip-500: #db2777;
+      --amber-400: #f59e0b;
+      --text: #f4f4f5;
+      --muted: #71717a;
+      --border: rgba(255, 255, 255, .08);
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #09090b;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Video Background ── */
+    .video-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .video-bg video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ── Overlay ── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.55) 0%,
+        rgba(0, 0, 0, 0.40) 40%,
+        rgba(0, 0, 0, 0.55) 100%
+      );
+    }
+
+
+    /* ── Main Content ── */
+    .container {
+      position: relative;
+      z-index: 2;
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+      text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Logo */
+    .logo {
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: -.06em;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(.22, 1, .36, 1) 0.2s forwards;
+    }
+
+    .aesthetic-icon {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(.22, 1, .36, 1) 0.25s forwards, breath 4s ease-in-out infinite alternate;
+    }
+
+    /* Title */
+    .title {
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -.02em;
+      margin-bottom: 2.5rem;
+      color: rgba(255, 255, 255, 0.9);
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(.22, 1, .36, 1) 0.3s forwards;
+    }
+
+    /* ── Countdown ── */
+    .countdown {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(.22, 1, .36, 1) 0.7s forwards;
+    }
+
+    .cd-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(20px) saturate(1.5);
+      -webkit-backdrop-filter: blur(20px) saturate(1.5);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 1rem;
+      padding: 1rem .8rem .7rem;
+      min-width: 70px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0.5px 0 rgba(255, 255, 255, 0.2);
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .cd-unit:hover {
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .cd-val {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 900;
+      letter-spacing: -.04em;
+      line-height: 1;
+      color: #ffffff;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+    }
+
+    .cd-label {
+      font-size: .5rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: rgba(255, 255, 255, 0.85);
+      margin-top: .35rem;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+    }
+
+    .cd-sep {
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 900;
+      color: #ffffff;
+      padding-bottom: 1rem;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+    }
+
+    /* ── Progress Bar ── */
+    .progress-wrapper {
+      width: 100%;
+      max-width: 420px;
+      margin-top: -1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(.22, 1, .36, 1) 0.5s forwards;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, .06);
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      position: absolute;
+      top: 0; left: 0;
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--tulip-500), var(--amber-400), var(--tulip-400));
+      background-size: 200% 100%;
+      animation: shimmer 2.6s linear infinite;
+      transition: width 1s linear;
+    }
+
+    /* ── Keyframes ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes breath {
+      0% { transform: scale(0.95); opacity: 0.4; text-shadow: 0 0 4px rgba(255,255,255,0.2); }
+      100% { transform: scale(1.1); opacity: 0.9; text-shadow: 0 0 16px rgba(255,255,255,1); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .2; }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% center; }
+      100% { background-position: -200% center; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .countdown { gap: .4rem; }
+      .cd-unit { min-width: 56px; padding: .8rem .5rem .5rem; border-radius: .8rem; }
+      .cd-val { font-size: clamp(1.4rem, 8vw, 2rem); }
+      .cd-label { font-size: .45rem; }
+      .cd-sep { font-size: 1.2rem; padding-bottom: .7rem; }
+      .logo { font-size: 1.6rem; margin-bottom: 2rem; }
+      .subtitle { margin-bottom: 2rem; }
+      .progress-wrapper { max-width: 300px; }
+    }
+
+    @media (max-width: 400px) {
+      .container { padding: 1.5rem; }
+      .countdown { gap: .3rem; }
+      .cd-unit { min-width: 48px; padding: .6rem .4rem .4rem; border-radius: .6rem; }
+      .cd-val { font-size: clamp(1.2rem, 10vw, 1.6rem); }
+      .cd-sep { font-size: 1rem; }
+      .logo { font-size: 1.4rem; margin-bottom: 1.5rem; }
+      .title { margin-bottom: .5rem; }
+      .subtitle { margin-bottom: 1.5rem; }
+    }
+
+    /* ── Mute Button Removed ── */
+  </style>
+</head>
+
+<body>
+
+  <!-- Video Background -->
+  <div class="video-bg">
+    <video id="bg-video" loop playsinline preload="auto">
+      <source src="videos/maintenance_bg.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- Overlay -->
+  <div class="overlay"></div>
+
+  <!-- Content -->
+  <div class="container">
+
+    <div class="logo">28E</div>
+
+    <div class="aesthetic-icon">✦</div>
+
+    <h1 class="title">La página se revelará en:</h1>
+
+    <!-- Countdown -->
+    <div class="countdown">
+      <div class="cd-unit">
+        <span class="cd-val" id="cd-days">00</span>
+        <span class="cd-label">Días</span>
+      </div>
+      <span class="cd-sep">:</span>
+      <div class="cd-unit">
+        <span class="cd-val" id="cd-hours">00</span>
+        <span class="cd-label">Horas</span>
+      </div>
+      <span class="cd-sep">:</span>
+      <div class="cd-unit">
+        <span class="cd-val" id="cd-mins">00</span>
+        <span class="cd-label">Mins</span>
+      </div>
+      <span class="cd-sep">:</span>
+      <div class="cd-unit">
+        <span class="cd-val" id="cd-secs">00</span>
+        <span class="cd-label">Segs</span>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-wrapper">
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ── Global Variables ──
+    let globalTargetDate = null;
+    let globalMaintStart = null;
+    let countdownInterval = null;
+
+    // ── Autoplay Logic ──
+    const videoEl = document.getElementById('bg-video');
+    if (videoEl) {
+      // Intentar reproducir con sonido automáticamente
+      videoEl.muted = false;
+      const playPromise = videoEl.play();
+      
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          // Si el navegador bloquea el sonido (política de Apple/Google en móviles)
+          // silenciamos para que al menos el video no se quede congelado.
+          videoEl.muted = true;
+          videoEl.play().catch(e => console.error('Fallo absoluto al reproducir video:', e));
+        });
+      }
+    }
+
+    async function fetchConfig() {
+      try {
+        const res = await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json?nocache=' + Date.now());
+        const cfg = await res.json();
+        if (!cfg) return;
+
+        // Redirect back to main site when admin disables maintenance (unless in preview mode)
+        const urlParams = new URLSearchParams(window.location.search);
+        const isPreview = urlParams.get('preview') === 'true';
+        if (isPreview) {
+            if (urlParams.has('type')) cfg.maintType = urlParams.get('type');
+            if (urlParams.has('date')) cfg.maintDate = urlParams.get('date');
+        }
+
+        if (cfg.mantenimiento === false && !isPreview) {
+          window.location.href = 'wrapped.html';
+          return;
+        } else if (cfg.maintScreen !== 'cinematic') {
+          window.location.href = 'mantenimiento';
+          return;
+        }
+
+        if (cfg.maintType === 'indefinite') {
+            document.querySelector('.countdown').style.display = 'none';
+            document.getElementById('progress-fill').style.width = '100%';
+            
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+
+            if (!document.getElementById('maint-phrase')) {
+                const phrases = [
+                    "Estamos preparando algo especial...",
+                    "Afinando los últimos detalles...",
+                    "Puliendo cada pequeño rincón...",
+                    "Asegurando que todo sea perfecto...",
+                    "Haciendo un poco de magia..."
+                ];
+                
+                document.querySelector('.title').innerHTML = `Volvemos pronto<br><span id="maint-phrase" class="phrase-fade" style="font-size: 1.2rem; font-weight: 400; opacity: 0; display: inline-block; min-height: 1.8rem; margin-top: 8px;">${phrases[0]}</span>`;
+                
+                if (!document.getElementById('dynamic-phrase-style')) {
+                    const style = document.createElement('style');
+                    style.id = 'dynamic-phrase-style';
+                    style.innerHTML = `
+                      .phrase-fade { animation: fade-phrase 8s cubic-bezier(0.25, 1, 0.5, 1) infinite; }
+                      @keyframes fade-phrase {
+                        0%, 2% { opacity: 0; transform: translateY(8px); }
+                        10%, 90% { opacity: 0.8; transform: translateY(0); }
+                        98%, 100% { opacity: 0; transform: translateY(-8px); }
+                      }
+                    `;
+                    document.head.appendChild(style);
+                }
+                
+                const phraseEl = document.getElementById('maint-phrase');
+                phraseEl.dataset.idx = 0;
+                phraseEl.addEventListener('animationiteration', () => {
+                    let phraseIndex = parseInt(phraseEl.dataset.idx, 10);
+                    phraseIndex = (phraseIndex + 1) % phrases.length;
+                    phraseEl.dataset.idx = phraseIndex;
+                    phraseEl.textContent = phrases[phraseIndex];
+                });
+            }
+            return;
+        }
+
+        if (!cfg.maintDate) return;
+        const [dPart, tPart] = cfg.maintDate.split('T');
+        const [yyyy, mm, dd] = dPart.split('-');
+        const [hh, min] = tPart.split(':');
+        const targetDate = new Date(yyyy, mm - 1, dd, hh, min).getTime();
+        if (!targetDate || isNaN(targetDate)) return;
+
+        let maintStart = targetDate - (24 * 60 * 60 * 1000); // fallback 24h
+        if (cfg.lastUpdated) {
+          maintStart = new Date(cfg.lastUpdated).getTime();
+        }
+
+        // Update globals
+        globalTargetDate = targetDate;
+        globalMaintStart = maintStart;
+
+        // Start countdown if not running
+        if (!countdownInterval) {
+          updateTimer();
+          countdownInterval = setInterval(updateTimer, 1000);
+        }
+
+      } catch (e) {
+        console.error('Error fetching config:', e);
+      }
+    }
+
+    function updateTimer() {
+      if (!globalTargetDate || !globalMaintStart) return;
+
+      const now = Date.now();
+      const distance = globalTargetDate - now;
+      const totalDuration = globalTargetDate - globalMaintStart;
+
+      if (distance <= 0) {
+        if (countdownInterval) clearInterval(countdownInterval);
+        document.getElementById('cd-days').textContent = '00';
+        document.getElementById('cd-hours').textContent = '00';
+        document.getElementById('cd-mins').textContent = '00';
+        document.getElementById('cd-secs').textContent = '00';
+        if (document.getElementById('pct')) document.getElementById('pct').textContent = '100%';
+        document.getElementById('progress-fill').style.width = '100%';
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const isPreview = urlParams.get('preview') === 'true';
+        if (isPreview) return;
+
+        // Turn off maintenance in Firebase automatically
+        fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json?nocache=' + Date.now())
+          .then(res => res.json())
+          .then(currentCfg => {
+            if (currentCfg) {
+              const updatedCfg = { ...currentCfg, mantenimiento: false };
+              delete updatedCfg.ghToken;
+              delete updatedCfg.ghRepo;
+              return fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedCfg)
+              });
+            }
+          })
+          .then(() => {
+            localStorage.removeItem('yaire_config');
+            window.location.href = 'wrapped.html';
+          })
+          .catch(() => {
+            window.location.href = 'wrapped.html';
+          });
+        return;
+      }
+
+      // Progress
+      let percent = 0;
+      if (totalDuration > 0) {
+        percent = ((now - globalMaintStart) / totalDuration) * 100;
+        if (percent < 0) percent = 0;
+        if (percent > 100) percent = 100;
+      }
+      document.getElementById('progress-fill').style.width = percent + '%';
+
+      // Countdown values
+      const days    = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours   = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById('cd-days').textContent  = String(days).padStart(2, '0');
+      document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('cd-mins').textContent  = String(minutes).padStart(2, '0');
+      document.getElementById('cd-secs').textContent  = String(seconds).padStart(2, '0');
+    }
+
+    // Initial fetch
+    fetchConfig();
+    // Poll every 3 seconds for dynamic updates
+    setInterval(() => { if (!document.hidden) fetchConfig(); }, 3000);
+  </script>
+
+</body>
+
+</html>
+

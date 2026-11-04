@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Yaire · Bedroom · Night Window</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!--
+  Yaire · Aesthetic Bedroom · Night Window  (loop infinito)
+  ------------------------------------------------------------------
+  Archivo INDEPENDIENTE. No importa ni modifica el juego (dclf.html).
+  Reutiliza la filosofía del motor gráfico de DCLF: WebGL propio, geometría
+  procedural low-poly (box / cone / blob / line), color por vértice, niebla,
+  dither y el mismo modelo de personaje de Yaire (piel, pelo, vestido rosa,
+  botas/zapatillas, manos, cabeza chibi), reescrito aquí con pose sentada.
+
+  Nunca termina: no hay video ni timeline. Todo es simulación continua
+  (máquina de actividades aleatoria, cortinas, estrellas, luciérnagas, etc.).
+
+  Parámetros de depuración opcionales:  ?t=60 (avanza la simulación)  ?act=sip  ?hold=1
+  Teclas: F = pantalla completa.
+-->
+<style>
+html,body{margin:0;height:100%;background:#05060d;overflow:hidden}
+body{cursor:none}
+canvas#c{position:fixed;inset:0;width:100vw;height:100vh;display:block}
+#vig{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 48%,transparent 50%,rgba(3,3,14,.50) 100%)}
+#grain{position:fixed;inset:-60px;pointer-events:none;opacity:.035;animation:gr .5s steps(5) infinite}
+@keyframes gr{0%{transform:translate(0,0)}20%{transform:translate(-23px,17px)}40%{transform:translate(19px,-31px)}60%{transform:translate(-37px,-9px)}80%{transform:translate(29px,26px)}100%{transform:translate(0,0)}}
+#fatal{position:fixed;inset:0;display:none;place-items:center;color:#cbb;font:16px system-ui;background:#05060d}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="brand" style="position:fixed;top:4rem;left:5rem;font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:1.85rem;font-weight:900;letter-spacing:-0.055em;color:#ffffff;text-shadow:0 2px 14px rgba(0,0,0,0.75);pointer-events:none;z-index:100">28E</div>
+<div id="vig"></div>
+<div id="grain"></div>
+<div id="fatal">WebGL no está disponible en este navegador.</div>
+<script>
+'use strict';
+(()=>{
+/* =====================================================================
+   1. MOTOR (mismo enfoque que DCLF: WebGL1 + Mesh procedural low-poly)
+   ===================================================================== */
+const cv=document.getElementById('c');
+const gl=cv.getContext('webgl',{antialias:true,alpha:false,powerPreference:'high-performance'});
+if(!gl){document.getElementById('fatal').style.display='grid';return}
+const Q=new URLSearchParams(location.search);
+
+/* ---- matemática (column-major, idéntica convención que DCLF) ---- */
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const sub=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]];
+const add=(a,b)=>[a[0]+b[0],a[1]+b[1],a[2]+b[2]];
+const mulv=(a,k)=>[a[0]*k,a[1]*k,a[2]*k];
+const dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+const norm=a=>{const d=Math.hypot(a[0],a[1],a[2])||1;return[a[0]/d,a[1]/d,a[2]/d]};
+const lerp=(a,b,t)=>a+(b-a)*t;
+const lerpv=(a,b,t)=>[lerp(a[0],b[0],t),lerp(a[1],b[1],t),lerp(a[2],b[2],t)];
+const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t)};
+function view(e,t){const z=norm(sub(e,t)),x=norm(cross([0,1,0],z)),y=cross(z,x);return[x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,-dot(x,e),-dot(y,e),-dot(z,e),1]}
+function projection(a,fov,n=.2,r=900){const f=1/Math.tan(fov/2);return[f/a,0,0,0,0,f,0,0,0,0,(r+n)/(n-r),-1,0,0,2*r*n/(n-r),0]}
+function mul(a,b){const r=new Array(16);for(let c=0;c<4;c++)for(let i=0;i<4;i++){let s=0;for(let k=0;k<4;k++)s+=a[k*4+i]*b[c*4+k];r[c*4+i]=s}return r}
+const Tm=(x,y,z)=>[1,0,0,0,0,1,0,0,0,0,1,0,x,y,z,1];
+const Sm=k=>[k,0,0,0,0,k,0,0,0,0,k,0,0,0,0,1];
+const Rx=a=>{const c=Math.cos(a),s=Math.sin(a);return[1,0,0,0,0,c,s,0,0,-s,c,0,0,0,0,1]};
+const Ry=a=>{const c=Math.cos(a),s=Math.sin(a);return[c,0,-s,0,0,1,0,0,s,0,c,0,0,0,0,1]};
+const Rz=a=>{const c=Math.cos(a),s=Math.sin(a);return[c,s,0,0,-s,c,0,0,0,0,1,0,0,0,0,1]};
+const ap=(M,p)=>[M[0]*p[0]+M[4]*p[1]+M[8]*p[2]+M[12],M[1]*p[0]+M[5]*p[1]+M[9]*p[2]+M[13],M[2]*p[0]+M[6]*p[1]+M[10]*p[2]+M[14]];
+const an=(M,n)=>[M[0]*n[0]+M[4]*n[1]+M[8]*n[2],M[1]*n[0]+M[5]*n[1]+M[9]*n[2],M[2]*n[0]+M[6]*n[1]+M[10]*n[2]];
+function rng(seed){return()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+
+/* ---- shaders ----
+   Atributo x = (emisivo, alfa, fx)
+   emisivo >= 10  -> sin iluminación (cielo, luna, estrellas)
+   fx  >= 2       -> cortina (balanceo con viento, peso = fx-2)
+   0 < fx < 2     -> planta/hoja (balanceo suave, peso = min(fx,1))
+   fx  < 0        -> parpadeo de luz (twinkle) de intensidad |fx|            */
+const VS=`attribute vec3 p;attribute vec3 n;attribute vec3 c;attribute vec3 x;
+uniform mat4 vp;uniform float t;
+varying vec3 wp;varying vec3 nn;varying vec3 col;varying vec3 xx;
+float h(vec3 v){return fract(sin(dot(v,vec3(12.9898,78.233,37.719)))*43758.5453);}
+void main(){
+ vec3 q=p;float fx=x.z;float em=x.x;
+ if(fx>=2.0){float w=fx-2.0;
+  q.z+=(sin(t*0.8+p.x*3.1+p.y*1.1)*0.5+0.5)*0.15*w+sin(t*1.6+p.x*7.0)*0.025*w;
+  q.x+=sin(t*0.6+p.y*1.7)*0.04*w;}
+ else if(fx>0.0){q.x+=sin(t*1.5+p.x*0.9+p.z*0.6)*0.07*fx;q.z+=cos(t*1.2+p.x*0.5+p.z*0.8)*0.035*fx;}
+ else if(fx<0.0){float k=-fx;em*=1.0-k*(0.5+0.5*sin(t*(1.5+h(p)*3.5)+h(p+1.0)*6.28));}
+ wp=q;nn=n;col=c;xx=vec3(em,x.y,fx);
+ gl_Position=vp*vec4(q,1.0);
+}`;
+const FS=`#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+varying vec3 wp;varying vec3 nn;varying vec3 col;varying vec3 xx;
+uniform vec3 eye;uniform vec3 fogCol;uniform float fogN;uniform float fogF;
+uniform vec3 amb;uniform vec3 moonD;uniform vec3 moonC;
+uniform vec4 pl[4];uniform vec3 plc[4];
+uniform float glowPass;
+vec3 finish(vec3 c){c=vec3(1.0)-exp(-c*1.30);c=pow(c,vec3(0.86));
+ c+=(mod(gl_FragCoord.x+mod(gl_FragCoord.y,2.0)*2.0,4.0)-1.5)/280.0;return c;}
+void main(){
+ float em=xx.x;float al=xx.y;
+ if(glowPass>0.5){gl_FragColor=vec4(col*em,al);return;}
+ if(em>=10.0){gl_FragColor=vec4(finish(col*(em-10.0)),al);return;}
+ vec3 N=normalize(nn);vec3 V=eye-wp;if(dot(N,V)<0.0)N=-N;
+ float ao=1.0;
+ if(wp.z>-3.3&&wp.x>-4.4&&wp.x<4.4&&wp.y<3.5){
+  ao=mix(0.62,1.0,smoothstep(0.0,0.7,wp.z+3.0))*mix(0.66,1.0,smoothstep(0.0,0.8,wp.x+4.2))*mix(0.72,1.0,smoothstep(0.0,0.35,wp.y));}
+ vec3 L=amb*ao*(0.72+0.28*N.y)+moonC*max(dot(N,-moonD),0.0)*(0.55+0.45*ao);
+ for(int i=0;i<4;i++){
+  vec3 d=pl[i].xyz-wp;float dist=length(d);
+  float a=clamp(1.0-dist/pl[i].w,0.0,1.0);a*=a;
+  float ndl=max(dot(N,d/max(dist,0.001)),0.0)*0.85+0.15;
+  L+=plc[i]*a*ndl;}
+ vec3 c=col*L+col*em;
+ float f=clamp((distance(eye,wp)-fogN)/(fogF-fogN),0.0,1.0);
+ c=mix(c,fogCol,f*f*0.92);
+ gl_FragColor=vec4(finish(c),al);
+}`;
+function sh(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(o));return o}
+const pr=gl.createProgram();
+try{gl.attachShader(pr,sh(gl.VERTEX_SHADER,VS));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,FS));gl.linkProgram(pr);
+ if(!gl.getProgramParameter(pr,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(pr))}
+catch(e){console.error(e);document.getElementById('fatal').style.display='grid';return}
+gl.useProgram(pr);
+const AT=['p','n','c','x'].map(n=>gl.getAttribLocation(pr,n));
+const U=n=>gl.getUniformLocation(pr,n);
+const u={vp:U('vp'),t:U('t'),eye:U('eye'),fogCol:U('fogCol'),fogN:U('fogN'),fogF:U('fogF'),amb:U('amb'),moonD:U('moonD'),moonC:U('moonC'),pl:U('pl'),plc:U('plc'),glow:U('glowPass')};
+
+/* ---- Mesh: igual que el de DCLF (box/cone/blob/line) + transformaciones, alfa y fx ---- */
+const STRIDE=12;
+class Mesh{
+ constructor(cap=4096){this.a=new Float32Array(cap*STRIDE);this.n=0;this.M=null;this.st=[];this.em=0;this.al=1;this.fx=0;this.fxf=null}
+ clear(){this.n=0;this.M=null;this.st.length=0;this.em=0;this.al=1;this.fx=0;this.fxf=null}
+ push(M){this.st.push(this.M);this.M=this.M?mul(this.M,M):M}
+ pop(){this.M=this.st.pop()}
+ v(p,nr,c,al){
+  if(this.M){p=ap(this.M,p);nr=an(this.M,nr)}
+  if((this.n+1)*STRIDE>this.a.length){const b=new Float32Array(this.a.length*2);b.set(this.a);this.a=b}
+  const a=this.a,o=this.n*STRIDE;
+  a[o]=p[0];a[o+1]=p[1];a[o+2]=p[2];a[o+3]=nr[0];a[o+4]=nr[1];a[o+5]=nr[2];
+  a[o+6]=c[0];a[o+7]=c[1];a[o+8]=c[2];a[o+9]=this.em;a[o+10]=al===undefined?this.al:al;
+  a[o+11]=this.fxf?this.fxf(p):this.fx;this.n++}
+ tri(a,b,c,col,al){const nr=norm(cross(sub(b,a),sub(c,a)));
+  const A=al===undefined?[undefined,undefined,undefined]:(typeof al==='number'?[al,al,al]:al);
+  this.v(a,nr,col,A[0]);this.v(b,nr,col,A[1]);this.v(c,nr,col,A[2])}
+ quad(a,b,c,d,col,al){const A=al===undefined?undefined:(typeof al==='number'?[al,al,al,al]:al);
+  this.tri(a,b,c,col,A&&[A[0],A[1],A[2]]);this.tri(a,c,d,col,A&&[A[0],A[2],A[3]])}
+ box(x,y,z,w,h,d,c){const X=x-w/2,Z=z-d/2,A=x+w/2,B=z+d/2,Y=y+h;
+  this.quad([X,Y,Z],[X,Y,B],[A,Y,B],[A,Y,Z],c);this.quad([X,y,Z],[A,y,Z],[A,y,B],[X,y,B],c);
+  this.quad([X,y,B],[A,y,B],[A,Y,B],[X,Y,B],c);this.quad([A,y,Z],[X,y,Z],[X,Y,Z],[A,Y,Z],c);
+  this.quad([A,y,B],[A,y,Z],[A,Y,Z],[A,Y,B],c);this.quad([X,y,Z],[X,y,B],[X,Y,B],[X,Y,Z],c)}
+ cone(x,y,z,r,R,h,c,n=7){for(let i=0;i<n;i++){const a=i*2*Math.PI/n,b=(i+1)*2*Math.PI/n,
+   p=[x+Math.cos(a)*r,y,z+Math.sin(a)*r],q=[x+Math.cos(b)*r,y,z+Math.sin(b)*r],
+   s=[x+Math.cos(a)*R,y+h,z+Math.sin(a)*R],t=[x+Math.cos(b)*R,y+h,z+Math.sin(b)*R];
+   this.quad(p,s,t,q,c);if(R)this.tri([x,y+h,z],t,s,c);if(r)this.tri([x,y,z],p,q,c)}}
+ blob(x,y,z,rx,ry,rz,c,n=7,bands=4){const st=Math.PI/bands;
+  for(let j=0;j<bands;j++)for(let i=0;i<n;i++){
+   const a=-Math.PI/2+j*st,b=a+st,uu=i*2*Math.PI/n,vv=uu+2*Math.PI/n,
+   p=(t,s)=>[x+rx*Math.cos(t)*Math.cos(s),y+ry*Math.sin(t),z+rz*Math.cos(t)*Math.sin(s)];
+   this.quad(p(a,uu),p(b,uu),p(b,vv),p(a,vv),c)}}
+ line(a,b,r,c,n=5){const ax=norm(sub(b,a)),uu=norm(cross(ax,Math.abs(ax[1])<.9?[0,1,0]:[1,0,0])),vv=cross(ax,uu),
+   p=(q,t)=>[q[0]+r*(uu[0]*Math.cos(t)+vv[0]*Math.sin(t)),q[1]+r*(uu[1]*Math.cos(t)+vv[1]*Math.sin(t)),q[2]+r*(uu[2]*Math.cos(t)+vv[2]*Math.sin(t))];
+  for(let i=0;i<n;i++){const t=i*2*Math.PI/n,s=t+2*Math.PI/n;this.quad(p(a,t),p(b,t),p(b,s),p(a,s),c)}}
+ /* caja rotada alrededor de su centro */
+ xbox(cx,cy,cz,w,h,d,c,rx=0,ry=0,rz=0){this.push(mul(mul(Tm(cx,cy,cz),Ry(ry)),mul(Rx(rx),Rz(rz))));this.box(0,-h/2,0,w,h,d,c);this.pop()}
+ /* elipse plana (sombra / glow / nube): ax,ay = ejes del plano, alfa centro->borde */
+ ell(P,ax,ay,rx,ry,c,aC,aE,n=18){for(let i=0;i<n;i++){const a=i*2*Math.PI/n,b=(i+1)*2*Math.PI/n;
+   const pa=add(P,add(mulv(ax,Math.cos(a)*rx),mulv(ay,Math.sin(a)*ry))),pb=add(P,add(mulv(ax,Math.cos(b)*rx),mulv(ay,Math.sin(b)*ry)));
+   this.tri(P,pa,pb,c,[aC,aE,aE])}}
+}
+const X_=[1,0,0],Z_=[0,0,1],Y_=[0,1,0];
+const MZ=[0,0,-1];
+
+/* ---- buffers ---- */
+function mkBuf(){return gl.createBuffer()}
+const bufS=mkBuf(),bufSB=mkBuf(),bufDS=mkBuf(),bufDB=mkBuf(),bufDG=mkBuf();
+function upload(m,b,usage){gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,m.a.subarray(0,m.n*STRIDE),usage);return m.n}
+function drawBuf(b,n){if(!n)return;gl.bindBuffer(gl.ARRAY_BUFFER,b);
+ AT.forEach((a,i)=>{gl.enableVertexAttribArray(a);gl.vertexAttribPointer(a,3,gl.FLOAT,false,STRIDE*4,i*12)});gl.drawArrays(gl.TRIANGLES,0,n)}
+
+/* =====================================================================
+   2. PALETA (colores de DCLF: piel, pelo, vestido, rosa, crema…) + noche
+   ===================================================================== */
+const C={skin:[.85,.61,.45],hair:[.17,.12,.15],dress:[.87,.39,.60],boot:[.30,.23,.23],pink:[1,.48,.70],rose:[1,.70,.81],cream:[.98,.91,.76],
+ leaf:[.28,.51,.31],lime:[.47,.67,.37],wood:[.57,.38,.25],tan:[.75,.56,.37],stone:[.64,.69,.64],yellow:[.97,.79,.38],dark:[.22,.33,.27],
+ water:[.26,.69,.84],soil:[.42,.28,.21],eye:[.10,.07,.09]};
+const WALL=[.50,.40,.60],WALL2=[.44,.35,.55],TRIM=[.93,.88,.80],WOOD=[.58,.40,.29],WOODD=[.34,.23,.19],LILAC=[.66,.55,.88],SWEAT=[.96,.91,.82];
+const rr=rng(28);
+
+/* =====================================================================
+   3. CÁMARA y ventana (la escena exterior se orienta con la mirada)
+   ===================================================================== */
+const E0=[2.95,1.95,1.80],T0=[-.30,1.50,-2.05],FOV=.80;
+const WIN={x0:-1.55,x1:1.75,y0:1.10,y1:3.20,z:-3.0};
+const WC=[(WIN.x0+WIN.x1)/2,(WIN.y0+WIN.y1)/2,WIN.z];
+function winPt(u,v){return[WC[0]+u*(WIN.x1-WIN.x0)/2,WC[1]+v*(WIN.y1-WIN.y0)/2,WIN.z]}
+function skyRay(u,v,dist){return add(E0,mulv(norm(sub(winPt(u,v),E0)),dist))}
+const OUT_YAW=Math.atan2(E0[0]-WC[0],E0[2]-WC[2]);
+const SKY_R=norm(cross(norm(sub(winPt(0,0),E0)),Y_)),SKY_U=cross(SKY_R,norm(sub(winPt(0,0),E0)));
+
+/* =====================================================================
+   4. ESCENA ESTÁTICA
+   ===================================================================== */
+const S=new Mesh(1<<17),SB=new Mesh(1<<12);
+const BULBS=[];            // luces de hadas (para glow dinámico)
+const LAMPS={desk:[1.62,1.34,-2.56],bed:[-3.80,.92,.05],fairy:[-1.2,3.0,-2.7],neon:[-3.55,2.30,-1.70]};
+
+function shadow(x,z,rx,rz,a,y=.006){SB.em=0;SB.ell([x,y,z],X_,[0,0,-1],rx,rz,[0,0,0],a,0,20)}
+
+function tulip(m,x,z,g,phase=0,pal=0){
+ const h=.15+.73*g;m.fxf=p=>clamp((p[1]-.1)*.9,0,.95);
+ m.line([x,.09,z],[x,h,z],.022,C.leaf);
+ if(g>.08){m.tri([x,.13,z],[x-.2*g,h*.65,z+.04],[x,h*.4,z],C.lime);m.tri([x,h*.4,z],[x+.2*g,h*.84,z-.04],[x,h*.7,z],C.leaf)}
+ if(g>.48){const k=(g-.48)/.52,r=.035+.12*k,cols=pal?[[.95,.82,.35],[1,.9,.55]]:[C.rose,C.pink];
+  m.em=.35;for(let i=0;i<5;i++){const a=i*2*Math.PI/5+phase;m.blob(x+Math.cos(a)*r*.5,h+.08,z+Math.sin(a)*r*.5,r*.62,.1+.08*k,r*.62,cols[i%2],5,2)}m.em=0}
+ m.fxf=null}
+function sunflower(m,x,z,g){
+ const h=.16+1.30*g;m.fxf=p=>clamp((p[1]-.1)*.7,0,.95);
+ m.line([x,.09,z],[x,h,z],.027,C.leaf);
+ for(let i=0;i<3;i++){const y=h*(.25+i*.17),s=i%2?1:-1;m.tri([x,y,z],[x+s*.26*g,y+.12*g,z+.09*g],[x,y+.16*g,z],i%2?C.leaf:C.lime)}
+ const r=.055+.21*g;m.blob(x,h,z,r*.53,r*.53,.055,[.28,.17,.07],7,3);m.em=.3;
+ for(let i=0;i<12;i++){const a=i*Math.PI/6,b=a-.16,c=a+.16,col=i%2?[1,.72,.12]:[1,.85,.25];
+  const A=[x+Math.cos(b)*r*.44,h+Math.sin(b)*r*.44,z+.022],B=[x+Math.cos(a)*r,h+Math.sin(a)*r,z+.022],D=[x+Math.cos(c)*r*.44,h+Math.sin(c)*r*.44,z+.022];
+  m.tri(A,B,D,col);m.tri(D,B,A,col)}
+ m.em=0;m.fxf=null}
+
+function fairyPath(m,A,B,sag,count,seed){
+ const rnd=rng(seed);let prev=null;
+ for(let i=0;i<=count;i++){const s=i/count;const p=[lerp(A[0],B[0],s),lerp(A[1],B[1],s)-sag*4*s*(1-s),lerp(A[2],B[2],s)];
+  if(prev)m.line(prev,p,.006,[.12,.10,.12],4);prev=p;
+  if(i>0&&i<count){const k=(i+seed)%3,col=k===0?[1,.80,.52]:(k===1?[1,.52,.72]:[.78,.66,1]);
+   m.em=1.9;m.fx=-.8;m.blob(p[0],p[1]-.04,p[2],.032,.042,.032,col,5,2);m.em=0;m.fx=0;
+   BULBS.push({p:[p[0],p[1]-.04,p[2]],c:col,ph:rnd()*6.28,sp:.7+rnd()*1.6})}}}
+
+function buildRoom(){
+ const m=S;
+ /* suelo de tablones (separaciones oscuras como en la casa de DCLF) */
+ for(let i=0;i<14;i++){const j=.9+((i*37)%11)/55;m.box(-4.2+.6*(i+.5),-.1,.2,.585,.1,6.4,[.50*j,.34*j,.26*j])}
+ /* paredes (la de fondo tiene el hueco de la ventana) */
+ const T=.25,zc=-3-T/2,H=3.5,{x0,x1,y0,y1}=WIN;
+ m.box((-4.2+x0)/2,0,zc,x0+4.2,H,T,WALL);m.box((x1+4.2)/2,0,zc,4.2-x1,H,T,WALL);
+ m.box((x0+x1)/2,0,zc,x1-x0,y0,T,WALL);m.box((x0+x1)/2,y1,zc,x1-x0,H-y1,T,WALL);
+ m.box(-4.2-T/2,0,.2,T,H,6.4,WALL2);          // pared izquierda
+ m.box(0,H,.2,8.8,.1,6.9,[.22,.19,.30]);       // techo
+ m.box(0,0,3.4+T/2,8.4,H,T,WALL);m.box(4.2+T/2,0,.2,T,H,6.4,WALL2);
+ /* zócalos */
+ m.box(0,0,-2.965,8.4,.15,.07,TRIM);m.box(-4.165,0,.2,.07,.15,6.4,TRIM);
+ /* marco de ventana */
+ m.box((x0+x1)/2,y1-.07,-3.04,x1-x0+.08,.08,.12,TRIM);m.box((x0+x1)/2,y0,-3.04,x1-x0+.08,.07,.12,TRIM);
+ m.box(x0,y0,-3.04,.07,y1-y0,.12,TRIM);m.box(x1,y0,-3.04,.07,y1-y0,.12,TRIM);
+ m.box(WC[0],y0,-3.07,.05,y1-y0,.06,TRIM);m.box((x0+x1)/2,WC[1],-3.07,x1-x0,.05,.06,TRIM);
+ m.box((x0+x1)/2,y0-.05,-2.86,x1-x0+.34,.05,.30,TRIM);
+ /* cortinas con balanceo en shader */
+ for(const [ca,cb] of [[-2.20,-1.42],[1.62,2.40]]){
+  const N=9,segs=10,top=3.28,bot=1.02;
+  for(let i=0;i<N;i++){const xa=lerp(ca,cb,i/N),xb=lerp(ca,cb,(i+1)/N),zo=(i%2?.05:-.01)-2.88,zo2=(i%2?-.01:.05)-2.88;
+   for(let k=0;k<segs;k++){const ya=lerp(top,bot,k/segs),yb=lerp(top,bot,(k+1)/segs),wa=2+k/segs,wb=2+(k+1)/segs;
+    const col=mulv(LILAC,.80+.20*(i%2)+.10*Math.sin(i*1.7));
+    m.fxf=null;m.fx=wa;const a=[xa,ya,zo],b=[xb,ya,zo2];m.fx=wb;const c=[xb,yb,zo2],d=[xa,yb,zo];
+    // quad con peso fx variable por vértice
+    const nr=norm(cross(sub(b,a),sub(c,a)));
+    m.fx=wa;m.v(a,nr,col);m.v(b,nr,col);m.fx=wb;m.v(c,nr,col);
+    m.fx=wa;m.v(a,nr,col);m.fx=wb;m.v(c,nr,col);m.v(d,nr,col)}}}
+ m.fx=0;
+ m.line([-2.35,3.30,-2.86],[-1.2,3.30,-2.86],.025,WOODD);m.line([1.45,3.30,-2.86],[2.55,3.30,-2.86],.025,WOODD);
+ /* guirnaldas de luces */
+ fairyPath(m,[-4.15,3.32,-2.94],[-2.45,3.36,-2.94],.34,7,1);
+ fairyPath(m,[2.55,3.36,-2.94],[4.15,3.30,-2.94],.30,6,2);
+ fairyPath(m,[-4.14,3.30,-2.85],[-4.14,3.22,-.7],.40,8,3);
+ fairyPath(m,[-4.14,3.22,-.7],[-4.14,3.28,1.4],.38,8,4);
+ fairyPath(m,[-4.14,3.28,1.4],[-4.14,3.30,3.2],.36,7,5);
+}
+
+function buildFurniture(){
+ const m=S;
+ /* ---- alfombra ---- */
+ m.cone(-.55,0,.55,1.55,1.55,.012,[.58,.30,.46],40);m.cone(-.55,0,.55,1.38,1.38,.016,[.96,.88,.82],40);m.cone(-.55,0,.55,1.22,1.22,.020,[.84,.46,.62],40);
+ m.cone(-.55,0,.55,.5,.5,.024,[.96,.88,.82],28);
+ /* ---- escritorio ---- */
+ m.box(.30,.80,-2.50,4.10,.07,1.0,[.66,.48,.36]);m.box(.30,.78,-2.50,4.0,.02,.95,WOODD);
+ m.box(1.78,0,-2.52,.95,.80,.88,[.58,.40,.29]);
+ for(let i=0;i<3;i++){m.box(1.78,.07+i*.24,-2.07,.86,.20,.02,[.70,.52,.40]);m.box(1.78,.15+i*.24,-2.05,.16,.03,.03,C.cream)}
+ for(const [x,z] of [[-1.7,-2.05],[-1.7,-2.95]])m.box(x,0,z,.07,.80,.07,WOODD);
+ m.box(-1.7,.30,-2.5,.05,.04,.9,WOODD);
+ /* ---- silla (cojín rosa) ---- */
+ m.cone(-.10,.40,-1.55,.34,.34,.07,C.dress,14);m.cone(-.10,.37,-1.55,.30,.30,.03,[.45,.20,.32],14);
+ m.line([-.10,.10,-1.55],[-.10,.40,-1.55],.035,[.16,.13,.18],6);
+ for(let i=0;i<5;i++){const a=i*2*Math.PI/5+.3,x=-.10+Math.cos(a)*.34,z=-1.55+Math.sin(a)*.34;
+  m.line([-.10,.10,-1.55],[x,.05,z],.025,[.16,.13,.18],4);m.blob(x,.035,z,.04,.035,.04,[.10,.09,.12],5,2)}
+ m.box(-.10,.49,-1.15,.52,.18,.07,C.dress);m.box(-.10,.49,-1.115,.44,.12,.02,[.95,.55,.72]);
+ /* ---- cuaderno abierto, taza, libros, jarrón con tulipanes, planta ---- */
+ m.box(0,.84,-2.20,.62,.016,.42,C.pink);m.box(-.15,.856,-2.20,.28,.012,.38,C.cream);m.box(.15,.856,-2.20,.28,.012,.38,C.cream);
+ for(let i=0;i<6;i++){m.box(-.15,.869,-2.33+i*.065,.20,.002,.006,[.62,.58,.70]);m.box(.15,.869,-2.33+i*.065,.20,.002,.006,[.62,.58,.70])}
+ m.box(0,.856,-2.20,.012,.02,.40,[.42,.20,.32]);
+ const bk=[[.90,-2.62,.46,.30,.07,C.rose],[.92,-2.62,.42,.28,.06,LILAC],[.90,-2.62,.40,.27,.07,C.cream]];let by=.84;
+ for(const [x,z,w,d,h,c] of bk){m.xbox(x,by+h/2,z,w,h,d,c,0,(x*7)%.3-.1,0);by+=h}
+ m.cone(-1.32,.84,-2.68,.09,.07,.20,[.70,.56,.90],8);m.cone(-1.32,.84,-2.68,.05,.05,.01,[.3,.5,.3],8);
+ tulip(m,-1.35,-2.68,.55,.2,0);tulip(m,-1.28,-2.70,.62,1.1,0);tulip(m,-1.31,-2.64,.48,2.2,1);
+ m.cone(-.85,.84,-2.75,.08,.07,.12,[.86,.54,.42],8);m.blob(-.85,.97,-2.75,.07,.08,.07,C.leaf,6,3);
+ for(let i=0;i<5;i++){const a=i*1.3;m.cone(-.85+Math.cos(a)*.03,.98,-2.75+Math.sin(a)*.03,.012,.004,.12,C.lime,4)}
+ /* lámpara de escritorio */
+ m.cone(1.95,.84,-2.68,.13,.10,.05,[.14,.12,.16],10);m.line([1.95,.88,-2.68],[1.80,1.34,-2.62],.018,[.15,.13,.18],4);
+ m.line([1.80,1.34,-2.62],[1.62,1.40,-2.56],.018,[.15,.13,.18],4);
+ m.cone(1.62,1.31,-2.56,.10,.20,.15,[.96,.70,.75],12);m.em=2.3;m.cone(1.62,1.30,-2.56,.17,.17,.01,[1,.75,.45],12);m.em=0;
+ /* ---- cama ---- */
+ m.box(-3.10,0,-1.70,1.92,.30,2.50,WOODD);
+ m.box(-3.10,.30,-1.70,1.80,.22,2.40,SWEAT);
+ m.box(-3.10,.46,-1.12,1.86,.14,1.56,LILAC);m.box(-3.10,.56,-1.84,1.86,.08,.22,C.rose);
+ for(let i=0;i<6;i++)m.box(-4.0+i*.36+.18,.44,-.34,.30,.12,.05,mulv(LILAC,.9));
+ m.box(-3.10,.20,-2.97,2.0,1.0,.08,WOODD);m.box(-3.10,1.2,-2.97,2.0,.07,.12,WOOD);
+ m.blob(-3.50,.62,-2.56,.40,.13,.27,SWEAT,9,3);m.blob(-2.72,.62,-2.56,.40,.13,.27,C.rose,9,3);
+ m.blob(-3.00,.63,-2.20,.30,.11,.20,[.98,.85,.60],8,3);
+ /* peluche osito */
+ m.blob(-2.50,.72,-1.95,.13,.14,.12,[.78,.56,.40],7,3);m.blob(-2.50,.90,-1.95,.10,.10,.09,[.80,.58,.42],7,3);
+ m.blob(-2.58,.99,-1.95,.04,.04,.03,[.72,.5,.36],5,2);m.blob(-2.42,.99,-1.95,.04,.04,.03,[.72,.5,.36],5,2);
+ m.box(-2.53,.91,-1.855,.02,.02,.012,[.1,.08,.08]);m.box(-2.47,.91,-1.855,.02,.02,.012,[.1,.08,.08]);
+ /* mesita de noche + lámpara */
+ m.box(-3.82,0,.05,.62,.56,.62,WOOD);m.box(-3.82,.56,.05,.68,.04,.68,TRIM);m.box(-3.5,.30,.05,.02,.2,.5,WOODD);
+ m.box(-3.62,.60,.28,.16,.05,.12,C.rose);m.box(-3.62,.65,.28,.14,.05,.11,C.cream);
+ m.cone(-3.82,.60,.05,.10,.07,.04,C.cream,8);m.line([-3.82,.62,.05],[-3.82,.80,.05],.014,C.cream,4);
+ m.em=1.6;m.cone(-3.82,.78,.05,.12,.08,.17,[1,.58,.74],10);m.em=0;
+ /* ---- librero ---- */
+ const bz0=.85,bz1=2.75;
+ m.box(-4.17,0,(bz0+bz1)/2,.05,2.0,bz1-bz0,WOODD);m.box(-4.0,0,bz0,.34,2.0,.05,WOOD);m.box(-4.0,0,bz1,.34,2.0,.05,WOOD);
+ for(let i=0;i<5;i++)m.box(-4.0,.02+i*.48,(bz0+bz1)/2,.34,.04,bz1-bz0,WOOD);
+ const bc=[C.pink,LILAC,C.cream,C.yellow,[.55,.75,.8],C.rose,[.6,.8,.6],[.9,.6,.5]];
+ for(let r=0;r<4;r++){let z=bz0+.08;while(z<bz1-.12){const w=.04+rr()*.05,h=.22+rr()*.16;
+   if(rr()<.12){z+=.14;continue}
+   m.xbox(-4.0,.06+r*.48+h/2,z+w/2,.2,h,w,bc[(rr()*8)|0],0,0,r===2&&rr()<.25?.25:0);z+=w+.004}}
+ m.cone(-4.0,2.02,1.2,.12,.09,.16,[.86,.54,.42],8);for(let i=0;i<6;i++){m.fx=.5;m.cone(-4.0,2.18,1.2,.04,.01,.30+i*.03,C.leaf,4);m.fx=0}
+ m.blob(-4.0,2.1,2.2,.12,.10,.2,SWEAT,6,3);
+ /* puf */
+ m.blob(-2.3,.24,1.35,.46,.28,.46,C.rose,10,4);m.blob(-2.3,.40,1.35,.30,.12,.30,C.pink,8,3);
+ /* monstera esquina */
+ m.cone(3.55,0,-2.45,.26,.22,.50,[.55,.40,.35],10);m.cone(3.55,.50,-2.45,.23,.23,.02,C.soil,10);
+ m.fxf=p=>clamp((p[1]-.5)*.4,0,.9);
+ for(let i=0;i<9;i++){const a=i*.7+rr()*.4,len=.45+rr()*.25,h=.9+(i%3)*.28,
+   b=[3.55,.5,-2.45],tipP=[3.55+Math.cos(a)*len,h,-2.45+Math.sin(a)*len*.7],mid=lerpv(b,tipP,.5);mid[1]+=.25;
+  m.line(b,mid,.012,C.leaf,4);m.line(mid,tipP,.012,C.leaf,4);
+  const nx=Math.cos(a),nz=Math.sin(a);
+  m.tri(tipP,[tipP[0]-nz*.20+nx*.05,tipP[1]-.10,tipP[2]+nx*.20],[tipP[0]+nz*.20+nx*.05,tipP[1]-.10,tipP[2]-nx*.20],i%2?C.leaf:C.lime);
+  m.tri(tipP,[tipP[0]+nz*.20+nx*.05,tipP[1]-.10,tipP[2]-nx*.20],[tipP[0]+nx*.28,tipP[1]-.20,tipP[2]+nz*.2],i%2?C.lime:C.leaf)}
+ m.fxf=null;
+ /* ---- decoración de paredes ---- */
+ const frames=[[-3.55,2.35,.52,.68,[.12,.14,.34]],[-2.95,2.15,.40,.52,[.55,.30,.45]],[-2.35,2.45,.34,.46,[.30,.42,.56]]];
+ for(const [x,y,w,h,c] of frames){m.box(x,y-h/2,-2.95,w+.07,h+.07,.05,TRIM);m.box(x,y-h/2+.03,-2.92,w-.04,h-.04,.02,c)}
+ m.em=11;m.blob(-3.45,2.55,-2.905,.06,.06,.006,[1.5,1.4,1.1],12,2);m.em=0;       // luna dentro del cuadro
+ m.box(-2.95,2.15-.26+.03,-2.91,.30,.12,.015,[.98,.62,.5]);                         // atardecer
+ // fotos polaroid colgando de una cuerda
+ m.line([-4.1,2.9,-2.9],[-2.2,2.62,-2.9],.004,[.12,.10,.12],3);
+ for(let i=0;i<5;i++){const x=-3.9+i*.36,y=2.9-(2.9-2.62)*(i*.36/1.9);m.xbox(x,y-.14,-2.9,.17,.21,.01,TRIM,0,0,((i*13)%7-3)*.03);m.xbox(x,y-.12,-2.89,.13,.13,.01,[.35+i*.08,.30+((i*3)%4)*.1,.5],0,0,((i*13)%7-3)*.03)}
+ // estante flotante derecho
+ m.box(3.0,1.9,-2.84,2.1,.05,.30,WOOD);for(let i=0;i<5;i++)m.xbox(2.35+i*.12,1.95,-2.80,.09,.28-i%2*.05,.20,bc[i],0,0,i===4?.2:0);
+ m.cone(3.55,1.95,-2.82,.09,.07,.12,C.cream,8);m.blob(3.55,2.15,-2.82,.09,.1,.09,C.leaf,6,3);
+ m.box(3.0,1.95,-2.80,.34,.16,.16,[.24,.20,.32]);m.blob(2.97,2.03,-2.71,.045,.045,.01,[.1,.1,.12],6,2);   // altavoz
+ // poster de tulipanes
+ m.box(3.2,2.30,-2.95,.92,1.18,.05,TRIM);m.box(3.2,2.34,-2.92,.82,1.08,.02,[.98,.90,.82]);
+ for(let i=0;i<5;i++){m.line([2.88+i*.15,2.45,-2.905],[2.88+i*.15,2.98-(i%2)*.1,-2.905],.012,C.leaf,4);m.blob(2.88+i*.15,3.02-(i%2)*.1,-2.90,.07,.09,.01,i%2?C.pink:C.rose,6,2)}
+ /* neón: luna creciente + estrella */
+ const nc=[-4.13,2.30,-1.70];m.em=12;const neon=[1.15,.42,.9];
+ const arcPts=(cu,cv,rad,a0,a1,n)=>{const pts=[];for(let i=0;i<=n;i++){const a=lerp(a0,a1,i/n);pts.push([nc[0],nc[1]+cv+Math.sin(a)*rad,nc[2]+cu+Math.cos(a)*rad])}return pts};
+ const D2R=Math.PI/180,o1=arcPts(0,0,.40,50.5*D2R,309.5*D2R,22),o2=arcPts(.17,0,.32,74.7*D2R,285.3*D2R,18);
+ for(let i=0;i<o1.length-1;i++)m.line(o1[i],o1[i+1],.014,neon,4);for(let i=0;i<o2.length-1;i++)m.line(o2[i],o2[i+1],.014,neon,4);
+ // destello de cuatro puntas ✦ (contorno)
+ const st=[];for(let i=0;i<8;i++){const a=i*Math.PI/4,r=i%2?.045:.15;st.push([nc[0],nc[1]+.30+Math.sin(a)*r,nc[2]+.66+Math.cos(a)*r])}st.push(st[0]);
+ for(let i=0;i<8;i++)m.line(st[i],st[i+1],.011,[.95,.75,1.2],4);m.em=0;
+}
+
+/* ---- cielo, luna, estrellas, colinas y el jardín visto desde la ventana ---- */
+function buildOutside(){
+ const m=S;
+ // gradiente de cielo (sin luz)
+ m.em=11;
+ const sk=[[-80,[.17,.15,.34]],[0,[.34,.25,.52]],[22,[.20,.17,.42]],[60,[.09,.09,.27]],[160,[.03,.04,.13]],[400,[.015,.02,.07]]];
+ for(let i=0;i<sk.length-1;i++){const [ya,ca]=sk[i],[yb,cb]=sk[i+1],zz=-420;
+  m.v([-900,ya,zz],[0,0,1],ca);m.v([900,ya,zz],[0,0,1],ca);m.v([900,yb,zz],[0,0,1],cb);
+  m.v([-900,ya,zz],[0,0,1],ca);m.v([900,yb,zz],[0,0,1],cb);m.v([-900,yb,zz],[0,0,1],cb)}
+ m.em=0;
+ // estrellas
+ m.em=11;const rs=rng(7);
+ for(let i=0;i<330;i++){const u=-1.6+rs()*3.2,v=-.05+rs()*1.8,d=380,c=skyRay(u,v,d),sz=.10+Math.pow(rs(),3)*.45;
+  const k=rs(),col=k<.6?[1.5,1.5,1.6]:(k<.85?[1.4,1.5,2.0]:[2.0,1.7,1.2]);m.fx=-(.4+rs()*.5);
+  m.quad(add(c,add(mulv(SKY_R,-sz),mulv(SKY_U,-sz))),add(c,add(mulv(SKY_R,sz),mulv(SKY_U,-sz))),add(c,add(mulv(SKY_R,sz),mulv(SKY_U,sz))),add(c,add(mulv(SKY_R,-sz),mulv(SKY_U,sz))),col)}
+ m.fx=0;
+ // luna (disco + cráteres)
+ const mp=skyRay(-.42,.50,360),mr=12.5;
+ m.ell(mp,SKY_R,SKY_U,mr,mr,[1.55,1.48,1.30],1,1,64);
+ const cr=[[-.3,.25,.22],[.25,-.1,.28],[-.1,-.4,.18],[.4,.35,.14],[-.45,-.2,.12]];
+ const toCam=norm(sub(E0,mp));
+ for(const [cx,cy,cs] of cr)m.ell(add(add(mp,mulv(toCam,.8)),add(mulv(SKY_R,cx*mr),mulv(SKY_U,cy*mr))),SKY_R,SKY_U,cs*mr*.5,cs*mr*.5,[1.34,1.32,1.24],1,1,18);
+ m.em=0;
+ LAMPS.moon=mp;
+ /* grupo exterior orientado con la línea de visión */
+ const base=mul(mul(Tm(WC[0],0,WC[2]-.3),Ry(OUT_YAW)),Sm(1));
+ m.push(base);
+ // colinas lejanas (sin luz, con calidez de horizonte)
+ m.em=11;
+ const hills=[[-230,[.15,.13,.30],34,20],[-170,[.11,.10,.25],24,15],[-120,[.08,.08,.19],17,10],[-80,[.055,.065,.14],11,7]];
+ const rh=rng(11);
+ for(const [z,col,rx,ry] of hills){for(let x=-260;x<260;x+=rx*1.1){m.blob(x+rh()*10,-ry*.3,z+rh()*8,rx*(.8+rh()*.5),ry*(.7+rh()*.7),rx*.4,col,10,3)}}
+ m.em=0;
+ // suelo
+ m.box(0,-.45,-125,400,.42,250,[.10,.19,.20]);
+ m.box(0,-.001,-14,3.0,.01,36,[.55,.55,.62]);     // sendero de piedra pálido
+ // bancales con tulipanes (como en el jardín del juego)
+ const rp=rng(31);
+ for(let r=0;r<4;r++)for(let c=0;c<3;c++){const px=(c-1)*2.45+(r%2?.6:0),pz=-(11+r*2.25);
+  m.box(px,.015,pz,1.9,.065,1.6,C.soil);for(const z of[-.81,.81])m.box(px,.02,pz+z,2.02,.13,.09,C.tan);for(const x of[-.98,.98])m.box(px+x,.02,pz,.09,.13,1.65,C.tan);
+  for(let i=0;i<10;i++){tulip(m,px-.72+(i%5)*.36+rp()*.1,pz-.4+Math.floor(i/5)*.8+rp()*.1,.8+rp()*.2,rp()*6,(rp()<.18)?1:0)}}
+ for(let i=0;i<9;i++)sunflower(m,-5.5+i*1.3+rp()*.3,-(27+rp()*2),.9+rp()*.1);
+ // valla
+ for(let i=-14;i<=14;i+=1.3){m.box(i,0,-33,.13,1,.13,C.cream)}for(const y of[.38,.76])m.box(0,y,-33,40,.12,.1,C.tan);
+ // árboles
+ const trees=[[-7,-20],[8.5,-24],[-11,-30],[13,-18],[4.5,-38],[-3,-44],[-15,-40],[17,-35],[0,-60],[-22,-55],[25,-62]];
+ for(const [x,z] of trees){const s=1+rp()*.5;m.cone(x,0,z,.30*s,.20*s,2.2*s,[.30,.22,.20],7);m.fxf=p=>clamp((p[1]-1.5)*.18,0,.5);
+  m.blob(x,3.0*s,z,1.5*s,1.6*s,1.4*s,[.14,.30,.28],8,3);m.blob(x-.8*s,2.5*s,z+.1,1.0*s,1.0*s,1.0*s,[.17,.35,.30],7,3);m.fxf=null}
+ // farolillos del jardín
+ for(const [x,z] of [[-3.4,-13],[3.6,-19]]){m.box(x,0,z,.10,2.0,.10,[.18,.15,.17]);m.em=2.4;m.box(x,2.0,z,.28,.34,.28,[1,.78,.45]);m.em=0;m.box(x,2.34,z,.40,.06,.40,[.18,.15,.17])}
+ LAMPS.lanterns=[[-3.4,2.17,-13],[3.6,2.17,-19]];
+ m.pop();
+ LAMPS.outBase=base;
+}
+
+/* =====================================================================
+   5. SOMBRAS DE CONTACTO ESTÁTICAS
+   ===================================================================== */
+function buildShadows(){
+ shadow(.3,-2.45,2.2,.9,.45);shadow(-.1,-1.55,.55,.55,.45);shadow(-3.1,-1.7,1.15,1.45,.5);
+ shadow(-3.82,.05,.5,.45,.45);shadow(-4.0,1.8,.4,1.15,.4);shadow(3.55,-2.45,.45,.4,.4);shadow(-2.3,1.35,.6,.6,.4);
+ shadow(1.78,-2.5,.7,.6,.4);
+ shadow(.44,-2.12,.1,.1,.5,.853);shadow(0,-2.20,.5,.35,.3,.853);shadow(1.95,-2.68,.2,.16,.5,.853);shadow(.9,-2.62,.30,.20,.4,.853);
+}
+
+buildRoom();buildFurniture();buildOutside();buildShadows();
+const nS=upload(S,bufS,gl.STATIC_DRAW),nSB=upload(SB,bufSB,gl.STATIC_DRAW);
+
+/* =====================================================================
+   6. YAIRE · Personaje sentada (mismo modelo que avatar() de DCLF)
+   ===================================================================== */
+const P0=[-.10,.46,-1.55];            // pelvis sobre el cojín
+const REST_R=[.20,.885,-2.12],REST_L=[-.36,.885,-2.08];
+const NOTE=[0,.884,-2.20];
+const MUG_REST=[.44,.85,-2.12];
+const Y={lean:.12,tyaw:0,hyaw:-.2,hpit:.1,hrol:0,sway:0,mugTilt:0,
+ R:REST_R.slice(),L:REST_L.slice(),act:'gaze',tau:0,dur:6,last:'',hold:Q.has('hold'),
+ pen:{pos:[.22,.862,-2.16],held:false,ang:.3},mug:{pos:MUG_REST.slice(),held:false},sipPh:0,sipT:0,
+ blink:0,nextBlink:2,tail:{sx:0,sz:0,vx:0,vz:0},prevYaw:-.2,prevPit:.1,torsoM:null,headM:null,
+ foot:[.1,.5],wave:0,seed:rng(99)};
+const SH_R=[.25,.60,0],SH_L=[-.25,.60,0];
+function ik(S_,T_,L1,L2,pole){
+ let d=sub(T_,S_),len=Math.hypot(d[0],d[1],d[2]);const mx=L1+L2-.01;
+ if(len>mx){T_=add(S_,mulv(d,mx/len));d=sub(T_,S_);len=mx}
+ const dir=mulv(d,1/Math.max(len,1e-4));const L=Math.max(len,.14);
+ const a=(L1*L1-L2*L2+L*L)/(2*L),h=Math.sqrt(Math.max(0,L1*L1-a*a));
+ const pv=norm(sub(pole,mulv(dir,dot(pole,dir))));
+ return{E:add(add(S_,mulv(dir,a)),mulv(pv,h)),T:T_}}
+
+const ACTS={
+ write:{w:34,d:[7,12]},gaze:{w:20,d:[5,9]},chin:{w:15,d:[6,10]},sip:{w:14,d:[7,8]},sway:{w:10,d:[6,10]},stretch:{w:5,d:[3.6,4.4]},peek:{w:5,d:[5,6.5]}};
+function pickAct(){
+ const names=Object.keys(ACTS).filter(n=>n!==Y.last);let tot=0;for(const n of names)tot+=ACTS[n].w;
+ let r=Y.seed()*tot;for(const n of names){r-=ACTS[n].w;if(r<=0)return n}return names[0]}
+function startAct(n){
+ Y.act=n;Y.tau=0;const d=ACTS[n].d;Y.dur=d[0]+Y.seed()*(d[1]-d[0]);Y.last=n;
+ Y.pen.held=false;Y.sipPh=0;Y.sipT=0;if(!Y.mug.held)Y.mug.pos=MUG_REST.slice();}
+const ex=(dt,k)=>1-Math.exp(-dt*k);
+
+function updateYaire(dt,t){
+ Y.tau+=dt;
+ if(!Y.hold&&Y.tau>Y.dur){if(Y.act==='sip'&&Y.mug.held){Y.mug.held=false;Y.mug.pos=MUG_REST.slice()}startAct(pickAct())}
+ const tt=Y.tau;
+ const T={lean:.10,tyaw:0,hyaw:-.32+.25*Math.sin(t*.13),hpit:.16+.05*Math.sin(t*.21),hrol:.03*Math.sin(t*.17),sway:.25,mugTilt:0,R:REST_R,L:REST_L};
+ const hm=Y.headM||Tm(0,2,0),tm=Y.torsoM||Tm(0,1,0);
+ const shR=ap(tm,SH_R);
+ const beat=t*2*Math.PI/.83;
+ switch(Y.act){
+  case 'write':{
+   T.lean=.30;T.hpit=-.52;T.hyaw=-.05+.08*Math.sin(t*.4);T.hrol=.06;T.sway=.1;
+   const pp=Y.pen.pos;
+   if(!Y.pen.held){T.R=[pp[0]-.01,.89,pp[2]+.03];if(Math.hypot(Y.R[0]-T.R[0],Y.R[2]-T.R[2])<.05)Y.pen.held=true}
+   else{const sx=-.13+((t*.11)%1)*.30,line=Math.floor(t*.11)%5;
+    T.R=[sx+Math.sin(t*11)*.010,.886,-2.32+line*.05+Math.cos(t*8.3)*.008];Y.pen.pos=[T.R[0]+.01,.862,T.R[2]-.03]}
+   T.L=[-.30,.886,-2.08];break}
+  case 'gaze':T.lean=.03;T.hpit=.22+.05*Math.sin(t*.5);T.hyaw=-.40+.15*Math.sin(t*.23);T.hrol=-.04;T.L=[-.36,.885,-2.06];break;
+  case 'chin':{
+   T.lean=.18;T.hpit=.05;T.hyaw=-.18+.1*Math.sin(t*.2);T.hrol=.14;
+   const lerpH=smooth(tt/1.2);T.R=lerpv(REST_R,ap(hm,[.20,.06,-.15]),lerpH);
+   T.L=[-.34,.885,-2.12];break}
+  case 'sip':{
+   T.lean=Y.sipPh===0?.24:.10;const mouth=ap(hm,[0,.10,-.32]),offH=[.10,-.01,.0];
+   const handAt=p=>add(p,offH);
+   if(Y.sipPh===0){T.R=handAt(MUG_REST);T.hpit=-.1;if(Math.hypot(Y.R[0]-T.R[0],Y.R[1]-T.R[1],Y.R[2]-T.R[2])<.05){Y.sipPh=1;Y.mug.held=true;Y.sipT=0}}
+   else if(Y.sipPh===1){T.R=handAt(mouth);T.hpit=.18;T.hyaw=-.1;T.mugTilt=.55;Y.sipT+=dt;
+    if(Math.hypot(Y.R[0]-T.R[0],Y.R[1]-T.R[1],Y.R[2]-T.R[2])<.05&&Y.sipT>1.8){Y.sipPh=2}}
+   else if(Y.sipPh===2){T.R=handAt(MUG_REST);T.hpit=-.1;
+    if(Math.hypot(Y.R[0]-T.R[0],Y.R[1]-T.R[1],Y.R[2]-T.R[2])<.05){Y.sipPh=3;Y.mug.held=false;Y.mug.pos=MUG_REST.slice()}}
+   else{T.R=REST_R}
+   T.L=[-.36,.885,-2.12];break}
+  case 'sway':T.lean=.06;T.sway=1;T.hyaw=-.2+.1*Math.sin(beat*.25);T.hpit=.12+.06*Math.abs(Math.sin(beat*.5));T.hrol=.08*Math.sin(beat*.5);
+   T.R=[REST_R[0],.885,REST_R[2]+.1*Math.sin(t*.5)];T.L=[-.36,.885,-2.12];break;
+  case 'stretch':{
+   const k=Math.sin(clamp(tt/Y.dur,0,1)*Math.PI),k2=smooth(k*1.6);
+   T.lean=lerp(.1,-.22,k2);T.hpit=lerp(.1,.40,k2);T.hyaw=-.1;T.sway=0;
+   const shL=ap(tm,SH_L);T.R=lerpv(REST_R,add(shR,[.18,.58,-.05]),k2);T.L=lerpv(REST_L,add(shL,[-.18,.58,-.05]),k2);break}
+  case 'peek':{
+   const k=smooth(tt/1.1)*(1-smooth((tt-(Y.dur-1.3))/1.1));
+   T.tyaw=.92*k;T.hyaw=lerp(-.2,1.22,k);T.hpit=lerp(.1,.0,k);T.hrol=lerp(0,-.05,k);T.lean=lerp(.1,.0,k);
+   const wv=smooth((tt-1.2)/.6)*(1-smooth((tt-(Y.dur-2.3))/.6));
+   T.R=lerpv(REST_R,add(shR,[.34+.07*Math.sin(t*10)*wv,.30,-.16]),wv);T.L=REST_L;break}
+ }
+ /* suavizado hacia los objetivos */
+ const k1=ex(dt,2.6);
+ Y.lean+=(T.lean-Y.lean)*k1;Y.tyaw+=(T.tyaw-Y.tyaw)*k1;Y.hyaw+=(T.hyaw-Y.hyaw)*ex(dt,3);Y.hpit+=(T.hpit-Y.hpit)*ex(dt,3.2);Y.hrol+=(T.hrol-Y.hrol)*ex(dt,3);
+ Y.sway+=(T.sway-Y.sway)*ex(dt,1.5);Y.mugTilt+=(T.mugTilt-Y.mugTilt)*ex(dt,4);
+ const kh=ex(dt,Y.act==='stretch'?3:6.5);
+ Y.R=lerpv(Y.R,T.R,kh);Y.L=lerpv(Y.L,T.L,kh);
+ /* cola de caballo: resorte amortiguado impulsado por el giro de la cabeza */
+ const dy=(Y.hyaw-Y.prevYaw)/Math.max(dt,1e-3),dp=(Y.hpit-Y.prevPit)/Math.max(dt,1e-3);Y.prevYaw=Y.hyaw;Y.prevPit=Y.hpit;
+ const tl=Y.tail;const ax=-tl.sx*38-tl.vx*5-dy*.55+Math.sin(t*1.3)*.4,az=-tl.sz*38-tl.vz*5-dp*.5+Math.sin(t*.9+1)*.25;
+ tl.vx+=ax*dt;tl.vz+=az*dt;tl.sx=clamp(tl.sx+tl.vx*dt,-.8,.8);tl.sz=clamp(tl.sz+tl.vz*dt,-.8,.8);
+ /* parpadeo */
+ Y.nextBlink-=dt;if(Y.nextBlink<0){Y.blink=.15;Y.nextBlink=2.2+Y.seed()*4.2}if(Y.blink>0)Y.blink-=dt;
+ /* matrices del esqueleto */
+ const breathe=Math.sin(t*1.45)*.008,bob=Math.sin(beat)*.012*Y.sway;
+ const F=Tm(P0[0],P0[1],P0[2]);
+ Y.torsoM=mul(mul(F,Ry(-Y.tyaw)),mul(Rx(-(Y.lean+breathe)),Rz(Math.sin(beat*.5)*.03*Y.sway)));
+ Y.headM=mul(mul(Y.torsoM,Tm(0,.70+bob,0)),mul(mul(Ry(-Y.hyaw),Rx(Y.hpit+Math.abs(Math.sin(beat*.5))*.02*Y.sway)),Rz(Y.hrol)));
+ /* taza: sigue a la mano mientras se agarra */
+ if(Y.mug.held)Y.mug.pos=sub(Y.R,[.10,-.01,0]);
+ /* balanceo de los pies */
+ Y.foot=[.20*Math.sin(t*1.1)+.12,.20*Math.sin(t*1.1+2.4)+.12];
+}
+
+function drawYaire(m,t){
+ m.M=null;m.st.length=0;
+ const tm=Y.torsoM,hm=Y.headM;
+ /* ---- piernas (en el marco de la pelvis) ---- */
+ const bs=Math.sin(t*2*Math.PI/.83)*.012*Y.sway;
+ for(let s=0;s<2;s++){const side=s?-1:1,x=P0[0]+side*.13;
+  const hip=[x,P0[1]+.04,P0[2]-.02],knee=[x,P0[1]+.05,P0[2]-.31];
+  m.line(hip,knee,.082,C.dress,6);m.blob(knee[0],knee[1],knee[2],.075,.07,.075,C.dress,6,3);
+  const ph=Y.foot[s],ank=[x,knee[1]-Math.cos(ph)*.30,knee[2]-Math.sin(ph)*.30];
+  m.line(knee,ank,.055,C.skin,6);
+  m.line(lerpv(knee,ank,.55),ank,.062,C.cream,6);
+  const fw=norm(sub(ank,knee));
+  m.blob(ank[0],ank[1]-.05,ank[2]-.08,.085,.055,.12,C.rose,7,3);m.blob(ank[0],ank[1]-.01,ank[2]-.02,.07,.045,.08,C.cream,6,2)}
+ /* ---- falda sobre los muslos ---- */
+ m.cone(P0[0],P0[1]+.005,P0[2]-.12,.37,.31,.10,C.dress,14);
+ /* ---- torso ---- */
+ m.push(tm);
+ m.cone(0,0,0,.31,.23,.34,C.dress,12);
+ m.box(0,.30,0,.42,.38,.30,SWEAT);m.cone(0,.26,0,.25,.24,.06,[.90,.84,.74],10);
+ m.blob(0,.66,.10,.20,.10,.09,[.90,.84,.74],8,3);       // capucha del suéter
+ m.blob(0,.70,0,.075,.07,.075,C.skin,6,3);
+ m.pop();
+ /* ---- brazos (IK) ---- */
+ const shR=ap(tm,SH_R),shL=ap(tm,SH_L);
+ const armR=ik(shR,Y.R,.34,.34,[.8,-.8,.35]),armL=ik(shL,Y.L,.34,.34,[-.8,-.8,.35]);
+ for(const [sh,a_] of [[shR,armR],[shL,armL]]){
+  m.blob(sh[0],sh[1],sh[2],.085,.085,.085,SWEAT,7,3);
+  m.line(sh,a_.E,.068,SWEAT,6);m.blob(a_.E[0],a_.E[1],a_.E[2],.068,.068,.068,SWEAT,6,3);
+  m.line(a_.E,a_.T,.060,SWEAT,6);
+  const d=norm(sub(a_.T,a_.E));m.line(sub(a_.T,mulv(d,.06)),add(a_.T,mulv(d,.005)),.068,[.90,.84,.74],6);
+  m.blob(a_.T[0]+d[0]*.04,a_.T[1]+d[1]*.04,a_.T[2]+d[2]*.04,.050,.045,.055,C.skin,6,3)}
+ /* ---- cabeza ---- */
+ m.push(hm);
+ m.blob(0,.26,0,.25,.27,.23,C.skin,12,5);                               // cara chibi
+ m.blob(0,.34,.05,.275,.23,.255,C.hair,12,4);                            // casquete de pelo
+ m.blob(0,.44,-.13,.23,.075,.11,C.hair,8,3);                             // flequillo
+ for(const sx of[-1,1])m.blob(sx*.215,.20,-.04,.065,.20,.12,C.hair,6,3);   // mechones laterales
+ m.blob(0,.12,.15,.23,.30,.15,C.hair,9,4);                               // pelo trasero
+ /* ojos, rubor y boca (cara hacia -z) */
+ const eh=.045*clamp(1-(Y.blink>0?Math.sin(clamp(Y.blink/.15,0,1)*Math.PI):0)*1.0,.12,1);
+ for(const sx of[-1,1]){m.box(sx*.085,.265-.0225*(eh/.045)+.0225,-.222,.038,eh,.02,C.eye);
+  m.em=.25;m.blob(sx*.150,.175,-.205,.045,.028,.02,C.pink,6,2);m.em=0}
+ m.box(0,.12,-.226,.034,.011,.012,[.78,.36,.34]);
+ /* diadema/auriculares crema y rosa */
+ const hb=[];for(let i=0;i<=12;i++){const a=Math.PI*(i/12);hb.push([Math.cos(a)*.30,.30+Math.sin(a)*.30,.02])}
+ for(let i=0;i<12;i++)m.line(hb[i],hb[i+1],.020,C.cream,5);
+ for(const sx of[-1,1]){m.blob(sx*.305,.28,.02,.055,.125,.115,C.cream,8,3);m.blob(sx*.335,.28,.02,.03,.095,.09,C.pink,8,3)}
+ /* coleta con scrunchie rosa */
+ const tl=Y.tail,p0=[0,.36,.27],p1=[tl.sx*.20,.20,.33+tl.sz*.18],p2=[tl.sx*.40,.02,.37+tl.sz*.34],p3=[tl.sx*.55,-.14,.39+tl.sz*.46];
+ m.blob(0,.37,.26,.065,.065,.065,C.pink,6,3);
+ m.line(p0,p1,.075,C.hair,6);m.line(p1,p2,.062,C.hair,6);m.line(p2,p3,.040,C.hair,5);m.blob(p3[0],p3[1],p3[2],.045,.06,.045,C.hair,6,3);
+ m.pop();
+ /* ---- bolígrafo ---- */
+ const pn=Y.pen;
+ if(pn.held){const h=Y.R;m.line([h[0]+.02,h[1]+.06,h[2]+.09],[h[0]-.005,h[1]-.01,h[2]-.045],.011,C.pink,4);m.blob(h[0]-.006,h[1]-.012,h[2]-.05,.008,.008,.008,[.1,.1,.12],4,2)}
+ else m.line([pn.pos[0]+.07,pn.pos[1]+.008,pn.pos[2]+.06],[pn.pos[0]-.07,pn.pos[1]+.008,pn.pos[2]-.06],.011,C.pink,4);
+ /* ---- taza ---- */
+ const mg=Y.mug.pos;
+ m.push(mul(Tm(mg[0],mg[1],mg[2]),Rx(Y.mugTilt)));
+ m.cone(0,0,0,.082,.09,.13,C.cream,12);m.cone(0,.03,0,.085,.092,.035,C.pink,12);m.cone(0,.128,0,.07,.07,.004,[.28,.15,.10],12);
+ m.line([.09,.10,0],[.135,.07,0],.012,C.cream,4);m.line([.135,.07,0],[.10,.03,0],.012,C.cream,4);
+ m.pop();
+}
+
+/* gato dormido sobre la cama */
+function drawCat(m,t){
+ const br=Math.sin(t*1.7)*.012,tw=Math.sin(t*.6)*.5+Math.sin(t*1.9)*.2;
+ const bx=-3.20,by=.665,bz=-1.02,cat=[.92,.72,.58],cat2=[.84,.62,.48];
+ m.blob(bx,by+.09+br,bz,.30,.15+br,.20,cat,10,4);
+ m.blob(bx+.23,by+.07,bz-.16,.13,.10,.12,cat2,8,3);
+ m.blob(bx+.34,by+.065,bz-.22,.11,.095,.10,cat,8,3);
+ m.cone(bx+.30,by+.15,bz-.27,.04,.01,.08,cat2,4);m.cone(bx+.40,by+.15,bz-.25,.04,.01,.08,cat2,4);
+ m.blob(bx+.40,by+.06,bz-.27,.015,.008,.008,[.2,.1,.1],4,2);
+ const a=[bx-.26,by+.07,bz+.06],b=[bx-.38,by+.06,bz-.10+tw*.05],c=[bx-.30,by+.05,bz-.24+tw*.12],d=[bx-.12,by+.05,bz-.30+tw*.15];
+ m.line(a,b,.04,cat2,5);m.line(b,c,.036,cat2,5);m.line(c,d,.03,cat,5);m.blob(d[0],d[1],d[2],.03,.03,.03,SWEAT,5,2);
+ m.blob(bx+.05,by+.17+br,bz+.05,.08,.03,.06,[.98,.82,.7],6,2);
+}
+
+/* =====================================================================
+   7. GLOWS / EFECTOS DINÁMICOS (aditivos)
+   ===================================================================== */
+const R_=norm(cross(norm(sub(T0,E0)),Y_)),U_=cross(R_,norm(sub(T0,E0)));
+let camR=R_,camU=U_;
+function glow(m,p,r,col,a){m.em=1;m.ell(p,camR,camU,r,r,col,a,0,14)}
+const FIREFLIES=[];{const r=rng(5);for(let i=0;i<22;i++)FIREFLIES.push({b:[(r()-.5)*10,.8+r()*2.4,-(8+r()*20)],a:[1+r()*2,.4+r()*.5,1+r()*2],f:[.1+r()*.2,.15+r()*.25,.1+r()*.2],ph:[r()*6,r()*6,r()*6],bl:.5+r()*1.2})}
+const MOTES=[];{const r=rng(3);for(let i=0;i<46;i++)MOTES.push({b:[-1.6+r()*3.8,.5+r()*2.4,-2.9+r()*3.2],a:[.25+r()*.3,.1+r()*.2,.25+r()*.3],f:[.05+r()*.12,.06+r()*.1,.05+r()*.1],ph:[r()*6,r()*6,r()*6]})}
+const CLOUDS=[];{const r=rng(17);for(let i=0;i<7;i++)CLOUDS.push({u:-2+r()*4,v:.05+r()*.95,sp:.004+r()*.006,rx:30+r()*45,ry:3+r()*5,al:.28+r()*.2,d:290+r()*30})}
+let shoot={t:-1,next:12+Math.random()*25,u:0,v:0,du:0,dv:0};
+let neonFl=0,nextNeon=14;
+
+/* Los glows aditivos van a DG (modo aditivo); las nubes a DB (mezcla normal) */
+const DS=new Mesh(1<<15),DB=new Mesh(1<<12),DG=new Mesh(1<<15);
+
+function buildDynamic(t,dt){
+ DS.clear();DB.clear();DG.clear();
+ drawYaire(DS,t);drawCat(DS,t);
+ /* nubes */
+ DB.em=11;
+ for(const c of CLOUDS){let u=((c.u+t*c.sp+2.6)%5.2)-2.6;const P=skyRay(u,c.v,c.d);
+  for(let k=0;k<4;k++)DB.ell(add(P,add(mulv(SKY_R,(k-1.5)*c.rx*.45),mulv(SKY_U,Math.sin(k*1.7)*c.ry*.5))),SKY_R,SKY_U,c.rx*(.55+.2*Math.sin(k*2.1)),c.ry*(.8+.3*Math.cos(k)),[.34,.30,.55],c.al,0,16)}
+ DB.em=0;
+ /* halos de la luna y brillo del horizonte */
+ const mp=add(LAMPS.moon,mulv(norm(sub(E0,LAMPS.moon)),4));let cloudDim=1;
+ for(const c of CLOUDS){const u=((c.u+t*c.sp+2.6)%5.2)-2.6;const du=Math.abs(u-(-.42)),dv=Math.abs(c.v-.5);if(du<c.rx/100&&dv<.25)cloudDim-=.3*c.al}
+ cloudDim=clamp(cloudDim,.55,1);
+ DG.em=1;DG.ell(mp,SKY_R,SKY_U,28,28,[.55,.62,1],.30*cloudDim,0,32);DG.ell(mp,SKY_R,SKY_U,60,60,[.40,.45,.85],.16*cloudDim,0,32);DG.ell(mp,SKY_R,SKY_U,130,130,[.28,.30,.65],.10*cloudDim,0,32);
+ DG.ell(add(E0,mulv(norm(sub(winPt(0,-.55),E0)),380)),SKY_R,SKY_U,260,26,[.55,.35,.65],.16,0,28);
+ /* haces de luz de luna + mancha en el suelo (con los travesaños de la ventana) */
+ const Dm=norm([.45,-.62,.64]),lift=p=>{const tt=p[1]/-Dm[1];return[p[0]+Dm[0]*tt,0,p[2]+Dm[2]*tt]};
+ const ux=[WIN.x0+.04,WC[0]-.025,WC[0]+.025,WIN.x1-.04],uy=[WIN.y0+.04,WC[1]-.025,WC[1]+.025,WIN.y1-.04];
+ const mflick=(.82+.18*Math.sin(t*.31)+.05*Math.sin(t*1.3))*cloudDim;
+ for(const [xa,xb] of [[ux[0],ux[1]],[ux[2],ux[3]]])for(const [ya,yb] of [[uy[0],uy[1]],[uy[2],uy[3]]]){
+  const w=[[xa,ya,WIN.z],[xb,ya,WIN.z],[xb,yb,WIN.z],[xa,yb,WIN.z]],f=w.map(lift);f.forEach(p=>{p[1]=.034});
+  DG.em=1;DG.quad(f[0],f[1],f[2],f[3],[.40,.52,1],.13*mflick);
+  for(let i=0;i<4;i++){const j=(i+1)%4;DG.quad(w[i],w[j],f[j],f[i],[.40,.50,.95],[.05*mflick,.05*mflick,0,0])}}
+ /* motas de polvo en la luz */
+ for(const d of MOTES){const p=[d.b[0]+Math.sin(t*d.f[0]+d.ph[0])*d.a[0],d.b[1]+Math.sin(t*d.f[1]+d.ph[1])*d.a[1],d.b[2]+Math.cos(t*d.f[2]+d.ph[2])*d.a[2]];
+  glow(DG,p,.012,[.85,.9,1],.38*(.5+.5*Math.sin(t*.8+d.ph[0]*3)))}
+ /* bombillas de las guirnaldas */
+ for(const b of BULBS)glow(DG,b.p,.17,b.c,.30*(.55+.45*Math.sin(t*b.sp+b.ph)));
+ /* lámpara de escritorio (ligera variación) y de noche */
+ const lf=1+.02*Math.sin(t*7.3)+.015*Math.sin(t*3.1);
+ glow(DG,LAMPS.desk,.55*lf,[1,.60,.25],.34);glow(DG,[LAMPS.desk[0],LAMPS.desk[1]-.02,LAMPS.desk[2]],.18,[1,.85,.6],.6);
+ glow(DG,[-3.82,.88,.05],.50,[1,.40,.62],.28);
+ /* neón (parpadea de vez en cuando) */
+ nextNeon-=dt;if(nextNeon<0){neonFl=.35;nextNeon=15+Math.random()*30}
+ let nI=1;if(neonFl>0){neonFl-=dt;nI=.45+.55*(Math.sin(t*90)>0?1:.2)}
+ DG.em=1;DG.ell([-4.10,2.30,-1.55],Z_,Y_,.9,.7,[1,.32,.78],.20*nI,0,20);
+ /* vapor de la taza */
+ const mgp=Y.mug.pos,steamOn=Y.mug.held&&Y.sipPh===1?.15:1;
+ for(let i=0;i<4;i++){const ph=(t*.35+i*.25)%1;glow(DG,[mgp[0]+Math.sin(t*1.3+i*2)*.02*ph*3,mgp[1]+.14+ph*.42,mgp[2]+Math.cos(t*1.1+i)*.02*ph*3],.05+ph*.09,[.9,.92,1],.13*(1-ph)*steamOn)}
+ /* luciérnagas y farolillos del jardín */
+ const ob=LAMPS.outBase;
+ for(const f of FIREFLIES){const p=[f.b[0]+Math.sin(t*f.f[0]+f.ph[0])*f.a[0],f.b[1]+Math.sin(t*f.f[1]+f.ph[1])*f.a[1],f.b[2]+Math.cos(t*f.f[2]+f.ph[2])*f.a[2]];
+  const wp=ap(ob,p),bl=Math.pow(Math.max(0,Math.sin(t*f.bl+f.ph[2])),2);glow(DG,wp,.10,[.7,1,.45],.9*bl);glow(DG,wp,.34,[.6,1,.4],.28*bl)}
+ for(const l of LAMPS.lanterns){const wp=ap(ob,l);glow(DG,wp,.9,[1,.65,.30],.30);glow(DG,wp,.3,[1,.85,.55],.6)}
+ /* estrella fugaz */
+ shoot.next-=dt;
+ if(shoot.t<0&&shoot.next<0){shoot.t=0;shoot.u=-1+Math.random()*1.4;shoot.v=.5+Math.random()*.6;shoot.du=.8+Math.random()*.5;shoot.dv=-.35-Math.random()*.2}
+ if(shoot.t>=0){shoot.t+=dt;const L=.75;if(shoot.t>L){shoot.t=-1;shoot.next=25+Math.random()*40}
+  else{const k=shoot.t/L,hu=shoot.u+shoot.du*k,hv=shoot.v+shoot.dv*k,tu=hu-shoot.du*.18,tv=hv-shoot.dv*.18;
+   const H=skyRay(hu,hv,370),Tl=skyRay(tu,tv,370),dir=norm(sub(H,Tl)),sd=norm(cross(dir,norm(sub(H,E0)))),w=.32;const fade=Math.sin(k*Math.PI);
+   DG.em=1;DG.quad(add(H,mulv(sd,w)),add(H,mulv(sd,-w)),add(Tl,mulv(sd,-.02)),add(Tl,mulv(sd,.02)),[1.2,1.2,1.5],[fade,fade,0,0]);glow(DG,H,2.4,[1,1,1.4],.7*fade)}}
+}
+
+/* =====================================================================
+   8. RENDER LOOP
+   ===================================================================== */
+const MOON_D=norm([.45,-.62,.64]);
+const fogCol=[.22,.18,.40];
+function sizeCanvas(){
+ const isEmbedded = window.self !== window.top || Q.has('embed') || Q.has('stream');
+ const maxW = isEmbedded ? 1280 : 1920;
+ const dpr = isEmbedded ? 1 : Math.min(window.devicePixelRatio||1, 2);
+ const W = Math.min(Math.round(innerWidth * dpr), maxW);
+ const H = Math.round(W * innerHeight / innerWidth);
+ if(cv.width !== W || cv.height !== H){cv.width = W; cv.height = H;}
+ gl.viewport(0, 0, cv.width, cv.height);
+}
+window.addEventListener('resize', sizeCanvas);
+sizeCanvas();
+addEventListener('keydown',e=>{if(e.key==='f'||e.key==='F'){if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()}});
+
+let simT=0;
+const lightPos=new Float32Array(16),lightCol=new Float32Array(12);
+function render(t,dt){
+ /* cámara con deriva lenta (nunca se repite exactamente) */
+ const eye=[E0[0]+Math.sin(t*.11)*.16,E0[1]+Math.sin(t*.07)*.05,E0[2]+Math.cos(t*.09)*.11];
+ const tgt=[T0[0]+Math.sin(t*.08)*.10,T0[1]+Math.sin(t*.06)*.04,T0[2]];
+ const f=norm(sub(tgt,eye));camR=norm(cross(f,Y_));camU=cross(camR,f);
+ buildDynamic(t,dt);
+ const asp=cv.width/cv.height;let fov=2*Math.atan(Math.tan(FOV/2)*Math.max(1,(16/9)/asp));
+ if(Q.get('cam')==='moon'){tgt[0]=LAMPS.moon[0];tgt[1]=LAMPS.moon[1];tgt[2]=LAMPS.moon[2];fov=.12}
+ if(Q.get('cam')==='yaire'){tgt[0]=-.1;tgt[1]=1.35;tgt[2]=-1.9;fov=.38}
+ const vp=mul(projection(asp,fov),view(eye,tgt));
+ gl.useProgram(pr);
+ gl.uniformMatrix4fv(u.vp,false,vp);gl.uniform1f(u.t,t);gl.uniform3fv(u.eye,eye);
+ gl.uniform3fv(u.fogCol,fogCol);gl.uniform1f(u.fogN,38);gl.uniform1f(u.fogF,190);
+ gl.uniform3fv(u.amb,[.62,.66,1.0].map(v=>v*.42));gl.uniform3fv(u.moonD,MOON_D);gl.uniform3fv(u.moonC,[.40,.50,.95].map(v=>v*.55));
+ const lf=1+.02*Math.sin(t*7.3)+.015*Math.sin(t*3.1);
+ const pls=[[LAMPS.desk,6.2,[1,.58,.26],2.3*lf],[LAMPS.bed,4.2,[1,.42,.62],1.2],[LAMPS.fairy,6.4,[1,.72,.45],.55],[LAMPS.neon,4.6,[1,.30,.72],.9*(neonFl>0?.6:1)]];
+ pls.forEach((l,i)=>{lightPos.set([l[0][0],l[0][1],l[0][2],l[1]],i*4);lightCol.set(l[2].map(v=>v*l[3]),i*3)});
+ gl.uniform4fv(u.pl,lightPos);gl.uniform3fv(u.plc,lightCol);
+ gl.clearColor(.02,.02,.05,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+ gl.enable(gl.DEPTH_TEST);gl.disable(gl.BLEND);gl.depthMask(true);gl.uniform1f(u.glow,0);
+ drawBuf(bufS,nS);
+ const nDS=upload(DS,bufDS,gl.DYNAMIC_DRAW);drawBuf(bufDS,nDS);
+ gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.depthMask(false);
+ drawBuf(bufSB,nSB);const nDB=upload(DB,bufDB,gl.DYNAMIC_DRAW);drawBuf(bufDB,nDB);
+ gl.blendFunc(gl.SRC_ALPHA,gl.ONE);gl.uniform1f(u.glow,1);
+ const nDG=upload(DG,bufDG,gl.DYNAMIC_DRAW);drawBuf(bufDG,nDG);
+ gl.depthMask(true);gl.disable(gl.BLEND);gl.uniform1f(u.glow,0);
+}
+
+/* grano de película (ruido pequeño en tile) */
+{const c=document.createElement('canvas');c.width=c.height=192;const x=c.getContext('2d'),im=x.createImageData(192,192);
+ for(let i=0;i<im.data.length;i+=4){const v=(Math.random()*255)|0;im.data[i]=im.data[i+1]=im.data[i+2]=v;im.data[i+3]=255}
+ x.putImageData(im,0,0);document.getElementById('grain').style.backgroundImage='url('+c.toDataURL()+')'}
+
+/* inicio: actividad inicial + avance opcional de la simulación (?t=) */
+startAct(Q.get('act')&&ACTS[Q.get('act')]?Q.get('act'):'gaze');
+if(Q.get('act')&&Q.has('hold'))Y.dur=1e9;
+updateYaire(1/60,0);
+const ff = parseFloat(Q.get('t') || '0');
+if (ff > 0) { let tt = 0; while (tt < ff) { tt += 1/30; simT = tt; updateYaire(1/30, simT); } }
+let lastRender = 0;
+const targetFps = 30;
+const frameInterval = 1000 / targetFps;
+
+function loop(now) {
+ requestAnimationFrame(loop);
+ const elapsed = now - lastRender;
+ if (elapsed < frameInterval - 3) return;
+ const dt = Math.min(0.06, (lastRender === 0 ? frameInterval : elapsed) / 1000);
+ lastRender = now - (elapsed % frameInterval);
+
+ if (window.self !== window.top) {
+  const b = document.getElementById('brand');
+  if (b) b.style.display = 'none';
+  const gr = document.getElementById('grain');
+  if (gr && gr.style.animation !== 'none') gr.style.animation = 'none';
+ }
+ simT += dt;
+ updateYaire(dt, simT);
+ render(simT, dt);
+}
+requestAnimationFrame(loop);
+window.__yaire={Y,advance(s){const steps=Math.max(1,Math.round(s*30));for(let i=0;i<steps;i++){simT+=1/30;updateYaire(1/30,simT)}render(simT,1/30)}};
+})();
+</script>
+</body>
+</html>

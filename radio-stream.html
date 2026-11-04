@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="es" class="notranslate">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google" content="notranslate">
+    <title>28E · 7 de Noviembre</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        html,
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: #000000;
+            color: #ffffff;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Video de fondo a pantalla completa en bucle continuo */
+        .video-bg {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            background: #000000;
+        }
+
+        .video-bg video,
+        .video-bg iframe {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: 0;
+            display: block;
+            pointer-events: none;
+        }
+
+        /* Overlay sutil para legibilidad pura sin alterar el video */
+        .video-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            background: radial-gradient(circle at center, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.65) 100%);
+            pointer-events: none;
+        }
+
+        /* Capa de interfaz (100% pantalla) */
+        .stage {
+            position: relative;
+            z-index: 10;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 3.5rem 4.5rem;
+            contain: layout style;
+            transform: translateZ(0);
+        }
+
+        /* Header */
+        /* ─── Encabezado ─── */
+        .header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        .brand-logo {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 3.2rem;
+            font-weight: 900;
+            letter-spacing: -0.055em;
+            line-height: 1;
+            color: #ffffff;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.85);
+            user-select: none;
+            -webkit-user-select: none;
+            padding-top: 0.15rem;
+        }
+
+        /* ─── Contador Superior: Minimalista Puro 28E ─── */
+        .countdown-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .countdown-eyebrow {
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.65);
+            margin-bottom: 0.45rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .timer-row {
+            display: flex;
+            align-items: baseline;
+            gap: 0.85rem;
+            font-variant-numeric: tabular-nums;
+            font-feature-settings: 'tnum' 1;
+        }
+
+        .time-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 64px;
+        }
+
+        .time-value {
+            font-size: 2.85rem;
+            font-weight: 800;
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+            color: #ffffff;
+            text-shadow: 0 4px 18px rgba(0, 0, 0, 0.75);
+        }
+
+        .time-sep {
+            font-size: 2.1rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.45);
+            line-height: 0.95;
+            transform: translateY(-2px);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .time-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 0.45rem;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+        }
+
+        /* Footer */
+        .footer {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+
+        .music-indicator {
+            display: flex;
+            align-items: center;
+            gap: 1.1rem;
+            font-size: 1.45rem;
+            color: rgba(255, 255, 255, 0.85);
+            text-shadow: 0 3px 16px rgba(0, 0, 0, 0.95);
+        }
+
+        .bars-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            height: 22px;
+        }
+
+        .bar {
+            width: 4px;
+            height: 22px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 3px;
+            transform-origin: bottom center;
+            will-change: transform;
+        }
+
+        .bar:nth-child(1) {
+            animation: barScale1 0.7s ease-in-out infinite alternate;
+            animation-delay: 0.1s;
+        }
+
+        .bar:nth-child(2) {
+            animation: barScale2 0.55s ease-in-out infinite alternate;
+            animation-delay: 0.25s;
+        }
+
+        .bar:nth-child(3) {
+            animation: barScale3 0.8s ease-in-out infinite alternate;
+            animation-delay: 0.15s;
+        }
+
+        .bar:nth-child(4) {
+            animation: barScale4 0.6s ease-in-out infinite alternate;
+            animation-delay: 0.35s;
+        }
+
+        @keyframes barScale1 {
+            0% { transform: scaleY(0.25); }
+            100% { transform: scaleY(0.95); }
+        }
+
+        @keyframes barScale2 {
+            0% { transform: scaleY(0.40); }
+            100% { transform: scaleY(1.0); }
+        }
+
+        @keyframes barScale3 {
+            0% { transform: scaleY(0.15); }
+            100% { transform: scaleY(0.80); }
+        }
+
+        @keyframes barScale4 {
+            0% { transform: scaleY(0.30); }
+            100% { transform: scaleY(0.90); }
+        }
+
+        .song-name {
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .song-artist {
+            color: rgba(255, 255, 255, 0.65);
+            font-weight: 400;
+        }
+
+        .target-stamp {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 1.45rem;
+            color: rgba(255, 255, 255, 0.85);
+            text-shadow: 0 3px 16px rgba(0, 0, 0, 0.95);
+            font-variant-numeric: tabular-nums;
+            font-feature-settings: 'tnum' 1;
+        }
+
+        .clock-date {
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .clock-time {
+            color: rgba(255, 255, 255, 0.65);
+            font-weight: 400;
+        }
+
+        /* ─── Zona Inferior & News (Minimalista Puro 28E) ─── */
+        .bottom-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            width: 100%;
+        }
+
+        .news-line {
+            display: flex;
+            align-items: baseline;
+            gap: 0.9rem;
+            font-size: 1.35rem;
+            line-height: 1.5;
+            padding: 6px 0;
+            color: rgba(255, 255, 255, 0.85);
+            text-shadow: 0 3px 16px rgba(0, 0, 0, 0.95);
+            max-width: 88vw;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .news-cat {
+            font-size: 1.05rem;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.55);
+            flex-shrink: 0;
+            line-height: 1.5;
+        }
+
+        .news-sep {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 1.15rem;
+            font-weight: 300;
+            flex-shrink: 0;
+            line-height: 1.5;
+        }
+
+        .news-title {
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 500;
+            line-height: 1.5;
+            transition: opacity 0.3s ease;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding: 2px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Fondo animado: Yaire en su habitación aesthetic en tiempo real -->
+    <div class="video-bg">
+        <iframe src="yaire_bedroom_night.html" frameborder="0"></iframe>
+    </div>
+
+    <!-- Sutil viñeta para contraste -->
+    <div class="video-overlay"></div>
+
+    <!-- Interfaz Principal -->
+    <div class="stage">
+
+        <!-- Header con logo y contador superior -->
+        <header class="header">
+            <div class="brand-logo">28E</div>
+
+            <div id="countdown-root" class="countdown-container">
+                <div class="countdown-eyebrow">Apertura de la Web</div>
+                <div class="timer-row">
+                    <div class="time-col">
+                        <span id="cd-d" class="time-value">00</span>
+                        <span class="time-label">Días</span>
+                    </div>
+                    <span class="time-sep">:</span>
+                    <div class="time-col">
+                        <span id="cd-h" class="time-value">00</span>
+                        <span class="time-label">Horas</span>
+                    </div>
+                    <span class="time-sep">:</span>
+                    <div class="time-col">
+                        <span id="cd-m" class="time-value">00</span>
+                        <span class="time-label">Minutos</span>
+                    </div>
+                    <span class="time-sep">:</span>
+                    <div class="time-col">
+                        <span id="cd-s" class="time-value">00</span>
+                        <span class="time-label">Segundos</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Zona Inferior: Música, Reloj y Cintillo de Noticias en Vivo -->
+        <div class="bottom-wrap">
+            <footer class="footer">
+                <div class="music-indicator">
+                    <div class="bars-container">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                    <span id="music-info">
+                        <span class="song-name">Cargando música...</span>
+                    </span>
+                </div>
+                <div id="live-clock" class="target-stamp">
+                    <span class="clock-date">--.--.----</span><span class="clock-time"> — --:--:--</span>
+                </div>
+            </footer>
+
+            <div class="news-line" id="news-line">
+                <span id="news-cat" class="news-cat">ACTUALIDAD</span>
+                <span class="news-sep">|</span>
+                <span id="news-title" class="news-title">Cargando titulares en vivo...</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Reproductor de música continuo -->
+    <audio id="audio-elem" preload="auto"></audio>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
+        import { getDatabase, ref, onValue, set, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js';
+
+        // ── 1. Contador exacto al 00:00:00 del 7 de Noviembre yendo al 8 (Hora oficial Venezuela UTC-4) ──
+        const TARGET_DATE = new Date('2026-11-08T00:00:00-04:00');
+
+        const elD = document.getElementById('cd-d');
+        const elH = document.getElementById('cd-h');
+        const elM = document.getElementById('cd-m');
+        const elS = document.getElementById('cd-s');
+        const elClock = document.getElementById('live-clock');
+
+        const clockFormatter = new Intl.DateTimeFormat('es-VE', {
+            timeZone: 'America/Caracas',
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        });
+
+        function tick() {
+            const now = new Date();
+
+            // Reloj y fecha en vivo de Venezuela (Mismo diseño y fuente de la música)
+            if (elClock) {
+                const parts = clockFormatter.formatToParts(now);
+                const getP = (type) => parts.find(p => p.type === type)?.value || '';
+                elClock.innerHTML = `<span class="clock-date">${getP('day')}.${getP('month')}.${getP('year')}</span><span class="clock-time"> — ${getP('hour')}:${getP('minute')}:${getP('second')}</span>`;
+            }
+
+            // Cuenta regresiva al lanzamiento
+            const diff = TARGET_DATE.getTime() - now.getTime();
+
+            if (diff <= 0) {
+                if (elD) elD.textContent = '00';
+                if (elH) elH.textContent = '00';
+                if (elM) elM.textContent = '00';
+                if (elS) elS.textContent = '00';
+                return;
+            }
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const m = Math.floor((diff / (1000 * 60)) % 60);
+            const s = Math.floor((diff / 1000) % 60);
+
+            if (elD) elD.textContent = String(d).padStart(2, '0');
+            if (elH) elH.textContent = String(h).padStart(2, '0');
+            if (elM) elM.textContent = String(m).padStart(2, '0');
+            if (elS) elS.textContent = String(s).padStart(2, '0');
+        }
+
+        setInterval(tick, 1000);
+        tick();
+
+        // ── 2. Conexión Realtime a 28E Radio (Sincronizado vía Firebase) ──
+        const firebaseConfig = {
+            apiKey: "AIzaSyDFkuktrXnsV9-jg2bv5dpJQRR-he8PT3g",
+            authDomain: "yaire-591ca.firebaseapp.com",
+            databaseURL: "https://yaire-591ca-default-rtdb.firebaseio.com",
+            projectId: "yaire-591ca",
+            storageBucket: "yaire-591ca.firebasestorage.app",
+            messagingSenderId: "450381430658",
+            appId: "1:450381430658:web:262d1bb7b1732c3990d99b"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // ── Setlist 100% Stream Safe (Libre de Reclamos / YouTube Audio Library & Epidemic Sound) ──
+        const radioTracks = [
+            { title: "Wonderful", artist: "Otis McDonald", src: "sounds/ost/Otis McDonald - Wonderful.mp3", duration: 167.0 },
+            { title: "MAS PERREO", artist: "Lawd Ito", src: "radio/ES_MAS PERREO - Lawd Ito.mp3", duration: 173.3 },
+            { title: "CRAZY (Live)", artist: "Otis McDonald", src: "sounds/Otis McDonald - CRAZY - Live (SPOTISAVER).mp3", duration: 124.1 },
+            { title: "Tokyo Magic", artist: "Lawd Ito", src: "radio/ES_Tokyo Magic - Lawd Ito.mp3", duration: 179.2 },
+            { title: "My Everything", artist: "Otis McDonald", src: "sounds/ost/Otis McDonald - My Everything.mp3", duration: 156.9 },
+            { title: "Atacha", artist: "Lawd Ito", src: "radio/ES_Atacha - Lawd Ito.mp3", duration: 195.0 },
+            { title: "Menea", artist: "Master One, Lawd Ito", src: "radio/ES_Menea - Master One.mp3", duration: 198.8 },
+            { title: "Sin Pensar", artist: "Lawd Ito, Mercedes Gala", src: "radio/ES_Sin Pensar - Lawd Ito.mp3", duration: 184.6 },
+            { title: "Eres Mía", artist: "Lawd Ito", src: "radio/ES_Eres Mia - Lawd Ito.mp3", duration: 167.0 },
+            { title: "Loko", artist: "Lawd Ito, Nicolas Rengifo", src: "radio/1792559637795_ES_Loko_-_Lawd_Ito.mp3", duration: 166.0 },
+            { title: "Ella", artist: "Lawd Ito, Bambi Haze, Frontera Bugalú", src: "radio/ES_Ella - Lawd Ito.mp3", duration: 181.3 },
+            { title: "Quemao", artist: "Lawd Ito", src: "radio/ES_Quemao - Lawd Ito.mp3", duration: 173.0 },
+            { title: "The Lights", artist: "Lawd Ito", src: "radio/ES_The Lights - Lawd Ito.mp3", duration: 177.2 },
+            { title: "Tikiti", artist: "Lawd Ito", src: "radio/ES_Tikiti - Lawd Ito.mp3", duration: 170.1 },
+            { title: "GWTF", artist: "Lawd Ito", src: "radio/ES_GWTF - Lawd Ito.mp3", duration: 190.8 },
+            { title: "Belén", artist: "Lawd Ito", src: "radio/ES_Belen - Lawd Ito.mp3", duration: 204.0 },
+            { title: "Sacatela", artist: "Lawd Ito", src: "radio/ES_Sacatela - Lawd Ito.mp3", duration: 172.5 },
+            { title: "Cafecito", artist: "Lawd Ito", src: "radio/ES_Cafecito - Lawd Ito.mp3", duration: 176.8 },
+            { title: "Pink Guava", artist: "Lawd Ito", src: "radio/ES_Pink Guava - Lawd Ito.mp3", duration: 175.1 },
+            { title: "Sangria", artist: "Lawd Ito", src: "radio/ES_Sangria - Lawd Ito.mp3", duration: 210.6 },
+            { title: "Vela", artist: "Lawd Ito", src: "radio/ES_Vela - Lawd Ito.mp3", duration: 182.1 },
+            { title: "Bendiciones", artist: "Lawd Ito, Tilden Parc", src: "radio/ES_Bendiciones - Lawd Ito.mp3", duration: 220.6 },
+            { title: "No Hay Trabajo", artist: "Lawd Ito", src: "radio/ES_No Hay Trabajo - Lawd Ito.mp3", duration: 168.6 },
+            { title: "Treat Me This Way (AI Rework)", artist: "Rodezel", src: "radio/1777594789237_f228324448.mp3", duration: 254.6 },
+            { title: "Joe Louis", artist: "Otis McDonald", src: "sounds/ost/Otis McDonald - Joe Louis.mp3", duration: 182.7 },
+            { title: "But We're Family", artist: "Otis McDonald", src: "sounds/ost/Otis McDonald - But We're Family.mp3", duration: 219.3 },
+            { title: "Magic, Pt. 2", artist: "Otis McDonald", src: "sounds/ost/Otis McDonald - I Got Your Back.mp3", duration: 225.7 },
+            { title: "I Wish I Knew", artist: "Otis McDonald, Joni Inez", src: "radio/I Wish I Knew - Otis McDonald.mp3", duration: 165.6 },
+            { title: "Forever Young", artist: "Otis McDonald", src: "radio/Forever Young - Otis McDonald.mp3", duration: 161.8 },
+            { title: "Side Steppin'", artist: "Otis McDonald", src: "radio/Side Steppin' - Otis McDonald.mp3", duration: 165.5 },
+            { title: "Truckee, CA", artist: "Otis McDonald", src: "radio/Truckee - Otis McDonald.mp3", duration: 168.8 },
+            { title: "Complicate Ya", artist: "Otis McDonald", src: "radio/Complicate ya - Otis McDonald.mp3", duration: 166.5 },
+            { title: "Treat Me This Way", artist: "Otis McDonald", src: "radio/Treat me this way - Otis McDonald.mp3", duration: 125.3 },
+            { title: "Yesterday", artist: "Otis McDonald", src: "radio/Yesterday - Otis McDonald.mp3", duration: 169.7 },
+            { title: "BirdBrainz II", artist: "Otis McDonald", src: "radio/BirdBrainz II - Otis McDonald.mp3", duration: 169.9 },
+            { title: "That Slapper", artist: "Otis McDonald", src: "radio/That Slapper - Otis McDonald.mp3", duration: 198.4 },
+            { title: "3rdeyeblimp", artist: "Otis McDonald", src: "radio/3rdEyeBlimp - Otis McDonald.mp3", duration: 157.8 },
+            { title: "Fly Away", artist: "Otis McDonald", src: "radio/Fly Away - Otis McDonald.mp3", duration: 165.1 },
+            { title: "Stay", artist: "Otis McDonald", src: "radio/Stay - Otis McDonald.mp3", duration: 118.6 },
+            { title: "Other Way", artist: "Otis McDonald", src: "radio/Other Way - Otis McDonald.mp3", duration: 114.7 },
+            { title: "Behind These Closed Doors", artist: "Otis McDonald", src: "radio/Behind Closed Doors - Otis McDonald.mp3", duration: 128.5 },
+            { title: "A Legacy Endures", artist: "Otis McDonald", src: "sounds/ost/Otis McDonald - A Legacy Endures.mp3", duration: 299.7 },
+            { title: "A Legacy Lived", artist: "Otis McDonald", src: "sounds/ost/Otis McDonald - A Legacy Lived.mp3", duration: 307.2 },
+            { title: "A Legacy Understood", artist: "Otis McDonald", src: "sounds/ost/Otis McDonald - A Legacy Understood.mp3", duration: 404.4 },
+            { title: "It Slowly Started to Fade Away", artist: "Otis McDonald", src: "sounds/ost/Otis McDonald - It Slowly Started to Fade Away.mp3", duration: 506.4 }
+        ];
+
+        const audio = document.getElementById('audio-elem');
+        const info = document.getElementById('music-info');
+
+        let serverTimeOffset = 0;
+        let currentRadioState = null;
+        let isTransitioning = false;
+
+        onValue(ref(db, '.info/serverTimeOffset'), snap => {
+            serverTimeOffset = snap.val() || 0;
+        });
+
+        // Resuelve qué canción y segundo exacto corresponden a este milisegundo real
+        function resolveLiveTrack(startTrackSrc, startTimeMs, nowMs) {
+            let idx = radioTracks.findIndex(t => t.src === startTrackSrc || new URL(t.src, document.baseURI).href === startTrackSrc);
+            if (idx === -1) idx = 0;
+            let elapsed = Math.max(0, (nowMs - startTimeMs) / 1000);
+
+            while (elapsed >= radioTracks[idx].duration) {
+                elapsed -= radioTracks[idx].duration;
+                idx = (idx + 1) % radioTracks.length;
+            }
+            return {
+                track: radioTracks[idx],
+                idx: idx,
+                seekTime: elapsed,
+                virtualStartTime: nowMs - Math.round(elapsed * 1000)
+            };
+        }
+
+        function advanceTrack() {
+            if (isTransitioning) return;
+            isTransitioning = true;
+            setTimeout(() => { isTransitioning = false; }, 1500);
+
+            const now = Date.now() + serverTimeOffset;
+            let curIdx = 0;
+            if (currentRadioState && currentRadioState.src) {
+                curIdx = radioTracks.findIndex(t => t.src === currentRadioState.src || new URL(t.src, document.baseURI).href === currentRadioState.src);
+                if (curIdx === -1) curIdx = 0;
+            }
+            const nextIdx = (curIdx + 1) % radioTracks.length;
+            const nextTrack = radioTracks[nextIdx];
+
+            const newState = {
+                title: nextTrack.title,
+                artist: nextTrack.artist,
+                src: nextTrack.src,
+                startTime: now,
+                isPlaying: true,
+                source: 'auto'
+            };
+            currentRadioState = newState;
+            set(ref(db, 'radio_state/current'), newState).catch(() => { });
+            syncTrack(newState);
+        }
+
+        function syncTrack(state) {
+            if (!state) return;
+            const now = Date.now() + serverTimeOffset;
+            const startTime = state.startTime || now;
+
+            const resolved = resolveLiveTrack(state.src, startTime, now);
+            const liveTrack = resolved.track;
+            const seekTime = resolved.seekTime;
+
+            // Si el estado en Firebase quedó desfasado en el tiempo, auto-repararlo
+            if (liveTrack.src !== state.src || Math.abs(resolved.virtualStartTime - startTime) > 3000) {
+                const correctedState = {
+                    title: liveTrack.title,
+                    artist: liveTrack.artist,
+                    src: liveTrack.src,
+                    startTime: resolved.virtualStartTime,
+                    isPlaying: true,
+                    source: 'auto'
+                };
+                currentRadioState = correctedState;
+                set(ref(db, 'radio_state/current'), correctedState).catch(() => { });
+            } else {
+                currentRadioState = state;
+            }
+
+            // Mostrar el título y artista REAL que está sonando en la radio de 28E
+            if (info) {
+                info.innerHTML = `<span class="song-name">${liveTrack.title}</span><span class="song-artist"> — ${liveTrack.artist}</span>`;
+            }
+
+            if (state.isPlaying && liveTrack.src) {
+                const targetUrl = new URL(liveTrack.src, document.baseURI).href;
+                if (audio.src !== targetUrl) {
+                    audio.src = liveTrack.src;
+                    audio.load();
+
+                    const onMeta = () => {
+                        if (audio.duration && seekTime < audio.duration) {
+                            audio.currentTime = seekTime;
+                        }
+                        audio.play().catch(() => { });
+                        audio.removeEventListener('loadedmetadata', onMeta);
+                    };
+                    audio.addEventListener('loadedmetadata', onMeta);
+                } else if (audio.paused) {
+                    if (audio.duration && seekTime < audio.duration) {
+                        audio.currentTime = seekTime;
+                    }
+                    audio.play().catch(() => { });
+                }
+            } else {
+                audio.pause();
+            }
+        }
+
+        // Suscripción reactiva en tiempo real al estado de la radio
+        onValue(ref(db, 'radio_state/current'), snap => {
+            const state = snap.val();
+            syncTrack(state);
+        });
+
+        // Carga inmediata vía REST para que no tarde ni medio segundo
+        fetch('https://yaire-591ca-default-rtdb.firebaseio.com/radio_state/current.json')
+            .then(res => res.json())
+            .then(state => {
+                if (!currentRadioState && state) syncTrack(state);
+            })
+            .catch(() => { });
+
+        // Al terminar la pista, rotar en Firebase para mantener la transmisión continua
+        audio.addEventListener('ended', advanceTrack);
+
+        // Guardián continuo: si la canción ya terminó y el evento 'ended' no saltó, avanzar
+        setInterval(() => {
+            if (audio.duration && audio.currentTime >= audio.duration - 0.4) {
+                advanceTrack();
+            }
+        }, 1000);
+
+        // ── 3. Cintillo de Noticias en Vivo (Mix Variado: Cultura, Música, Tecnología, Actualidad) ──
+        const elNewsCat = document.getElementById('news-cat');
+        const elNewsTitle = document.getElementById('news-title');
+
+        let newsList = [
+            { category: "ACTUALIDAD & ECONOMÍA", title: "Transmisión 24/7 en directo camino a la apertura oficial de 28E" },
+            { category: "MÚSICA & CULTURA", title: "Nuevas producciones y lanzamientos globales marcan la escena urbana" },
+            { category: "TECNOLOGÍA & CIENCIA", title: "Avances de inteligencia artificial y computación espacial marcan el 2026" }
+        ];
+        let newsIdx = 0;
+
+        function renderNewsItem(item) {
+            if (!item || !elNewsTitle) return;
+            elNewsTitle.style.opacity = '0';
+
+            setTimeout(() => {
+                if (elNewsCat) elNewsCat.textContent = item.category || 'NOTICIAS';
+                elNewsTitle.textContent = item.title || '';
+                elNewsTitle.style.opacity = '1';
+            }, 300);
+        }
+
+        function cycleNews() {
+            if (!newsList || newsList.length === 0) return;
+            newsIdx = (newsIdx + 1) % newsList.length;
+            renderNewsItem(newsList[newsIdx]);
+        }
+
+        // Suscripción reactiva en tiempo real al feed de noticias de Firebase
+        onValue(ref(db, 'radio_state/news/items'), snap => {
+            const data = snap.val();
+            if (Array.isArray(data) && data.length > 0) {
+                newsList = data;
+                renderNewsItem(newsList[newsIdx % newsList.length]);
+            }
+        });
+
+        // Carga inmediata vía REST de noticias
+        fetch('https://yaire-591ca-default-rtdb.firebaseio.com/radio_state/news/items.json')
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data) && data.length > 0) {
+                    newsList = data;
+                    renderNewsItem(newsList[newsIdx % newsList.length]);
+                }
+            })
+            .catch(() => { });
+
+        // Rotar titular cada 9 segundos
+        setInterval(cycleNews, 9000);
+        renderNewsItem(newsList[0]);
+
+        window.addEventListener('click', function () {
+            if (audio.paused) {
+                audio.play().catch(() => { });
+            }
+        });
+    </script>
+</body>
+
+</html>

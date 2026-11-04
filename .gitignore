@@ -1,0 +1,42 @@
+.vercel
+
+yt-dlp.exe
+node_modules/
+dist/
+game-desktop/
+build/
+release/
+android/
+ios/
+
+*.pem
+*.asar
+*.zip
+*.exe
+WhatsApp Chat with*.txt
+
+# Large video assets (exceeds GitHub limits)
+videos/
+*.mp4
+
+# Backup & restoration scratch files
+*.bak*
+*.backup*
+*.githead*
+*.head*
+*.restored*
+index.*.html
+hf_radio28e/
+hf_repo_clone/
+scratch/
+scratch_dir/
+.codex/
+.impeccable/
+.agents/
+.media/
+capturas/
+check_*.png
+test_*.png
+scratch_*.jpg
+scripts/current_screen.png
+__pycache__/

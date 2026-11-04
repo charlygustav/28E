@@ -1,0 +1,74 @@
+{
+  "name": "donde-crecen-las-flores",
+  "productName": "28E - Donde crecen las flores",
+  "version": "1.0.0",
+  "description": "Juego de jardín y narrativa en San Francisco de Macorís",
+  "main": "main.js",
+  "author": "28E Entertainment",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win",
+    "build:portable": "electron-builder --win portable",
+    "build:dir": "electron-builder --win --dir"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.3.1",
+    "discord-rpc": "^4.0.1",
+    "node-id3": "^0.2.9",
+    "tailwindcss": "^3.4.1"
+  },
+  "devDependencies": {
+    "electron": "^35.0.0",
+    "electron-builder": "^25.1.8",
+    "rcedit": "^5.0.2"
+  },
+  "build": {
+    "npmRebuild": false,
+    "appId": "com.twentyonee.dondecrecenlasflores",
+    "productName": "28E - Donde crecen las flores",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "tulip.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "28E - Donde crecen las flores",
+      "installerIcon": "tulip.ico",
+      "uninstallerIcon": "tulip.ico",
+      "installerSidebar": "assets/installer/installer_sidebar.bmp",
+      "uninstallerSidebar": "assets/installer/installer_sidebar.bmp",
+      "installerHeader": "assets/installer/installer_header.bmp",
+      "include": "assets/installer/custom_installer.nsh",
+      "warningsAsErrors": false
+    },
+    "files": [
+      "dclf.html",
+      "main.js",
+      "gsap.min.js",
+      "tulip.ico",
+      "fonts/**/*",
+      "sounds/**/*",
+      "radio/**/*",
+      "videos/28E_Entertainment_Intro_1080p_Final.mp4",
+      "images/**/*",
+      "lasfotos/**/*",
+      "gallery/**/*",
+      "assets/**/*",
+      "*.mp3",
+      "*.wav"
+    ],
+    "directories": {
+      "output": "C:/Users/thegi/dclf_build"
+    }
+  }
+}

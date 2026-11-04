@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #000000;
+    color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Plus Jakarta Sans', sans-serif;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .brand-card {
+    width: 900px;
+    height: 480px;
+    background: radial-gradient(120% 120% at 50% 0%, #16181d 0%, #090a0d 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 28px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 0 1px 1px rgba(255, 255, 255, 0.1) inset;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 44px 52px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-glow {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 2;
+  }
+
+  .ch-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  .pill-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+  .dot-uno { background: #10b981; box-shadow: 0 0 10px #10b981; }
+  .dot-flow { background: #c084fc; box-shadow: 0 0 10px #c084fc; }
+  .dot-dclf { background: #f472b6; box-shadow: 0 0 10px #f472b6; }
+
+  .apple-badge {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .card-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    z-index: 2;
+  }
+
+  .logo-display {
+    max-height: 120px;
+    max-width: 580px;
+    object-fit: contain;
+    filter: drop-shadow(0 12px 32px rgba(0, 0, 0, 0.6));
+  }
+
+  .card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 24px;
+    z-index: 2;
+  }
+
+  .channel-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+  }
+
+  .channel-desc {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 4px;
+    font-weight: 400;
+  }
+
+  .tech-specs {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    text-align: right;
+  }
+
+  /* Master Brand Board */
+  .brand-board {
+    width: 1280px;
+    background: #090a0d;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 32px;
+    padding: 60px;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.9);
+  }
+
+  .board-header {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  .board-title {
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #ffffff;
+  }
+  .board-sub {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .board-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .board-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: border-color 0.2s;
+  }
+
+  .board-item-logo {
+    height: 70px;
+    margin-bottom: 24px;
+    object-fit: contain;
+  }
+
+  .board-item-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  .board-item-meta {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.45);
+    margin-top: 4px;
+  }
+
+  /* On-Air Simulation */
+  .onair-sim {
+    background: linear-gradient(135deg, #111827 0%, #030712 100%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sim-watermark {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(9, 13, 22, 0.75);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 8px 18px;
+    border-radius: 999px;
+  }
+  .sim-watermark img {
+    height: 22px;
+  }
+  .sim-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ef4444;
+    box-shadow: 0 0 8px #ef4444;
+  }
+  .sim-live {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #f8fafc;
+  }
+</style>
+</head>
+<body>
+
+  <!-- CARD 1: 28E Uno -->
+  <div class="brand-card" id="card-uno">
+    <div class="card-glow"></div>
+    <div class="card-top">
+      <div class="ch-pill">
+        <span class="pill-dot dot-uno"></span>
+        <span>CANAL 01</span>
+      </div>
+      <div class="apple-badge">Apple-Grade Minimalist Identity</div>
+    </div>
+    <div class="card-center">
+      <img src="assets/logos/logo_28e_uno.svg" class="logo-display" alt="28E Uno">
+    </div>
+    <div class="card-bottom">
+      <div>
+        <div class="channel-title">28E Uno</div>
+        <div class="channel-desc">Señal Abierta · Noticias · Cine Mundial · Eventos en Vivo</div>
+      </div>
+      <div class="tech-specs">
+        BASE: 28E Authentic Mark<br>
+        TYPE: SF Pro Display SemiBold
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 2: 28E Flow -->
+  <div class="brand-card" id="card-flow">
+    <div class="card-glow"></div>
+    <div class="card-top">
+      <div class="ch-pill">
+        <span class="pill-dot dot-flow"></span>
+        <span>CANAL 02</span>
+      </div>
+      <div class="apple-badge">Apple-Grade Minimalist Identity</div>
+    </div>
+    <div class="card-center">
+      <img src="assets/logos/logo_28e_flow.svg" class="logo-display" alt="28E Flow">
+    </div>
+    <div class="card-bottom">
+      <div>
+        <div class="channel-title">28E Flow</div>
+        <div class="channel-desc">Canal Musical 24/7 · Urbano, Reggaeton, Trap & Hits Globales</div>
+      </div>
+      <div class="tech-specs">
+        BASE: 28E Authentic Mark<br>
+        TYPE: SF Pro Display Lowercase
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 3: DCLF TV -->
+  <div class="brand-card" id="card-dclf">
+    <div class="card-glow"></div>
+    <div class="card-top">
+      <div class="ch-pill">
+        <span class="pill-dot dot-dclf"></span>
+        <span>CANAL 03</span>
+      </div>
+      <div class="apple-badge">Official Game Asset · tulip.ico</div>
+    </div>
+    <div class="card-center">
+      <img src="assets/logos/logo_dclf_tv.svg" class="logo-display" alt="DCLF TV">
+    </div>
+    <div class="card-bottom">
+      <div>
+        <div class="channel-title">DCLF TV</div>
+        <div class="channel-desc">Canal de Gaming, Comunidad & Animación · De Cultivo La Flor</div>
+      </div>
+      <div class="tech-specs">
+        ICON: Official 3D Island from tulip.ico<br>
+        BRAND: 28E Lettermark + DCLF TV
+      </div>
+    </div>
+  </div>
+
+  <!-- MASTER BOARD -->
+  <div class="brand-board" id="master-board">
+    <div class="board-header">
+      <div class="board-title">28E TELEVISION NETWORK</div>
+      <div class="board-sub">Identidad Gráfica Oficial · Sistema de Canales 2026 · Estilo Apple Minimalista</div>
+    </div>
+
+    <div class="board-grid">
+      <div class="board-item">
+        <img src="assets/logos/logo_28e_uno.svg" class="board-item-logo" alt="28E Uno">
+        <div class="board-item-name">28E Uno</div>
+        <div class="board-item-meta">Canal 01 · Señal Matriz</div>
+      </div>
+
+      <div class="board-item">
+        <img src="assets/logos/logo_28e_flow.svg" class="board-item-logo" alt="28E Flow">
+        <div class="board-item-name">28E Flow</div>
+        <div class="board-item-meta">Canal 02 · Música 24/7</div>
+      </div>
+
+      <div class="board-item">
+        <img src="assets/logos/logo_dclf_tv.svg" class="board-item-logo" alt="DCLF TV">
+        <div class="board-item-name">DCLF TV</div>
+        <div class="board-item-meta">Canal 03 · Gaming & tulip.ico</div>
+      </div>
+    </div>
+
+    <div class="onair-sim">
+      <div>
+        <div style="font-weight:700; font-size:16px;">Simulación Watermark / Station Bug en Pantalla</div>
+        <div style="font-size:12px; color:rgba(255,255,255,0.45); margin-top:3px;">Cápsula de cristal esmerilado con live dot sobre emisión</div>
+      </div>
+      <div style="display:flex; gap:16px;">
+        <div class="sim-watermark">
+          <img src="assets/logos/logo_28e_uno.svg" alt="Uno Bug">
+          <span class="sim-dot"></span>
+          <span class="sim-live">LIVE</span>
+        </div>
+        <div class="sim-watermark">
+          <img src="assets/logos/logo_28e_flow.svg" alt="Flow Bug">
+          <span class="sim-dot"></span>
+          <span class="sim-live">LIVE</span>
+        </div>
+        <div class="sim-watermark">
+          <img src="assets/logos/logo_dclf_tv.svg" alt="DCLF Bug">
+          <span class="sim-dot"></span>
+          <span class="sim-live">LIVE</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

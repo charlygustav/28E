@@ -1,0 +1,30 @@
+{
+  "cleanUrls": true,
+  "headers": [
+    {
+      "source": "/(.*)\\.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+        { "key": "Pragma", "value": "no-cache" }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/vc-api/:path*",
+      "destination": "https://voice.yaire.site/:path*"
+    },
+    {
+      "source": "/yt-search/piped/:path*",
+      "destination": "https://pipedapi.kavin.rocks/:path*"
+    },
+    {
+      "source": "/yt-search/inv/:path*",
+      "destination": "https://inv.nadeko.net/api/v1/:path*"
+    },
+    {
+      "source": "/__/:path*",
+      "destination": "https://yaire-591ca.firebaseapp.com/__/:path*"
+    }
+  ]
+}
