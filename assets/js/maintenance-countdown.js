@@ -1,7 +1,7 @@
 
         (async function () {
             // Fecha de desbloqueo: 28 de Abril de 2026 a las 00:00:00 (Mes 3 = Abril)
-            const unlockDate = new Date(2026, 3, 28, 0, 0, 0);
+            const unlockDate = new Date("2026-11-08T00:00:00-04:00");
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('reset') === '1') {
                 localStorage.clear();
@@ -142,7 +142,7 @@
                                 }
 
                                 if (fbCfg.mantenimiento && !timeIsUp && urlParams.get('dev') !== '1') {
-                                    const targetPage = fbCfg.maintScreen === 'cinematic' ? 'Yaire_Trailer_Cinematico.html' : fbCfg.maintScreen === 'trailer' ? 'tulipanes.html' : 'mantenimiento.html';
+                                    const targetPage = 'mantenimiento.html';
                                     // Solo si el estado previo NO era mantenimiento y ahora sí es mantenimiento
                                     if (oldCfg && !oldCfg.mantenimiento) {
                                         startMaintenanceCountdown(targetPage);
@@ -171,7 +171,7 @@
                                 if (Date.now() >= new Date(yyyy, mm - 1, dd, hh, min).getTime()) timeIsUp = true;
                             }
                             if (fbCfg.mantenimiento && !timeIsUp && urlParams.get('dev') !== '1') {
-                                const targetPage = fbCfg.maintScreen === 'cinematic' ? 'Yaire_Trailer_Cinematico.html' : fbCfg.maintScreen === 'trailer' ? 'tulipanes.html' : 'mantenimiento.html';
+                                const targetPage = 'mantenimiento.html';
                                 window.location.replace(targetPage);
                                 return;
                             }

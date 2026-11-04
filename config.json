@@ -18,7 +18,7 @@
   "maintMsg": "",
   "maintScreen": "special",
   "maintType": "indefinite",
-  "mantenimiento": false,
+  "mantenimiento": true,
   "refugeText": "",
   "refugeTitle": "Te escucho, mi amor",
   "songs": [
