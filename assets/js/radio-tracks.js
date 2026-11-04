@@ -324,7 +324,7 @@
                     if (ambientArt) {
                         if (artUrl) {
                             ambientArt.src = artUrl;
-                            ambientArt.style.opacity = '0.35';
+                            ambientArt.style.opacity = '0.4';
                         } else {
                             ambientArt.style.opacity = '0';
                         }
