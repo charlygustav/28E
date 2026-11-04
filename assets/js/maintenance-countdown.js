@@ -133,8 +133,8 @@
                                 localStorage.setItem('yaire_config', newStr);
                                 window.dispatchEvent(new CustomEvent('yaire_config_updated', { detail: fbCfg }));
                                 // Check if scheduled time is up
-                                let timeIsUp = false;
-                                if (fbCfg.maintType === 'scheduled' && fbCfg.maintDate) {
+                                let timeIsUp = (Date.now() >= unlockDate.getTime());
+                                if (!timeIsUp && fbCfg.maintType === 'scheduled' && fbCfg.maintDate) {
                                     const [dPart, tPart] = fbCfg.maintDate.split('T');
                                     const [yyyy, mm, dd] = dPart.split('-');
                                     const [hh, min] = tPart.split(':');
@@ -163,8 +163,8 @@
                                 window.dispatchEvent(new CustomEvent('yaire_config_updated', { detail: fbCfg }));
                             }
 
-                            let timeIsUp = false;
-                            if (fbCfg.maintType === 'scheduled' && fbCfg.maintDate) {
+                            let timeIsUp = (Date.now() >= unlockDate.getTime());
+                                if (!timeIsUp && fbCfg.maintType === 'scheduled' && fbCfg.maintDate) {
                                 const [dPart, tPart] = fbCfg.maintDate.split('T');
                                 const [yyyy, mm, dd] = dPart.split('-');
                                 const [hh, min] = tPart.split(':');

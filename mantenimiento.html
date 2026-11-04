@@ -537,7 +537,44 @@
             hour12: false
         });
 
-        function tick() {
+                let hasUnlocked = false;
+        function triggerUnlock() {
+            if (hasUnlocked) return;
+            hasUnlocked = true;
+
+            if (elD) elD.textContent = '00';
+            if (elH) elH.textContent = '00';
+            if (elM) elM.textContent = '00';
+            if (elS) elS.textContent = '00';
+
+            const eyebrow = document.querySelector('.countdown-eyebrow');
+            if (eyebrow) {
+                eyebrow.textContent = '¡APERTURA OFICIAL! ENTRANDO A 28E...';
+                eyebrow.style.color = '#10b981';
+            }
+
+            const maintTag = document.querySelector('.maint-tag');
+            if (maintTag) {
+                maintTag.innerHTML = '<span class="maint-dot" style="background:#10b981;box-shadow:0 0 10px #10b981"></span><span style="color:#10b981">ABIERTO</span>';
+            }
+
+            try {
+                set(ref(db, 'config/mantenimiento'), false).catch(() => {});
+            } catch (e) {}
+
+            setTimeout(() => {
+                const stage = document.querySelector('.stage');
+                if (stage) {
+                    stage.style.transition = 'opacity 1.2s ease-out';
+                    stage.style.opacity = '0';
+                }
+                setTimeout(() => {
+                    window.location.replace('index.html');
+                }, 1200);
+            }, 2000);
+        }
+
+function tick() {
             const now = new Date();
 
             // Reloj y fecha en vivo de Venezuela
@@ -551,12 +588,7 @@
             const diff = TARGET_DATE.getTime() - now.getTime();
 
             if (diff <= 0) {
-                if (elD) elD.textContent = '00';
-                if (elH) elH.textContent = '00';
-                if (elM) elM.textContent = '00';
-                if (elS) elS.textContent = '00';
-                // Si la web ya abrió, recargar para ir a la página principal
-                setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+                triggerUnlock();
                 return;
             }
 
