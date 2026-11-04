@@ -165,8 +165,8 @@
                     if (compactTitle) compactTitle.textContent = titleText;
                     if (radioTitle) radioTitle.textContent = titleText;
 
-                    if (expArtist) expArtist.innerHTML = `<span class="text-rose-500 font-bold tracking-widest uppercase animate-pulse">🔴 EN VIVO</span> · ${artistText}`;
-                    if (compactArtist) compactArtist.innerHTML = `<span class="text-rose-500 font-bold tracking-wider animate-pulse">🔴 EN VIVO</span> · ${artistText}`;
+                    if (expArtist) expArtist.innerHTML = `<span class="inline-flex items-center gap-1.5 text-rose-400 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0 inline-block"></span>En vivo</span> · <span class="text-zinc-400">${artistText}</span>`;
+                    if (compactArtist) compactArtist.innerHTML = `<span class="inline-flex items-center gap-1.5 text-rose-400 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0 inline-block"></span>En vivo</span> · <span class="text-zinc-400">${artistText}</span>`;
                     if (radioArtist) radioArtist.textContent = artistText;
 
                     if (isSpotPlaying && spotlightMode === 'radio') {
@@ -966,7 +966,7 @@
                             const radioTitle = document.getElementById('spotlight-radio-title');
                             const radioArtist = document.getElementById('spotlight-radio-artist');
                             if (compactTitle) compactTitle.textContent = '28E Radio';
-                            if (compactArtist) compactArtist.innerHTML = `<span class="text-rose-500 font-bold tracking-wider animate-pulse">🔴 EN VIVO</span>`;
+                            if (compactArtist) compactArtist.innerHTML = `<span class="inline-flex items-center gap-1.5 text-rose-400 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0 inline-block"></span>En vivo</span>`;
                             if (radioTitle) radioTitle.textContent = '28E Radio';
                             if (radioArtist) radioArtist.textContent = 'Transmisión en Vivo';
                             updateAllArtwork('tulip.ico?v=3');
