@@ -4,27 +4,27 @@
   <script>try{if(window.location.hostname==="tv.yaire.site"&&window.location.pathname!=="/"){window.history.replaceState(null,"","/"+window.location.search+window.location.hash);}}catch(e){}</script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>28E TV · Transmisión Lineal 24/7</title>
-  <meta name="description" content="28E TV: Televisión lineal en vivo, minimalista y continua con 28E Flow y señal de Donde Crecen las Flores.">
-  <!-- Tipografía: Plus Jakarta Sans & JetBrains Mono vía Google Fonts WOFF2 con hinting óptimo -->
+  <title>28E TV · Twenty Eight Experience Radio (En Vivo 24/7)</title>
+  <meta name="description" content="28E TV: Transmisión en vivo oficial 24/7 de Twenty Eight Experience Radio. Emisión continua y minimalista.">
+  <link rel="icon" type="image/x-icon" href="./favicon.ico">
+
+  <!-- Tipografía: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
   
-  <!-- GSAP y HLS.js -->
+  <!-- GSAP -->
   <script src="gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8/dist/hls.min.js"></script>
 
   <style>
     :root {
       --bg: #000000;
       --fg: #f8fafc;
       --muted: #94a3b8;
-      --surface: rgba(12, 16, 14, 0.52);
-      --surface-border: rgba(255, 255, 255, 0.08);
-      --accent-ch1: #10b981;
-      --accent-ch2: #a855f7;
-      --accent-ch3: #ec4899;
+      --surface: rgba(12, 16, 14, 0.65);
+      --surface-border: rgba(255, 255, 255, 0.1);
+      --accent-live: #ef4444;
+      --accent-brand: #10b981;
       --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
       --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
@@ -37,8 +37,6 @@
       -webkit-user-select: none;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      text-rendering: optimizeLegibility;
-      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     }
 
     html, body {
@@ -77,23 +75,15 @@
       align-items: center;
       justify-content: center;
       background: #000;
+      overflow: hidden;
     }
 
-    #tv-video-player {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      background: #000;
-      display: block;
-    }
-
-    /* CONTENEDOR Y REPRODUCTOR YOUTUBE (SIN INTERFAZ DE YOUTUBE) */
+    /* CONTENEDOR Y REPRODUCTOR YOUTUBE */
     #tv-youtube-container {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
-      display: none;
       background: #000;
       z-index: 2;
       overflow: hidden;
@@ -107,9 +97,8 @@
       height: 56.25vw; /* Ratio 16:9 */
       min-height: 100vh;
       min-width: 177.77vh; /* Ratio 16:9 */
-      transform: translate(-50%, -50%) scale(1);
+      transform: translate(-50%, -50%);
       transform-origin: center center;
-      pointer-events: none;
     }
 
     #tv-youtube-container iframe,
@@ -117,29 +106,18 @@
       width: 100% !important;
       height: 100% !important;
       border: 0 !important;
-      pointer-events: none !important;
       display: block;
+      pointer-events: none;
     }
 
+    /* ESCUDO DE CLIC: CAPTURA CLICS PARA DESMUTEAR Y WAKE HUD */
     .yt-click-shield {
       position: absolute;
       inset: 0;
       z-index: 5;
       background: transparent;
       pointer-events: auto;
-      cursor: default;
-    }
-
-    /* CANVAS DE ESTÁTICA / ZAPPING */
-    #static-canvas {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 10;
-      opacity: 0;
-      transition: opacity 0.1s ease;
+      cursor: pointer;
     }
 
     /* SCANLINES CRT SUTILES */
@@ -160,1191 +138,345 @@
       opacity: 1;
     }
 
-    /* WATERMARK / MOSCA DE CANAL LIMPIA (SUPERIOR DERECHO - SOLO LOGO) */
-    .tv-watermark-container,
-    .tv-watermark-pill {
+    /* WATERMARK / MOSCA DE CANAL (SUPERIOR DERECHO) */
+    .tv-watermark-container {
       position: absolute;
-      top: 26px;
-      right: 32px;
+      top: 24px;
+      right: 28px;
       z-index: 22;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: none !important;
-      border: none !important;
-      backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
-      box-shadow: none !important;
-      padding: 0 !important;
-      border-radius: 0 !important;
       pointer-events: none;
     }
 
     .watermark-logo-img {
-      height: 40px;
+      height: 38px;
       width: auto;
       object-fit: contain;
-      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 1px rgba(0, 0, 0, 0.95));
-      opacity: 0.92;
-      transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.85));
+      opacity: 0.9;
     }
 
-    /* OVERLAY MUSICAL FLOTANTE · SIN RECUADRO NI CAJAS (28E FLOW) */
-    .mtv-lower-third {
+    /* UNMUTE TOAST / PILL HINT */
+    .unmute-hint {
       position: absolute;
-      bottom: 84px;
-      left: 32px;
-      z-index: 25;
-      display: none;
-      pointer-events: none;
-      background: transparent !important;
-      border: none !important;
-      border-radius: 0 !important;
-      box-shadow: none !important;
-      backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
-      padding: 6px 12px !important;
-      will-change: transform, opacity, filter;
-    }
-
-    /* AURA NEGRA / SOMBRA DIFUSA ORGÁNICA DETRÁS DEL TEXTO (SIN FORMA DE RECTÁNGULO) */
-    .mtv-lower-third::before {
-      content: '';
-      position: absolute;
-      inset: -22px -45px;
-      background: radial-gradient(ellipse 75% 70% at 35% 50%, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.45) 50%, transparent 80%);
-      filter: blur(16px);
-      z-index: -1;
-      pointer-events: none;
-      border-radius: 50%;
-    }
-
-    .mtv-title {
-      font-family: var(--font-sans);
-      font-size: 20px;
-      font-weight: 700;
-      color: #ffffff;
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95), 0 0 4px rgba(0, 0, 0, 0.95);
-    }
-
-    .mtv-artist {
-      font-family: var(--font-sans);
-      font-size: 15px;
-      font-weight: 500;
-      color: rgba(255, 255, 255, 0.88);
-      margin-top: 3px;
-      line-height: 1.25;
-      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.95);
-    }
-
-    /* ============================================================
-       PAQUETE GRÁFICO TELEVISIVO (BROADCAST GRAPHICS PACKAGE)
-       Station IDs · Bumpers "Ya Volvemos" · "De Regreso" · "Ya Viene"
-       ============================================================ */
-    .broadcast-gfx-stage {
-      position: absolute;
-      inset: 0;
-      z-index: 45;
-      display: none;
-      pointer-events: none;
-      overflow: hidden;
-      contain: layout style paint;
-    }
-
-    .gfx-stage-backdrop {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at center, rgba(8, 11, 14, 0.74) 0%, rgba(2, 3, 5, 0.94) 100%);
-      backdrop-filter: blur(28px) saturate(135%);
-      -webkit-backdrop-filter: blur(28px) saturate(135%);
-      opacity: 0;
-      will-change: opacity;
-    }
-
-    .gfx-stage-content {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 24px;
-      pointer-events: none;
-    }
-
-    .gfx-channel-badge {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      padding: 4px 16px;
-      border-radius: 999px;
-      margin-bottom: 22px;
-      opacity: 0;
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      background: rgba(255, 255, 255, 0.05);
-      color: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
-      will-change: transform, opacity;
-    }
-
-    .gfx-logo-wrapper {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 22px;
-      opacity: 0;
-      overflow: hidden;
-      padding: 8px 16px;
-      will-change: transform, opacity, filter;
-    }
-
-    .gfx-stage-logo {
-      height: 76px;
-      width: auto;
-      object-fit: contain;
-      filter: drop-shadow(0 14px 40px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 24px rgba(255, 255, 255, 0.22));
-    }
-
-    .gfx-shimmer-sweep {
-      position: absolute;
-      inset: -20px -60px;
-      background: linear-gradient(105deg, transparent 32%, rgba(255, 255, 255, 0.45) 50%, transparent 68%);
-      transform: translateX(-160%);
-      pointer-events: none;
-      mix-blend-mode: overlay;
-      will-change: transform;
-    }
-
-    .gfx-main-tagline {
-      font-family: var(--font-sans);
-      font-size: 26px;
-      font-weight: 700;
-      color: #ffffff;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.95), 0 0 4px rgba(0, 0, 0, 0.9);
-      opacity: 0;
-      margin-bottom: 8px;
-      will-change: transform, opacity;
-    }
-
-    .gfx-sub-tagline {
-      font-family: var(--font-mono);
-      font-size: 13px;
-      font-weight: 500;
-      color: rgba(255, 255, 255, 0.68);
-      letter-spacing: 0.24em;
-      text-transform: uppercase;
-      opacity: 0;
-      will-change: transform, opacity;
-    }
-
-
-
-    /* CONSOLA DE AUDITORÍA Y CONTROL EN VIVO: STUDIO GFX DOCK */
-    .gfx-studio-dock {
-      position: absolute;
-      bottom: 82px;
+      bottom: 96px;
       left: 50%;
-      transform: translateX(-50%) translateY(16px);
-      z-index: 60;
-      background: rgba(10, 13, 16, 0.92);
-      backdrop-filter: blur(28px) saturate(180%);
-      -webkit-backdrop-filter: blur(28px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 18px;
-      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.85), 0 1px 1px rgba(255, 255, 255, 0.08) inset;
-      padding: 16px 20px;
-      min-width: 660px;
-      max-width: 94vw;
-      display: none;
-      opacity: 0;
-      transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .gfx-studio-dock.open {
-      display: block;
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    .studio-dock-header {
+      transform: translateX(-50%);
+      z-index: 30;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 14px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .studio-dock-title {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 700;
-      color: rgba(255, 255, 255, 0.9);
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-    }
-
-    .studio-pulse {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #10b981;
-      box-shadow: 0 0 10px #10b981;
-      animation: pulsePing 2s infinite;
-    }
-
-    .studio-close-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: rgba(255, 255, 255, 0.7);
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      transition: background 0.15s, color 0.15s;
-    }
-
-    .studio-close-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
-      color: #ffffff;
-    }
-
-    .studio-channels-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-    }
-
-    .studio-channel-col {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      border-radius: 12px;
-      padding: 10px;
-    }
-
-    .studio-channel-col .col-header {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      margin-bottom: 9px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 700;
-      color: #ffffff;
-    }
-
-    .studio-channel-col.col-uno .col-num {
-      background: rgba(16, 185, 129, 0.25);
-      color: #10b981;
-      padding: 1px 5px;
-      border-radius: 4px;
-    }
-
-    .studio-channel-col.col-flow .col-num {
-      background: rgba(168, 85, 247, 0.25);
-      color: #c084fc;
-      padding: 1px 5px;
-      border-radius: 4px;
-    }
-
-    .studio-channel-col.col-dclf .col-num {
-      background: rgba(236, 72, 153, 0.25);
-      color: #f472b6;
-      padding: 1px 5px;
-      border-radius: 4px;
-    }
-
-    .col-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    .studio-trigger-btn {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: rgba(255, 255, 255, 0.85);
-      font-family: var(--font-sans);
-      font-size: 11px;
+      gap: 10px;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      color: #fff;
+      font-size: 13px;
       font-weight: 600;
-      padding: 6px 10px;
-      border-radius: 7px;
-      cursor: pointer;
-      text-align: left;
-      transition: background 0.15s, transform 0.1s, border-color 0.15s, color 0.15s;
-    }
-
-    .studio-trigger-btn:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.25);
-      color: #ffffff;
-      transform: translateY(-1px);
-    }
-
-    .studio-trigger-btn:active {
-      transform: translateY(1px);
-    }
-
-    /* INDICADOR DE CORTE COMERCIAL (MINIMALISTA, ELEGANTE Y CONFORTABLE) */
-    .ad-break-tag {
-      position: absolute;
-      top: 22px;
-      left: 24px;
-      height: 28px;
-      padding: 0 11px 0 9px;
-      background: rgba(14, 18, 22, 0.72);
-      backdrop-filter: blur(24px) saturate(160%);
-      -webkit-backdrop-filter: blur(24px) saturate(160%);
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-      z-index: 22;
-      display: none;
-      align-items: center;
-      gap: 7px;
-      user-select: none;
-      cursor: default;
-      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-      animation: adTagIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .ad-break-tag:hover {
-      background: rgba(18, 24, 30, 0.85);
-      border-color: rgba(245, 158, 11, 0.25);
-    }
-
-    .ad-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #f59e0b;
-      box-shadow: 0 0 8px rgba(245, 158, 11, 0.7);
-      flex-shrink: 0;
-      animation: adDotGlow 2.4s ease-in-out infinite;
-    }
-
-    @keyframes adDotGlow {
-      0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-        box-shadow: 0 0 8px rgba(245, 158, 11, 0.75);
-      }
-      50% {
-        opacity: 0.6;
-        transform: scale(0.9);
-        box-shadow: 0 0 3px rgba(245, 158, 11, 0.35);
-      }
-    }
-
-    .ad-label {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      color: #fbbf24;
-      line-height: 1;
-      text-transform: uppercase;
-    }
-
-    .ad-divider {
-      width: 1px;
-      height: 10px;
-      background: rgba(255, 255, 255, 0.14);
-      flex-shrink: 0;
-    }
-
-    .ad-timer,
-    .ad-timer-pill {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      font-weight: 600;
-      color: #cbd5e1;
       letter-spacing: 0.02em;
-      line-height: 1;
-      font-variant-numeric: tabular-nums;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      animation: hintBounce 2.5s infinite ease-in-out;
     }
 
-    .ad-title-text {
-      display: none !important;
+    .unmute-hint.hidden {
+      opacity: 0;
+      transform: translateX(-50%) translateY(12px);
+      pointer-events: none;
     }
 
-    @keyframes adTagIn {
-      from {
-        opacity: 0;
-        transform: translateY(-5px) scale(0.96);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+    @keyframes hintBounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-6px); }
     }
 
-
-
-    /* ════════════════════════════════════════════
-       FLOATING HUD (AUTO-HIDE EN INACTIVIDAD)
-    ════════════════════════════════════════════ */
+    /* FLOATING HUD OVERLAY (AUTO-HIDE EN INACTIVIDAD) */
     .floating-hud {
       position: absolute;
       inset: 0;
+      z-index: 25;
       pointer-events: none;
-      z-index: 30;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 16px 20px;
+      padding: max(20px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
       opacity: 1;
       transform: translateY(0);
-      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .floating-hud * {
-      pointer-events: auto;
+      transition: opacity 0.35s ease, transform 0.35s ease;
     }
 
     .floating-hud.idle-hidden {
       opacity: 0;
-      pointer-events: none;
       transform: translateY(-4px);
     }
 
-    .floating-hud.idle-hidden * {
-      pointer-events: none;
-    }
-
-    /* ════════════════════════════════════════════
-       TOP BAR: APPLE DYNAMIC ISLAND MINIMALISTA
-       ════════════════════════════════════════════ */
+    /* BARRA SUPERIOR (DYNAMIC ISLAND) */
     .hud-top-island {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto;
-      height: 44px;
-      background: rgba(8, 11, 13, 0.76);
-      backdrop-filter: blur(32px) saturate(190%);
-      -webkit-backdrop-filter: blur(32px) saturate(190%);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 999px;
-      padding: 0 8px 0 16px;
-      gap: 16px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      align-self: center;
       pointer-events: auto;
-      user-select: none;
-      transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-    }
-
-    .hud-top-island:hover {
-      background: rgba(12, 16, 20, 0.88);
-      border-color: rgba(255, 255, 255, 0.12);
-      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-    }
-
-    /* BRAND / LIVE */
-    .top-brand-group {
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      gap: 8px;
-      cursor: default;
-      flex-shrink: 0;
+      gap: 14px;
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 8px 18px;
+      border-radius: 9999px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .top-brand-group {
+      display: flex;
+      align-items: center;
+      gap: 9px;
     }
 
     .live-dot-ping {
-      width: 7px;
-      height: 7px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
-      background: #ef4444;
-      box-shadow: 0 0 10px rgba(239, 68, 68, 0.85);
-      animation: pulseLive 2s infinite ease-in-out;
-      flex-shrink: 0;
+      background: var(--accent-live);
+      box-shadow: 0 0 10px var(--accent-live);
+      position: relative;
     }
 
-    @keyframes pulseLive {
-      0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 10px rgba(239, 68, 68, 0.85); }
-      50% { opacity: 0.45; transform: scale(0.85); box-shadow: 0 0 4px rgba(239, 68, 68, 0.4); }
+    .live-dot-ping::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      border: 2px solid var(--accent-live);
+      opacity: 0.8;
+      animation: livePing 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+
+    @keyframes livePing {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(2.2); opacity: 0; }
     }
 
     .top-brand-label {
-      font-family: var(--font-mono);
       font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      color: #ffffff;
-      line-height: 1;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: #fff;
+    }
+
+    .top-badge-live {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      padding: 2px 7px;
+      border-radius: 6px;
     }
 
     .top-brand-sep {
-      width: 3px;
-      height: 3px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
-      flex-shrink: 0;
+      width: 1px;
+      height: 16px;
+      background: rgba(255, 255, 255, 0.16);
     }
 
-    /* SELECTOR DE CANALES (SEGMENTED DOCK) */
-    .top-channels-group {
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      background: rgba(255, 255, 255, 0.04);
-      padding: 3px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.04);
-    }
-
-    .top-ch-btn {
-      background: transparent;
-      border: none;
-      height: 30px;
-      padding: 0 12px;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      cursor: pointer;
-      color: rgba(255, 255, 255, 0.6);
+    .top-stream-title {
       font-size: 12px;
-      font-weight: 500;
-      font-family: var(--font-sans);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      white-space: nowrap;
-    }
-
-    .top-ch-btn:hover {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .top-ch-btn:active {
-      transform: scale(0.96);
-    }
-
-    .top-ch-btn.active {
-      color: #ffffff;
       font-weight: 600;
-      background: rgba(255, 255, 255, 0.13);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.16);
-    }
-
-    .top-ch-badge {
-      font-family: var(--font-mono);
-      font-weight: 800;
-      font-size: 10px;
-      letter-spacing: 0.02em;
-      padding: 2px 6px;
-      border-radius: 6px;
-      line-height: 1;
-      flex-shrink: 0;
-      background: rgba(255, 255, 255, 0.08);
-      color: rgba(255, 255, 255, 0.45);
-      transition: all 0.2s ease;
-    }
-
-    .top-ch-btn.active .top-ch-badge.ch-1,
-    .top-ch-btn[data-ch="1"].active .top-ch-badge {
-      background: var(--accent-ch1);
-      color: #021a0e;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
-    }
-
-    .top-ch-btn.active .top-ch-badge.ch-2,
-    .top-ch-btn[data-ch="2"].active .top-ch-badge {
-      background: var(--accent-ch2);
-      color: #120520;
-      box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
-    }
-
-    .top-ch-btn.active .top-ch-badge.ch-3,
-    .top-ch-btn[data-ch="3"].active .top-ch-badge {
-      background: var(--accent-ch3);
-      color: #1a0510;
-      box-shadow: 0 0 10px rgba(236, 72, 153, 0.4);
-    }
-
-    .top-ch-name {
-      letter-spacing: -0.01em;
-    }
-
-    /* ACCIONES (GUÍA & VAULT) */
-    .top-actions-group {
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
+      color: rgba(255, 255, 255, 0.88);
+      max-width: 240px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .top-action-btn {
-      background: transparent;
-      border: none;
-      height: 30px;
-      padding: 0 11px;
-      border-radius: 999px;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.8);
       text-decoration: none;
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 11.5px;
-      font-weight: 500;
-      font-family: var(--font-sans);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      white-space: nowrap;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: background 0.18s ease, color 0.18s ease;
+      cursor: pointer;
     }
 
     .top-action-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
       color: #ffffff;
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .top-action-btn:active {
-      transform: scale(0.95);
     }
 
     .top-action-btn svg {
-      width: 14px;
-      height: 14px;
+      width: 13px;
+      height: 13px;
       stroke: currentColor;
+      stroke-width: 2.2;
       fill: none;
-      stroke-width: 1.8;
       stroke-linecap: round;
       stroke-linejoin: round;
-      opacity: 0.8;
-      flex-shrink: 0;
     }
 
-    /* ════════════════════════════════════════════
-       BOTTOM HUD BAR — REDESIGN MINIMALISTA
-    ════════════════════════════════════════════ */
+    /* BARRA INFERIOR */
     .hud-bottom-bar {
+      align-self: center;
+      pointer-events: auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0;
+      gap: 20px;
       width: 100%;
-      max-width: 900px;
-      margin: 0 auto;
-      background: rgba(8, 11, 10, 0.72);
-      backdrop-filter: blur(32px) saturate(180%);
-      -webkit-backdrop-filter: blur(32px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      border-radius: 22px;
-      padding: 0;
-      overflow: hidden;
-      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(255,255,255,0.04) inset;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      max-width: 860px;
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 12px 20px;
+      border-radius: 20px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
     }
 
-    .hud-bottom-bar:hover {
-      border-color: rgba(255, 255, 255, 0.12);
-    }
-
-    /* INFO SECTION — izquierda */
     .bottom-info-group {
       display: flex;
       align-items: center;
       gap: 12px;
       min-width: 0;
-      flex: 1;
-      padding: 11px 18px;
     }
 
     .bottom-ch-badge {
       font-family: var(--font-mono);
-      font-weight: 800;
       font-size: 11px;
-      letter-spacing: 0.03em;
-      color: #021a0e;
-      background: var(--accent-ch1);
-      padding: 5px 9px;
-      border-radius: 9px;
-      line-height: 1;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 4px 8px;
+      border-radius: 8px;
+      background: rgba(16, 185, 129, 0.18);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.35);
       flex-shrink: 0;
-      transition: background 0.35s cubic-bezier(0.16,1,0.3,1), color 0.35s ease;
     }
-    .bottom-ch-badge.ch-2 { background: var(--accent-ch2); color: #120520; }
-    .bottom-ch-badge.ch-3 { background: var(--accent-ch3); color: #1a0510; }
 
     .bottom-text-wrap {
-      min-width: 0;
       display: flex;
       flex-direction: column;
-      gap: 1px;
-    }
-
-    .bottom-program-badge {
-      font-family: var(--font-mono);
-      font-size: 8.5px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #38bdf8;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      margin-bottom: 2px;
-      line-height: 1;
+      min-width: 0;
     }
 
     .bottom-show-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: #f1f5f9;
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      letter-spacing: -0.01em;
     }
 
     .bottom-show-sub {
-      font-size: 10.5px;
-      color: rgba(148, 163, 184, 0.7);
+      font-size: 11px;
+      color: var(--muted);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      letter-spacing: 0.01em;
     }
 
-    /* DIVIDER */
     .hud-bar-divider {
       width: 1px;
-      align-self: stretch;
-      background: rgba(255,255,255,0.06);
+      height: 24px;
+      background: rgba(255, 255, 255, 0.1);
       flex-shrink: 0;
     }
 
-    /* CONTROLES — derecha */
     .bottom-controls-group {
       display: flex;
       align-items: center;
-      gap: 2px;
+      gap: 10px;
       flex-shrink: 0;
-      padding: 6px 10px;
     }
 
-    /* Botones de control individuales */
     .hud-tool-btn {
-      background: transparent;
-      border: none;
-      color: rgba(203, 213, 225, 0.6);
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
-      display: flex;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #e2e8f0;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: background 0.15s ease, color 0.15s ease, transform 0.12s cubic-bezier(0.16,1,0.3,1);
-      position: relative;
+      transition: background 0.18s ease, transform 0.12s ease, color 0.18s ease;
     }
 
     .hud-tool-btn:hover {
-      background: rgba(255, 255, 255, 0.08);
-      color: #f1f5f9;
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+      transform: scale(1.05);
     }
 
     .hud-tool-btn:active {
-      transform: scale(0.88);
-      background: rgba(255, 255, 255, 0.12);
+      transform: scale(0.95);
     }
 
     .hud-tool-btn.active {
-      color: var(--accent-ch1);
-    }
-    .hud-tool-btn.active:hover {
-      background: rgba(16, 185, 129, 0.1);
+      background: rgba(16, 185, 129, 0.2);
+      border-color: rgba(16, 185, 129, 0.4);
+      color: #34d399;
     }
 
     .hud-tool-btn svg {
-      width: 16px;
-      height: 16px;
+      width: 17px;
+      height: 17px;
       stroke: currentColor;
+      stroke-width: 2;
       fill: none;
-      stroke-width: 1.75;
       stroke-linecap: round;
       stroke-linejoin: round;
     }
 
-    /* VOLUME — grupo compacto */
+    /* SLIDER VOLUMEN */
     .vol-slider-wrap {
       display: flex;
       align-items: center;
-      gap: 4px;
-      padding: 0 4px;
+      gap: 8px;
     }
 
-    /* Custom range slider — minimalista */
     .vol-slider-input {
       -webkit-appearance: none;
       appearance: none;
-      width: 72px;
-      height: 3px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 99px;
+      width: 76px;
+      height: 4px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.2);
       outline: none;
       cursor: pointer;
-      transition: background 0.2s ease;
     }
-    .vol-slider-input:hover {
-      background: rgba(255,255,255,0.22);
-    }
+
     .vol-slider-input::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
       width: 13px;
       height: 13px;
       border-radius: 50%;
-      background: #fff;
-      border: none;
-      box-shadow: 0 0 0 2px rgba(0,0,0,0.4);
+      background: #10b981;
       cursor: pointer;
-      transition: transform 0.12s cubic-bezier(0.16,1,0.3,1), box-shadow 0.15s ease;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+      transition: transform 0.12s ease;
     }
+
     .vol-slider-input::-webkit-slider-thumb:hover {
-      transform: scale(1.25);
-      box-shadow: 0 0 0 3px rgba(255,255,255,0.18);
-    }
-    .vol-slider-input::-webkit-slider-thumb:active {
-      transform: scale(1.1);
-    }
-    .vol-slider-input::-moz-range-thumb {
-      width: 13px;
-      height: 13px;
-      border-radius: 50%;
-      background: #fff;
-      border: none;
-      cursor: pointer;
-    }
-    .vol-slider-input::-moz-range-track {
-      background: rgba(255,255,255,0.15);
-      border-radius: 99px;
-      height: 3px;
-    }
-
-    /* ==========================================
-       GUÍA EPG · TV LINEAL STYLE
-       ========================================== */
-    .epg-modal-wrap {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.65);
-      backdrop-filter: blur(20px) saturate(150%);
-      -webkit-backdrop-filter: blur(20px) saturate(150%);
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px 16px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.18s ease;
-    }
-
-    .epg-modal-wrap.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    /* PANEL PRINCIPAL */
-    .epg-card {
-      width: 100%;
-      max-width: 580px;
-      background: rgba(10, 13, 18, 0.96);
-      backdrop-filter: blur(40px);
-      -webkit-backdrop-filter: blur(40px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.9);
-    }
-
-    /* CABECERA */
-    .epg-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 18px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .epg-header-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .epg-header-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: #f1f5f9;
-      letter-spacing: -0.01em;
-    }
-
-    .epg-live-pill {
-      font-family: var(--font-mono);
-      font-size: 8.5px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      color: #ef4444;
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid rgba(239, 68, 68, 0.2);
-      padding: 2px 7px;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .epg-live-pill-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: #ef4444;
-      animation: epgLivePulse 1.6s ease-in-out infinite;
-    }
-
-    @keyframes epgLivePulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.35; }
-    }
-
-    .epg-clock {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 600;
-      color: #64748b;
-    }
-
-    .epg-x-btn {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.07);
-      color: #64748b;
-      font-size: 11px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.12s ease, color 0.12s ease;
-    }
-
-    .epg-x-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
-    .epg-x-btn:active { transform: scale(0.94); }
-
-    /* FILAS DE CANAL */
-    .epg-channel-list {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .epg-ch-row {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 14px 18px;
-      cursor: pointer;
-      transition: background 0.12s ease;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      position: relative;
-    }
-
-    .epg-ch-row:last-child {
-      border-bottom: none;
-    }
-
-    .epg-ch-row:hover {
-      background: rgba(255,255,255,0.025);
-    }
-
-    .epg-ch-row.is-tuned {
-      background: rgba(255,255,255,0.03);
-    }
-
-    /* Badge número de canal */
-    .epg-ch-badge {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      min-width: 34px;
-      text-align: center;
-      padding: 5px 6px;
-      border-radius: 7px;
-      flex-shrink: 0;
-    }
-
-    /* Contenido central de la fila */
-    .epg-ch-body {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .epg-ch-now {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .epg-ch-label {
-      font-size: 8.5px;
-      font-family: var(--font-mono);
-      font-weight: 700;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .epg-ch-title {
-      font-size: 13.5px;
-      font-weight: 700;
-      color: #f1f5f9;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      letter-spacing: -0.01em;
-    }
-
-    .epg-ch-sub {
-      font-size: 11px;
-      color: #475569;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* Barra de progreso del programa actual */
-    .epg-prog-bar {
-      width: 100%;
-      height: 2px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 999px;
-      overflow: hidden;
-    }
-
-    .epg-prog-fill {
-      height: 100%;
-      border-radius: 999px;
-      transition: width 1s linear;
-    }
-
-    /* Próximo */
-    .epg-next-row {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 10.5px;
-      color: #475569;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-
-    .epg-next-row span {
-      color: #64748b;
-      flex-shrink: 0;
-    }
-
-    .epg-next-title {
-      color: #94a3b8;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-weight: 500;
-    }
-
-    /* Indicador derecho de sintonización */
-    .epg-ch-side {
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 60px;
-    }
-
-    .epg-on-air {
-      font-family: var(--font-mono);
-      font-size: 8.5px;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      color: #34d399;
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.2);
-      padding: 3px 8px;
-      border-radius: 5px;
-    }
-
-    .epg-tune-hint {
-      font-size: 10.5px;
-      color: #334155;
-      font-weight: 600;
-      opacity: 0;
-      transition: opacity 0.12s ease;
-    }
-
-    .epg-ch-row:hover .epg-tune-hint {
-      opacity: 1;
-    }
-
-    
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-      .hud-top-island {
-        padding: 2px 4px;
-        gap: 2px;
-      }
-      .top-ch-btn {
-        padding: 4px 7px;
-        font-size: 11px;
-      }
-      .top-action-btn span {
-        display: none;
-      }
-      .hud-bottom-bar {
-        border-radius: 18px;
-      }
-      .bottom-info-group {
-        padding: 10px 14px;
-      }
-      .bottom-controls-group {
-        padding: 5px 8px;
-      }
-      .vol-slider-input {
-        width: 52px;
-      }
-      .tv-watermark-container,
-      .tv-watermark-pill {
-        top: 16px;
-        right: 18px;
-      }
-      .watermark-logo-img {
-        height: 28px;
-      }
-      .ad-break-tag {
-        top: 16px;
-        left: 16px;
-        height: 26px;
-        padding: 0 10px 0 8px;
-        gap: 6px;
-      }
+      transform: scale(1.2);
     }
 
     /* ── 28E TV CINEMATIC INTRO IDENT ── */
@@ -1354,85 +486,43 @@
       width: 100vw;
       height: 100vh;
       height: 100dvh;
-      z-index: 99999;
-      background: #000000;
+      background: #000;
+      z-index: 10000;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      user-select: none;
-      -webkit-user-select: none;
-      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s;
+      cursor: pointer;
+      opacity: 1;
+      transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .tv-intro-video {
-      width: 100vw;
-      height: 100vh;
-      height: 100dvh;
-      object-fit: contain;
-      background: #000000;
-      display: block;
-    }
-
-    .tv-intro-controls {
       position: absolute;
-      bottom: max(24px, calc(env(safe-area-inset-bottom) + 16px));
-      right: max(24px, calc(env(safe-area-inset-right) + 16px));
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 10;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #000;
+      pointer-events: none;
     }
 
-    .tv-intro-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 18px;
-      border-radius: 9999px;
-      background: rgba(18, 18, 24, 0.72);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      color: rgba(255, 255, 255, 0.92);
-      font-family: var(--font-sans);
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: -0.01em;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .tv-intro-btn:hover {
-      background: rgba(255, 255, 255, 0.18);
-      border-color: rgba(255, 255, 255, 0.32);
-      color: #ffffff;
-      transform: translateY(-1px);
-    }
-
-    .tv-intro-btn:active {
-      transform: scale(0.96);
-    }
-
-    .tv-intro-unmute-btn {
-      background: rgba(225, 29, 72, 0.85);
-      border-color: rgba(255, 255, 255, 0.3);
-      color: #ffffff;
-      animation: introPulse 2s infinite ease-in-out;
-    }
-
-    .tv-intro-unmute-btn:hover {
-      background: rgba(244, 63, 94, 0.95);
-    }
-
-    .tv-intro-btn.hidden {
-      display: none !important;
-    }
-
-    @keyframes introPulse {
-      0%, 100% { transform: scale(1); box-shadow: 0 4px 20px rgba(225, 29, 72, 0.4); }
-      50% { transform: scale(1.04); box-shadow: 0 6px 28px rgba(225, 29, 72, 0.7); }
+    @media (max-width: 640px) {
+      .top-stream-title {
+        display: none;
+      }
+      .hud-bottom-bar {
+        padding: 10px 14px;
+        gap: 12px;
+      }
+      .vol-slider-input {
+        width: 52px;
+      }
+      .bottom-show-sub {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -1452,179 +542,73 @@
     <!-- PANTALLA DE EMISIÓN -->
     <div class="tv-screen-viewport" id="tv-screen">
       
-      <!-- Video Player Nativo HLS / MP4 -->
-      <video id="tv-video-player" playsinline muted autoplay preload="auto"></video>
-
-      <!-- YouTube Player (Encapsulado para ocultar UI nativa) -->
+      <!-- YouTube Player (Encapsulado para visualización inmersiva 16:9) -->
       <div id="tv-youtube-container">
         <div class="yt-frame-wrapper">
           <div id="tv-youtube-player"></div>
         </div>
-        <div class="yt-click-shield" id="yt-click-shield"></div>
+        <div class="yt-click-shield" id="yt-click-shield" title="Toca para activar audio o pausar"></div>
       </div>
-
-      <!-- Canvas de Estática Zapping -->
-      <canvas id="static-canvas"></canvas>
 
       <!-- Scanlines CRT -->
       <div class="crt-overlay" id="crt-overlay"></div>
 
-      <!-- Watermark / Mosca de Canal Oficial (Solo Logo Flotante) -->
+      <!-- Watermark / Mosca de Canal Oficial (Logo Flotante) -->
       <div class="tv-watermark-container" id="tv-watermark">
         <img id="watermark-logo-img" src="assets/logos/logo_28e_uno.svg" alt="Canal Logo" class="watermark-logo-img">
       </div>
 
-      <!-- Indicador de Publicidad (Ultra-Minimalista & Confortable) -->
-      <div class="ad-break-tag" id="ad-break-tag">
-        <span class="ad-dot"></span>
-        <span class="ad-label">PUBLICIDAD</span>
-        <span class="ad-divider"></span>
-        <span class="ad-timer" id="ad-break-timer">0s</span>
-        <span class="ad-title-text" id="ad-break-name" style="display: none;">Espacio Comercial</span>
-      </div>
-
-      <!-- Music Lower Third (Canal 2: 28E Flow) -->
-      <div class="mtv-lower-third" id="mtv-lower-third">
-        <div class="mtv-title" id="mtv-title"></div>
-        <div class="mtv-artist" id="mtv-artist"></div>
-      </div>
-
-      <!-- ESCENARIO PRINCIPAL DE PAQUETE GRÁFICO (STATION IDS, YA VOLVEMOS, DE REGRESO) -->
-      <div class="broadcast-gfx-stage" id="broadcast-gfx-stage" aria-hidden="true">
-        <div class="gfx-stage-backdrop" id="gfx-stage-backdrop"></div>
-        <div class="gfx-stage-content" id="gfx-stage-content">
-          <div class="gfx-channel-badge" id="gfx-channel-badge">01 · 28E UNO</div>
-          <div class="gfx-logo-wrapper" id="gfx-logo-wrapper">
-            <img src="assets/logos/logo_28e_uno.svg" alt="Canal Logo" id="gfx-stage-logo" class="gfx-stage-logo" />
-            <div class="gfx-shimmer-sweep" id="gfx-shimmer-sweep"></div>
-          </div>
-          <div class="gfx-main-tagline" id="gfx-main-tagline">TRANSMISIÓN PRINCIPAL</div>
-          <div class="gfx-sub-tagline" id="gfx-sub-tagline">CINE · SERIES · VAULT DE ENTRETENIMIENTO</div>
-        </div>
-      </div>
-
-
-
-      <!-- CONSOLA DE AUDITORÍA Y CONTROL EN VIVO: STUDIO GFX DOCK -->
-      <div class="gfx-studio-dock" id="gfx-studio-dock" aria-label="Consola de Paquete Gráfico">
-        <div class="studio-dock-header">
-          <div class="studio-dock-title">
-            <span class="studio-pulse"></span>
-            <span>STUDIO GFX · PAQUETE GRÁFICO TELEVISIVO</span>
-          </div>
-          <button class="studio-close-btn" id="btn-close-gfx-studio" title="Cerrar Consola (Esc o B)">✕</button>
-        </div>
-        <div class="studio-channels-grid">
-          <!-- CANAL 01: 28E UNO -->
-          <div class="studio-channel-col col-uno">
-            <div class="col-header">
-              <span class="col-num num-1">01</span>
-              <span class="col-name">28E Uno</span>
-            </div>
-            <div class="col-buttons">
-              <button class="studio-trigger-btn" data-ch="1" data-type="station_id">Station ID (4s)</button>
-              <button class="studio-trigger-btn" data-ch="1" data-type="break_in">Ya Volvemos (3s)</button>
-              <button class="studio-trigger-btn" data-ch="1" data-type="break_out">De Regreso (2.5s)</button>
-              <button class="studio-trigger-btn" data-ch="1" data-type="up_next">Ya Viene (6s)</button>
-            </div>
-          </div>
-          <!-- CANAL 02: 28E FLOW -->
-          <div class="studio-channel-col col-flow">
-            <div class="col-header">
-              <span class="col-num num-2">02</span>
-              <span class="col-name">28E Flow</span>
-            </div>
-            <div class="col-buttons">
-              <button class="studio-trigger-btn" data-ch="2" data-type="station_id">Station ID (4s)</button>
-              <button class="studio-trigger-btn" data-ch="2" data-type="break_in">Ya Volvemos (3s)</button>
-              <button class="studio-trigger-btn" data-ch="2" data-type="break_out">De Regreso (2.5s)</button>
-              <button class="studio-trigger-btn" data-ch="2" data-type="up_next">Ya Viene (6s)</button>
-            </div>
-          </div>
-          <!-- CANAL 03: DCLF TV -->
-          <div class="studio-channel-col col-dclf">
-            <div class="col-header">
-              <span class="col-num num-3">03</span>
-              <span class="col-name">DCLF TV</span>
-            </div>
-            <div class="col-buttons">
-              <button class="studio-trigger-btn" data-ch="3" data-type="station_id">Station ID (4s)</button>
-              <button class="studio-trigger-btn" data-ch="3" data-type="break_in">Ya Volvemos (3s)</button>
-              <button class="studio-trigger-btn" data-ch="3" data-type="break_out">De Regreso (2.5s)</button>
-              <button class="studio-trigger-btn" data-ch="3" data-type="up_next">Ya Viene (6s)</button>
-            </div>
-          </div>
-        </div>
+      <!-- Toast / Hint para activar audio -->
+      <div class="unmute-hint hidden" id="unmute-hint">
+        <span>🔊</span>
+        <span>Toca la pantalla para activar el audio</span>
       </div>
 
       <!-- FLOATING HUD OVERLAY (AUTO-HIDE EN INACTIVIDAD) -->
       <div class="floating-hud" id="floating-hud">
 
-        <!-- BARRA SUPERIOR: ULTRA-MINIMALISTA (DYNAMIC ISLAND) -->
+        <!-- BARRA SUPERIOR (DYNAMIC ISLAND) -->
         <header class="hud-top-island" id="hud-top-bar">
           
-          <!-- Brand & Live Indicator -->
-          <div class="top-brand-group" title="28E Emisión en Directo">
+          <div class="top-brand-group" title="28E TV · Transmisión en Directo">
             <span class="live-dot-ping"></span>
-            <span class="top-brand-label">28E</span>
+            <span class="top-brand-label">28E TV</span>
+            <span class="top-badge-live">EN VIVO</span>
           </div>
 
           <span class="top-brand-sep" aria-hidden="true"></span>
 
-          <!-- Selector de Canales (Dock Segmentado) -->
-          <nav class="top-channels-group" id="top-channels-group" aria-label="Canales de TV">
-            <button class="top-ch-btn active" data-ch="1" id="pill-ch-1" title="Canal 01 · 28E Uno [Tecla 1]">
-              <span class="top-ch-badge ch-1">01</span>
-              <span class="top-ch-name">Uno</span>
-            </button>
-            <button class="top-ch-btn" data-ch="2" id="pill-ch-2" title="Canal 02 · 28E Flow [Tecla 2]">
-              <span class="top-ch-badge ch-2">02</span>
-              <span class="top-ch-name">Flow</span>
-            </button>
-            <button class="top-ch-btn" data-ch="3" id="pill-ch-3" title="Canal 03 · DCLF TV [Tecla 3]">
-              <span class="top-ch-badge ch-3">03</span>
-              <span class="top-ch-name">DCLF</span>
-            </button>
-          </nav>
+          <span class="top-stream-title">Twenty Eight Experience Radio</span>
 
           <span class="top-brand-sep" aria-hidden="true"></span>
 
-          <!-- Acciones Rápidas -->
-          <div class="top-actions-group">
-            <button class="top-action-btn" id="btn-epg" title="Guía de Canales [Tecla G]">
-              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="9" x2="9" y2="21"/></svg>
-              <span>Guía</span>
-            </button>
-            <a href="index.html" class="top-action-btn" title="Volver al Vault [Esc]">
-              <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-              <span>Vault</span>
-            </a>
-          </div>
+          <a href="https://yaire.site/" class="top-action-btn" title="Volver al Vault [Esc]">
+            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+            <span>Vault</span>
+          </a>
 
         </header>
 
         <!-- BARRA INFERIOR (INFORMACIÓN + CONTROLES) -->
         <div class="hud-bottom-bar" id="hud-bottom-bar">
 
-          <!-- Info: canal + título + artista -->
+          <!-- Info de Emisión -->
           <div class="bottom-info-group">
-            <div class="bottom-ch-badge" id="bottom-ch-badge">01</div>
+            <div class="bottom-ch-badge">LIVE</div>
             <div class="bottom-text-wrap">
-              <div class="bottom-show-title" id="bottom-show-title">Cargando emisión...</div>
-              <div class="bottom-show-sub" id="bottom-show-sub">Transmisión Lineal Sincronizada</div>
+              <div class="bottom-show-title" id="bottom-show-title">Twenty Eight Experience Radio</div>
+              <div class="bottom-show-sub" id="bottom-show-sub">Transmisión Oficial en Directo 24/7 · 28E Entertainment</div>
             </div>
           </div>
 
           <div class="hud-bar-divider"></div>
 
-          <!-- Controles: prev · next · vol · crt · fullscreen -->
+          <!-- Controles -->
           <div class="bottom-controls-group">
 
-            <button class="hud-tool-btn" id="btn-prev-ch" title="Canal Anterior [← ↓]">
-              <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-            </button>
-            <button class="hud-tool-btn" id="btn-next-ch" title="Canal Siguiente [→ ↑]">
-              <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            <!-- Play / Pause -->
+            <button class="hud-tool-btn" id="btn-play-pause" title="Pausar / Reanudar [Espacio]">
+              <svg id="icon-play-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
             </button>
 
             <!-- Volumen -->
@@ -1636,7 +620,7 @@
             </div>
 
             <!-- CRT -->
-            <button class="hud-tool-btn" id="btn-crt" title="Filtro CRT">
+            <button class="hud-tool-btn" id="btn-crt" title="Filtro CRT [C]">
               <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             </button>
 
@@ -1652,1852 +636,200 @@
       </div>
 
     </div>
-
   </main>
-
-  <!-- GUÍA EPG · TV LINEAL -->
-  <div class="epg-modal-wrap" id="epg-modal" role="dialog" aria-modal="true" aria-labelledby="epg-header-title">
-    <div class="epg-card" id="epg-card">
-      <!-- CABECERA -->
-      <div class="epg-header">
-        <div class="epg-header-left">
-          <span class="epg-header-title" id="epg-header-title">Guía de Canales</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span class="epg-clock" id="epg-live-clock">00:00:00</span>
-          <button class="epg-x-btn" id="btn-close-epg" title="Cerrar (Esc)" aria-label="Cerrar guía">✕</button>
-        </div>
-      </div>
-      <!-- LISTA DE CANALES -->
-      <div class="epg-channel-list" id="epg-channel-list"></div>
-    </div>
-  </div>
 
   <script>
     (function () {
       'use strict';
 
-      // ==========================================
-      // 1. MOTOR DE AUDIO SINTETIZADO (Web Audio)
-      // ==========================================
-      const AudioFX = {
-        ctx: null,
-        init: function () {
-          if (!this.ctx) {
-            const AC = window.AudioContext || window.webkitAudioContext;
-            if (AC) this.ctx = new AC();
-          }
-        },
-        playStaticBurst: function () {
-          this.init();
-          if (!this.ctx) return;
-          try {
-            if (this.ctx.state === 'suspended') this.ctx.resume();
-            const bufferSize = Math.floor(this.ctx.sampleRate * 0.1);
-            const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-            const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) {
-              data[i] = Math.random() * 2 - 1;
-            }
-            const noise = this.ctx.createBufferSource();
-            noise.buffer = buffer;
-            const filter = this.ctx.createBiquadFilter();
-            filter.type = 'bandpass';
-            filter.frequency.value = 1100;
-            const gain = this.ctx.createGain();
-            gain.gain.setValueAtTime(0.06, this.ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.1);
-            noise.connect(filter);
-            filter.connect(gain);
-            gain.connect(this.ctx.destination);
-            noise.start();
-          } catch (e) {}
-        },
-        playBeep: function (freq = 900) {
-          this.init();
-          if (!this.ctx) return;
-          try {
-            if (this.ctx.state === 'suspended') this.ctx.resume();
-            const osc = this.ctx.createOscillator();
-            const gain = this.ctx.createGain();
-            osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-            gain.gain.setValueAtTime(0.03, this.ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
-            osc.connect(gain);
-            gain.connect(this.ctx.destination);
-            osc.start();
-            osc.stop(this.ctx.currentTime + 0.04);
-          } catch (e) {}
-        },
-        playStationIdSound: function (channelId) {
-          this.init();
-          if (!this.ctx) return;
-          try {
-            if (this.ctx.state === 'suspended') this.ctx.resume();
-            const now = this.ctx.currentTime;
-            
-            if (channelId === 1) {
-              // 28E UNO: Mnemónico orquestal cinematográfico estilo Apple TV / HBO (Acorde en Do rico y profundo)
-              const chord = [65.41, 130.81, 196.00, 261.63, 329.63]; // C2, C3, G3, C4, E4
-              chord.forEach((freq, i) => {
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                const filter = this.ctx.createBiquadFilter();
-                
-                osc.type = i < 2 ? 'triangle' : 'sine';
-                osc.frequency.setValueAtTime(freq, now);
-                
-                filter.type = 'lowpass';
-                filter.frequency.setValueAtTime(400, now);
-                filter.frequency.exponentialRampToValueAtTime(2600, now + 0.6);
-                filter.frequency.exponentialRampToValueAtTime(800, now + 3.2);
+      const YOUTUBE_STREAM_ID = 'Gfnj_4BU9cs';
 
-                const volume = (i === 0 ? 0.08 : (i === 1 ? 0.06 : 0.035));
-                gain.gain.setValueAtTime(0.0001, now);
-                gain.gain.linearRampToValueAtTime(volume, now + 0.25);
-                gain.gain.exponentialRampToValueAtTime(0.0001, now + 3.4);
-
-                osc.connect(filter);
-                filter.connect(gain);
-                gain.connect(this.ctx.destination);
-
-                osc.start(now);
-                osc.stop(now + 3.5);
-              });
-            } else if (channelId === 2) {
-              // 28E FLOW: Pulso rítmico moderno estilo COLORS / Apple Music (808 Sub-Bass Drop + Micro-click)
-              const osc = this.ctx.createOscillator();
-              const gain = this.ctx.createGain();
-              osc.type = 'sine';
-              osc.frequency.setValueAtTime(160, now);
-              osc.frequency.exponentialRampToValueAtTime(42, now + 0.22);
-
-              gain.gain.setValueAtTime(0.12, now);
-              gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.2);
-
-              osc.connect(gain);
-              gain.connect(this.ctx.destination);
-              osc.start(now);
-              osc.stop(now + 2.3);
-
-              // Click de vinilo / micro-transiente
-              const clickOsc = this.ctx.createOscillator();
-              const clickGain = this.ctx.createGain();
-              clickOsc.type = 'triangle';
-              clickOsc.frequency.setValueAtTime(3200, now);
-              clickOsc.frequency.exponentialRampToValueAtTime(400, now + 0.025);
-              clickGain.gain.setValueAtTime(0.08, now);
-              clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.025);
-              clickOsc.connect(clickGain);
-              clickGain.connect(this.ctx.destination);
-              clickOsc.start(now);
-              clickOsc.stop(now + 0.03);
-            } else if (channelId === 3) {
-              // DCLF TV: Arpegio de campanillas botánicas zen (Pentatónica cristalina Mi-Sol#-Si-Mi)
-              const notes = [659.25, 830.61, 987.77, 1318.51];
-              notes.forEach((freq, idx) => {
-                const noteTime = now + (idx * 0.18);
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(freq, noteTime);
-
-                gain.gain.setValueAtTime(0.0001, noteTime);
-                gain.gain.linearRampToValueAtTime(0.05, noteTime + 0.02);
-                gain.gain.exponentialRampToValueAtTime(0.0001, noteTime + 2.4);
-
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start(noteTime);
-                osc.stop(noteTime + 2.5);
-              });
-            }
-          } catch (e) {}
-        },
-        playBumperSound: function (type, channelId) {
-          this.init();
-          if (!this.ctx) return;
-          try {
-            if (this.ctx.state === 'suspended') this.ctx.resume();
-            const now = this.ctx.currentTime;
-            if (type === 'break_in') {
-              // Aviso suave de corte publicitario: dos notas descendentes
-              [880, 587.33].forEach((freq, idx) => {
-                const t = now + (idx * 0.16);
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(freq, t);
-                gain.gain.setValueAtTime(0.045, t);
-                gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.9);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start(t);
-                osc.stop(t + 0.95);
-              });
-            } else if (type === 'break_out') {
-              // Retorno de publicidad: dos notas ascendentes
-              [587.33, 880].forEach((freq, idx) => {
-                const t = now + (idx * 0.14);
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(freq, t);
-                gain.gain.setValueAtTime(0.045, t);
-                gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.1);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start(t);
-                osc.stop(t + 1.15);
-              });
-            } else if (type === 'up_next') {
-              // Micro-aviso sutil estilo iOS/Apple
-              const osc = this.ctx.createOscillator();
-              const gain = this.ctx.createGain();
-              osc.type = 'sine';
-              osc.frequency.setValueAtTime(1046.5, now);
-              gain.gain.setValueAtTime(0.03, now);
-              gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
-              osc.connect(gain);
-              gain.connect(this.ctx.destination);
-              osc.start(now);
-              osc.stop(now + 0.36);
-            }
-          } catch (e) {}
-        }
-      };
-
-      // ==========================================
-      // 2. PARRILLA DE CONTENIDO Y TRANSMISIÓN REAL
-      // ==========================================
-      const CHANNELS = {
-        1: {
-          number: '01',
-          name: '28E Uno',
-          sub: 'Canal General · Señal Abierta',
-          accent: '#10b981',
-          programs: [
-            { name: 'Estelar 28E: Donde Crecen las Flores', timeSlot: '18:00 - 22:00', desc: 'Cinemática oficial y presentación narrativa del universo Yaire.' },
-            { name: 'Cine Club 28E: Sesión Nocturna', timeSlot: '22:00 - 06:00', desc: 'Estética cinematográfica, metraje nocturno y grandes estrenos.' },
-            { name: 'Tráiler World 2026: Blockbusters & Tech', timeSlot: '06:00 - 18:00', desc: 'Los tráilers más esperados del cine mundial y novedades tecnológicas.' }
-          ],
-          schedule: [
-          {
-                    "title": "28E Uno · Station ID",
-                    "desc": "Ident oficial de señal · 28E Uno.",
-                    "duration": 6,
-                    "type": "bumper",
-                    "src": "videos/bumpers/ch1_station_id.mp4",
-                    "isAd": false,
-                    "isBumper": true,
-                    "program": "Estelar 28E: Donde Crecen las Flores"
-          },
-          {
-                    "title": "Donde Crecen las Flores: Tráiler Oficial",
-                    "desc": "Cinemática oficial de presentación y narrativa.",
-                    "duration": 94,
-                    "type": "video",
-                    "src": "videos/28E - Donde crecen las flores (Trailer Oficial).mp4",
-                    "isAd": false,
-                    "program": "Estelar 28E: Donde Crecen las Flores"
-          },
-          {
-                    "title": "28E Uno · Ya Volvemos",
-                    "desc": "Pausa Publicitaria · 28E Uno.",
-                    "duration": 6,
-                    "type": "bumper",
-                    "src": "videos/bumpers/ch1_break_in.mp4",
-                    "isAd": false,
-                    "isBumper": true,
-                    "program": "Estelar 28E: Donde Crecen las Flores"
-          },
-          {
-                    "title": "Empresas Polar · Lleva Calidad, Elige con Confianza",
-                    "desc": "Comercial oficial venezolano en 1080p · Empresas Polar.",
-                    "duration": 15,
-                    "type": "ad",
-                    "src": "videos/ads/empresas_polar_calidad_15s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Cashea · La Confianza Floreció",
-                    "desc": "Comercial oficial venezolano · Cashea Compra Ahora y Paga Después.",
-                    "duration": 40,
-                    "type": "ad",
-                    "src": "videos/ads/cashea_venezuela_40s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Avengers 5: Doomsday · Tráiler Oficial (2026)",
-                    "desc": "Tráiler oficial de estreno 2026 doblado en español latino · Marvel Studios.",
-                    "duration": 165,
-                    "type": "ad",
-                    "src": "videos/ads/trailer_avengers_doomsday_2026.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Harina P.A.N. · El Auténtico Sabor Venezolano",
-                    "desc": "Comercial oficial en 1080p · Harina P.A.N. Alimentos Polar.",
-                    "duration": 30,
-                    "type": "ad",
-                    "src": "videos/ads/harina_pan_30s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "28E Uno · De Regreso",
-                    "desc": "Continuamos con la emisión · 28E Uno.",
-                    "duration": 6,
-                    "type": "bumper",
-                    "src": "videos/bumpers/ch1_break_out.mp4",
-                    "isAd": false,
-                    "isBumper": true,
-                    "program": "Estelar 28E: Donde Crecen las Flores"
-          },
-          {
-                    "title": "Cine Club 28E: Sesión Nocturna",
-                    "desc": "Estética cinematográfica en alta definición.",
-                    "duration": 600,
-                    "type": "video",
-                    "src": "videos/WWDC_25_Final_10m.mp4",
-                    "isAd": false,
-                    "program": "Cine Club 28E: Sesión Nocturna"
-          },
-          {
-                    "title": "28E Uno · Ya Volvemos",
-                    "desc": "Pausa Publicitaria · 28E Uno.",
-                    "duration": 6,
-                    "type": "bumper",
-                    "src": "videos/bumpers/ch1_break_in.mp4",
-                    "isAd": false,
-                    "isBumper": true,
-                    "program": "Cine Club 28E: Sesión Nocturna"
-          },
-          {
-                    "title": "Spider-Man: Un Nuevo Día · Tráiler Oficial (2026)",
-                    "desc": "Tráiler oficial de estreno 2026 doblado en español latino · Marvel Studios.",
-                    "duration": 173,
-                    "type": "ad",
-                    "src": "videos/ads/trailer_spiderman_nuevo_dia_2026.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Digitel · Vívelo Todo con Digitel 4G LTE",
-                    "desc": "Comercial oficial en 1080p · Digitel Venezuela.",
-                    "duration": 60,
-                    "type": "ad",
-                    "src": "videos/ads/digitel_venezuela_60s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Toddy · El Irresistible Sabor a Chocolate",
-                    "desc": "Comercial oficial venezolano en 1080p · Toddy Bebida Chocolatada.",
-                    "duration": 30,
-                    "type": "ad",
-                    "src": "videos/ads/toddy_venezuela_30s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Netflix · El Juego del Calamar 2 (Avance Oficial)",
-                    "desc": "Avance oficial de estreno doblado en español · Netflix.",
-                    "duration": 57,
-                    "type": "ad",
-                    "src": "videos/ads/netflix_squid_game_2.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Max · La Casa del Dragón 2 (Tráiler Oficial)",
-                    "desc": "Tráiler oficial de estreno en español latino · Max / HBO.",
-                    "duration": 118,
-                    "type": "ad",
-                    "src": "videos/ads/max_casa_dragon_2.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Banco de Venezuela · Nuestra Campeona Yulimar",
-                    "desc": "Comercial oficial venezolano en 1080p · BDV con Yulimar Rojas.",
-                    "duration": 21,
-                    "type": "ad",
-                    "src": "videos/ads/bdv_yulimar_20s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "28E Uno · De Regreso",
-                    "desc": "Continuamos con la emisión · 28E Uno.",
-                    "duration": 6,
-                    "type": "bumper",
-                    "src": "videos/bumpers/ch1_break_out.mp4",
-                    "isAd": false,
-                    "isBumper": true,
-                    "program": "Cine Club 28E: Sesión Nocturna"
-          },
-          {
-                    "title": "28E Uno · Ya Volvemos",
-                    "desc": "Pausa Publicitaria · 28E Uno.",
-                    "duration": 6,
-                    "type": "bumper",
-                    "src": "videos/bumpers/ch1_break_in.mp4",
-                    "isAd": false,
-                    "isBumper": true,
-                    "program": "Tráiler World 2026: Blockbusters & Tech"
-          },
-          {
-                    "title": "Polar Pilsen · Un Rondón de Polarcitas",
-                    "desc": "Comercial oficial venezolano en 1080p · Polar Pilsen feat. Salomón Rondón.",
-                    "duration": 60,
-                    "type": "ad",
-                    "src": "videos/ads/polar_pilsen_rondon_60s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Empresas Polar · Aquí Seguimos #PorqueSí",
-                    "desc": "Comercial institucional oficial en 1080p · Empresas Polar.",
-                    "duration": 40,
-                    "type": "ad",
-                    "src": "videos/ads/empresas_polar_porquesi_40s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Moana 2 · Tráiler Oficial",
-                    "desc": "Tráiler oficial de estreno en español latino · Walt Disney Studios LA.",
-                    "duration": 141,
-                    "type": "ad",
-                    "src": "videos/ads/trailer_moana_2.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Savoy · El Auténtico Sabor a Chocolate",
-                    "desc": "Comercial oficial venezolano · Chocolates Savoy Nestlé.",
-                    "duration": 20,
-                    "type": "ad",
-                    "src": "videos/ads/savoy_chocolates_20s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "PlayStation 5 Pro · Cada Detalle Cuenta",
-                    "desc": "Comercial oficial de lanzamiento en español latino 1080p · PlayStation.",
-                    "duration": 66,
-                    "type": "ad",
-                    "src": "videos/ads/ps5_pro_espanol_60s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Ridery · La App de Movilidad de Venezuela",
-                    "desc": "Comercial oficial venezolano · Ridery Tu Viaje Seguro.",
-                    "duration": 47,
-                    "type": "ad",
-                    "src": "videos/ads/ridery_venezuela_45s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Samsung Galaxy · Inteligencia Alucinante Galaxy AI",
-                    "desc": "Comercial oficial en español 1080p · Samsung Galaxy.",
-                    "duration": 82,
-                    "type": "ad",
-                    "src": "videos/ads/samsung_galaxy_ai_80s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Pirulín · El Secreto de la Felicidad",
-                    "desc": "Comercial oficial venezolano en 1080p · Pirulín Barquillos de Chocolate.",
-                    "duration": 27,
-                    "type": "ad",
-                    "src": "videos/ads/pirulin_venezuela_27s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "28E Uno · De Regreso",
-                    "desc": "Continuamos con la emisión · 28E Uno.",
-                    "duration": 6,
-                    "type": "bumper",
-                    "src": "videos/bumpers/ch1_break_out.mp4",
-                    "isAd": false,
-                    "isBumper": true,
-                    "program": "Tráiler World 2026: Blockbusters & Tech"
-          }
-]
-        },
-        2: {
-          number: '02',
-          name: '28E Flow',
-          sub: 'Música Urbana & Tendencias · 24/7',
-          accent: '#a855f7',
-          programs: [
-            { name: 'Top Hits & Estrenos', timeSlot: '12:00 - 18:00', desc: 'Éxitos mundiales y estrenos de videoclips (Rodezel, Drake, Ariana Grande, Alvaro Diaz).' },
-            { name: 'Zona Perreo & Dembow', timeSlot: '18:00 - 23:00', desc: 'Reggaetón y trap pesado (Tokischa, Anuel AA, Chimbala, Mora).' },
-            { name: 'After Hours & Chill', timeSlot: '23:00 - 12:00', desc: 'R&B suave, soul alternativo e instrumentales (Dean Blunt, Montell Fish, Rosalía, Tems).' }
-          ],
-          schedule: [
-          {
-                    "title": "28E Flow · Station ID",
-                    "artist": "28E Flow",
-                    "album": "Ident Oficial · Música Urbana 24/7",
-                    "duration": 6,
-                    "type": "bumper",
-                    "src": "videos/bumpers/ch2_station_id.mp4",
-                    "isAd": false,
-                    "isBumper": true,
-                    "program": "Top Hits & Estrenos"
-          },
-          {
-                    "title": "Tulipanes Pa' Yaire",
-                    "artist": "Charles Gustav",
-                    "album": "28E Originals Special (2026)",
-                    "duration": 177,
-                    "type": "video",
-                    "src": "videos/tulipanes_pa_yaire.mp4",
-                    "isAd": false,
-                    "program": "Top Hits & Estrenos"
-          },
-          {
-                    "title": "Eres (Official Visualizer)",
-                    "artist": "Rodezel",
-                    "album": "Single Oficial (2024)",
-                    "duration": 200,
-                    "type": "video",
-                    "src": "videos/mtv/rodezel_eres.mp4",
-                    "youtubeId": "mmb9g5IuSls",
-                    "isAd": false,
-                    "program": "Top Hits & Estrenos"
-          },
-          {
-                    "title": "Maltín Polar · Lo Bueno Nos Une",
-                    "desc": "Comercial oficial venezolano en 1080p · Cervecería Polar.",
-                    "duration": 15,
-                    "type": "ad",
-                    "src": "videos/ads/maltin_polar_15s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Doritos · Más Crujientes",
-                    "desc": "Spot oficial en español · Doritos.",
-                    "duration": 20,
-                    "type": "ad",
-                    "src": "videos/ads/doritos_espanol_20s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "MALASNOTICIAS",
-                    "artist": "Alvaro Diaz, LATIN MAFIA",
-                    "album": "SAYONARA (2024)",
-                    "duration": 194,
-                    "type": "video",
-                    "src": "videos/mtv/alvaro_diaz_malasnoticias.mp4",
-                    "isAd": false,
-                    "program": "Top Hits & Estrenos"
-          },
-          {
-                    "title": "No Pole",
-                    "artist": "Don Toliver",
-                    "album": "Love Sick (2023)",
-                    "duration": 255,
-                    "type": "video",
-                    "src": "videos/mtv/don_toliver_no_pole.mp4",
-                    "isAd": false,
-                    "program": "Top Hits & Estrenos"
-          },
-          {
-                    "title": "Pepsi Venezuela · Un Aventurero del Sabor",
-                    "desc": "Comercial oficial en 1080p · Pepsi Cola Venezuela.",
-                    "duration": 20,
-                    "type": "ad",
-                    "src": "videos/ads/pepsi_venezuela_20s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Spider-Man: Un Nuevo Día · Tráiler Oficial (2026)",
-                    "desc": "Tráiler oficial de estreno 2026 doblado en español latino · Marvel Studios.",
-                    "duration": 173,
-                    "type": "ad",
-                    "src": "videos/ads/trailer_spiderman_nuevo_dia_2026.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Tomás",
-                    "artist": "Girl Ultra ft. Chromeo, Empress Of",
-                    "album": "Single Oficial (2024)",
-                    "duration": 203,
-                    "type": "video",
-                    "src": "videos/mtv/girl_ultra_tomas.mp4",
-                    "isAd": false,
-                    "program": "Top Hits & Estrenos"
-          },
-          {
-                    "title": "God's Plan",
-                    "artist": "Drake",
-                    "album": "Scorpion (2018)",
-                    "duration": 357,
-                    "type": "video",
-                    "src": "videos/mtv/drake_gods_plan.mp4",
-                    "isAd": false,
-                    "program": "Top Hits & Estrenos"
-          },
-          {
-                    "title": "Sprite · Refresca Tu Mundo",
-                    "desc": "Comercial oficial · Sprite.",
-                    "duration": 15,
-                    "type": "ad",
-                    "src": "videos/ads/sprite_chile_15s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Red Bull · Te Da Alas",
-                    "desc": "Comercial animado oficial en español · Red Bull.",
-                    "duration": 30,
-                    "type": "ad",
-                    "src": "videos/ads/redbull_espanol_30s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "I Like It",
-                    "artist": "Cardi B, Bad Bunny & J Balvin",
-                    "album": "Invasion of Privacy (2018)",
-                    "duration": 257,
-                    "type": "video",
-                    "src": "videos/mtv/cardi_b_i_like_it.mp4",
-                    "isAd": false,
-                    "program": "Top Hits & Estrenos"
-          },
-          {
-                    "title": "God is a woman",
-                    "artist": "Ariana Grande",
-                    "album": "Sweetener (2018)",
-                    "duration": 242,
-                    "type": "video",
-                    "src": "videos/mtv/ariana_grande_god_is_a_woman.mp4",
-                    "isAd": false,
-                    "program": "Top Hits & Estrenos"
-          },
-          {
-                    "title": "Maltín Polar Coco · ¡Vacila la Nueva Edición!",
-                    "desc": "Comercial oficial venezolano en 1080p · Cervecería Polar.",
-                    "duration": 15,
-                    "type": "ad",
-                    "src": "videos/ads/maltin_polar_coco_15s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "La Reina del Flow 3 · Tráiler Oficial (2026)",
-                    "desc": "Tráiler oficial de estreno 2026 · Caracol Televisión.",
-                    "duration": 200,
-                    "type": "ad",
-                    "src": "videos/ads/trailer_la_reina_del_flow_3.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "fuëgo",
-                    "artist": "Alvaro Diaz",
-                    "album": "Felicilandia (2021)",
-                    "duration": 245,
-                    "type": "video",
-                    "src": "videos/mtv/alvaro_diaz_fuego.mp4",
-                    "isAd": false,
-                    "program": "Top Hits & Estrenos"
-          },
-          {
-                    "title": "Impact",
-                    "artist": "SG Lewis ft. Robyn, Channel Tres",
-                    "album": "times (2021)",
-                    "duration": 335,
-                    "type": "video",
-                    "src": "videos/mtv/sg_lewis_impact.mp4",
-                    "isAd": false,
-                    "program": "After Hours & Chill"
-          },
-          {
-                    "title": "Cashea · La Confianza Floreció",
-                    "desc": "Comercial oficial venezolano · Cashea Compra Ahora y Paga Después.",
-                    "duration": 40,
-                    "type": "ad",
-                    "src": "videos/ads/cashea_venezuela_40s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Evercrisp · El Sabor Que Nos Une",
-                    "desc": "Comercial oficial · Evercrisp Snacks.",
-                    "duration": 15,
-                    "type": "ad",
-                    "src": "videos/ads/evercrisp_chile_15s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Heaven Can Wait",
-                    "artist": "Dean Blunt",
-                    "album": "Black Metal 2 (2021)",
-                    "duration": 290,
-                    "type": "video",
-                    "src": "videos/mtv/dean_blunt_heaven_can_wait.mp4",
-                    "isAd": false,
-                    "program": "After Hours & Chill"
-          },
-          {
-                    "title": "Bon Bon",
-                    "artist": "Boy Wonder",
-                    "album": "Chosen Few (2023)",
-                    "duration": 225,
-                    "type": "video",
-                    "src": "videos/mtv/boy_wonder_bon_bon.mp4",
-                    "isAd": false,
-                    "program": "Zona Perreo & Dembow"
-          },
-          {
-                    "title": "WOM Chile · Nadie Te Da Más",
-                    "desc": "Comercial oficial · WOM Telecomunicaciones.",
-                    "duration": 20,
-                    "type": "ad",
-                    "src": "videos/ads/wom_chile_20s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Nintendo Switch · Super Mario Party Jamboree",
-                    "desc": "Comercial oficial en 1080p60 español · Nintendo.",
-                    "duration": 30,
-                    "type": "ad",
-                    "src": "videos/ads/nintendo_mario_party_jamboree_30s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Como Panas",
-                    "artist": "Micro TDH",
-                    "album": "NUEVE (2021)",
-                    "duration": 246,
-                    "type": "video",
-                    "src": "videos/mtv/micro_tdh_como_panas.mp4",
-                    "isAd": false,
-                    "program": "Zona Perreo & Dembow"
-          },
-          {
-                    "title": "Delincuente",
-                    "artist": "Tokischa, Anuel AA, Ñengo Flow",
-                    "album": "Single Oficial (2022)",
-                    "duration": 288,
-                    "type": "video",
-                    "src": "videos/mtv/tokischa_delincuente.mp4",
-                    "isAd": false,
-                    "program": "Zona Perreo & Dembow"
-          },
-          {
-                    "title": "Ridery · La App de Movilidad de Venezuela",
-                    "desc": "Comercial oficial venezolano · Ridery Tu Viaje Seguro.",
-                    "duration": 47,
-                    "type": "ad",
-                    "src": "videos/ads/ridery_venezuela_45s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "PlayStation 5 · Jugar No Tiene Límites",
-                    "desc": "Spot oficial de lanzamiento en español · Sony PlayStation.",
-                    "duration": 66,
-                    "type": "ad",
-                    "src": "videos/ads/ps5_espanol_30s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Inolvidable",
-                    "artist": "Beéle ft. Ovy On The Drums",
-                    "album": "Single Oficial (2020)",
-                    "duration": 225,
-                    "type": "video",
-                    "src": "videos/mtv/beele_inolvidable.mp4",
-                    "isAd": false,
-                    "program": "Zona Perreo & Dembow"
-          },
-          {
-                    "title": "Oscar Winning Tears.",
-                    "artist": "RAYE",
-                    "album": "My 21st Century Blues (2023)",
-                    "duration": 272,
-                    "type": "video",
-                    "src": "videos/mtv/raye_oscar_winning_tears.mp4",
-                    "isAd": false,
-                    "program": "After Hours & Chill"
-          },
-          {
-                    "title": "Apple iPhone 16 Pro · Reveal Oficial",
-                    "desc": "Comercial oficial de lanzamiento en 1080p · Apple.",
-                    "duration": 39,
-                    "type": "ad",
-                    "src": "videos/ads/iphone_16_pro_apple_40s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Shrek 5 · Tráiler Oficial (2026)",
-                    "desc": "Tráiler oficial de estreno en español latino · DreamWorks Animation.",
-                    "duration": 96,
-                    "type": "ad",
-                    "src": "videos/ads/trailer_shrek_5_2026.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Bing Bong",
-                    "artist": "Gorillaz",
-                    "album": "The Mountain (2024)",
-                    "duration": 124,
-                    "type": "video",
-                    "src": "videos/mtv/gorillaz_bing_bong.mp4",
-                    "isAd": false,
-                    "program": "Top Hits & Estrenos"
-          },
-          {
-                    "title": "Brazilera (Remix)",
-                    "artist": "Rauw Alejandro",
-                    "album": "Playa Saturno (2023)",
-                    "duration": 230,
-                    "type": "video",
-                    "src": "videos/mtv/rauw_alejandro_brazilera.mp4",
-                    "isAd": false,
-                    "program": "Zona Perreo & Dembow"
-          },
-          {
-                    "title": "Apple iPhone · Reveal Oficial",
-                    "desc": "Comercial oficial de televisión · Apple.",
-                    "duration": 18,
-                    "type": "ad",
-                    "src": "videos/ads/apple_iphone_ad.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Dior Parfums · Elegancia & Distinción",
-                    "desc": "Comercial oficial · Parfums Christian Dior.",
-                    "duration": 21,
-                    "type": "ad",
-                    "src": "videos/ads/dior_parfums_ad.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Se Me Nota (Agárrame)",
-                    "artist": "Chimbala",
-                    "album": "Urbano Hits (2022)",
-                    "duration": 177,
-                    "type": "video",
-                    "src": "videos/mtv/chimbala_se_me_nota.mp4",
-                    "isAd": false,
-                    "program": "Zona Perreo & Dembow"
-          },
-          {
-                    "title": "MAMI 100PRE SABE (INTERLUDE)",
-                    "artist": "Alvaro Diaz",
-                    "album": "SAYONARA (2024)",
-                    "duration": 138,
-                    "type": "video",
-                    "src": "videos/mtv/alvaro_diaz_mami_100pre_sabe.mp4",
-                    "isAd": false,
-                    "program": "Zona Perreo & Dembow"
-          },
-          {
-                    "title": "Digitel · Vívelo Todo con Digitel 4G LTE",
-                    "desc": "Comercial oficial en 1080p · Digitel Venezuela.",
-                    "duration": 60,
-                    "type": "ad",
-                    "src": "videos/ads/digitel_venezuela_60s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "La Reina del Flow 3 · Avance Oficial (2026)",
-                    "desc": "Avance oficial de la nueva temporada · Caracol Televisión.",
-                    "duration": 25,
-                    "type": "ad",
-                    "src": "videos/ads/avance_la_reina_del_flow_3.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Crowd Go Crazy",
-                    "artist": "C. Tangana",
-                    "album": "Avida Dollars (2018)",
-                    "duration": 180,
-                    "type": "video",
-                    "src": "videos/mtv/c_tangana_crowd_go_crazy.mp4",
-                    "isAd": false,
-                    "program": "Zona Perreo & Dembow"
-          },
-          {
-                    "title": "Thootie",
-                    "artist": "Baby Keem",
-                    "album": "The Melodic Blue (2021)",
-                    "duration": 152,
-                    "type": "video",
-                    "src": "videos/mtv/baby_keem_thootie.mp4",
-                    "isAd": false,
-                    "program": "Zona Perreo & Dembow"
-          },
-          {
-                    "title": "MTV · Ident Oficial de Transmisión",
-                    "desc": "Ident oficial internacional · MTV Music Television.",
-                    "duration": 15,
-                    "type": "ad",
-                    "src": "videos/ads/mtv_ident_2022.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Avengers 5: Doomsday · Tráiler Oficial (2026)",
-                    "desc": "Tráiler oficial de estreno 2026 doblado en español latino · Marvel Studios.",
-                    "duration": 165,
-                    "type": "ad",
-                    "src": "videos/ads/trailer_avengers_doomsday_2026.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Toto Lindo",
-                    "artist": "La Zowi",
-                    "album": "La Reina del Sur (2023)",
-                    "duration": 182,
-                    "type": "video",
-                    "src": "videos/mtv/la_zowi_toto_lindo.mp4",
-                    "isAd": false,
-                    "program": "Zona Perreo & Dembow"
-          },
-          {
-                    "title": "Pasao De Farmacia",
-                    "artist": "Mora",
-                    "album": "ESTRELLA (2023)",
-                    "duration": 166,
-                    "type": "video",
-                    "src": "videos/mtv/mora_pasao_de_farmacia.mp4",
-                    "isAd": false,
-                    "program": "Zona Perreo & Dembow"
-          },
-          {
-                    "title": "Polar Pilsen · Un Rondón de Polarcitas",
-                    "desc": "Comercial oficial venezolano en 1080p · Polar Pilsen feat. Salomón Rondón.",
-                    "duration": 60,
-                    "type": "ad",
-                    "src": "videos/ads/polar_pilsen_rondon_60s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Toy Story 5 · Tráiler Oficial (2026)",
-                    "desc": "Tráiler oficial de estreno 2026 doblado en español latino · Disney Pixar.",
-                    "duration": 164,
-                    "type": "ad",
-                    "src": "videos/ads/trailer_toy_story_5_2026.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "De la Noche a la Mañana",
-                    "artist": "Alvaro Diaz",
-                    "album": "Díaz Antes (2020)",
-                    "duration": 208,
-                    "type": "video",
-                    "src": "videos/mtv/alvaro_diaz_de_la_noche_a_la_manana.mp4",
-                    "isAd": false,
-                    "program": "After Hours & Chill"
-          },
-          {
-                    "title": "worry (Slowed)",
-                    "artist": "Montell Fish",
-                    "album": "JAMIE (2022)",
-                    "duration": 202,
-                    "type": "video",
-                    "src": "videos/mtv/montell_fish_worry.mp4",
-                    "isAd": false,
-                    "program": "After Hours & Chill"
-          },
-          {
-                    "title": "Toddy · El Irresistible Sabor a Chocolate",
-                    "desc": "Comercial oficial venezolano en 1080p · Toddy Bebida Chocolatada.",
-                    "duration": 30,
-                    "type": "ad",
-                    "src": "videos/ads/toddy_venezuela_30s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Jumanji: En el Mundo Real · Tráiler Oficial (2026)",
-                    "desc": "Tráiler oficial de estreno 2026 doblado en español latino · Sony Pictures.",
-                    "duration": 194,
-                    "type": "ad",
-                    "src": "videos/ads/trailer_jumanji_2026.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Flip The Coin",
-                    "artist": "Burna Boy",
-                    "album": "I Told Them... (2023)",
-                    "duration": 228,
-                    "type": "video",
-                    "src": "videos/mtv/burna_boy_flip_the_coin.mp4",
-                    "isAd": false,
-                    "program": "After Hours & Chill"
-          },
-          {
-                    "title": "Sweet Escape (Instrumental)",
-                    "artist": "Gwen Stefani",
-                    "album": "The Sweet Escape (2006)",
-                    "duration": 177,
-                    "type": "video",
-                    "src": "videos/mtv/gwen_stefani_sweet_escape.mp4",
-                    "isAd": false,
-                    "program": "After Hours & Chill"
-          },
-          {
-                    "title": "Savoy · El Auténtico Sabor a Chocolate",
-                    "desc": "Comercial oficial venezolano · Chocolates Savoy Nestlé.",
-                    "duration": 20,
-                    "type": "ad",
-                    "src": "videos/ads/savoy_chocolates_20s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Harina P.A.N. · El Auténtico Sabor Venezolano",
-                    "desc": "Comercial oficial en 1080p · Harina P.A.N. Alimentos Polar.",
-                    "duration": 30,
-                    "type": "ad",
-                    "src": "videos/ads/harina_pan_30s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Slow Burn",
-                    "artist": "Kacey Musgraves",
-                    "album": "Golden Hour (2018)",
-                    "duration": 130,
-                    "type": "video",
-                    "src": "videos/mtv/kacey_musgraves_slow_burn.mp4",
-                    "isAd": false,
-                    "program": "After Hours & Chill"
-          },
-          {
-                    "title": "Barcelona (demo)",
-                    "artist": "Rosalía",
-                    "album": "Motomami Demos (2022)",
-                    "duration": 261,
-                    "type": "video",
-                    "src": "videos/mtv/rosalia_barcelona_demo.mp4",
-                    "isAd": false,
-                    "program": "After Hours & Chill"
-          },
-          {
-                    "title": "Treat Me This Way",
-                    "artist": "Tems",
-                    "album": "Born in the Wild (2024)",
-                    "duration": 191,
-                    "type": "video",
-                    "src": "videos/mtv/tems_treat_me_this_way.mp4",
-                    "isAd": false,
-                    "program": "After Hours & Chill"
-          },
-          {
-                    "title": "28E Flow · Station ID",
-                    "artist": "28E Flow",
-                    "album": "Ident Oficial · Música Urbana 24/7",
-                    "duration": 6,
-                    "type": "bumper",
-                    "src": "videos/bumpers/ch2_station_id.mp4",
-                    "isAd": false,
-                    "isBumper": true,
-                    "program": "Top Hits & Estrenos"
-          }
-]
-        },
-        3: {
-          number: '03',
-          name: 'DCLF TV',
-          sub: 'Canal Oficial de Donde Crecen las Flores',
-          accent: '#ec4899',
-          programs: [
-            { name: 'Crónicas del Jardín: Universo DCLF', timeSlot: '14:00 - 20:00', desc: 'La historia de Yaire, cinemática oficial y DCLF Dance Showcase de Rodezel.' },
-            { name: 'Paseo Nocturno 3D por el Huerto', timeSlot: '20:00 - 02:00', desc: 'Recorrido nocturno contemplativo por San Francisco de Macorís en 1080p.' },
-            { name: 'Botánica Sonora & Cine Familiar', timeSlot: '02:00 - 14:00', desc: 'Música botánica zen, cortos animados y trailers de fantasía.' }
-          ],
-          schedule: [
-          {
-                    "title": "DCLF TV · Ident de Estación",
-                    "desc": "Ident oficial · Donde Crecen las Flores TV.",
-                    "duration": 7,
-                    "type": "bumper",
-                    "src": "videos/bumpers/ch3_station_id.mp4",
-                    "isAd": false,
-                    "isBumper": true,
-                    "program": "Crónicas del Jardín: Universo DCLF"
-          },
-          {
-                    "title": "Donde Crecen las Flores: Cinemática",
-                    "desc": "La historia de Yaire y el jardín de tulipanes.",
-                    "duration": 94,
-                    "type": "video",
-                    "src": "videos/28E - Donde crecen las flores (Trailer Oficial).mp4",
-                    "isAd": false,
-                    "program": "Crónicas del Jardín: Universo DCLF"
-          },
-          {
-                    "title": "DCLF Dance Showcase",
-                    "desc": "Showcase visual y danza · DCLF TV.",
-                    "duration": 11,
-                    "type": "video",
-                    "src": "videos/dclf_dance_showcase.mp4",
-                    "youtubeId": "ArwAjqRAgIo",
-                    "isAd": false,
-                    "program": "Crónicas del Jardín: Universo DCLF"
-          },
-          {
-                    "title": "DCLF TV · Pausa en el Jardín",
-                    "desc": "Respira y Ya Volvemos · DCLF TV.",
-                    "duration": 7,
-                    "type": "bumper",
-                    "src": "videos/bumpers/ch3_break_in.mp4",
-                    "isAd": false,
-                    "isBumper": true,
-                    "program": "Crónicas del Jardín: Universo DCLF"
-          },
-          {
-                    "title": "Harina P.A.N. · El Auténtico Sabor Venezolano",
-                    "desc": "Comercial oficial en 1080p · Harina P.A.N. Alimentos Polar.",
-                    "duration": 30,
-                    "type": "ad",
-                    "src": "videos/ads/harina_pan_30s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Toddy · El Irresistible Sabor a Chocolate",
-                    "desc": "Comercial oficial venezolano en 1080p · Toddy Bebida Chocolatada.",
-                    "duration": 30,
-                    "type": "ad",
-                    "src": "videos/ads/toddy_venezuela_30s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Toy Story 5 · Tráiler Oficial (2026)",
-                    "desc": "Tráiler oficial de estreno 2026 doblado en español latino · Disney Pixar.",
-                    "duration": 164,
-                    "type": "ad",
-                    "src": "videos/ads/trailer_toy_story_5_2026.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Pirulín · El Secreto de la Felicidad",
-                    "desc": "Comercial oficial venezolano en 1080p · Pirulín Barquillos de Chocolate.",
-                    "duration": 27,
-                    "type": "ad",
-                    "src": "videos/ads/pirulin_venezuela_27s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "DCLF TV · De Vuelta al Huerto",
-                    "desc": "Continuamos Floreciendo · DCLF TV.",
-                    "duration": 7,
-                    "type": "bumper",
-                    "src": "videos/bumpers/ch3_break_out.mp4",
-                    "isAd": false,
-                    "isBumper": true,
-                    "program": "Crónicas del Jardín: Universo DCLF"
-          },
-          {
-                    "title": "Paseo Nocturno por el Jardín 3D",
-                    "desc": "Recorrido por San Francisco de Macorís.",
-                    "duration": 600,
-                    "type": "video",
-                    "src": "videos/WWDC_25_Final_10m.mp4",
-                    "isAd": false,
-                    "program": "Paseo Nocturno 3D por el Huerto"
-          },
-          {
-                    "title": "DCLF TV · Pausa en el Jardín",
-                    "desc": "Respira y Ya Volvemos · DCLF TV.",
-                    "duration": 7,
-                    "type": "bumper",
-                    "src": "videos/bumpers/ch3_break_in.mp4",
-                    "isAd": false,
-                    "isBumper": true,
-                    "program": "Paseo Nocturno 3D por el Huerto"
-          },
-          {
-                    "title": "Shrek 5 · Tráiler Oficial (2026)",
-                    "desc": "Tráiler oficial de estreno en español latino · DreamWorks Animation.",
-                    "duration": 96,
-                    "type": "ad",
-                    "src": "videos/ads/trailer_shrek_5_2026.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Savoy · El Auténtico Sabor a Chocolate",
-                    "desc": "Comercial oficial venezolano · Chocolates Savoy Nestlé.",
-                    "duration": 20,
-                    "type": "ad",
-                    "src": "videos/ads/savoy_chocolates_20s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Moana 2 · Tráiler Oficial",
-                    "desc": "Tráiler oficial de estreno en español latino · Walt Disney Studios LA.",
-                    "duration": 141,
-                    "type": "ad",
-                    "src": "videos/ads/trailer_moana_2.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Empresas Polar · Aquí Seguimos #PorqueSí",
-                    "desc": "Comercial institucional oficial en 1080p · Empresas Polar.",
-                    "duration": 40,
-                    "type": "ad",
-                    "src": "videos/ads/empresas_polar_porquesi_40s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Dior Parfums · Elegancia & Distinción",
-                    "desc": "Comercial oficial · Parfums Christian Dior.",
-                    "duration": 21,
-                    "type": "ad",
-                    "src": "videos/ads/dior_parfums_ad.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "DCLF TV · De Vuelta al Huerto",
-                    "desc": "Continuamos Floreciendo · DCLF TV.",
-                    "duration": 7,
-                    "type": "bumper",
-                    "src": "videos/bumpers/ch3_break_out.mp4",
-                    "isAd": false,
-                    "isBumper": true,
-                    "program": "Paseo Nocturno 3D por el Huerto"
-          },
-          {
-                    "title": "DCLF TV · Pausa en el Jardín",
-                    "desc": "Respira y Ya Volvemos · DCLF TV.",
-                    "duration": 7,
-                    "type": "bumper",
-                    "src": "videos/bumpers/ch3_break_in.mp4",
-                    "isAd": false,
-                    "isBumper": true,
-                    "program": "Botánica Sonora & Cine Familiar"
-          },
-          {
-                    "title": "Cashea · La Confianza Floreció",
-                    "desc": "Comercial oficial venezolano · Cashea Compra Ahora y Paga Después.",
-                    "duration": 40,
-                    "type": "ad",
-                    "src": "videos/ads/cashea_venezuela_40s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Apple iPhone 16 Pro · Reveal Oficial",
-                    "desc": "Comercial oficial de lanzamiento en 1080p · Apple.",
-                    "duration": 39,
-                    "type": "ad",
-                    "src": "videos/ads/iphone_16_pro_apple_40s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Disney+ Latinoamérica · Todo en un Mismo Lugar",
-                    "desc": "Spot oficial en español latino 1080p · Disney Plus Latinoamérica.",
-                    "duration": 30,
-                    "type": "ad",
-                    "src": "videos/ads/disney_plus_latam_30s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Jumanji: En el Mundo Real · Tráiler Oficial (2026)",
-                    "desc": "Tráiler oficial de estreno 2026 doblado en español latino · Sony Pictures.",
-                    "duration": 194,
-                    "type": "ad",
-                    "src": "videos/ads/trailer_jumanji_2026.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Pepsi Venezuela · Un Aventurero del Sabor",
-                    "desc": "Comercial oficial en 1080p · Pepsi Cola Venezuela.",
-                    "duration": 20,
-                    "type": "ad",
-                    "src": "videos/ads/pepsi_venezuela_20s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Max Latinoamérica · Mucho Más Que Ver",
-                    "desc": "Spot publicitario oficial · HBO Max ahora es Max.",
-                    "duration": 60,
-                    "type": "ad",
-                    "src": "videos/ads/max_latam_60s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Netflix Latinoamérica · Historias Que Te Atrapan",
-                    "desc": "Spot publicitario oficial · Vive Netflix Latinoamérica.",
-                    "duration": 30,
-                    "type": "ad",
-                    "src": "videos/ads/netflix_latam_30s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "Maltín Polar Coco · ¡Vacila la Nueva Edición!",
-                    "desc": "Comercial oficial venezolano en 1080p · Cervecería Polar.",
-                    "duration": 15,
-                    "type": "ad",
-                    "src": "videos/ads/maltin_polar_coco_15s.mp4",
-                    "isAd": true
-          },
-          {
-                    "title": "DCLF TV · De Vuelta al Huerto",
-                    "desc": "Continuamos Floreciendo · DCLF TV.",
-                    "duration": 7,
-                    "type": "bumper",
-                    "src": "videos/bumpers/ch3_break_out.mp4",
-                    "isAd": false,
-                    "isBumper": true,
-                    "program": "Botánica Sonora & Cine Familiar"
-          }
-]
-        }
-      };
-
-      // ==========================================
-      // 3. ESTADO GLOBAL
-      // ==========================================
-      let currentChannelId = 1;
-      let activeItem = null;
-      let isMuted = true;
-      let hlsInstance = null;
       let ytPlayer = null;
       let ytReady = false;
+      let isMuted = true;
+      let currentVolume = 0.65;
+      let isPlaying = true;
       let idleTimeout = null;
-      let activeItemIndex = -1;
-      let activeChannelPlaying = null;
 
-      // Elementos del DOM
-      const videoEl = document.getElementById('tv-video-player');
-      const staticCanvas = document.getElementById('static-canvas');
-      const staticCtx = staticCanvas.getContext('2d');
-      const crtOverlay = document.getElementById('crt-overlay');
-      const watermarkText = document.getElementById('watermark-text');
-      const adBreakTag = document.getElementById('ad-break-tag');
-      const adBreakName = document.getElementById('ad-break-name');
-      const mtvLowerThird = document.getElementById('mtv-lower-third');
-      const mtvTitle = document.getElementById('mtv-title');
-      const mtvArtist = document.getElementById('mtv-artist');
+      // Elementos DOM
       const floatingHud = document.getElementById('floating-hud');
-      const bottomChBadge = document.getElementById('bottom-ch-badge');
-      const bottomShowTitle = document.getElementById('bottom-show-title');
-      const bottomShowSub = document.getElementById('bottom-show-sub');
       const volumeSlider = document.getElementById('volume-slider');
       const btnMute = document.getElementById('btn-mute');
+      const btnPlayPause = document.getElementById('btn-play-pause');
       const btnCrt = document.getElementById('btn-crt');
       const btnFullscreen = document.getElementById('btn-fullscreen');
-      const epgModal = document.getElementById('epg-modal');
-      const btnEpg = document.getElementById('btn-epg');
-      const btnCloseEpg = document.getElementById('btn-close-epg');
-      const epgChannelList = document.getElementById('epg-channel-list');
+      const crtOverlay = document.getElementById('crt-overlay');
+      const iconVol = document.getElementById('icon-vol');
+      const iconPlayPause = document.getElementById('icon-play-pause');
+      const unmuteHint = document.getElementById('unmute-hint');
+      const ytClickShield = document.getElementById('yt-click-shield');
 
-      // Elementos del Escenario Gráfico (Broadcast Graphics)
-      const broadcastGfxStage = document.getElementById('broadcast-gfx-stage');
-      const gfxStageBackdrop = document.getElementById('gfx-stage-backdrop');
-      const gfxChannelBadge = document.getElementById('gfx-channel-badge');
-      const gfxLogoWrapper = document.getElementById('gfx-logo-wrapper');
-      const gfxStageLogo = document.getElementById('gfx-stage-logo');
-      const gfxShimmerSweep = document.getElementById('gfx-shimmer-sweep');
-      const gfxMainTagline = document.getElementById('gfx-main-tagline');
-      const gfxSubTagline = document.getElementById('gfx-sub-tagline');
-      const gfxUpnextBug = document.getElementById('gfx-upnext-bug');
-      const upnextDot = document.getElementById('upnext-dot');
-      const upnextTag = document.getElementById('upnext-tag');
-      const upnextTitle = document.getElementById('upnext-title');
-      const upnextSub = document.getElementById('upnext-sub');
-      const gfxStudioDock = document.getElementById('gfx-studio-dock');
-      const btnGfxStudio = document.getElementById('btn-gfx-studio');
-      const btnCloseGfxStudio = document.getElementById('btn-close-gfx-studio');
-
-      const BRAND_PACKAGES = {
-        1: {
-          name: '28E Uno',
-          badge: '01 · 28E UNO',
-          logo: 'assets/logos/logo_28e_uno.svg',
-          accent: '#10b981',
-          dotColor: '#10b981',
-          upnextTag: 'A CONTINUACIÓN',
-          taglines: {
-            station_id: { main: '28E UNO', sub: 'CINE · SERIES · VAULT DE ENTRETENIMIENTO' },
-            break_in: { main: 'YA VOLVEMOS', sub: 'ESPACIO PUBLICITARIO · 28E UNO' },
-            break_out: { main: 'DE REGRESO', sub: 'CONTINUAMOS CON LA EMISIÓN' }
-          }
-        },
-        2: {
-          name: '28E Flow',
-          badge: '02 · 28E FLOW',
-          logo: 'assets/logos/logo_28e_flow.svg',
-          accent: '#c084fc',
-          dotColor: '#a855f7',
-          upnextTag: 'EN SEGUIDA',
-          taglines: {
-            station_id: { main: '28E FLOW', sub: 'VIDEOCLIPS · FLOW URBANO · 24/7' },
-            break_in: { main: 'PAUSA MUSICAL', sub: 'YA VOLVEMOS CON MÁS FLOW' },
-            break_out: { main: 'EN ROTACIÓN', sub: 'DE VUELTA A LOS VIDEOS' }
-          }
-        },
-        3: {
-          name: 'DCLF TV',
-          badge: '03 · DCLF TV',
-          logo: 'assets/logos/logo_dclf_tv.svg',
-          accent: '#f472b6',
-          dotColor: '#ec4899',
-          upnextTag: 'PRÓXIMO EN EL JARDÍN',
-          taglines: {
-            station_id: { main: 'DCLF TV', sub: 'DONDE CRECEN LAS FLORES · RELAX & MÚSICA' },
-            break_in: { main: 'PAUSA EN EL JARDÍN', sub: 'RESPIRA Y YA VOLVEMOS' },
-            break_out: { main: 'DE VUELTA AL HUERTO', sub: 'CONTINUAMOS FLORECIENDO' }
-          }
+      // ── AUTO-HIDE HUD ──
+      function wakeHud() {
+        if (!floatingHud) return;
+        floatingHud.classList.remove('idle-hidden');
+        if (window.gsap) {
+          gsap.to(floatingHud, { opacity: 1, y: 0, duration: 0.22, ease: 'power2.out' });
         }
-      };
-
-      let activeBumperTimeline = null;
-      let activeUpNextTimer = null;
-      let previousItemWasAd = null;
-      let lastUpNextShownForTitle = null;
-
-      function playRealBumper(channelId = currentChannelId, type = 'station_id') {
-        const bumperMap = {
-          '1_station_id': { src: 'videos/bumpers/ch1_station_id.mp4', title: '28E Uno · Station ID', desc: 'Ident oficial de señal · 28E Uno' },
-          '1_break_in':   { src: 'videos/bumpers/ch1_break_in.mp4', title: '28E Uno · Ya Volvemos', desc: 'Pausa Publicitaria · 28E Uno' },
-          '1_break_out':  { src: 'videos/bumpers/ch1_break_out.mp4', title: '28E Uno · De Regreso', desc: 'Continuamos con la emisión · 28E Uno' },
-          '1_up_next':    { src: 'videos/bumpers/ch1_up_next.mp4', title: '28E Uno · A Continuación', desc: 'Cine Club 28E: Sesión Nocturna' },
-
-          '2_station_id': { src: 'videos/bumpers/ch2_station_id.mp4', title: '28E Flow · Station ID', desc: 'Música Urbana & Videoclips 24/7' },
-          '2_break_in':   { src: 'videos/bumpers/ch2_break_in.mp4', title: '28E Flow · Pausa Musical', desc: 'Ya Volvemos con más Flow' },
-          '2_break_out':  { src: 'videos/bumpers/ch2_break_out.mp4', title: '28E Flow · En Rotación', desc: 'De Vuelta a los Videos · 28E Flow' },
-          '2_up_next':    { src: 'videos/bumpers/ch2_up_next.mp4', title: '28E Flow · En Seguidilla', desc: "Tulipanes Pa' Yaire · Charles Gustav" },
-
-          '3_station_id': { src: 'videos/bumpers/ch3_station_id.mp4', title: 'DCLF TV · Station ID', desc: 'Donde Crecen las Flores · Relax & Música' },
-          '3_break_in':   { src: 'videos/bumpers/ch3_break_in.mp4', title: 'DCLF TV · Pausa en el Jardín', desc: 'Respira y Ya Volvemos' },
-          '3_break_out':  { src: 'videos/bumpers/ch3_break_out.mp4', title: 'DCLF TV · De Vuelta al Huerto', desc: 'Continuamos Floreciendo' },
-          '3_up_next':    { src: 'videos/bumpers/ch3_up_next.mp4', title: 'DCLF TV · Próximo en el Jardín', desc: 'Paseo Nocturno por el Jardín 3D' }
-        };
-
-        const key = `${channelId}_${type}`;
-        const b = bumperMap[key] || bumperMap[`${channelId}_station_id`] || bumperMap['1_station_id'];
-        if (bottomShowTitle) bottomShowTitle.textContent = b.title;
-        if (bottomShowSub) bottomShowSub.textContent = b.desc;
-        if (adBreakTag) adBreakTag.style.display = 'none';
-        hideMusicLowerThird(true);
-        if (broadcastGfxStage) broadcastGfxStage.style.display = 'none';
-        playNativeVideo(b.src, 0);
-      }
-
-      function playBumper(type = 'station_id', channelId = currentChannelId, customData = null) {
-        // Los bumpers de transmisión ahora son piezas de video reales (.mp4 en 1080p) integradas en la parrilla lineal.
-        // Desactivamos el antiguo overlay DOM artificial del navegador para garantizar una experiencia 100% de televisión real.
-        if (broadcastGfxStage) broadcastGfxStage.style.display = 'none';
-        return;
-      }
-
-      function showUpNextTeaser(nextItem, channelId = currentChannelId) {
-        // Desactivado / Eliminado
-        return;
-      }
-
-      function toggleStudioDock(forceState = null) {
-        if (!gfxStudioDock) return;
-        const willOpen = (forceState !== null) ? forceState : !gfxStudioDock.classList.contains('open');
-        if (willOpen) {
-          gfxStudioDock.classList.add('open');
-          AudioFX.playBeep(1200);
-        } else {
-          gfxStudioDock.classList.remove('open');
-          AudioFX.playBeep(700);
-        }
-      }
-
-      // Exponer funciones en window para API pública, testing y atajos
-      window.playBumper = playBumper;
-      window.showUpNextTeaser = showUpNextTeaser;
-      window.toggleStudioDock = toggleStudioDock;
-      window.BRAND_PACKAGES = BRAND_PACKAGES;
-
-      // Redimensionar canvas de estática
-      function resizeCanvas() {
-        staticCanvas.width = 320;
-        staticCanvas.height = 180;
-      }
-      resizeCanvas();
-      window.addEventListener('resize', resizeCanvas);
-
-      function renderStaticNoise() {
-        const w = staticCanvas.width;
-        const h = staticCanvas.height;
-        const imgData = staticCtx.createImageData(w, h);
-        const buffer = new Uint32Array(imgData.data.buffer);
-        const len = buffer.length;
-        for (let i = 0; i < len; i++) {
-          const val = (Math.random() * 255) | 0;
-          buffer[i] = (255 << 24) | (val << 16) | (val << 8) | val;
-        }
-        staticCtx.putImageData(imgData, 0, 0);
-      }
-
-      let staticAnimId = null;
-      function showStaticGlitch(durationMs = 220) {
-        staticCanvas.style.opacity = '0.9';
-        AudioFX.playStaticBurst();
-        function loop() {
-          renderStaticNoise();
-          staticAnimId = requestAnimationFrame(loop);
-        }
-        loop();
-        setTimeout(() => {
-          staticCanvas.style.opacity = '0';
-          if (staticAnimId) cancelAnimationFrame(staticAnimId);
-        }, durationMs);
-      }
-
-      // ==========================================
-      // 4. MOTOR MATEMÁTICO LINEAL (FAST EPG SYNC)
-      // ==========================================
-      function getChannelTimelineState(channelId) {
-        const channel = CHANNELS[channelId];
-        const totalDuration = channel.schedule.reduce((acc, item) => acc + item.duration, 0);
-        
-        const now = new Date();
-        const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-        const elapsedToday = Math.floor((now.getTime() - startOfDay) / 1000);
-        
-        const positionInLoop = elapsedToday % totalDuration;
-        
-        let accumulated = 0;
-        for (let i = 0; i < channel.schedule.length; i++) {
-          const item = channel.schedule[i];
-          if (positionInLoop >= accumulated && positionInLoop < accumulated + item.duration) {
-            return {
-              item: item,
-              index: i,
-              seekSeconds: positionInLoop - accumulated,
-              totalDuration: item.duration,
-              remainingSeconds: item.duration - (positionInLoop - accumulated)
-            };
-          }
-          accumulated += item.duration;
-        }
-
-        return {
-          item: channel.schedule[0],
-          index: 0,
-          seekSeconds: 0,
-          totalDuration: channel.schedule[0].duration,
-          remainingSeconds: channel.schedule[0].duration
-        };
-      }
-
-      // ==========================================
-      // 5. REPRODUCCIÓN Y SINTONIZADOR
-      // ==========================================
-      function tuneToChannel(channelId) {
-        currentChannelId = channelId;
-        const channel = CHANNELS[channelId];
-        
-        showStaticGlitch(200);
-
-        // Actualizar pills de canales activos y micro-animación GSAP
-        document.querySelectorAll('.top-ch-btn, .pill-ch').forEach(btn => {
-          btn.classList.toggle('active', parseInt(btn.dataset.ch) === channelId);
-        });
-
-        const activeTopBtn = document.querySelector(`.top-ch-btn[data-ch="${channelId}"]`);
-        if (activeTopBtn && window.gsap) {
-          gsap.fromTo(activeTopBtn,
-            { scale: 0.94 },
-            { scale: 1, duration: 0.28, ease: 'back.out(2)' }
-          );
-          const topBadge = activeTopBtn.querySelector('.top-ch-badge');
-          if (topBadge) {
-            gsap.fromTo(topBadge, 
-              { scale: 0.72, rotate: -4 },
-              { scale: 1, rotate: 0, duration: 0.32, ease: 'back.out(2.4)' }
-            );
-          }
-        }
-
-        const watermarkImg = document.getElementById('watermark-logo-img');
-        if (watermarkImg) {
-          const logos = {
-            1: 'assets/logos/logo_28e_uno.svg',
-            2: 'assets/logos/logo_28e_flow.svg',
-            3: 'assets/logos/logo_dclf_tv.svg'
-          };
-          const targetLogo = logos[channelId] || logos[1];
-          if (watermarkImg.getAttribute('src') !== targetLogo) {
-            watermarkImg.style.opacity = '0';
-            setTimeout(() => {
-              watermarkImg.src = targetLogo;
-              watermarkImg.style.opacity = '0.92';
-            }, 120);
-          }
-        }
-        if (bottomChBadge) {
-          bottomChBadge.textContent = channel.number;
-          bottomChBadge.className = 'bottom-ch-badge' + (channelId === 2 ? ' ch-2' : channelId === 3 ? ' ch-3' : '');
+        if (idleTimeout) clearTimeout(idleTimeout);
+        idleTimeout = setTimeout(() => {
           if (window.gsap) {
-            gsap.fromTo(bottomChBadge, { scale: 0.82, opacity: 0.6 }, { scale: 1, opacity: 1, duration: 0.28, ease: 'back.out(2)' });
-          }
-        }
-
-        if (channelId !== 2) {
-          lastShownMusicTitle = null;
-          hideMusicLowerThird(true);
-        } else {
-          lastShownMusicTitle = null;
-        }
-
-        updatePlayback(true);
-        playBumper('station_id', channelId);
-        wakeHud();
-      }
-
-      // GESTIÓN DEL CINTILLO MUSICAL (28E FLOW) CON ANIMACIÓN DE ENTRADA Y SALIDA
-      let mtvHideTimer = null;
-      let lastShownMusicTitle = null;
-
-      function showMusicLowerThird(item, force = false) {
-        if (!mtvLowerThird) return;
-        if (currentChannelId !== 2 || !item || !item.artist || item.isAd) {
-          hideMusicLowerThird(true);
-          return;
-        }
-
-        if (!force && lastShownMusicTitle === item.title) {
-          return;
-        }
-        lastShownMusicTitle = item.title;
-
-        if (mtvTitle) mtvTitle.textContent = item.title;
-        if (mtvArtist) mtvArtist.textContent = item.artist;
-
-        if (mtvHideTimer) {
-          clearTimeout(mtvHideTimer);
-          mtvHideTimer = null;
-        }
-        if (window.gsap) {
-          gsap.killTweensOf(mtvLowerThird);
-        }
-
-        mtvLowerThird.style.display = 'block';
-
-        // Animación de apertura: el texto y su aura negra se deslizan y emergen del desenfoque
-        if (window.gsap) {
-          gsap.fromTo(mtvLowerThird, 
-            { 
-              x: -36, 
+            gsap.to(floatingHud, {
               opacity: 0,
-              filter: 'blur(12px)'
-            }, 
-            { 
-              x: 0, 
-              opacity: 1, 
-              filter: 'blur(0px)',
-              duration: 0.7, 
-              ease: 'power3.out' 
-            }
-          );
-        } else {
-          mtvLowerThird.style.opacity = '1';
-          mtvLowerThird.style.transform = 'none';
-        }
-
-        // Se mantiene visible durante 7 segundos y luego se cierra suavemente
-        mtvHideTimer = setTimeout(() => {
-          hideMusicLowerThird(false);
-        }, 7000);
+              y: -4,
+              duration: 0.4,
+              ease: 'power2.in',
+              onComplete: () => {
+                if (floatingHud) floatingHud.classList.add('idle-hidden');
+              }
+            });
+          } else {
+            if (floatingHud) floatingHud.classList.add('idle-hidden');
+          }
+        }, 3500);
       }
 
-      function hideMusicLowerThird(immediate = false) {
-        if (!mtvLowerThird) return;
-        if (mtvHideTimer) {
-          clearTimeout(mtvHideTimer);
-          mtvHideTimer = null;
-        }
+      window.addEventListener('mousemove', wakeHud);
+      window.addEventListener('touchstart', wakeHud);
+      window.addEventListener('click', wakeHud);
 
-        if (immediate || !window.gsap) {
-          mtvLowerThird.style.display = 'none';
-          mtvLowerThird.style.opacity = '0';
-          return;
+      // ── ICONOS VOLUMEN ──
+      function updateVolumeIcon(vol) {
+        if (!iconVol) return;
+        if (vol <= 0 || isMuted) {
+          iconVol.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
+        } else if (vol < 0.5) {
+          iconVol.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>';
+        } else {
+          iconVol.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>';
         }
+      }
 
-        // Animación de cierre: el texto y su aura negra se deslizan a la izquierda y se desvanecen
-        gsap.to(mtvLowerThird, {
-          x: -28,
-          opacity: 0,
-          filter: 'blur(8px)',
-          duration: 0.55,
-          ease: 'power3.in',
-          onComplete: () => {
-            mtvLowerThird.style.display = 'none';
+      // ── ICONOS PLAY / PAUSE ──
+      function updatePlayPauseIcon(playing) {
+        if (!iconPlayPause) return;
+        if (playing) {
+          iconPlayPause.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+        } else {
+          iconPlayPause.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+        }
+      }
+
+      // ── GESTIÓN DE AUDIO ──
+      function setMuteState(muted, customVol = null) {
+        isMuted = muted;
+        if (customVol !== null) currentVolume = customVol;
+
+        if (isMuted) {
+          if (ytPlayer && typeof ytPlayer.mute === 'function') ytPlayer.mute();
+          volumeSlider.value = 0;
+          updateVolumeIcon(0);
+          if (unmuteHint) unmuteHint.classList.remove('hidden');
+        } else {
+          if (unmuteHint) unmuteHint.classList.add('hidden');
+          const targetVol = currentVolume > 0 ? currentVolume : 0.65;
+          currentVolume = targetVol;
+          volumeSlider.value = targetVol;
+          updateVolumeIcon(targetVol);
+          if (ytPlayer && typeof ytPlayer.unMute === 'function') {
+            ytPlayer.unMute();
+            ytPlayer.setVolume(targetVol * 100);
           }
+        }
+      }
+
+      btnMute.addEventListener('click', () => {
+        setMuteState(!isMuted);
+      });
+
+      volumeSlider.addEventListener('input', (e) => {
+        const val = parseFloat(e.target.value);
+        if (val === 0) {
+          setMuteState(true);
+        } else {
+          setMuteState(false, val);
+        }
+      });
+
+      // ── TOGGLE PLAY / PAUSE ──
+      function togglePlayPause() {
+        if (!ytPlayer) return;
+        if (isPlaying) {
+          if (typeof ytPlayer.pauseVideo === 'function') ytPlayer.pauseVideo();
+          isPlaying = false;
+        } else {
+          if (typeof ytPlayer.playVideo === 'function') ytPlayer.playVideo();
+          isPlaying = true;
+          if (isMuted) setMuteState(false);
+        }
+        updatePlayPauseIcon(isPlaying);
+      }
+
+      btnPlayPause.addEventListener('click', togglePlayPause);
+
+      // ── CLICK SHIELD ──
+      ytClickShield.addEventListener('click', () => {
+        if (isMuted) {
+          setMuteState(false);
+        } else {
+          togglePlayPause();
+        }
+        wakeHud();
+      });
+
+      if (unmuteHint) {
+        unmuteHint.addEventListener('click', () => {
+          setMuteState(false);
+          wakeHud();
         });
       }
 
-      function updatePlayback(forceReload = false) {
-        const state = getChannelTimelineState(currentChannelId);
-        const item = state.item;
+      // ── FILTRO CRT ──
+      btnCrt.addEventListener('click', () => {
+        crtOverlay.classList.toggle('active');
+        btnCrt.classList.toggle('active', crtOverlay.classList.contains('active'));
+      });
 
-        // Actualizar textos del HUD inferior de manera segura
-        // (bottom-program-badge removed)
-        if (bottomShowTitle) bottomShowTitle.textContent = item.title;
-        if (bottomShowSub) bottomShowSub.textContent = item.artist ? `${item.artist} · ${item.album || ''}` : (item.desc || CHANNELS[currentChannelId].sub);
-
-        // Bloque de Bumper o Publicidad
-        if (item.isBumper || item.type === 'bumper') {
-          if (adBreakTag) adBreakTag.style.display = 'none';
-          hideMusicLowerThird(true);
-        } else if (item.isAd) {
-          if (adBreakTag) {
-            adBreakTag.style.display = 'inline-flex';
-            const cleanTitle = item.title.replace(/^Comercial:\s*/i, '').replace(/^Espacio Publicitario:\s*/i, '');
-            if (adBreakName) {
-              adBreakName.textContent = cleanTitle;
-            }
-            adBreakTag.title = cleanTitle; // Tooltip sutil en hover
-            const timerEl = document.getElementById('ad-break-timer');
-            if (timerEl) timerEl.textContent = `${Math.ceil(state.remainingSeconds)}s`;
-          }
-          hideMusicLowerThird(true);
+      // ── PANTALLA COMPLETA ──
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+          btnFullscreen.classList.add('active');
         } else {
-          if (adBreakTag) adBreakTag.style.display = 'none';
-
-          // Cintillo musical en Canal 2 (28E Flow)
-          // Se muestra unos segundos (7s) al comenzar la canción y luego desaparece con su sombra y holder
-          if (currentChannelId === 2 && item.artist) {
-            showMusicLowerThird(item, forceReload);
-          } else {
-            hideMusicLowerThird(true);
-          }
-        }
-
-        // Detección automática de transición a comerciales ("Ya Volvemos" / "De Regreso")
-        if (previousItemWasAd !== null && previousItemWasAd !== item.isAd && !forceReload) {
-          if (item.isAd) {
-            playBumper('break_in', currentChannelId);
-          } else {
-            playBumper('break_out', currentChannelId);
-          }
-        }
-        previousItemWasAd = item.isAd;
-
-
-        // Si cambió el item al aire (por cambio de índice en la parrilla, canal o recarga)
-        const isNewItem = forceReload ||
-                          activeChannelPlaying !== currentChannelId ||
-                          activeItemIndex !== state.index ||
-                          !activeItem ||
-                          activeItem !== item ||
-                          activeItem.src !== item.src;
-
-        if (isNewItem) {
-          activeItem = item;
-          activeItemIndex = state.index;
-          activeChannelPlaying = currentChannelId;
-
-          if (item.type === 'youtube' && item.youtubeId) {
-            videoEl.pause();
-            videoEl.style.display = 'none';
-            playYouTubeItem(item.youtubeId, state.seekSeconds);
-          } else {
-            if (ytPlayer && typeof ytPlayer.stopVideo === 'function') {
-              try { ytPlayer.stopVideo(); } catch (e) {}
-            }
-            const ytWrapper = document.getElementById('tv-youtube-container');
-            if (ytWrapper) ytWrapper.style.display = 'none';
-            videoEl.style.display = 'block';
-            playNativeVideo(item.src, state.seekSeconds);
-          }
+          if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+          btnFullscreen.classList.remove('active');
         }
       }
 
-      function playNativeVideo(src, seekSeconds) {
-        if (!src) return;
+      btnFullscreen.addEventListener('click', toggleFullscreen);
 
-        if (src.includes('.m3u8')) {
-          if (Hls.isSupported()) {
-            if (hlsInstance) hlsInstance.destroy();
-            hlsInstance = new Hls({ enableWorker: true });
-            hlsInstance.loadSource(src);
-            hlsInstance.attachMedia(videoEl);
-            hlsInstance.on(Hls.Events.MANIFEST_PARSED, function () {
-              if (seekSeconds > 0) {
-                try { videoEl.currentTime = seekSeconds; } catch (e) {}
-              }
-              videoEl.play().catch(() => {});
-            });
-          } else if (videoEl.canPlayType('application/vnd.apple.mpegurl')) {
-            videoEl.src = src;
-            if (seekSeconds > 0) {
-              try { videoEl.currentTime = seekSeconds; } catch (e) {}
-            }
-            videoEl.play().catch(() => {});
-          }
-        } else {
-          if (hlsInstance) {
-            hlsInstance.destroy();
-            hlsInstance = null;
-          }
+      document.addEventListener('fullscreenchange', () => {
+        btnFullscreen.classList.toggle('active', !!document.fullscreenElement);
+      });
 
-          const encodedSrc = encodeURI(src);
-          const isSameSource = videoEl.getAttribute('data-active-src') === src;
-
-          videoEl.volume = parseFloat(volumeSlider.value);
-          videoEl.muted = isMuted;
-
-          if (!isSameSource) {
-            videoEl.setAttribute('data-active-src', src);
-            videoEl.src = encodedSrc;
-            videoEl.load();
-
-            const onMetadata = function () {
-              videoEl.removeEventListener('loadedmetadata', onMetadata);
-              if (seekSeconds > 0 && seekSeconds < (videoEl.duration || 9999)) {
-                try { videoEl.currentTime = seekSeconds; } catch (e) {}
-              }
-              const p = videoEl.play();
-              if (p !== undefined) {
-                p.catch(() => {
-                  videoEl.muted = true;
-                  isMuted = true;
-                  videoEl.play().catch(() => {});
-                });
-              }
-            };
-
-            if (videoEl.readyState >= 1) {
-              onMetadata();
-            } else {
-              videoEl.addEventListener('loadedmetadata', onMetadata, { once: true });
-            }
-          } else {
-            if (seekSeconds > 0 && Math.abs(videoEl.currentTime - seekSeconds) > 3) {
-              try { videoEl.currentTime = seekSeconds; } catch (e) {}
-            }
-          }
-
-          const p = videoEl.play();
-          if (p !== undefined) {
-            p.catch(() => {
-              videoEl.muted = true;
-              isMuted = true;
-              videoEl.play().catch(() => {});
-            });
-          }
+      // ── TECLADO ──
+      window.addEventListener('keydown', (e) => {
+        if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+        const key = e.key.toLowerCase();
+        if (key === 'm') {
+          e.preventDefault();
+          setMuteState(!isMuted);
+          wakeHud();
+        } else if (key === 'f') {
+          e.preventDefault();
+          toggleFullscreen();
+        } else if (key === 'c') {
+          e.preventDefault();
+          btnCrt.click();
+          wakeHud();
+        } else if (e.code === 'Space' || key === 'k') {
+          e.preventDefault();
+          togglePlayPause();
+          wakeHud();
         }
-      }
+      });
 
-      function playYouTubeItem(youtubeId, seekSeconds) {
-        const ytWrapper = document.getElementById('tv-youtube-container');
-        if (ytWrapper) ytWrapper.style.display = 'block';
-
-        if (!ytReady) {
-          loadYouTubeAPI(() => {
-            initYTPlayer(youtubeId, seekSeconds);
-          });
-        } else if (ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
-          ytPlayer.loadVideoById({
-            videoId: youtubeId,
-            startSeconds: Math.floor(seekSeconds)
-          });
-          try {
-            if (typeof ytPlayer.unloadModule === 'function') {
-              ytPlayer.unloadModule('captions');
-              ytPlayer.unloadModule('cc');
-            }
-          } catch (e) {}
-          if (isMuted) {
-            ytPlayer.mute();
-            ytPlayer.setVolume(0);
-          } else {
-            ytPlayer.unMute();
-            ytPlayer.setVolume(parseFloat(volumeSlider.value) * 100);
-          }
-          ytPlayer.playVideo();
-        }
-      }
-
+      // ── YOUTUBE API ──
       function loadYouTubeAPI(callback) {
         if (window.YT && window.YT.Player) {
           ytReady = true;
@@ -3514,401 +846,67 @@
         first.parentNode.insertBefore(tag, first);
       }
 
-      function initYTPlayer(youtubeId, seekSeconds) {
-        ytPlayer = new YT.Player('tv-youtube-player', {
-          height: '100%',
-          width: '100%',
-          videoId: youtubeId,
-          playerVars: {
-            autoplay: 1,
-            controls: 0,
-            disablekb: 1,
-            fs: 0,
-            modestbranding: 1,
-            rel: 0,
-            iv_load_policy: 3,
-            cc_load_policy: 0,
-            playsinline: 1,
-            start: Math.floor(seekSeconds),
-            origin: window.location.origin
-          },
-          events: {
-            onReady: function (event) {
-              try {
-                if (typeof event.target.unloadModule === 'function') {
-                  event.target.unloadModule('captions');
-                  event.target.unloadModule('cc');
-                }
-              } catch (e) {}
-
-              if (isMuted) {
-                event.target.mute();
-                event.target.setVolume(0);
-              } else {
-                event.target.unMute();
-                event.target.setVolume(parseFloat(volumeSlider.value) * 100);
-              }
-              event.target.playVideo();
+      function initYouTubeLiveStream(unmuteInitial = false) {
+        loadYouTubeAPI(() => {
+          ytPlayer = new YT.Player('tv-youtube-player', {
+            height: '100%',
+            width: '100%',
+            videoId: YOUTUBE_STREAM_ID,
+            playerVars: {
+              autoplay: 1,
+              controls: 0,
+              disablekb: 1,
+              fs: 0,
+              modestbranding: 1,
+              rel: 0,
+              iv_load_policy: 3,
+              cc_load_policy: 0,
+              playsinline: 1,
+              enablejsapi: 1,
+              origin: window.location.origin
             },
-            onStateChange: function (event) {
-              if (event.data === YT.PlayerState.ENDED) {
-                updatePlayback(true);
+            events: {
+              onReady: function (event) {
+                if (unmuteInitial) {
+                  setMuteState(false, 0.65);
+                } else {
+                  setMuteState(true);
+                }
+                event.target.playVideo();
+                isPlaying = true;
+                updatePlayPauseIcon(true);
+              },
+              onStateChange: function (event) {
+                if (event.data === YT.PlayerState.PLAYING) {
+                  isPlaying = true;
+                  updatePlayPauseIcon(true);
+                } else if (event.data === YT.PlayerState.PAUSED) {
+                  isPlaying = false;
+                  updatePlayPauseIcon(false);
+                } else if (event.data === YT.PlayerState.ENDED) {
+                  // Si el directo finaliza o reconecta, reintentar reproducción
+                  setTimeout(() => {
+                    if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+                      ytPlayer.playVideo();
+                    }
+                  }, 4000);
+                }
+              },
+              onError: function (event) {
+                console.warn('YouTube Stream status/error:', event.data);
+                // Reintento en caso de hipo de conexión
+                setTimeout(() => {
+                  if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+                    ytPlayer.playVideo();
+                  }
+                }, 5000);
               }
             }
-          }
+          });
         });
       }
 
-      // ==========================================
-      // 6. AUTO-HIDE HUD FLOTANTE (EXPERIENCIA CINE)
-      // ==========================================
-      function wakeHud() {
-        if (!floatingHud) return;
-        if (floatingHud.classList.contains('idle-hidden')) {
-          floatingHud.classList.remove('idle-hidden');
-          if (window.gsap) {
-            gsap.to(floatingHud, { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out' });
-          }
-        }
-        if (idleTimeout) clearTimeout(idleTimeout);
-        idleTimeout = setTimeout(() => {
-          if (!epgModal || !epgModal.classList.contains('open')) {
-            if (window.gsap) {
-              gsap.to(floatingHud, { opacity: 0, y: -4, duration: 0.45, ease: 'power2.in', onComplete: () => {
-                if (floatingHud) floatingHud.classList.add('idle-hidden');
-              }});
-            } else {
-              if (floatingHud) floatingHud.classList.add('idle-hidden');
-            }
-          }
-        }, 3500);
-      }
-
-      window.addEventListener('mousemove', wakeHud);
-      window.addEventListener('touchstart', wakeHud);
-      window.addEventListener('click', wakeHud);
-
-      // Heartbeat cada segundo
-      setInterval(() => {
-        updatePlayback(false);
-      }, 1000);
-
-      // ==========================================
-      // 7. GUÍA EPG · TV LINEAL
-      // ==========================================
-
-      function renderEPG() {
-        const list = document.getElementById('epg-channel-list');
-        const clock = document.getElementById('epg-live-clock');
-        if (!list) return;
-
-        // Reloj
-        if (clock) {
-          clock.textContent = new Date().toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
-        }
-
-        list.innerHTML = Object.keys(CHANNELS).map(id => {
-          const chId = parseInt(id);
-          const ch   = CHANNELS[chId];
-          const st   = getChannelTimelineState(chId);
-          const item = st.item;
-          const isTuned = (chId === currentChannelId);
-
-          // Título del programa en curso
-          const nowTitle = item.isAd
-            ? 'Pausa Comercial'
-            : (item.artist ? `${item.title} — ${item.artist}` : item.title);
-
-          const nowSub = item.isAd
-            ? (item.program || ch.name)
-            : (item.program || ch.sub);
-
-          // Próximo
-          const nextIdx  = (st.index + 1) % ch.schedule.length;
-          const nextItem = ch.schedule[nextIdx];
-          const nextTitle = nextItem.isAd
-            ? 'Pausa Comercial'
-            : (nextItem.artist ? `${nextItem.title} — ${nextItem.artist}` : nextItem.title);
-
-          // Progreso (0-100)
-          const pct = Math.min(100, Math.max(0, (st.seekSeconds / st.totalDuration) * 100));
-
-          return `
-            <div class="epg-ch-row ${isTuned ? 'is-tuned' : ''}" onclick="window.__tune(${chId})">
-              <div class="epg-ch-badge" style="background:${ch.accent}18; color:${ch.accent}; border:1px solid ${ch.accent}30;">${ch.number}</div>
-
-              <div class="epg-ch-body">
-                <div class="epg-ch-now">
-                  <div class="epg-ch-label" style="color:${ch.accent};">${item.isAd ? '■ PUBLICIDAD' : '● AHORA'}</div>
-                  <div class="epg-ch-title">${nowTitle}</div>
-                  <div class="epg-ch-sub">${nowSub}</div>
-                </div>
-                <div class="epg-prog-bar">
-                  <div class="epg-prog-fill" style="width:${pct.toFixed(1)}%; background:${ch.accent};"></div>
-                </div>
-                <div class="epg-next-row">
-                  <span>A continuación ›</span>
-                  <span class="epg-next-title">${nextTitle}</span>
-                </div>
-              </div>
-
-              <div class="epg-ch-side">
-                ${isTuned
-                  ? '<span class="epg-on-air">● ON AIR</span>'
-                  : '<span class="epg-tune-hint">Ver ›</span>'
-                }
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
-
-      window.__playItem = function (chId, itemIdx) {
-        // kept for compatibility but not shown in guide
-        currentChannelId = chId;
-        const ch = CHANNELS[chId];
-        if (!ch || !ch.schedule || !ch.schedule[itemIdx]) return;
-        const targetItem = ch.schedule[itemIdx];
-        activeItem = targetItem;
-        activeItemIndex = itemIdx;
-        activeChannelPlaying = chId;
-        tuneToChannel(chId);
-        if (targetItem.type === 'youtube' && targetItem.youtubeId) {
-          videoEl.pause(); videoEl.style.display = 'none';
-          playYouTubeItem(targetItem.youtubeId, 0);
-        } else {
-          videoEl.style.display = 'block';
-          playNativeVideo(targetItem.src, 0);
-        }
-        epgModal.classList.remove('open');
-        wakeHud();
-      };
-
-      // 8. CONTROLES Y EVENT LISTENERS
-      // ==========================================
-      document.querySelectorAll('.top-ch-btn, .pill-ch').forEach(btn => {
-        btn.addEventListener('click', function () {
-          const ch = parseInt(this.dataset.ch);
-          tuneToChannel(ch);
-        });
-      });
-
-      document.getElementById('btn-next-ch').addEventListener('click', () => {
-        const next = currentChannelId >= 3 ? 1 : currentChannelId + 1;
-        tuneToChannel(next);
-      });
-
-      document.getElementById('btn-prev-ch').addEventListener('click', () => {
-        const prev = currentChannelId <= 1 ? 3 : currentChannelId - 1;
-        tuneToChannel(prev);
-      });
-
-      // Mute / Volumen Dinámico
-      function updateVolumeIcon(val) {
-        const icon = document.getElementById('icon-vol');
-        if (!icon) return;
-        if (isMuted || val === 0) {
-          icon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
-        } else if (val < 0.4) {
-          icon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>';
-        } else {
-          icon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>';
-        }
-      }
-
-      btnMute.addEventListener('click', () => {
-        isMuted = !isMuted;
-        videoEl.muted = isMuted;
-        if (isMuted) {
-          updateVolumeIcon(0);
-          if (ytPlayer && typeof ytPlayer.mute === 'function') ytPlayer.mute();
-        } else {
-          const val = parseFloat(volumeSlider.value) > 0 ? parseFloat(volumeSlider.value) : 0.65;
-          volumeSlider.value = val;
-          videoEl.volume = val;
-          updateVolumeIcon(val);
-          if (ytPlayer && typeof ytPlayer.unMute === 'function') {
-            ytPlayer.unMute();
-            ytPlayer.setVolume(val * 100);
-          }
-        }
-        AudioFX.playBeep();
-      });
-
-      volumeSlider.addEventListener('input', (e) => {
-        const val = parseFloat(e.target.value);
-        videoEl.volume = val;
-        isMuted = (val === 0);
-        videoEl.muted = isMuted;
-        updateVolumeIcon(val);
-        if (ytPlayer && typeof ytPlayer.setVolume === 'function') {
-          if (val > 0) ytPlayer.unMute();
-          else ytPlayer.mute();
-          ytPlayer.setVolume(val * 100);
-        }
-      });
-
-
-
-      document.getElementById('tv-screen').addEventListener('click', () => {
-        if (isMuted) {
-          btnMute.click();
-        }
-        wakeHud();
-      });
-
-      // CRT Scanlines
-      btnCrt.addEventListener('click', () => {
-        crtOverlay.classList.toggle('active');
-        btnCrt.classList.toggle('active');
-        AudioFX.playBeep();
-      });
-
-      // Fullscreen
-      btnFullscreen.addEventListener('click', () => {
-        const stage = document.getElementById('cinema-stage');
-        if (!document.fullscreenElement) {
-          if (stage.requestFullscreen) stage.requestFullscreen();
-          else if (stage.webkitRequestFullscreen) stage.webkitRequestFullscreen();
-        } else {
-          if (document.exitFullscreen) document.exitFullscreen();
-        }
-        AudioFX.playBeep();
-      });
-
-      // Modal EPG con actualización viva cada segundo
-      let selectedEpgChannel = currentChannelId;
-      let epgLiveInterval = null;
-
-      // window.__tune — called from onclick in renderEPG rows
-      window.__tune = function(chId) {
-        if (!CHANNELS[chId]) return;
-        currentChannelId = chId;
-        tuneToChannel(chId);
-        epgModal.classList.remove('open');
-        if (epgLiveInterval) { clearInterval(epgLiveInterval); epgLiveInterval = null; }
-        wakeHud();
-      };
-
-      btnEpg.addEventListener('click', () => {
-        selectedEpgChannel = currentChannelId;
-        renderEPG();
-        epgModal.classList.add('open');
-        if (window.gsap) {
-          gsap.fromTo('#epg-card', { scale: 0.96, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: 'power3.out' });
-        }
-        AudioFX.playBeep();
-        if (epgLiveInterval) clearInterval(epgLiveInterval);
-        epgLiveInterval = setInterval(() => {
-          if (epgModal.classList.contains('open')) {
-            renderEPG();
-          } else {
-            clearInterval(epgLiveInterval);
-            epgLiveInterval = null;
-          }
-        }, 1000);
-      });
-
-      btnCloseEpg.addEventListener('click', () => {
-        epgModal.classList.remove('open');
-        if (epgLiveInterval) {
-          clearInterval(epgLiveInterval);
-          epgLiveInterval = null;
-        }
-        AudioFX.playBeep();
-      });
-
-      epgModal.addEventListener('click', (e) => {
-        if (e.target === epgModal) {
-          epgModal.classList.remove('open');
-          if (epgLiveInterval) {
-            clearInterval(epgLiveInterval);
-            epgLiveInterval = null;
-          }
-        }
-      });
-
-      // Controles de Consola Studio GFX
-      if (btnGfxStudio) {
-        btnGfxStudio.addEventListener('click', () => {
-          toggleStudioDock();
-        });
-      }
-      if (btnCloseGfxStudio) {
-        btnCloseGfxStudio.addEventListener('click', () => {
-          toggleStudioDock(false);
-        });
-      }
-      document.querySelectorAll('.studio-trigger-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-          const ch = parseInt(this.dataset.ch) || currentChannelId;
-          const type = this.dataset.type || 'station_id';
-          playRealBumper(ch, type);
-        });
-      });
-
-      // Atajos de teclado y Control Remoto Smart TV (webOS / Tizen / Android TV)
-      window.addEventListener('keydown', (e) => {
-        if (['1', '2', '3'].includes(e.key)) {
-          if (epgModal && epgModal.classList.contains('open')) {
-            window.__selectEpgChannel(parseInt(e.key));
-          } else {
-            tuneToChannel(parseInt(e.key));
-          }
-        } else if (e.key === 'ArrowUp' || e.key === 'ArrowRight' || e.key === 'ChannelUp' || e.key === 'PageUp') {
-          document.getElementById('btn-next-ch').click();
-        } else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ChannelDown' || e.key === 'PageDown') {
-          document.getElementById('btn-prev-ch').click();
-        } else if (e.key === 'Enter' || e.key === 'MediaPlayPause' || e.key === 'Play' || e.key === ' ') {
-          if (isMuted) btnMute.click();
-        } else if (e.key.toLowerCase() === 'm') {
-          btnMute.click();
-        } else if (e.key.toLowerCase() === 'f') {
-          btnFullscreen.click();
-        } else if (e.key.toLowerCase() === 'c') {
-          btnCrt.click();
-        } else if (e.key.toLowerCase() === 'g') {
-          btnEpg.click();
-        } else if (e.key.toLowerCase() === 'b') {
-          toggleStudioDock();
-        } else if (e.key === 'Escape') {
-          if (gfxStudioDock && gfxStudioDock.classList.contains('open')) {
-            toggleStudioDock(false);
-          } else if (epgModal && epgModal.classList.contains('open')) {
-            epgModal.classList.remove('open');
-          }
-        }
-      });
-
-      videoEl.addEventListener('ended', () => {
-        updatePlayback(true);
-      });
-
-      videoEl.addEventListener('error', (e) => {
-        console.warn('Playback error detected on native video element, auto-advancing:', e);
-        setTimeout(() => updatePlayback(true), 1200);
-      });
-
-      // Arranque con volumen dinámico tras intro
-      function startTV(unmuteAfterIntro = false) {
-        if (unmuteAfterIntro) {
-          isMuted = false;
-          volumeSlider.value = 0.65;
-          videoEl.volume = 0.65;
-          videoEl.muted = false;
-          updateVolumeIcon(0.65);
-        } else {
-          updateVolumeIcon(0);
-        }
-        const urlParams = new URLSearchParams(window.location.search);
-        const chParam = parseInt(urlParams.get('ch'));
-        const initialCh = (chParam >= 1 && chParam <= 3) ? chParam : 1;
-        tuneToChannel(initialCh);
-        wakeHud();
-      }
-
-      let isTVIntroActive = false;
-
+      // ── INTRO CINEMÁTICA ──
       function playTVIntroSequence(onFinished) {
         const introEl = document.getElementById('tvIntro');
         const video = document.getElementById('tvIntroVideo');
@@ -3918,14 +916,12 @@
           return;
         }
 
-        isTVIntroActive = true;
         let completed = false;
         let userUnmuted = false;
 
         function finish() {
           if (completed) return;
           completed = true;
-          isTVIntroActive = false;
 
           window.removeEventListener('keydown', onKeyDown);
           introEl.removeEventListener('pointerdown', onScreenInteraction);
@@ -3965,16 +961,15 @@
 
         video.onended = () => finish();
         video.onerror = (err) => {
-          console.warn('TV Intro video could not load, proceeding directly to TV broadcast:', err);
+          console.warn('TV Intro video error:', err);
           finish();
         };
 
-        // Timeout de seguridad (video dura 10.6s)
+        // Timeout máximo de seguridad
         setTimeout(() => {
-          if (isTVIntroActive) finish();
+          if (!completed) finish();
         }, 13000);
 
-        // Iniciar reproducción
         try {
           video.currentTime = 0;
           video.volume = 1.0;
@@ -3985,7 +980,6 @@
             playPromise.then(() => {
               userUnmuted = true;
             }).catch(() => {
-              // Si el navegador bloquea audio sin gesto previo, reproducir en mute y desmutear al tocar
               video.muted = true;
               video.play().catch(() => finish());
             });
@@ -3998,7 +992,8 @@
 
       function initTV() {
         playTVIntroSequence((unmuted) => {
-          startTV(unmuted);
+          initYouTubeLiveStream(unmuted);
+          wakeHud();
         });
       }
 
