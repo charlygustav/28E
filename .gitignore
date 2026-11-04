@@ -16,8 +16,16 @@ ios/
 WhatsApp Chat with*.txt
 
 # Large video assets (exceeds GitHub limits)
-videos/
+videos/*
+!videos/bumpers/
+!videos/bumpers/*
+!videos/28E_Entertainment_Intro_1080p_Final.mp4
+!videos/28e_tv_ident_1080p.mp4
 *.mp4
+!videos/28E_Entertainment_Intro_1080p_Final.mp4
+!videos/28e_tv_ident_1080p.mp4
+!videos/bumpers/*.mp4
+videos/bumpers/test_clip.mp4
 
 # Backup & restoration scratch files
 *.bak*
