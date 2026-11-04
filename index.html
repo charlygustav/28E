@@ -22,11 +22,11 @@
             try {
                 var host = window.location.hostname;
                 if (host === 'dclf.yaire.site') {
-                    window.location.replace('dclf.html' + window.location.search);
+                    window.location.replace('dclf.html' + window.location.search + window.location.hash);
                     return;
                 }
                 if (host === 'tv.yaire.site') {
-                    window.location.replace('tv.html' + window.location.search);
+                    window.location.replace('tv.html' + window.location.search + window.location.hash);
                     return;
                 }
                 var p = new URLSearchParams(window.location.search);
@@ -5361,7 +5361,7 @@
 
             <!-- Card 2: Donde crecen las flores -->
 
-            <a href="dclf.html"
+            <a href="https://dclf.yaire.site/"
 
                 class="spotlight-card group relative bg-[#0f0f14] hover:bg-[#15151c] rounded-2xl border border-white/[0.08] hover:border-white/20 p-2.5 flex flex-col cursor-pointer select-none no-underline block focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/50">
 
@@ -11795,7 +11795,7 @@
 
                     <!-- Card 5: 28E — Donde Crecen las Flores -->
 
-                    <div onclick="window.location.href='dclf.html'" class="ghub-card-v3 rose cursor-pointer group">
+                    <div onclick="window.location.href='https://dclf.yaire.site/'" class="ghub-card-v3 rose cursor-pointer group">
 
                         <div class="bg-glow"></div>
 
@@ -11965,7 +11965,7 @@
 
                     <!-- Card 6: 28E TV · Televisión en Vivo 24/7 -->
 
-                    <div onclick="window.location.href='tv.html'" class="ghub-card-v3 emerald cursor-pointer group">
+                    <div onclick="window.location.href='https://tv.yaire.site/'" class="ghub-card-v3 emerald cursor-pointer group">
 
                         <div class="bg-glow"></div>
 

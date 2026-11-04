@@ -4,15 +4,40 @@
     {
       "source": "/(.*)\\.html",
       "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
-        { "key": "Pragma", "value": "no-cache" }
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        }
       ]
     },
     {
       "source": "/(tv|dclf)",
       "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
-        { "key": "Pragma", "value": "no-cache" }
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        }
       ]
     }
   ],
@@ -72,6 +97,96 @@
     {
       "source": "/__/:path*",
       "destination": "https://yaire-591ca.firebaseapp.com/__/:path*"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/dclf",
+      "has": [
+        {
+          "type": "host",
+          "value": "yaire.site"
+        }
+      ],
+      "destination": "https://dclf.yaire.site/",
+      "permanent": false
+    },
+    {
+      "source": "/dclf",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.yaire.site"
+        }
+      ],
+      "destination": "https://dclf.yaire.site/",
+      "permanent": false
+    },
+    {
+      "source": "/dclf.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "yaire.site"
+        }
+      ],
+      "destination": "https://dclf.yaire.site/",
+      "permanent": false
+    },
+    {
+      "source": "/dclf.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.yaire.site"
+        }
+      ],
+      "destination": "https://dclf.yaire.site/",
+      "permanent": false
+    },
+    {
+      "source": "/tv",
+      "has": [
+        {
+          "type": "host",
+          "value": "yaire.site"
+        }
+      ],
+      "destination": "https://tv.yaire.site/",
+      "permanent": false
+    },
+    {
+      "source": "/tv",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.yaire.site"
+        }
+      ],
+      "destination": "https://tv.yaire.site/",
+      "permanent": false
+    },
+    {
+      "source": "/tv.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "yaire.site"
+        }
+      ],
+      "destination": "https://tv.yaire.site/",
+      "permanent": false
+    },
+    {
+      "source": "/tv.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.yaire.site"
+        }
+      ],
+      "destination": "https://tv.yaire.site/",
+      "permanent": false
     }
   ]
 }
