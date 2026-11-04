@@ -18,6 +18,46 @@
   ],
   "rewrites": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "dclf.yaire.site"
+        }
+      ],
+      "destination": "/dclf.html"
+    },
+    {
+      "source": "/dclf",
+      "has": [
+        {
+          "type": "host",
+          "value": "dclf.yaire.site"
+        }
+      ],
+      "destination": "/dclf.html"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "tv.yaire.site"
+        }
+      ],
+      "destination": "/tv.html"
+    },
+    {
+      "source": "/tv",
+      "has": [
+        {
+          "type": "host",
+          "value": "tv.yaire.site"
+        }
+      ],
+      "destination": "/tv.html"
+    },
+    {
       "source": "/vc-api/:path*",
       "destination": "https://voice.yaire.site/:path*"
     },
