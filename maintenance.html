@@ -102,35 +102,6 @@
             text-shadow: 0 3px 16px rgba(0, 0, 0, 0.85);
             padding-top: 0.1rem;
         }
-
-        .maint-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.45rem;
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.7);
-            background: rgba(0, 0, 0, 0.45);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            padding: 0.28rem 0.75rem;
-            border-radius: 99px;
-            width: fit-content;
-        }
-
-        .maint-dot {
-            width: 6px;
-            height: 6px;
-            background: #f59e0b;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #f59e0b;
-            animation: pulseDot 2s infinite ease-in-out;
-        }
-
-        @keyframes pulseDot {
-            0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.4; transform: scale(0.85); }
         }
 
@@ -192,41 +163,6 @@
             color: rgba(255, 255, 255, 0.6);
             margin-top: 0.35rem;
             text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
-        }
-
-        /* ─── Aviso flotante de audio web ─── */
-        .audio-pill {
-            position: fixed;
-            top: 1.25rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-            background: rgba(15, 15, 20, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.16);
-            color: #ffffff;
-            font-size: 0.8rem;
-            font-weight: 600;
-            padding: 0.42rem 1rem;
-            border-radius: 999px;
-            cursor: pointer;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .audio-pill:hover {
-            background: rgba(30, 30, 40, 0.95);
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateX(-50%) translateY(-2px);
-        }
-
-        .audio-pill.hidden {
-            opacity: 0;
-            pointer-events: none;
-            transform: translateX(-50%) translateY(-10px);
         }
 
         /* ─── Footer ─── */
@@ -437,23 +373,12 @@
     <!-- Sutil viñeta para contraste -->
     <div class="video-overlay"></div>
 
-    <!-- Píldora para activar audio en navegadores con autoplay bloqueado -->
-    <div id="audio-pill" class="audio-pill" onclick="triggerAudio()">
-        <span>🔊</span> Toca para escuchar la radio en vivo
-    </div>
-
     <!-- Interfaz Principal -->
     <div class="stage">
 
         <!-- Header con logo, badge de mantenimiento y contador superior -->
         <header class="header">
-            <div class="brand-wrap">
-                <div class="brand-logo">28E</div>
-                <div class="maint-tag">
-                    <span class="maint-dot"></span>
-                    <span>En Mantenimiento</span>
-                </div>
-            </div>
+            <div class="brand-logo">28E</div>
 
             <div id="countdown-root" class="countdown-container">
                 <div class="countdown-eyebrow">Apertura Oficial de la Web</div>
@@ -524,8 +449,7 @@
         const elM = document.getElementById('cd-m');
         const elS = document.getElementById('cd-s');
         const elClock = document.getElementById('live-clock');
-        const audioPill = document.getElementById('audio-pill');
-
+        
         const clockFormatter = new Intl.DateTimeFormat('es-VE', {
             timeZone: 'America/Caracas',
             day: '2-digit',
@@ -551,11 +475,6 @@
             if (eyebrow) {
                 eyebrow.textContent = '¡APERTURA OFICIAL! ENTRANDO A 28E...';
                 eyebrow.style.color = '#10b981';
-            }
-
-            const maintTag = document.querySelector('.maint-tag');
-            if (maintTag) {
-                maintTag.innerHTML = '<span class="maint-dot" style="background:#10b981;box-shadow:0 0 10px #10b981"></span><span style="color:#10b981">ABIERTO</span>';
             }
 
             try {
@@ -721,9 +640,7 @@ function tick() {
                             audio.currentTime = seekTime;
                         }
                         audio.play().then(() => {
-                            if (audioPill) audioPill.classList.add('hidden');
                         }).catch(() => {
-                            if (audioPill) audioPill.classList.remove('hidden');
                         });
                         audio.removeEventListener('loadedmetadata', onMeta);
                     };
@@ -733,9 +650,7 @@ function tick() {
                         audio.currentTime = seekTime;
                     }
                     audio.play().then(() => {
-                        if (audioPill) audioPill.classList.add('hidden');
                     }).catch(() => {
-                        if (audioPill) audioPill.classList.remove('hidden');
                     });
                 }
             } else {
@@ -807,7 +722,6 @@ function tick() {
         window.triggerAudio = function () {
             if (audio.paused) {
                 audio.play().then(() => {
-                    if (audioPill) audioPill.classList.add('hidden');
                 }).catch(() => { });
             }
         };
@@ -818,9 +732,7 @@ function tick() {
         // Intentar autoplay de inmediato
         setTimeout(() => {
             audio.play().then(() => {
-                if (audioPill) audioPill.classList.add('hidden');
             }).catch(() => {
-                if (audioPill) audioPill.classList.remove('hidden');
             });
         }, 800);
     </script>
