@@ -5,13 +5,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>28E TV · Twenty Eight Experience Radio (En Vivo 24/7)</title>
-  <meta name="description" content="28E TV: Transmisión en vivo oficial 24/7 de Twenty Eight Experience Radio. Emisión continua y minimalista.">
+  <meta name="description" content="28E TV: Transmisión en vivo oficial 24/7 de Twenty Eight Experience Radio.">
   <link rel="icon" type="image/x-icon" href="./favicon.ico">
 
   <!-- Tipografía: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   
   <!-- GSAP -->
   <script src="gsap.min.js"></script>
@@ -19,14 +19,17 @@
   <style>
     :root {
       --bg: #000000;
-      --fg: #f8fafc;
-      --muted: #94a3b8;
-      --surface: rgba(12, 16, 14, 0.65);
-      --surface-border: rgba(255, 255, 255, 0.1);
-      --accent-live: #ef4444;
-      --accent-brand: #10b981;
-      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
-      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --fg: #ffffff;
+      --muted: rgba(255, 255, 255, 0.65);
+      --apple-glass: rgba(18, 18, 22, 0.52);
+      --apple-glass-hover: rgba(28, 28, 34, 0.68);
+      --apple-glass-border: rgba(255, 255, 255, 0.12);
+      --apple-glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      --apple-glass-blur: blur(28px) saturate(190%);
+      --accent-live: #ff3b30;
+      --accent-active: #34c759;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
     }
 
     * {
@@ -51,7 +54,7 @@
       line-height: 1.4;
     }
 
-    /* CONTENEDOR TEATRAL (100% PANTALLA) */
+    /* CONTENEDOR TEATRAL */
     .tv-cinema-stage {
       position: relative;
       width: 100vw;
@@ -62,6 +65,11 @@
       justify-content: center;
       background: #000;
       overflow: hidden;
+      cursor: default;
+    }
+
+    .tv-cinema-stage.is-idle {
+      cursor: none !important;
     }
 
     /* PANTALLA PRINCIPAL DE VIDEO */
@@ -110,14 +118,13 @@
       pointer-events: none;
     }
 
-    /* ESCUDO DE CLIC: CAPTURA CLICS PARA DESMUTEAR Y WAKE HUD */
+    /* ESCUDO DE CLIC */
     .yt-click-shield {
       position: absolute;
       inset: 0;
       z-index: 5;
       background: transparent;
       pointer-events: auto;
-      cursor: pointer;
     }
 
     /* SCANLINES CRT SUTILES */
@@ -138,190 +145,299 @@
       opacity: 1;
     }
 
-    /* WATERMARK / MOSCA DE CANAL (SUPERIOR DERECHO) */
-    .tv-watermark-container {
-      position: absolute;
-      top: 24px;
-      right: 28px;
-      z-index: 22;
-      display: flex;
+    /* ── COMPONENTES ESTILO APPLE (FROSTED GLASS & SPRINGS) ── */
+    .apple-glass {
+      background: var(--apple-glass);
+      backdrop-filter: var(--apple-glass-blur);
+      -webkit-backdrop-filter: var(--apple-glass-blur);
+      border: 1px solid var(--apple-glass-border);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.42), var(--apple-glass-highlight);
+    }
+
+    .apple-btn {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      pointer-events: none;
+      border: none;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.88);
+      cursor: pointer;
+      outline: none;
+      border-radius: 9999px;
+      transition: transform 0.12s cubic-bezier(0.2, 0, 0, 1), background 0.18s ease, color 0.18s ease, opacity 0.18s ease;
     }
 
-    .watermark-logo-img {
-      height: 38px;
-      width: auto;
-      object-fit: contain;
-      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.85));
-      opacity: 0.9;
+    .apple-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
     }
 
-    /* UNMUTE TOAST / PILL HINT */
-    .unmute-hint {
+    .apple-btn:active {
+      transform: scale(0.92);
+    }
+
+    /* BARRA SUPERIOR (HEADER MINIMALISTA) */
+    .apple-top-bar {
       position: absolute;
-      bottom: 96px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 30;
+      top: max(20px, env(safe-area-inset-top));
+      left: max(24px, env(safe-area-inset-left));
+      right: max(24px, env(safe-area-inset-right));
+      z-index: 25;
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 10px 20px;
+      justify-content: space-between;
+      pointer-events: none;
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .apple-back-pill {
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 14px 7px 10px;
       border-radius: 9999px;
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      color: #fff;
       font-size: 13px;
       font-weight: 600;
-      letter-spacing: 0.02em;
-      cursor: pointer;
+      letter-spacing: -0.01em;
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      transition: transform 0.12s cubic-bezier(0.2, 0, 0, 1), background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .apple-back-pill:hover {
+      background: var(--apple-glass-hover);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .apple-back-pill:active {
+      transform: scale(0.94);
+    }
+
+    .apple-back-pill svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 2.4;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .apple-live-badge {
       pointer-events: auto;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      animation: hintBounce 2.5s infinite ease-in-out;
-    }
-
-    .unmute-hint.hidden {
-      opacity: 0;
-      transform: translateX(-50%) translateY(12px);
-      pointer-events: none;
-    }
-
-    @keyframes hintBounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(-6px); }
-    }
-
-    /* FLOATING HUD OVERLAY (AUTO-HIDE EN INACTIVIDAD) */
-    .floating-hud {
-      position: absolute;
-      inset: 0;
-      z-index: 25;
-      pointer-events: none;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: max(20px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
-      opacity: 1;
-      transform: translateY(0);
-      transition: opacity 0.35s ease, transform 0.35s ease;
-    }
-
-    .floating-hud.idle-hidden {
-      opacity: 0;
-      transform: translateY(-4px);
-    }
-
-    /* BARRA SUPERIOR (DYNAMIC ISLAND) */
-    .hud-top-island {
-      align-self: center;
-      pointer-events: auto;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 14px;
-      background: rgba(15, 23, 42, 0.72);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      padding: 8px 18px;
+      gap: 7px;
+      padding: 6px 12px;
       border-radius: 9999px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: rgba(255, 255, 255, 0.95);
     }
 
-    .top-brand-group {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-    }
-
-    .live-dot-ping {
-      width: 9px;
-      height: 9px;
+    .apple-live-dot {
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: var(--accent-live);
       box-shadow: 0 0 10px var(--accent-live);
       position: relative;
     }
 
-    .live-dot-ping::after {
+    .apple-live-dot::after {
       content: '';
       position: absolute;
       inset: -3px;
       border-radius: 50%;
-      border: 2px solid var(--accent-live);
+      border: 1.5px solid var(--accent-live);
       opacity: 0.8;
-      animation: livePing 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+      animation: livePulse 2s cubic-bezier(0, 0, 0.2, 1) infinite;
     }
 
-    @keyframes livePing {
+    @keyframes livePulse {
       0% { transform: scale(1); opacity: 0.8; }
-      100% { transform: scale(2.2); opacity: 0; }
+      100% { transform: scale(2.4); opacity: 0; }
     }
 
-    .top-brand-label {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      color: #fff;
+    /* FLASH DE CONFIRMACIÓN AL CENTRO (APPLE STYLE FEEDBACK) */
+    .apple-action-flash {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 20;
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      pointer-events: none;
     }
 
-    .top-badge-live {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      background: rgba(239, 68, 68, 0.2);
-      color: #f87171;
-      border: 1px solid rgba(239, 68, 68, 0.35);
-      padding: 2px 7px;
-      border-radius: 6px;
+    .apple-action-flash svg {
+      width: 30px;
+      height: 30px;
+      fill: currentColor;
     }
 
-    .top-brand-sep {
-      width: 1px;
+    /* BARRA FLOTANTE INFERIOR (APPLE DOCK CAPSULE) */
+    .apple-bottom-dock {
+      position: absolute;
+      bottom: max(24px, env(safe-area-inset-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 25;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 7px 12px;
+      border-radius: 9999px;
+      pointer-events: auto;
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .apple-play-btn {
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .apple-play-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .apple-play-btn svg {
+      width: 16px;
       height: 16px;
-      background: rgba(255, 255, 255, 0.16);
+      fill: currentColor;
     }
 
-    .top-stream-title {
-      font-size: 12px;
+    .apple-stream-info {
+      display: flex;
+      flex-direction: column;
+      padding: 0 4px;
+      max-width: 180px;
+    }
+
+    .apple-stream-title {
+      font-size: 13px;
       font-weight: 600;
-      color: rgba(255, 255, 255, 0.88);
-      max-width: 240px;
+      letter-spacing: -0.01em;
+      color: #ffffff;
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      white-space: nowrap;
     }
 
-    .top-action-btn {
-      display: inline-flex;
+    .apple-stream-meta {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .apple-dock-divider {
+      width: 1px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.12);
+      flex-shrink: 0;
+    }
+
+    /* CONTROL DE VOLUMEN APPLE */
+    .apple-volume-group {
+      display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 12px;
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.8);
-      text-decoration: none;
-      padding: 4px 10px;
+    }
+
+    .apple-icon-btn {
+      width: 34px;
+      height: 34px;
+      flex-shrink: 0;
+    }
+
+    .apple-icon-btn svg {
+      width: 17px;
+      height: 17px;
+      stroke: currentColor;
+      stroke-width: 2.1;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .apple-slider-wrap {
+      display: flex;
+      align-items: center;
+      width: 72px;
+      transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .apple-volume-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 4px;
       border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      transition: background 0.18s ease, color 0.18s ease;
+      background: rgba(255, 255, 255, 0.22);
+      outline: none;
       cursor: pointer;
     }
 
-    .top-action-btn:hover {
-      background: rgba(255, 255, 255, 0.15);
-      color: #ffffff;
+    .apple-volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+      cursor: pointer;
+      transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .top-action-btn svg {
-      width: 13px;
-      height: 13px;
+    .apple-volume-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.25);
+    }
+
+    /* TOAST ELEGANTE PARA DESMUTEAR (SOLO SI AUTOPLAY LO SILENCIA) */
+    .apple-unmute-pill {
+      position: absolute;
+      bottom: calc(100% + 12px);
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #ffffff;
+      white-space: nowrap;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .apple-unmute-pill.hidden {
+      opacity: 0;
+      transform: translateX(-50%) translateY(8px);
+      pointer-events: none;
+    }
+
+    .apple-unmute-pill svg {
+      width: 14px;
+      height: 14px;
       stroke: currentColor;
       stroke-width: 2.2;
       fill: none;
@@ -329,154 +445,17 @@
       stroke-linejoin: round;
     }
 
-    /* BARRA INFERIOR */
-    .hud-bottom-bar {
-      align-self: center;
-      pointer-events: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      width: 100%;
-      max-width: 860px;
-      background: rgba(15, 23, 42, 0.72);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      padding: 12px 20px;
-      border-radius: 20px;
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+    /* ESTADO IDLE (HUD OCULTO) */
+    .is-idle .apple-top-bar {
+      opacity: 0;
+      transform: translateY(-8px);
+      pointer-events: none;
     }
 
-    .bottom-info-group {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: 0;
-    }
-
-    .bottom-ch-badge {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      padding: 4px 8px;
-      border-radius: 8px;
-      background: rgba(16, 185, 129, 0.18);
-      color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      flex-shrink: 0;
-    }
-
-    .bottom-text-wrap {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-
-    .bottom-show-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: #ffffff;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .bottom-show-sub {
-      font-size: 11px;
-      color: var(--muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .hud-bar-divider {
-      width: 1px;
-      height: 24px;
-      background: rgba(255, 255, 255, 0.1);
-      flex-shrink: 0;
-    }
-
-    .bottom-controls-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-shrink: 0;
-    }
-
-    .hud-tool-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: #e2e8f0;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.18s ease, transform 0.12s ease, color 0.18s ease;
-    }
-
-    .hud-tool-btn:hover {
-      background: rgba(255, 255, 255, 0.16);
-      color: #ffffff;
-      transform: scale(1.05);
-    }
-
-    .hud-tool-btn:active {
-      transform: scale(0.95);
-    }
-
-    .hud-tool-btn.active {
-      background: rgba(16, 185, 129, 0.2);
-      border-color: rgba(16, 185, 129, 0.4);
-      color: #34d399;
-    }
-
-    .hud-tool-btn svg {
-      width: 17px;
-      height: 17px;
-      stroke: currentColor;
-      stroke-width: 2;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    /* SLIDER VOLUMEN */
-    .vol-slider-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .vol-slider-input {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 76px;
-      height: 4px;
-      border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.2);
-      outline: none;
-      cursor: pointer;
-    }
-
-    .vol-slider-input::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 13px;
-      height: 13px;
-      border-radius: 50%;
-      background: #10b981;
-      cursor: pointer;
-      box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
-      transition: transform 0.12s ease;
-    }
-
-    .vol-slider-input::-webkit-slider-thumb:hover {
-      transform: scale(1.2);
+    .is-idle .apple-bottom-dock {
+      opacity: 0;
+      transform: translateX(-50%) translateY(10px);
+      pointer-events: none;
     }
 
     /* ── 28E TV CINEMATIC INTRO IDENT ── */
@@ -509,19 +488,15 @@
       pointer-events: none;
     }
 
-    @media (max-width: 640px) {
-      .top-stream-title {
+    @media (max-width: 600px) {
+      .apple-stream-info {
         display: none;
       }
-      .hud-bottom-bar {
-        padding: 10px 14px;
-        gap: 12px;
-      }
-      .vol-slider-input {
-        width: 52px;
-      }
-      .bottom-show-sub {
+      .apple-dock-divider {
         display: none;
+      }
+      .apple-slider-wrap {
+        width: 56px;
       }
     }
   </style>
@@ -536,102 +511,84 @@
     </video>
   </div>
 
-  <!-- CONTENEDOR CINEMATOGRÁFICO TEATRAL -->
+  <!-- ESCENARIO TEATRAL PRINCIPAL -->
   <main class="tv-cinema-stage" id="cinema-stage">
     
     <!-- PANTALLA DE EMISIÓN -->
     <div class="tv-screen-viewport" id="tv-screen">
       
-      <!-- YouTube Player (Encapsulado para visualización inmersiva 16:9) -->
+      <!-- YouTube Player (16:9 Inmersivo) -->
       <div id="tv-youtube-container">
         <div class="yt-frame-wrapper">
           <div id="tv-youtube-player"></div>
         </div>
-        <div class="yt-click-shield" id="yt-click-shield" title="Toca para activar audio o pausar"></div>
+        <div class="yt-click-shield" id="yt-click-shield"></div>
       </div>
 
-      <!-- Scanlines CRT -->
+      <!-- Scanlines CRT Opcional -->
       <div class="crt-overlay" id="crt-overlay"></div>
 
-      <!-- Watermark / Mosca de Canal Oficial (Logo Flotante) -->
-      <div class="tv-watermark-container" id="tv-watermark">
-        <img id="watermark-logo-img" src="assets/logos/logo_28e_uno.svg" alt="Canal Logo" class="watermark-logo-img">
+      <!-- FLASH DE CONFIRMACIÓN AL CENTRO -->
+      <div class="apple-glass apple-action-flash" id="apple-action-flash">
+        <svg id="flash-icon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
       </div>
 
-      <!-- Toast / Hint para activar audio -->
-      <div class="unmute-hint hidden" id="unmute-hint">
-        <span>🔊</span>
-        <span>Toca la pantalla para activar el audio</span>
-      </div>
+      <!-- BARRA SUPERIOR APPLE -->
+      <header class="apple-top-bar" id="apple-top-bar">
+        <a href="https://yaire.site/" class="apple-glass apple-back-pill" id="btn-back">
+          <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+          <span>Vault</span>
+        </a>
 
-      <!-- FLOATING HUD OVERLAY (AUTO-HIDE EN INACTIVIDAD) -->
-      <div class="floating-hud" id="floating-hud">
-
-        <!-- BARRA SUPERIOR (DYNAMIC ISLAND) -->
-        <header class="hud-top-island" id="hud-top-bar">
-          
-          <div class="top-brand-group" title="28E TV · Transmisión en Directo">
-            <span class="live-dot-ping"></span>
-            <span class="top-brand-label">28E TV</span>
-            <span class="top-badge-live">EN VIVO</span>
-          </div>
-
-          <span class="top-brand-sep" aria-hidden="true"></span>
-
-          <span class="top-stream-title">Twenty Eight Experience Radio</span>
-
-          <span class="top-brand-sep" aria-hidden="true"></span>
-
-          <a href="https://yaire.site/" class="top-action-btn" title="Volver al Vault [Esc]">
-            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-            <span>Vault</span>
-          </a>
-
-        </header>
-
-        <!-- BARRA INFERIOR (INFORMACIÓN + CONTROLES) -->
-        <div class="hud-bottom-bar" id="hud-bottom-bar">
-
-          <!-- Info de Emisión -->
-          <div class="bottom-info-group">
-            <div class="bottom-ch-badge">LIVE</div>
-            <div class="bottom-text-wrap">
-              <div class="bottom-show-title" id="bottom-show-title">Twenty Eight Experience Radio</div>
-              <div class="bottom-show-sub" id="bottom-show-sub">Transmisión Oficial en Directo 24/7 · 28E Entertainment</div>
-            </div>
-          </div>
-
-          <div class="hud-bar-divider"></div>
-
-          <!-- Controles -->
-          <div class="bottom-controls-group">
-
-            <!-- Play / Pause -->
-            <button class="hud-tool-btn" id="btn-play-pause" title="Pausar / Reanudar [Espacio]">
-              <svg id="icon-play-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-            </button>
-
-            <!-- Volumen -->
-            <div class="vol-slider-wrap">
-              <button class="hud-tool-btn" id="btn-mute" title="Mute / Activar [M]">
-                <svg id="icon-vol" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-              </button>
-              <input type="range" class="vol-slider-input" id="volume-slider" min="0" max="1" step="0.02" value="0" title="Volumen">
-            </div>
-
-            <!-- CRT -->
-            <button class="hud-tool-btn" id="btn-crt" title="Filtro CRT [C]">
-              <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-            </button>
-
-            <!-- Fullscreen -->
-            <button class="hud-tool-btn" id="btn-fullscreen" title="Pantalla Completa [F]">
-              <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
-            </button>
-
-          </div>
-
+        <div class="apple-glass apple-live-badge">
+          <span class="apple-live-dot"></span>
+          <span>EN VIVO</span>
         </div>
+      </header>
+
+      <!-- BARRA FLOTANTE INFERIOR APPLE -->
+      <div class="apple-glass apple-bottom-dock" id="apple-bottom-dock">
+
+        <!-- Hint para activar audio si inicia muteado -->
+        <div class="apple-glass apple-unmute-pill hidden" id="apple-unmute-pill">
+          <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+          <span>Activar audio</span>
+        </div>
+
+        <!-- Play / Pause -->
+        <button class="apple-btn apple-play-btn" id="btn-play-pause" aria-label="Reproducir o Pausar">
+          <svg id="icon-play-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+        </button>
+
+        <!-- Información de Emisión -->
+        <div class="apple-stream-info">
+          <span class="apple-stream-title">Twenty Eight Experience</span>
+          <span class="apple-stream-meta">Radio 24/7 · En Directo</span>
+        </div>
+
+        <div class="apple-dock-divider"></div>
+
+        <!-- Grupo de Volumen -->
+        <div class="apple-volume-group">
+          <button class="apple-btn apple-icon-btn" id="btn-mute" aria-label="Silenciar o Activar sonido">
+            <svg id="icon-vol" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          </button>
+          <div class="apple-slider-wrap">
+            <input type="range" class="apple-volume-slider" id="volume-slider" min="0" max="1" step="0.02" value="0.65" aria-label="Volumen">
+          </div>
+        </div>
+
+        <div class="apple-dock-divider"></div>
+
+        <!-- CRT -->
+        <button class="apple-btn apple-icon-btn" id="btn-crt" aria-label="Filtro CRT">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="3"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </button>
+
+        <!-- Pantalla Completa -->
+        <button class="apple-btn apple-icon-btn" id="btn-fullscreen" aria-label="Pantalla Completa">
+          <svg id="icon-fullscreen" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+        </button>
 
       </div>
 
@@ -649,10 +606,10 @@
       let isMuted = true;
       let currentVolume = 0.65;
       let isPlaying = true;
-      let idleTimeout = null;
+      let idleTimer = null;
 
       // Elementos DOM
-      const floatingHud = document.getElementById('floating-hud');
+      const cinemaStage = document.getElementById('cinema-stage');
       const volumeSlider = document.getElementById('volume-slider');
       const btnMute = document.getElementById('btn-mute');
       const btnPlayPause = document.getElementById('btn-play-pause');
@@ -661,39 +618,68 @@
       const crtOverlay = document.getElementById('crt-overlay');
       const iconVol = document.getElementById('icon-vol');
       const iconPlayPause = document.getElementById('icon-play-pause');
-      const unmuteHint = document.getElementById('unmute-hint');
+      const iconFullscreen = document.getElementById('icon-fullscreen');
+      const flashEl = document.getElementById('apple-action-flash');
+      const flashIcon = document.getElementById('flash-icon');
+      const unmutePill = document.getElementById('apple-unmute-pill');
       const ytClickShield = document.getElementById('yt-click-shield');
 
-      // ── AUTO-HIDE HUD ──
-      function wakeHud() {
-        if (!floatingHud) return;
-        floatingHud.classList.remove('idle-hidden');
-        if (window.gsap) {
-          gsap.to(floatingHud, { opacity: 1, y: 0, duration: 0.22, ease: 'power2.out' });
-        }
-        if (idleTimeout) clearTimeout(idleTimeout);
-        idleTimeout = setTimeout(() => {
-          if (window.gsap) {
-            gsap.to(floatingHud, {
-              opacity: 0,
-              y: -4,
-              duration: 0.4,
-              ease: 'power2.in',
-              onComplete: () => {
-                if (floatingHud) floatingHud.classList.add('idle-hidden');
-              }
-            });
-          } else {
-            if (floatingHud) floatingHud.classList.add('idle-hidden');
-          }
-        }, 3500);
+      // ── WAKE & IDLE (APPLE BEHAVIOR) ──
+      function wakeControls() {
+        if (!cinemaStage) return;
+        cinemaStage.classList.remove('is-idle');
+
+        if (idleTimer) clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+          cinemaStage.classList.add('is-idle');
+        }, 2500);
       }
 
-      window.addEventListener('mousemove', wakeHud);
-      window.addEventListener('touchstart', wakeHud);
-      window.addEventListener('click', wakeHud);
+      window.addEventListener('mousemove', wakeControls, { passive: true });
+      window.addEventListener('touchstart', wakeControls, { passive: true });
+      window.addEventListener('click', wakeControls, { passive: true });
 
-      // ── ICONOS VOLUMEN ──
+      // ── FLASH DE ACCIÓN EN EL CENTRO ──
+      function showCenterFlash(type) {
+        if (!flashEl || !flashIcon) return;
+        if (type === 'play') {
+          flashIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+        } else if (type === 'pause') {
+          flashIcon.innerHTML = '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>';
+        } else if (type === 'unmute') {
+          flashIcon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>';
+        } else if (type === 'mute') {
+          flashIcon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
+        }
+
+        if (window.gsap) {
+          gsap.killTweensOf(flashEl);
+          gsap.fromTo(flashEl,
+            { opacity: 0, scale: 0.72, display: 'flex' },
+            {
+              opacity: 1,
+              scale: 1,
+              duration: 0.16,
+              ease: 'power3.out',
+              onComplete: () => {
+                gsap.to(flashEl, {
+                  opacity: 0,
+                  scale: 1.15,
+                  duration: 0.28,
+                  ease: 'power2.in',
+                  delay: 0.14,
+                  onComplete: () => { flashEl.style.display = 'none'; }
+                });
+              }
+            }
+          );
+        } else {
+          flashEl.style.display = 'flex';
+          setTimeout(() => { flashEl.style.display = 'none'; }, 400);
+        }
+      }
+
+      // ── ACTUALIZAR ICONOS ──
       function updateVolumeIcon(vol) {
         if (!iconVol) return;
         if (vol <= 0 || isMuted) {
@@ -705,18 +691,17 @@
         }
       }
 
-      // ── ICONOS PLAY / PAUSE ──
       function updatePlayPauseIcon(playing) {
         if (!iconPlayPause) return;
         if (playing) {
-          iconPlayPause.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+          iconPlayPause.innerHTML = '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>';
         } else {
           iconPlayPause.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
         }
       }
 
       // ── GESTIÓN DE AUDIO ──
-      function setMuteState(muted, customVol = null) {
+      function setMuteState(muted, customVol = null, userTriggered = false) {
         isMuted = muted;
         if (customVol !== null) currentVolume = customVol;
 
@@ -724,9 +709,10 @@
           if (ytPlayer && typeof ytPlayer.mute === 'function') ytPlayer.mute();
           volumeSlider.value = 0;
           updateVolumeIcon(0);
-          if (unmuteHint) unmuteHint.classList.remove('hidden');
+          if (unmutePill) unmutePill.classList.remove('hidden');
+          if (userTriggered) showCenterFlash('mute');
         } else {
-          if (unmuteHint) unmuteHint.classList.add('hidden');
+          if (unmutePill) unmutePill.classList.add('hidden');
           const targetVol = currentVolume > 0 ? currentVolume : 0.65;
           currentVolume = targetVol;
           volumeSlider.value = targetVol;
@@ -735,101 +721,119 @@
             ytPlayer.unMute();
             ytPlayer.setVolume(targetVol * 100);
           }
+          if (userTriggered) showCenterFlash('unmute');
         }
       }
 
       btnMute.addEventListener('click', () => {
-        setMuteState(!isMuted);
+        setMuteState(!isMuted, null, true);
+        wakeControls();
       });
 
       volumeSlider.addEventListener('input', (e) => {
         const val = parseFloat(e.target.value);
         if (val === 0) {
-          setMuteState(true);
+          setMuteState(true, null, false);
         } else {
-          setMuteState(false, val);
+          setMuteState(false, val, false);
         }
+        wakeControls();
       });
 
-      // ── TOGGLE PLAY / PAUSE ──
-      function togglePlayPause() {
+      if (unmutePill) {
+        unmutePill.addEventListener('click', (e) => {
+          e.stopPropagation();
+          setMuteState(false, 0.65, true);
+          wakeControls();
+        });
+      }
+
+      // ── PLAY / PAUSE ──
+      function togglePlayPause(userTriggered = false) {
         if (!ytPlayer) return;
         if (isPlaying) {
           if (typeof ytPlayer.pauseVideo === 'function') ytPlayer.pauseVideo();
           isPlaying = false;
+          if (userTriggered) showCenterFlash('pause');
         } else {
           if (typeof ytPlayer.playVideo === 'function') ytPlayer.playVideo();
           isPlaying = true;
-          if (isMuted) setMuteState(false);
+          if (isMuted) setMuteState(false, 0.65, false);
+          if (userTriggered) showCenterFlash('play');
         }
         updatePlayPauseIcon(isPlaying);
       }
 
-      btnPlayPause.addEventListener('click', togglePlayPause);
+      btnPlayPause.addEventListener('click', (e) => {
+        e.stopPropagation();
+        togglePlayPause(true);
+        wakeControls();
+      });
 
-      // ── CLICK SHIELD ──
+      // ── CLIC EN PANTALLA ──
       ytClickShield.addEventListener('click', () => {
         if (isMuted) {
-          setMuteState(false);
+          setMuteState(false, 0.65, true);
         } else {
-          togglePlayPause();
+          togglePlayPause(true);
         }
-        wakeHud();
+        wakeControls();
       });
 
-      if (unmuteHint) {
-        unmuteHint.addEventListener('click', () => {
-          setMuteState(false);
-          wakeHud();
-        });
-      }
-
-      // ── FILTRO CRT ──
-      btnCrt.addEventListener('click', () => {
+      // ── CRT ──
+      btnCrt.addEventListener('click', (e) => {
+        e.stopPropagation();
         crtOverlay.classList.toggle('active');
-        btnCrt.classList.toggle('active', crtOverlay.classList.contains('active'));
+        btnCrt.style.color = crtOverlay.classList.contains('active') ? 'var(--accent-active)' : 'rgba(255, 255, 255, 0.88)';
+        wakeControls();
       });
 
-      // ── PANTALLA COMPLETA ──
+      // ── FULLSCREEN ──
       function toggleFullscreen() {
         if (!document.fullscreenElement) {
           document.documentElement.requestFullscreen().catch(() => {});
-          btnFullscreen.classList.add('active');
         } else {
           if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
-          btnFullscreen.classList.remove('active');
         }
+        wakeControls();
       }
 
-      btnFullscreen.addEventListener('click', toggleFullscreen);
-
-      document.addEventListener('fullscreenchange', () => {
-        btnFullscreen.classList.toggle('active', !!document.fullscreenElement);
+      btnFullscreen.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleFullscreen();
       });
 
-      // ── TECLADO ──
+      document.addEventListener('fullscreenchange', () => {
+        if (!iconFullscreen) return;
+        if (document.fullscreenElement) {
+          iconFullscreen.innerHTML = '<path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>';
+        } else {
+          iconFullscreen.innerHTML = '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>';
+        }
+      });
+
+      // ── ATAJOS DE TECLADO ──
       window.addEventListener('keydown', (e) => {
         if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
         const key = e.key.toLowerCase();
         if (key === 'm') {
           e.preventDefault();
-          setMuteState(!isMuted);
-          wakeHud();
+          setMuteState(!isMuted, null, true);
+          wakeControls();
         } else if (key === 'f') {
           e.preventDefault();
           toggleFullscreen();
         } else if (key === 'c') {
           e.preventDefault();
           btnCrt.click();
-          wakeHud();
         } else if (e.code === 'Space' || key === 'k') {
           e.preventDefault();
-          togglePlayPause();
-          wakeHud();
+          togglePlayPause(true);
+          wakeControls();
         }
       });
 
-      // ── YOUTUBE API ──
+      // ── YOUTUBE IFRAME API ──
       function loadYouTubeAPI(callback) {
         if (window.YT && window.YT.Player) {
           ytReady = true;
@@ -868,9 +872,9 @@
             events: {
               onReady: function (event) {
                 if (unmuteInitial) {
-                  setMuteState(false, 0.65);
+                  setMuteState(false, 0.65, false);
                 } else {
-                  setMuteState(true);
+                  setMuteState(true, null, false);
                 }
                 event.target.playVideo();
                 isPlaying = true;
@@ -884,22 +888,19 @@
                   isPlaying = false;
                   updatePlayPauseIcon(false);
                 } else if (event.data === YT.PlayerState.ENDED) {
-                  // Si el directo finaliza o reconecta, reintentar reproducción
                   setTimeout(() => {
                     if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
                       ytPlayer.playVideo();
                     }
-                  }, 4000);
+                  }, 3500);
                 }
               },
-              onError: function (event) {
-                console.warn('YouTube Stream status/error:', event.data);
-                // Reintento en caso de hipo de conexión
+              onError: function () {
                 setTimeout(() => {
                   if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
                     ytPlayer.playVideo();
                   }
-                }, 5000);
+                }, 4000);
               }
             }
           });
@@ -960,12 +961,8 @@
         introEl.addEventListener('pointerdown', onScreenInteraction);
 
         video.onended = () => finish();
-        video.onerror = (err) => {
-          console.warn('TV Intro video error:', err);
-          finish();
-        };
+        video.onerror = () => finish();
 
-        // Timeout máximo de seguridad
         setTimeout(() => {
           if (!completed) finish();
         }, 13000);
@@ -985,7 +982,6 @@
             });
           }
         } catch (err) {
-          console.warn('TV Intro play error:', err);
           finish();
         }
       }
@@ -993,7 +989,7 @@
       function initTV() {
         playTVIntroSequence((unmuted) => {
           initYouTubeLiveStream(unmuted);
-          wakeHud();
+          wakeControls();
         });
       }
 
