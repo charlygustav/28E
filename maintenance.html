@@ -1,489 +1,797 @@
 <!DOCTYPE html>
-<html lang="es" class="dark">
+<html lang="es" class="notranslate">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>28E - Mantenimiento</title>
-  <meta name="description" content="La página está temporalmente en mantenimiento. Volvemos pronto.">
-  <link rel="icon" type="image/x-icon" href="dclf_game.ico?v=1">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="google" content="notranslate">
+    <title>28E · En Mantenimiento · Apertura Oficial</title>
+    <link rel="icon" type="image/x-icon" href="dclf_game.ico?v=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
 
-    :root {
-      --tulip-400: #ec4899;
-      --tulip-500: #db2777;
-      --amber-400: #f59e0b;
-      --text: #f4f4f5;
-      --muted: #71717a;
-      --border: rgba(255, 255, 255, .08);
-    }
+        html,
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: #000000;
+            color: #ffffff;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
-    html, body {
-      height: 100%;
-      overflow: hidden;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #09090b;
-      color: var(--text);
-      -webkit-font-smoothing: antialiased;
-    }
+        /* Fondo de habitación aesthetic en tiempo real */
+        .video-bg {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            background: #000000;
+        }
 
-    /* ── Video Background ── */
-    .video-bg {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      overflow: hidden;
-    }
+        .video-bg iframe {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: 0;
+            display: block;
+            pointer-events: none;
+        }
 
-    .video-bg video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+        /* Viñeta sutil para contraste */
+        .video-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            background: radial-gradient(circle at center, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.7) 100%);
+            pointer-events: none;
+        }
 
-    /* ── Overlay ── */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 1;
-      background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.55) 0%,
-        rgba(0, 0, 0, 0.40) 40%,
-        rgba(0, 0, 0, 0.55) 100%
-      );
-    }
+        /* Capa de interfaz */
+        .stage {
+            position: relative;
+            z-index: 10;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 3.5rem 4.5rem;
+            contain: layout style;
+            transform: translateZ(0);
+        }
 
+        /* ─── Encabezado ─── */
+        .header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
 
-    /* ── Main Content ── */
-    .container {
-      position: relative;
-      z-index: 2;
-      height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      text-align: center;
-      text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
-    }
+        .brand-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
 
-    /* Logo */
-    .logo {
-      font-size: 2.2rem;
-      font-weight: 900;
-      letter-spacing: -.06em;
-      color: #fff;
-      margin-bottom: 1.5rem;
-      opacity: 0;
-      animation: fadeUp 0.8s cubic-bezier(.22, 1, .36, 1) 0.2s forwards;
-    }
+        .brand-logo {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 3.2rem;
+            font-weight: 900;
+            letter-spacing: -0.055em;
+            line-height: 1;
+            color: #ffffff;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.85);
+            padding-top: 0.15rem;
+        }
 
-    .aesthetic-icon {
-      font-size: 1.2rem;
-      color: rgba(255, 255, 255, 0.5);
-      margin-bottom: 2.5rem;
-      opacity: 0;
-      animation: fadeUp 0.8s cubic-bezier(.22, 1, .36, 1) 0.25s forwards, breath 4s ease-in-out infinite alternate;
-    }
+        .maint-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.7);
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 0.4rem 0.9rem;
+            border-radius: 99px;
+            width: fit-content;
+        }
 
-    /* Title */
-    .title {
-      font-size: clamp(1.4rem, 4vw, 2.2rem);
-      font-weight: 800;
-      line-height: 1.15;
-      letter-spacing: -.02em;
-      margin-bottom: 2.5rem;
-      color: rgba(255, 255, 255, 0.9);
-      opacity: 0;
-      animation: fadeUp 0.8s cubic-bezier(.22, 1, .36, 1) 0.3s forwards;
-    }
+        .maint-dot {
+            width: 7px;
+            height: 7px;
+            background: #f59e0b;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #f59e0b;
+            animation: pulseDot 2s infinite ease-in-out;
+        }
 
-    /* ── Countdown ── */
-    .countdown {
-      display: flex;
-      align-items: center;
-      gap: .6rem;
-      margin-bottom: 2rem;
-      opacity: 0;
-      animation: fadeUp 0.8s cubic-bezier(.22, 1, .36, 1) 0.7s forwards;
-    }
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
 
-    .cd-unit {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(20px) saturate(1.5);
-      -webkit-backdrop-filter: blur(20px) saturate(1.5);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 1rem;
-      padding: 1rem .8rem .7rem;
-      min-width: 70px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0.5px 0 rgba(255, 255, 255, 0.2);
-      transition: border-color 0.3s, background 0.3s;
-    }
+        /* ─── Contador Superior ─── */
+        .countdown-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
 
-    .cd-unit:hover {
-      border-color: rgba(255, 255, 255, 0.4);
-      background: rgba(0, 0, 0, 0.4);
-    }
+        .countdown-eyebrow {
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.65);
+            margin-bottom: 0.45rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
 
-    .cd-val {
-      font-size: clamp(1.8rem, 5vw, 2.8rem);
-      font-weight: 900;
-      letter-spacing: -.04em;
-      line-height: 1;
-      color: #ffffff;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-    }
+        .timer-row {
+            display: flex;
+            align-items: baseline;
+            gap: 0.85rem;
+            font-variant-numeric: tabular-nums;
+            font-feature-settings: 'tnum' 1;
+        }
 
-    .cd-label {
-      font-size: .5rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .14em;
-      color: rgba(255, 255, 255, 0.85);
-      margin-top: .35rem;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
-    }
+        .time-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 64px;
+        }
 
-    .cd-sep {
-      font-size: clamp(1.2rem, 3vw, 2rem);
-      font-weight: 900;
-      color: #ffffff;
-      padding-bottom: 1rem;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.8);
-    }
+        .time-value {
+            font-size: 2.85rem;
+            font-weight: 800;
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+            color: #ffffff;
+            text-shadow: 0 4px 18px rgba(0, 0, 0, 0.75);
+        }
 
-    /* ── Progress Bar ── */
-    .progress-wrapper {
-      width: 100%;
-      max-width: 420px;
-      margin-top: -1rem;
-      opacity: 0;
-      animation: fadeUp 0.8s cubic-bezier(.22, 1, .36, 1) 0.5s forwards;
-    }
+        .time-sep {
+            font-size: 2.1rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.45);
+            line-height: 0.95;
+            transform: translateY(-2px);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+        }
 
-    .progress-track {
-      width: 100%;
-      height: 6px;
-      background: rgba(255, 255, 255, .06);
-      border-radius: 999px;
-      overflow: hidden;
-      position: relative;
-    }
+        .time-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 0.45rem;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+        }
 
-    .progress-fill {
-      position: absolute;
-      top: 0; left: 0;
-      height: 100%;
-      width: 0%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, var(--tulip-500), var(--amber-400), var(--tulip-400));
-      background-size: 200% 100%;
-      animation: shimmer 2.6s linear infinite;
-      transition: width 1s linear;
-    }
+        /* ─── Aviso flotante de audio web ─── */
+        .audio-pill {
+            position: fixed;
+            top: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            background: rgba(15, 15, 20, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: #ffffff;
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 0.55rem 1.25rem;
+            border-radius: 999px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-    /* ── Keyframes ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+        .audio-pill:hover {
+            background: rgba(30, 30, 40, 0.95);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(-50%) translateY(-2px);
+        }
 
-    @keyframes breath {
-      0% { transform: scale(0.95); opacity: 0.4; text-shadow: 0 0 4px rgba(255,255,255,0.2); }
-      100% { transform: scale(1.1); opacity: 0.9; text-shadow: 0 0 16px rgba(255,255,255,1); }
-    }
+        .audio-pill.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-50%) translateY(-10px);
+        }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: .2; }
-    }
+        /* ─── Footer ─── */
+        .footer {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
 
-    @keyframes shimmer {
-      0% { background-position: 200% center; }
-      100% { background-position: -200% center; }
-    }
+        .music-indicator {
+            display: flex;
+            align-items: center;
+            gap: 1.1rem;
+            font-size: 1.45rem;
+            color: rgba(255, 255, 255, 0.85);
+            text-shadow: 0 3px 16px rgba(0, 0, 0, 0.95);
+        }
 
-    /* ── Responsive ── */
-    @media (max-width: 768px) {
-      .countdown { gap: .4rem; }
-      .cd-unit { min-width: 56px; padding: .8rem .5rem .5rem; border-radius: .8rem; }
-      .cd-val { font-size: clamp(1.4rem, 8vw, 2rem); }
-      .cd-label { font-size: .45rem; }
-      .cd-sep { font-size: 1.2rem; padding-bottom: .7rem; }
-      .logo { font-size: 1.6rem; margin-bottom: 2rem; }
-      .subtitle { margin-bottom: 2rem; }
-      .progress-wrapper { max-width: 300px; }
-    }
+        .bars-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            height: 22px;
+        }
 
-    @media (max-width: 400px) {
-      .container { padding: 1.5rem; }
-      .countdown { gap: .3rem; }
-      .cd-unit { min-width: 48px; padding: .6rem .4rem .4rem; border-radius: .6rem; }
-      .cd-val { font-size: clamp(1.2rem, 10vw, 1.6rem); }
-      .cd-sep { font-size: 1rem; }
-      .logo { font-size: 1.4rem; margin-bottom: 1.5rem; }
-      .title { margin-bottom: .5rem; }
-      .subtitle { margin-bottom: 1.5rem; }
-    }
+        .bar {
+            width: 4px;
+            height: 22px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 3px;
+            transform-origin: bottom center;
+            will-change: transform;
+        }
 
-    /* ── Mute Button Removed ── */
-  </style>
+        .bar:nth-child(1) { animation: barScale1 0.7s ease-in-out infinite alternate; animation-delay: 0.1s; }
+        .bar:nth-child(2) { animation: barScale2 0.55s ease-in-out infinite alternate; animation-delay: 0.25s; }
+        .bar:nth-child(3) { animation: barScale3 0.8s ease-in-out infinite alternate; animation-delay: 0.15s; }
+        .bar:nth-child(4) { animation: barScale4 0.6s ease-in-out infinite alternate; animation-delay: 0.35s; }
+
+        @keyframes barScale1 { 0% { transform: scaleY(0.25); } 100% { transform: scaleY(0.95); } }
+        @keyframes barScale2 { 0% { transform: scaleY(0.40); } 100% { transform: scaleY(1.0); } }
+        @keyframes barScale3 { 0% { transform: scaleY(0.15); } 100% { transform: scaleY(0.80); } }
+        @keyframes barScale4 { 0% { transform: scaleY(0.30); } 100% { transform: scaleY(0.90); } }
+
+        .song-name {
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .song-artist {
+            color: rgba(255, 255, 255, 0.65);
+            font-weight: 400;
+        }
+
+        .target-stamp {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 1.45rem;
+            color: rgba(255, 255, 255, 0.85);
+            text-shadow: 0 3px 16px rgba(0, 0, 0, 0.95);
+            font-variant-numeric: tabular-nums;
+            font-feature-settings: 'tnum' 1;
+        }
+
+        .clock-date {
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .clock-time {
+            color: rgba(255, 255, 255, 0.65);
+            font-weight: 400;
+        }
+
+        /* ─── Zona Inferior & News ─── */
+        .bottom-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            width: 100%;
+        }
+
+        .news-line {
+            display: flex;
+            align-items: baseline;
+            gap: 0.9rem;
+            font-size: 1.35rem;
+            line-height: 1.5;
+            padding: 6px 0;
+            color: rgba(255, 255, 255, 0.85);
+            text-shadow: 0 3px 16px rgba(0, 0, 0, 0.95);
+            max-width: 88vw;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .news-cat {
+            font-size: 1.05rem;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.55);
+            flex-shrink: 0;
+            line-height: 1.5;
+        }
+
+        .news-sep {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 1.15rem;
+            font-weight: 300;
+            flex-shrink: 0;
+            line-height: 1.5;
+        }
+
+        .news-title {
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 500;
+            line-height: 1.5;
+            transition: opacity 0.3s ease;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding: 2px 0;
+        }
+
+        /* Responsive Mobile Web */
+        @media (max-width: 768px) {
+            .stage {
+                padding: 1.5rem 1.25rem;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .brand-logo {
+                font-size: 2.2rem;
+            }
+
+            .countdown-container {
+                align-items: flex-start;
+                width: 100%;
+            }
+
+            .countdown-eyebrow {
+                font-size: 0.78rem;
+                letter-spacing: 0.18em;
+            }
+
+            .timer-row {
+                gap: 0.45rem;
+            }
+
+            .time-col {
+                min-width: 44px;
+            }
+
+            .time-value {
+                font-size: 1.95rem;
+            }
+
+            .time-sep {
+                font-size: 1.5rem;
+            }
+
+            .time-label {
+                font-size: 0.62rem;
+                letter-spacing: 0.12em;
+            }
+
+            .footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.6rem;
+            }
+
+            .music-indicator {
+                font-size: 1.05rem;
+                gap: 0.75rem;
+            }
+
+            .target-stamp {
+                font-size: 1.05rem;
+            }
+
+            .news-line {
+                font-size: 0.98rem;
+                max-width: 95vw;
+            }
+
+            .news-cat {
+                font-size: 0.82rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-  <!-- Video Background -->
-  <div class="video-bg">
-    <video id="bg-video" loop playsinline preload="auto">
-      <source src="videos/maintenance_bg.mp4" type="video/mp4">
-    </video>
-  </div>
-
-  <!-- Overlay -->
-  <div class="overlay"></div>
-
-  <!-- Content -->
-  <div class="container">
-
-    <div class="logo">28E</div>
-
-    <div class="aesthetic-icon">✦</div>
-
-    <h1 class="title">La página se revelará en:</h1>
-
-    <!-- Countdown -->
-    <div class="countdown">
-      <div class="cd-unit">
-        <span class="cd-val" id="cd-days">00</span>
-        <span class="cd-label">Días</span>
-      </div>
-      <span class="cd-sep">:</span>
-      <div class="cd-unit">
-        <span class="cd-val" id="cd-hours">00</span>
-        <span class="cd-label">Horas</span>
-      </div>
-      <span class="cd-sep">:</span>
-      <div class="cd-unit">
-        <span class="cd-val" id="cd-mins">00</span>
-        <span class="cd-label">Mins</span>
-      </div>
-      <span class="cd-sep">:</span>
-      <div class="cd-unit">
-        <span class="cd-val" id="cd-secs">00</span>
-        <span class="cd-label">Segs</span>
-      </div>
+    <!-- Fondo animado: Yaire en su habitación aesthetic en tiempo real -->
+    <div class="video-bg">
+        <iframe src="yaire_bedroom_night.html" frameborder="0"></iframe>
     </div>
 
-    <!-- Progress -->
-    <div class="progress-wrapper">
-      <div class="progress-track">
-        <div class="progress-fill" id="progress-fill"></div>
-      </div>
+    <!-- Sutil viñeta para contraste -->
+    <div class="video-overlay"></div>
+
+    <!-- Píldora para activar audio en navegadores con autoplay bloqueado -->
+    <div id="audio-pill" class="audio-pill" onclick="triggerAudio()">
+        <span>🔊</span> Toca para escuchar la radio en vivo
     </div>
 
-  </div>
+    <!-- Interfaz Principal -->
+    <div class="stage">
 
-  <script>
-    // ── Global Variables ──
-    let globalTargetDate = null;
-    let globalMaintStart = null;
-    let countdownInterval = null;
+        <!-- Header con logo, badge de mantenimiento y contador superior -->
+        <header class="header">
+            <div class="brand-wrap">
+                <div class="brand-logo">28E</div>
+                <div class="maint-tag">
+                    <span class="maint-dot"></span>
+                    <span>En Mantenimiento</span>
+                </div>
+            </div>
 
-    // ── Autoplay Logic ──
-    const videoEl = document.getElementById('bg-video');
-    if (videoEl) {
-      // Intentar reproducir con sonido automáticamente
-      videoEl.muted = false;
-      const playPromise = videoEl.play();
-      
-      if (playPromise !== undefined) {
-        playPromise.catch(error => {
-          // Si el navegador bloquea el sonido (política de Apple/Google en móviles)
-          // silenciamos para que al menos el video no se quede congelado.
-          videoEl.muted = true;
-          videoEl.play().catch(e => console.error('Fallo absoluto al reproducir video:', e));
+            <div id="countdown-root" class="countdown-container">
+                <div class="countdown-eyebrow">Apertura Oficial de la Web</div>
+                <div class="timer-row">
+                    <div class="time-col">
+                        <span id="cd-d" class="time-value">00</span>
+                        <span class="time-label">Días</span>
+                    </div>
+                    <span class="time-sep">:</span>
+                    <div class="time-col">
+                        <span id="cd-h" class="time-value">00</span>
+                        <span class="time-label">Horas</span>
+                    </div>
+                    <span class="time-sep">:</span>
+                    <div class="time-col">
+                        <span id="cd-m" class="time-value">00</span>
+                        <span class="time-label">Minutos</span>
+                    </div>
+                    <span class="time-sep">:</span>
+                    <div class="time-col">
+                        <span id="cd-s" class="time-value">00</span>
+                        <span class="time-label">Segundos</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Zona Inferior: Música, Reloj y Cintillo de Noticias en Vivo -->
+        <div class="bottom-wrap">
+            <footer class="footer">
+                <div class="music-indicator">
+                    <div class="bars-container">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                    <span id="music-info">
+                        <span class="song-name">Cargando radio 28E...</span>
+                    </span>
+                </div>
+                <div id="live-clock" class="target-stamp">
+                    <span class="clock-date">--.--.----</span><span class="clock-time"> — --:--:--</span>
+                </div>
+            </footer>
+
+            <div class="news-line" id="news-line">
+                <span id="news-cat" class="news-cat">ACTUALIDAD</span>
+                <span class="news-sep">|</span>
+                <span id="news-title" class="news-title">Cargando titulares en vivo...</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Reproductor de música continuo -->
+    <audio id="audio-elem" preload="auto"></audio>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
+        import { getDatabase, ref, onValue, set } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js';
+
+        // ── 1. Contador exacto al 00:00:00 del 7 de Noviembre yendo al 8 (Hora oficial Venezuela UTC-4) ──
+        const TARGET_DATE = new Date('2026-11-08T00:00:00-04:00');
+
+        const elD = document.getElementById('cd-d');
+        const elH = document.getElementById('cd-h');
+        const elM = document.getElementById('cd-m');
+        const elS = document.getElementById('cd-s');
+        const elClock = document.getElementById('live-clock');
+        const audioPill = document.getElementById('audio-pill');
+
+        const clockFormatter = new Intl.DateTimeFormat('es-VE', {
+            timeZone: 'America/Caracas',
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
         });
-      }
-    }
 
-    async function fetchConfig() {
-      try {
-        const res = await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json?nocache=' + Date.now());
-        const cfg = await res.json();
-        if (!cfg) return;
+        function tick() {
+            const now = new Date();
 
-        // Redirect back to main site when admin disables maintenance (unless in preview mode)
-        const urlParams = new URLSearchParams(window.location.search);
-        const isPreview = urlParams.get('preview') === 'true';
-        if (isPreview) {
-            if (urlParams.has('type')) cfg.maintType = urlParams.get('type');
-            if (urlParams.has('date')) cfg.maintDate = urlParams.get('date');
-        }
-
-        if (cfg.mantenimiento === false && !isPreview) {
-          window.location.href = 'wrapped.html';
-          return;
-        } else if (cfg.maintScreen !== 'cinematic') {
-          window.location.href = 'mantenimiento';
-          return;
-        }
-
-        if (cfg.maintType === 'indefinite') {
-            document.querySelector('.countdown').style.display = 'none';
-            document.getElementById('progress-fill').style.width = '100%';
-            
-            if (countdownInterval) {
-                clearInterval(countdownInterval);
-                countdownInterval = null;
+            // Reloj y fecha en vivo de Venezuela
+            if (elClock) {
+                const parts = clockFormatter.formatToParts(now);
+                const getP = (type) => parts.find(p => p.type === type)?.value || '';
+                elClock.innerHTML = `<span class="clock-date">${getP('day')}.${getP('month')}.${getP('year')}</span><span class="clock-time"> — ${getP('hour')}:${getP('minute')}:${getP('second')}</span>`;
             }
 
-            if (!document.getElementById('maint-phrase')) {
-                const phrases = [
-                    "Estamos preparando algo especial...",
-                    "Afinando los últimos detalles...",
-                    "Puliendo cada pequeño rincón...",
-                    "Asegurando que todo sea perfecto...",
-                    "Haciendo un poco de magia..."
-                ];
-                
-                document.querySelector('.title').innerHTML = `Volvemos pronto<br><span id="maint-phrase" class="phrase-fade" style="font-size: 1.2rem; font-weight: 400; opacity: 0; display: inline-block; min-height: 1.8rem; margin-top: 8px;">${phrases[0]}</span>`;
-                
-                if (!document.getElementById('dynamic-phrase-style')) {
-                    const style = document.createElement('style');
-                    style.id = 'dynamic-phrase-style';
-                    style.innerHTML = `
-                      .phrase-fade { animation: fade-phrase 8s cubic-bezier(0.25, 1, 0.5, 1) infinite; }
-                      @keyframes fade-phrase {
-                        0%, 2% { opacity: 0; transform: translateY(8px); }
-                        10%, 90% { opacity: 0.8; transform: translateY(0); }
-                        98%, 100% { opacity: 0; transform: translateY(-8px); }
-                      }
-                    `;
-                    document.head.appendChild(style);
+            // Cuenta regresiva al lanzamiento
+            const diff = TARGET_DATE.getTime() - now.getTime();
+
+            if (diff <= 0) {
+                if (elD) elD.textContent = '00';
+                if (elH) elH.textContent = '00';
+                if (elM) elM.textContent = '00';
+                if (elS) elS.textContent = '00';
+                // Si la web ya abrió, recargar para ir a la página principal
+                setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+                return;
+            }
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const m = Math.floor((diff / (1000 * 60)) % 60);
+            const s = Math.floor((diff / 1000) % 60);
+
+            if (elD) elD.textContent = String(d).padStart(2, '0');
+            if (elH) elH.textContent = String(h).padStart(2, '0');
+            if (elM) elM.textContent = String(m).padStart(2, '0');
+            if (elS) elS.textContent = String(s).padStart(2, '0');
+        }
+
+        setInterval(tick, 1000);
+        tick();
+
+        // ── 2. Conexión Realtime a 28E Radio (Sincronizado vía Firebase) ──
+        const firebaseConfig = {
+            apiKey: "AIzaSyDFkuktrXnsV9-jg2bv5dpJQRR-he8PT3g",
+            authDomain: "yaire-591ca.firebaseapp.com",
+            databaseURL: "https://yaire-591ca-default-rtdb.firebaseio.com",
+            projectId: "yaire-591ca",
+            storageBucket: "yaire-591ca.firebasestorage.app",
+            messagingSenderId: "450381430658",
+            appId: "1:450381430658:web:262d1bb7b1732c3990d99b"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Setlist oficial de la radio
+        const radioTracks = [
+            { title: "Wonderful", artist: "Otis McDonald", src: "sounds/ost/Otis McDonald - Wonderful.mp3", duration: 167.0 },
+            { title: "MAS PERREO", artist: "Lawd Ito", src: "radio/ES_MAS PERREO - Lawd Ito.mp3", duration: 173.3 },
+            { title: "CRAZY (Live)", artist: "Otis McDonald", src: "sounds/Otis McDonald - CRAZY - Live (SPOTISAVER).mp3", duration: 124.1 },
+            { title: "Tokyo Magic", artist: "Lawd Ito", src: "radio/ES_Tokyo Magic - Lawd Ito.mp3", duration: 179.2 },
+            { title: "My Everything", artist: "Otis McDonald", src: "sounds/ost/Otis McDonald - My Everything.mp3", duration: 156.9 },
+            { title: "Atacha", artist: "Lawd Ito", src: "radio/ES_Atacha - Lawd Ito.mp3", duration: 195.0 },
+            { title: "Menea", artist: "Master One, Lawd Ito", src: "radio/ES_Menea - Master One.mp3", duration: 198.8 },
+            { title: "Sin Pensar", artist: "Lawd Ito, Mercedes Gala", src: "radio/ES_Sin Pensar - Lawd Ito.mp3", duration: 184.6 },
+            { title: "Eres Mía", artist: "Lawd Ito", src: "radio/ES_Eres Mia - Lawd Ito.mp3", duration: 167.0 },
+            { title: "Loko", artist: "Lawd Ito, Nicolas Rengifo", src: "radio/1792559637795_ES_Loko_-_Lawd_Ito.mp3", duration: 166.0 },
+            { title: "Ella", artist: "Lawd Ito, Bambi Haze, Frontera Bugalú", src: "radio/ES_Ella - Lawd Ito.mp3", duration: 181.3 },
+            { title: "Quemao", artist: "Lawd Ito", src: "radio/ES_Quemao - Lawd Ito.mp3", duration: 173.0 },
+            { title: "The Lights", artist: "Lawd Ito", src: "radio/ES_The Lights - Lawd Ito.mp3", duration: 177.2 },
+            { title: "Tikiti", artist: "Lawd Ito", src: "radio/ES_Tikiti - Lawd Ito.mp3", duration: 170.1 },
+            { title: "GWTF", artist: "Lawd Ito", src: "radio/ES_GWTF - Lawd Ito.mp3", duration: 190.8 },
+            { title: "Belén", artist: "Lawd Ito", src: "radio/ES_Belen - Lawd Ito.mp3", duration: 204.0 },
+            { title: "Sacatela", artist: "Lawd Ito", src: "radio/ES_Sacatela - Lawd Ito.mp3", duration: 172.5 },
+            { title: "Cafecito", artist: "Lawd Ito", src: "radio/ES_Cafecito - Lawd Ito.mp3", duration: 176.8 },
+            { title: "Pink Guava", artist: "Lawd Ito", src: "radio/ES_Pink Guava - Lawd Ito.mp3", duration: 175.1 },
+            { title: "Sangria", artist: "Lawd Ito", src: "radio/ES_Sangria - Lawd Ito.mp3", duration: 210.6 },
+            { title: "Vela", artist: "Lawd Ito", src: "radio/ES_Vela - Lawd Ito.mp3", duration: 182.1 },
+            { title: "Bendiciones", artist: "Lawd Ito, Tilden Parc", src: "radio/ES_Bendiciones - Lawd Ito.mp3", duration: 220.6 },
+            { title: "No Hay Trabajo", artist: "Lawd Ito", src: "radio/ES_No Hay Trabajo - Lawd Ito.mp3", duration: 168.6 },
+            { title: "Joe Louis", artist: "Otis McDonald", src: "sounds/ost/Otis McDonald - Joe Louis.mp3", duration: 182.7 },
+            { title: "But We're Family", artist: "Otis McDonald", src: "sounds/ost/Otis McDonald - But We're Family.mp3", duration: 219.3 },
+            { title: "Magic, Pt. 2", artist: "Otis McDonald", src: "sounds/ost/Otis McDonald - I Got Your Back.mp3", duration: 225.7 },
+            { title: "I Wish I Knew", artist: "Otis McDonald, Joni Inez", src: "radio/I Wish I Knew - Otis McDonald.mp3", duration: 165.6 },
+            { title: "Forever Young", artist: "Otis McDonald", src: "radio/Forever Young - Otis McDonald.mp3", duration: 161.8 },
+            { title: "Side Steppin'", artist: "Otis McDonald", src: "radio/Side Steppin' - Otis McDonald.mp3", duration: 165.5 },
+            { title: "Truckee, CA", artist: "Otis McDonald", src: "radio/Truckee - Otis McDonald.mp3", duration: 168.8 },
+            { title: "Complicate Ya", artist: "Otis McDonald", src: "radio/Complicate ya - Otis McDonald.mp3", duration: 166.5 },
+            { title: "Treat Me This Way", artist: "Otis McDonald", src: "radio/Treat me this way - Otis McDonald.mp3", duration: 125.3 },
+            { title: "Yesterday", artist: "Otis McDonald", src: "radio/Yesterday - Otis McDonald.mp3", duration: 169.7 },
+            { title: "BirdBrainz II", artist: "Otis McDonald", src: "radio/BirdBrainz II - Otis McDonald.mp3", duration: 169.9 },
+            { title: "That Slapper", artist: "Otis McDonald", src: "radio/That Slapper - Otis McDonald.mp3", duration: 198.4 },
+            { title: "3rdeyeblimp", artist: "Otis McDonald", src: "radio/3rdEyeBlimp - Otis McDonald.mp3", duration: 157.8 },
+            { title: "Fly Away", artist: "Otis McDonald", src: "radio/Fly Away - Otis McDonald.mp3", duration: 165.1 },
+            { title: "Stay", artist: "Otis McDonald", src: "radio/Stay - Otis McDonald.mp3", duration: 118.6 },
+            { title: "Other Way", artist: "Otis McDonald", src: "radio/Other Way - Otis McDonald.mp3", duration: 114.7 },
+            { title: "Behind These Closed Doors", artist: "Otis McDonald", src: "radio/Behind Closed Doors - Otis McDonald.mp3", duration: 128.5 },
+            { title: "A Legacy Endures", artist: "Otis McDonald", src: "sounds/ost/Otis McDonald - A Legacy Endures.mp3", duration: 299.7 },
+            { title: "A Legacy Lived", artist: "Otis McDonald", src: "sounds/ost/Otis McDonald - A Legacy Lived.mp3", duration: 307.2 },
+            { title: "A Legacy Understood", artist: "Otis McDonald", src: "sounds/ost/Otis McDonald - A Legacy Understood.mp3", duration: 404.4 },
+            { title: "It Slowly Started to Fade Away", artist: "Otis McDonald", src: "sounds/ost/Otis McDonald - It Slowly Started to Fade Away.mp3", duration: 506.4 }
+        ];
+
+        const audio = document.getElementById('audio-elem');
+        const info = document.getElementById('music-info');
+
+        let serverTimeOffset = 0;
+        let currentRadioState = null;
+
+        onValue(ref(db, '.info/serverTimeOffset'), snap => {
+            serverTimeOffset = snap.val() || 0;
+        });
+
+        function resolveLiveTrack(startTrackSrc, startTimeMs, nowMs) {
+            let idx = radioTracks.findIndex(t => t.src === startTrackSrc || new URL(t.src, document.baseURI).href === startTrackSrc);
+            if (idx === -1) idx = 0;
+            let elapsed = Math.max(0, (nowMs - startTimeMs) / 1000);
+
+            while (elapsed >= radioTracks[idx].duration) {
+                elapsed -= radioTracks[idx].duration;
+                idx = (idx + 1) % radioTracks.length;
+            }
+            return {
+                track: radioTracks[idx],
+                idx: idx,
+                seekTime: elapsed,
+                virtualStartTime: nowMs - Math.round(elapsed * 1000)
+            };
+        }
+
+        function syncTrack(state) {
+            if (!state) return;
+            const now = Date.now() + serverTimeOffset;
+            const startTime = state.startTime || now;
+
+            const resolved = resolveLiveTrack(state.src, startTime, now);
+            const liveTrack = resolved.track;
+            const seekTime = resolved.seekTime;
+
+            currentRadioState = state;
+
+            if (info) {
+                info.innerHTML = `<span class="song-name">${liveTrack.title}</span><span class="song-artist"> — ${liveTrack.artist}</span>`;
+            }
+
+            if (state.isPlaying && liveTrack.src) {
+                const targetUrl = new URL(liveTrack.src, document.baseURI).href;
+                if (audio.src !== targetUrl) {
+                    audio.src = liveTrack.src;
+                    audio.load();
+
+                    const onMeta = () => {
+                        if (audio.duration && seekTime < audio.duration) {
+                            audio.currentTime = seekTime;
+                        }
+                        audio.play().then(() => {
+                            if (audioPill) audioPill.classList.add('hidden');
+                        }).catch(() => {
+                            if (audioPill) audioPill.classList.remove('hidden');
+                        });
+                        audio.removeEventListener('loadedmetadata', onMeta);
+                    };
+                    audio.addEventListener('loadedmetadata', onMeta);
+                } else if (audio.paused) {
+                    if (audio.duration && seekTime < audio.duration) {
+                        audio.currentTime = seekTime;
+                    }
+                    audio.play().then(() => {
+                        if (audioPill) audioPill.classList.add('hidden');
+                    }).catch(() => {
+                        if (audioPill) audioPill.classList.remove('hidden');
+                    });
                 }
-                
-                const phraseEl = document.getElementById('maint-phrase');
-                phraseEl.dataset.idx = 0;
-                phraseEl.addEventListener('animationiteration', () => {
-                    let phraseIndex = parseInt(phraseEl.dataset.idx, 10);
-                    phraseIndex = (phraseIndex + 1) % phrases.length;
-                    phraseEl.dataset.idx = phraseIndex;
-                    phraseEl.textContent = phrases[phraseIndex];
-                });
+            } else {
+                audio.pause();
             }
-            return;
         }
 
-        if (!cfg.maintDate) return;
-        const [dPart, tPart] = cfg.maintDate.split('T');
-        const [yyyy, mm, dd] = dPart.split('-');
-        const [hh, min] = tPart.split(':');
-        const targetDate = new Date(yyyy, mm - 1, dd, hh, min).getTime();
-        if (!targetDate || isNaN(targetDate)) return;
+        onValue(ref(db, 'radio_state/current'), snap => {
+            const state = snap.val();
+            syncTrack(state);
+        });
 
-        let maintStart = targetDate - (24 * 60 * 60 * 1000); // fallback 24h
-        if (cfg.lastUpdated) {
-          maintStart = new Date(cfg.lastUpdated).getTime();
+        fetch('https://yaire-591ca-default-rtdb.firebaseio.com/radio_state/current.json')
+            .then(res => res.json())
+            .then(state => {
+                if (!currentRadioState && state) syncTrack(state);
+            })
+            .catch(() => { });
+
+        // ── 3. Cintillo de Noticias en Vivo ──
+        const elNewsCat = document.getElementById('news-cat');
+        const elNewsTitle = document.getElementById('news-title');
+
+        let newsList = [
+            { category: "ACTUALIDAD", title: "Transmisión 24/7 en directo camino a la apertura oficial de 28E" },
+            { category: "MÚSICA", title: "Nuevas producciones y lanzamientos globales marcan la escena urbana" }
+        ];
+        let newsIdx = 0;
+
+        function renderNewsItem(item) {
+            if (!item || !elNewsTitle) return;
+            elNewsTitle.style.opacity = '0';
+
+            setTimeout(() => {
+                if (elNewsCat) elNewsCat.textContent = item.category || 'NOTICIAS';
+                elNewsTitle.textContent = item.title || '';
+                elNewsTitle.style.opacity = '1';
+            }, 300);
         }
 
-        // Update globals
-        globalTargetDate = targetDate;
-        globalMaintStart = maintStart;
-
-        // Start countdown if not running
-        if (!countdownInterval) {
-          updateTimer();
-          countdownInterval = setInterval(updateTimer, 1000);
+        function cycleNews() {
+            if (!newsList || newsList.length === 0) return;
+            newsIdx = (newsIdx + 1) % newsList.length;
+            renderNewsItem(newsList[newsIdx]);
         }
 
-      } catch (e) {
-        console.error('Error fetching config:', e);
-      }
-    }
-
-    function updateTimer() {
-      if (!globalTargetDate || !globalMaintStart) return;
-
-      const now = Date.now();
-      const distance = globalTargetDate - now;
-      const totalDuration = globalTargetDate - globalMaintStart;
-
-      if (distance <= 0) {
-        if (countdownInterval) clearInterval(countdownInterval);
-        document.getElementById('cd-days').textContent = '00';
-        document.getElementById('cd-hours').textContent = '00';
-        document.getElementById('cd-mins').textContent = '00';
-        document.getElementById('cd-secs').textContent = '00';
-        if (document.getElementById('pct')) document.getElementById('pct').textContent = '100%';
-        document.getElementById('progress-fill').style.width = '100%';
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const isPreview = urlParams.get('preview') === 'true';
-        if (isPreview) return;
-
-        // Turn off maintenance in Firebase automatically
-        fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json?nocache=' + Date.now())
-          .then(res => res.json())
-          .then(currentCfg => {
-            if (currentCfg) {
-              const updatedCfg = { ...currentCfg, mantenimiento: false };
-              delete updatedCfg.ghToken;
-              delete updatedCfg.ghRepo;
-              return fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json', {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(updatedCfg)
-              });
+        onValue(ref(db, 'radio_state/news/items'), snap => {
+            const data = snap.val();
+            if (Array.isArray(data) && data.length > 0) {
+                newsList = data;
+                renderNewsItem(newsList[newsIdx % newsList.length]);
             }
-          })
-          .then(() => {
-            localStorage.removeItem('yaire_config');
-            window.location.href = 'wrapped.html';
-          })
-          .catch(() => {
-            window.location.href = 'wrapped.html';
-          });
-        return;
-      }
+        });
 
-      // Progress
-      let percent = 0;
-      if (totalDuration > 0) {
-        percent = ((now - globalMaintStart) / totalDuration) * 100;
-        if (percent < 0) percent = 0;
-        if (percent > 100) percent = 100;
-      }
-      document.getElementById('progress-fill').style.width = percent + '%';
+        fetch('https://yaire-591ca-default-rtdb.firebaseio.com/radio_state/news/items.json')
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data) && data.length > 0) {
+                    newsList = data;
+                    renderNewsItem(newsList[newsIdx % newsList.length]);
+                }
+            })
+            .catch(() => { });
 
-      // Countdown values
-      const days    = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours   = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        setInterval(cycleNews, 9000);
+        renderNewsItem(newsList[0]);
 
-      document.getElementById('cd-days').textContent  = String(days).padStart(2, '0');
-      document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
-      document.getElementById('cd-mins').textContent  = String(minutes).padStart(2, '0');
-      document.getElementById('cd-secs').textContent  = String(seconds).padStart(2, '0');
-    }
+        // Manejador global de clic para iniciar audio si el navegador bloquea autoplay
+        window.triggerAudio = function () {
+            if (audio.paused) {
+                audio.play().then(() => {
+                    if (audioPill) audioPill.classList.add('hidden');
+                }).catch(() => { });
+            }
+        };
 
-    // Initial fetch
-    fetchConfig();
-    // Poll every 3 seconds for dynamic updates
-    setInterval(() => { if (!document.hidden) fetchConfig(); }, 3000);
-  </script>
+        window.addEventListener('click', triggerAudio, { passive: true });
+        window.addEventListener('touchstart', triggerAudio, { passive: true });
 
+        // Intentar autoplay de inmediato
+        setTimeout(() => {
+            audio.play().then(() => {
+                if (audioPill) audioPill.classList.add('hidden');
+            }).catch(() => {
+                if (audioPill) audioPill.classList.remove('hidden');
+            });
+        }, 800);
+    </script>
 </body>
 
 </html>
-
