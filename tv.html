@@ -86,7 +86,7 @@
       overflow: hidden;
     }
 
-    /* CONTENEDOR Y REPRODUCTOR YOUTUBE */
+    /* CONTENEDOR Y REPRODUCTOR YOUTUBE (FIT 16:9 COMPLETO) */
     #tv-youtube-container {
       position: absolute;
       inset: 0;
@@ -94,19 +94,24 @@
       height: 100%;
       background: #000;
       z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       overflow: hidden;
     }
 
     .yt-frame-wrapper {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 100vw;
-      height: 56.25vw; /* Ratio 16:9 */
-      min-height: 100vh;
-      min-width: 177.77vh; /* Ratio 16:9 */
-      transform: translate(-50%, -50%);
-      transform-origin: center center;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      max-width: calc(100vh * (16 / 9));
+      max-height: calc(100vw * (9 / 16));
+      max-width: calc(100dvh * (16 / 9));
+      aspect-ratio: 16 / 9;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     #tv-youtube-container iframe,
@@ -483,7 +488,7 @@
       transform: translate(-50%, -50%);
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       background: #000;
       pointer-events: none;
     }
