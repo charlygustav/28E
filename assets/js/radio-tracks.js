@@ -989,7 +989,8 @@
                         }
                         if (radioCoverWrap) {
                             radioCoverWrap.style.transform = 'scale(1)';
-                            radioCoverWrap.style.filter = 'drop-shadow(0 20px 40px rgba(0,0,0,0.75))';
+                            radioCoverWrap.style.filter = 'none';
+                            radioCoverWrap.style.boxShadow = '0 20px 40px -10px rgba(0, 0, 0, 0.55)';
                         }
                         if (radioEqBars) {
                             radioEqBars.forEach(b => b.style.animationPlayState = 'running');
@@ -1010,7 +1011,8 @@
                         }
                         if (radioCoverWrap) {
                             radioCoverWrap.style.transform = 'scale(0.92)';
-                            radioCoverWrap.style.filter = 'drop-shadow(0 12px 24px rgba(0,0,0,0.5))';
+                            radioCoverWrap.style.filter = 'none';
+                            radioCoverWrap.style.boxShadow = '0 10px 24px -6px rgba(0, 0, 0, 0.35)';
                         }
                         if (radioEqBars) {
                             radioEqBars.forEach(b => b.style.animationPlayState = 'paused');
