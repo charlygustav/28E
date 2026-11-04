@@ -169,6 +169,18 @@
                     if (compactArtist) compactArtist.innerHTML = `<span class="text-rose-500 font-bold tracking-wider animate-pulse">🔴 EN VIVO</span> · ${artistText}`;
                     if (radioArtist) radioArtist.textContent = artistText;
 
+                    if (isSpotPlaying && spotlightMode === 'radio') {
+                        document.title = `28E Radio · ${titleText}`;
+                        if ('mediaSession' in navigator) {
+                            navigator.mediaSession.metadata = new MediaMetadata({
+                                title: titleText,
+                                artist: artistText,
+                                album: '28E Radio',
+                                artwork: [{ src: 'tulip.ico?v=3', sizes: '512x512', type: 'image/x-icon' }]
+                            });
+                        }
+                    }
+
                     if (state.title && state.artist) {
                         fetchSpotlightArtwork({ title: state.title, artist: state.artist }).then(url => {
                             if (spotlightMode === 'radio') {
@@ -684,12 +696,14 @@
                     // Actualizar título de ventana y Media Session del Sistema Operativo
                     if (isSpotPlaying) {
                         if (spotlightMode === 'radio') {
-                            document.title = '28E FM (Live)';
+                            const rTitle = currentRadioState && currentRadioState.title ? currentRadioState.title : 'Radio en Vivo';
+                            const rArtist = currentRadioState && currentRadioState.artist ? currentRadioState.artist : 'Transmisión en Vivo';
+                            document.title = currentRadioState && currentRadioState.title ? `28E Radio · ${currentRadioState.title}` : '28E · Radio en Vivo';
                             if ('mediaSession' in navigator) {
                                 navigator.mediaSession.metadata = new MediaMetadata({
-                                    title: 'Spotlight Music',
-                                    artist: 'Live Broadcast',
-                                    album: '28E',
+                                    title: rTitle,
+                                    artist: rArtist,
+                                    album: '28E Radio',
                                     artwork: [{ src: 'tulip.ico?v=3', sizes: '512x512', type: 'image/x-icon' }]
                                 });
                             }
@@ -750,9 +764,15 @@
                 }
 
                 function spotlightUpdateTitle() {
-                    const track = spotlightTracks[currentSpotTrack];
-                    if (isSpotPlaying && track) {
-                        document.title = spotlightMode === 'radio' ? '28E FM (Live)' : `${track.title}`;
+                    if (isSpotPlaying) {
+                        if (spotlightMode === 'radio') {
+                            document.title = currentRadioState && currentRadioState.title
+                                ? `28E Radio · ${currentRadioState.title}`
+                                : '28E · Radio en Vivo';
+                        } else {
+                            const track = spotlightTracks[currentSpotTrack];
+                            document.title = track ? `${track.title}` : '28E';
+                        }
                     } else {
                         document.title = '28E';
                     }
@@ -1051,9 +1071,8 @@
                 // Restaurar título al volver a la pestaña
                 document.addEventListener('visibilitychange', () => {
                     if (document.visibilityState === 'visible') {
-                        if (isSpotPlaying && spotlightTracks[currentSpotTrack]) {
-                            const t = spotlightTracks[currentSpotTrack];
-                            document.title = spotlightMode === 'radio' ? '28E FM (Live)' : `${t.title}`;
+                        if (isSpotPlaying) {
+                            spotlightUpdateTitle();
                         } else {
                             document.title = '28E';
                         }
