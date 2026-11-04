@@ -117,6 +117,14 @@
                                 events: {
                                     onReady: (event) => {
                                         ytRadioReady = true;
+                                        const volSlider = document.getElementById('spotlight-radio-volume');
+                                        if (volSlider && typeof event.target.getVolume === 'function') {
+                                            try {
+                                                const curVol = event.target.getVolume();
+                                                volSlider.value = curVol;
+                                                volSlider.style.background = `linear-gradient(to right, #ffffff 0%, #ffffff ${curVol}%, rgba(255, 255, 255, 0.2) ${curVol}%, rgba(255, 255, 255, 0.2) 100%)`;
+                                            } catch (e) { }
+                                        }
                                         if (autoplay || (isSpotPlaying && spotlightMode === 'radio')) {
                                             try { event.target.playVideo(); } catch (e) { }
                                         }
@@ -147,14 +155,19 @@
                     const expArtist = document.getElementById('spotlight-expanded-artist');
                     const compactArtist = document.getElementById('spotlight-artist');
                     const compactTitle = document.getElementById('spotlight-title');
+                    const radioTitle = document.getElementById('spotlight-radio-title');
+                    const radioArtist = document.getElementById('spotlight-radio-artist');
 
                     const titleText = state.title || '28E Radio';
                     const artistText = state.artist || 'Transmisión en Vivo';
 
                     if (expTitle) expTitle.textContent = titleText;
                     if (compactTitle) compactTitle.textContent = titleText;
+                    if (radioTitle) radioTitle.textContent = titleText;
+
                     if (expArtist) expArtist.innerHTML = `<span class="text-rose-500 font-bold tracking-widest uppercase animate-pulse">🔴 EN VIVO</span> · ${artistText}`;
                     if (compactArtist) compactArtist.innerHTML = `<span class="text-rose-500 font-bold tracking-wider animate-pulse">🔴 EN VIVO</span> · ${artistText}`;
+                    if (radioArtist) radioArtist.textContent = artistText;
 
                     if (state.title && state.artist) {
                         fetchSpotlightArtwork({ title: state.title, artist: state.artist }).then(url => {
@@ -327,6 +340,19 @@
                         } else {
                             vinylArt.style.display = 'none';
                             if (vinylIcon) vinylIcon.style.display = '';
+                        }
+                    }
+                    // Radio View Hero Cover Art
+                    const radioHeroArt = document.getElementById('spotlight-radio-hero-art');
+                    const radioHeroIcon = document.getElementById('spotlight-radio-hero-icon');
+                    if (radioHeroArt) {
+                        if (artUrl) {
+                            radioHeroArt.src = artUrl;
+                            radioHeroArt.style.display = 'block';
+                            if (radioHeroIcon) radioHeroIcon.style.display = 'none';
+                        } else {
+                            radioHeroArt.style.display = 'none';
+                            if (radioHeroIcon) radioHeroIcon.style.display = '';
                         }
                     }
                     // Compact player thumbnail
@@ -820,6 +846,24 @@
                     }
                 }
 
+                
+                function handleRadioVolume(val) {
+                    const num = parseInt(val, 10);
+                    if (ytRadioPlayer && typeof ytRadioPlayer.setVolume === 'function') {
+                        try {
+                            ytRadioPlayer.setVolume(num);
+                            if (num > 0 && typeof ytRadioPlayer.isMuted === 'function' && ytRadioPlayer.isMuted()) {
+                                ytRadioPlayer.unMute();
+                            }
+                        } catch (e) { }
+                    }
+                    const slider = document.getElementById('spotlight-radio-volume');
+                    if (slider) {
+                        slider.style.background = `linear-gradient(to right, #ffffff 0%, #ffffff ${num}%, rgba(255, 255, 255, 0.2) ${num}%, rgba(255, 255, 255, 0.2) 100%)`;
+                    }
+                }
+                window.handleRadioVolume = handleRadioVolume;
+
                 function setSpotlightMode(mode) {
                     if (spotlightMode === mode) return;
                     spotlightMode = mode;
@@ -828,17 +872,8 @@
                     const btnMusic = document.getElementById('spot-mode-btn-music');
                     const btnRadio = document.getElementById('spot-mode-btn-radio');
                     const compactNext = document.getElementById('spotlight-compact-next');
-                    const expPrev = document.getElementById('spotlight-expanded-prev');
-                    const expNext = document.getElementById('spotlight-expanded-next');
-                    const expLoop = document.getElementById('spotlight-loop-btn');
-                    const expProgress = document.getElementById('spotlight-progress-container');
-                    const expTimeList = expProgress ? expProgress.previousElementSibling : null;
-                    const expList = document.getElementById('spotlight-expanded-list');
-                    const radioVis = document.getElementById('spotlight-radio-visualizer');
-                    const expTitle = document.getElementById('spotlight-expanded-title');
-                    const expArtist = document.getElementById('spotlight-expanded-artist');
-                    const compactTitle = document.getElementById('spotlight-title');
-                    const compactArtist = document.getElementById('spotlight-artist');
+                    const viewMusic = document.getElementById('spotlight-view-music');
+                    const viewRadio = document.getElementById('spotlight-view-radio');
 
                     // Pause current playback on switch
                     if (isSpotPlaying) {
@@ -852,6 +887,13 @@
                     if (mode === 'music') {
                         // Activate Music UI
                         stopYouTubeRadio();
+                        if (viewMusic) viewMusic.style.display = 'flex';
+                        if (viewRadio) {
+                            viewRadio.style.display = 'none';
+                            viewRadio.classList.add('hidden');
+                            viewRadio.classList.remove('flex');
+                        }
+
                         btnMusic.className = "px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full transition-all bg-white shadow-sm cursor-pointer";
                         btnRadio.className = "px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full transition-all text-zinc-400 hover:text-white cursor-pointer";
                         btnMusic.setAttribute('data-active', 'true');
@@ -859,20 +901,14 @@
                         btnRadio.setAttribute('data-active', 'false');
                         btnRadio.style.setProperty('color', '#A1A1AA', 'important');
                         if (compactNext) compactNext.style.display = '';
-                        if (expPrev) expPrev.style.visibility = 'visible';
-                        if (expNext) expNext.style.visibility = 'visible';
-                        if (expLoop) expLoop.style.visibility = 'visible';
-                        if (expProgress) expProgress.style.display = '';
-                        if (expTimeList) expTimeList.style.display = '';
-                        if (expList) expList.style.display = '';
-                        if (radioVis) {
-                            radioVis.classList.add('hidden');
-                            radioVis.classList.remove('flex');
-                        }
 
                         // Restore music track info
                         const t = spotlightTracks[currentSpotTrack];
                         if (t) {
+                            const compactTitle = document.getElementById('spotlight-title');
+                            const compactArtist = document.getElementById('spotlight-artist');
+                            const expTitle = document.getElementById('spotlight-expanded-title');
+                            const expArtist = document.getElementById('spotlight-expanded-artist');
                             if (compactTitle) compactTitle.textContent = t.title;
                             if (compactArtist) compactArtist.textContent = t.artist;
                             if (expTitle) expTitle.textContent = t.title;
@@ -882,9 +918,16 @@
                             });
                         }
                     } else {
-                        // Activate Radio UI (Pure Audio Stream + Live Metadata & Artwork)
+                        // Activate Radio UI (Apple-Style Live Radio Experience)
                         if (spotAudio) spotAudio.pause();
                         initYouTubeRadio(isSpotPlaying);
+
+                        if (viewMusic) viewMusic.style.display = 'none';
+                        if (viewRadio) {
+                            viewRadio.style.display = 'flex';
+                            viewRadio.classList.remove('hidden');
+                            viewRadio.classList.add('flex');
+                        }
 
                         btnRadio.className = "px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full transition-all bg-rose-500 shadow-sm cursor-pointer";
                         btnMusic.className = "px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full transition-all text-zinc-400 hover:text-white cursor-pointer";
@@ -893,26 +936,30 @@
                         btnMusic.setAttribute('data-active', 'false');
                         btnMusic.style.setProperty('color', '#A1A1AA', 'important');
                         if (compactNext) compactNext.style.display = 'none';
-                        if (expPrev) expPrev.style.visibility = 'hidden';
-                        if (expNext) expNext.style.visibility = 'hidden';
-                        if (expLoop) expLoop.style.visibility = 'hidden';
-                        if (expProgress) expProgress.style.display = 'none';
-                        if (expTimeList) expTimeList.style.display = 'none';
-                        if (expList) expList.style.display = 'none';
-                        if (radioVis) {
-                            radioVis.classList.remove('hidden');
-                            radioVis.classList.add('flex');
-                        }
 
                         // Set live track info from Firebase stream state
                         if (currentRadioState) {
                             updateRadioTrackUI(currentRadioState);
                         } else {
+                            const compactTitle = document.getElementById('spotlight-title');
+                            const compactArtist = document.getElementById('spotlight-artist');
+                            const radioTitle = document.getElementById('spotlight-radio-title');
+                            const radioArtist = document.getElementById('spotlight-radio-artist');
                             if (compactTitle) compactTitle.textContent = '28E Radio';
                             if (compactArtist) compactArtist.innerHTML = `<span class="text-rose-500 font-bold tracking-wider animate-pulse">🔴 EN VIVO</span>`;
-                            if (expTitle) expTitle.textContent = '28E Radio';
-                            if (expArtist) expArtist.innerHTML = `<span class="text-rose-500 font-bold tracking-widest uppercase animate-pulse">🔴 TRANSMISIÓN EN VIVO</span>`;
+                            if (radioTitle) radioTitle.textContent = '28E Radio';
+                            if (radioArtist) radioArtist.textContent = 'Transmisión en Vivo';
                             updateAllArtwork('tulip.ico?v=3');
+                        }
+
+                        // Sync volume slider
+                        const volSlider = document.getElementById('spotlight-radio-volume');
+                        if (volSlider && ytRadioPlayer && typeof ytRadioPlayer.getVolume === 'function') {
+                            try {
+                                const curVol = ytRadioPlayer.getVolume();
+                                volSlider.value = curVol;
+                                volSlider.style.background = `linear-gradient(to right, #ffffff 0%, #ffffff ${curVol}%, rgba(255, 255, 255, 0.2) ${curVol}%, rgba(255, 255, 255, 0.2) 100%)`;
+                            } catch (e) { }
                         }
                     }
                 }
@@ -921,23 +968,52 @@
                     const icon = document.getElementById('spotlight-play-icon');
                     const iconWrap = document.getElementById('spotlight-icon-wrap');
                     const expPlayIcon = document.getElementById('spotlight-expanded-play-icon');
+                    const radioPlayIcon = document.getElementById('spotlight-radio-play-icon');
+                    const radioCoverWrap = document.getElementById('spotlight-radio-cover-wrap');
+                    const radioEqBars = document.querySelectorAll('.eq-bar-apple');
                     const vinylSpin = document.getElementById('spotlight-vinyl-spin');
 
                     if (isSpotPlaying) {
-                        icon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-                        icon.classList.remove('ml-0.5');
-                        iconWrap.classList.add('bg-rose-500/20');
+                        if (icon) {
+                            icon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+                            icon.classList.remove('ml-0.5');
+                        }
+                        if (iconWrap) iconWrap.classList.add('bg-rose-500/20');
                         if (expPlayIcon) {
                             expPlayIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
                             expPlayIcon.classList.remove('ml-0.5');
                         }
+                        if (radioPlayIcon) {
+                            radioPlayIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+                            radioPlayIcon.classList.remove('ml-0.5');
+                        }
+                        if (radioCoverWrap) {
+                            radioCoverWrap.style.transform = 'scale(1)';
+                            radioCoverWrap.style.filter = 'drop-shadow(0 20px 40px rgba(0,0,0,0.75))';
+                        }
+                        if (radioEqBars) {
+                            radioEqBars.forEach(b => b.style.animationPlayState = 'running');
+                        }
                     } else {
-                        icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
-                        icon.classList.add('ml-0.5');
-                        iconWrap.classList.remove('bg-rose-500/20');
+                        if (icon) {
+                            icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+                            icon.classList.add('ml-0.5');
+                        }
+                        if (iconWrap) iconWrap.classList.remove('bg-rose-500/20');
                         if (expPlayIcon) {
                             expPlayIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
                             expPlayIcon.classList.add('ml-0.5');
+                        }
+                        if (radioPlayIcon) {
+                            radioPlayIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+                            radioPlayIcon.classList.add('ml-0.5');
+                        }
+                        if (radioCoverWrap) {
+                            radioCoverWrap.style.transform = 'scale(0.92)';
+                            radioCoverWrap.style.filter = 'drop-shadow(0 12px 24px rgba(0,0,0,0.5))';
+                        }
+                        if (radioEqBars) {
+                            radioEqBars.forEach(b => b.style.animationPlayState = 'paused');
                         }
                     }
 
@@ -945,7 +1021,7 @@
                         vinylSpin.style.animationPlayState = isSpotPlaying ? 'running' : 'paused';
                     }
 
-                    if (isSpotlightExpanded) {
+                    if (isSpotlightExpanded && spotlightMode === 'music') {
                         renderSpotlightPlaylist();
                     }
                 }
