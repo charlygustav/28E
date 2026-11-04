@@ -20,6 +20,15 @@
     <script>
         (function () {
             try {
+                var host = window.location.hostname;
+                if (host === 'dclf.yaire.site') {
+                    window.location.replace('dclf.html' + window.location.search);
+                    return;
+                }
+                if (host === 'tv.yaire.site') {
+                    window.location.replace('tv.html' + window.location.search);
+                    return;
+                }
                 var p = new URLSearchParams(window.location.search);
                 if (p.get('dev') === '1' || p.get('admin') === '1') return;
                 var target = new Date('2026-11-08T00:00:00-04:00');

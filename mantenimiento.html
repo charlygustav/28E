@@ -6,6 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="google" content="notranslate">
     <title>28E · Apertura de la Web</title>
+    <script>
+        (function () {
+            try {
+                var host = window.location.hostname;
+                if (host === 'dclf.yaire.site') {
+                    window.location.replace('dclf.html' + window.location.search);
+                } else if (host === 'tv.yaire.site') {
+                    window.location.replace('tv.html' + window.location.search);
+                }
+            } catch (e) {}
+        })();
+    </script>
     <link rel="icon" type="image/x-icon" href="dclf_game.ico?v=1">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
