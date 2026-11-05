@@ -86,15 +86,15 @@
       overflow: hidden;
     }
 
-    /* UNIDAD TELEVISOR SONY FD TRINITRON PANORÁMICO ULTRAWIDE */
+    /* UNIDAD TELEVISOR SONY CON MOCKUP IA EXPANDIDO */
     .tv-mockup-wrapper {
       position: relative;
       width: 100%;
       height: 100%;
-      max-width: calc(100vh * (3840 / 1613));
-      max-height: calc(100vw * (1613 / 3840));
-      max-width: calc(100dvh * (3840 / 1613));
-      aspect-ratio: 3840 / 1613;
+      max-width: calc(100vh * (1376 / 768));
+      max-height: calc(100vw * (768 / 1376));
+      max-width: calc(100dvh * (1376 / 768));
+      aspect-ratio: 1376 / 768;
       margin: auto;
       display: flex;
       align-items: center;
@@ -102,13 +102,13 @@
       overflow: hidden;
     }
 
-    /* PANTALLA INTERIOR (APERTURA EXACTA DEL RECORTE TRANSPARENTE 16:9) */
+    /* PANTALLA INTERIOR (APERTURA EXACTA RECORTE TRANSPARENTE) */
     .tv-screen-aperture {
       position: absolute;
-      left: 20.365%;
-      top: 5.27%;
-      width: 60.286%;
-      height: 80.285%;
+      left: 10.647%;
+      top: 5.273%;
+      width: 79.978%;
+      height: 80.404%;
       background: #000;
       z-index: 2;
       overflow: hidden;
@@ -179,146 +179,6 @@
 
     .crt-overlay.active {
       opacity: 1;
-    }
-
-    /* ══════════════════════════════════════════════════════════════════
-       LAS 3 OPCIONES DE INMERSIÓN
-       ══════════════════════════════════════════════════════════════════ */
-
-    /* ── OPCIÓN 1: RESPLANDOR AMBILIGHT AURA TRASERO ── */
-    .tv-ambient-backdrop {
-      position: absolute;
-      inset: -20vh -20vw;
-      pointer-events: none;
-      z-index: 1;
-      opacity: 0;
-      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-      background: 
-        radial-gradient(ellipse 65% 55% at 50% 50%, rgba(142, 68, 240, 0.45) 0%, rgba(68, 25, 145, 0.25) 45%, rgba(18, 10, 36, 0.12) 75%, transparent 100%),
-        radial-gradient(circle at 50% 85%, rgba(230, 80, 160, 0.3) 0%, transparent 60%);
-      filter: blur(65px);
-      transform: scale(1.08);
-      animation: ambilightBreathing 8s ease-in-out infinite alternate;
-    }
-
-    @keyframes ambilightBreathing {
-      0% {
-        opacity: 0.85;
-        transform: scale(1.05) translateY(0);
-        filter: blur(60px) hue-rotate(0deg);
-      }
-      50% {
-        opacity: 1;
-        transform: scale(1.12) translateY(-10px);
-        filter: blur(75px) hue-rotate(18deg);
-      }
-      100% {
-        opacity: 0.9;
-        transform: scale(1.08) translateY(6px);
-        filter: blur(65px) hue-rotate(-18deg);
-      }
-    }
-
-    .mode-ambilight .tv-ambient-backdrop {
-      opacity: 1;
-    }
-
-    .mode-ambilight .tv-mockup-wrapper {
-      filter: drop-shadow(0 25px 60px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 45px rgba(142, 68, 240, 0.38));
-      transition: max-width 0.45s cubic-bezier(0.16, 1, 0.3, 1), width 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.45s ease;
-    }
-
-    /* ── OPCIÓN 2: HABITACIÓN RETRO NOCTURNA (LO-FI DESK & STUDIO) ── */
-    .tv-room-backdrop {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 1;
-      opacity: 0;
-      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-      background:
-        /* Superficie de escritorio de madera oscura */
-        linear-gradient(to top, rgba(14, 11, 10, 0.98) 0%, rgba(26, 20, 17, 0.92) 14%, rgba(12, 10, 10, 0.4) 22%, transparent 32%),
-        /* Iluminación tenue de lámpara cálida a la izquierda */
-        radial-gradient(circle at 14% 30%, rgba(255, 175, 95, 0.22) 0%, transparent 45%),
-        /* Luz de neón morada anime a la derecha */
-        radial-gradient(circle at 86% 35%, rgba(185, 75, 245, 0.25) 0%, transparent 50%),
-        /* Pared de estudio nocturno con viñeta */
-        radial-gradient(circle at 50% 45%, #181522 0%, #0d0c13 55%, #050508 100%);
-    }
-
-    .tv-room-backdrop::before {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 18%;
-      background: linear-gradient(90deg, rgba(30, 24, 20, 0.9) 0%, rgba(48, 38, 32, 0.95) 50%, rgba(30, 24, 20, 0.9) 100%);
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-      opacity: 0.85;
-      pointer-events: none;
-    }
-
-    .mode-room .tv-room-backdrop {
-      opacity: 1;
-    }
-
-    .mode-room .tv-mockup-wrapper {
-      filter: drop-shadow(0 35px 70px rgba(0, 0, 0, 0.98)) drop-shadow(0 15px 30px rgba(0, 0, 0, 0.85));
-      transition: max-width 0.45s cubic-bezier(0.16, 1, 0.3, 1), width 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.45s ease;
-    }
-
-    /* ── OPCIÓN 3: MODO LLENAR PANTALLA (EDGE TO EDGE / BORDE A BORDE) ── */
-    .mode-fill .tv-mockup-wrapper {
-      width: 100vw !important;
-      max-width: 100vw !important;
-      height: calc(100vw * (6144 / 11016)) !important;
-      max-height: none !important;
-      filter: none;
-      transition: max-width 0.45s cubic-bezier(0.16, 1, 0.3, 1), width 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.45s ease;
-    }
-
-    /* SELECTOR DE MODO EN BARRA SUPERIOR */
-    .apple-mode-selector {
-      pointer-events: auto;
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      padding: 4px;
-      border-radius: 9999px;
-    }
-
-    .apple-mode-btn {
-      border: none;
-      background: transparent;
-      color: rgba(255, 255, 255, 0.7);
-      font-family: inherit;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      padding: 5px 12px;
-      border-radius: 9999px;
-      cursor: pointer;
-      outline: none;
-      transition: background 0.18s ease, color 0.18s ease, transform 0.12s cubic-bezier(0.2, 0, 0, 1);
-      white-space: nowrap;
-    }
-
-    .apple-mode-btn:hover {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .apple-mode-btn:active {
-      transform: scale(0.94);
-    }
-
-    .apple-mode-btn.active {
-      background: rgba(255, 255, 255, 0.22);
-      color: #ffffff;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
     }
 
     /* ── COMPONENTES ESTILO APPLE (FROSTED GLASS & SPRINGS) ── */
@@ -674,13 +534,6 @@
       .apple-slider-wrap {
         width: 56px;
       }
-      .apple-mode-btn {
-        padding: 4px 8px;
-        font-size: 11px;
-      }
-      .apple-top-bar {
-        gap: 6px;
-      }
     }
   </style>
 </head>
@@ -695,14 +548,8 @@
   </div>
 
   <!-- ESCENARIO TEATRAL PRINCIPAL -->
-  <main class="tv-cinema-stage mode-ambilight" id="cinema-stage">
+  <main class="tv-cinema-stage" id="cinema-stage">
     
-    <!-- CAPA MODO 1: RESPLANDOR AMBILIGHT AURA -->
-    <div class="tv-ambient-backdrop" id="tv-ambient-backdrop"></div>
-
-    <!-- CAPA MODO 2: HABITACIÓN RETRO NOCTURNA -->
-    <div class="tv-room-backdrop" id="tv-room-backdrop"></div>
-
     <!-- PANTALLA DE EMISIÓN -->
     <div class="tv-screen-viewport" id="tv-screen">
       
@@ -717,8 +564,8 @@
           <div class="crt-overlay" id="crt-overlay"></div>
         </div>
 
-        <!-- Chasis del televisor panorámico extendido con IA -->
-        <img class="tv-mockup-frame" src="assets/mockups/mockup_chassis_ultrawide.png" alt="28E TV CRT Mockup Panorámico">
+        <!-- Chasis del televisor overlay -->
+        <img class="tv-mockup-frame" src="assets/mockups/ai_chassis_expanded_1.png" alt="28E TV CRT Mockup">
       </div>
 
       <!-- FLASH DE CONFIRMACIÓN AL CENTRO -->
@@ -732,13 +579,6 @@
           <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
           <span>Vault</span>
         </a>
-
-        <!-- SELECTOR DE INMERSIÓN (3 OPCIONES) -->
-        <nav class="apple-glass apple-mode-selector" id="apple-mode-selector" aria-label="Modo de Inmersión">
-          <button class="apple-mode-btn active" data-mode="ambilight" title="Opción 1: Resplandor Ambilight">✨ Ambilight</button>
-          <button class="apple-mode-btn" data-mode="room" title="Opción 2: Habitación Retro">🛋️ Habitación</button>
-          <button class="apple-mode-btn" data-mode="fill" title="Opción 3: Llenar Pantalla">📐 Llenar</button>
-        </nav>
 
         <div class="apple-glass apple-live-badge">
           <span class="apple-live-dot"></span>
@@ -783,11 +623,6 @@
         <!-- CRT -->
         <button class="apple-btn apple-icon-btn" id="btn-crt" aria-label="Filtro CRT">
           <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="3"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        </button>
-
-        <!-- Selector Rápido de Inmersión -->
-        <button class="apple-btn apple-icon-btn" id="btn-immersion" aria-label="Cambiar Modo Inmersivo" title="Cambiar Inmersión (i)">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         </button>
 
         <!-- Pantalla Completa -->
@@ -855,12 +690,6 @@
           flashIcon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>';
         } else if (type === 'mute') {
           flashIcon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
-        } else if (type === 'ambilight') {
-          flashIcon.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
-        } else if (type === 'room') {
-          flashIcon.innerHTML = '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>';
-        } else if (type === 'fill') {
-          flashIcon.innerHTML = '<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>';
         }
 
         if (window.gsap) {
@@ -1023,60 +852,6 @@
         }
       });
 
-      // ── GESTIÓN DE MODOS DE INMERSIÓN (3 OPCIONES) ──
-      const IMMERSION_MODES = ['ambilight', 'room', 'fill'];
-      let currentImmersion = 'ambilight';
-      try {
-        const saved = localStorage.getItem('28e_tv_immersion_mode');
-        if (saved && IMMERSION_MODES.includes(saved)) currentImmersion = saved;
-      } catch (e) {}
-
-      const modeButtons = document.querySelectorAll('.apple-mode-btn');
-      const btnImmersion = document.getElementById('btn-immersion');
-
-      function setImmersionMode(mode, showFeedback = true) {
-        if (!IMMERSION_MODES.includes(mode)) mode = 'ambilight';
-        currentImmersion = mode;
-        try { localStorage.setItem('28e_tv_immersion_mode', mode); } catch (e) {}
-
-        if (cinemaStage) {
-          cinemaStage.classList.remove('mode-ambilight', 'mode-room', 'mode-fill');
-          cinemaStage.classList.add(`mode-${mode}`);
-        }
-
-        modeButtons.forEach(btn => {
-          btn.classList.toggle('active', btn.getAttribute('data-mode') === mode);
-        });
-
-        if (btnImmersion) {
-          btnImmersion.style.color = mode !== 'fill' ? 'var(--accent-active)' : 'rgba(255, 255, 255, 0.88)';
-        }
-
-        if (showFeedback) {
-          showCenterFlash(mode);
-        }
-      }
-
-      modeButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const targetMode = btn.getAttribute('data-mode');
-          setImmersionMode(targetMode, true);
-          wakeControls();
-        });
-      });
-
-      if (btnImmersion) {
-        btnImmersion.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const nextIdx = (IMMERSION_MODES.indexOf(currentImmersion) + 1) % IMMERSION_MODES.length;
-          setImmersionMode(IMMERSION_MODES[nextIdx], true);
-          wakeControls();
-        });
-      }
-
-      setImmersionMode(currentImmersion, false);
-
       // ── ATAJOS DE TECLADO ──
       window.addEventListener('keydown', (e) => {
         if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
@@ -1091,9 +866,6 @@
         } else if (key === 'c') {
           e.preventDefault();
           btnCrt.click();
-        } else if (key === 'i') {
-          e.preventDefault();
-          if (btnImmersion) btnImmersion.click();
         } else if (e.code === 'Space' || key === 'k') {
           e.preventDefault();
           togglePlayPause(true);
