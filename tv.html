@@ -328,43 +328,6 @@
       stroke-linejoin: round;
     }
 
-    .apple-live-badge {
-      pointer-events: auto;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 6px 12px;
-      border-radius: 9999px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      color: rgba(255, 255, 255, 0.95);
-    }
-
-    .apple-live-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--accent-live);
-      box-shadow: 0 0 10px var(--accent-live);
-      position: relative;
-    }
-
-    .apple-live-dot::after {
-      content: '';
-      position: absolute;
-      inset: -3px;
-      border-radius: 50%;
-      border: 1.5px solid var(--accent-live);
-      opacity: 0.8;
-      animation: livePulse 2s cubic-bezier(0, 0, 0.2, 1) infinite;
-    }
-
-    @keyframes livePulse {
-      0% { transform: scale(1); opacity: 0.8; }
-      100% { transform: scale(2.4); opacity: 0; }
-    }
-
     /* FLASH DE CONFIRMACIÓN AL CENTRO (APPLE STYLE FEEDBACK) */
     .apple-action-flash {
       position: absolute;
@@ -535,11 +498,6 @@
           <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
           <span>Vault</span>
         </a>
-
-        <div class="apple-glass apple-live-badge">
-          <span class="apple-live-dot"></span>
-          <span>EN VIVO</span>
-        </div>
       </header>
 
       <!-- HINT PARA ACTIVAR AUDIO SI EL NAVEGADOR LO INICIA SILENCIADO -->
