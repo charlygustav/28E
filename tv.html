@@ -678,6 +678,10 @@
         }
         showCenterFlash('power-off');
 
+        if (ytPlayer && typeof ytPlayer.mute === 'function') {
+          ytPlayer.mute();
+        }
+
         if (window.gsap && tvContainer) {
           gsap.killTweensOf(tvContainer);
           gsap.timeline()
@@ -696,20 +700,10 @@
             })
             .to(tvContainer, {
               opacity: 0,
-              duration: 0.08,
-              onComplete: () => {
-                if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
-                  ytPlayer.pauseVideo();
-                }
-                isPlaying = false;
-                updatePlayPauseIcon(false);
-              }
+              duration: 0.08
             });
         } else if (tvContainer) {
           tvContainer.style.opacity = '0';
-          if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') ytPlayer.pauseVideo();
-          isPlaying = false;
-          updatePlayPauseIcon(false);
         }
       }
 
@@ -723,11 +717,11 @@
         }
         showCenterFlash('power-on');
 
-        if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
-          ytPlayer.playVideo();
+        if (ytPlayer) {
+          if (typeof ytPlayer.playVideo === 'function') ytPlayer.playVideo();
+          if (!isMuted && typeof ytPlayer.unMute === 'function') ytPlayer.unMute();
         }
         isPlaying = true;
-        updatePlayPauseIcon(true);
 
         if (window.gsap && tvContainer) {
           gsap.killTweensOf(tvContainer);
@@ -806,24 +800,15 @@
         });
       }
 
-      // ── PLAY / PAUSE ──
+      // ── CONMUTAR AUDIO (MUTE / UNMUTE) EN LUGAR DE PAUSAR ──
       function togglePlayPause(userTriggered = false) {
         if (!isTvPowered) {
           playMechanicalClick(true);
           turnOnTV();
           return;
         }
-        if (!ytPlayer) return;
-        if (isPlaying) {
-          if (typeof ytPlayer.pauseVideo === 'function') ytPlayer.pauseVideo();
-          isPlaying = false;
-          if (userTriggered) showCenterFlash('pause');
-        } else {
-          if (typeof ytPlayer.playVideo === 'function') ytPlayer.playVideo();
-          isPlaying = true;
-          if (isMuted) setMuteState(false, 0.65, false);
-          if (userTriggered) showCenterFlash('play');
-        }
+        // En una emisión en vivo de televisión 24/7 nunca se pausa: alternar sonido evita que YouTube congele la pantalla
+        setMuteState(!isMuted, null, userTriggered);
       }
 
       // ── CLIC EN PANTALLA ──
@@ -834,11 +819,8 @@
           wakeControls();
           return;
         }
-        if (isMuted) {
-          setMuteState(false, 0.65, true);
-        } else {
-          togglePlayPause(true);
-        }
+        // Al hacer clic conmuta el sonido (mute / unmute) manteniendo la transmisión en vivo siempre continua
+        setMuteState(!isMuted, null, true);
         wakeControls();
       });
 
@@ -939,16 +921,18 @@
               onStateChange: function (event) {
                 if (event.data === YT.PlayerState.PLAYING) {
                   isPlaying = true;
-                  updatePlayPauseIcon(true);
                 } else if (event.data === YT.PlayerState.PAUSED) {
-                  isPlaying = false;
-                  updatePlayPauseIcon(false);
+                  // Transmisión siempre en vivo: si se detecta pausa externa, reactivar inmediatamente
+                  if (isTvPowered && ytPlayer && typeof ytPlayer.playVideo === 'function') {
+                    ytPlayer.playVideo();
+                  }
+                  isPlaying = isTvPowered;
                 } else if (event.data === YT.PlayerState.ENDED) {
                   setTimeout(() => {
                     if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
                       ytPlayer.playVideo();
                     }
-                  }, 3500);
+                  }, 2000);
                 }
               },
               onError: function () {
