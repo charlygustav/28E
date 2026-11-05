@@ -182,6 +182,73 @@
       opacity: 1;
     }
 
+    /* ── BOTONES FÍSICOS INTERACTIVOS EN EL CHASIS DEL TELEVISOR ── */
+    .tv-hardware-btn {
+      position: absolute;
+      z-index: 12;
+      background: transparent;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      pointer-events: auto;
+      padding: 0;
+      margin: 0;
+      transition: transform 0.08s cubic-bezier(0.2, 0, 0, 1), background-color 0.15s ease, box-shadow 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .tv-hardware-btn:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.2);
+    }
+
+    .tv-hardware-btn:active {
+      transform: scale(0.93) translateY(1px);
+      background-color: rgba(0, 0, 0, 0.25);
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.75);
+    }
+
+    /* Volumen - */
+    .tv-hw-vol-down {
+      left: 81.76%;
+      top: 94.01%;
+      width: 3.63%;
+      height: 4.56%;
+      border-radius: 4px 0 0 4px;
+    }
+
+    /* Volumen + */
+    .tv-hw-vol-up {
+      left: 85.47%;
+      top: 94.01%;
+      width: 3.71%;
+      height: 4.56%;
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* Botón Power (Circular) */
+    .tv-hw-power {
+      left: 91.28%;
+      top: 92.71%;
+      width: 3.20%;
+      height: 5.73%;
+      border-radius: 50% !important;
+    }
+
+    .tv-hw-power:hover {
+      background-color: rgba(255, 255, 255, 0.12);
+      box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.28), 0 0 6px rgba(255, 255, 255, 0.15);
+    }
+
+    .tv-hw-power:active {
+      transform: scale(0.91) translateY(1.2px);
+      box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.85);
+    }
+
+    .tv-hw-power.is-off {
+      box-shadow: inset 0 0 5px rgba(255, 59, 48, 0.85), 0 0 8px rgba(255, 59, 48, 0.5);
+    }
+
     /* ── COMPONENTES ESTILO APPLE (FROSTED GLASS & SPRINGS) ── */
     .apple-glass {
       background: var(--apple-glass);
@@ -567,6 +634,11 @@
 
         <!-- Chasis del televisor overlay definitivo original -->
         <img class="tv-mockup-frame" src="assets/mockups/ai_chassis_expanded_1.png" alt="28E TV CRT Mockup">
+
+        <!-- BOTONES FÍSICOS INTERACTIVOS EN EL CHASIS -->
+        <button class="tv-hardware-btn tv-hw-vol-down" id="hw-vol-down" aria-label="Bajar Volumen (-)" title="Bajar Volumen (-)" type="button"></button>
+        <button class="tv-hardware-btn tv-hw-vol-up" id="hw-vol-up" aria-label="Subir Volumen (+)" title="Subir Volumen (+)" type="button"></button>
+        <button class="tv-hardware-btn tv-hw-power" id="hw-power" aria-label="Apagar / Encender TV" title="Power" type="button"></button>
       </div>
 
       <!-- FLASH DE CONFIRMACIÓN AL CENTRO -->
@@ -664,6 +736,56 @@
       const flashIcon = document.getElementById('flash-icon');
       const unmutePill = document.getElementById('apple-unmute-pill');
       const ytClickShield = document.getElementById('yt-click-shield');
+      const btnHwVolDown = document.getElementById('hw-vol-down');
+      const btnHwVolUp = document.getElementById('hw-vol-up');
+      const btnHwPower = document.getElementById('hw-power');
+      const tvContainer = document.getElementById('tv-youtube-container');
+
+      let isTvPowered = true;
+
+      // ── SONIDO TÁCTIL DE BOTONES FÍSICOS (WEB AUDIO API) ──
+      let audioCtx = null;
+      function playMechanicalClick(isPower = false) {
+        try {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContextClass) return;
+          if (!audioCtx) audioCtx = new AudioContextClass();
+          if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+          }
+          const t = audioCtx.currentTime;
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          if (isPower) {
+            // Relé mecánico / switch pesado para Power
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(320, t);
+            osc.frequency.exponentialRampToValueAtTime(45, t + 0.05);
+
+            gain.gain.setValueAtTime(0.32, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(t);
+            osc.stop(t + 0.05);
+          } else {
+            // Micro-switch táctil para volumen +/-
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1400, t);
+            osc.frequency.exponentialRampToValueAtTime(160, t + 0.025);
+
+            gain.gain.setValueAtTime(0.2, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.025);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(t);
+            osc.stop(t + 0.025);
+          }
+        } catch (e) {}
+      }
 
       // ── WAKE & IDLE (APPLE BEHAVIOR) ──
       function wakeControls() {
@@ -691,6 +813,8 @@
           flashIcon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>';
         } else if (type === 'mute') {
           flashIcon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
+        } else if (type === 'power-off' || type === 'power-on') {
+          flashIcon.innerHTML = '<path d="M18.36 6.64a9 9 0 1 1-12.73 0M12 2v10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
         }
 
         if (window.gsap) {
@@ -789,8 +913,152 @@
         });
       }
 
+      // ── CONTROL DE ENERGÍA (POWER ON / OFF ESTILO CRT SONY) ──
+      function turnOffTV() {
+        if (!isTvPowered) return;
+        isTvPowered = false;
+        if (btnHwPower) {
+          btnHwPower.classList.add('is-off');
+          btnHwPower.setAttribute('aria-label', 'Encender TV');
+          btnHwPower.setAttribute('title', 'Power (Encender)');
+        }
+        showCenterFlash('power-off');
+
+        if (window.gsap && tvContainer) {
+          gsap.killTweensOf(tvContainer);
+          gsap.timeline()
+            .to(tvContainer, {
+              scaleY: 0.005,
+              scaleX: 1.02,
+              filter: 'brightness(2.2) contrast(1.4)',
+              duration: 0.14,
+              ease: 'power2.in'
+            })
+            .to(tvContainer, {
+              scaleX: 0.005,
+              filter: 'brightness(4)',
+              duration: 0.12,
+              ease: 'power3.in'
+            })
+            .to(tvContainer, {
+              opacity: 0,
+              duration: 0.08,
+              onComplete: () => {
+                if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
+                  ytPlayer.pauseVideo();
+                }
+                isPlaying = false;
+                updatePlayPauseIcon(false);
+              }
+            });
+        } else if (tvContainer) {
+          tvContainer.style.opacity = '0';
+          if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') ytPlayer.pauseVideo();
+          isPlaying = false;
+          updatePlayPauseIcon(false);
+        }
+      }
+
+      function turnOnTV() {
+        if (isTvPowered) return;
+        isTvPowered = true;
+        if (btnHwPower) {
+          btnHwPower.classList.remove('is-off');
+          btnHwPower.setAttribute('aria-label', 'Apagar TV');
+          btnHwPower.setAttribute('title', 'Power (Apagar)');
+        }
+        showCenterFlash('power-on');
+
+        if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+          ytPlayer.playVideo();
+        }
+        isPlaying = true;
+        updatePlayPauseIcon(true);
+
+        if (window.gsap && tvContainer) {
+          gsap.killTweensOf(tvContainer);
+          gsap.set(tvContainer, { opacity: 1, scaleX: 0.005, scaleY: 0.005, filter: 'brightness(3.5)' });
+          gsap.timeline()
+            .to(tvContainer, {
+              scaleX: 1.02,
+              scaleY: 0.005,
+              filter: 'brightness(2)',
+              duration: 0.14,
+              ease: 'power3.out'
+            })
+            .to(tvContainer, {
+              scaleX: 1,
+              scaleY: 1,
+              filter: 'brightness(1) contrast(1)',
+              duration: 0.22,
+              ease: 'back.out(1.2)'
+            });
+        } else if (tvContainer) {
+          tvContainer.style.opacity = '1';
+          tvContainer.style.transform = 'none';
+          tvContainer.style.filter = 'none';
+        }
+      }
+
+      function toggleTvPower() {
+        if (isTvPowered) {
+          turnOffTV();
+        } else {
+          turnOnTV();
+        }
+      }
+
+      // ── BOTONES FÍSICOS DEL CHASIS DEL MOCKUP ──
+      if (btnHwVolDown) {
+        btnHwVolDown.addEventListener('click', (e) => {
+          e.stopPropagation();
+          playMechanicalClick(false);
+          if (!isTvPowered) {
+            turnOnTV();
+            return;
+          }
+          const currentVal = isMuted ? 0 : currentVolume;
+          const nextVol = Math.max(0, Math.round((currentVal - 0.10) * 10) / 10);
+          if (nextVol <= 0.05) {
+            setMuteState(true, 0, true);
+          } else {
+            setMuteState(false, nextVol, true);
+          }
+          wakeControls();
+        });
+      }
+
+      if (btnHwVolUp) {
+        btnHwVolUp.addEventListener('click', (e) => {
+          e.stopPropagation();
+          playMechanicalClick(false);
+          if (!isTvPowered) {
+            turnOnTV();
+            return;
+          }
+          const currentVal = isMuted ? 0 : currentVolume;
+          const nextVol = Math.min(1.0, Math.round((currentVal + 0.10) * 10) / 10);
+          setMuteState(false, Math.max(0.10, nextVol), true);
+          wakeControls();
+        });
+      }
+
+      if (btnHwPower) {
+        btnHwPower.addEventListener('click', (e) => {
+          e.stopPropagation();
+          playMechanicalClick(true);
+          toggleTvPower();
+          wakeControls();
+        });
+      }
+
       // ── PLAY / PAUSE ──
       function togglePlayPause(userTriggered = false) {
+        if (!isTvPowered) {
+          playMechanicalClick(true);
+          turnOnTV();
+          return;
+        }
         if (!ytPlayer) return;
         if (isPlaying) {
           if (typeof ytPlayer.pauseVideo === 'function') ytPlayer.pauseVideo();
@@ -813,6 +1081,12 @@
 
       // ── CLIC EN PANTALLA ──
       ytClickShield.addEventListener('click', () => {
+        if (!isTvPowered) {
+          playMechanicalClick(true);
+          turnOnTV();
+          wakeControls();
+          return;
+        }
         if (isMuted) {
           setMuteState(false, 0.65, true);
         } else {
@@ -871,6 +1145,15 @@
           e.preventDefault();
           togglePlayPause(true);
           wakeControls();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (btnHwVolUp) btnHwVolUp.click();
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (btnHwVolDown) btnHwVolDown.click();
+        } else if (key === 'p') {
+          e.preventDefault();
+          if (btnHwPower) btnHwPower.click();
         }
       });
 
