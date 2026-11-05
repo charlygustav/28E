@@ -86,15 +86,15 @@
       overflow: hidden;
     }
 
-    /* UNIDAD TELEVISOR SONY CON MOCKUP IA EXPANDIDO */
+    /* UNIDAD TELEVISOR SONY CON MOCKUP IA EXPANDIDO ULTRAWIDE */
     .tv-mockup-wrapper {
       position: relative;
-      width: 100%;
-      height: 100%;
-      max-width: calc(100vh * (1376 / 768));
-      max-height: calc(100vw * (768 / 1376));
-      max-width: calc(100dvh * (1376 / 768));
-      aspect-ratio: 1376 / 768;
+      height: 100vh;
+      height: 100dvh;
+      aspect-ratio: 1882 / 768;
+      max-height: 100vh;
+      max-height: 100dvh;
+      flex-shrink: 0;
       margin: auto;
       display: flex;
       align-items: center;
@@ -102,13 +102,22 @@
       overflow: hidden;
     }
 
-    /* PANTALLA INTERIOR (APERTURA EXACTA RECORTE TRANSPARENTE) */
+    @media (max-aspect-ratio: 16/9) {
+      .tv-mockup-wrapper {
+        width: calc(100vw * (1882 / 1100));
+        height: auto;
+        aspect-ratio: 1882 / 768;
+        max-height: none;
+      }
+    }
+
+    /* PANTALLA INTERIOR (APERTURA EXACTA RECORTE TRANSPARENTE ULTRAWIDE) */
     .tv-screen-aperture {
       position: absolute;
-      left: 10.647%;
-      top: 5.273%;
-      width: 79.978%;
-      height: 80.404%;
+      left: 20.776%;
+      top: 5.339%;
+      width: 58.448%;
+      height: 80.339%;
       background: #000;
       z-index: 2;
       overflow: hidden;
@@ -564,8 +573,8 @@
           <div class="crt-overlay" id="crt-overlay"></div>
         </div>
 
-        <!-- Chasis del televisor overlay -->
-        <img class="tv-mockup-frame" src="assets/mockups/ai_chassis_expanded_1.png" alt="28E TV CRT Mockup">
+        <!-- Chasis del televisor overlay ultrawide -->
+        <img class="tv-mockup-frame" src="assets/mockups/ai_chassis_expanded_ultrawide.png" alt="28E TV CRT Mockup">
       </div>
 
       <!-- FLASH DE CONFIRMACIÓN AL CENTRO -->
