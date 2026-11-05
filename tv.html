@@ -86,38 +86,55 @@
       overflow: hidden;
     }
 
-    /* CONTENEDOR Y REPRODUCTOR YOUTUBE (FIT 16:9 COMPLETO) */
-    #tv-youtube-container {
-      position: absolute;
-      inset: 0;
+    /* UNIDAD TELEVISOR SONY FD TRINITRON CON MOCKUP DEFINITIVO */
+    .tv-mockup-wrapper {
+      position: relative;
       width: 100%;
       height: 100%;
-      background: #000;
-      z-index: 2;
+      max-width: calc(100vh * (11016 / 6144));
+      max-height: calc(100vw * (6144 / 11016));
+      max-width: calc(100dvh * (11016 / 6144));
+      aspect-ratio: 11016 / 6144;
+      margin: auto;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
     }
 
-    .yt-frame-wrapper {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      max-width: calc(100vh * (16 / 9));
-      max-height: calc(100vw * (9 / 16));
-      max-width: calc(100dvh * (16 / 9));
-      aspect-ratio: 16 / 9;
-      margin: auto;
+    /* PANTALLA INTERIOR (APERTURA EXACTA DEL RECORTE TRANSPARENTE) */
+    .tv-screen-aperture {
+      position: absolute;
+      left: 10.644%;
+      top: 5.257%;
+      width: 80.07%;
+      height: 80.347%;
+      background: #000;
+      z-index: 2;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+
+    /* CONTENEDOR Y REPRODUCTOR YOUTUBE */
+    #tv-youtube-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
     }
 
     #tv-youtube-container iframe,
     #tv-youtube-player {
       width: 100% !important;
       height: 100% !important;
+      transform: scale(1.01);
       border: 0 !important;
       display: block;
       pointer-events: none;
@@ -130,6 +147,20 @@
       z-index: 5;
       background: transparent;
       pointer-events: auto;
+    }
+
+    /* CHASIS DEL MOCKUP SONY CRT (OVERLAY SUPERIOR) */
+    .tv-mockup-frame {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      pointer-events: none;
+      z-index: 10;
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
     }
 
     /* SCANLINES CRT SUTILES */
@@ -522,16 +553,20 @@
     <!-- PANTALLA DE EMISIÓN -->
     <div class="tv-screen-viewport" id="tv-screen">
       
-      <!-- YouTube Player (16:9 Inmersivo) -->
-      <div id="tv-youtube-container">
-        <div class="yt-frame-wrapper">
-          <div id="tv-youtube-player"></div>
+      <!-- UNIDAD TELEVISOR SONY CON MOCKUP DEFINITIVO -->
+      <div class="tv-mockup-wrapper">
+        <div class="tv-screen-aperture">
+          <div id="tv-youtube-container">
+            <div id="tv-youtube-player"></div>
+          </div>
+          <div class="yt-click-shield" id="yt-click-shield"></div>
+          <!-- Scanlines CRT Opcional dentro de la pantalla -->
+          <div class="crt-overlay" id="crt-overlay"></div>
         </div>
-        <div class="yt-click-shield" id="yt-click-shield"></div>
-      </div>
 
-      <!-- Scanlines CRT Opcional -->
-      <div class="crt-overlay" id="crt-overlay"></div>
+        <!-- Chasis del televisor overlay -->
+        <img class="tv-mockup-frame" src="mockup definitivo.png" alt="28E TV CRT Mockup">
+      </div>
 
       <!-- FLASH DE CONFIRMACIÓN AL CENTRO -->
       <div class="apple-glass apple-action-flash" id="apple-action-flash">
