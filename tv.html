@@ -139,6 +139,13 @@
       border: 0 !important;
       display: block;
       pointer-events: none !important;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    #tv-youtube-container.stream-ready iframe,
+    #tv-youtube-container.stream-ready #tv-youtube-player {
+      opacity: 1 !important;
     }
 
     /* ESCUDO DE CLIC */
@@ -682,6 +689,10 @@
           ytPlayer.mute();
         }
 
+        if (tvContainer) {
+          tvContainer.classList.remove('stream-ready');
+        }
+
         if (window.gsap && tvContainer) {
           gsap.killTweensOf(tvContainer);
           gsap.timeline()
@@ -738,9 +749,13 @@
               scaleY: 1,
               filter: 'brightness(1) contrast(1)',
               duration: 0.22,
-              ease: 'back.out(1.2)'
+              ease: 'back.out(1.2)',
+              onComplete: () => {
+                if (tvContainer) tvContainer.classList.add('stream-ready');
+              }
             });
         } else if (tvContainer) {
+          tvContainer.classList.add('stream-ready');
           tvContainer.style.opacity = '1';
           tvContainer.style.transform = 'none';
           tvContainer.style.filter = 'none';
@@ -894,6 +909,7 @@
             videoId: YOUTUBE_STREAM_ID,
             playerVars: {
               autoplay: 1,
+              mute: 1,
               controls: 0,
               disablekb: 1,
               fs: 0,
@@ -909,21 +925,43 @@
             },
             events: {
               onReady: function (event) {
-                if (unmuteInitial) {
-                  setMuteState(false, 0.65, false);
-                } else {
-                  setMuteState(true, null, false);
-                }
+                // Iniciar muteado en la API para garantizar que el navegador permita autoplay sin excepciones
+                try {
+                  event.target.mute();
+                } catch (e) {}
                 event.target.playVideo();
                 isPlaying = true;
+
+                if (unmuteInitial) {
+                  setTimeout(() => {
+                    try {
+                      event.target.unMute();
+                      event.target.setVolume(65);
+                      isMuted = false;
+                    } catch (e) {
+                      isMuted = true;
+                      if (unmutePill) unmutePill.classList.remove('hidden');
+                    }
+                  }, 400);
+                } else {
+                  isMuted = true;
+                  if (unmutePill) unmutePill.classList.remove('hidden');
+                }
               },
               onStateChange: function (event) {
                 if (event.data === YT.PlayerState.PLAYING) {
                   isPlaying = true;
+                  if (tvContainer) tvContainer.classList.add('stream-ready');
                 } else if (event.data === YT.PlayerState.PAUSED) {
-                  // Si el televisor está encendido, mantener la emisión en vivo activa sin mostrar la pantalla de pausa de YouTube
+                  // Ocultar inmediatamente el iframe para que NUNCA sea visible la interfaz de pausa ni recomendaciones
+                  if (tvContainer) tvContainer.classList.remove('stream-ready');
                   if (isTvPowered) {
-                    event.target.playVideo();
+                    try {
+                      event.target.mute();
+                      isMuted = true;
+                      if (unmutePill) unmutePill.classList.remove('hidden');
+                      event.target.playVideo();
+                    } catch (e) {}
                   }
                   isPlaying = isTvPowered;
                 } else if (event.data === YT.PlayerState.ENDED) {
@@ -931,7 +969,7 @@
                     if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
                       ytPlayer.playVideo();
                     }
-                  }, 2500);
+                  }, 2000);
                 }
               },
               onError: function () {
@@ -939,7 +977,7 @@
                   if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
                     ytPlayer.playVideo();
                   }
-                }, 4000);
+                }, 3000);
               }
             }
           });
