@@ -328,7 +328,7 @@
       stroke-linejoin: round;
     }
 
-    /* FLASH DE CONFIRMACIÓN AL CENTRO (APPLE STYLE FEEDBACK) */
+    /* BOTÓN / BADGE DE AUDIO FIJO AL CENTRO (APPLE FROSTED GLASS) */
     .apple-action-flash {
       position: absolute;
       top: 50%;
@@ -338,63 +338,29 @@
       width: 68px;
       height: 68px;
       border-radius: 50%;
-      display: none;
+      display: flex;
       align-items: center;
       justify-content: center;
       color: #ffffff;
-      pointer-events: none;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: background 0.18s ease, box-shadow 0.2s ease, opacity 0.25s ease;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+    }
+
+    .apple-action-flash:hover {
+      background: var(--apple-glass-hover);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6), var(--apple-glass-highlight);
+    }
+
+    .apple-action-flash:active {
+      transform: translate(-50%, -50%) scale(0.92);
     }
 
     .apple-action-flash svg {
-      width: 30px;
-      height: 30px;
+      width: 28px;
+      height: 28px;
       fill: currentColor;
-    }
-
-    /* TOAST ELEGANTE PARA ACTIVAR AUDIO (SOLO SI EL NAVEGADOR BLOQUEA AUDIO) */
-    .apple-unmute-pill {
-      position: absolute;
-      bottom: max(24px, env(safe-area-inset-bottom));
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 25;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 18px;
-      border-radius: 9999px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #ffffff;
-      white-space: nowrap;
-      cursor: pointer;
-      pointer-events: auto;
-      transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), background 0.18s ease;
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
-    }
-
-    .apple-unmute-pill:hover {
-      background: var(--apple-glass-hover);
-    }
-
-    .apple-unmute-pill:active {
-      transform: translateX(-50%) scale(0.95);
-    }
-
-    .apple-unmute-pill.hidden {
-      opacity: 0;
-      transform: translateX(-50%) translateY(12px);
-      pointer-events: none;
-    }
-
-    .apple-unmute-pill svg {
-      width: 15px;
-      height: 15px;
-      stroke: currentColor;
-      stroke-width: 2.2;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
     }
 
     /* ESTADO IDLE (HUD OCULTO) */
@@ -404,8 +370,8 @@
       pointer-events: none;
     }
 
-    .is-idle .apple-unmute-pill:not(.hidden) {
-      opacity: 0.4;
+    .is-idle .apple-action-flash {
+      opacity: 0.85;
     }
 
     /* ── 28E TV CINEMATIC INTRO IDENT ── */
@@ -489,7 +455,7 @@
 
       <!-- FLASH DE CONFIRMACIÓN AL CENTRO -->
       <div class="apple-glass apple-action-flash" id="apple-action-flash">
-        <svg id="flash-icon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <svg id="flash-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
       </div>
 
       <!-- BARRA SUPERIOR APPLE -->
@@ -500,11 +466,7 @@
         </a>
       </header>
 
-      <!-- HINT PARA ACTIVAR AUDIO SI EL NAVEGADOR LO INICIA SILENCIADO -->
-      <div class="apple-glass apple-unmute-pill hidden" id="apple-unmute-pill">
-        <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-        <span>Activar audio</span>
-      </div>
+
 
     </div>
   </main>
@@ -527,7 +489,6 @@
       const crtOverlay = document.getElementById('crt-overlay');
       const flashEl = document.getElementById('apple-action-flash');
       const flashIcon = document.getElementById('flash-icon');
-      const unmutePill = document.getElementById('apple-unmute-pill');
       const ytClickShield = document.getElementById('yt-click-shield');
       const btnHwVolDown = document.getElementById('hw-vol-down');
       const btnHwVolUp = document.getElementById('hw-vol-up');
@@ -596,45 +557,70 @@
       window.addEventListener('touchstart', wakeControls, { passive: true });
       window.addEventListener('click', wakeControls, { passive: true });
 
-      // ── FLASH DE ACCIÓN EN EL CENTRO ──
+      // ── BADGE DE AUDIO FIJO AL CENTRO (ICONO SPEAKER SILENCIADO) ──
+      function updateMuteBadge(muted, animate = false) {
+        if (!flashEl || !flashIcon) return;
+        if (muted && isTvPowered) {
+          flashIcon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>';
+          flashEl.setAttribute('aria-label', 'Activar audio');
+          flashEl.setAttribute('title', 'Activar audio');
+          flashEl.style.display = 'flex';
+          flashEl.style.pointerEvents = 'auto';
+
+          if (window.gsap && animate) {
+            gsap.killTweensOf(flashEl);
+            gsap.fromTo(flashEl,
+              { opacity: 0, scale: 0.72 },
+              { opacity: 1, scale: 1, duration: 0.22, ease: 'back.out(1.5)' }
+            );
+          } else {
+            flashEl.style.opacity = '1';
+            flashEl.style.transform = 'translate(-50%, -50%) scale(1)';
+          }
+        } else {
+          // Desmutear: animar hacia afuera y ocultar
+          flashEl.style.pointerEvents = 'none';
+          if (window.gsap && animate) {
+            gsap.killTweensOf(flashEl);
+            flashIcon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>';
+            gsap.timeline()
+              .to(flashEl, { scale: 1.15, opacity: 1, duration: 0.16, ease: 'power2.out' })
+              .to(flashEl, { scale: 0.82, opacity: 0, duration: 0.22, ease: 'power2.in', onComplete: () => {
+                if (!isMuted) flashEl.style.display = 'none';
+              }});
+          } else {
+            flashEl.style.display = 'none';
+            flashEl.style.opacity = '0';
+          }
+        }
+      }
+
       function showCenterFlash(type) {
         if (!flashEl || !flashIcon) return;
-        if (type === 'play') {
-          flashIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
-        } else if (type === 'pause') {
-          flashIcon.innerHTML = '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>';
-        } else if (type === 'unmute') {
-          flashIcon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>';
-        } else if (type === 'mute') {
-          flashIcon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
-        } else if (type === 'power-off' || type === 'power-on') {
+        if (type === 'power-off' || type === 'power-on') {
           flashIcon.innerHTML = '<path d="M18.36 6.64a9 9 0 1 1-12.73 0M12 2v10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
-        }
-
-        if (window.gsap) {
-          gsap.killTweensOf(flashEl);
-          gsap.fromTo(flashEl,
-            { opacity: 0, scale: 0.72, display: 'flex' },
-            {
-              opacity: 1,
-              scale: 1,
-              duration: 0.16,
-              ease: 'power3.out',
-              onComplete: () => {
-                gsap.to(flashEl, {
-                  opacity: 0,
-                  scale: 1.15,
-                  duration: 0.28,
-                  ease: 'power2.in',
-                  delay: 0.14,
-                  onComplete: () => { flashEl.style.display = 'none'; }
-                });
+          if (window.gsap) {
+            gsap.killTweensOf(flashEl);
+            flashEl.style.display = 'flex';
+            gsap.fromTo(flashEl,
+              { opacity: 0, scale: 0.72 },
+              {
+                opacity: 1, scale: 1, duration: 0.16, ease: 'power3.out',
+                onComplete: () => {
+                  gsap.to(flashEl, {
+                    opacity: 0, scale: 1.15, duration: 0.24, ease: 'power2.in', delay: 0.12,
+                    onComplete: () => {
+                      if (isMuted && isTvPowered) {
+                        updateMuteBadge(true, false);
+                      } else {
+                        flashEl.style.display = 'none';
+                      }
+                    }
+                  });
+                }
               }
-            }
-          );
-        } else {
-          flashEl.style.display = 'flex';
-          setTimeout(() => { flashEl.style.display = 'none'; }, 400);
+            );
+          }
         }
       }
 
@@ -645,24 +631,23 @@
 
         if (isMuted) {
           if (ytPlayer && typeof ytPlayer.mute === 'function') ytPlayer.mute();
-          if (unmutePill) unmutePill.classList.remove('hidden');
-          if (userTriggered) showCenterFlash('mute');
+          updateMuteBadge(true, userTriggered);
         } else {
-          if (unmutePill) unmutePill.classList.add('hidden');
           const targetVol = currentVolume > 0 ? currentVolume : 0.65;
           currentVolume = targetVol;
           if (ytPlayer && typeof ytPlayer.unMute === 'function') {
             ytPlayer.unMute();
             ytPlayer.setVolume(targetVol * 100);
           }
-          if (userTriggered) showCenterFlash('unmute');
+          updateMuteBadge(false, userTriggered);
         }
       }
 
-      if (unmutePill) {
-        unmutePill.addEventListener('click', (e) => {
+      // Clic directo en el badge central activa/desactiva sonido
+      if (flashEl) {
+        flashEl.addEventListener('click', (e) => {
           e.stopPropagation();
-          setMuteState(false, 0.65, true);
+          setMuteState(!isMuted, null, true);
           wakeControls();
         });
       }
@@ -680,6 +665,9 @@
 
         if (ytPlayer && typeof ytPlayer.mute === 'function') {
           ytPlayer.mute();
+        }
+        if (flashEl) {
+          flashEl.style.display = 'none';
         }
 
         if (window.gsap && tvContainer) {
@@ -722,6 +710,9 @@
           if (!isMuted && typeof ytPlayer.unMute === 'function') ytPlayer.unMute();
         }
         isPlaying = true;
+        if (isMuted) {
+          updateMuteBadge(true, true);
+        }
 
         if (window.gsap && tvContainer) {
           gsap.killTweensOf(tvContainer);
