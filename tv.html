@@ -135,10 +135,10 @@
     #tv-youtube-player {
       width: 100% !important;
       height: 100% !important;
-      transform: scale(1.01);
+      transform: scale(1.03);
       border: 0 !important;
       display: block;
-      pointer-events: none;
+      pointer-events: none !important;
     }
 
     /* ESCUDO DE CLIC */
@@ -147,7 +147,8 @@
       inset: 0;
       z-index: 5;
       background: transparent;
-      pointer-events: auto;
+      pointer-events: auto !important;
+      cursor: pointer;
     }
 
     /* CHASIS DEL MOCKUP SONY CRT (OVERLAY SUPERIOR) */
@@ -677,6 +678,10 @@
         }
         showCenterFlash('power-off');
 
+        if (ytPlayer && typeof ytPlayer.mute === 'function') {
+          ytPlayer.mute();
+        }
+
         if (window.gsap && tvContainer) {
           gsap.killTweensOf(tvContainer);
           gsap.timeline()
@@ -695,20 +700,10 @@
             })
             .to(tvContainer, {
               opacity: 0,
-              duration: 0.08,
-              onComplete: () => {
-                if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
-                  ytPlayer.pauseVideo();
-                }
-                isPlaying = false;
-                updatePlayPauseIcon(false);
-              }
+              duration: 0.08
             });
         } else if (tvContainer) {
           tvContainer.style.opacity = '0';
-          if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') ytPlayer.pauseVideo();
-          isPlaying = false;
-          updatePlayPauseIcon(false);
         }
       }
 
@@ -722,11 +717,10 @@
         }
         showCenterFlash('power-on');
 
-        if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
-          ytPlayer.playVideo();
+        if (ytPlayer) {
+          if (typeof ytPlayer.playVideo === 'function') ytPlayer.playVideo();
+          if (!isMuted && typeof ytPlayer.unMute === 'function') ytPlayer.unMute();
         }
-        isPlaying = true;
-        updatePlayPauseIcon(true);
 
         if (window.gsap && tvContainer) {
           gsap.killTweensOf(tvContainer);
@@ -805,24 +799,15 @@
         });
       }
 
-      // ── PLAY / PAUSE ──
+      // ── CONMUTAR AUDIO / TRANSMISIÓN CONTINUA ──
       function togglePlayPause(userTriggered = false) {
         if (!isTvPowered) {
           playMechanicalClick(true);
           turnOnTV();
           return;
         }
-        if (!ytPlayer) return;
-        if (isPlaying) {
-          if (typeof ytPlayer.pauseVideo === 'function') ytPlayer.pauseVideo();
-          isPlaying = false;
-          if (userTriggered) showCenterFlash('pause');
-        } else {
-          if (typeof ytPlayer.playVideo === 'function') ytPlayer.playVideo();
-          isPlaying = true;
-          if (isMuted) setMuteState(false, 0.65, false);
-          if (userTriggered) showCenterFlash('play');
-        }
+        // En una emisión en vivo de televisión, alternar sonido evita que YouTube congele la pantalla y muestre interfaces de recomendación
+        setMuteState(!isMuted, null, userTriggered);
       }
 
       // ── CLIC EN PANTALLA ──
@@ -833,11 +818,7 @@
           wakeControls();
           return;
         }
-        if (isMuted) {
-          setMuteState(false, 0.65, true);
-        } else {
-          togglePlayPause(true);
-        }
+        setMuteState(!isMuted, null, true);
         wakeControls();
       });
 
@@ -918,10 +899,12 @@
               fs: 0,
               modestbranding: 1,
               rel: 0,
+              showinfo: 0,
               iv_load_policy: 3,
               cc_load_policy: 0,
               playsinline: 1,
               enablejsapi: 1,
+              widget_referrer: window.location.origin,
               origin: window.location.origin
             },
             events: {
@@ -933,21 +916,22 @@
                 }
                 event.target.playVideo();
                 isPlaying = true;
-                updatePlayPauseIcon(true);
               },
               onStateChange: function (event) {
                 if (event.data === YT.PlayerState.PLAYING) {
                   isPlaying = true;
-                  updatePlayPauseIcon(true);
                 } else if (event.data === YT.PlayerState.PAUSED) {
-                  isPlaying = false;
-                  updatePlayPauseIcon(false);
+                  // Si el televisor está encendido, mantener la emisión en vivo activa sin mostrar la pantalla de pausa de YouTube
+                  if (isTvPowered) {
+                    event.target.playVideo();
+                  }
+                  isPlaying = isTvPowered;
                 } else if (event.data === YT.PlayerState.ENDED) {
                   setTimeout(() => {
                     if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
                       ytPlayer.playVideo();
                     }
-                  }, 3500);
+                  }, 2500);
                 }
               },
               onError: function () {
