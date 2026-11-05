@@ -328,6 +328,87 @@
       stroke-linejoin: round;
     }
 
+    /* ── INDICADOR DE VOLUMEN FLOTANTE (APPLE GLASS OSD) ── */
+    .tv-volume-osd {
+      position: absolute;
+      top: max(22px, env(safe-area-inset-top));
+      left: 50%;
+      transform: translateX(-50%) translateY(-10px) scale(0.94);
+      z-index: 30;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 16px 9px 14px;
+      border-radius: 9999px;
+      color: #ffffff;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), var(--apple-glass-highlight);
+    }
+
+    .tv-volume-osd.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0) scale(1);
+    }
+
+    .tv-volume-osd-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    .tv-volume-osd-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .tv-volume-osd-icon svg polygon {
+      fill: currentColor;
+      stroke: none;
+    }
+
+    .tv-volume-osd-track {
+      width: 108px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.18);
+      border-radius: 9999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .tv-volume-osd-bar {
+      height: 100%;
+      background: #ffffff;
+      border-radius: 9999px;
+      transition: width 0.12s cubic-bezier(0.2, 0, 0, 1);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+    }
+
+    .tv-volume-osd-val {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      min-width: 32px;
+      text-align: right;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    @media (max-width: 600px) {
+      .tv-volume-osd-track {
+        width: 76px;
+      }
+    }
+
     /* BOTÓN / BADGE DE AUDIO FIJO AL CENTRO (APPLE FROSTED GLASS) */
     .apple-action-flash {
       position: absolute;
@@ -453,7 +534,18 @@
         <button class="tv-hardware-btn tv-hw-power" id="hw-power" aria-label="Apagar / Encender TV" title="Power" type="button"></button>
       </div>
 
-      <!-- FLASH DE CONFIRMACIÓN AL CENTRO -->
+      <!-- INDICADOR DE VOLUMEN OSD FLOTANTE -->
+      <div class="apple-glass tv-volume-osd" id="tv-volume-osd" aria-live="polite">
+        <div class="tv-volume-osd-icon" id="tv-volume-osd-icon">
+          <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        </div>
+        <div class="tv-volume-osd-track">
+          <div class="tv-volume-osd-bar" id="tv-volume-osd-bar" style="width: 65%;"></div>
+        </div>
+        <span class="tv-volume-osd-val" id="tv-volume-osd-val">65%</span>
+      </div>
+
+      <!-- BADGE DE AUDIO FIJO AL CENTRO -->
       <div class="apple-glass apple-action-flash" id="apple-action-flash">
         <svg id="flash-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
       </div>
@@ -556,6 +648,64 @@
       window.addEventListener('mousemove', wakeControls, { passive: true });
       window.addEventListener('touchstart', wakeControls, { passive: true });
       window.addEventListener('click', wakeControls, { passive: true });
+
+      // ── INDICADOR DE VOLUMEN FLOTANTE (APPLE GLASS OSD) ──
+      let volumeHudTimer = null;
+      const volumeHud = document.getElementById('tv-volume-osd');
+      const volumeHudBar = document.getElementById('tv-volume-osd-bar');
+      const volumeHudVal = document.getElementById('tv-volume-osd-val');
+      const volumeHudIcon = document.getElementById('tv-volume-osd-icon');
+
+      function showVolumeHud(vol, muted = false) {
+        if (!volumeHud || !volumeHudBar || !volumeHudVal || !volumeHudIcon) return;
+        
+        const pct = muted ? 0 : Math.round(vol * 100);
+        volumeHudBar.style.width = `${pct}%`;
+        volumeHudVal.textContent = muted ? '0%' : `${pct}%`;
+
+        // Actualizar icono SVG según el nivel
+        if (muted || pct === 0) {
+          volumeHudIcon.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
+        } else if (pct <= 35) {
+          volumeHudIcon.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>';
+        } else if (pct <= 70) {
+          volumeHudIcon.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>';
+        } else {
+          volumeHudIcon.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>';
+        }
+
+        if (window.gsap) {
+          gsap.killTweensOf(volumeHud);
+          volumeHud.style.display = 'flex';
+          gsap.fromTo(volumeHud,
+            { opacity: 0, scale: 0.92, y: -8 },
+            { opacity: 1, scale: 1, y: 0, duration: 0.16, ease: 'power3.out' }
+          );
+        } else {
+          volumeHud.style.display = 'flex';
+          volumeHud.classList.add('visible');
+        }
+
+        if (volumeHudTimer) clearTimeout(volumeHudTimer);
+        volumeHudTimer = setTimeout(() => {
+          if (window.gsap) {
+            gsap.to(volumeHud, {
+              opacity: 0,
+              scale: 0.94,
+              y: -6,
+              duration: 0.22,
+              ease: 'power2.in',
+              onComplete: () => {
+                volumeHud.classList.remove('visible');
+                volumeHud.style.display = 'none';
+              }
+            });
+          } else {
+            volumeHud.classList.remove('visible');
+            volumeHud.style.display = 'none';
+          }
+        }, 1600);
+      }
 
       // ── BADGE DE AUDIO FIJO AL CENTRO (ICONO SPEAKER SILENCIADO) ──
       function updateMuteBadge(muted, animate = false) {
@@ -756,12 +906,20 @@
             turnOnTV();
             return;
           }
-          const currentVal = isMuted ? 0 : currentVolume;
-          const nextVol = Math.max(0, Math.round((currentVal - 0.10) * 10) / 10);
+          if (isMuted) {
+            const nextVol = Math.max(0.10, Math.round((currentVolume - 0.10) * 10) / 10);
+            setMuteState(false, nextVol, true);
+            showVolumeHud(nextVol, false);
+            wakeControls();
+            return;
+          }
+          const nextVol = Math.max(0, Math.round((currentVolume - 0.10) * 10) / 10);
           if (nextVol <= 0.05) {
             setMuteState(true, 0, true);
+            showVolumeHud(0, true);
           } else {
             setMuteState(false, nextVol, true);
+            showVolumeHud(nextVol, false);
           }
           wakeControls();
         });
@@ -775,9 +933,11 @@
             turnOnTV();
             return;
           }
-          const currentVal = isMuted ? 0 : currentVolume;
-          const nextVol = Math.min(1.0, Math.round((currentVal + 0.10) * 10) / 10);
-          setMuteState(false, Math.max(0.10, nextVol), true);
+          const baseVal = currentVolume > 0.05 ? currentVolume : 0.50;
+          const nextVol = Math.min(1.0, Math.round((baseVal + 0.10) * 10) / 10);
+          const finalVol = Math.max(0.10, nextVol);
+          setMuteState(false, finalVol, true);
+          showVolumeHud(finalVol, false);
           wakeControls();
         });
       }
