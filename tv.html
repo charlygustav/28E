@@ -388,8 +388,8 @@
       fill: currentColor;
     }
 
-    /* BARRA FLOTANTE INFERIOR (APPLE DOCK CAPSULE) */
-    .apple-bottom-dock {
+    /* TOAST ELEGANTE PARA ACTIVAR AUDIO (SOLO SI EL NAVEGADOR BLOQUEA AUDIO) */
+    .apple-unmute-pill {
       position: absolute;
       bottom: max(24px, env(safe-area-inset-bottom));
       left: 50%;
@@ -397,151 +397,36 @@
       z-index: 25;
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 7px 12px;
+      gap: 8px;
+      padding: 8px 18px;
       border-radius: 9999px;
-      pointer-events: auto;
-      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .apple-play-btn {
-      width: 36px;
-      height: 36px;
-      background: rgba(255, 255, 255, 0.1);
-      color: #ffffff;
-      flex-shrink: 0;
-    }
-
-    .apple-play-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    .apple-play-btn svg {
-      width: 16px;
-      height: 16px;
-      fill: currentColor;
-    }
-
-    .apple-stream-info {
-      display: flex;
-      flex-direction: column;
-      padding: 0 4px;
-      max-width: 180px;
-    }
-
-    .apple-stream-title {
       font-size: 13px;
       font-weight: 600;
-      letter-spacing: -0.01em;
-      color: #ffffff;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .apple-stream-meta {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .apple-dock-divider {
-      width: 1px;
-      height: 20px;
-      background: rgba(255, 255, 255, 0.12);
-      flex-shrink: 0;
-    }
-
-    /* CONTROL DE VOLUMEN APPLE */
-    .apple-volume-group {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .apple-icon-btn {
-      width: 34px;
-      height: 34px;
-      flex-shrink: 0;
-    }
-
-    .apple-icon-btn svg {
-      width: 17px;
-      height: 17px;
-      stroke: currentColor;
-      stroke-width: 2.1;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .apple-slider-wrap {
-      display: flex;
-      align-items: center;
-      width: 72px;
-      transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .apple-volume-slider {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 100%;
-      height: 4px;
-      border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.22);
-      outline: none;
-      cursor: pointer;
-    }
-
-    .apple-volume-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #ffffff;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
-      cursor: pointer;
-      transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .apple-volume-slider::-webkit-slider-thumb:hover {
-      transform: scale(1.25);
-    }
-
-    /* TOAST ELEGANTE PARA DESMUTEAR (SOLO SI AUTOPLAY LO SILENCIA) */
-    .apple-unmute-pill {
-      position: absolute;
-      bottom: calc(100% + 12px);
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 14px;
-      border-radius: 9999px;
-      font-size: 12px;
-      font-weight: 600;
       color: #ffffff;
       white-space: nowrap;
       cursor: pointer;
       pointer-events: auto;
-      transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+      transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), background 0.18s ease;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
+    }
+
+    .apple-unmute-pill:hover {
+      background: var(--apple-glass-hover);
+    }
+
+    .apple-unmute-pill:active {
+      transform: translateX(-50%) scale(0.95);
     }
 
     .apple-unmute-pill.hidden {
       opacity: 0;
-      transform: translateX(-50%) translateY(8px);
+      transform: translateX(-50%) translateY(12px);
       pointer-events: none;
     }
 
     .apple-unmute-pill svg {
-      width: 14px;
-      height: 14px;
+      width: 15px;
+      height: 15px;
       stroke: currentColor;
       stroke-width: 2.2;
       fill: none;
@@ -556,10 +441,8 @@
       pointer-events: none;
     }
 
-    .is-idle .apple-bottom-dock {
-      opacity: 0;
-      transform: translateX(-50%) translateY(10px);
-      pointer-events: none;
+    .is-idle .apple-unmute-pill:not(.hidden) {
+      opacity: 0.4;
     }
 
     /* ── 28E TV CINEMATIC INTRO IDENT ── */
@@ -659,50 +542,10 @@
         </div>
       </header>
 
-      <!-- BARRA FLOTANTE INFERIOR APPLE -->
-      <div class="apple-glass apple-bottom-dock" id="apple-bottom-dock">
-
-        <!-- Hint para activar audio si inicia muteado -->
-        <div class="apple-glass apple-unmute-pill hidden" id="apple-unmute-pill">
-          <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-          <span>Activar audio</span>
-        </div>
-
-        <!-- Play / Pause -->
-        <button class="apple-btn apple-play-btn" id="btn-play-pause" aria-label="Reproducir o Pausar">
-          <svg id="icon-play-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
-        </button>
-
-        <!-- Información de Emisión -->
-        <div class="apple-stream-info">
-          <span class="apple-stream-title">Twenty Eight Experience</span>
-          <span class="apple-stream-meta">Radio 24/7 · En Directo</span>
-        </div>
-
-        <div class="apple-dock-divider"></div>
-
-        <!-- Grupo de Volumen -->
-        <div class="apple-volume-group">
-          <button class="apple-btn apple-icon-btn" id="btn-mute" aria-label="Silenciar o Activar sonido">
-            <svg id="icon-vol" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-          </button>
-          <div class="apple-slider-wrap">
-            <input type="range" class="apple-volume-slider" id="volume-slider" min="0" max="1" step="0.02" value="0.65" aria-label="Volumen">
-          </div>
-        </div>
-
-        <div class="apple-dock-divider"></div>
-
-        <!-- CRT -->
-        <button class="apple-btn apple-icon-btn" id="btn-crt" aria-label="Filtro CRT">
-          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="3"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        </button>
-
-        <!-- Pantalla Completa -->
-        <button class="apple-btn apple-icon-btn" id="btn-fullscreen" aria-label="Pantalla Completa">
-          <svg id="icon-fullscreen" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
-        </button>
-
+      <!-- HINT PARA ACTIVAR AUDIO SI EL NAVEGADOR LO INICIA SILENCIADO -->
+      <div class="apple-glass apple-unmute-pill hidden" id="apple-unmute-pill">
+        <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+        <span>Activar audio</span>
       </div>
 
     </div>
@@ -723,15 +566,7 @@
 
       // Elementos DOM
       const cinemaStage = document.getElementById('cinema-stage');
-      const volumeSlider = document.getElementById('volume-slider');
-      const btnMute = document.getElementById('btn-mute');
-      const btnPlayPause = document.getElementById('btn-play-pause');
-      const btnCrt = document.getElementById('btn-crt');
-      const btnFullscreen = document.getElementById('btn-fullscreen');
       const crtOverlay = document.getElementById('crt-overlay');
-      const iconVol = document.getElementById('icon-vol');
-      const iconPlayPause = document.getElementById('icon-play-pause');
-      const iconFullscreen = document.getElementById('icon-fullscreen');
       const flashEl = document.getElementById('apple-action-flash');
       const flashIcon = document.getElementById('flash-icon');
       const unmutePill = document.getElementById('apple-unmute-pill');
@@ -844,27 +679,6 @@
         }
       }
 
-      // ── ACTUALIZAR ICONOS ──
-      function updateVolumeIcon(vol) {
-        if (!iconVol) return;
-        if (vol <= 0 || isMuted) {
-          iconVol.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
-        } else if (vol < 0.5) {
-          iconVol.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>';
-        } else {
-          iconVol.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>';
-        }
-      }
-
-      function updatePlayPauseIcon(playing) {
-        if (!iconPlayPause) return;
-        if (playing) {
-          iconPlayPause.innerHTML = '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>';
-        } else {
-          iconPlayPause.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
-        }
-      }
-
       // ── GESTIÓN DE AUDIO ──
       function setMuteState(muted, customVol = null, userTriggered = false) {
         isMuted = muted;
@@ -872,16 +686,12 @@
 
         if (isMuted) {
           if (ytPlayer && typeof ytPlayer.mute === 'function') ytPlayer.mute();
-          volumeSlider.value = 0;
-          updateVolumeIcon(0);
           if (unmutePill) unmutePill.classList.remove('hidden');
           if (userTriggered) showCenterFlash('mute');
         } else {
           if (unmutePill) unmutePill.classList.add('hidden');
           const targetVol = currentVolume > 0 ? currentVolume : 0.65;
           currentVolume = targetVol;
-          volumeSlider.value = targetVol;
-          updateVolumeIcon(targetVol);
           if (ytPlayer && typeof ytPlayer.unMute === 'function') {
             ytPlayer.unMute();
             ytPlayer.setVolume(targetVol * 100);
@@ -889,21 +699,6 @@
           if (userTriggered) showCenterFlash('unmute');
         }
       }
-
-      btnMute.addEventListener('click', () => {
-        setMuteState(!isMuted, null, true);
-        wakeControls();
-      });
-
-      volumeSlider.addEventListener('input', (e) => {
-        const val = parseFloat(e.target.value);
-        if (val === 0) {
-          setMuteState(true, null, false);
-        } else {
-          setMuteState(false, val, false);
-        }
-        wakeControls();
-      });
 
       if (unmutePill) {
         unmutePill.addEventListener('click', (e) => {
@@ -1070,14 +865,7 @@
           if (isMuted) setMuteState(false, 0.65, false);
           if (userTriggered) showCenterFlash('play');
         }
-        updatePlayPauseIcon(isPlaying);
       }
-
-      btnPlayPause.addEventListener('click', (e) => {
-        e.stopPropagation();
-        togglePlayPause(true);
-        wakeControls();
-      });
 
       // ── CLIC EN PANTALLA ──
       ytClickShield.addEventListener('click', () => {
@@ -1095,12 +883,10 @@
         wakeControls();
       });
 
-      // ── CRT ──
-      btnCrt.addEventListener('click', (e) => {
-        e.stopPropagation();
-        crtOverlay.classList.toggle('active');
-        btnCrt.style.color = crtOverlay.classList.contains('active') ? 'var(--accent-active)' : 'rgba(255, 255, 255, 0.88)';
-        wakeControls();
+      // Doble clic en pantalla para pantalla completa
+      ytClickShield.addEventListener('dblclick', (e) => {
+        e.preventDefault();
+        toggleFullscreen();
       });
 
       // ── FULLSCREEN ──
@@ -1112,20 +898,6 @@
         }
         wakeControls();
       }
-
-      btnFullscreen.addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleFullscreen();
-      });
-
-      document.addEventListener('fullscreenchange', () => {
-        if (!iconFullscreen) return;
-        if (document.fullscreenElement) {
-          iconFullscreen.innerHTML = '<path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>';
-        } else {
-          iconFullscreen.innerHTML = '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>';
-        }
-      });
 
       // ── ATAJOS DE TECLADO ──
       window.addEventListener('keydown', (e) => {
@@ -1140,7 +912,8 @@
           toggleFullscreen();
         } else if (key === 'c') {
           e.preventDefault();
-          btnCrt.click();
+          if (crtOverlay) crtOverlay.classList.toggle('active');
+          wakeControls();
         } else if (e.code === 'Space' || key === 'k') {
           e.preventDefault();
           togglePlayPause(true);
