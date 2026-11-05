@@ -54,7 +54,7 @@
       line-height: 1.4;
     }
 
-    /* CONTENEDOR TEATRAL */
+    /* CONTENEDOR TEATRAL CON FONDO AMBIENTAL */
     .tv-cinema-stage {
       position: relative;
       width: 100vw;
@@ -63,7 +63,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #000;
+      background: #000 url('assets/mockups/tv_ambient_backdrop.jpg') center center / cover no-repeat;
       overflow: hidden;
       cursor: default;
     }
@@ -82,7 +82,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #000;
+      background: transparent;
       overflow: hidden;
     }
 
@@ -100,6 +100,7 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 80px rgba(0, 0, 0, 0.8));
     }
 
     /* PANTALLA INTERIOR (APERTURA EXACTA RECORTE TRANSPARENTE) */
