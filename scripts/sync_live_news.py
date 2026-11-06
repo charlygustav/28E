@@ -4,6 +4,7 @@ import json
 import time
 import html
 import random
+from email.utils import parsedate_to_datetime
 import datetime
 import threading
 import urllib.request
@@ -28,7 +29,10 @@ FEEDS = [
 ]
 
 EFEMERIDES_DB = [
-    # Efemérides con fecha exacta
+    # Efemérides de Noviembre con fecha exacta
+    (11, 6, 2012, 'ARCHIVO', 'En 2012, 343 Industries lanzó Halo 4 en Xbox 360, recaudando más de 220 millones de dólares en sus primeras 24 horas.'),
+    (11, 6, 1980, 'ARCHIVO', 'En 1980, Microsoft e IBM sellaron el histórico acuerdo que dio origen al sistema operativo MS-DOS del IBM PC.'),
+    (11, 6, 2015, 'ARCHIVO', 'En 2015, Activision y Treyarch lanzaron Call of Duty: Black Ops III, marcando récords de juego multijugador.'),
     (11, 15, 1990, 'ARCHIVO', 'En 1990, Tim Berners-Lee y Robert Cailliau publicaron la propuesta formal de la World Wide Web en el CERN.'),
     (11, 15, 2001, 'ARCHIVO', 'En 2001, Microsoft desafió a la industria lanzando la primera Xbox junto a la revolución de Halo: Combat Evolved.'),
     (11, 16, 2004, 'ARCHIVO', 'En 2004, Valve lanzó Half-Life 2, impresionando con su motor de físicas Havok y la arquitectura de Steam.'),
@@ -145,6 +149,7 @@ def is_good_headline(title, tag):
 
 def fetch_feed(tag, url):
     feed_items = []
+    now_utc = datetime.datetime.now(datetime.timezone.utc)
     try:
         ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
         req = urllib.request.Request(url, headers={'User-Agent': ua})
@@ -154,6 +159,18 @@ def fetch_feed(tag, url):
                 raw_title = item.find('title')
                 if raw_title is None or not raw_title.text:
                     continue
+
+                # Filtrar estrictamente: solo noticias de las últimas 36 horas
+                p_date = item.find('pubDate')
+                if p_date is not None and p_date.text:
+                    try:
+                        pub_dt = parsedate_to_datetime(p_date.text)
+                        age_hours = (now_utc - pub_dt).total_seconds() / 3600
+                        if age_hours > 36:
+                            continue
+                    except Exception:
+                        pass
+
                 title = clean_title(raw_title.text)
                 if is_good_headline(title, tag):
                     final_tag = tag
