@@ -687,6 +687,12 @@
             { category: "UN DÍA COMO HOY", title: "En 1999, The Matrix llegó a las salas combinando filosofía existencial y la técnica del bullet time" }
         ];
         let newsIdx = 0;
+        let newsTimer = null;
+
+        function scheduleNextNews(durationMs = 14000) {
+            if (newsTimer) clearTimeout(newsTimer);
+            newsTimer = setTimeout(cycleNews, durationMs);
+        }
 
         function renderNewsItem(item) {
             if (!item || !elNewsTitle) return;
@@ -696,7 +702,12 @@
                 if (elNewsCat) elNewsCat.textContent = item.category || 'NOTICIAS';
                 elNewsTitle.textContent = item.title || '';
                 elNewsTitle.style.opacity = '1';
-            }, 300);
+
+                // Duración generosa: 16 segundos para "UN DÍA COMO HOY" o textos largos, 13 segundos normal
+                const isLong = (item.title && item.title.length > 70) || (item.category && item.category.includes('DÍA'));
+                const displayMs = isLong ? 16000 : 13000;
+                scheduleNextNews(displayMs);
+            }, 350);
         }
 
         function cycleNews() {
@@ -709,8 +720,11 @@
         onValue(ref(db, 'radio_state/news/items'), snap => {
             const data = snap.val();
             if (Array.isArray(data) && data.length > 0) {
+                const wasEmpty = !newsList || newsList.length === 0;
                 newsList = data;
-                renderNewsItem(newsList[newsIdx % newsList.length]);
+                if (wasEmpty) {
+                    renderNewsItem(newsList[0]);
+                }
             }
         });
 
@@ -719,14 +733,16 @@
             .then(res => res.json())
             .then(data => {
                 if (Array.isArray(data) && data.length > 0) {
+                    const wasEmpty = !newsList || newsList.length === 0;
                     newsList = data;
-                    renderNewsItem(newsList[newsIdx % newsList.length]);
+                    if (wasEmpty) {
+                        renderNewsItem(newsList[0]);
+                    }
                 }
             })
             .catch(() => { });
 
-        // Rotar titular cada 9 segundos
-        setInterval(cycleNews, 9000);
+        // Iniciar la primera noticia
         renderNewsItem(newsList[0]);
 
         window.addEventListener('click', function () {
