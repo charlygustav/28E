@@ -545,19 +545,31 @@
 
         const audio = document.getElementById('audio-elem');
         const info = document.getElementById('music-info');
+        const nextAudioPreloader = new Audio();
+        nextAudioPreloader.preload = 'auto';
 
         let serverTimeOffset = 0;
         let currentRadioState = null;
+        let currentTrackIdx = -1;
         let isTransitioning = false;
+        let hasInitialSynced = false;
+        let lastDjStartTime = 0;
+        let activeMetaHandler = null;
+        let endedTimer = null;
 
         onValue(ref(db, '.info/serverTimeOffset'), snap => {
             serverTimeOffset = snap.val() || 0;
         });
 
-        // Resuelve qué canción y segundo exacto corresponden a este milisegundo real
+        function findTrackIndex(src) {
+            if (!src) return 0;
+            const idx = radioTracks.findIndex(t => t.src === src || new URL(t.src, document.baseURI).href === src);
+            return idx !== -1 ? idx : 0;
+        }
+
+        // Resuelve qué canción y segundo exacto corresponden a este milisegundo real (solo para el arranque inicial)
         function resolveLiveTrack(startTrackSrc, startTimeMs, nowMs) {
-            let idx = radioTracks.findIndex(t => t.src === startTrackSrc || new URL(t.src, document.baseURI).href === startTrackSrc);
-            if (idx === -1) idx = 0;
+            let idx = findTrackIndex(startTrackSrc);
             let elapsed = Math.max(0, (nowMs - startTimeMs) / 1000);
 
             while (elapsed >= radioTracks[idx].duration) {
@@ -572,16 +584,73 @@
             };
         }
 
+        function preloadNextTrack(idx) {
+            if (idx < 0 || !radioTracks.length) return;
+            const nextTrack = radioTracks[(idx + 1) % radioTracks.length];
+            if (nextTrack && nextTrack.src) {
+                const targetUrl = new URL(nextTrack.src, document.baseURI).href;
+                if (nextAudioPreloader.src !== targetUrl) {
+                    nextAudioPreloader.src = nextTrack.src;
+                    nextAudioPreloader.load();
+                }
+            }
+        }
+
+        function updateNowPlayingUI(track) {
+            if (info && track) {
+                info.innerHTML = `<span class="song-name">${track.title}</span><span class="song-artist"> — ${track.artist}</span>`;
+            }
+        }
+
+        // Carga y reproduce una pista de principio a fin sin cortes ni re-seeks innecesarios
+        function loadAndPlayTrack(idx, seekTime = 0, allowSeek = false) {
+            const track = radioTracks[idx];
+            if (!track || !track.src) return;
+
+            currentTrackIdx = idx;
+            updateNowPlayingUI(track);
+            preloadNextTrack(idx);
+
+            if (activeMetaHandler) {
+                audio.removeEventListener('loadedmetadata', activeMetaHandler);
+                activeMetaHandler = null;
+            }
+
+            const targetUrl = new URL(track.src, document.baseURI).href;
+            if (audio.src !== targetUrl) {
+                audio.src = track.src;
+                audio.load();
+
+                activeMetaHandler = () => {
+                    if ( activeMetaHandler ) {
+                        audio.removeEventListener('loadedmetadata', activeMetaHandler);
+                        activeMetaHandler = null;
+                    }
+                    // Solo hacer seek si es el arranque inicial de la página y la canción va avanzada
+                    if (allowSeek && seekTime > 3 && audio.duration && seekTime < audio.duration - 6) {
+                        try { audio.currentTime = seekTime; } catch (_) { }
+                    }
+                    audio.play().catch(() => { });
+                };
+                audio.addEventListener('loadedmetadata', activeMetaHandler);
+            } else if (audio.paused) {
+                audio.play().catch(() => { });
+            }
+        }
+
         function advanceTrack() {
             if (isTransitioning) return;
             isTransitioning = true;
+            if (endedTimer) {
+                clearTimeout(endedTimer);
+                endedTimer = null;
+            }
             setTimeout(() => { isTransitioning = false; }, 1500);
 
             const now = Date.now() + serverTimeOffset;
-            let curIdx = 0;
-            if (currentRadioState && currentRadioState.src) {
-                curIdx = radioTracks.findIndex(t => t.src === currentRadioState.src || new URL(t.src, document.baseURI).href === currentRadioState.src);
-                if (curIdx === -1) curIdx = 0;
+            let curIdx = currentTrackIdx >= 0 ? currentTrackIdx : 0;
+            if (currentTrackIdx < 0 && currentRadioState && currentRadioState.src) {
+                curIdx = findTrackIndex(currentRadioState.src);
             }
             const nextIdx = (curIdx + 1) % radioTracks.length;
             const nextTrack = radioTracks[nextIdx];
@@ -595,8 +664,12 @@
                 source: 'auto'
             };
             currentRadioState = newState;
+
+            // Reproducir la siguiente canción completa desde 0:00 (allowSeek = false)
+            loadAndPlayTrack(nextIdx, 0, false);
+
+            // Publicar en Firebase para actualizar clientes y panel DJ
             set(ref(db, 'radio_state/current'), newState).catch(() => { });
-            syncTrack(newState);
         }
 
         function syncTrack(state) {
@@ -604,17 +677,59 @@
             const now = Date.now() + serverTimeOffset;
             const startTime = state.startTime || now;
 
-            const resolved = resolveLiveTrack(state.src, startTime, now);
-            const liveTrack = resolved.track;
-            const seekTime = resolved.seekTime;
+            // 1. Pausa / Reanudación desde el Admin Panel
+            if (state.isPlaying === false) {
+                currentRadioState = state;
+                audio.pause();
+                return;
+            }
 
-            // Si el estado en Firebase quedó desfasado en el tiempo, auto-repararlo
-            if (liveTrack.src !== state.src || Math.abs(resolved.virtualStartTime - startTime) > 3000) {
+            // 2. Si el DJ forzó una canción manualmente desde el Admin Panel (source === 'dj')
+            if (hasInitialSynced && state.source === 'dj' && state.startTime && state.startTime !== lastDjStartTime) {
+                lastDjStartTime = state.startTime;
+                currentRadioState = state;
+                const djIdx = findTrackIndex(state.src);
+                loadAndPlayTrack(djIdx, 0, false);
+                return;
+            }
+
+            // 3. Si ya estamos reproduciendo activamente una canción, NO permitir que actualizaciones
+            //    automáticas de Firebase o desfases de reloj corten la canción antes de que termine de sonar
+            if (hasInitialSynced) {
+                const wasPausedByAdmin = currentRadioState && currentRadioState.isPlaying === false && state.isPlaying === true;
+                currentRadioState = state;
+                if (wasPausedByAdmin && audio.paused) {
+                    audio.play().catch(() => { });
+                }
+                return;
+            }
+
+            // 4. Arranque inicial (primera carga del stream)
+            hasInitialSynced = true;
+            if (state.source === 'dj' && state.startTime) {
+                lastDjStartTime = state.startTime;
+            }
+
+            const resolved = resolveLiveTrack(state.src, startTime, now);
+            let bootIdx = resolved.idx;
+            let bootSeek = resolved.seekTime;
+            let bootVirtualStart = resolved.virtualStartTime;
+
+            // Si a la canción actual le quedan menos de 8 segundos al arrancar, empezar limpiamente desde 0:00 en la siguiente
+            if (bootSeek >= radioTracks[bootIdx].duration - 8) {
+                bootIdx = (bootIdx + 1) % radioTracks.length;
+                bootSeek = 0;
+                bootVirtualStart = now;
+            }
+
+            const liveTrack = radioTracks[bootIdx];
+
+            if (liveTrack.src !== state.src || Math.abs(bootVirtualStart - startTime) > 5000) {
                 const correctedState = {
                     title: liveTrack.title,
                     artist: liveTrack.artist,
                     src: liveTrack.src,
-                    startTime: resolved.virtualStartTime,
+                    startTime: bootVirtualStart,
                     isPlaying: true,
                     source: 'auto'
                 };
@@ -624,34 +739,7 @@
                 currentRadioState = state;
             }
 
-            // Mostrar el título y artista REAL que está sonando en la radio de 28E
-            if (info) {
-                info.innerHTML = `<span class="song-name">${liveTrack.title}</span><span class="song-artist"> — ${liveTrack.artist}</span>`;
-            }
-
-            if (state.isPlaying && liveTrack.src) {
-                const targetUrl = new URL(liveTrack.src, document.baseURI).href;
-                if (audio.src !== targetUrl) {
-                    audio.src = liveTrack.src;
-                    audio.load();
-
-                    const onMeta = () => {
-                        if (audio.duration && seekTime < audio.duration) {
-                            audio.currentTime = seekTime;
-                        }
-                        audio.play().catch(() => { });
-                        audio.removeEventListener('loadedmetadata', onMeta);
-                    };
-                    audio.addEventListener('loadedmetadata', onMeta);
-                } else if (audio.paused) {
-                    if (audio.duration && seekTime < audio.duration) {
-                        audio.currentTime = seekTime;
-                    }
-                    audio.play().catch(() => { });
-                }
-            } else {
-                audio.pause();
-            }
+            loadAndPlayTrack(bootIdx, bootSeek, bootSeek > 3);
         }
 
         // Suscripción reactiva en tiempo real al estado de la radio
@@ -664,19 +752,33 @@
         fetch('https://yaire-591ca-default-rtdb.firebaseio.com/radio_state/current.json')
             .then(res => res.json())
             .then(state => {
-                if (!currentRadioState && state) syncTrack(state);
+                if (!hasInitialSynced && state) syncTrack(state);
             })
             .catch(() => { });
 
-        // Al terminar la pista, rotar en Firebase para mantener la transmisión continua
-        audio.addEventListener('ended', advanceTrack);
-
-        // Guardián continuo: si la canción ya terminó y el evento 'ended' no saltó, avanzar
-        setInterval(() => {
-            if (audio.duration && audio.currentTime >= audio.duration - 0.4) {
+        // Al terminar naturalmente la pista (100% reproducida), dar 200ms de respiro al buffer de audio y avanzar
+        audio.addEventListener('ended', () => {
+            if (endedTimer) clearTimeout(endedTimer);
+            endedTimer = setTimeout(() => {
                 advanceTrack();
+            }, 200);
+        });
+
+        // Si un archivo de audio llegara a fallar en carga de red, saltar limpiamente a la siguiente pista
+        audio.addEventListener('error', () => {
+            if (hasInitialSynced && !isTransitioning) {
+                setTimeout(advanceTrack, 1000);
             }
-        }, 1000);
+        });
+
+        // Guardián pasivo de seguridad: SOLO actúa si el evento 'ended' ya ocurrió y el reproductor quedó detenido
+        setInterval(() => {
+            if (hasInitialSynced && !isTransitioning && currentRadioState && currentRadioState.isPlaying !== false) {
+                if (audio.ended) {
+                    advanceTrack();
+                }
+            }
+        }, 2500);
 
         // ── 3. Cintillo de Noticias en Vivo (Mix Variado: Cultura, Música, Tecnología, Actualidad) ──
         const elNewsCat = document.getElementById('news-cat');

@@ -588,17 +588,28 @@ function tick() {
 
         const audio = document.getElementById('audio-elem');
         const info = document.getElementById('music-info');
+        const nextAudioPreloader = new Audio();
+        nextAudioPreloader.preload = 'auto';
 
         let serverTimeOffset = 0;
         let currentRadioState = null;
+        let currentTrackIdx = -1;
+        let hasInitialSynced = false;
+        let lastDjStartTime = 0;
+        let activeMetaHandler = null;
 
         onValue(ref(db, '.info/serverTimeOffset'), snap => {
             serverTimeOffset = snap.val() || 0;
         });
 
+        function findTrackIndex(src) {
+            if (!src) return 0;
+            const idx = radioTracks.findIndex(t => t.src === src || new URL(t.src, document.baseURI).href === src);
+            return idx !== -1 ? idx : 0;
+        }
+
         function resolveLiveTrack(startTrackSrc, startTimeMs, nowMs) {
-            let idx = radioTracks.findIndex(t => t.src === startTrackSrc || new URL(t.src, document.baseURI).href === startTrackSrc);
-            if (idx === -1) idx = 0;
+            let idx = findTrackIndex(startTrackSrc);
             let elapsed = Math.max(0, (nowMs - startTimeMs) / 1000);
 
             while (elapsed >= radioTracks[idx].duration) {
@@ -613,49 +624,103 @@ function tick() {
             };
         }
 
+        function preloadNextTrack(idx) {
+            if (idx < 0 || !radioTracks.length) return;
+            const nextTrack = radioTracks[(idx + 1) % radioTracks.length];
+            if (nextTrack && nextTrack.src) {
+                const targetUrl = new URL(nextTrack.src, document.baseURI).href;
+                if (nextAudioPreloader.src !== targetUrl) {
+                    nextAudioPreloader.src = nextTrack.src;
+                    nextAudioPreloader.load();
+                }
+            }
+        }
+
+        function loadAndPlayTrack(idx, seekTime = 0, allowSeek = false) {
+            const track = radioTracks[idx];
+            if (!track || !track.src) return;
+
+            currentTrackIdx = idx;
+            if (info) {
+                info.innerHTML = `<span class="song-name">${track.title}</span><span class="song-artist"> — ${track.artist}</span>`;
+            }
+            preloadNextTrack(idx);
+
+            if (activeMetaHandler) {
+                audio.removeEventListener('loadedmetadata', activeMetaHandler);
+                activeMetaHandler = null;
+            }
+
+            const targetUrl = new URL(track.src, document.baseURI).href;
+            if (audio.src !== targetUrl) {
+                audio.src = track.src;
+                audio.load();
+
+                activeMetaHandler = () => {
+                    if (activeMetaHandler) {
+                        audio.removeEventListener('loadedmetadata', activeMetaHandler);
+                        activeMetaHandler = null;
+                    }
+                    if (allowSeek && seekTime > 3 && audio.duration && seekTime < audio.duration - 6) {
+                        try { audio.currentTime = seekTime; } catch (_) { }
+                    }
+                    audio.play().catch(() => { });
+                };
+                audio.addEventListener('loadedmetadata', activeMetaHandler);
+            } else if (audio.paused) {
+                audio.play().catch(() => { });
+            }
+        }
+
         function syncTrack(state) {
             if (!state) return;
             const now = Date.now() + serverTimeOffset;
             const startTime = state.startTime || now;
 
-            const resolved = resolveLiveTrack(state.src, startTime, now);
-            const liveTrack = resolved.track;
-            const seekTime = resolved.seekTime;
+            if (state.isPlaying === false) {
+                currentRadioState = state;
+                audio.pause();
+                return;
+            }
 
+            if (hasInitialSynced && state.source === 'dj' && state.startTime && state.startTime !== lastDjStartTime) {
+                lastDjStartTime = state.startTime;
+                currentRadioState = state;
+                loadAndPlayTrack(findTrackIndex(state.src), 0, false);
+                return;
+            }
+
+            if (hasInitialSynced) {
+                const wasPaused = currentRadioState && currentRadioState.isPlaying === false && state.isPlaying === true;
+                currentRadioState = state;
+                if (wasPaused && audio.paused) {
+                    audio.play().catch(() => { });
+                }
+                return;
+            }
+
+            hasInitialSynced = true;
+            if (state.source === 'dj' && state.startTime) {
+                lastDjStartTime = state.startTime;
+            }
             currentRadioState = state;
 
-            if (info) {
-                info.innerHTML = `<span class="song-name">${liveTrack.title}</span><span class="song-artist"> — ${liveTrack.artist}</span>`;
+            const resolved = resolveLiveTrack(state.src, startTime, now);
+            let bootIdx = resolved.idx;
+            let bootSeek = resolved.seekTime;
+            if (bootSeek >= radioTracks[bootIdx].duration - 8) {
+                bootIdx = (bootIdx + 1) % radioTracks.length;
+                bootSeek = 0;
             }
-
-            if (state.isPlaying && liveTrack.src) {
-                const targetUrl = new URL(liveTrack.src, document.baseURI).href;
-                if (audio.src !== targetUrl) {
-                    audio.src = liveTrack.src;
-                    audio.load();
-
-                    const onMeta = () => {
-                        if (audio.duration && seekTime < audio.duration) {
-                            audio.currentTime = seekTime;
-                        }
-                        audio.play().then(() => {
-                        }).catch(() => {
-                        });
-                        audio.removeEventListener('loadedmetadata', onMeta);
-                    };
-                    audio.addEventListener('loadedmetadata', onMeta);
-                } else if (audio.paused) {
-                    if (audio.duration && seekTime < audio.duration) {
-                        audio.currentTime = seekTime;
-                    }
-                    audio.play().then(() => {
-                    }).catch(() => {
-                    });
-                }
-            } else {
-                audio.pause();
-            }
+            loadAndPlayTrack(bootIdx, bootSeek, bootSeek > 3);
         }
+
+        audio.addEventListener('ended', () => {
+            setTimeout(() => {
+                const nextIdx = ((currentTrackIdx >= 0 ? currentTrackIdx : 0) + 1) % radioTracks.length;
+                loadAndPlayTrack(nextIdx, 0, false);
+            }, 200);
+        });
 
         onValue(ref(db, 'radio_state/current'), snap => {
             const state = snap.val();
@@ -665,7 +730,7 @@ function tick() {
         fetch('https://yaire-591ca-default-rtdb.firebaseio.com/radio_state/current.json')
             .then(res => res.json())
             .then(state => {
-                if (!currentRadioState && state) syncTrack(state);
+                if (!hasInitialSynced && state) syncTrack(state);
             })
             .catch(() => { });
 
