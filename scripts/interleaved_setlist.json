@@ -94,6 +94,12 @@
     "duration": 166.0
   },
   {
+    "title": "Tulipanes Pa' Yaire",
+    "artist": "Rodezel",
+    "src": "radio/Tulipanes Pa' Yaire - Rodezel.mp3",
+    "duration": 177.2
+  },
+  {
     "title": "Entre Tú y Yo",
     "artist": "Nico Rengifo",
     "src": "radio/ES_Entre Tu y Yo - Nico Rengifo.mp3",
@@ -394,6 +400,12 @@
     "artist": "Otis McDonald",
     "src": "radio/Stay - Otis McDonald.mp3",
     "duration": 118.6
+  },
+  {
+    "title": "Eres",
+    "artist": "Rodezel",
+    "src": "radio/Eres - Rodezel.mp3",
+    "duration": 200.0
   },
   {
     "title": "Other Way",
