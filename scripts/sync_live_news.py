@@ -141,6 +141,7 @@ def clean_title(t):
     t = re.sub(r'^[¡!]\s*', '', t)
     t = re.sub(r'\s+[-|]\s+[^-|]+$', '', t)
     t = re.sub(r'\s+', ' ', t).strip()
+    t = re.sub(r'\.+$', '', t).strip()
     return t
 
 def is_good_headline(title, tag):
@@ -199,8 +200,9 @@ def get_efemerides():
     general_pool = []
 
     for m, d, y, cat, txt in EFEMERIDES_DB:
-        # Texto limpio sin fechas de almanaque en el cuerpo
+        # Texto limpio sin fechas de almanaque en el cuerpo ni punto final
         clean_txt = re.sub(r'^(Un d[ií]a como hoy\s*(\([^)]+\))?[:\-]?\s*)', '', txt, flags=re.IGNORECASE).strip()
+        clean_txt = re.sub(r'\.+$', '', clean_txt).strip()
         if m == now_m and d == now_d:
             matching_today.append({'category': cat, 'title': clean_txt})
         else:
@@ -255,6 +257,11 @@ def fetch_fresh_ticker():
     return interleaved
 
 def upload_to_firebase(items):
+    # Asegurar que ningún elemento termine con punto final
+    for it in items:
+        if 'title' in it and it['title']:
+            it['title'] = re.sub(r'\.+$', '', it['title'].strip())
+
     data = json.dumps({
         'updatedAt': int(time.time() * 1000),
         'items': items

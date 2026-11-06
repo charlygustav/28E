@@ -700,7 +700,8 @@
 
             setTimeout(() => {
                 if (elNewsCat) elNewsCat.textContent = item.category || 'NOTICIAS';
-                elNewsTitle.textContent = item.title || '';
+                const cleanText = (item.title || '').trim().replace(/\.+$/, '');
+                elNewsTitle.textContent = cleanText;
                 elNewsTitle.style.opacity = '1';
 
                 // Duración generosa: 16 segundos para "UN DÍA COMO HOY" o textos largos, 13 segundos normal
