@@ -11,7 +11,7 @@ import xml.etree.ElementTree as ET
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # ==============================================================================
-# 28E RADIO — SERVICIO DE NOTICIAS TECH & GAMING + EFEMÉRIDES GEEK / POP CULTURE
+# 28E RADIO — SERVICIO DE TITULARES: GAMING, TECNOLOGÍA, ARCHIVO Y CULTURA
 # ==============================================================================
 
 FEEDS = [
@@ -28,80 +28,81 @@ FEEDS = [
 ]
 
 EFEMERIDES_DB = [
-    # Efemérides de Noviembre con fecha exacta
-    (11, 15, 1990, 'EFEMÉRIDE GEEK', 'En 1990, Tim Berners-Lee y Robert Cailliau publicaron la propuesta formal de la World Wide Web (WWW).'),
-    (11, 15, 2001, 'EFEMÉRIDE GEEK', 'En 2001, Microsoft lanzó la primera consola Xbox junto a "Halo: Combat Evolved", cambiando el FPS en consolas.'),
-    (11, 16, 2004, 'EFEMÉRIDE GEEK', 'En 2004, Valve lanzó "Half-Life 2", impresionando al mundo con su motor de físicas Havok y la Gravity Gun.'),
-    (11, 17, 2006, 'EFEMÉRIDE GEEK', 'En 2006, Sony lanzó la PlayStation 3 en Norteamérica con lector Blu-Ray y el procesador Cell.'),
-    (11, 18, 2001, 'EFEMÉRIDE GEEK', 'En 2001, Nintendo lanzó la GameCube en Norteamérica con su inolvidable diseño compacto y "Luigi\'s Mansion".'),
-    (11, 19, 1998, 'EFEMÉRIDE GEEK', 'En 1998, Valve lanzó "Half-Life" en PC, redefiniendo la narrativa ambiental y la inteligencia artificial en juegos.'),
-    (11, 19, 2006, 'EFEMÉRIDE GEEK', 'En 2006, Nintendo lanzó la Wii al mercado, revolucionando el juego con sensores de movimiento y "Wii Sports".'),
-    (11, 21, 1990, 'EFEMÉRIDE GEEK', 'En 1990, Nintendo lanzó la Super Famicom (SNES) en Japón junto a "Super Mario World" y "F-Zero".'),
-    (11, 21, 1998, 'EFEMÉRIDE GEEK', 'En 1998, se lanzó "The Legend of Zelda: Ocarina of Time" para Nintendo 64, catalogado como una obra maestra inmortal.'),
-    (11, 21, 1999, 'EFEMÉRIDE GEEK', 'En 1999, Game Freak lanzó "Pokémon Gold & Silver" en Game Boy Color, introduciendo la región de Johto y ciclo día/noche.'),
-    (11, 22, 2005, 'EFEMÉRIDE GEEK', 'En 2005, Microsoft lanzó la Xbox 360, popularizando la era de los logros, Xbox Live y la alta definición.'),
-    (11, 23, 2004, 'EFEMÉRIDE GEEK', 'En 2004, Blizzard Entertainment lanzó "World of Warcraft", el MMORPG que definiría a toda una generación.'),
-    (11, 27, 1998, 'EFEMÉRIDE GEEK', 'En 1998, Sega lanzó la Dreamcast en Japón, la primera consola de 128 bits con módem integrado para internet.'),
-    (11, 30, 1992, 'EFEMÉRIDE GEEK', 'En 1992, id Software lanzó "Wolfenstein 3D", estableciendo las raíces del género first-person shooter.'),
+    # Efemérides con fecha exacta
+    (11, 15, 1990, 'ARCHIVO', 'En 1990, Tim Berners-Lee y Robert Cailliau publicaron la propuesta formal de la World Wide Web en el CERN.'),
+    (11, 15, 2001, 'ARCHIVO', 'En 2001, Microsoft desafió a la industria lanzando la primera Xbox junto a la revolución de Halo: Combat Evolved.'),
+    (11, 16, 2004, 'ARCHIVO', 'En 2004, Valve lanzó Half-Life 2, impresionando con su motor de físicas Havok y la arquitectura de Steam.'),
+    (11, 17, 2006, 'ARCHIVO', 'En 2006, Sony lanzó la PlayStation 3 incorporando el procesador Cell y apostando por el formato Blu-Ray.'),
+    (11, 18, 2001, 'ARCHIVO', 'En 2001, Nintendo lanzó la GameCube, una de las consolas de sobremesa con diseño más emblemático de la marca.'),
+    (11, 19, 1998, 'ARCHIVO', 'En 1998, Valve redefinió la narrativa en primera persona y la inteligencia artificial en PC con Half-Life.'),
+    (11, 19, 2006, 'ARCHIVO', 'En 2006, Nintendo lanzó la Wii, transformando el control por movimiento con el fenómeno global de Wii Sports.'),
+    (11, 21, 1990, 'ARCHIVO', 'En 1990, debutó la Super Famicom en Japón, inaugurando una era dorada del videojuego en 16 bits.'),
+    (11, 21, 1998, 'ARCHIVO', 'En 1998, Nintendo lanzó The Legend of Zelda: Ocarina of Time en N64, considerado el cenit del diseño de aventuras en 3D.'),
+    (11, 21, 1999, 'ARCHIVO', 'En 1999, Game Freak lanzó Pokémon Gold & Silver en Game Boy Color, introduciendo la región de Johto y reloj interno.'),
+    (11, 22, 2005, 'ARCHIVO', 'En 2005, Xbox 360 definió la era moderna con juego online masivo en alta definición y el sistema de logros.'),
+    (11, 23, 2004, 'ARCHIVO', 'En 2004, Blizzard lanzó World of Warcraft, transformando el videojuego en un espacio social interactivo a escala global.'),
+    (11, 27, 1998, 'ARCHIVO', 'En 1998, Sega lanzó la Dreamcast en Japón: fue la primera consola doméstica en incorporar conexión nativa a internet.'),
+    (11, 30, 1992, 'ARCHIVO', 'En 1992, id Software liberó Wolfenstein 3D, sentando las bases fundacionales de los shooters en primera persona.'),
 
-    # Efemérides Geek & Computación Landmark
-    (None, None, 1971, 'EFEMÉRIDE GEEK', 'En 1971, Intel presentó el 4004, el primer microprocesador comercial en un solo chip de silicio del mundo.'),
-    (None, None, 1977, 'EFEMÉRIDE GEEK', 'En 1977, Apple lanzó el Apple II, una de las primeras computadoras personales producidas en masa con gráficos en color.'),
-    (None, None, 1979, 'EFEMÉRIDE GEEK', 'En 1979, Sony lanzó el Walkman TPS-L2, permitiendo a las personas escuchar música de forma portátil por primera vez.'),
-    (None, None, 1984, 'EFEMÉRIDE GEEK', 'En 1984, Apple presentó la Macintosh original con interfaz gráfica y ratón durante el Super Bowl XVIII.'),
-    (None, None, 1985, 'EFEMÉRIDE GEEK', 'En 1985, Nintendo lanzó "Super Mario Bros." en NES, salvando a la industria de los videojuegos del colapso de 1983.'),
-    (None, None, 1989, 'EFEMÉRIDE GEEK', 'En 1989, Nintendo lanzó la Game Boy original creada por Gunpei Yokoi, vendiendo más de 118 millones de unidades.'),
-    (None, None, 1991, 'EFEMÉRIDE GEEK', 'En 1991, Linus Torvalds publicó el núcleo de Linux con un mensaje libre en Usenet: "solo un hobby, no será grande".'),
-    (None, None, 1993, 'EFEMÉRIDE GEEK', 'En 1993, John Carmack y John Romero liberaron "DOOM", revolucionando la computación gráfica y el juego en red LAN.'),
-    (None, None, 1994, 'EFEMÉRIDE GEEK', 'En 1994, Sony lanzó la PlayStation original (PS1) en Japón, popularizando los CDs de audio y gráficos 3D.'),
-    (None, None, 1995, 'EFEMÉRIDE GEEK', 'En 1995, Microsoft lanzó Windows 95 con el botón Inicio y la barra de tareas, vendiendo 7 millones de copias en 5 semanas.'),
-    (None, None, 1996, 'EFEMÉRIDE GEEK', 'En 1996, Nintendo lanzó la Nintendo 64 y "Super Mario 64", sentando los cimientos de la cámara libre en 3D.'),
-    (None, None, 1996, 'EFEMÉRIDE GEEK', 'En 1996, Satoshi Tajiri creó Pokémon con el debut de "Pokémon Red & Green" en Japón para la Game Boy.'),
-    (None, None, 1997, 'EFEMÉRIDE GEEK', 'En 1997, Square lanzó "Final Fantasy VII" en PS1, convirtiéndose en un fenómeno cultural y cinemático global.'),
-    (None, None, 1998, 'EFEMÉRIDE GEEK', 'En 1998, Hideo Kojima lanzó "Metal Gear Solid" en PlayStation, elevando el sigilo y la cinematografía en videojuegos.'),
-    (None, None, 1998, 'EFEMÉRIDE GEEK', 'En 1998, Larry Page y Sergey Brin fundaron Google en un garaje de Menlo Park, California.'),
-    (None, None, 1999, 'EFEMÉRIDE GEEK', 'En 1999, Sega lanzó la Dreamcast en Occidente el legendario 9/9/99, convirtiéndose en consola de culto.'),
-    (None, None, 2000, 'EFEMÉRIDE GEEK', 'En 2000, Sony lanzó la PlayStation 2, que llegaría a vender más de 160 millones de consolas en todo el mundo.'),
-    (None, None, 2001, 'EFEMÉRIDE GEEK', 'En 2001, Apple lanzó el primer iPod bajo el lema "1.000 canciones en tu bolsillo" con rueda de desplazamiento físico.'),
-    (None, None, 2001, 'EFEMÉRIDE GEEK', 'En 2001, Rockstar Games lanzó "Grand Theft Auto III", creando el estándar de los mundos abiertos en 3D.'),
-    (None, None, 2004, 'EFEMÉRIDE GEEK', 'En 2004, Rockstar Games lanzó "GTA: San Andreas", uno de los videojuegos más influyentes y queridos de la historia.'),
-    (None, None, 2004, 'EFEMÉRIDE GEEK', 'En 2004, Nintendo lanzó la Nintendo DS con doble pantalla táctil, vendiendo más de 154 millones de consolas.'),
-    (None, None, 2007, 'EFEMÉRIDE GEEK', 'En 2007, Steve Jobs presentó el iPhone diciendo: "un iPod de pantalla ancha, un teléfono y un navegador de internet".'),
-    (None, None, 2011, 'EFEMÉRIDE GEEK', 'En 2011, Mojang lanzó la versión final de "Minecraft", convirtiéndose en el videojuego más vendido de la historia (300M+).'),
-    (None, None, 2011, 'EFEMÉRIDE GEEK', 'En 2011, FromSoftware y Hidetaka Miyazaki lanzaron "Dark Souls", forjando el género Soulsborne.'),
+    # Archivo Histórico: Computación, Consolas & Videojuegos
+    (None, None, 1971, 'ARCHIVO', 'En 1971, Intel presentó el 4004, el primer microprocesador comercial en un único chip de silicio del mundo.'),
+    (None, None, 1977, 'ARCHIVO', 'En 1977, Apple lanzó el Apple II, una de las primeras computadoras personales de éxito masivo con gráficos en color.'),
+    (None, None, 1979, 'ARCHIVO', 'En 1979, Sony lanzó el Walkman TPS-L2, permitiendo por primera vez en la historia llevar la música personal en movimiento.'),
+    (None, None, 1984, 'ARCHIVO', 'En 1984, Apple presentó la Macintosh original con interfaz gráfica y ratón durante el Super Bowl XVIII.'),
+    (None, None, 1985, 'ARCHIVO', 'En 1985, Nintendo lanzó Super Mario Bros. en NES, rescatando a la industria del videojuego tras el colapso de 1983.'),
+    (None, None, 1989, 'ARCHIVO', 'En 1989, Nintendo lanzó la Game Boy original creada por Gunpei Yokoi; junto a Tetris superó las 118 millones de unidades.'),
+    (None, None, 1991, 'ARCHIVO', 'En 1991, Linus Torvalds presentó el núcleo de Linux como un experimento personal; hoy sostiene la infraestructura de internet.'),
+    (None, None, 1993, 'ARCHIVO', 'En 1993, John Carmack y John Romero liberaron DOOM, revolucionando la computación gráfica y las partidas multijugador en LAN.'),
+    (None, None, 1994, 'ARCHIVO', 'En 1994, Sony lanzó la PlayStation original en Japón, masificando el formato en disco y los entornos poligonales 3D.'),
+    (None, None, 1995, 'ARCHIVO', 'En 1995, Microsoft lanzó Windows 95, introduciendo el menú Inicio y la arquitectura de escritorio moderna.'),
+    (None, None, 1996, 'ARCHIVO', 'En 1996, Nintendo 64 y Super Mario 64 establecieron el estándar del control analógico y la cámara libre en mundos 3D.'),
+    (None, None, 1996, 'ARCHIVO', 'En 1996, Satoshi Tajiri creó el fenómeno global de Pokémon con el estreno de Pokémon Red & Green en Game Boy.'),
+    (None, None, 1997, 'ARCHIVO', 'En 1997, Square lanzó Final Fantasy VII en PS1, marcando un antes y un después en la narrativa cinemática de los RPGs.'),
+    (None, None, 1998, 'ARCHIVO', 'En 1998, Hideo Kojima lanzó Metal Gear Solid en PlayStation, elevando el sigilo y la dirección cinematográfica.'),
+    (None, None, 1998, 'ARCHIVO', 'En 1998, Larry Page y Sergey Brin fundaron Google en California, redefiniendo la búsqueda y organización de información.'),
+    (None, None, 1999, 'ARCHIVO', 'En 1999, Sega lanzó la Dreamcast en Occidente el legendario 9/9/99, convirtiéndose en una consola de culto inmortal.'),
+    (None, None, 2000, 'ARCHIVO', 'En 2000, Sony lanzó la PlayStation 2: vendió más de 160 millones de unidades y se consolidó como la consola más exitosa de la historia.'),
+    (None, None, 2001, 'ARCHIVO', 'En 2001, Steve Jobs presentó el iPod original con el lema "1.000 canciones en tu bolsillo" y su icónica rueda de control.'),
+    (None, None, 2001, 'ARCHIVO', 'En 2001, Rockstar Games revolucionó la industria con GTA III, definiendo el concepto de mundo abierto contemporáneo.'),
+    (None, None, 2004, 'ARCHIVO', 'En 2004, Grand Theft Auto: San Andreas debutó en PS2, consagrándose como una de las obras cumbres del género sandbox.'),
+    (None, None, 2004, 'ARCHIVO', 'En 2004, Nintendo lanzó la Nintendo DS con pantalla táctil dual, alcanzando más de 154 millones de consolas vendidas.'),
+    (None, None, 2007, 'ARCHIVO', 'En 2007, Apple presentó el iPhone original, redefiniendo la telefonía móvil y la computación de bolsillo.'),
+    (None, None, 2011, 'ARCHIVO', 'Hace más de una década, Mojang liberó Minecraft: hoy supera los 300 millones de copias vendidas como el juego más vendido de la historia.'),
+    (None, None, 2011, 'ARCHIVO', 'En 2011, Hidetaka Miyazaki y FromSoftware forjaron el género Soulsborne con el lanzamiento de Dark Souls.'),
 
-    # Cultura Pop, Anime & Cine Clásico
-    (None, None, 1977, 'CULTURA POP', 'En 1977, George Lucas estrenó "Star Wars: Una Nueva Esperanza", transformando el cine de ciencia ficción para siempre.'),
-    (None, None, 1982, 'CULTURA POP', 'En 1982, Michael Jackson lanzó "Thriller", el álbum musical más vendido de todos los tiempos con más de 70M de copias.'),
-    (None, None, 1982, 'CULTURA POP', 'En 1982, Ridley Scott estrenó "Blade Runner", definiendo la atmósfera visual y estética cyberpunk moderna.'),
-    (None, None, 1984, 'CULTURA POP', 'En 1984, James Cameron estrenó "The Terminator", consagrando a Arnold Schwarzenegger como icono del cine de acción.'),
-    (None, None, 1985, 'CULTURA POP', 'En 1985, Robert Zemeckis estrenó "Back to the Future", convirtiendo al DeLorean y a Doc Brown en mitos del cine.'),
-    (None, None, 1986, 'CULTURA POP', 'En 1986, Toei Animation emitió el primer episodio del anime "Dragon Ball" basado en el manga de Akira Toriyama.'),
-    (None, None, 1988, 'CULTURA POP', 'En 1988, Katsuhiro Otomo estrenó la película animada "Akira", deslumbrando al mundo con su animación cyberpunk a 24 fps.'),
-    (None, None, 1988, 'CULTURA POP', 'En 1988, Studio Ghibli y Hayao Miyazaki estrenaron "Mi Vecino Totoro", obra cumbre de la animación japonesa.'),
-    (None, None, 1989, 'CULTURA POP', 'En 1989, Matt Groening estrenó la serie "Los Simpson" en la televisión estadounidense.'),
-    (None, None, 1991, 'CULTURA POP', 'En 1991, James Cameron estrenó "Terminator 2: El Juicio Final", marcando un hito en efectos especiales por CGI con el T-1000.'),
-    (None, None, 1993, 'CULTURA POP', 'En 1993, Steven Spielberg estrenó "Jurassic Park", fascinando al planeta con dinosaurios mecánicos y computarizados.'),
-    (None, None, 1994, 'CULTURA POP', 'En 1994, Quentin Tarantino estrenó "Pulp Fiction", ganando la Palma de Oro con sus diálogos no lineales de culto.'),
-    (None, None, 1995, 'CULTURA POP', 'En 1995, Pixar estrenó "Toy Story", el primer largometraje animado íntegramente por ordenador.'),
-    (None, None, 1995, 'CULTURA POP', 'En 1995, Hideaki Anno estrenó "Neon Genesis Evangelion", revolucionando la narrativa del anime psicológico y de mechas.'),
-    (None, None, 1995, 'CULTURA POP', 'En 1995, Mamoru Oshii estrenó "Ghost in the Shell", una profunda exploración sobre la identidad artificial y la cibernética.'),
-    (None, None, 1997, 'CULTURA POP', 'En 1997, Daft Punk lanzó su álbum debut "Homework", catapultando el french house con himnos como "Around the World".'),
-    (None, None, 1998, 'CULTURA POP', 'En 1998, Shinichirō Watanabe estrenó "Cowboy Bebop", fusionando el jazz de Yoko Kanno, el cine noir y el espacio.'),
-    (None, None, 1999, 'CULTURA POP', 'En 1999, las hermanas Wachowski estrenaron "The Matrix", popularizando el "bullet time" y la filosofía cyberpunk.'),
-    (None, None, 1999, 'CULTURA POP', 'En 1999, David Fincher estrenó "Fight Club", basada en la novela de Chuck Palahniuk y convertida en cinta de culto.'),
-    (None, None, 2000, 'CULTURA POP', 'En 2000, OutKast lanzó su icónico álbum "Stankonia", reinventando el sonido del hip-hop con temas como "Ms. Jackson".'),
-    (None, None, 2000, 'CULTURA POP', 'En 2000, Linkin Park lanzó "Hybrid Theory", uno de los álbumes debut de rock y nu-metal más vendidos de la historia.'),
-    (None, None, 2001, 'CULTURA POP', 'En 2001, Daft Punk lanzó "Discovery", con pistas maestras como "One More Time" y "Harder, Better, Faster, Stronger".'),
-    (None, None, 2001, 'CULTURA POP', 'En 2001, Damon Albarn y Jamie Hewlett crearon "Gorillaz", presentando a la banda animada más icónica del siglo XXI.'),
-    (None, None, 2001, 'CULTURA POP', 'En 2001, Peter Jackson estrenó "El Señor de los Anillos: La Comunidad del Anillo", redefiniendo la fantasía épica en el cine.'),
-    (None, None, 2001, 'CULTURA POP', 'En 2001, Hayao Miyazaki estrenó "El Viaje de Chihiro", la única película animada japonesa en ganar el Premio Óscar.'),
-    (None, None, 2003, 'CULTURA POP', 'En 2003, Linkin Park lanzó "Meteora", dejando himnos generacionales inolvidables como "Numb" e "In the End".')
+    # Cultura: Cine Sci-Fi, Anime de Culto & Música
+    (None, None, 1977, 'CULTURA', 'En 1977, George Lucas estrenó Star Wars: Una Nueva Esperanza, redefiniendo la escala del cine de aventuras en el espacio.'),
+    (None, None, 1982, 'CULTURA', 'En 1982, Michael Jackson lanzó "Thriller", el álbum más vendido de la historia con una producción discográfica insuperable.'),
+    (None, None, 1982, 'CULTURA', 'En 1982, Ridley Scott esculpió la atmósfera visual del cyberpunk y el cine distópico con el estreno de Blade Runner.'),
+    (None, None, 1984, 'CULTURA', 'En 1984, James Cameron estrenó The Terminator, consagrando a Arnold Schwarzenegger como icono del cine de acción.'),
+    (None, None, 1985, 'CULTURA', 'En 1985, Robert Zemeckis estrenó Back to the Future, convirtiendo el viaje temporal del DeLorean en un clásico imperecedero.'),
+    (None, None, 1986, 'CULTURA', 'En 1986, Toei Animation emitió el primer episodio de Dragon Ball, expandiendo la obra de Akira Toriyama por todo el mundo.'),
+    (None, None, 1988, 'CULTURA', 'En 1988, Katsuhiro Otomo deslumbró al cine internacional con Akira y su visión de Neo-Tokyo a 24 cuadros por segundo.'),
+    (None, None, 1988, 'CULTURA', 'En 1988, Hayao Miyazaki y Studio Ghibli estrenaron Mi Vecino Totoro, consagrando una nueva era en el cine animado tradicional.'),
+    (None, None, 1989, 'CULTURA', 'En 1989, Matt Groening estrenó la serie animada Los Simpson, convertida en un pilar del humor y la televisión moderna.'),
+    (None, None, 1991, 'CULTURA', 'En 1991, James Cameron marcó un antes y un después en los efectos digitales de Hollywood con Terminator 2: El Juicio Final.'),
+    (None, None, 1993, 'CULTURA', 'En 1993, Steven Spielberg combinó robótica y animación digital para dar vida a los dinosaurios de Jurassic Park.'),
+    (None, None, 1994, 'CULTURA', 'En 1994, Quentin Tarantino conquistó el Festival de Cannes con la narrativa no lineal de Pulp Fiction.'),
+    (None, None, 1995, 'CULTURA', 'En 1995, Pixar estrenó Toy Story, el primer largometraje animado íntegramente por ordenador en la historia del cine.'),
+    (None, None, 1995, 'CULTURA', 'En 1995, Hideaki Anno transformó la animación contemporánea con el impacto psicológico de Neon Genesis Evangelion.'),
+    (None, None, 1995, 'CULTURA', 'En 1995, Mamoru Oshii estrenó Ghost in the Shell, una influyente reflexión sobre la conciencia y la identidad artificial.'),
+    (None, None, 1997, 'CULTURA', 'En 1997, Daft Punk irrumpió con "Homework", catapultando el sonido del french house en las pistas globales.'),
+    (None, None, 1998, 'CULTURA', 'En 1998, Shinichirō Watanabe y Yoko Kanno fusionaron jazz, cine negro y ciencia ficción en la obra maestra Cowboy Bebop.'),
+    (None, None, 1999, 'CULTURA', 'En 1999, The Matrix llegó a las salas combinando filosofía existencial, artes marciales y la técnica del bullet time.'),
+    (None, None, 1999, 'CULTURA', 'En 1999, David Fincher dirigió Fight Club, una de las películas más analizadas y debatidas del cine contemporáneo.'),
+    (None, None, 2000, 'CULTURA', 'En 2000, OutKast lanzó "Stankonia", expandiendo los límites creativos del hip-hop con temas como "Ms. Jackson".'),
+    (None, None, 2000, 'CULTURA', 'En 2000, Linkin Park lanzó "Hybrid Theory", consolidando el sonido más exitoso del rock y el nu-metal de los 2000.'),
+    (None, None, 2001, 'CULTURA', 'En 2001, Daft Punk lanzó "Discovery", fusionando música electrónica, nostalgia setentera y anime con Interstella 5555.'),
+    (None, None, 2001, 'CULTURA', 'En 2001, Damon Albarn y Jamie Hewlett crearon Gorillaz, la primera gran banda virtual multimedia del siglo XXI.'),
+    (None, None, 2001, 'CULTURA', 'En 2001, Peter Jackson llevó a la pantalla La Comunidad del Anillo, iniciando una de las trilogías más premiadas de la historia.'),
+    (None, None, 2001, 'CULTURA', 'En 2001, El Viaje de Chihiro conquistó el Oso de Oro en Berlín y el Premio Óscar a la mejor película animada.'),
+    (None, None, 2003, 'CULTURA', 'En 2003, Linkin Park lanzó "Meteora", dejando himnos generacionales inolvidables como "Numb" e "In the End".')
 ]
 
 HARD_REJECT_PATTERNS = [
     r'^[?¿]',
     r'^(c[oó]mo|por qu[eé]|cu[aá]ndo|d[oó]nde|qui[eé]n(es)?|qu[eé]|cu[aá]l(es)?|lo que|as[ií] (es|se|fue|funciona))\b',
+    r'^(im[aá]genes de|tr[aá]iler de|fotos de|gameplay de)\b',
     r'\b(descuento|black friday|oferta|rebaja|ganga|choll|compra este|por menos de \d+|ahorra|hazte con|llévate|llevate|funda|accesorio|chollo|cuestan|ladrillo en el bolsillo)\b',
     r'\b(n[oó]mada digital|furgoneta|camperizada|alquiler|seguridad social|hacienda|elecciones|votar|pensiones|paro|sindicatos)\b',
     r'\b(hijos|padres|beb[eé]s|cenar sin ellos|dormir|dieta|psicolog\w*|matrimonio|divorcio)\b',
@@ -201,6 +202,7 @@ def fetch_fresh_ticker():
     tech_items = news_by_cat.get('TECNOLOGÍA', [])
     efemerides = get_efemerides()
 
+    # Interleave cleanly: GAMING, TECNOLOGÍA, ARCHIVO, GAMING, TECNOLOGÍA, CULTURA...
     interleaved = []
     g_idx, t_idx, e_idx = 0, 0, 0
     max_total = 65
@@ -241,15 +243,15 @@ def upload_to_firebase(items):
         return resp.read().decode('utf-8')
 
 def news_worker_loop():
-    print('[NEWS_SERVICE] Loop de noticias Tech, Gaming y Efemérides iniciado.', flush=True)
+    print('[NEWS_SERVICE] Loop de noticias Gaming, Tecnología, Archivo y Cultura iniciado.', flush=True)
     time.sleep(5)
     while True:
         try:
-            print('[NEWS_SERVICE] Recopilando titulares Tech, Gaming y Efemérides...', flush=True)
+            print('[NEWS_SERVICE] Recopilando titulares...', flush=True)
             items = fetch_fresh_ticker()
             if items:
                 upload_to_firebase(items)
-                print(f'[NEWS_SERVICE] Éxito: {len(items)} titulares Tech, Gaming y Efemérides subidos a Firebase.', flush=True)
+                print(f'[NEWS_SERVICE] Éxito: {len(items)} titulares subidos a Firebase.', flush=True)
             else:
                 print('[NEWS_SERVICE] Aviso: No se pudieron recolectar titulares.', flush=True)
         except Exception as e:
@@ -263,11 +265,11 @@ def start_news_updater():
     return t
 
 if __name__ == '__main__':
-    print("Ejecutando recopilación y sincronización manual de noticias...")
+    print("Ejecutando recopilación y sincronización manual...")
     items = fetch_fresh_ticker()
     if items:
         upload_to_firebase(items)
         print(f"¡Sincronización completada! {len(items)} titulares subidos a Firebase.")
         print("\nPrimeros 15 titulares sincronizados:")
         for idx, it in enumerate(items[:15]):
-            print(f"  {idx+1:2d}. [{it['category']:16s}] {it['title']}")
+            print(f"  {idx+1:2d}. [{it['category']:12s}] {it['title']}")
