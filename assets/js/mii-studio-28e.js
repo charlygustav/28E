@@ -302,6 +302,71 @@
         } catch (e) {}
     }
 
+    let miiBgmAudio = null;
+    let miiBgmFadeTimer = null;
+    let wasSpotAudioPlaying = false;
+
+    function startMiiBgm() {
+        try {
+            if (miiBgmFadeTimer) {
+                clearInterval(miiBgmFadeTimer);
+                miiBgmFadeTimer = null;
+            }
+            if (typeof window.spotAudio !== 'undefined' && window.spotAudio && !window.spotAudio.paused) {
+                wasSpotAudioPlaying = true;
+                window.spotAudio.pause();
+            } else {
+                wasSpotAudioPlaying = false;
+            }
+            if (!miiBgmAudio) {
+                miiBgmAudio = new Audio('sounds/mii-studio-bgm.mp3');
+                miiBgmAudio.loop = true;
+                miiBgmAudio.preload = 'auto';
+            }
+            const isMuted = typeof window.AudioManager !== 'undefined' && window.AudioManager && window.AudioManager.muted;
+            miiBgmAudio.muted = !!isMuted;
+            miiBgmAudio.currentTime = 0;
+            miiBgmAudio.volume = 0;
+            const playPromise = miiBgmAudio.play();
+            if (playPromise && typeof playPromise.then === 'function') {
+                playPromise.then(() => {
+                    const targetVol = 0.42;
+                    miiBgmFadeTimer = setInterval(() => {
+                        if (!miiBgmAudio || miiBgmAudio.paused) {
+                            clearInterval(miiBgmFadeTimer);
+                            miiBgmFadeTimer = null;
+                            return;
+                        }
+                        if (miiBgmAudio.volume < targetVol - 0.04) {
+                            miiBgmAudio.volume = Math.min(targetVol, miiBgmAudio.volume + 0.04);
+                        } else {
+                            miiBgmAudio.volume = targetVol;
+                            clearInterval(miiBgmFadeTimer);
+                            miiBgmFadeTimer = null;
+                        }
+                    }, 30);
+                }).catch(() => {});
+            }
+        } catch (e) {}
+    }
+
+    function stopMiiBgm() {
+        try {
+            if (miiBgmFadeTimer) {
+                clearInterval(miiBgmFadeTimer);
+                miiBgmFadeTimer = null;
+            }
+            if (miiBgmAudio) {
+                miiBgmAudio.pause();
+                miiBgmAudio.currentTime = 0;
+            }
+            if (wasSpotAudioPlaying && typeof window.spotAudio !== 'undefined' && window.spotAudio) {
+                wasSpotAudioPlaying = false;
+                window.spotAudio.play().catch(() => {});
+            }
+        } catch (e) {}
+    }
+
     function loadIconsJson() {
         if (iconsData) return Promise.resolve(iconsData);
         if (iconsLoadingPromise) return iconsLoadingPromise;
@@ -1716,6 +1781,7 @@
         updateModeButtonsUI();
         modalEl.classList.add('open');
         playSound('gameopen.wav', 0.35);
+        startMiiBgm();
 
         refreshPreview(true);
         renderActiveTab();
@@ -1730,6 +1796,7 @@
     function closeMiiStudio() {
         if (!modalEl) return;
         modalEl.classList.remove('open');
+        stopMiiBgm();
         playSound('flyout.wav', 0.3);
     }
 
