@@ -13,28 +13,39 @@
     const FALLBACK_API = 'https://mii-unsecure.ariankordi.net/miis/image.png';
     const ICONS_JSON_URL = 'assets/data/mii-icons.json';
 
-    // Orden oficial de partes de Nintendo Switch / Mii Studio
-    const HAIR_ORDER = [
+    // Catálogos separados por género (sin mezclar peinados u ojos femeninos y masculinos)
+    const HAIR_ORDER_MALE = [
         33, 47, 40, 37, 32, 107, 48, 51, 55, 70, 44, 66,
         52, 50, 38, 49, 43, 31, 56, 68, 62, 115, 76, 119,
         64, 81, 116, 121, 22, 58, 60, 87, 125, 117, 73, 75,
         42, 89, 57, 54, 80, 34, 23, 86, 88, 118, 39, 36,
-        45, 67, 59, 65, 41, 30, 12, 16, 10, 82, 128, 129,
-        14, 95, 105, 100, 6, 20, 93, 102, 27, 4, 17, 110,
-        123, 8, 106, 72, 3, 21, 0, 98, 63, 90, 11, 120,
-        5, 74, 108, 94, 124, 25, 99, 69, 35, 13, 122, 113,
-        53, 24, 85, 83, 71, 131, 96, 101, 29, 7, 15, 112,
-        79, 1, 109, 127, 91, 26, 61, 103, 2, 77, 18, 92,
-        84, 9, 19, 130, 97, 104, 46, 78, 28, 114, 126, 111
+        45, 67, 59, 65, 41, 30
     ];
 
-    const EYE_ORDER = [
-        2, 4, 0, 8, 39, 17, 1, 26, 16, 15, 27, 20,
-        33, 11, 19, 32, 9, 12, 23, 34, 21, 25, 40, 35,
-        5, 41, 13, 36, 37, 6, 24, 30, 31, 18, 28, 46,
-        7, 44, 38, 42, 45, 29, 3, 43, 22, 10, 14, 47,
-        48, 49, 50, 53, 59, 56, 54, 58, 57, 55, 51, 52
+    const HAIR_ORDER_FEMALE = [
+        12, 16, 10, 82, 128, 129, 14, 95, 105, 100, 6, 20,
+        93, 102, 27, 4, 17, 110, 123, 8, 106, 72, 3, 21,
+        0, 98, 63, 90, 11, 120, 5, 74, 108, 94, 124, 25,
+        99, 69, 35, 13, 122, 113, 53, 24, 85, 83, 71, 131,
+        96, 101, 29, 7, 15, 112, 79, 1, 109, 127, 91, 26,
+        61, 103, 2, 77, 18, 92, 84, 9, 19, 130, 97, 104,
+        46, 78, 28, 114, 126, 111
     ];
+
+    const EYE_ORDER_FEMALE = [
+        4, 0, 39, 17, 1, 26, 27, 20, 33, 19,
+        32, 9, 23, 34, 40, 35, 41, 24, 30, 18,
+        28, 46, 7, 42, 45, 29, 10, 47, 54, 56
+    ];
+
+    const EYE_ORDER_MALE = [
+        2, 8, 16, 15, 11, 12, 21, 25, 5, 13,
+        36, 37, 6, 31, 44, 38, 3, 43, 22, 14,
+        48, 49, 50, 53, 59, 58, 57, 55, 51, 52
+    ];
+
+    const MAKEUP_ORDER_FEMALE = [0, 1, 2, 9, 3, 4, 5, 6, 7, 8, 10];
+    const MAKEUP_ORDER_MALE = [0, 9, 10, 11, 2];
 
     const EYEBROW_ORDER = [
         6, 0, 12, 1, 9, 19, 7, 21, 8, 17, 5, 4,
@@ -839,13 +850,9 @@
     }
 
     function randomizeMii() {
-        const isFemale = Math.random() < 0.5 ? 1 : 0;
-        const hairPool = isFemale
-            ? [12, 20, 21, 22, 23, 27, 36, 39, 41, 45, 54, 57, 58, 60, 63, 65, 67, 73, 75, 80, 86, 88, 89, 100, 102, 117, 121]
-            : [33, 47, 40, 37, 32, 48, 51, 55, 70, 44, 66, 52, 50, 38, 49, 43, 31, 56, 68, 62, 64, 81, 115];
-        const eyePool = isFemale
-            ? [4, 1, 17, 20, 26, 27, 19, 32, 33, 34, 40, 41, 18, 28]
-            : [2, 0, 8, 39, 16, 15, 11, 9, 12, 23, 25, 35, 5, 13];
+        const isFemale = state.rawBytes[IDX.gender] === 1 ? 1 : 0;
+        const hairPool = isFemale ? HAIR_ORDER_FEMALE : HAIR_ORDER_MALE;
+        const eyePool = isFemale ? EYE_ORDER_FEMALE : EYE_ORDER_MALE;
         const mouthPool = [19, 22, 1, 21, 0, 8, 10, 16, 6, 13, 15, 11];
         const nosePool = [1, 10, 2, 3, 6, 0, 5, 4];
         const skinPool = [0, 6, 7, 3, 1, 2, 4];
@@ -860,7 +867,7 @@
         raw[IDX.gender] = isFemale;
         raw[IDX.facelineColor] = pick(skinPool);
         raw[IDX.facelineType] = Math.floor(Math.random() * 6);
-        raw[IDX.facelineMake] = isFemale ? pick([0, 1, 2, 3, 9]) : 0;
+        raw[IDX.facelineMake] = isFemale ? pick([0, 1, 2, 9]) : pick([0, 0, 9, 10]);
         raw[IDX.facelineWrinkle] = 0;
         raw[IDX.hairType] = pick(hairPool);
         raw[IDX.hairColor] = hCol;
@@ -986,7 +993,7 @@
 
     function getPartsGridNode(categoryKey, byteIdx, orderList, totalCount) {
         const currentVal = state.rawBytes[byteIdx];
-        const cacheKey = `${categoryKey}_${byteIdx}`;
+        const cacheKey = `${categoryKey}_${byteIdx}_${orderList ? orderList[0] + '_' + orderList.length : totalCount}`;
 
         if (gridDomCache[cacheKey]) {
             const cachedGrid = gridDomCache[cacheKey];
@@ -1021,11 +1028,30 @@
         const container = modalEl.querySelector('#mii-tab-content');
         if (!container) return;
 
+        const b = state.rawBytes;
+        const isFemale = b[IDX.gender] === 1;
+
+        // Ocultar pestaña Vello (Bigote/Barba) cuando el personaje es Femenino
+        const beardTabBtn = modalEl.querySelector('.mii-tab-btn[data-tab="beard"]');
+        if (beardTabBtn) {
+            beardTabBtn.style.display = isFemale ? 'none' : '';
+        }
+        if (isFemale && activeTab === 'beard') {
+            activeTab = 'face';
+        }
+
+        // Sincronizar selector de género en el panel izquierdo
+        const stageFemBtn = modalEl.querySelector('#mii-stage-gender-f');
+        const stageMaleBtn = modalEl.querySelector('#mii-stage-gender-m');
+        if (stageFemBtn && stageMaleBtn) {
+            stageFemBtn.classList.toggle('active', isFemale);
+            stageMaleBtn.classList.toggle('active', !isFemale);
+        }
+
         modalEl.querySelectorAll('.mii-tab-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.tab === activeTab);
         });
 
-        const b = state.rawBytes;
         container.innerHTML = '';
 
         if (activeTab === 'face') {
@@ -1046,12 +1072,13 @@
                 <div class="mii-subtoolbar">
                     <div class="mii-segmented">
                         <button type="button" class="mii-segmented-btn ${subTabFace === 'shape' ? 'active' : ''}" data-subtab-face="shape">Contorno</button>
-                        <button type="button" class="mii-segmented-btn ${subTabFace === 'makeup' ? 'active' : ''}" data-subtab-face="makeup">Rubor y pecas</button>
+                        <button type="button" class="mii-segmented-btn ${subTabFace === 'makeup' ? 'active' : ''}" data-subtab-face="makeup">${isFemale ? 'Rubor y pecas' : 'Facciones'}</button>
                         <button type="button" class="mii-segmented-btn ${subTabFace === 'wrinkles' ? 'active' : ''}" data-subtab-face="wrinkles">Líneas</button>
+                        <button type="button" class="mii-segmented-btn ${subTabFace === 'mole' ? 'active' : ''}" data-subtab-face="mole">Lunar</button>
                     </div>
                     <div class="mii-segmented">
-                        <button type="button" class="mii-segmented-btn ${b[IDX.gender] === 1 ? 'active' : ''}" data-gender-preset="1">Femenino</button>
-                        <button type="button" class="mii-segmented-btn ${b[IDX.gender] === 0 ? 'active' : ''}" data-gender-preset="0">Masculino</button>
+                        <button type="button" class="mii-segmented-btn ${isFemale ? 'active' : ''}" data-gender-preset="1">Femenino</button>
+                        <button type="button" class="mii-segmented-btn ${!isFemale ? 'active' : ''}" data-gender-preset="0">Masculino</button>
                     </div>
                 </div>
             `;
@@ -1060,11 +1087,28 @@
             if (subTabFace === 'shape') {
                 container.appendChild(getPartsGridNode('face', IDX.facelineType, null, 12));
             } else if (subTabFace === 'makeup') {
-                container.appendChild(getPartsGridNode('makeup', IDX.facelineMake, null, 12));
-            } else {
+                const makeupList = isFemale ? MAKEUP_ORDER_FEMALE : MAKEUP_ORDER_MALE;
+                container.appendChild(getPartsGridNode('makeup', IDX.facelineMake, makeupList, makeupList.length));
+            } else if (subTabFace === 'wrinkles') {
                 container.appendChild(getPartsGridNode('wrinkles', IDX.facelineWrinkle, null, 12));
+            } else {
+                const moleBox = document.createElement('div');
+                moleBox.className = 'mii-adjust-drawer';
+                moleBox.innerHTML = `
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                        <span style="font-size:12.5px;font-weight:500;color:#e4e4e7;">Mostrar lunar facial</span>
+                        <button type="button" class="mii-pill-btn ${b[IDX.moleType] === 1 ? 'active' : ''}" id="mii-btn-toggle-mole">
+                            ${b[IDX.moleType] === 1 ? 'Activado' : 'Desactivado'}
+                        </button>
+                    </div>
+                    ${buildSliderHTML('Tamaño', IDX.moleScale, 0, 8)}
+                    ${buildSliderHTML('Posición X', IDX.moleX, 0, 16)}
+                    ${buildSliderHTML('Posición Y', IDX.moleY, 0, 30)}
+                `;
+                container.appendChild(moleBox);
             }
         } else if (activeTab === 'hair') {
+            const hairList = isFemale ? HAIR_ORDER_FEMALE : HAIR_ORDER_MALE;
             const topWrap = document.createElement('div');
             topWrap.style.display = 'flex';
             topWrap.style.flexDirection = 'column';
@@ -1072,15 +1116,16 @@
             topWrap.innerHTML = `
                 ${buildColorPickerHTML(IDX.hairColor, QUICK_HAIR_COLORS)}
                 <div class="mii-subtoolbar">
-                    <span class="mii-section-label" style="margin:0;">Peinado</span>
+                    <span class="mii-section-label" style="margin:0;">Peinados (${isFemale ? 'Femeninos' : 'Masculinos'})</span>
                     <button type="button" class="mii-pill-btn ${b[IDX.hairFlip] === 1 ? 'active' : ''}" id="mii-btn-hairflip">
                         Invertir orientación
                     </button>
                 </div>
             `;
             container.appendChild(topWrap);
-            container.appendChild(getPartsGridNode('hair', IDX.hairType, HAIR_ORDER, 132));
+            container.appendChild(getPartsGridNode('hair', IDX.hairType, hairList, hairList.length));
         } else if (activeTab === 'eyes') {
+            const eyeList = isFemale ? EYE_ORDER_FEMALE : EYE_ORDER_MALE;
             const topWrap = document.createElement('div');
             topWrap.style.display = 'flex';
             topWrap.style.flexDirection = 'column';
@@ -1088,7 +1133,7 @@
             topWrap.innerHTML = `
                 ${buildColorPickerHTML(IDX.eyeColor, QUICK_EYE_COLORS)}
                 <div class="mii-subtoolbar">
-                    <span class="mii-section-label" style="margin:0;">Mirada</span>
+                    <span class="mii-section-label" style="margin:0;">Mirada (${isFemale ? 'Femenina' : 'Masculina'})</span>
                     <button type="button" class="mii-pill-btn ${showAdjustments ? 'active' : ''}" id="mii-toggle-adjust">
                         Ajustar posición
                     </button>
@@ -1104,7 +1149,7 @@
                 ` : ''}
             `;
             container.appendChild(topWrap);
-            container.appendChild(getPartsGridNode('eyes', IDX.eyeType, EYE_ORDER, 60));
+            container.appendChild(getPartsGridNode('eyes', IDX.eyeType, eyeList, eyeList.length));
         } else if (activeTab === 'eyebrows') {
             const topWrap = document.createElement('div');
             topWrap.style.display = 'flex';
@@ -1192,17 +1237,17 @@
             container.appendChild(topWrap);
             container.appendChild(getPartsGridNode('glasses', IDX.glassType, null, 20));
         } else if (activeTab === 'beard') {
+            if (subTabBeard === 'mole') subTabBeard = 'mustache';
             const topWrap = document.createElement('div');
             topWrap.style.display = 'flex';
             topWrap.style.flexDirection = 'column';
             topWrap.style.gap = '12px';
             topWrap.innerHTML = `
-                ${subTabBeard !== 'mole' ? buildColorPickerHTML(IDX.beardColor, QUICK_HAIR_COLORS) : ''}
+                ${buildColorPickerHTML(IDX.beardColor, QUICK_HAIR_COLORS)}
                 <div class="mii-subtoolbar">
                     <div class="mii-segmented">
                         <button type="button" class="mii-segmented-btn ${subTabBeard === 'mustache' ? 'active' : ''}" data-subtab-beard="mustache">Bigote</button>
                         <button type="button" class="mii-segmented-btn ${subTabBeard === 'goatee' ? 'active' : ''}" data-subtab-beard="goatee">Barba</button>
-                        <button type="button" class="mii-segmented-btn ${subTabBeard === 'mole' ? 'active' : ''}" data-subtab-beard="mole">Lunar</button>
                     </div>
                     ${subTabBeard === 'mustache' ? `
                         <button type="button" class="mii-pill-btn ${showAdjustments ? 'active' : ''}" id="mii-toggle-adjust">Ajustar posición</button>
@@ -1222,23 +1267,8 @@
                     container.appendChild(adj);
                 }
                 container.appendChild(getPartsGridNode('mustache', IDX.mustacheType, null, 6));
-            } else if (subTabBeard === 'goatee') {
-                container.appendChild(getPartsGridNode('goatee', IDX.beardType, null, 6));
             } else {
-                const moleBox = document.createElement('div');
-                moleBox.className = 'mii-adjust-drawer';
-                moleBox.innerHTML = `
-                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-                        <span style="font-size:12.5px;font-weight:500;color:#e4e4e7;">Mostrar lunar facial</span>
-                        <button type="button" class="mii-pill-btn ${b[IDX.moleType] === 1 ? 'active' : ''}" id="mii-btn-toggle-mole">
-                            ${b[IDX.moleType] === 1 ? 'Activado' : 'Desactivado'}
-                        </button>
-                    </div>
-                    ${buildSliderHTML('Tamaño', IDX.moleScale, 0, 8)}
-                    ${buildSliderHTML('Posición X', IDX.moleX, 0, 16)}
-                    ${buildSliderHTML('Posición Y', IDX.moleY, 0, 30)}
-                `;
-                container.appendChild(moleBox);
+                container.appendChild(getPartsGridNode('goatee', IDX.beardType, null, 6));
             }
         } else if (activeTab === 'style') {
             const expBtns = EXPRESSIONS.map(ex => {
@@ -1327,7 +1357,11 @@
                             </div>
                         </div>
 
-                        <div class="mii-presets-box">
+                        <div class="mii-presets-box" style="gap:8px;align-items:center;">
+                            <div class="mii-segmented" style="width:100%;">
+                                <button type="button" id="mii-stage-gender-f" class="mii-segmented-btn active" style="flex:1;" data-gender-preset="1">Femenino</button>
+                                <button type="button" id="mii-stage-gender-m" class="mii-segmented-btn" style="flex:1;" data-gender-preset="0">Masculino</button>
+                            </div>
                             <button type="button" id="mii-preset-random" class="mii-ghost-btn">Generar Mii al azar</button>
                         </div>
                     </div>
@@ -1427,6 +1461,25 @@
             refreshPreview(true);
         });
 
+        // Selector de género en el panel izquierdo y en Rostro
+        modalEl.addEventListener('click', (e) => {
+            const genderPresetBtn = e.target.closest('[data-gender-preset]');
+            if (genderPresetBtn) {
+                const isFemale = parseInt(genderPresetBtn.dataset.genderPreset, 10) === 1;
+                if ((state.rawBytes[IDX.gender] === 1) === isFemale) return;
+                const currentSkin = state.rawBytes[IDX.facelineColor];
+                const nextRaw = isFemale ? PRESET_CHICA.slice() : PRESET_CHICO.slice();
+                nextRaw[IDX.facelineColor] = currentSkin;
+                state.rawBytes = clampBytes(nextRaw);
+                state.expression = 'normal';
+                state.enabled = true;
+                updateModeButtonsUI();
+                playSound('colors.wav', 0.35);
+                refreshPreview(true);
+                renderActiveTab();
+            }
+        });
+
         // Generar Mii al azar
         modalEl.querySelector('#mii-preset-random').addEventListener('click', randomizeMii);
 
@@ -1453,22 +1506,6 @@
         // Delegación O(1) en el contenido de la pestaña
         const contentEl = modalEl.querySelector('#mii-tab-content');
         contentEl.addEventListener('click', (e) => {
-            const genderPresetBtn = e.target.closest('[data-gender-preset]');
-            if (genderPresetBtn) {
-                const isFemale = parseInt(genderPresetBtn.dataset.genderPreset, 10) === 1;
-                const currentSkin = state.rawBytes[IDX.facelineColor];
-                const nextRaw = isFemale ? PRESET_CHICA.slice() : PRESET_CHICO.slice();
-                nextRaw[IDX.facelineColor] = currentSkin;
-                state.rawBytes = clampBytes(nextRaw);
-                state.expression = 'normal';
-                state.enabled = true;
-                updateModeButtonsUI();
-                playSound('colors.wav', 0.35);
-                refreshPreview(true);
-                renderActiveTab();
-                return;
-            }
-
             const subFaceBtn = e.target.closest('[data-subtab-face]');
             if (subFaceBtn) {
                 subTabFace = subFaceBtn.dataset.subtabFace;
