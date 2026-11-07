@@ -42,7 +42,7 @@ var logDebug = window.logDebug;
 
                 loading: "Cargando nuestro universo...", nav_logo: "28E", hero_badge: "28E", hero_countdown_prefix: "28E en",
 
-                hero_title1: "Mi lugar favorito", hero_title2: "sigue siendo contigo.",
+                hero_title1: "Mi lugar favorito", hero_title2: "sigue siendo <em style=\"font-style: italic; font-family: inherit;\">contigo.</em>",
 
                 hero_subtitle: "Dejamos de ser una hermosa casualidad para convertirnos en mi mayor certeza. Caminando de tu mano, venciendo cualquier distancia y eligiéndote cada día. Esta historia es nuestra, para siempre.",
 
