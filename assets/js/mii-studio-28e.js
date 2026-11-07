@@ -1751,6 +1751,7 @@
 
     function openMiiStudio() {
         ensureModalDOM();
+        if (modalEl && modalEl.classList.contains('open')) return;
 
         let saved = null;
         if (typeof window.yaireGetCurrentMiiProfile === 'function') {
