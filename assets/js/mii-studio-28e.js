@@ -696,24 +696,27 @@
                 --icon-hat-stroke: #3f3f46;
                 --icon-face-detail: #E775A6;
                 --icon-face-wrinkles: #52525b;
-                --icon-eyebrow-fill: #3f3f46;
+                --icon-eyebrow-fill: #e4e4e7;
                 --icon-mouth-tooth: #ffffff;
-                --icon-lip-color-top: #a1a1aa;
-                --icon-lip-color-bottom: #d4d4d8;
-                --eye-color: #52525b;
+                --icon-lip-color-top: #E775A6;
+                --icon-lip-color-bottom: #f48fb1;
+                --eye-color: #71717a;
             }
             .mii-part-card {
                 height: 58px;
                 border-radius: 18px;
-                background: rgba(255, 255, 255, 0.04);
-                border: 1px solid rgba(255, 255, 255, 0.07);
+                background: rgba(255, 255, 255, 0.045);
+                border: 1px solid rgba(255, 255, 255, 0.08);
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 cursor: pointer;
                 padding: 4px;
-                color: #27272a;
+                color: #e4e4e7;
                 transition: transform 140ms var(--ease-out), background-color 140ms var(--ease-out), border-color 140ms var(--ease-out);
+            }
+            .mii-part-card.mii-part-composite {
+                color: #27272a;
             }
             .mii-part-card.selected {
                 background: rgba(231, 117, 166, 0.14);
@@ -1076,10 +1079,17 @@
         gridEl.className = 'mii-parts-grid';
         gridEl.innerHTML = indices.map(idx => {
             const sel = currentVal === idx ? 'selected' : '';
-            const svgMarkup = (catIcons && catIcons[idx])
-                ? catIcons[idx]
-                : `<span style="font-size:11px;font-weight:600;color:#71717a;">${idx + 1}</span>`;
-            return `<button type="button" class="mii-part-card ${sel}" data-part-byte="${byteIdx}" data-part-val="${idx}" aria-label="Opción ${idx + 1}">${svgMarkup}</button>`;
+            let rawSvg = (catIcons && catIcons[idx]) ? catIcons[idx] : '';
+            let compositeClass = '';
+            if (rawSvg) {
+                if (categoryKey === 'glasses' || (categoryKey === 'mouth' && (rawSvg.includes('--icon-mouth-tooth') || rawSvg.includes('--icon-lip-color')))) {
+                    compositeClass = 'mii-part-composite';
+                } else if (categoryKey === 'eyes' && !rawSvg.includes('fill="white"') && !rawSvg.includes('var(--eye-color)')) {
+                    rawSvg = rawSvg.replace(/fill="black"/g, 'fill="currentColor"').replace(/stroke="black"/g, 'stroke="currentColor"');
+                }
+            }
+            const svgMarkup = rawSvg || `<span style="font-size:11px;font-weight:600;color:#71717a;">${idx + 1}</span>`;
+            return `<button type="button" class="mii-part-card ${compositeClass} ${sel}" data-part-byte="${byteIdx}" data-part-val="${idx}" aria-label="Opción ${idx + 1}">${svgMarkup}</button>`;
         }).join('');
 
         if (catIcons) {
