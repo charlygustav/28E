@@ -87,6 +87,8 @@
         }
 
         .brand-logo {
+            display: flex;
+            align-items: baseline;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 3.2rem;
             font-weight: 900;
@@ -97,6 +99,25 @@
             user-select: none;
             -webkit-user-select: none;
             padding-top: 0.15rem;
+        }
+
+        .brand-sep {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 1.55rem;
+            font-weight: 400;
+            letter-spacing: 0;
+            color: rgba(255, 255, 255, 0.42);
+            margin: 0 0.6rem;
+            transform: translateY(-0.22rem);
+        }
+
+        .brand-site {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 1.55rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            color: rgba(255, 255, 255, 0.72);
+            transform: translateY(-0.18rem);
         }
 
         /* ─── Contador Superior: Minimalista Puro 28E ─── */
@@ -335,7 +356,7 @@
 
         <!-- Header con logo y contador superior -->
         <header class="header">
-            <div class="brand-logo">28E</div>
+            <div class="brand-logo">28E<span class="brand-sep">·</span><span class="brand-site">yaire.site</span></div>
 
             <div id="countdown-root" class="countdown-container">
                 <div class="countdown-eyebrow">Apertura de la Web</div>
