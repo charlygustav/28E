@@ -76,6 +76,7 @@ function rng(seed){return()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(see
    fx  < 0        -> parpadeo de luz (twinkle) de intensidad |fx|            */
 const VS=`attribute vec3 p;attribute vec3 n;attribute vec3 c;attribute vec3 x;
 uniform mat4 vp;uniform float t;
+uniform vec3 eye;uniform float fogN;uniform float fogF;
 varying vec3 wp;varying vec3 nn;varying vec3 col;varying vec3 xx;
 float h(vec3 v){return fract(sin(dot(v,vec3(12.9898,78.233,37.719)))*43758.5453);}
 void main(){
@@ -85,7 +86,8 @@ void main(){
   q.x+=sin(t*0.6+p.y*1.7)*0.04*w;}
  else if(fx>0.0){q.x+=sin(t*1.5+p.x*0.9+p.z*0.6)*0.07*fx;q.z+=cos(t*1.2+p.x*0.5+p.z*0.8)*0.035*fx;}
  else if(fx<0.0){float k=-fx;em*=1.0-k*(0.5+0.5*sin(t*(1.5+h(p)*3.5)+h(p+1.0)*6.28));}
- wp=q;nn=n;col=c;xx=vec3(em,x.y,fx);
+ float f=clamp((distance(eye,q)-fogN)/(fogF-fogN),0.0,1.0);
+ wp=q;nn=normalize(n);col=c;xx=vec3(em,x.y,f*f*0.92);
  gl_Position=vp*vec4(q,1.0);
 }`;
 const FS=`#ifdef GL_FRAGMENT_PRECISION_HIGH
@@ -94,17 +96,16 @@ precision highp float;
 precision mediump float;
 #endif
 varying vec3 wp;varying vec3 nn;varying vec3 col;varying vec3 xx;
-uniform vec3 eye;uniform vec3 fogCol;uniform float fogN;uniform float fogF;
+uniform vec3 eye;uniform vec3 fogCol;
 uniform vec3 amb;uniform vec3 moonD;uniform vec3 moonC;
 uniform vec4 pl[4];uniform vec3 plc[4];
 uniform float glowPass;
-vec3 finish(vec3 c){c=vec3(1.0)-exp(-c*1.30);c=pow(c,vec3(0.86));
- c+=(mod(gl_FragCoord.x+mod(gl_FragCoord.y,2.0)*2.0,4.0)-1.5)/280.0;return c;}
+vec3 finish(vec3 c){vec3 x=max(c,0.0);return clamp((x*(1.32+x*0.58))/(1.0+x*(1.12+x*0.58)),0.0,1.0);}
 void main(){
  float em=xx.x;float al=xx.y;
  if(glowPass>0.5){gl_FragColor=vec4(col*em,al);return;}
  if(em>=10.0){gl_FragColor=vec4(finish(col*(em-10.0)),al);return;}
- vec3 N=normalize(nn);vec3 V=eye-wp;if(dot(N,V)<0.0)N=-N;
+ vec3 N=nn;vec3 V=eye-wp;if(dot(N,V)<0.0)N=-N;
  float ao=1.0;
  if(wp.z>-3.3&&wp.x>-4.4&&wp.x<4.4&&wp.y<3.5){
   ao=mix(0.62,1.0,smoothstep(0.0,0.7,wp.z+3.0))*mix(0.66,1.0,smoothstep(0.0,0.8,wp.x+4.2))*mix(0.72,1.0,smoothstep(0.0,0.35,wp.y));}
@@ -115,8 +116,7 @@ void main(){
   float ndl=max(dot(N,d/max(dist,0.001)),0.0)*0.85+0.15;
   L+=plc[i]*a*ndl;}
  vec3 c=col*L+col*em;
- float f=clamp((distance(eye,wp)-fogN)/(fogF-fogN),0.0,1.0);
- c=mix(c,fogCol,f*f*0.92);
+ c=mix(c,fogCol,xx.z);
  gl_FragColor=vec4(finish(c),al);
 }`;
 function sh(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(o));return o}
@@ -752,9 +752,11 @@ function loop(now) {
 
  if (window.self !== window.top) {
   const b = document.getElementById('brand');
-  if (b) b.style.display = 'none';
+  if (b && b.style.display !== 'none') b.style.display = 'none';
   const gr = document.getElementById('grain');
-  if (gr && gr.style.animation !== 'none') gr.style.animation = 'none';
+  if (gr && gr.style.display !== 'none') gr.style.display = 'none';
+  const vg = document.getElementById('vig');
+  if (vg && vg.style.display !== 'none') vg.style.display = 'none';
  }
  simT += dt;
  updateYaire(dt, simT);
