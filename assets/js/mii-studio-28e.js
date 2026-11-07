@@ -511,32 +511,18 @@
                 width: 100%;
                 display: flex;
                 flex-direction: column;
-                gap: 7px;
                 padding-top: 12px;
                 border-top: 1px solid rgba(255, 255, 255, 0.06);
             }
-            .mii-presets-title {
-                font-size: 11px;
-                font-weight: 500;
-                color: #71717a;
-                letter-spacing: -0.01em;
-                text-align: center;
-            }
-            .mii-presets-row {
-                width: 100%;
-                display: flex;
-                align-items: center;
-                gap: 6px;
-            }
             .mii-ghost-btn {
-                flex: 1;
-                padding: 7px 10px;
+                width: 100%;
+                padding: 8px 14px;
                 border-radius: 9999px;
-                font-size: 11.5px;
+                font-size: 12px;
                 font-weight: 500;
                 letter-spacing: -0.01em;
                 color: #d4d4d8;
-                background: rgba(255, 255, 255, 0.045);
+                background: rgba(255, 255, 255, 0.05);
                 border: 1px solid rgba(255, 255, 255, 0.08);
                 cursor: pointer;
                 text-align: center;
@@ -557,8 +543,9 @@
             .mii-tabs-bar {
                 display: flex;
                 align-items: center;
-                gap: 5px;
-                padding: 10px 16px;
+                justify-content: space-between;
+                gap: 3px;
+                padding: 10px 14px;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.07);
                 overflow-x: auto;
                 scrollbar-width: none;
@@ -568,9 +555,13 @@
                 display: none;
             }
             .mii-tab-btn {
-                padding: 6px 13px;
+                flex: 1 1 auto;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 6px 8px;
                 border-radius: 9999px;
-                font-size: 12.5px;
+                font-size: 12px;
                 font-weight: 500;
                 letter-spacing: -0.01em;
                 color: #8e8e93;
@@ -1059,8 +1050,8 @@
                         <button type="button" class="mii-segmented-btn ${subTabFace === 'wrinkles' ? 'active' : ''}" data-subtab-face="wrinkles">Líneas</button>
                     </div>
                     <div class="mii-segmented">
-                        <button type="button" class="mii-segmented-btn ${b[IDX.gender] === 1 ? 'active' : ''}" data-part-byte="${IDX.gender}" data-part-val="1">Femenino</button>
-                        <button type="button" class="mii-segmented-btn ${b[IDX.gender] === 0 ? 'active' : ''}" data-part-byte="${IDX.gender}" data-part-val="0">Masculino</button>
+                        <button type="button" class="mii-segmented-btn ${b[IDX.gender] === 1 ? 'active' : ''}" data-gender-preset="1">Femenino</button>
+                        <button type="button" class="mii-segmented-btn ${b[IDX.gender] === 0 ? 'active' : ''}" data-gender-preset="0">Masculino</button>
                     </div>
                 </div>
             `;
@@ -1337,12 +1328,7 @@
                         </div>
 
                         <div class="mii-presets-box">
-                            <span class="mii-presets-title">Empezar desde plantilla</span>
-                            <div class="mii-presets-row">
-                                <button type="button" id="mii-preset-chica" class="mii-ghost-btn">Plantilla Chica</button>
-                                <button type="button" id="mii-preset-chico" class="mii-ghost-btn">Plantilla Chico</button>
-                            </div>
-                            <button type="button" id="mii-preset-random" class="mii-ghost-btn" style="width:100%;">Generar Mii al azar</button>
+                            <button type="button" id="mii-preset-random" class="mii-ghost-btn">Generar Mii al azar</button>
                         </div>
                     </div>
 
@@ -1441,32 +1427,24 @@
             refreshPreview(true);
         });
 
-        // Presets
-        modalEl.querySelector('#mii-preset-chica').addEventListener('click', () => {
-            state.rawBytes = PRESET_CHICA.slice();
-            state.expression = 'normal';
-            state.enabled = true;
-            updateModeButtonsUI();
-            playSound('colors.wav', 0.35);
-            refreshPreview(true);
-            renderActiveTab();
-        });
-        modalEl.querySelector('#mii-preset-chico').addEventListener('click', () => {
-            state.rawBytes = PRESET_CHICO.slice();
-            state.expression = 'normal';
-            state.enabled = true;
-            updateModeButtonsUI();
-            playSound('colors.wav', 0.35);
-            refreshPreview(true);
-            renderActiveTab();
-        });
+        // Generar Mii al azar
         modalEl.querySelector('#mii-preset-random').addEventListener('click', randomizeMii);
 
-        // Pestañas principales
+        // Pestañas principales (con soporte de rueda horizontal y centrado automático)
+        const tabsBar = modalEl.querySelector('.mii-tabs-bar');
+        if (tabsBar) {
+            tabsBar.addEventListener('wheel', (e) => {
+                if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                    tabsBar.scrollLeft += e.deltaY;
+                }
+            }, { passive: true });
+        }
+
         modalEl.querySelectorAll('.mii-tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 if (activeTab === btn.dataset.tab) return;
                 activeTab = btn.dataset.tab;
+                btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
                 playSound('navegacion.wav', 0.3);
                 renderActiveTab();
             });
@@ -1475,6 +1453,22 @@
         // Delegación O(1) en el contenido de la pestaña
         const contentEl = modalEl.querySelector('#mii-tab-content');
         contentEl.addEventListener('click', (e) => {
+            const genderPresetBtn = e.target.closest('[data-gender-preset]');
+            if (genderPresetBtn) {
+                const isFemale = parseInt(genderPresetBtn.dataset.genderPreset, 10) === 1;
+                const currentSkin = state.rawBytes[IDX.facelineColor];
+                const nextRaw = isFemale ? PRESET_CHICA.slice() : PRESET_CHICO.slice();
+                nextRaw[IDX.facelineColor] = currentSkin;
+                state.rawBytes = clampBytes(nextRaw);
+                state.expression = 'normal';
+                state.enabled = true;
+                updateModeButtonsUI();
+                playSound('colors.wav', 0.35);
+                refreshPreview(true);
+                renderActiveTab();
+                return;
+            }
+
             const subFaceBtn = e.target.closest('[data-subtab-face]');
             if (subFaceBtn) {
                 subTabFace = subFaceBtn.dataset.subtabFace;
