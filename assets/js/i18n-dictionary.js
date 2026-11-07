@@ -48,7 +48,7 @@ var logDebug = window.logDebug;
 
 
 
-                origin_label: "Nuestra Historia", origin_title: "De los píxeles a la <span class=\"text-highlight\">realidad</span>.",
+                origin_label: "Nuestra Historia", origin_title: "De los píxeles a la <span class=\"text-highlight\"><em style=\"font-style: italic; font-family: inherit;\">realidad</em></span>.",
 
                 origin_text1: "¿Quién iba a decir que detrás de unas pantallas, en el mundo virtual de <strong>Hevvo</strong>, iba a encontrar al amor de mi vida? Nos mudamos a <strong>Habbo ID</strong> para seguir nuestra historia, y sin darnos cuenta, lo que empezó como un juego se convirtió en el sentimiento más real, maduro y profundo que he experimentado.",
 
