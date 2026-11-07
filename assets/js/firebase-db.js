@@ -104,68 +104,139 @@
         const authIcon = document.getElementById('auth-icon');
         const authAvatar = document.getElementById('auth-avatar');
 
+        let currentMiiProfile = null;
+        let currentGooglePhotoURL = '';
+
+        // Safe avatar loader that prevents broken image icons and handles Google CDN referrerpolicy
+        const setupAvatar = (img, placeholder, url) => {
+            if (!img) return;
+            if (!url) {
+                img.classList.add('hidden');
+                img.style.display = 'none';
+                if (placeholder) {
+                    placeholder.classList.remove('hidden');
+                    placeholder.style.display = '';
+                }
+                return;
+            }
+
+            img.referrerPolicy = 'no-referrer';
+            img.onload = () => {
+                img.classList.remove('hidden');
+                img.style.display = '';
+                if (placeholder) {
+                    placeholder.classList.add('hidden');
+                    placeholder.style.display = 'none';
+                }
+            };
+            img.onerror = () => {
+                img.classList.add('hidden');
+                img.style.display = 'none';
+                if (placeholder) {
+                    placeholder.classList.remove('hidden');
+                    placeholder.style.display = '';
+                }
+            };
+            img.src = url;
+
+            if (img.complete && img.naturalWidth > 0) {
+                img.classList.remove('hidden');
+                img.style.display = '';
+                if (placeholder) {
+                    placeholder.classList.add('hidden');
+                    placeholder.style.display = 'none';
+                }
+            }
+        };
+
+        const applyActiveAvatarToDOM = () => {
+            if (!currentUser) {
+                if (currentMiiProfile && currentMiiProfile.enabled !== false && currentMiiProfile.avatarUrl) {
+                    setupAvatar(authAvatar, authIcon, currentMiiProfile.avatarUrl);
+                }
+                return;
+            }
+            const activeUrl = (currentMiiProfile && currentMiiProfile.enabled !== false && currentMiiProfile.avatarUrl)
+                ? currentMiiProfile.avatarUrl
+                : currentGooglePhotoURL;
+            window.yaireActiveAvatarURL = activeUrl;
+            try {
+                Object.defineProperty(currentUser, 'photoURL', {
+                    get: () => window.yaireActiveAvatarURL || currentGooglePhotoURL,
+                    configurable: true
+                });
+            } catch (e) {}
+
+            const authMenuAvatar = document.getElementById('auth-menu-avatar');
+            const authMenuAvatarPh = document.getElementById('auth-menu-avatar-ph');
+            setupAvatar(authAvatar, authIcon, activeUrl);
+            setupAvatar(authMenuAvatar, authMenuAvatarPh, activeUrl);
+        };
+
+        window.yaireGetCurrentMiiProfile = () => currentMiiProfile;
+
+        window.yaireSaveMiiProfile = async (profilePayload) => {
+            currentMiiProfile = profilePayload;
+            try {
+                localStorage.setItem('yaire_mii_guest', JSON.stringify(profilePayload));
+                if (currentUser && currentUser.uid) {
+                    localStorage.setItem('yaire_mii_' + currentUser.uid, JSON.stringify(profilePayload));
+                    await set(ref(db, `users/${currentUser.uid}/miiProfile`), profilePayload);
+                }
+            } catch (e) {
+                console.warn('Error guardando miiProfile en Firebase:', e);
+            }
+            applyActiveAvatarToDOM();
+            window.dispatchEvent(new Event('yaireAuthChanged'));
+            updatePresence();
+        };
+
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
             window.yaireCurrentUser = user; // Expose globally
             if (user) {
+                currentGooglePhotoURL = user.photoURL || '';
+                window.yaireGooglePhotoURL = currentGooglePhotoURL;
+
+                // Load cached Mii immediately for 0ms startup
+                try {
+                    const cached = localStorage.getItem('yaire_mii_' + user.uid) || localStorage.getItem('yaire_mii_guest');
+                    if (cached) currentMiiProfile = JSON.parse(cached);
+                } catch (e) {}
+
+                applyActiveAvatarToDOM();
+
+                // Sync Mii from Firebase DB
+                get(ref(db, `users/${user.uid}/miiProfile`)).then((snap) => {
+                    if (snap && snap.exists()) {
+                        currentMiiProfile = snap.val();
+                        try {
+                            localStorage.setItem('yaire_mii_' + user.uid, JSON.stringify(currentMiiProfile));
+                        } catch (e) {}
+                        applyActiveAvatarToDOM();
+                        window.dispatchEvent(new Event('yaireAuthChanged'));
+                        updatePresence();
+                    } else if (currentMiiProfile) {
+                        // Migrate guest Mii to account on first login
+                        set(ref(db, `users/${user.uid}/miiProfile`), currentMiiProfile).catch(() => {});
+                    }
+                }).catch(() => {});
+
                 window.yaireVcHistoryData = await window.yaireVcHistoryGet();
 
             } else {
+                currentMiiProfile = null;
+                currentGooglePhotoURL = '';
+                window.yaireActiveAvatarURL = '';
                 window.yaireVcHistoryData = [];
             }
             window.dispatchEvent(new Event('yaireAuthChanged'));
             if (user) {
-                // Safe avatar loader that prevents broken image icons and handles Google CDN referrerpolicy
-                const setupAvatar = (img, placeholder, url) => {
-                    if (!img) return;
-                    if (!url) {
-                        img.classList.add('hidden');
-                        img.style.display = 'none';
-                        if (placeholder) {
-                            placeholder.classList.remove('hidden');
-                            placeholder.style.display = '';
-                        }
-                        return;
-                    }
-
-                    img.referrerPolicy = 'no-referrer';
-                    img.onload = () => {
-                        img.classList.remove('hidden');
-                        img.style.display = '';
-                        if (placeholder) {
-                            placeholder.classList.add('hidden');
-                            placeholder.style.display = 'none';
-                        }
-                    };
-                    img.onerror = () => {
-                        img.classList.add('hidden');
-                        img.style.display = 'none';
-                        if (placeholder) {
-                            placeholder.classList.remove('hidden');
-                            placeholder.style.display = '';
-                        }
-                    };
-                    img.src = url;
-
-                    if (img.complete && img.naturalWidth > 0) {
-                        img.classList.remove('hidden');
-                        img.style.display = '';
-                        if (placeholder) {
-                            placeholder.classList.add('hidden');
-                            placeholder.style.display = 'none';
-                        }
-                    }
-                };
-
-                setupAvatar(authAvatar, authIcon, user.photoURL);
+                applyActiveAvatarToDOM();
 
                 if (authToggle) authToggle.title = "Cuenta (" + user.displayName + ")";
                 const authLabel = document.getElementById('auth-toggle-label');
                 if (authLabel) authLabel.textContent = (user.displayName || 'Cuenta').split(' ')[0];
-
-                const authMenuAvatar = document.getElementById('auth-menu-avatar');
-                const authMenuAvatarPh = document.getElementById('auth-menu-avatar-ph');
-                setupAvatar(authMenuAvatar, authMenuAvatarPh, user.photoURL);
 
                 const authMenu = document.getElementById('auth-menu');
                 if (authMenu) authMenu.classList.add('logged-in-view');
@@ -376,6 +447,21 @@
         if (authBtnGotoVcOut) {
             authBtnGotoVcOut.addEventListener('click', handleOpenVc);
         }
+
+        const authBtnMiiIn = document.getElementById('auth-btn-mii-loggedin');
+        const authBtnMiiOut = document.getElementById('auth-btn-mii-loggedout');
+        const handleOpenMii = (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            if (isAuthMenuOpen) toggleAuthMenu();
+            setTimeout(() => {
+                if (typeof window.openMiiStudio28E === 'function') {
+                    window.openMiiStudio28E();
+                }
+            }, 60);
+        };
+        if (authBtnMiiIn) authBtnMiiIn.addEventListener('click', handleOpenMii);
+        if (authBtnMiiOut) authBtnMiiOut.addEventListener('click', handleOpenMii);
 
         const gbLoginBtn = document.getElementById('gb-login-btn');
         if (gbLoginBtn) {
