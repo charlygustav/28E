@@ -87,6 +87,10 @@
         }
 
         .brand-logo {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 3.2rem;
             font-weight: 900;
@@ -97,6 +101,33 @@
             user-select: none;
             -webkit-user-select: none;
             padding-top: 0.15rem;
+            cursor: pointer;
+        }
+
+        .brand-logo-text {
+            display: inline-block;
+            transition: opacity 0.15s ease;
+        }
+
+        .brand-logo.is-ready .brand-logo-text {
+            opacity: 0;
+        }
+
+        .brand-logo-video {
+            position: absolute;
+            width: 165px;
+            height: 165px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -48%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+            filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.85));
+        }
+
+        .brand-logo.is-ready .brand-logo-video {
+            opacity: 1;
         }
 
         /* ─── Contador Superior: Minimalista Puro 28E ─── */
@@ -340,7 +371,10 @@
 
         <!-- Header con logo y contador superior -->
         <header class="header">
-            <div class="brand-logo">28E</div>
+            <div id="brand-logo-bug" class="brand-logo" title="Haz clic para probar la animación del logo">
+                <span class="brand-logo-text">28E</span>
+                <video id="brand-logo-vid" class="brand-logo-video" src="logo-28e-bug.webm" muted playsinline preload="auto"></video>
+            </div>
 
             <div id="countdown-root" class="countdown-container">
                 <div class="countdown-eyebrow">28E · yaire.site</div>
@@ -918,6 +952,42 @@
                 audio.play().catch(() => { });
             }
         });
+
+        // ─── Mosca de TV (Logo 28E Liquid Glass Animado cada 70s) ───
+        const logoBug = document.getElementById('brand-logo-bug');
+        const logoVid = document.getElementById('brand-logo-vid');
+        let logoAnimBusy = false;
+
+        function playLogoBugAnimation() {
+            if (!logoBug || !logoVid || logoAnimBusy) return;
+            logoAnimBusy = true;
+            logoBug.classList.add('is-ready');
+            logoVid.currentTime = 0;
+            logoVid.play().catch(() => {
+                logoAnimBusy = false;
+            });
+        }
+
+        if (logoVid && logoBug) {
+            const markLogoReady = () => logoBug.classList.add('is-ready');
+            if (logoVid.readyState >= 2) {
+                markLogoReady();
+            } else {
+                logoVid.addEventListener('loadeddata', markLogoReady, { once: true });
+            }
+
+            logoVid.addEventListener('ended', () => {
+                logoVid.pause();
+                logoAnimBusy = false;
+            });
+
+            logoBug.addEventListener('click', () => {
+                playLogoBugAnimation();
+            });
+
+            setTimeout(playLogoBugAnimation, 2500);
+            setInterval(playLogoBugAnimation, 70000);
+        }
     </script>
 </body>
 
