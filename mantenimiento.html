@@ -239,13 +239,19 @@
         }
 
         .clock-date {
-            font-weight: 700;
-            color: #ffffff;
+            color: rgba(255, 255, 255, 0.68);
+            font-weight: 400;
+        }
+
+        .clock-sep {
+            color: rgba(255, 255, 255, 0.42);
+            font-weight: 400;
+            margin: 0 0.22rem;
         }
 
         .clock-time {
-            color: rgba(255, 255, 255, 0.65);
-            font-weight: 400;
+            font-weight: 700;
+            color: #ffffff;
         }
 
         /* ─── Zona Inferior & News ─── */
@@ -432,7 +438,7 @@
                     </span>
                 </div>
                 <div id="live-clock" class="target-stamp">
-                    <span class="clock-date">--.--.----</span><span class="clock-time"> — --:--:--</span>
+                    <span class="clock-date">---, - ---</span><span class="clock-sep"> · </span><span class="clock-time">--:-- --</span>
                 </div>
             </footer>
 
@@ -461,16 +467,17 @@
         const elS = document.getElementById('cd-s');
         const elClock = document.getElementById('live-clock');
         
-        const clockFormatter = new Intl.DateTimeFormat('es-VE', {
+        const clockFormatter = new Intl.DateTimeFormat('en-US', {
             timeZone: 'America/Caracas',
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
+            weekday: 'short',
+            day: 'numeric',
+            month: 'numeric',
+            hour: 'numeric',
             minute: '2-digit',
-            second: '2-digit',
-            hour12: false
+            hour12: true
         });
+        const WEEKDAYS_ES = { Sun: 'Dom', Mon: 'Lun', Tue: 'Mar', Wed: 'Mié', Thu: 'Jue', Fri: 'Vie', Sat: 'Sáb' };
+        const MONTHS_ES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
                 let hasUnlocked = false;
         function triggerUnlock() {
@@ -507,11 +514,17 @@
 function tick() {
             const now = new Date();
 
-            // Reloj y fecha en vivo de Venezuela
+            // Reloj y fecha en vivo de Venezuela (Estilo Apple / macOS: Vie, 6 nov · 8:49 PM)
             if (elClock) {
                 const parts = clockFormatter.formatToParts(now);
                 const getP = (type) => parts.find(p => p.type === type)?.value || '';
-                elClock.innerHTML = `<span class="clock-date">${getP('day')}.${getP('month')}.${getP('year')}</span><span class="clock-time"> — ${getP('hour')}:${getP('minute')}:${getP('second')}</span>`;
+                const wDay = WEEKDAYS_ES[getP('weekday')] || getP('weekday');
+                const dayNum = getP('day');
+                const monthName = MONTHS_ES[(parseInt(getP('month'), 10) || 1) - 1];
+                const hourVal = getP('hour');
+                const minVal = getP('minute');
+                const dayPeriod = (getP('dayPeriod') || '').toUpperCase().replace(/\./g, '').replace(/\s+/g, '');
+                elClock.innerHTML = `<span class="clock-date">${wDay}, ${dayNum} ${monthName}</span><span class="clock-sep"> · </span><span class="clock-time">${hourVal}:${minVal} ${dayPeriod}</span>`;
             }
 
             // Cuenta regresiva al lanzamiento
