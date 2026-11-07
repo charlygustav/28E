@@ -449,10 +449,10 @@
         }
 
         const authBtnMiiIn = document.getElementById('auth-btn-mii-loggedin');
-        const authBtnMiiOut = document.getElementById('auth-btn-mii-loggedout');
         const handleOpenMii = (e) => {
             e.stopPropagation();
             e.preventDefault();
+            if (!currentUser) return;
             if (isAuthMenuOpen) toggleAuthMenu();
             setTimeout(() => {
                 if (typeof window.openMiiStudio28E === 'function') {
@@ -461,7 +461,6 @@
             }, 60);
         };
         if (authBtnMiiIn) authBtnMiiIn.addEventListener('click', handleOpenMii);
-        if (authBtnMiiOut) authBtnMiiOut.addEventListener('click', handleOpenMii);
 
         const gbLoginBtn = document.getElementById('gb-login-btn');
         if (gbLoginBtn) {

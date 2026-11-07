@@ -13319,6 +13319,7 @@ video {
   line-height: 1.25 !important;
 }
 
+#auth-btn-mii-loggedin,
 #auth-btn-goto-vc,
 #auth-btn-goto-vc-loggedout,
 #auth-btn-goto-wrapped,
@@ -13344,11 +13345,13 @@ video {
   outline: none !important;
 }
 
+#auth-btn-mii-loggedin.gp-focus,
 #auth-btn-login.gp-focus,
 #auth-btn-goto-vc-loggedout.gp-focus,
 #auth-btn-goto-vc.gp-focus,
 #auth-btn-goto-wrapped.gp-focus,
 #auth-btn-goto-wrapped-loggedout.gp-focus,
+#auth-btn-mii-loggedin:hover,
 #auth-btn-login:hover,
 #auth-btn-goto-vc-loggedout:hover,
 #auth-btn-goto-vc:hover,
@@ -13364,6 +13367,7 @@ video {
   color: #fb7185 !important;
 }
 
+#auth-btn-mii-loggedin:hover svg,
 #auth-btn-goto-vc-loggedout:hover svg,
 #auth-btn-goto-vc:hover svg,
 #auth-btn-goto-wrapped:hover svg,
@@ -13375,6 +13379,7 @@ video {
   color: #fb7185 !important;
 }
 
+#auth-btn-mii-loggedin:active,
 #auth-btn-login:active,
 #auth-btn-goto-vc-loggedout:active,
 #auth-btn-goto-vc:active,
