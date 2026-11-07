@@ -41,7 +41,7 @@ canvas#c{position:fixed;inset:0;width:100vw;height:100vh;display:block}
    1. MOTOR (mismo enfoque que DCLF: WebGL1 + Mesh procedural low-poly)
    ===================================================================== */
 const cv=document.getElementById('c');
-const gl=cv.getContext('webgl',{antialias:true,alpha:false,powerPreference:'high-performance'});
+const gl=cv.getContext('webgl',{antialias:window.self===window.top,alpha:false,powerPreference:'high-performance'});
 if(!gl){document.getElementById('fatal').style.display='grid';return}
 const Q=new URLSearchParams(location.search);
 
@@ -686,7 +686,7 @@ const MOON_D=norm([.45,-.62,.64]);
 const fogCol=[.22,.18,.40];
 function sizeCanvas(){
  const isEmbedded = window.self !== window.top || Q.has('embed') || Q.has('stream');
- const maxW = isEmbedded ? 1280 : 1920;
+ const maxW = isEmbedded ? 1024 : 1920;
  const dpr = isEmbedded ? 1 : Math.min(window.devicePixelRatio||1, 2);
  const W = Math.min(Math.round(innerWidth * dpr), maxW);
  const H = Math.round(W * innerHeight / innerWidth);

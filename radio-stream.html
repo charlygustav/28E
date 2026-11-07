@@ -418,10 +418,15 @@
         const WEEKDAYS_ES = { Sun: 'Dom', Mon: 'Lun', Tue: 'Mar', Wed: 'Mié', Thu: 'Jue', Fri: 'Vie', Sat: 'Sáb' };
         const MONTHS_ES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
-        function tick() {
-            const now = new Date();
+        let serverTimeOffset = 0;
+        let streamLatencyMs = 8000; // Compensación en tiempo real del pipeline RTMP -> YouTube Live
+        let lastClockMarkup = '';
 
-            // Reloj y fecha en vivo de Venezuela (Estilo Apple / macOS: Vie, 6 nov · 8:49 PM)
+        function tick() {
+            const nowMs = Date.now() + serverTimeOffset + streamLatencyMs;
+            const now = new Date(nowMs);
+
+            // Reloj y fecha en vivo de Venezuela (solo toca el DOM cuando cambia el minuto)
             if (elClock) {
                 const parts = clockFormatter.formatToParts(now);
                 const getP = (type) => parts.find(p => p.type === type)?.value || '';
@@ -431,32 +436,36 @@
                 const hourVal = getP('hour');
                 const minVal = getP('minute');
                 const dayPeriod = (getP('dayPeriod') || '').toUpperCase().replace(/\./g, '').replace(/\s+/g, '');
-                elClock.innerHTML = `<span class="clock-date">${wDay}, ${dayNum} ${monthName}</span><span class="clock-sep"> · </span><span class="clock-time">${hourVal}:${minVal} ${dayPeriod}</span>`;
+                const nextMarkup = `<span class="clock-date">${wDay}, ${dayNum} ${monthName}</span><span class="clock-sep"> · </span><span class="clock-time">${hourVal}:${minVal} ${dayPeriod}</span>`;
+                if (nextMarkup !== lastClockMarkup) {
+                    lastClockMarkup = nextMarkup;
+                    elClock.innerHTML = nextMarkup;
+                }
             }
 
-            // Cuenta regresiva al lanzamiento
-            const diff = TARGET_DATE.getTime() - now.getTime();
+            // Cuenta regresiva al lanzamiento (actualización de alta precisión 10Hz sin DOM thrashing)
+            const diff = TARGET_DATE.getTime() - nowMs;
 
             if (diff <= 0) {
-                if (elD) elD.textContent = '00';
-                if (elH) elH.textContent = '00';
-                if (elM) elM.textContent = '00';
-                if (elS) elS.textContent = '00';
+                if (elD && elD.textContent !== '00') elD.textContent = '00';
+                if (elH && elH.textContent !== '00') elH.textContent = '00';
+                if (elM && elM.textContent !== '00') elM.textContent = '00';
+                if (elS && elS.textContent !== '00') elS.textContent = '00';
                 return;
             }
 
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const m = Math.floor((diff / (1000 * 60)) % 60);
-            const s = Math.floor((diff / 1000) % 60);
+            const dStr = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
+            const hStr = String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(2, '0');
+            const mStr = String(Math.floor((diff / (1000 * 60)) % 60)).padStart(2, '0');
+            const sStr = String(Math.floor((diff / 1000) % 60)).padStart(2, '0');
 
-            if (elD) elD.textContent = String(d).padStart(2, '0');
-            if (elH) elH.textContent = String(h).padStart(2, '0');
-            if (elM) elM.textContent = String(m).padStart(2, '0');
-            if (elS) elS.textContent = String(s).padStart(2, '0');
+            if (elD && elD.textContent !== dStr) elD.textContent = dStr;
+            if (elH && elH.textContent !== hStr) elH.textContent = hStr;
+            if (elM && elM.textContent !== mStr) elM.textContent = mStr;
+            if (elS && elS.textContent !== sStr) elS.textContent = sStr;
         }
 
-        setInterval(tick, 1000);
+        setInterval(tick, 100);
         tick();
 
         // ── 2. Conexión Realtime a 28E Radio (Sincronizado vía Firebase) ──
@@ -482,6 +491,14 @@
                     TARGET_DATE = parsed;
                     tick();
                 }
+            }
+        });
+
+        onValue(ref(db, 'radio_state/streamLatencyMs'), snap => {
+            const val = Number(snap.val());
+            if (!isNaN(val) && val >= 0 && val <= 30000) {
+                streamLatencyMs = val;
+                tick();
             }
         });
 
@@ -591,7 +608,6 @@
         const nextAudioPreloader = new Audio();
         nextAudioPreloader.preload = 'auto';
 
-        let serverTimeOffset = 0;
         let currentRadioState = null;
         let currentTrackIdx = -1;
         let isTransitioning = false;
