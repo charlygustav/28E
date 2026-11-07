@@ -41,9 +41,11 @@ canvas#c{position:fixed;inset:0;width:100vw;height:100vh;display:block}
    1. MOTOR (mismo enfoque que DCLF: WebGL1 + Mesh procedural low-poly)
    ===================================================================== */
 const cv=document.getElementById('c');
-const gl=cv.getContext('webgl',{antialias:true,alpha:false,powerPreference:'high-performance'});
-if(!gl){document.getElementById('fatal').style.display='grid';return}
 const Q=new URLSearchParams(location.search);
+/* Modo stream/embebido: render ligero (el fondo va por CPU en el servidor; libera CPU para la interfaz y el encoder) */
+const IS_EMBED = window.self !== window.top || Q.has('embed') || Q.has('stream');
+const gl=cv.getContext('webgl',{antialias:!IS_EMBED,alpha:false,powerPreference:'high-performance'});
+if(!gl){document.getElementById('fatal').style.display='grid';return}
 
 /* ---- matemática (column-major, idéntica convención que DCLF) ---- */
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -685,8 +687,8 @@ function buildDynamic(t,dt){
 const MOON_D=norm([.45,-.62,.64]);
 const fogCol=[.22,.18,.40];
 function sizeCanvas(){
- const isEmbedded = window.self !== window.top || Q.has('embed') || Q.has('stream');
- const maxW = isEmbedded ? 1280 : 1920;
+ const isEmbedded = IS_EMBED;
+ const maxW = isEmbedded ? 1024 : 1920;
  const dpr = isEmbedded ? 1 : Math.min(window.devicePixelRatio||1, 2);
  const W = Math.min(Math.round(innerWidth * dpr), maxW);
  const H = Math.round(W * innerHeight / innerWidth);
@@ -740,7 +742,7 @@ updateYaire(1/60,0);
 const ff = parseFloat(Q.get('t') || '0');
 if (ff > 0) { let tt = 0; while (tt < ff) { tt += 1/30; simT = tt; updateYaire(1/30, simT); } }
 let lastRender = 0;
-const targetFps = 30;
+const targetFps = IS_EMBED ? 24 : 30;
 const frameInterval = 1000 / targetFps;
 
 function loop(now) {
