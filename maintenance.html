@@ -93,10 +93,6 @@
         }
 
         .brand-logo {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 2.1rem;
             font-weight: 900;
@@ -105,34 +101,6 @@
             color: #ffffff;
             text-shadow: 0 3px 16px rgba(0, 0, 0, 0.85);
             padding-top: 0.1rem;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .brand-logo-text {
-            display: inline-block;
-            transition: opacity 0.15s ease;
-        }
-
-        .brand-logo.is-ready .brand-logo-text {
-            opacity: 0;
-        }
-
-        .brand-logo-video {
-            position: absolute;
-            width: 108px;
-            height: 108px;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -48%);
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.15s ease;
-            filter: drop-shadow(0 3px 16px rgba(0, 0, 0, 0.85));
-        }
-
-        .brand-logo.is-ready .brand-logo-video {
-            opacity: 1;
         }
 
         /* ─── Contador Superior: Minimalista Puro 28E Web ─── */
@@ -465,10 +433,7 @@
 
         <!-- Header con logo, badge de mantenimiento y contador superior -->
         <header class="header">
-            <div id="brand-logo-bug" class="brand-logo" title="Haz clic para probar la animación del logo">
-                <span class="brand-logo-text">28E</span>
-                <video id="brand-logo-vid" class="brand-logo-video" src="logo-28e-bug.webm" muted playsinline preload="auto"></video>
-            </div>
+            <div class="brand-logo">28E</div>
 
             <div id="countdown-root" class="countdown-container">
                 <div class="countdown-eyebrow">Apertura de la Web</div>
@@ -977,44 +942,6 @@
             }).catch(() => {
             });
         }, 800);
-
-        // ─── Mosca de TV (Logo 28E Liquid Glass Animado Periódico) ───
-        const logoBug = document.getElementById('brand-logo-bug');
-        const logoVid = document.getElementById('brand-logo-vid');
-        let logoAnimBusy = false;
-
-        function playLogoBugAnimation() {
-            if (!logoBug || !logoVid || logoAnimBusy) return;
-            logoAnimBusy = true;
-            logoBug.classList.add('is-ready');
-            logoVid.currentTime = 0;
-            logoVid.play().catch(() => {
-                logoAnimBusy = false;
-            });
-        }
-
-        if (logoVid && logoBug) {
-            const markLogoReady = () => logoBug.classList.add('is-ready');
-            if (logoVid.readyState >= 2) {
-                markLogoReady();
-            } else {
-                logoVid.addEventListener('loadeddata', markLogoReady, { once: true });
-            }
-
-            logoVid.addEventListener('ended', () => {
-                logoVid.pause();
-                logoAnimBusy = false;
-            });
-
-            // Permitir probar la animación al hacer clic sobre el logo 28E
-            logoBug.addEventListener('click', () => {
-                playLogoBugAnimation();
-            });
-
-            // Primera animación a los 2.5s de entrar y luego cada 70s
-            setTimeout(playLogoBugAnimation, 2500);
-            setInterval(playLogoBugAnimation, 70000);
-        }
     </script>
 </body>
 
