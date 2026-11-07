@@ -392,8 +392,8 @@
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
         import { getDatabase, ref, onValue, set, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js';
 
-        // ── 1. Contador exacto al 00:00:00 del 7 de Noviembre yendo al 8 (Hora oficial Venezuela UTC-4) ──
-        const TARGET_DATE = new Date('2026-11-08T00:00:00-04:00');
+        // ── 1. Contador exacto al 00:00:00 del 21 de Noviembre (12:00 AM, Hora oficial Venezuela UTC-4) ──
+        let TARGET_DATE = new Date('2026-11-21T00:00:00-04:00');
 
         const elD = document.getElementById('cd-d');
         const elH = document.getElementById('cd-h');
@@ -460,6 +460,28 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
+
+        // Permite actualizar la fecha objetivo en vivo desde Firebase sin reiniciar el stream
+        onValue(ref(db, 'radio_state/targetDate'), snap => {
+            const val = snap.val();
+            if (val) {
+                const parsed = new Date(val);
+                if (!isNaN(parsed.getTime())) {
+                    TARGET_DATE = parsed;
+                    tick();
+                }
+            }
+        });
+
+        let initialReloadToken = null;
+        onValue(ref(db, 'radio_state/reloadToken'), snap => {
+            const token = snap.val();
+            if (initialReloadToken === null) {
+                initialReloadToken = token || 0;
+            } else if (token && token !== initialReloadToken) {
+                window.location.reload();
+            }
+        });
 
         // ── Setlist 100% Stream Safe (Libre de Reclamos / YouTube Audio Library & Epidemic Sound) ──
         const radioTracks = [

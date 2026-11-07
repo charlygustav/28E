@@ -1,7 +1,7 @@
 
         (async function () {
-            // Fecha de desbloqueo: 28 de Abril de 2026 a las 00:00:00 (Mes 3 = Abril)
-            const unlockDate = new Date("2026-11-08T00:00:00-04:00");
+            // Fecha de desbloqueo: 21 de Noviembre de 2026 a las 00:00:00 (12:00 AM, Hora Venezuela UTC-4)
+            const unlockDate = new Date("2026-11-21T00:00:00-04:00");
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('reset') === '1') {
                 localStorage.clear();
