@@ -1076,10 +1076,6 @@
                         <button type="button" class="mii-segmented-btn ${subTabFace === 'wrinkles' ? 'active' : ''}" data-subtab-face="wrinkles">Líneas</button>
                         <button type="button" class="mii-segmented-btn ${subTabFace === 'mole' ? 'active' : ''}" data-subtab-face="mole">Lunar</button>
                     </div>
-                    <div class="mii-segmented">
-                        <button type="button" class="mii-segmented-btn ${isFemale ? 'active' : ''}" data-gender-preset="1">Femenino</button>
-                        <button type="button" class="mii-segmented-btn ${!isFemale ? 'active' : ''}" data-gender-preset="0">Masculino</button>
-                    </div>
                 </div>
             `;
             container.appendChild(topWrap);
