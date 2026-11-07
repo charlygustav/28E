@@ -3,8 +3,8 @@
  * ESTUDIO MII 28E — Editor de Personaje (Apple Design & Emil Kowalski Edition)
  * ============================================================================
  * Diseño minimalista, superficies translúcidas con bordes especulares de 1px,
- * divulgación progresiva, cero emojis y rendimiento instantáneo a 60fps
- * mediante caché de nodos DOM SVG y actualizaciones O(1) sin reflows.
+ * divulgación progresiva, cero emojis, botones 100% redondeados (pill) y
+ * rendimiento instantáneo a 60fps mediante caché de nodos DOM SVG y O(1).
  */
 (function () {
     'use strict';
@@ -42,7 +42,7 @@
     ];
 
     const MOUTH_ORDER = [
-        23, 1, 19, 21, 22, 5, 0, 8, 10, 16, 6, 13,
+        19, 22, 1, 21, 23, 5, 0, 8, 10, 16, 6, 13,
         7, 9, 2, 17, 3, 4, 15, 11, 20, 18, 14, 12,
         27, 30, 24, 25, 29, 28, 26, 35, 31, 34, 33, 32
     ];
@@ -182,20 +182,20 @@
         [0, 8], [0, 5], [0, 16], [0, 8], [0, 17], [0, 18]
     ];
 
-    // Presets equilibrados con expresión natural (ojos abiertos y sonrisa cálida)
+    // Presets equilibrados con sonrisa real (mouthType 19) y expresión natural
     const PRESET_CHICA = [
         8, 0, 56, 3, 10, 4, 4, 4, 2, 12,
-        3, 1, 6, 4, 0, 2, 10, 0, 1, 0,
+        3, 1, 5, 4, 0, 2, 10, 0, 1, 0,
         0, 7, 1, 8, 4, 0, 10, 1, 0, 12,
-        60, 4, 0, 2, 20, 3, 21, 4, 23, 13,
+        60, 4, 0, 2, 20, 3, 21, 4, 19, 13,
         4, 0, 10, 3, 1, 9
     ];
 
     const PRESET_CHICO = [
         8, 0, 64, 3, 8, 4, 4, 2, 2, 12,
-        3, 8, 6, 4, 6, 2, 10, 0, 0, 0,
+        3, 8, 5, 4, 6, 2, 10, 0, 0, 0,
         0, 11, 0, 8, 4, 0, 10, 8, 0, 33,
-        68, 4, 0, 2, 20, 3, 19, 4, 23, 13,
+        68, 4, 0, 2, 20, 3, 19, 4, 19, 13,
         4, 0, 10, 4, 1, 9
     ];
 
@@ -247,7 +247,7 @@
         const width = options.width || 512;
         const type = options.viewType === 'all_body' ? 'all_body' : 'face';
         const expression = options.expression || 'normal';
-        const bgColor = options.bgColor || '18181BFF';
+        const bgColor = options.bgColor || 'C4377AFF';
         const rotateY = ((Number(options.rotateY) || 0) % 360 + 360) % 360;
 
         const base = useFallback ? FALLBACK_API : NINTENDO_API;
@@ -270,7 +270,6 @@
     let subTabBeard = 'mustache';  // 'mustache' | 'goatee' | 'mole'
     let showAdjustments = false;
     let showAllColors = false;
-    let showCodePanel = false;
 
     // Caché de nodos DOM de grillas SVG para cambios de pestaña en < 0.5ms
     const gridDomCache = {};
@@ -279,7 +278,7 @@
         enabled: true,
         rawBytes: PRESET_CHICA.slice(),
         expression: 'normal',
-        bgColor: '18181BFF',
+        bgColor: 'C4377AFF',
         viewType: 'face',
         rotateY: 0
     };
@@ -299,7 +298,6 @@
             .then(r => r.json())
             .then(d => {
                 iconsData = d;
-                // Limpiar caché previa si había placeholders numéricos
                 Object.keys(gridDomCache).forEach(k => delete gridDomCache[k]);
                 return d;
             })
@@ -341,12 +339,12 @@
                 width: 100%;
                 max-width: 840px;
                 height: min(84vh, 620px);
-                background: rgba(20, 20, 23, 0.92);
+                background: rgba(20, 20, 23, 0.94);
                 border: 1px solid rgba(255, 255, 255, 0.09);
                 box-shadow:
                     0 24px 72px rgba(0, 0, 0, 0.65),
                     0 0 0 0.5px rgba(255, 255, 255, 0.06) inset;
-                border-radius: 22px;
+                border-radius: 26px;
                 display: flex;
                 flex-direction: column;
                 overflow: hidden;
@@ -380,14 +378,14 @@
                 display: inline-flex;
                 align-items: center;
                 padding: 3px;
-                border-radius: 9px;
+                border-radius: 9999px;
                 background: rgba(255, 255, 255, 0.05);
                 border: 1px solid rgba(255, 255, 255, 0.06);
                 gap: 2px;
             }
             .mii-segmented-btn {
-                padding: 4px 11px;
-                border-radius: 6.5px;
+                padding: 5px 13px;
+                border-radius: 9999px;
                 font-size: 12px;
                 font-weight: 500;
                 letter-spacing: -0.01em;
@@ -399,16 +397,16 @@
             }
             .mii-segmented-btn.active {
                 color: #ffffff;
-                background: rgba(255, 255, 255, 0.13);
+                background: rgba(255, 255, 255, 0.14);
                 box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
             }
             .mii-segmented-btn:active {
                 transform: scale(0.97);
             }
             .mii-close-btn {
-                width: 28px;
-                height: 28px;
-                border-radius: 999px;
+                width: 30px;
+                height: 30px;
+                border-radius: 9999px;
                 background: rgba(255, 255, 255, 0.06);
                 border: 1px solid rgba(255, 255, 255, 0.06);
                 color: #a1a1aa;
@@ -425,7 +423,7 @@
             /* Body Layout */
             .mii-studio-body {
                 display: grid;
-                grid-template-columns: 256px 1fr;
+                grid-template-columns: 262px 1fr;
                 flex: 1;
                 min-height: 0;
                 overflow: hidden;
@@ -445,13 +443,13 @@
                 position: relative;
                 width: 196px;
                 height: 196px;
-                border-radius: 42px;
+                border-radius: 44px;
                 overflow: hidden;
                 border: 1px solid rgba(255, 255, 255, 0.12);
                 box-shadow:
                     0 16px 36px rgba(0, 0, 0, 0.4),
                     inset 0 1px 0 rgba(255, 255, 255, 0.14);
-                background-color: #18181b;
+                background-color: #C4377A;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -471,7 +469,7 @@
                 right: 12px;
                 width: 16px;
                 height: 16px;
-                border-radius: 999px;
+                border-radius: 9999px;
                 border: 1.75px solid rgba(255, 255, 255, 0.16);
                 border-top-color: rgba(255, 255, 255, 0.85);
                 animation: miiSpin 650ms linear infinite;
@@ -490,13 +488,13 @@
             .mii-cam-bar {
                 display: flex;
                 align-items: center;
-                gap: 4px;
+                gap: 6px;
                 margin-top: 12px;
             }
             .mii-icon-btn {
-                width: 28px;
-                height: 28px;
-                border-radius: 8px;
+                width: 30px;
+                height: 30px;
+                border-radius: 9999px;
                 background: rgba(255, 255, 255, 0.05);
                 border: 1px solid rgba(255, 255, 255, 0.07);
                 color: #a1a1aa;
@@ -509,27 +507,40 @@
             .mii-icon-btn:active {
                 transform: scale(0.95);
             }
+            .mii-presets-box {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 7px;
+                padding-top: 12px;
+                border-top: 1px solid rgba(255, 255, 255, 0.06);
+            }
+            .mii-presets-title {
+                font-size: 11px;
+                font-weight: 500;
+                color: #71717a;
+                letter-spacing: -0.01em;
+                text-align: center;
+            }
             .mii-presets-row {
                 width: 100%;
                 display: flex;
                 align-items: center;
-                justify-content: center;
                 gap: 6px;
-                padding-top: 12px;
-                border-top: 1px solid rgba(255, 255, 255, 0.06);
             }
             .mii-ghost-btn {
                 flex: 1;
-                padding: 6px 8px;
-                border-radius: 8px;
+                padding: 7px 10px;
+                border-radius: 9999px;
                 font-size: 11.5px;
                 font-weight: 500;
                 letter-spacing: -0.01em;
-                color: #a1a1aa;
-                background: rgba(255, 255, 255, 0.035);
-                border: 1px solid rgba(255, 255, 255, 0.06);
+                color: #d4d4d8;
+                background: rgba(255, 255, 255, 0.045);
+                border: 1px solid rgba(255, 255, 255, 0.08);
                 cursor: pointer;
                 text-align: center;
+                white-space: nowrap;
                 transition: color 150ms var(--ease-out), background-color 150ms var(--ease-out), transform 120ms var(--ease-out);
             }
             .mii-ghost-btn:active {
@@ -546,7 +557,7 @@
             .mii-tabs-bar {
                 display: flex;
                 align-items: center;
-                gap: 4px;
+                gap: 5px;
                 padding: 10px 16px;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.07);
                 overflow-x: auto;
@@ -557,8 +568,8 @@
                 display: none;
             }
             .mii-tab-btn {
-                padding: 6px 12px;
-                border-radius: 8px;
+                padding: 6px 13px;
+                border-radius: 9999px;
                 font-size: 12.5px;
                 font-weight: 500;
                 letter-spacing: -0.01em;
@@ -571,8 +582,8 @@
             }
             .mii-tab-btn.active {
                 color: #f4f4f5;
-                background: rgba(255, 255, 255, 0.1);
-                border-color: rgba(255, 255, 255, 0.08);
+                background: rgba(255, 255, 255, 0.11);
+                border-color: rgba(255, 255, 255, 0.09);
             }
             .mii-tab-btn:active {
                 transform: scale(0.97);
@@ -626,7 +637,7 @@
             }
             .mii-part-card {
                 height: 58px;
-                border-radius: 12px;
+                border-radius: 18px;
                 background: rgba(255, 255, 255, 0.04);
                 border: 1px solid rgba(255, 255, 255, 0.07);
                 display: flex;
@@ -662,7 +673,7 @@
             .mii-color-swatch {
                 width: 24px;
                 height: 24px;
-                border-radius: 999px;
+                border-radius: 9999px;
                 border: 1.5px solid rgba(255, 255, 255, 0.16);
                 cursor: pointer;
                 padding: 0;
@@ -681,8 +692,8 @@
             .mii-adjust-drawer {
                 background: rgba(255, 255, 255, 0.025);
                 border: 1px solid rgba(255, 255, 255, 0.07);
-                border-radius: 12px;
-                padding: 12px 14px;
+                border-radius: 18px;
+                padding: 12px 16px;
                 display: flex;
                 flex-direction: column;
                 gap: 9px;
@@ -706,7 +717,7 @@
                 accent-color: #E775A6;
                 cursor: pointer;
                 height: 4px;
-                border-radius: 999px;
+                border-radius: 9999px;
             }
 
             .mii-section-label {
@@ -721,8 +732,8 @@
             }
 
             .mii-pill-btn {
-                padding: 5px 10px;
-                border-radius: 7px;
+                padding: 6px 13px;
+                border-radius: 9999px;
                 font-size: 11.5px;
                 font-weight: 500;
                 letter-spacing: -0.01em;
@@ -746,18 +757,19 @@
 
             /* Footer */
             .mii-footer {
-                height: 52px;
+                height: 54px;
                 padding: 0 18px;
                 border-top: 1px solid rgba(255, 255, 255, 0.07);
                 background: rgba(0, 0, 0, 0.2);
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
+                justify-content: flex-end;
+                gap: 8px;
                 flex-shrink: 0;
             }
             .mii-save-btn {
-                padding: 7px 16px;
-                border-radius: 9px;
+                padding: 8px 18px;
+                border-radius: 9999px;
                 font-size: 12.5px;
                 font-weight: 600;
                 letter-spacing: -0.01em;
@@ -802,7 +814,7 @@
             @media (max-width: 740px) {
                 .mii-studio-dialog {
                     height: 92vh;
-                    border-radius: 18px;
+                    border-radius: 22px;
                 }
                 .mii-studio-body {
                     grid-template-columns: 1fr;
@@ -843,7 +855,7 @@
         const eyePool = isFemale
             ? [4, 1, 17, 20, 26, 27, 19, 32, 33, 34, 40, 41, 18, 28]
             : [2, 0, 8, 39, 16, 15, 11, 9, 12, 23, 25, 35, 5, 13];
-        const mouthPool = [23, 1, 19, 21, 22, 0, 8, 10, 16, 6, 13, 15, 11];
+        const mouthPool = [19, 22, 1, 21, 0, 8, 10, 16, 6, 13, 15, 11];
         const nosePool = [1, 10, 2, 3, 6, 0, 5, 4];
         const skinPool = [0, 6, 7, 3, 1, 2, 4];
         const hairColors = [8, 1, 2, 3, 5, 6, 7, 32, 41, 50];
@@ -892,14 +904,10 @@
         const viewport = modalEl.querySelector('#mii-stage-viewport');
         const imgEl = modalEl.querySelector('#mii-stage-img');
         const loaderEl = modalEl.querySelector('#mii-stage-loader');
-        const hexInput = modalEl.querySelector('#mii-code-input');
 
         if (viewport) {
             const bgObj = BG_PRESETS.find(b => b.id === state.bgColor);
-            viewport.style.backgroundColor = bgObj ? bgObj.hex : '#18181b';
-        }
-        if (hexInput && document.activeElement !== hexInput) {
-            hexInput.value = encodeStudioMii(state.rawBytes);
+            viewport.style.backgroundColor = bgObj ? bgObj.hex : '#C4377A';
         }
 
         if (previewTimer) clearTimeout(previewTimer);
@@ -913,7 +921,6 @@
             if (imgEl.dataset.currentUrl === primaryUrl) return;
             if (loaderEl) loaderEl.classList.add('loading');
 
-            // Cancelar precarga anterior en vuelo para evitar colas o parpadeos
             if (activePreloader) {
                 activePreloader.onload = null;
                 activePreloader.onerror = null;
@@ -966,8 +973,8 @@
             <div>
                 <div class="mii-section-label">
                     <span>Color</span>
-                    <button type="button" class="mii-pill-btn ${showAllColors ? 'active' : ''}" id="mii-toggle-all-colors" style="padding:2px 8px;font-size:11px;">
-                        ${showAllColors ? 'Básicos' : 'Paleta completa (100)'}
+                    <button type="button" class="mii-pill-btn ${showAllColors ? 'active' : ''}" id="mii-toggle-all-colors" style="padding:3px 10px;font-size:11px;">
+                        ${showAllColors ? 'Colores básicos' : 'Paleta completa (100)'}
                     </button>
                 </div>
                 <div class="mii-color-bar">${swatches}</div>
@@ -986,10 +993,6 @@
         `;
     }
 
-    /**
-     * Obtiene o construye (y cachea en memoria) el nodo DOM de una grilla de partes SVG.
-     * Cambiar de pestaña o seleccionar un ítem no vuelve a parsear los SVGs nunca.
-     */
     function getPartsGridNode(categoryKey, byteIdx, orderList, totalCount) {
         const currentVal = state.rawBytes[byteIdx];
         const cacheKey = `${categoryKey}_${byteIdx}`;
@@ -1284,20 +1287,6 @@
                     ${buildSliderHTML('Estatura', IDX.height, 0, 127)}
                     ${buildSliderHTML('Complexión', IDX.build, 0, 127)}
                 </div>
-                <div>
-                    <button type="button" class="mii-pill-btn ${showCodePanel ? 'active' : ''}" id="mii-toggle-code">
-                        Código de personaje (Importar / Exportar)
-                    </button>
-                    ${showCodePanel ? `
-                        <div class="mii-adjust-drawer" style="margin-top:8px;flex-direction:row;align-items:center;gap:8px;">
-                            <input id="mii-code-input" type="text" value="${encodeStudioMii(state.rawBytes)}"
-                                style="flex:1;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.12);border-radius:7px;padding:6px 10px;font-size:11.5px;font-family:ui-monospace,SFMono-Regular,monospace;color:#e4e4e7;outline:none;"
-                                placeholder="Código hexadecimal de 94 caracteres..." />
-                            <button type="button" class="mii-pill-btn" id="mii-btn-apply-code">Importar</button>
-                            <button type="button" class="mii-pill-btn" id="mii-btn-copy-code">Copiar</button>
-                        </div>
-                    ` : ''}
-                </div>
             `;
             container.appendChild(styleWrap);
         }
@@ -1347,10 +1336,13 @@
                             </div>
                         </div>
 
-                        <div class="mii-presets-row">
-                            <button type="button" id="mii-preset-chica" class="mii-ghost-btn">Base A</button>
-                            <button type="button" id="mii-preset-chico" class="mii-ghost-btn">Base B</button>
-                            <button type="button" id="mii-preset-random" class="mii-ghost-btn">Aleatorio</button>
+                        <div class="mii-presets-box">
+                            <span class="mii-presets-title">Empezar desde plantilla</span>
+                            <div class="mii-presets-row">
+                                <button type="button" id="mii-preset-chica" class="mii-ghost-btn">Plantilla Chica</button>
+                                <button type="button" id="mii-preset-chico" class="mii-ghost-btn">Plantilla Chico</button>
+                            </div>
+                            <button type="button" id="mii-preset-random" class="mii-ghost-btn" style="width:100%;">Generar Mii al azar</button>
                         </div>
                     </div>
 
@@ -1373,17 +1365,12 @@
 
                 <!-- Footer -->
                 <div class="mii-footer">
-                    <a id="mii-btn-download" href="#" target="_blank" rel="noopener" class="mii-pill-btn" style="text-decoration:none;">
-                        Exportar PNG
-                    </a>
-                    <div style="display:flex;align-items:center;gap:8px;">
-                        <button type="button" id="mii-btn-cancel" class="mii-pill-btn" style="background:transparent;border-color:transparent;color:#a1a1aa;">
-                            Cancelar
-                        </button>
-                        <button type="button" id="mii-btn-save" class="mii-save-btn">
-                            Guardar cambios
-                        </button>
-                    </div>
+                    <button type="button" id="mii-btn-cancel" class="mii-pill-btn" style="background:transparent;border-color:transparent;color:#a1a1aa;">
+                        Cancelar
+                    </button>
+                    <button type="button" id="mii-btn-save" class="mii-save-btn">
+                        Guardar cambios
+                    </button>
                 </div>
             </div>
         `;
@@ -1485,7 +1472,7 @@
             });
         });
 
-        // Delegación O(1) en el contenido de la pestaña (sin destruir el DOM al elegir parte o color)
+        // Delegación O(1) en el contenido de la pestaña
         const contentEl = modalEl.querySelector('#mii-tab-content');
         contentEl.addEventListener('click', (e) => {
             const subFaceBtn = e.target.closest('[data-subtab-face]');
@@ -1510,12 +1497,6 @@
 
             if (e.target.closest('#mii-toggle-all-colors')) {
                 showAllColors = !showAllColors;
-                renderActiveTab();
-                return;
-            }
-
-            if (e.target.closest('#mii-toggle-code')) {
-                showCodePanel = !showCodePanel;
                 renderActiveTab();
                 return;
             }
@@ -1609,31 +1590,6 @@
                 refreshPreview(true);
                 return;
             }
-
-            if (e.target.closest('#mii-btn-apply-code')) {
-                const inp = contentEl.querySelector('#mii-code-input');
-                const decoded = decodeStudioMii(inp ? inp.value : '');
-                if (decoded) {
-                    state.rawBytes = decoded;
-                    state.enabled = true;
-                    updateModeButtonsUI();
-                    playSound('celebration.wav', 0.4);
-                    refreshPreview(true);
-                    renderActiveTab();
-                } else if (window.showPremiumAlert) {
-                    window.showPremiumAlert('Código inválido', 'Introduce un código hexadecimal válido de Mii Studio (94 caracteres).', 'error');
-                }
-                return;
-            }
-
-            if (e.target.closest('#mii-btn-copy-code')) {
-                const code = encodeStudioMii(state.rawBytes);
-                if (navigator.clipboard) navigator.clipboard.writeText(code);
-                if (window.showPremiumAlert) {
-                    window.showPremiumAlert('Código copiado', 'El código de tu personaje se copió al portapapeles.', 'success');
-                }
-                return;
-            }
         });
 
         contentEl.addEventListener('input', (e) => {
@@ -1650,11 +1606,6 @@
             }
         });
 
-        modalEl.querySelector('#mii-btn-download').addEventListener('click', (e) => {
-            const url = buildMiiUrl(state.rawBytes, { ...state, width: 512 }, false);
-            e.currentTarget.href = url;
-        });
-
         modalEl.querySelector('#mii-btn-save').addEventListener('click', async () => {
             const saveBtn = modalEl.querySelector('#mii-btn-save');
             const origText = saveBtn.textContent;
@@ -1665,7 +1616,7 @@
                 viewType: 'face',
                 width: 512,
                 expression: state.expression || 'normal',
-                bgColor: state.bgColor || '18181BFF',
+                bgColor: state.bgColor || 'C4377AFF',
                 rotateY: 0
             }, false);
 
@@ -1674,7 +1625,7 @@
                 dataHex: encodeStudioMii(state.rawBytes),
                 rawBytes: clampBytes(state.rawBytes),
                 expression: state.expression || 'normal',
-                bgColor: state.bgColor || '18181BFF',
+                bgColor: state.bgColor || 'C4377AFF',
                 viewType: state.viewType || 'face',
                 avatarUrl: avatarHeadUrl,
                 updatedAt: Date.now()
@@ -1723,7 +1674,7 @@
         if (saved && Array.isArray(saved.rawBytes) && saved.rawBytes.length === 46) {
             state.rawBytes = clampBytes(saved.rawBytes);
             state.expression = saved.expression || 'normal';
-            state.bgColor = saved.bgColor || '18181BFF';
+            state.bgColor = saved.bgColor || 'C4377AFF';
             state.viewType = saved.viewType || 'face';
             state.enabled = saved.enabled !== false;
             state.rotateY = 0;
@@ -1731,7 +1682,7 @@
             const dec = decodeStudioMii(saved.dataHex);
             if (dec) state.rawBytes = dec;
             state.expression = saved.expression || 'normal';
-            state.bgColor = saved.bgColor || '18181BFF';
+            state.bgColor = saved.bgColor || 'C4377AFF';
             state.enabled = saved.enabled !== false;
         }
 
