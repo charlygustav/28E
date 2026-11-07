@@ -15,7 +15,7 @@
                 } else if (host === 'tv.yaire.site') {
                     window.location.replace('tv.html' + window.location.search);
                 }
-            } catch (e) {}
+            } catch (e) { }
         })();
     </script>
     <link rel="icon" type="image/x-icon" href="dclf_game.ico?v=1">
@@ -123,13 +123,14 @@
         }
 
         .countdown-eyebrow {
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 0.14em;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
             color: rgba(255, 255, 255, 0.7);
             margin-bottom: 0.45rem;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
-            margin-right: -0.14em;
+            margin-right: -0.22em;
         }
 
         .timer-row {
@@ -208,15 +209,65 @@
             will-change: transform;
         }
 
-        .bar:nth-child(1) { animation: barScale1 0.7s ease-in-out infinite alternate; animation-delay: 0.1s; }
-        .bar:nth-child(2) { animation: barScale2 0.55s ease-in-out infinite alternate; animation-delay: 0.25s; }
-        .bar:nth-child(3) { animation: barScale3 0.8s ease-in-out infinite alternate; animation-delay: 0.15s; }
-        .bar:nth-child(4) { animation: barScale4 0.6s ease-in-out infinite alternate; animation-delay: 0.35s; }
+        .bar:nth-child(1) {
+            animation: barScale1 0.7s ease-in-out infinite alternate;
+            animation-delay: 0.1s;
+        }
 
-        @keyframes barScale1 { 0% { transform: scaleY(0.25); } 100% { transform: scaleY(0.95); } }
-        @keyframes barScale2 { 0% { transform: scaleY(0.40); } 100% { transform: scaleY(1.0); } }
-        @keyframes barScale3 { 0% { transform: scaleY(0.15); } 100% { transform: scaleY(0.80); } }
-        @keyframes barScale4 { 0% { transform: scaleY(0.30); } 100% { transform: scaleY(0.90); } }
+        .bar:nth-child(2) {
+            animation: barScale2 0.55s ease-in-out infinite alternate;
+            animation-delay: 0.25s;
+        }
+
+        .bar:nth-child(3) {
+            animation: barScale3 0.8s ease-in-out infinite alternate;
+            animation-delay: 0.15s;
+        }
+
+        .bar:nth-child(4) {
+            animation: barScale4 0.6s ease-in-out infinite alternate;
+            animation-delay: 0.35s;
+        }
+
+        @keyframes barScale1 {
+            0% {
+                transform: scaleY(0.25);
+            }
+
+            100% {
+                transform: scaleY(0.95);
+            }
+        }
+
+        @keyframes barScale2 {
+            0% {
+                transform: scaleY(0.40);
+            }
+
+            100% {
+                transform: scaleY(1.0);
+            }
+        }
+
+        @keyframes barScale3 {
+            0% {
+                transform: scaleY(0.15);
+            }
+
+            100% {
+                transform: scaleY(0.80);
+            }
+        }
+
+        @keyframes barScale4 {
+            0% {
+                transform: scaleY(0.30);
+            }
+
+            100% {
+                transform: scaleY(0.90);
+            }
+        }
 
         .song-name {
             font-weight: 700;
@@ -397,7 +448,7 @@
             <div class="brand-logo">28E</div>
 
             <div id="countdown-root" class="countdown-container">
-                <div class="countdown-eyebrow">28E · yaire.site</div>
+                <div class="countdown-eyebrow">Apertura de la Web</div>
                 <div class="timer-row">
                     <div class="time-col">
                         <span id="cd-d" class="time-value">00</span>
@@ -437,7 +488,8 @@
                     </span>
                 </div>
                 <div id="live-clock" class="target-stamp">
-                    <span class="clock-date">---, - ---</span><span class="clock-sep"> · </span><span class="clock-time">--:-- --</span>
+                    <span class="clock-date">---, - ---</span><span class="clock-sep"> · </span><span
+                        class="clock-time">--:-- --</span>
                 </div>
             </footer>
 
@@ -465,7 +517,7 @@
         const elM = document.getElementById('cd-m');
         const elS = document.getElementById('cd-s');
         const elClock = document.getElementById('live-clock');
-        
+
         const clockFormatter = new Intl.DateTimeFormat('en-US', {
             timeZone: 'America/Caracas',
             weekday: 'short',
@@ -478,7 +530,7 @@
         const WEEKDAYS_ES = { Sun: 'Dom', Mon: 'Lun', Tue: 'Mar', Wed: 'Mié', Thu: 'Jue', Fri: 'Vie', Sat: 'Sáb' };
         const MONTHS_ES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
-                let hasUnlocked = false;
+        let hasUnlocked = false;
         function triggerUnlock() {
             if (hasUnlocked) return;
             hasUnlocked = true;
@@ -495,8 +547,8 @@
             }
 
             try {
-                set(ref(db, 'config/mantenimiento'), false).catch(() => {});
-            } catch (e) {}
+                set(ref(db, 'config/mantenimiento'), false).catch(() => { });
+            } catch (e) { }
 
             setTimeout(() => {
                 const stage = document.querySelector('.stage');
@@ -510,7 +562,7 @@
             }, 2000);
         }
 
-function tick() {
+        function tick() {
             const now = new Date();
 
             // Reloj y fecha en vivo de Venezuela (Estilo Apple / macOS: Vie, 6 nov · 8:49 PM)
