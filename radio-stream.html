@@ -269,6 +269,48 @@
             color: #ffffff;
         }
 
+
+        /* ─── Clima (debajo de la hora) ─── */
+        .clock-col {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .weather-stamp {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: 0.4rem;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 1.45rem;
+            color: rgba(255, 255, 255, 0.85);
+            text-shadow: 0 3px 16px rgba(0, 0, 0, 0.95);
+            white-space: nowrap;
+            transition: opacity 0.35s ease;
+        }
+
+        .weather-stamp[hidden] {
+            display: none;
+        }
+
+        .wx-ico {
+            width: 1.25em;
+            height: 1.25em;
+            flex-shrink: 0;
+            margin-right: 0.15rem;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .wx-temp {
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .wx-sep {
+            color: rgba(255, 255, 255, 0.42);
+        }
+
         /* ─── Zona Inferior & News (Minimalista Puro 28E) ─── */
         .bottom-wrap {
             display: flex;
@@ -322,6 +364,24 @@
             white-space: nowrap;
             padding: 2px 0;
         }
+
+        /* ─── Cuadrícula: fila 1 hora · fila 2 canción + clima · fila 3 noticias a todo el ancho ─── */
+        .bottom-wrap {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 36rem;
+            column-gap: 2rem;
+            align-items: center;
+        }
+
+        .bottom-wrap .footer,
+        .bottom-wrap .clock-col {
+            display: contents;
+        }
+
+        .bottom-wrap .music-indicator { grid-column: 1; grid-row: 2; }
+        .bottom-wrap #live-clock { grid-column: 2; grid-row: 1; justify-self: end; text-align: right; }
+        .bottom-wrap .weather-stamp { grid-column: 2; grid-row: 2; justify-self: end; margin-top: 0; }
+        .bottom-wrap .news-line { grid-column: 1 / -1; grid-row: 3; max-width: none; min-width: 0; }
     </style>
 </head>
 
@@ -382,8 +442,11 @@
                         <span class="song-name">Cargando música...</span>
                     </span>
                 </div>
-                <div id="live-clock" class="target-stamp">
-                    <span class="clock-date">---, - ---</span><span class="clock-sep"> · </span><span class="clock-time">--:-- --</span>
+                <div class="clock-col">
+                    <div id="live-clock" class="target-stamp">
+                        <span class="clock-date">---, - ---</span><span class="clock-sep"> · </span><span class="clock-time">--:-- --</span>
+                    </div>
+                    <div id="live-weather" class="weather-stamp" hidden></div>
                 </div>
             </footer>
 
@@ -918,6 +981,97 @@
                 audio.play().catch(() => { });
             }
         });
+
+        // ─── Clima en vivo (Open-Meteo, sin API key): 1 petición liviana cada 15 min, cero trabajo entre medias ───
+        const WEATHER_CITIES = [
+            { name: 'Caracas', lat: 10.4806, lon: -66.9036 },
+            { name: 'San Francisco de Macorís', lat: 19.3009, lon: -70.2528 },
+            { name: 'Santiago de los Caballeros', lat: 19.4517, lon: -70.6970 },
+            { name: 'Santo Domingo', lat: 18.4861, lon: -69.9312 }
+        ];
+        const WEATHER_CFG = { everyMs: 15 * 60 * 1000, rotateMs: 15000 };
+        const elWeather = document.getElementById('live-weather');
+        const WX_ICONS = {
+            sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+            moon: '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
+            cloud: '<path d="M18 10h-1.3A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>',
+            rain: '<path d="M16 13v8M8 13v8M12 15v8M20 16.6A5 5 0 0 0 18 7h-1.3A8 8 0 1 0 4 15.3"/>',
+            storm: '<path d="M19 16.9A5 5 0 0 0 18 7h-1.3a8 8 0 1 0-11.6 9M13 11l-4 6h6l-4 6"/>',
+            snow: '<path d="M20 17.6A5 5 0 0 0 18 8h-1.3A8 8 0 1 0 4 16.3M8 16h.01M8 20h.01M12 18h.01M12 22h.01M16 16h.01M16 20h.01"/>',
+            fog: '<path d="M3 8h18M5 12h14M3 16h18"/>'
+        };
+        function describeWeather(code, isDay) {
+            if (code === 0) return isDay ? ['sun', 'Despejado'] : ['moon', 'Despejado'];
+            if (code === 1) return isDay ? ['sun', 'Mayormente despejado'] : ['moon', 'Mayormente despejado'];
+            if (code === 2) return ['cloud', 'Parcialmente nublado'];
+            if (code === 3) return ['cloud', 'Nublado'];
+            if (code === 45 || code === 48) return ['fog', 'Niebla'];
+            if (code >= 51 && code <= 57) return ['rain', 'Llovizna'];
+            if ((code >= 61 && code <= 67) || (code >= 80 && code <= 82)) return ['rain', code >= 80 ? 'Chubascos' : 'Lluvia'];
+            if ((code >= 71 && code <= 77) || code === 85 || code === 86) return ['snow', 'Nieve'];
+            if (code >= 95) return ['storm', 'Tormenta'];
+            return ['cloud', 'Nublado'];
+        }
+        let weatherData = [];
+        let weatherIdx = 0;
+        let lastWeatherMarkup = '';
+
+        function weatherMarkup(w) {
+            const [icon] = describeWeather(w.code, w.isDay);
+            return `<svg class="wx-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${WX_ICONS[icon]}</svg><span class="wx-city">${w.name}</span><span class="wx-sep"> · </span><span class="wx-temp">${w.temp}°C</span>`;
+        }
+
+        function showWeather(fade) {
+            if (!elWeather || weatherData.length === 0) return;
+            const markup = weatherMarkup(weatherData[weatherIdx % weatherData.length]);
+            if (markup === lastWeatherMarkup) return;
+            const apply = () => {
+                lastWeatherMarkup = markup;
+                elWeather.innerHTML = markup;
+                elWeather.hidden = false;
+                elWeather.style.opacity = '1';
+            };
+            if (fade && !elWeather.hidden) {
+                elWeather.style.opacity = '0';
+                setTimeout(apply, 350);
+            } else {
+                apply();
+            }
+        }
+
+        // Una sola petición trae las 4 ciudades a la vez
+        async function updateWeather() {
+            if (!elWeather) return;
+            try {
+                const ctrl = new AbortController();
+                const to = setTimeout(() => ctrl.abort(), 8000);
+                const lats = WEATHER_CITIES.map(c => c.lat).join(',');
+                const lons = WEATHER_CITIES.map(c => c.lon).join(',');
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&current=temperature_2m,weather_code,is_day&timezone=auto`, { signal: ctrl.signal, cache: 'no-store' });
+                clearTimeout(to);
+                const json = await res.json();
+                const list = Array.isArray(json) ? json : [json];
+                const fresh = [];
+                list.forEach((r, i) => {
+                    const c = r && r.current;
+                    if (c && typeof c.temperature_2m === 'number' && WEATHER_CITIES[i]) {
+                        fresh.push({ name: WEATHER_CITIES[i].name, temp: Math.round(c.temperature_2m), code: c.weather_code, isDay: c.is_day === 1 });
+                    }
+                });
+                if (fresh.length > 0) {
+                    weatherData = fresh;
+                    showWeather(false);
+                }
+            } catch (_) { /* sin red: se conserva el último clima mostrado */ }
+        }
+        updateWeather();
+        setInterval(updateWeather, WEATHER_CFG.everyMs);
+        setInterval(() => {
+            if (weatherData.length > 1) {
+                weatherIdx = (weatherIdx + 1) % weatherData.length;
+                showWeather(true);
+            }
+        }, WEATHER_CFG.rotateMs);
     </script>
 </body>
 
