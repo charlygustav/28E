@@ -30,7 +30,7 @@ var logDebug = window.logDebug;
 
                 spot_mode_music: "Música", spot_mode_radio: "Radio", radio_signal: "Señal en Vivo", radio_desc: "Sintonizando la frecuencia de 28E. Emisión ininterrumpida de amor y recuerdos.", radio_live_badge: "En vivo", radio_live_title: "Transmisión en Vivo",
 
-                gb_auth_req: "Para firmar el muro, por favor identifícate.", gb_auth_google: "Continuar con Google", gb_auth_manual: "Prefiero escribir mi nombre manualmente", auth_prompt: "Inicia sesión para entrar al canal de voz y guardar progreso.", auth_login_btn: "Iniciar sesión", auth_logout_btn: "Cerrar sesión", gb_tag: "Muro de Dedicatorias", gb_title: "Dejando <span class=\"text-highlight\">huella</span>.", gb_desc: "Un espacio para dejar mensajes, recuerdos o simplemente un saludo. Todo lo que se escriba aquí quedará guardado para siempre.", gb_form_title: "Escribe un mensaje", gb_label_name: "Tu Nombre", gb_ph_name: "Ej. Visitante Anónimo", gb_label_msg: "Mensaje", gb_ph_msg: "Escribe algo bonito...", gb_btn: "Publicar Mensaje", gb_publishing: "Publicando...", gb_saving: "Guardando...", gb_loading: "Cargando mensajes...", gb_empty: "Aún no hay mensajes. ¡Sé el primero!", gb_recent: "Reciente", gb_save_changes: "Guardar Cambios", gb_cancel_edit: "Cancelar Edición", gb_delete_confirm: "¿Estás seguro de que quieres borrar este mensaje para siempre?", gb_deleted_title: "Borrado", gb_deleted_msg: "El mensaje ha sido eliminado", gb_updated_title: "Actualizado", gb_updated_msg: "Tu mensaje ha sido modificado", gb_edit_title: "Editar mensaje", gb_delete_title: "Borrar mensaje", gb_edited_tag: "(editado)",
+                gb_auth_req: "Para firmar el muro, por favor identifícate.", gb_auth_google: "Continuar con Google", gb_auth_manual: "Prefiero escribir mi nombre manualmente", auth_prompt: "Inicia sesión para entrar al canal de voz y guardar progreso.", auth_login_btn: "Iniciar sesión", auth_logout_btn: "Cerrar sesión", gb_tag: "Muro de Dedicatorias", gb_title: "Dejando <span class=\"text-highlight\"><em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">huella</em></span>.", gb_desc: "Un espacio para dejar mensajes, recuerdos o simplemente un saludo. Todo lo que se escriba aquí quedará guardado para siempre.", gb_form_title: "Escribe un mensaje", gb_label_name: "Tu Nombre", gb_ph_name: "Ej. Visitante Anónimo", gb_label_msg: "Mensaje", gb_ph_msg: "Escribe algo bonito...", gb_btn: "Publicar Mensaje", gb_publishing: "Publicando...", gb_saving: "Guardando...", gb_loading: "Cargando mensajes...", gb_empty: "Aún no hay mensajes. ¡Sé el primero!", gb_recent: "Reciente", gb_save_changes: "Guardar Cambios", gb_cancel_edit: "Cancelar Edición", gb_delete_confirm: "¿Estás seguro de que quieres borrar este mensaje para siempre?", gb_deleted_title: "Borrado", gb_deleted_msg: "El mensaje ha sido eliminado", gb_updated_title: "Actualizado", gb_updated_msg: "Tu mensaje ha sido modificado", gb_edit_title: "Editar mensaje", gb_delete_title: "Borrar mensaje", gb_edited_tag: "(editado)",
 
                 menu_cat_essence: "✦ ESENCIA", menu_cat_exp: "✦ EXPERIENCIAS", menu_cat_special: "✦ ESPECIAL", menu_cat_6months: "✦ ANIVERSARIO", menu_search: "Buscar sección...",
 
@@ -176,7 +176,7 @@ var logDebug = window.logDebug;
 
 
 
-                universe_kicker: "Gustos y Pasiones", universe_title: "Su <span class=\"text-highlight\">universo</span>.", universe_subtitle: "Las historias, melodías y momentos que definen su mundo y conectan con el mío.",
+                universe_kicker: "Gustos y Pasiones", universe_title: "Su <span class=\"text-highlight\"><em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">universo</em></span>.", universe_subtitle: "Las historias, melodías y momentos que definen su mundo y conectan con el mío.",
 
                 movie_label: "Su Película Favorita", movie_title: "La Princesa y el Sapo",
 
@@ -198,7 +198,7 @@ var logDebug = window.logDebug;
 
 
 
-                gallery_label: "La Musa", gallery_title: "Galería de <span class=\"text-highlight\">arte</span>.", gallery_desc: "Porque ninguna obra de arte en los mejores museos del mundo se compara con tu belleza. Un espacio dedicado exclusivamente a admirarte.",
+                gallery_label: "La Musa", gallery_title: "Galería de <span class=\"text-highlight\"><em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">arte</em></span>.", gallery_desc: "Porque ninguna obra de arte en los mejores museos del mundo se compara con tu belleza. Un espacio dedicado exclusivamente a admirarte.",
 
                 gallery_cap1: "\"La sonrisa que ilumina mis días.\"", gallery_cap2: "\"Perfección.\"", gallery_cap3: "\"Mi vista favorita.\"", gallery_cap4: "\"Instantes que guardo en el alma.\"", gallery_cap5: "\"Esa mirada que lo dice todo.\"", gallery_cap6: "\"Simplemente tú, mi obra de arte.\"",
 
@@ -230,7 +230,7 @@ var logDebug = window.logDebug;
 
 
 
-                games_label: "Zona Interactiva", games_title: "Yaire's <span class=\"text-highlight\">Interactive Hub</span>.", games_subtitle: "Explora experiencias, minijuegos y transmisiones para ti.",
+                games_label: "Zona Interactiva", games_title: "Yaire's <span class=\"text-highlight\"><em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">Interactive Hub</em></span>.", games_subtitle: "Explora experiencias, minijuegos y transmisiones para ti.",
 
                 game1_title: "El Jardín de Yaire", game1_desc: "Cosecha girasoles a contrarreloj.",
 
@@ -270,7 +270,7 @@ var logDebug = window.logDebug;
 
 
 
-                prep_title: "Mis promesas para <span class=\"text-highlight\">ti</span>.", prep_subtitle: "No son solo palabras vacías en una página web. Son decretos reales de cómo planeo amarte, respetarte y cuidarte todos los días de mi vida.",
+                prep_title: "Mis promesas para <span class=\"text-highlight\"><em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">ti</em></span>.", prep_subtitle: "No son solo palabras vacías en una página web. Son decretos reales de cómo planeo amarte, respetarte y cuidarte todos los días de mi vida.",
 
                 promise_click_hint: "Toca cada promesa para ver más ✨",
 
