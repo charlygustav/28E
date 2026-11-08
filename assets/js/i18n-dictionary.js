@@ -2658,7 +2658,7 @@ var logDebug = window.logDebug;
                                         ${g.desc ? `<span class="search-item-desc truncate">${g.desc}</span>` : ''}
                                     </div>
                                 </div>
-                                <span class="search-item-badge">${g.badge || 'Abrir'}</span>
+                                <span class="text-xs text-zinc-600 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0">→</span>
                             `;
 
                             itemEl.onclick = () => {
