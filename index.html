@@ -1147,6 +1147,144 @@
 
         }
 
+        /* Search Groups & Items Visual Polish (Apple / Linear command palette style) */
+        #menu-panel .injected-search-group {
+            margin-top: 1.75rem !important;
+            margin-bottom: 1.5rem !important;
+            padding-top: 1.25rem !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+        }
+
+        #menu-panel .injected-search-group:first-of-type,
+        #menu-panel .injected-search-group.is-first-group {
+            margin-top: 0.65rem !important;
+            padding-top: 0 !important;
+            border-top: none !important;
+        }
+
+        #menu-panel .injected-search-group .search-group-title {
+            font-size: 10px !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.18em !important;
+            text-transform: uppercase !important;
+            color: #A1A1AA !important;
+            margin-bottom: 0.75rem !important;
+            padding: 0 0.35rem !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.45rem !important;
+        }
+
+        #menu-panel .injected-items-list {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 0.55rem !important;
+        }
+
+        #menu-panel .injected-search-item {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 0.85rem !important;
+            padding: 0.75rem 0.95rem !important;
+            border-radius: 14px !important;
+            background: rgba(255, 255, 255, 0.035) !important;
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            transition: all 0.16s ease !important;
+            cursor: pointer !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+            transform: none !important;
+        }
+
+        #menu-panel .injected-search-item:hover {
+            background: rgba(255, 255, 255, 0.08) !important;
+            border-color: rgba(225, 29, 72, 0.4) !important;
+            transform: translateY(-1.5px) !important;
+            box-shadow: 0 6px 18px rgba(225, 29, 72, 0.18) !important;
+        }
+
+        #menu-panel .injected-search-item .search-item-icon {
+            width: 38px !important;
+            height: 38px !important;
+            border-radius: 10px !important;
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 1.2rem !important;
+            flex-shrink: 0 !important;
+        }
+
+        #menu-panel .injected-search-item .search-item-title {
+            font-size: 13.5px !important;
+            font-weight: 500 !important;
+            color: #F4F4F5 !important;
+            line-height: 1.25 !important;
+        }
+
+        #menu-panel .injected-search-item .search-item-desc {
+            font-size: 11.5px !important;
+            font-weight: 400 !important;
+            color: #71717A !important;
+            margin-top: 2px !important;
+            line-height: 1.3 !important;
+        }
+
+        #menu-panel .injected-search-item .search-item-badge {
+            font-family: monospace !important;
+            font-size: 10px !important;
+            font-weight: 600 !important;
+            letter-spacing: 0.05em !important;
+            text-transform: uppercase !important;
+            color: #FDA4AF !important;
+            background: rgba(244, 63, 94, 0.12) !important;
+            border: 1px solid rgba(244, 63, 94, 0.28) !important;
+            padding: 0.28rem 0.65rem !important;
+            border-radius: 7px !important;
+            flex-shrink: 0 !important;
+            transition: all 0.15s ease !important;
+        }
+
+        #menu-panel .injected-search-item:hover .search-item-badge {
+            background: rgba(244, 63, 94, 0.22) !important;
+            border-color: rgba(244, 63, 94, 0.5) !important;
+            color: #FFE4E6 !important;
+        }
+
+        /* Spacing for active static groups when searching */
+        #menu-panel #menu-links.menu-is-searching .menu-cat-group {
+            margin-top: 1.75rem !important;
+            margin-bottom: 1.5rem !important;
+            padding-top: 1.25rem !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+        }
+
+        #menu-panel #menu-links.menu-is-searching .menu-cat-group:first-of-type {
+            margin-top: 0.65rem !important;
+            padding-top: 0 !important;
+            border-top: none !important;
+        }
+
+        #menu-panel #menu-links.menu-is-searching .menu-grid {
+            gap: 0.45rem !important;
+        }
+
+        #menu-panel #menu-links.menu-is-searching a.menu-link-item {
+            padding: 0.65rem 0.85rem !important;
+            border-radius: 12px !important;
+            background: rgba(255, 255, 255, 0.02) !important;
+            border: 1px solid rgba(255, 255, 255, 0.04) !important;
+            transform: none !important;
+        }
+
+        #menu-panel #menu-links.menu-is-searching a.menu-link-item:hover {
+            background: rgba(255, 255, 255, 0.06) !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+            transform: translateY(-1px) !important;
+        }
+
+
         /* Vault button in drawer - Immersive Modal Card Redesign */
 
         #menu-panel .vault-btn {
@@ -19713,7 +19851,7 @@
         }
     </script>
 
-    <script src="assets/js/i18n-dictionary.js?v=1794109500000"></script>
+    <script src="assets/js/i18n-dictionary.js?v=1794109600000"></script>
 
     <!-- ---------- CAPÍTULO V: CINEMASCOPE V (5 MESES) ---------- -->
 

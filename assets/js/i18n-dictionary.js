@@ -2349,6 +2349,11 @@ var logDebug = window.logDebug;
                     }
                 }
 
+                const menuLinksContainer = document.getElementById('menu-links');
+                if (!qNorm && menuLinksContainer) {
+                    menuLinksContainer.classList.remove('menu-is-searching');
+                }
+
                 // Injected shortcuts, games, tools & experiences if query exists
                 if (qNorm) {
                     const t = (typeof dictionary !== 'undefined' && dictionary[typeof currentLang !== 'undefined' ? currentLang : 'es']) || (typeof dictionary !== 'undefined' ? dictionary.es : {});
@@ -2599,46 +2604,61 @@ var logDebug = window.logDebug;
                         }
                     ];
 
+                    const menuLinksEl = document.getElementById('menu-links');
+                    if (menuLinksEl) menuLinksEl.classList.add('menu-is-searching');
+
                     const categoryLabels = {
-                        stream: '✦ TRANSMISIÓN & EN VIVO',
-                        game: '✦ MINIJUEGOS & 3D',
-                        tool: '✦ HERRAMIENTAS & CREATIVIDAD',
-                        recipe: '✦ GASTRONOMÍA',
-                        wrapped: '✦ RESUMEN & STATS'
+                        stream: 'Transmisión & En Vivo',
+                        game: 'Minijuegos & 3D',
+                        tool: 'Herramientas & Creatividad',
+                        recipe: 'Gastronomía',
+                        wrapped: 'Resumen & Stats'
                     };
 
-                    const addedCategories = {};
+                    const categoryGroups = {};
+                    let hasInjectedCategory = false;
 
                     searchItems.forEach(g => {
                         const itemHaystack = normStr(g.title + ' ' + (g.desc || '') + ' ' + (g.keys || []).join(' '));
                         const matches = (tokens.length > 0 && tokens.every(t => itemHaystack.includes(t))) ||
                                         (g.keys && g.keys.some(k => {
                                             const kNorm = normStr(k);
-                                            return kNorm && (itemHaystack.includes(qNorm) || qNorm.includes(kNorm) || kNorm.includes(qNorm));
+                                            return kNorm && (kNorm === qNorm || kNorm.includes(qNorm) || (qNorm.length >= 3 && kNorm.length >= 3 && qNorm.includes(kNorm)));
                                         }));
 
                         if (matches) {
-                            if (!addedCategories[g.type]) {
-                                const sep = document.createElement('div');
-                                sep.className = 'injected-game-search my-3 pt-2.5 border-t border-white/[0.06] flex items-center justify-between select-none';
-                                const sepLabel = categoryLabels[g.type] || '✦ DESTACADOS';
-                                sep.innerHTML = `<span class="text-[10px] font-mono tracking-widest text-zinc-500 uppercase font-semibold">${sepLabel}</span>`;
-                                document.getElementById('menu-links').appendChild(sep);
-                                addedCategories[g.type] = true;
+                            if (!categoryGroups[g.type]) {
+                                const groupEl = document.createElement('div');
+                                const isFirst = !hasInjectedCategory && (visibleCount === 0);
+                                groupEl.className = 'injected-game-search injected-search-group' + (isFirst ? ' is-first-group' : '');
+                                hasInjectedCategory = true;
+
+                                const sepLabel = categoryLabels[g.type] || 'Destacados';
+                                groupEl.innerHTML = `
+                                    <div class="search-group-title select-none">
+                                        <span>✦</span> <span>${sepLabel}</span>
+                                    </div>
+                                    <div class="injected-items-list"></div>
+                                `;
+
+                                if (menuLinksEl) menuLinksEl.appendChild(groupEl);
+                                categoryGroups[g.type] = groupEl.querySelector('.injected-items-list');
                             }
 
                             const itemEl = document.createElement('div');
                             itemEl.tabIndex = 0;
-                            itemEl.className = "injected-game-search menu-link-item group flex items-center justify-between gap-3 p-2.5 rounded-lg text-sm text-zinc-300 hover:text-white hover:bg-white/[0.04] transition-all cursor-pointer";
+                            itemEl.className = "injected-search-item menu-link-item group";
                             itemEl.innerHTML = `
-                                <div class="flex items-center gap-3 min-w-0">
-                                    <span class="text-base select-none shrink-0">${g.emoji}</span>
-                                    <div class="flex flex-col min-w-0">
-                                        <span class="text-sm font-medium text-zinc-200 group-hover:text-white truncate">${g.title}</span>
-                                        ${g.desc ? `<span class="text-[11px] text-zinc-500 truncate font-normal">${g.desc}</span>` : ''}
+                                <div class="flex items-center gap-3 min-w-0" style="display:flex;align-items:center;gap:0.75rem;min-width:0;">
+                                    <div class="search-item-icon">
+                                        ${g.emoji}
+                                    </div>
+                                    <div class="flex flex-col min-w-0" style="display:flex;flex-direction:column;min-width:0;">
+                                        <span class="search-item-title truncate">${g.title}</span>
+                                        ${g.desc ? `<span class="search-item-desc truncate">${g.desc}</span>` : ''}
                                     </div>
                                 </div>
-                                <span class="text-[10px] font-mono uppercase tracking-wider text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded shrink-0">${g.badge || 'Abrir'}</span>
+                                <span class="search-item-badge">${g.badge || 'Abrir'}</span>
                             `;
 
                             itemEl.onclick = () => {
@@ -2648,7 +2668,9 @@ var logDebug = window.logDebug;
                                 g.action();
                             };
 
-                            document.getElementById('menu-links').appendChild(itemEl);
+                            if (categoryGroups[g.type]) {
+                                categoryGroups[g.type].appendChild(itemEl);
+                            }
                             visibleCount++;
                         }
                     });
