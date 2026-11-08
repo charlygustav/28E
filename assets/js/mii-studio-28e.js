@@ -802,18 +802,19 @@
             }
 
             .mii-pill-btn {
-                padding: 6px 13px;
+                height: 24px;
+                padding: 0 10px;
                 border-radius: 9999px;
-                font-size: 11.5px;
+                font-size: 11px;
                 font-weight: 500;
                 letter-spacing: -0.01em;
-                background: rgba(255, 255, 255, 0.05);
-                border: 1px solid rgba(255, 255, 255, 0.08);
-                color: #d4d4d8;
+                background: rgba(255, 255, 255, 0.04);
+                border: 1px solid rgba(255, 255, 255, 0.07);
+                color: #a1a1aa;
                 cursor: pointer;
                 display: inline-flex;
                 align-items: center;
-                gap: 5px;
+                gap: 4px;
                 transition: color 140ms var(--ease-out), background-color 140ms var(--ease-out), border-color 140ms var(--ease-out), transform 120ms var(--ease-out);
             }
             .mii-pill-btn.active {
@@ -1023,13 +1024,9 @@
         }, delay);
     }
 
-    function buildColorPickerHTML(byteIdx, quickList) {
+    function buildColorPickerHTML(byteIdx, quickList, rightActionHTML) {
         const currentVal = state.rawBytes[byteIdx];
-        const indices = showAllColors
-            ? Array.from({ length: 100 }, (_, i) => i)
-            : quickList;
-
-        const swatches = indices.map(colorIdx => {
+        const swatches = quickList.map(colorIdx => {
             const hex = SWITCH_COLORS[colorIdx] || '#000000';
             const sel = currentVal === colorIdx ? 'selected' : '';
             return `<button type="button" class="mii-color-swatch ${sel}" data-color-byte="${byteIdx}" data-color-val="${colorIdx}" style="background:${hex};" aria-label="Color ${colorIdx + 1}"></button>`;
@@ -1039,9 +1036,7 @@
             <div>
                 <div class="mii-section-label">
                     <span>Color</span>
-                    <button type="button" class="mii-pill-btn ${showAllColors ? 'active' : ''}" id="mii-toggle-all-colors" style="padding:3px 10px;font-size:11px;">
-                        ${showAllColors ? 'Colores básicos' : 'Paleta completa (100)'}
-                    </button>
+                    ${rightActionHTML || ''}
                 </div>
                 <div class="mii-color-bar">${swatches}</div>
             </div>
@@ -1180,35 +1175,23 @@
             }
         } else if (activeTab === 'hair') {
             const hairList = isFemale ? HAIR_ORDER_FEMALE : HAIR_ORDER_MALE;
+            const flipBtn = `<button type="button" class="mii-pill-btn ${b[IDX.hairFlip] === 1 ? 'active' : ''}" id="mii-btn-hairflip">Invertir</button>`;
             const topWrap = document.createElement('div');
             topWrap.style.display = 'flex';
             topWrap.style.flexDirection = 'column';
-            topWrap.style.gap = '12px';
-            topWrap.innerHTML = `
-                ${buildColorPickerHTML(IDX.hairColor, QUICK_HAIR_COLORS)}
-                <div class="mii-subtoolbar">
-                    <span class="mii-section-label" style="margin:0;">Peinados (${isFemale ? 'Femeninos' : 'Masculinos'})</span>
-                    <button type="button" class="mii-pill-btn ${b[IDX.hairFlip] === 1 ? 'active' : ''}" id="mii-btn-hairflip">
-                        Invertir orientación
-                    </button>
-                </div>
-            `;
+            topWrap.style.gap = '10px';
+            topWrap.innerHTML = buildColorPickerHTML(IDX.hairColor, QUICK_HAIR_COLORS, flipBtn);
             container.appendChild(topWrap);
             container.appendChild(getPartsGridNode('hair', IDX.hairType, hairList, hairList.length));
         } else if (activeTab === 'eyes') {
             const eyeList = isFemale ? EYE_ORDER_FEMALE : EYE_ORDER_MALE;
+            const adjBtn = `<button type="button" class="mii-pill-btn ${showAdjustments ? 'active' : ''}" id="mii-toggle-adjust">Ajustar</button>`;
             const topWrap = document.createElement('div');
             topWrap.style.display = 'flex';
             topWrap.style.flexDirection = 'column';
-            topWrap.style.gap = '12px';
+            topWrap.style.gap = '10px';
             topWrap.innerHTML = `
-                ${buildColorPickerHTML(IDX.eyeColor, QUICK_EYE_COLORS)}
-                <div class="mii-subtoolbar">
-                    <span class="mii-section-label" style="margin:0;">Mirada (${isFemale ? 'Femenina' : 'Masculina'})</span>
-                    <button type="button" class="mii-pill-btn ${showAdjustments ? 'active' : ''}" id="mii-toggle-adjust">
-                        Ajustar posición
-                    </button>
-                </div>
+                ${buildColorPickerHTML(IDX.eyeColor, QUICK_EYE_COLORS, adjBtn)}
                 ${showAdjustments ? `
                     <div class="mii-adjust-drawer">
                         ${buildSliderHTML('Tamaño', IDX.eyeScale, 0, 7)}
@@ -1222,19 +1205,13 @@
             container.appendChild(topWrap);
             container.appendChild(getPartsGridNode('eyes', IDX.eyeType, eyeList, eyeList.length));
         } else if (activeTab === 'eyebrows') {
+            const adjBtn = `<button type="button" class="mii-pill-btn ${showAdjustments ? 'active' : ''}" id="mii-toggle-adjust">Ajustar</button>`;
             const topWrap = document.createElement('div');
             topWrap.style.display = 'flex';
             topWrap.style.flexDirection = 'column';
-            topWrap.style.gap = '12px';
+            topWrap.style.gap = '10px';
             topWrap.innerHTML = `
-                ${buildColorPickerHTML(IDX.eyebrowColor, QUICK_HAIR_COLORS)}
-                <div class="mii-subtoolbar">
-                    <span class="mii-section-label" style="margin:0;">Forma de cejas</span>
-                    <div style="display:flex;gap:6px;">
-                        <button type="button" class="mii-pill-btn" id="mii-btn-sync-brow-color">Igualar al cabello</button>
-                        <button type="button" class="mii-pill-btn ${showAdjustments ? 'active' : ''}" id="mii-toggle-adjust">Ajustar posición</button>
-                    </div>
-                </div>
+                ${buildColorPickerHTML(IDX.eyebrowColor, QUICK_HAIR_COLORS, adjBtn)}
                 ${showAdjustments ? `
                     <div class="mii-adjust-drawer">
                         ${buildSliderHTML('Tamaño', IDX.eyebrowScale, 0, 8)}
@@ -1251,11 +1228,11 @@
             const topWrap = document.createElement('div');
             topWrap.style.display = 'flex';
             topWrap.style.flexDirection = 'column';
-            topWrap.style.gap = '12px';
+            topWrap.style.gap = '10px';
             topWrap.innerHTML = `
-                <div class="mii-subtoolbar">
-                    <span class="mii-section-label" style="margin:0;">Forma de nariz</span>
-                    <button type="button" class="mii-pill-btn ${showAdjustments ? 'active' : ''}" id="mii-toggle-adjust">Ajustar posición</button>
+                <div class="mii-section-label" style="margin:0;">
+                    <span>Forma de nariz</span>
+                    <button type="button" class="mii-pill-btn ${showAdjustments ? 'active' : ''}" id="mii-toggle-adjust">Ajustar</button>
                 </div>
                 ${showAdjustments ? `
                     <div class="mii-adjust-drawer">
@@ -1267,16 +1244,13 @@
             container.appendChild(topWrap);
             container.appendChild(getPartsGridNode('nose', IDX.noseType, NOSE_ORDER, 18));
         } else if (activeTab === 'mouth') {
+            const adjBtn = `<button type="button" class="mii-pill-btn ${showAdjustments ? 'active' : ''}" id="mii-toggle-adjust">Ajustar</button>`;
             const topWrap = document.createElement('div');
             topWrap.style.display = 'flex';
             topWrap.style.flexDirection = 'column';
-            topWrap.style.gap = '12px';
+            topWrap.style.gap = '10px';
             topWrap.innerHTML = `
-                ${buildColorPickerHTML(IDX.mouthColor, QUICK_MOUTH_COLORS)}
-                <div class="mii-subtoolbar">
-                    <span class="mii-section-label" style="margin:0;">Expresión de boca</span>
-                    <button type="button" class="mii-pill-btn ${showAdjustments ? 'active' : ''}" id="mii-toggle-adjust">Ajustar posición</button>
-                </div>
+                ${buildColorPickerHTML(IDX.mouthColor, QUICK_MOUTH_COLORS, adjBtn)}
                 ${showAdjustments ? `
                     <div class="mii-adjust-drawer">
                         ${buildSliderHTML('Tamaño', IDX.mouthScale, 0, 8)}
@@ -1288,16 +1262,13 @@
             container.appendChild(topWrap);
             container.appendChild(getPartsGridNode('mouth', IDX.mouthType, MOUTH_ORDER, 36));
         } else if (activeTab === 'glasses') {
+            const adjBtn = `<button type="button" class="mii-pill-btn ${showAdjustments ? 'active' : ''}" id="mii-toggle-adjust">Ajustar</button>`;
             const topWrap = document.createElement('div');
             topWrap.style.display = 'flex';
             topWrap.style.flexDirection = 'column';
-            topWrap.style.gap = '12px';
+            topWrap.style.gap = '10px';
             topWrap.innerHTML = `
-                ${buildColorPickerHTML(IDX.glassColor, QUICK_GLASS_COLORS)}
-                <div class="mii-subtoolbar">
-                    <span class="mii-section-label" style="margin:0;">Montura</span>
-                    <button type="button" class="mii-pill-btn ${showAdjustments ? 'active' : ''}" id="mii-toggle-adjust">Ajustar posición</button>
-                </div>
+                ${buildColorPickerHTML(IDX.glassColor, QUICK_GLASS_COLORS, adjBtn)}
                 ${showAdjustments ? `
                     <div class="mii-adjust-drawer">
                         ${buildSliderHTML('Tamaño', IDX.glassScale, 0, 7)}
@@ -1312,7 +1283,7 @@
             const topWrap = document.createElement('div');
             topWrap.style.display = 'flex';
             topWrap.style.flexDirection = 'column';
-            topWrap.style.gap = '12px';
+            topWrap.style.gap = '10px';
             topWrap.innerHTML = `
                 ${buildColorPickerHTML(IDX.beardColor, QUICK_HAIR_COLORS)}
                 <div class="mii-subtoolbar">
@@ -1321,7 +1292,7 @@
                         <button type="button" class="mii-segmented-btn ${subTabBeard === 'goatee' ? 'active' : ''}" data-subtab-beard="goatee">Barba</button>
                     </div>
                     ${subTabBeard === 'mustache' ? `
-                        <button type="button" class="mii-pill-btn ${showAdjustments ? 'active' : ''}" id="mii-toggle-adjust">Ajustar posición</button>
+                        <button type="button" class="mii-pill-btn ${showAdjustments ? 'active' : ''}" id="mii-toggle-adjust">Ajustar</button>
                     ` : ''}
                 </div>
             `;
@@ -1374,11 +1345,6 @@
                     <div class="mii-section-label"><span>Expresión de cámara</span></div>
                     <div style="display:flex;flex-wrap:wrap;gap:6px;">${expBtns}</div>
                 </div>
-                <div class="mii-adjust-drawer">
-                    <div class="mii-section-label" style="margin-bottom:2px;"><span>Proporciones corporales</span></div>
-                    ${buildSliderHTML('Estatura', IDX.height, 0, 127)}
-                    ${buildSliderHTML('Complexión', IDX.build, 0, 127)}
-                </div>
             `;
             container.appendChild(styleWrap);
         }
@@ -1412,19 +1378,6 @@
                             <div id="mii-stage-viewport" class="mii-stage-viewport">
                                 <img id="mii-stage-img" src="" alt="Vista previa del personaje" referrerpolicy="no-referrer" />
                                 <div id="mii-stage-loader" class="mii-stage-loader"></div>
-                            </div>
-
-                            <div class="mii-cam-bar">
-                                <button type="button" class="mii-icon-btn" id="mii-rot-left" title="Girar a la izquierda" aria-label="Girar a la izquierda">
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-                                </button>
-                                <div class="mii-segmented">
-                                    <button type="button" class="mii-segmented-btn active" id="mii-view-face">Retrato</button>
-                                    <button type="button" class="mii-segmented-btn" id="mii-view-body">Cuerpo</button>
-                                </div>
-                                <button type="button" class="mii-icon-btn" id="mii-rot-right" title="Girar a la derecha" aria-label="Girar a la derecha">
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
-                                </button>
                             </div>
                         </div>
 
@@ -1506,33 +1459,7 @@
             updateModeButtonsUI();
         });
 
-        // Cámara y rotación
-        const btnFace = modalEl.querySelector('#mii-view-face');
-        const btnBody = modalEl.querySelector('#mii-view-body');
-        btnFace.addEventListener('click', () => {
-            state.viewType = 'face';
-            state.rotateY = 0;
-            btnFace.classList.add('active');
-            btnBody.classList.remove('active');
-            refreshPreview(true);
-        });
-        btnBody.addEventListener('click', () => {
-            state.viewType = 'all_body';
-            btnBody.classList.add('active');
-            btnFace.classList.remove('active');
-            refreshPreview(true);
-        });
-
-        modalEl.querySelector('#mii-rot-left').addEventListener('click', () => {
-            state.rotateY = (state.rotateY - 30 + 360) % 360;
-            refreshPreview(true);
-        });
-        modalEl.querySelector('#mii-rot-right').addEventListener('click', () => {
-            state.rotateY = (state.rotateY + 30) % 360;
-            refreshPreview(true);
-        });
-
-        // Selector de género en el panel izquierdo y en Rostro
+        // Selector de género en el panel izquierdo
         modalEl.addEventListener('click', (e) => {
             const genderPresetBtn = e.target.closest('[data-gender-preset]');
             if (genderPresetBtn) {
@@ -1638,6 +1565,10 @@
                 const byteIdx = parseInt(colorBtn.dataset.colorByte, 10);
                 const val = parseInt(colorBtn.dataset.colorVal, 10);
                 state.rawBytes[byteIdx] = val;
+                if (byteIdx === IDX.hairColor) {
+                    state.rawBytes[IDX.eyebrowColor] = val;
+                    state.rawBytes[IDX.beardColor] = val;
+                }
                 state.enabled = true;
                 updateModeButtonsUI();
 
@@ -1656,14 +1587,6 @@
                 btn.classList.toggle('active', state.rawBytes[IDX.hairFlip] === 1);
                 playSound('seleccionsi.wav', 0.3);
                 refreshPreview(true);
-                return;
-            }
-
-            if (e.target.closest('#mii-btn-sync-brow-color')) {
-                state.rawBytes[IDX.eyebrowColor] = state.rawBytes[IDX.hairColor];
-                playSound('colors.wav', 0.3);
-                refreshPreview(true);
-                renderActiveTab();
                 return;
             }
 
@@ -1778,7 +1701,7 @@
             state.rawBytes = clampBytes(saved.rawBytes);
             state.expression = saved.expression || 'normal';
             state.bgColor = saved.bgColor || 'C4377AFF';
-            state.viewType = saved.viewType || 'face';
+            state.viewType = 'face';
             state.enabled = saved.enabled !== false;
             state.rotateY = 0;
         } else if (saved && saved.dataHex) {
