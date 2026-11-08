@@ -60,7 +60,7 @@ var logDebug = window.logDebug;
 
 
 
-                name_label: "Identidad y Magia", name_title: "El misterio de tu <span class=\"text-highlight\">nombre</span>.", name_hover_hint: "(Pasa el cursor o toca las letras)",
+                name_label: "Identidad y Magia", name_title: "El misterio de tu <span class=\"text-highlight\"><em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">nombre</em></span>.", name_hover_hint: "(Pasa el cursor o toca las letras)",
 
                 name_card1_title: "Su Origen", name_card1_desc: "El nombre Yaire tiene hermosas raíces. Se asocia frecuentemente con el hebreo antiguo (Yair), con conexiones espirituales y luminosas. Es un nombre raro y precioso.",
 
