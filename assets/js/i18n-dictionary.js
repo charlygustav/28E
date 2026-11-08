@@ -70,7 +70,7 @@ var logDebug = window.logDebug;
 
 
 
-                tulips_label: "Tus Flores Favoritas", tulips_title: "La elegancia del <span class=\"text-highlight\">tulipán rosa</span>.",
+                tulips_label: "Tus Flores Favoritas", tulips_title: "La elegancia del <span class=\"text-highlight\"><em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">tulipán rosa</em></span>.",
 
                 tulips_subtitle: "Un viaje por el significado, la belleza y la promesa que guardan tus flores favoritas.",
 
@@ -136,7 +136,7 @@ var logDebug = window.logDebug;
 
 
 
-                quiz_label: "Un Pequeño Juego", quiz_title: "El misterio del <span class=\"text-highlight\">girasol</span>.", quiz_question: "Ya hablamos de tus flores favoritas... pero, ¿sabes por qué mis flores representativas en nuestra relación siempre son los girasoles?",
+                quiz_label: "Un Pequeño Juego", quiz_title: "El misterio del <span class=\"text-highlight\"><em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">girasol</em></span>.", quiz_question: "Ya hablamos de tus flores favoritas... pero, ¿sabes por qué mis flores representativas en nuestra relación siempre son los girasoles?",
 
                 quiz_opt1: "Porque simplemente me encanta el color amarillo.", quiz_opt2: "Porque tú eres el sol que me ilumina siempre.", quiz_opt3: "Porque crecen muy alto, igual que tú.",
 
@@ -154,13 +154,13 @@ var logDebug = window.logDebug;
 
 
 
-                dist_title: "Un <span class=\"text-highlight\">océano</span> de por medio.", dist_dr: "San Francisco de Macorís", dist_ve: "Caracas",
+                dist_title: "Un <span class=\"text-highlight\"><em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">océano</em></span> de por medio.", dist_dr: "San Francisco de Macorís", dist_ve: "Caracas",
 
                 dist_text: "\"La distancia actual es de ~900 kilómetros, pero nuestros corazones están en las mismas coordenadas. Es solo un número temporal... pronto, ese número se reducirá a cero.\"",
 
 
 
-                food_label: "Gastronomía y Promesas", food_title: "Entre pechugas a la crema y el <span class=\"text-highlight\">Clásico Mundial</span>.",
+                food_label: "Gastronomía y Promesas", food_title: "Entre pechugas a la crema y el <span class=\"text-highlight\"><em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">Clásico Mundial</em></span>.",
 
                 food_card1_title: "Su Platillo Estrella",
 
