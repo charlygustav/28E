@@ -1,8 +1,15 @@
 
         (async function () {
+            // En desarrollo local (localhost / 127.0.0.1) o modo dev, omitir mantenimiento para poder probar libremente
+            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
+            const isDev = isLocal || window.__YAIRE_DEV_BYPASS__ || localStorage.getItem('yaire_dev_mode') === '1' || sessionStorage.getItem('yaire_dev_mode') === '1';
+            const urlParams = new URLSearchParams(window.location.search);
+            if (isDev || urlParams.get('dev') === '1' || urlParams.get('admin') === '1') {
+                return;
+            }
+
             // Fecha de desbloqueo: 21 de Noviembre de 2026 a las 00:00:00 (12:00 AM, Hora Venezuela UTC-4)
             const unlockDate = new Date("2026-11-21T00:00:00-04:00");
-            const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('reset') === '1') {
                 localStorage.clear();
                 sessionStorage.clear();

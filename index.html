@@ -21,6 +21,13 @@
         (function () {
             try {
                 var host = window.location.hostname;
+                var p = new URLSearchParams(window.location.search);
+                var isLocal = host === 'localhost' || host === '127.0.0.1';
+                var isDev = isLocal || p.get('dev') === '1' || p.get('admin') === '1' || localStorage.getItem('yaire_dev_mode') === '1' || sessionStorage.getItem('yaire_dev_mode') === '1';
+                if (isDev) {
+                    window.__YAIRE_DEV_BYPASS__ = true;
+                    return;
+                }
                 if (host === 'dclf.yaire.site') {
                     window.location.replace('dclf.html' + window.location.search + window.location.hash);
                     return;
@@ -29,8 +36,6 @@
                     window.location.replace('tv.html' + window.location.search + window.location.hash);
                     return;
                 }
-                var p = new URLSearchParams(window.location.search);
-                if (p.get('dev') === '1' || p.get('admin') === '1') return;
                 var target = new Date('2026-11-21T00:00:00-04:00');
                 if (new Date() < target) {
                     window.location.replace('mantenimiento.html');
@@ -196,65 +201,42 @@
         }
 
         #epidemic-hero {
-
-            min-height: calc(100vh - 4.5rem) !important;
-
-            min-height: calc(100dvh - 4.5rem) !important;
-
+            min-height: 100vh !important;
+            min-height: 100dvh !important;
             display: flex !important;
-
             flex-direction: column !important;
-
             justify-content: center !important;
-
             align-items: center !important;
-
-            padding-top: 5.5rem !important;
-
-            padding-bottom: 2.5rem !important;
-
-            margin-bottom: 5rem !important;
-
+            padding-top: 5rem !important;
+            padding-bottom: 2rem !important;
+            margin-bottom: 2rem !important;
             box-sizing: border-box !important;
-
         }
 
         #epidemic-hero h1 {
-
             font-family: 'Sebenta', 'Fraunces', Georgia, serif !important;
-
             font-weight: 500;
-
             letter-spacing: -0.02em;
-
             color: #FFFFFF;
-
+            text-align: center !important;
+            width: 100% !important;
         }
 
         .text-highlight,
-
         #epidemic-hero h1 .text-highlight {
-
             background: linear-gradient(180deg, #A81B65 0%, #C4377A 22%, #E775A6 52%, #FFB7D4 82%, #FFE5EE 100%) !important;
-
             -webkit-background-clip: text !important;
-
             -webkit-text-fill-color: transparent !important;
-
             background-clip: text !important;
-
             color: transparent !important;
-
             display: inline-block;
-
+            text-align: center !important;
             filter: drop-shadow(0 4px 24px rgba(196, 55, 122, 0.4));
-
         }
 
         #epidemic-hero p {
-
             color: #A1A1AA !important;
-
+            text-align: center !important;
         }
 
         /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1266,62 +1248,42 @@
         }
 
 
-        /* Vault button in drawer - Immersive Modal Card Redesign */
-
+        /* Vault button in drawer - Minimalist Refined Card */
         #menu-panel .vault-btn {
-
             position: relative !important;
-
             display: flex !important;
-
             align-items: center !important;
-
             justify-content: space-between !important;
-
             width: 100% !important;
-
-            background: linear-gradient(90deg, rgba(244, 63, 94, 0.08) 0%, rgba(139, 92, 246, 0.04) 40%, rgba(11, 11, 16, 0.95) 100%) !important;
-
-            border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
-
+            background: rgba(255, 255, 255, 0.015) !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
             border-bottom: none !important;
-
             border-left: none !important;
-
             border-right: none !important;
-
             border-radius: 0 !important;
-
             margin: 0 !important;
-
             color: #FFFFFF !important;
-
             padding: 0.85rem 1.25rem !important;
-
             overflow: hidden !important;
-
             box-shadow: none !important;
-
-            transition: all 0.2s ease !important;
-
+            transform: none !important;
+            animation: none !important;
+            transition: background 0.18s ease !important;
             text-decoration: none !important;
-
         }
 
         #menu-panel .vault-btn:hover {
-
-            background: linear-gradient(90deg, rgba(244, 63, 94, 0.14) 0%, rgba(139, 92, 246, 0.08) 50%, rgba(18, 18, 24, 0.98) 100%) !important;
-
-            border-top-color: rgba(244, 63, 94, 0.35) !important;
-
+            background: rgba(255, 255, 255, 0.045) !important;
+            transform: none !important;
+            box-shadow: none !important;
         }
 
         #menu-panel .vault-btn,
-
-        #menu-panel .vault-btn * {
-
+        #menu-panel .vault-btn *,
+        #menu-panel .vault-btn:hover,
+        #menu-panel .vault-btn:hover * {
+            transform: none !important;
             box-sizing: border-box !important;
-
         }
 
         /* Bottom Compact Player */
@@ -1683,7 +1645,7 @@
 
     <!-- Bloqueo temporal: Redirigir a mantenimiento antes del 28 de Abril -->
 
-    <script src="assets/js/maintenance-countdown.js"></script>
+    <script src="assets/js/maintenance-countdown.js?v=20261108_local"></script>
 
     <!-- --- Performance: Preconnect to external origins --- -->
 
@@ -3900,83 +3862,44 @@
             <!-- Bóveda Secreta - At the end of the list, flush to edges and bottom -->
 
             <div id="menu-vault-wrap"
-
                 style="margin-left: -1rem !important; margin-right: -1rem !important; margin-bottom: 0 !important; width: auto !important; display: block !important; overflow: hidden !important;"
-
                 class="mt-4">
-
                 <a href="#secreto"
-
                     onclick="if(typeof window.closeMenu==='function'){window.closeMenu();}const s=document.getElementById('secreto');if(s)s.scrollIntoView({behavior:'smooth'});"
-
-                    class="menu-link vault-btn group relative flex items-center justify-between w-full border-t border-white/[0.08] hover:border-rose-500/30 px-5 py-3 transition-all duration-200 select-none cursor-pointer">
-
-                    <!-- Left: Clean Lock SVG + Typography (No Emojis) -->
-
-                    <div class="flex items-center gap-3.5 min-w-0">
-
+                    class="menu-link vault-btn relative flex items-center justify-between w-full border-t border-white/[0.06] px-5 py-3 select-none cursor-pointer">
+                    <!-- Left: Clean Lock SVG + Typography (Minimalist) -->
+                    <div class="flex items-center gap-3 min-w-0">
                         <div
-
-                            class="w-8 h-8 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center shrink-0 text-rose-400 group-hover:text-rose-300 group-hover:border-rose-500/40 transition-all">
-
-                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-
-                                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-
+                            class="w-7 h-7 rounded-md bg-white/[0.03] border border-white/[0.06] flex items-center justify-center shrink-0 text-zinc-400">
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-
                                 <path d="M7 11V7a5 5 0 0110 0v4"></path>
-
                             </svg>
-
                         </div>
-
                         <div class="min-w-0 flex flex-col">
-
                             <span
-
-                                class="text-sm font-semibold text-white tracking-tight group-hover:text-rose-200 transition-colors"
-
+                                class="text-sm font-medium text-zinc-200 tracking-tight"
                                 data-i18n="menu_secret">
-
-                                El Último Secreto
-
+                                Lo que nunca te dije
                             </span>
-
                             <span
-
-                                class="text-[11px] text-zinc-400 group-hover:text-zinc-300 transition-colors font-normal">
-
-                                Bóveda privada • Solo para ti
-
+                                class="text-[11px] text-zinc-500 font-normal">
+                                Solo para sus ojos
                             </span>
-
                         </div>
-
                     </div>
-
-                    <!-- Right: Minimalist Tag & Arrow (No Emojis) -->
-
+                    <!-- Right: Minimalist Tag & Arrow -->
                     <div class="flex items-center gap-2 shrink-0">
-
-                        <span class="text-[10px] font-mono tracking-widest uppercase text-rose-400/90 font-medium">
-
+                        <span class="text-[11px] text-zinc-500 font-normal">
                             Privado
-
                         </span>
-
                         <span
-
-                            class="text-xs text-zinc-500 group-hover:text-white group-hover:translate-x-0.5 transition-all">
-
+                            class="text-xs text-zinc-500">
                             →
-
                         </span>
-
                     </div>
-
                 </a>
-
             </div>
 
         </div>
@@ -4642,7 +4565,8 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform, opacity;
+            pointer-events: auto;
         }
         #loader-video {
             width: 100%;
@@ -4650,6 +4574,7 @@
             object-fit: cover;
             pointer-events: none;
             user-select: none;
+            will-change: transform, opacity;
         }
         @media (max-aspect-ratio: 4/3) {
             #loader-video {
@@ -4663,30 +4588,102 @@
 
     <div id="page-loader">
         <video id="loader-video" autoplay muted playsinline preload="auto">
+            <source src="liquid-glass-logo-16x9-1920x1080-30fps.webm" type="video/webm">
             <source src="liquid-glass-logo-16x9-2560x1440-60fps.mp4" type="video/mp4">
         </video>
     </div>
 
     <script>
         (function () {
-            var loader = document.getElementById('page-loader');
-            var video = document.getElementById('loader-video');
+            var loader = document.getElementById("page-loader");
+            var video = document.getElementById("loader-video");
             var gone = false;
 
             function hideLoader() {
                 if (gone || !loader) return;
                 gone = true;
-                loader.style.opacity = '0';
-                loader.style.pointerEvents = 'none';
-                setTimeout(function () {
-                    loader.style.display = 'none';
-                    if (video) {
-                        try { video.pause(); video.removeAttribute('src'); video.load(); } catch (e) {}
+                loader.style.pointerEvents = "none";
+
+                var prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+                if (window.gsap) {
+                    if (prefersReducedMotion) {
+                        window.gsap.to(loader, {
+                            opacity: 0,
+                            duration: 0.35,
+                            ease: "power2.out",
+                            onComplete: function () {
+                                loader.style.display = "none";
+                                cleanupVideo();
+                            }
+                        });
+                        return;
                     }
-                }, 700);
+
+                    // Timeline cinematográfica de salida con GSAP
+                    var tl = window.gsap.timeline({
+                        onComplete: function () {
+                            loader.style.display = "none";
+                            cleanupVideo();
+                        }
+                    });
+
+                    // 1. Efecto Parallax en el video del logo: escala sutil y elevación con desvanecimiento
+                    tl.to(video, {
+                        scale: 1.07,
+                        y: 35,
+                        opacity: 0,
+                        duration: 0.75,
+                        ease: "power2.inOut"
+                    }, 0);
+
+                    // 2. Telón deslizante (Curtain Wipe & Dissolve): sube fluidamente disolviendo opacidad
+                    tl.to(loader, {
+                        yPercent: -100,
+                        opacity: 0,
+                        duration: 0.9,
+                        ease: "power3.inOut"
+                    }, 0.05);
+
+                    // 3. Revelación y asentamiento de la interfaz principal (Navbar + Hero)
+                    var nav = document.getElementById("epidemic-nav");
+                    var heroBadge = document.getElementById("hero-badge-container");
+                    var heroTitle = document.getElementById("hero-main-title");
+                    var heroSubtitle = document.querySelector("#epidemic-hero p[data-i18n=\"hero_subtitle\"]");
+
+                    var revealTargets = [nav, heroBadge, heroTitle, heroSubtitle].filter(Boolean);
+                    if (revealTargets.length > 0) {
+                        window.gsap.from(revealTargets, {
+                            y: 24,
+                            opacity: 0,
+                            duration: 0.95,
+                            stagger: 0.08,
+                            ease: "power3.out",
+                            delay: 0.25,
+                            clearProps: "transform,opacity"
+                        });
+                    }
+                } else {
+                    // Respaldo sin GSAP
+                    loader.style.opacity = "0";
+                    setTimeout(function () {
+                        loader.style.display = "none";
+                        cleanupVideo();
+                    }, 700);
+                }
             }
 
-            var pageLoaded = (document.readyState === 'complete');
+            function cleanupVideo() {
+                if (video) {
+                    try {
+                        video.pause();
+                        video.removeAttribute("src");
+                        video.load();
+                    } catch (e) {}
+                }
+            }
+
+            var pageLoaded = (document.readyState === "complete");
             var animFinished = false;
 
             function checkReadyToDismiss() {
@@ -4700,20 +4697,20 @@
                 checkReadyToDismiss();
             }
 
-            if (document.readyState === 'complete') {
+            if (document.readyState === "complete") {
                 pageLoaded = true;
             } else {
-                document.addEventListener('DOMContentLoaded', onComplete);
-                window.addEventListener('load', onComplete);
+                document.addEventListener("DOMContentLoaded", onComplete);
+                window.addEventListener("load", onComplete);
             }
 
             if (video) {
-                video.addEventListener('ended', function () {
+                video.addEventListener("ended", function () {
                     animFinished = true;
                     checkReadyToDismiss();
                 });
                 var playPromise = video.play();
-                if (playPromise && typeof playPromise.catch === 'function') {
+                if (playPromise && typeof playPromise.catch === "function") {
                     playPromise.catch(function () {
                         animFinished = true;
                         checkReadyToDismiss();
@@ -4733,7 +4730,6 @@
             }, 2800);
         })();
     </script>
-
     <!-- Epidemic Sound Modern Dark Experience -->
 
     <!-- ----------------------------------------------------------------------------- -->
@@ -4866,7 +4862,7 @@
 
                         class="px-3.5 py-1.5 rounded-full text-xs font-semibold text-rose-300 hover:text-white hover:bg-rose-500/10 transition-colors">
 
-                        Bóveda Secreta
+                        Lo que nunca te dije
 
                     </a>
 
@@ -5188,9 +5184,9 @@
 
     <!-- ----------------------------------------------------------------------------- -->
 
-    <section id="epidemic-hero" class="relative px-4 sm:px-6 max-w-5xl mx-auto text-center" style="isolation: isolate;">
+    <section id="epidemic-hero" class="relative px-4 sm:px-6 max-w-6xl mx-auto text-center" style="isolation: isolate;">
 
-        <div class="relative w-full max-w-4xl mx-auto flex flex-col items-center my-auto">
+        <div class="relative w-full max-w-5xl mx-auto flex flex-col items-center my-auto">
 
             <!-- Aura / Degradado ambiental claramente visible detrás del encabezado (Paleta Imagen 2) -->
 
@@ -5254,11 +5250,11 @@
 
             <h1
 
-                class="font-editorial text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-medium tracking-tight leading-[1.08] mb-6 text-white select-none">
+                id="hero-main-title" class="font-editorial text-3xl sm:text-5xl md:text-6xl lg:text-[4.75rem] font-medium tracking-tight leading-[1.08] mb-6 text-white select-none cursor-pointer text-center w-full flex flex-col items-center justify-center" title="Toca para cambiar de frase">
 
-                <span data-i18n="hero_title1" class="text-white block">Mi lugar favorito</span>
+                <span id="hero-line-1" data-i18n="hero_title1" class="text-white block sm:whitespace-nowrap text-center w-full">Mi lugar favorito</span>
 
-                <span data-i18n="hero_title2" class="text-highlight block">sigue siendo <em class="italic" style="font-style: italic; font-family: inherit;">contigo.</em></span>
+                <span id="hero-line-2" data-i18n="hero_title2" class="text-highlight block sm:whitespace-nowrap text-center w-full">sigue siendo <em class="italic" style="font-style: italic; font-family: inherit;">contigo.</em></span>
 
             </h1>
 
@@ -5266,7 +5262,7 @@
 
             <p data-i18n="hero_subtitle"
 
-                class="font-sans text-sm sm:text-base md:text-[17px] max-w-xl mx-auto leading-relaxed text-zinc-400 font-normal px-4">
+                class="font-sans text-sm sm:text-base md:text-[17px] max-w-2xl mx-auto leading-relaxed text-zinc-400 font-normal px-4 text-center">
 
                 Dejamos de ser una hermosa casualidad para convertirnos en mi mayor certeza. Caminando de tu mano,
 
@@ -5367,7 +5363,7 @@
             <!-- Card 2: Donde crecen las flores -->
 
             <a href="https://dclf.yaire.site/"
-
+                onclick="var u=(window.yaireCurrentUser&&(window.yaireCurrentUser.displayName||window.yaireCurrentUser.email))||''; if(!u){try{var a=JSON.parse(localStorage.getItem('yaire_auth_user')||'{}');u=a.firstName||a.displayName||'';}catch(e){}} var q=u?'?user='+encodeURIComponent(u.trim().split(' ')[0]):''; var dest=(window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1')?('dclf.html'+q):('https://dclf.yaire.site/'+q); window.location.href=dest; return false;"
                 class="spotlight-card group relative bg-[#0f0f14] hover:bg-[#15151c] rounded-2xl border border-white/[0.08] hover:border-white/20 p-2.5 flex flex-col cursor-pointer select-none no-underline block focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/50">
 
                 <!-- Media Container -->
@@ -11798,7 +11794,7 @@
 
                     <!-- Card 5: 28E — Donde Crecen las Flores -->
 
-                    <div onclick="window.location.href='https://dclf.yaire.site/'" class="ghub-card-v3 rose cursor-pointer group">
+                    <div onclick="var u=(window.yaireCurrentUser&&(window.yaireCurrentUser.displayName||window.yaireCurrentUser.email))||''; if(!u){try{var a=JSON.parse(localStorage.getItem('yaire_auth_user')||'{}');u=a.firstName||a.displayName||'';}catch(e){}} var q=u?'?user='+encodeURIComponent(u.trim().split(' ')[0]):''; window.location.href=(window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1')?('dclf.html'+q):('https://dclf.yaire.site/'+q);" class="ghub-card-v3 rose cursor-pointer group">
 
                         <div class="bg-glow"></div>
 
@@ -11968,7 +11964,7 @@
 
                     <!-- Card 6: 28E TV · Televisión en Vivo 24/7 -->
 
-                    <div onclick="window.location.href='https://tv.yaire.site/'" class="ghub-card-v3 emerald cursor-pointer group">
+                    <div onclick="window.location.href=(window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1')?'tv.html':'https://tv.yaire.site/';" class="ghub-card-v3 emerald cursor-pointer group">
 
                         <div class="bg-glow"></div>
 
@@ -19028,7 +19024,7 @@
 
             <!-- Editorial Title with Signature Pink Gradient & Subtitle -->
             <h3 class="apple-display-title text-2xl sm:text-4xl font-normal text-white mb-2 text-center tracking-tight">
-                El Último <span class="text-highlight">Secreto.</span>
+                Lo que nunca <span class="text-highlight">te dije.</span>
             </h3>
             <p class="text-zinc-400 text-center text-xs sm:text-sm mb-6 max-w-xs font-normal leading-relaxed" data-i18n="secret_pwd_desc">Solo ella conoce la palabra mágica.</p>
 
@@ -19895,6 +19891,8 @@
     <script src="assets/js/mii-studio-28e.js?v=1794109500000" defer></script>
 
     <script type="module" src="assets/js/firebase-db.js?v=1794086500000"></script>
+    <script src="assets/js/play-games-toast.js"></script>
+    <script src="assets/js/hero-phrases.js"></script>
 
     <!-- NEXT SONG TOAST (LEGIBILIDAD TOTAL CON CRISTAL OBSIDIANA FROSTED Y AURA CIRCULAR) -->
 

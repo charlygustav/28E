@@ -521,7 +521,7 @@
 
         <!-- Header con logo, badge de mantenimiento y contador superior -->
         <header class="header">
-            <div class="brand-logo">28E</div>
+            <div class="brand-logo" onclick="if(window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1'){localStorage.setItem('yaire_dev_mode','1');sessionStorage.setItem('yaire_dev_mode','1');window.location.href='/?dev=1';}" style="cursor:pointer;" title="Ir a la web principal (Local)">28E</div>
 
             <div id="countdown-root" class="countdown-container">
                 <div class="countdown-eyebrow">Apertura de la Web</div>
@@ -1122,6 +1122,23 @@
                 showWeather(true);
             }
         }, WEATHER_CFG.rotateMs);
+    </script>
+    <script>
+        (function() {
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                const btn = document.createElement('a');
+                btn.href = '/?dev=1';
+                btn.onclick = () => {
+                    localStorage.setItem('yaire_dev_mode', '1');
+                    sessionStorage.setItem('yaire_dev_mode', '1');
+                };
+                btn.innerHTML = '⚡ Entrar a 28E Web (Modo Local)';
+                btn.style.cssText = 'position:fixed;bottom:64px;right:24px;z-index:999999;background:rgba(231,117,166,0.92);backdrop-filter:blur(16px);color:#ffffff;font-size:13px;font-weight:700;padding:9px 18px;border-radius:9999px;box-shadow:0 8px 28px rgba(0,0,0,0.6);text-decoration:none;display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,0.3);transition:transform 0.2s;cursor:pointer;';
+                btn.onmouseover = () => btn.style.transform = 'scale(1.05)';
+                btn.onmouseout = () => btn.style.transform = 'scale(1)';
+                document.body.appendChild(btn);
+            }
+        })();
     </script>
 </body>
 

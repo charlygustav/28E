@@ -24,7 +24,7 @@ var logDebug = window.logDebug;
 
                 flag: "ES", code: "ES", nav_subtitle: "Para Yaire",
 
-                menu_nav: "Spotlight", menu_home: "Inicio", menu_story: "Historia & Tiempo", menu_name: "Tu Nombre", menu_tulips: "Tus Flores", menu_quiz: "El Misterio", menu_dist: "La Distancia", menu_food: "El Pacto", menu_universe: "Su Universo", menu_gallery: "Galería de Arte", menu_games: "Minijuegos", menu_promises: "Promesas", menu_memorial: "Para tu Ángel", menu_hype: "El Hype", menu_mes_cinco: "Capítulo V: 5 Meses", menu_secret: "El Último Secreto", menu_settings: "Ajustes de Sistema", menu_theme: "Tema Visual", menu_lang: "Idioma", menu_new_badge: "Nuevo",
+                menu_nav: "Spotlight", menu_home: "Inicio", menu_story: "Historia & Tiempo", menu_name: "Tu Nombre", menu_tulips: "Tus Flores", menu_quiz: "El Misterio", menu_dist: "La Distancia", menu_food: "El Pacto", menu_universe: "Su Universo", menu_gallery: "Galería de Arte", menu_games: "Minijuegos", menu_promises: "Promesas", menu_memorial: "Para tu Ángel", menu_hype: "El Hype", menu_mes_cinco: "Capítulo V: 5 Meses", menu_secret: "Lo que nunca te dije", menu_settings: "Ajustes de Sistema", menu_theme: "Tema Visual", menu_lang: "Idioma", menu_new_badge: "Nuevo",
 
                 menu_colors: "Colores Favoritos", menu_tulip_colors: "Guía de Colores", menu_healing: "Sanación", menu_guestbook: "Muro de Dedicatorias",
 
@@ -424,7 +424,7 @@ var logDebug = window.logDebug;
 
                 secret_stat_letter: "Carta", secret_stat_love: "Amor", secret_stat_key: "1 Clave",
 
-                secret_pwd_title: "El Último Secreto", secret_pwd_desc: "Solo ella conoce la palabra mágica.", secret_pwd_error: "Esa no es la palabra mágica.", secret_hint: "Pista: La identidad que usaste cuando nuestra historia continuó entre píxeles.", secret_pwd_btn: "Desbloquear", secret_pwd_cancel: "Volver",
+                secret_pwd_title: "Lo que nunca te dije", secret_pwd_desc: "Solo ella conoce la palabra mágica.", secret_pwd_error: "Esa no es la palabra mágica.", secret_hint: "Pista: La identidad que usaste cuando nuestra historia continuó entre píxeles.", secret_pwd_btn: "Desbloquear", secret_pwd_cancel: "Volver",
 
                 secret_security_badge: "Acceso Restringido", secret_lockout: "Acceso bloqueado",
 
@@ -7238,6 +7238,13 @@ var logDebug = window.logDebug;
             };
 
             const currentGameTitle = ghubNames[gameId] || 'Juego';
+
+            // Google Play Games style toast para usuarios registrados
+            if (typeof window.show28EPlayToast === 'function') {
+                setTimeout(() => {
+                    window.show28EPlayToast();
+                }, 350);
+            }
 
 
 

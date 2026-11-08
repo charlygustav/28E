@@ -151,9 +151,13 @@
 
         const applyActiveAvatarToDOM = () => {
             if (!currentUser) {
-                if (currentMiiProfile && currentMiiProfile.enabled !== false && currentMiiProfile.avatarUrl) {
-                    setupAvatar(authAvatar, authIcon, currentMiiProfile.avatarUrl);
-                }
+                const guestMii = (currentMiiProfile && currentMiiProfile.enabled !== false && currentMiiProfile.avatarUrl)
+                    ? currentMiiProfile.avatarUrl
+                    : '';
+                setupAvatar(authAvatar, authIcon, guestMii);
+                const authMenuAvatar = document.getElementById('auth-menu-avatar');
+                const authMenuAvatarPh = document.getElementById('auth-menu-avatar-ph');
+                setupAvatar(authMenuAvatar, authMenuAvatarPh, guestMii);
                 return;
             }
             const activeUrl = (currentMiiProfile && currentMiiProfile.enabled !== false && currentMiiProfile.avatarUrl)
@@ -171,6 +175,30 @@
             const authMenuAvatarPh = document.getElementById('auth-menu-avatar-ph');
             setupAvatar(authAvatar, authIcon, activeUrl);
             setupAvatar(authMenuAvatar, authMenuAvatarPh, activeUrl);
+            syncAuthUserToLocalStorage();
+        };
+
+        const syncAuthUserToLocalStorage = () => {
+            if (!currentUser) {
+                try { localStorage.removeItem('yaire_auth_user'); } catch (e) {}
+                return;
+            }
+            const hasActiveMii = !!(currentMiiProfile && currentMiiProfile.enabled !== false && currentMiiProfile.avatarUrl);
+            const activeUrl = hasActiveMii ? currentMiiProfile.avatarUrl : (currentGooglePhotoURL || currentUser.photoURL || '');
+            const rawName = (currentUser.displayName || currentUser.email || 'Gamer').trim();
+            const firstName = rawName.split(' ')[0] || 'Gamer';
+            try {
+                localStorage.setItem('yaire_auth_user', JSON.stringify({
+                    uid: currentUser.uid,
+                    displayName: rawName,
+                    firstName: firstName,
+                    email: currentUser.email || '',
+                    photoURL: currentGooglePhotoURL || currentUser.photoURL || '',
+                    activeAvatarURL: activeUrl,
+                    miiActive: hasActiveMii,
+                    updatedAt: Date.now()
+                }));
+            } catch (e) {}
         };
 
         window.yaireGetCurrentMiiProfile = () => currentMiiProfile;
@@ -187,11 +215,14 @@
                 console.warn('Error guardando miiProfile en Firebase:', e);
             }
             applyActiveAvatarToDOM();
+            syncAuthUserToLocalStorage();
             window.dispatchEvent(new Event('yaireAuthChanged'));
             updatePresence();
         };
 
+        let hasInitialAuthRun = false;
         onAuthStateChanged(auth, async (user) => {
+            const isFreshLogin = hasInitialAuthRun && !currentUser && !!user;
             currentUser = user;
             window.yaireCurrentUser = user; // Expose globally
             if (user) {
@@ -205,6 +236,7 @@
                 } catch (e) {}
 
                 applyActiveAvatarToDOM();
+                syncAuthUserToLocalStorage();
 
                 // Sync Mii from Firebase DB
                 get(ref(db, `users/${user.uid}/miiProfile`)).then((snap) => {
@@ -214,6 +246,7 @@
                             localStorage.setItem('yaire_mii_' + user.uid, JSON.stringify(currentMiiProfile));
                         } catch (e) {}
                         applyActiveAvatarToDOM();
+                        syncAuthUserToLocalStorage();
                         window.dispatchEvent(new Event('yaireAuthChanged'));
                         updatePresence();
                     } else if (currentMiiProfile) {
@@ -224,12 +257,22 @@
 
                 window.yaireVcHistoryData = await window.yaireVcHistoryGet();
 
+                if (isFreshLogin) {
+                    setTimeout(() => {
+                        if (typeof window.show28EPlayToast === 'function') {
+                            window.show28EPlayToast({ force: true });
+                        }
+                    }, 500);
+                }
+
             } else {
                 currentMiiProfile = null;
                 currentGooglePhotoURL = '';
                 window.yaireActiveAvatarURL = '';
                 window.yaireVcHistoryData = [];
+                syncAuthUserToLocalStorage();
             }
+            hasInitialAuthRun = true;
             window.dispatchEvent(new Event('yaireAuthChanged'));
             if (user) {
                 applyActiveAvatarToDOM();
@@ -269,8 +312,15 @@
                     if (gbBackBtn) gbBackBtn.classList.add('hidden');
                 }
             } else {
-                if (authAvatar) authAvatar.classList.add('hidden');
-                if (authIcon) authIcon.classList.remove('hidden');
+                if (authAvatar) {
+                    authAvatar.classList.add('hidden');
+                    authAvatar.style.display = 'none';
+                    authAvatar.src = '';
+                }
+                if (authIcon) {
+                    authIcon.classList.remove('hidden');
+                    authIcon.style.display = '';
+                }
                 if (authToggle) authToggle.title = "Iniciar sesión";
                 const authLabel = document.getElementById('auth-toggle-label');
                 if (authLabel) authLabel.textContent = "Cuenta";
