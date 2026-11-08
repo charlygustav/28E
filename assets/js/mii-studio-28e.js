@@ -550,8 +550,14 @@
                 user-select: none;
                 filter: grayscale(1);
             }
+            .mii-studio-dialog.google-mode .mii-stage-viewport {
+                background-color: transparent !important;
+                border-color: transparent;
+                box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+            }
             .mii-studio-dialog.google-mode .mii-stage-viewport img {
                 object-fit: cover;
+                border-radius: 44px;
             }
             .mii-stage-loader {
                 position: absolute;
@@ -999,8 +1005,12 @@
         const loaderEl = modalEl.querySelector('#mii-stage-loader');
 
         if (viewport) {
-            const bgObj = BG_PRESETS.find(b => b.id === state.bgColor);
-            viewport.style.backgroundColor = bgObj ? bgObj.hex : '#C4377A';
+            if (state.enabled === false) {
+                viewport.style.backgroundColor = 'transparent';
+            } else {
+                const bgObj = BG_PRESETS.find(b => b.id === state.bgColor);
+                viewport.style.backgroundColor = bgObj ? bgObj.hex : '#C4377A';
+            }
         }
 
         if (previewTimer) clearTimeout(previewTimer);
