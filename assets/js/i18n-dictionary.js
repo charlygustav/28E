@@ -304,7 +304,7 @@ var logDebug = window.logDebug;
 
                 hype_kicker: "Vuelo Soñado",
 
-                hype_title: "Ojalá este Hype se haga <span class=\"text-highlight\">REAL</span>.", hype_text: "Todavía no es un hecho, pero la sola idea de que algún día ese avión aterrice en Venezuela me tiene soñando despierto. Ya tengo pensada la ruta, los lugares, la comida, y lo más importante: el momento exacto en el que por fin te pueda dar ese abrazo en persona. ¡Mantengo la esperanza intacta!",
+                hype_title: "Ojalá este Hype se haga <span class=\"text-highlight\"><em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">REAL</em></span>.", hype_text: "Todavía no es un hecho, pero la sola idea de que algún día ese avión aterrice en Venezuela me tiene soñando despierto. Ya tengo pensada la ruta, los lugares, la comida, y lo más importante: el momento exacto en el que por fin te pueda dar ese abrazo en persona. ¡Mantengo la esperanza intacta!",
 
                 hype_list1_title: "El Abrazo de Aeropuerto", hype_list1_desc: "Ese primer momento donde por fin podré comprobar si eres tan abrazable como imagino (seguro que sí). Cero soltarte por al menos 5 minutos.",
 
@@ -354,7 +354,7 @@ var logDebug = window.logDebug;
 
                 pal_section_desc: "Cada color que te representa es un capítulo de quién eres. Toca cualquiera para descubrir su historia y lo que dice de ti.",
 
-                pal_title: "La paleta de <span class=\"text-highlight\">Yaire</span>.",
+                pal_title: "La paleta de <span class=\"text-highlight\"><em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">Yaire</em></span>.",
 
                 pal_swipe_hint: "Desliza para cambiar vista",
 
@@ -714,7 +714,7 @@ var logDebug = window.logDebug;
 
                 menu_song: "Tu Canción",
 
-                song_badge: "Producción Original", song_title: "Tulipanes pa' <span class=\"text-highlight\">Yaire</span>.",
+                song_badge: "Producción Original", song_title: "Tulipanes pa' <span class=\"text-highlight\"><em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">Yaire</em></span>.",
 
                 song_subtitle: "No todos tienen una canción hecha exclusivamente para ellos. Esta es nuestra banda sonora oficial, y tú eres la protagonista absoluta.",
 
