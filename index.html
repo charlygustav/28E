@@ -4509,222 +4509,108 @@
 
     <!-- ------------------------------------------------------------------- -->
 
-    <!-- LOADER DE INICIO — Fondo Procedural Video + Lottie 28E Transparente -->
-
+    <!-- LOADER DE INICIO — Liquid Glass 28E (2560x1440 60fps) -->
     <!-- ------------------------------------------------------------------- -->
+    <style>
+        #page-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: #f4f4f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        #loader-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+            user-select: none;
+        }
+        @media (max-aspect-ratio: 4/3) {
+            #loader-video {
+                width: 135%;
+                max-width: none;
+                height: auto;
+                object-fit: contain;
+            }
+        }
+    </style>
 
-    <div id="page-loader" style="
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 99999;
-
-    background: #140018;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    overflow: hidden;
-
-    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-
-  ">
-
-        <!-- Video de gradiente procedural a pantalla completa (100% sin rayas negras) -->
-
-        <video id="loader-video" autoplay muted loop playsinline preload="auto" style="
-
-        position: absolute;
-
-        inset: 0;
-
-        width: 100%;
-
-        height: 100%;
-
-        object-fit: cover;
-
-      ">
-
-            <source src="loaders new/Procedural-Gradient-Background.mp4" type="video/mp4">
-
+    <div id="page-loader">
+        <video id="loader-video" autoplay muted playsinline preload="auto">
+            <source src="liquid-glass-logo-16x9-2560x1440-60fps.mp4" type="video/mp4">
         </video>
-
-        <!-- Animación Lottie 28E + Spinner en tamaño proporcionado y transparente -->
-
-        <div id="lottie-container" style="
-
-      position: relative;
-
-      z-index: 10;
-
-      width: min(440px, 78vw);
-
-      aspect-ratio: 16 / 9;
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      pointer-events: none;
-
-    "></div>
-
     </div>
 
-    <script src="assets/js/lottie.min.js"></script>
-
-    <script src="loaders new/lottie-data.js"></script>
-
     <script>
-
         (function () {
-
             var loader = document.getElementById('page-loader');
-
             var video = document.getElementById('loader-video');
-
-            var lottieBox = document.getElementById('lottie-container');
-
-            var anim = null;
-
             var gone = false;
 
-            // Iniciar animación Lottie
-
-            if (window.lottie && window.LOTTIE_28E_DATA && lottieBox) {
-
-                anim = lottie.loadAnimation({
-
-                    container: lottieBox,
-
-                    renderer: 'svg',
-
-                    loop: true,
-
-                    autoplay: true,
-
-                    animationData: window.LOTTIE_28E_DATA
-
-                });
-
-            }
-
-            if (video) {
-
-                video.play().catch(function () { });
-
-            }
-
             function hideLoader() {
-
                 if (gone || !loader) return;
-
                 gone = true;
-
                 loader.style.opacity = '0';
-
                 loader.style.pointerEvents = 'none';
-
                 setTimeout(function () {
-
                     loader.style.display = 'none';
-
-                    if (anim) {
-
-                        try { anim.destroy(); } catch (e) { }
-
-                    }
-
                     if (video) {
-
-                        try { video.pause(); video.src = ''; } catch (e) { }
-
+                        try { video.pause(); video.removeAttribute('src'); video.load(); } catch (e) {}
                     }
-
-                }, 850);
-
+                }, 700);
             }
-
-            // --- CONTROL REAL DE CARGA ---------------------------------
 
             var pageLoaded = (document.readyState === 'complete');
-
-            var minTimeElapsed = false;
-
-            var MIN_DISPLAY_TIME = 600; // Carga ágil sin esperas
+            var animFinished = false;
 
             function checkReadyToDismiss() {
-
-                if (pageLoaded && minTimeElapsed) {
-
+                if (pageLoaded && animFinished) {
                     hideLoader();
-
                 }
-
             }
 
-            // 1. Escuchar carga real completa del DOM, estilos, fuentes e imágenes
-
             function onComplete() {
-
                 pageLoaded = true;
-
                 checkReadyToDismiss();
-
             }
 
             if (document.readyState === 'complete') {
-
                 pageLoaded = true;
-
             } else {
-
-                document.addEventListener('DOMContentLoaded', onComplete); window.addEventListener('load', onComplete);
-
+                document.addEventListener('DOMContentLoaded', onComplete);
+                window.addEventListener('load', onComplete);
             }
 
-            if (document.fonts && document.fonts.ready) {
-
-                document.fonts.ready.then(function () {
-
-                    if (document.readyState === 'complete') {
-
-                        onComplete();
-
-                    }
-
+            if (video) {
+                video.addEventListener('ended', function () {
+                    animFinished = true;
+                    checkReadyToDismiss();
                 });
-
+                var playPromise = video.play();
+                if (playPromise && typeof playPromise.catch === 'function') {
+                    playPromise.catch(function () {
+                        animFinished = true;
+                        checkReadyToDismiss();
+                    });
+                }
             }
 
-            // 2. Tiempo mínimo estático para que no desaparezca en un parpadeo
-
+            // Duración del clip Liquid Glass (2.4s)
             setTimeout(function () {
-
-                minTimeElapsed = true;
-
+                animFinished = true;
                 checkReadyToDismiss();
+            }, 2350);
 
-            }, MIN_DISPLAY_TIME);
-
-            // 3. Fallback de seguridad inmediato (máximo 1.5s)
-
+            // Fallback de seguridad máximo (2.8s)
             setTimeout(function () {
-
                 hideLoader();
-
-            }, 1500);
-
+            }, 2800);
         })();
-
     </script>
 
     <!-- Epidemic Sound Modern Dark Experience -->
