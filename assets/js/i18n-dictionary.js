@@ -90,7 +90,7 @@ var logDebug = window.logDebug;
 
                 tulips_sym4_title: "Amor Floreciente", tulips_sym4_desc: "El significado más profundo: un amor que apenas comienza a florecer y que promete convertirse en algo eterno e indestructible.",
 
-                tulips_colors_title: "Guía de Colores del Tulipán", tulips_colors_hint: "Toca cada color para descubrir su significado",
+                tulips_colors_title: "Guía de <em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">Colores</em> del <em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">Tulipán</em>", tulips_colors_hint: "Toca cada color para descubrir su significado",
 
                 tulips_c_pink: "Rosa", tulips_c_red: "Rojo", tulips_c_yellow: "Amarillo", tulips_c_white: "Blanco", tulips_c_purple: "Morado", tulips_c_orange: "Naranja",
 
@@ -126,7 +126,7 @@ var logDebug = window.logDebug;
 
                 tulips_fact9_title: "Floriografía Victoriana", tulips_fact9_desc: "En el lenguaje de las flores del siglo XIX, regalar un tulipán rosa era la declaración silenciosa más pura y sincera: significaba admiración profunda, ternura incondicional y la promesa de un afecto verdadero.",
 
-                tulips_promise_badge: "", tulips_promise_title: "Un ramo de <span class=\"text-highlight\">tulipanes rosas</span> te espera",
+                tulips_promise_badge: "", tulips_promise_title: "Un ramo de <span class=\"text-highlight\"><em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">tulipanes rosas</em></span> te espera",
 
                 tulips_promise_text: "El día que finalmente nos encontremos cara a cara, no voy a llegar con las manos vacías. Te estaré esperando con el ramo de tulipanes rosas más hermoso y real que hayas visto en tu vida. Cada flor representará un día que te amé desde la distancia.",
 
