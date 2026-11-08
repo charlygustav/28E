@@ -1467,10 +1467,10 @@
         modalEl = document.createElement('div');
         modalEl.id = 'mii-studio-modal';
         modalEl.innerHTML = `
-            <div class="mii-studio-dialog" role="dialog" aria-modal="true" aria-label="Personaje Mii">
+            <div class="mii-studio-dialog" role="dialog" aria-modal="true" aria-label="28E Studio">
                 <!-- Header -->
                 <div class="mii-header">
-                    <span class="mii-header-title">Personaje</span>
+                    <span class="mii-header-title">28E Studio</span>
                     <div class="mii-segmented" role="tablist" aria-label="Tipo de avatar">
                         <button type="button" id="mii-mode-mii" class="mii-segmented-btn active">Avatar</button>
                         <button type="button" id="mii-mode-google" class="mii-segmented-btn">Foto de Google</button>
@@ -1788,7 +1788,7 @@
                     window.showPremiumAlert(
                         profilePayload.enabled ? 'Personaje actualizado' : 'Foto de Google activada',
                         profilePayload.enabled
-                            ? 'Tu personaje Mii ya está activo en tu cuenta, comentarios y canal de voz.'
+                            ? 'Tu avatar de 28E Studio ya está activo en tu cuenta, comentarios y canal de voz.'
                             : 'Tu cuenta volvió a mostrar tu foto de perfil de Google.',
                         'success'
                     );

@@ -2392,15 +2392,15 @@ var logDebug = window.logDebug;
                             }
                         },
 
-                        // 3. Mii Studio 28E (Avatar)
+                        // 3. 28E Studio
                         {
                             id: 'mii',
                             type: 'tool',
                             emoji: '👤',
-                            title: 'Mii Studio (Avatar)',
+                            title: '28E Studio',
                             desc: 'Crea y personaliza tu avatar interactivo para 28E',
                             badge: 'Abrir',
-                            keys: ['mii', 'mii studio', 'avatar', 'avatar maker', 'creador de avatar', 'personaje mii', 'personaje', 'estilo', 'foto de perfil', 'crear mii', 'studio'],
+                            keys: ['28e studio', 'studio', '28estudio', 'avatar', 'avatar maker', 'creador de avatar', 'crear avatar', 'personaje', 'estilo', 'foto de perfil', 'crear mii', 'mii', 'mii studio'],
                             action: () => {
                                 if (typeof window.closeMenu === 'function') window.closeMenu(); else toggleMenu();
                                 setTimeout(() => {
