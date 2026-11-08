@@ -90,7 +90,7 @@ var logDebug = window.logDebug;
 
                 tulips_sym4_title: "Amor Floreciente", tulips_sym4_desc: "El significado más profundo: un amor que apenas comienza a florecer y que promete convertirse en algo eterno e indestructible.",
 
-                tulips_colors_title: "Guía de <em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">Colores</em> del <em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">Tulipán</em>", tulips_colors_hint: "Toca cada color para descubrir su significado",
+                tulips_colors_title: "Guía de <span class=\"text-highlight\"><em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">Colores</em></span> del <span class=\"text-highlight\"><em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">Tulipán</em></span>", tulips_colors_hint: "Toca cada color para descubrir su significado",
 
                 tulips_c_pink: "Rosa", tulips_c_red: "Rojo", tulips_c_yellow: "Amarillo", tulips_c_white: "Blanco", tulips_c_purple: "Morado", tulips_c_orange: "Naranja",
 
