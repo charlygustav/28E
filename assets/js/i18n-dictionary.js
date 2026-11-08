@@ -2419,26 +2419,6 @@ var logDebug = window.logDebug;
                             }
                         },
 
-                        // 4. Radio 28E (Spotlight Audio)
-                        {
-                            id: 'radio',
-                            type: 'stream',
-                            emoji: '📻',
-                            title: 'Radio 28E (En vivo)',
-                            desc: 'Transmisión de música continua en vivo',
-                            badge: 'Escuchar',
-                            keys: ['radio', 'radio 28e', 'reproductor', 'musica en vivo', 'stream radio', 'audio en vivo', 'escuchar radio', 'emisora', 'spotlight audio'],
-                            action: () => {
-                                if (typeof window.closeMenu === 'function') window.closeMenu(); else toggleMenu();
-                                setTimeout(() => {
-                                    if (typeof spotlightTogglePlay === 'function') {
-                                        spotlightTogglePlay();
-                                    }
-                                    const r = document.getElementById('spotlight-radio-play-btn');
-                                    if (r && !window.spotlightIsPlaying) r.click();
-                                }, 250);
-                            }
-                        },
 
                         // 5. El Jardín de Yaire
                         {
