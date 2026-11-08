@@ -42,6 +42,46 @@
                 }
             } catch (e) {}
         })();
+
+        window.open28EExperience = function (target, newTab) {
+            var host = window.location.hostname;
+            var isLocal = host === 'localhost' || host === '127.0.0.1';
+            var u = '';
+            var av = '';
+            try {
+                if (window.yaireCurrentUser) {
+                    u = (window.yaireCurrentUser.displayName || window.yaireCurrentUser.email || '').trim().split(' ')[0];
+                    av = window.yaireActiveAvatarURL || window.yaireGooglePhotoURL || window.yaireCurrentUser.photoURL || '';
+                } else {
+                    var raw = localStorage.getItem('yaire_auth_user');
+                    if (raw) {
+                        var parsed = JSON.parse(raw);
+                        u = parsed.firstName || (parsed.displayName ? parsed.displayName.trim().split(' ')[0] : '');
+                        av = parsed.activeAvatarURL || parsed.photoURL || '';
+                    }
+                }
+            } catch (e) {}
+
+            var qParts = [];
+            if (u) qParts.push('user=' + encodeURIComponent(u));
+            if (av) qParts.push('av=' + encodeURIComponent(av));
+            var q = qParts.length ? ('?' + qParts.join('&')) : '';
+
+            var dest = '';
+            if (target === 'dclf') {
+                dest = isLocal ? ('dclf.html' + q) : ('https://dclf.yaire.site/' + q);
+            } else if (target === 'tv') {
+                dest = isLocal ? ('tv.html' + q) : ('https://tv.yaire.site/' + q);
+            }
+
+            if (dest) {
+                if (newTab) {
+                    window.open(dest, '_blank', 'noopener,noreferrer');
+                } else {
+                    window.location.href = dest;
+                }
+            }
+        };
     </script>
 
     <!-- Epidemic Sound Editorial Fonts -->
@@ -4259,7 +4299,7 @@
 
                     <!-- Sleek Frosted 28E TV Pill -->
                     <a href="https://tv.yaire.site/" target="_blank" rel="noopener noreferrer"
-                        onclick="if(window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1'){window.open('tv.html','_blank');return false;}"
+                        onclick="window.open28EExperience('tv', true); return false;"
                         title="Ver transmisión en vivo en 28E TV"
                         class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.06] hover:bg-white/[0.12] active:scale-95 border border-white/10 text-xs font-semibold text-white/80 hover:text-white transition-all shadow-sm group/tv">
                         <svg class="w-4 h-4 shrink-0 text-[#E775A6] group-hover/tv:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -4588,7 +4628,6 @@
 
     <div id="page-loader">
         <video id="loader-video" autoplay muted playsinline preload="auto">
-            <source src="liquid-glass-logo-16x9-1920x1080-30fps.webm" type="video/webm">
             <source src="liquid-glass-logo-16x9-2560x1440-60fps.mp4" type="video/mp4">
         </video>
     </div>
@@ -5363,7 +5402,7 @@
             <!-- Card 2: Donde crecen las flores -->
 
             <a href="https://dclf.yaire.site/"
-                onclick="var u=(window.yaireCurrentUser&&(window.yaireCurrentUser.displayName||window.yaireCurrentUser.email))||''; if(!u){try{var a=JSON.parse(localStorage.getItem('yaire_auth_user')||'{}');u=a.firstName||a.displayName||'';}catch(e){}} var q=u?'?user='+encodeURIComponent(u.trim().split(' ')[0]):''; var dest=(window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1')?('dclf.html'+q):('https://dclf.yaire.site/'+q); window.location.href=dest; return false;"
+                onclick="window.open28EExperience('dclf'); return false;"
                 class="spotlight-card group relative bg-[#0f0f14] hover:bg-[#15151c] rounded-2xl border border-white/[0.08] hover:border-white/20 p-2.5 flex flex-col cursor-pointer select-none no-underline block focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/50">
 
                 <!-- Media Container -->
@@ -11794,7 +11833,7 @@
 
                     <!-- Card 5: 28E — Donde Crecen las Flores -->
 
-                    <div onclick="var u=(window.yaireCurrentUser&&(window.yaireCurrentUser.displayName||window.yaireCurrentUser.email))||''; if(!u){try{var a=JSON.parse(localStorage.getItem('yaire_auth_user')||'{}');u=a.firstName||a.displayName||'';}catch(e){}} var q=u?'?user='+encodeURIComponent(u.trim().split(' ')[0]):''; window.location.href=(window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1')?('dclf.html'+q):('https://dclf.yaire.site/'+q);" class="ghub-card-v3 rose cursor-pointer group">
+                    <div onclick="window.open28EExperience('dclf');" class="ghub-card-v3 rose cursor-pointer group">
 
                         <div class="bg-glow"></div>
 
@@ -11964,7 +12003,7 @@
 
                     <!-- Card 6: 28E TV · Televisión en Vivo 24/7 -->
 
-                    <div onclick="window.location.href=(window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1')?'tv.html':'https://tv.yaire.site/';" class="ghub-card-v3 emerald cursor-pointer group">
+                    <div onclick="window.open28EExperience('tv');" class="ghub-card-v3 emerald cursor-pointer group">
 
                         <div class="bg-glow"></div>
 

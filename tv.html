@@ -1181,6 +1181,9 @@
         playTVIntroSequence((unmuted) => {
           initYouTubeLiveStream(unmuted);
           wakeControls();
+          if (typeof window.show28EPlayToast === 'function') {
+            setTimeout(() => { window.show28EPlayToast(); }, 500);
+          }
         });
       }
 

@@ -178,27 +178,45 @@
             syncAuthUserToLocalStorage();
         };
 
+        const syncAuthUserToCookie = (data) => {
+            try {
+                const host = window.location.hostname;
+                const isProd = host.endsWith('yaire.site');
+                const domainStr = isProd ? '; domain=.yaire.site' : '';
+                const secureStr = window.location.protocol === 'https:' ? '; Secure' : '';
+                if (data) {
+                    const payload = encodeURIComponent(JSON.stringify(data));
+                    document.cookie = `yaire_auth_user=${payload}; path=/${domainStr}; max-age=2592000; SameSite=Lax${secureStr}`;
+                } else {
+                    document.cookie = `yaire_auth_user=; path=/${domainStr}; max-age=0; SameSite=Lax${secureStr}`;
+                }
+            } catch (e) {}
+        };
+
         const syncAuthUserToLocalStorage = () => {
             if (!currentUser) {
                 try { localStorage.removeItem('yaire_auth_user'); } catch (e) {}
+                syncAuthUserToCookie(null);
                 return;
             }
             const hasActiveMii = !!(currentMiiProfile && currentMiiProfile.enabled !== false && currentMiiProfile.avatarUrl);
             const activeUrl = hasActiveMii ? currentMiiProfile.avatarUrl : (currentGooglePhotoURL || currentUser.photoURL || '');
             const rawName = (currentUser.displayName || currentUser.email || 'Gamer').trim();
             const firstName = rawName.split(' ')[0] || 'Gamer';
+            const authPayload = {
+                uid: currentUser.uid,
+                displayName: rawName,
+                firstName: firstName,
+                email: currentUser.email || '',
+                photoURL: currentGooglePhotoURL || currentUser.photoURL || '',
+                activeAvatarURL: activeUrl,
+                miiActive: hasActiveMii,
+                updatedAt: Date.now()
+            };
             try {
-                localStorage.setItem('yaire_auth_user', JSON.stringify({
-                    uid: currentUser.uid,
-                    displayName: rawName,
-                    firstName: firstName,
-                    email: currentUser.email || '',
-                    photoURL: currentGooglePhotoURL || currentUser.photoURL || '',
-                    activeAvatarURL: activeUrl,
-                    miiActive: hasActiveMii,
-                    updatedAt: Date.now()
-                }));
+                localStorage.setItem('yaire_auth_user', JSON.stringify(authPayload));
             } catch (e) {}
+            syncAuthUserToCookie(authPayload);
         };
 
         window.yaireGetCurrentMiiProfile = () => currentMiiProfile;

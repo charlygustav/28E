@@ -6,6 +6,47 @@
 (function () {
     'use strict';
 
+    // 0. Sincronizar y limpiar parámetros de auth de la URL al instante para que la barra de direcciones quede 100% impecable
+    (function cleanAuthParamsFromUrl() {
+        try {
+            const urlObj = new URL(window.location.href);
+            const u = urlObj.searchParams.get('user') || urlObj.searchParams.get('u');
+            const av = urlObj.searchParams.get('avatar') || urlObj.searchParams.get('av');
+            let shouldClean = false;
+
+            if (u || av) {
+                let current = {};
+                try {
+                    const raw = localStorage.getItem('yaire_auth_user');
+                    if (raw) current = JSON.parse(raw);
+                } catch (e) {}
+
+                if (u) {
+                    current.displayName = u;
+                    current.firstName = u.trim().split(' ')[0];
+                }
+                if (av) {
+                    const decodedAv = decodeURIComponent(av);
+                    current.activeAvatarURL = decodedAv;
+                    current.photoURL = decodedAv;
+                }
+                current.updatedAt = Date.now();
+                try { localStorage.setItem('yaire_auth_user', JSON.stringify(current)); } catch (e) {}
+
+                urlObj.searchParams.delete('user');
+                urlObj.searchParams.delete('u');
+                urlObj.searchParams.delete('avatar');
+                urlObj.searchParams.delete('av');
+                shouldClean = true;
+            }
+
+            if (shouldClean) {
+                const cleanSearch = urlObj.searchParams.toString() ? ('?' + urlObj.searchParams.toString()) : '';
+                window.history.replaceState(null, document.title, urlObj.pathname + cleanSearch + urlObj.hash);
+            }
+        } catch (e) {}
+    })();
+
     if (window.__28E_PLAY_TOAST_INITIALIZED__) return;
     window.__28E_PLAY_TOAST_INITIALIZED__ = true;
 
@@ -260,7 +301,29 @@
             }
         } catch (e) {}
 
-        // 3. LocalStorage compartido (para tv.html, dclf.html o lectura en 0ms)
+        // 3. Cookie compartida entre todos los subdominios de yaire.site (*.yaire.site)
+        try {
+            const match = document.cookie.match(/(?:^|;\s*)yaire_auth_user=([^;]+)/);
+            if (match) {
+                const data = JSON.parse(decodeURIComponent(match[1]));
+                if (data && (data.firstName || data.displayName)) {
+                    const rawName = (data.displayName || data.firstName || 'Gamer').trim();
+                    const firstName = data.firstName || rawName.split(' ')[0] || 'Gamer';
+                    const avatar = data.activeAvatarURL || data.photoURL || '';
+                    try { localStorage.setItem('yaire_auth_user', JSON.stringify(data)); } catch (e) {}
+                    return {
+                        isLogged: true,
+                        uid: data.uid || 'cookie',
+                        displayName: rawName,
+                        firstName: firstName,
+                        avatar: avatar,
+                        hasMii: !!data.miiActive || !!avatar
+                    };
+                }
+            }
+        } catch (e) {}
+
+        // 4. LocalStorage compartido (para tv.html, dclf.html o lectura en 0ms)
         try {
             const raw = localStorage.getItem('yaire_auth_user');
             if (raw) {
@@ -268,13 +331,14 @@
                 if (data && (data.uid || data.firstName || data.displayName)) {
                     const rawName = (data.displayName || data.firstName || 'Gamer').trim();
                     const firstName = data.firstName || rawName.split(' ')[0] || 'Gamer';
+                    const avatar = data.activeAvatarURL || data.photoURL || '';
                     return {
                         isLogged: true,
                         uid: data.uid || 'local',
                         displayName: rawName,
                         firstName: firstName,
-                        avatar: data.activeAvatarURL || data.photoURL || '',
-                        hasMii: !!data.miiActive
+                        avatar: avatar,
+                        hasMii: !!data.miiActive || !!avatar
                     };
                 }
             }
@@ -449,17 +513,18 @@
     function autoTriggerIfExperiencePage() {
         const path = window.location.pathname.toLowerCase();
         const host = window.location.hostname.toLowerCase();
-        let isExp = false;
-        if (path.includes('tv') || host.indexOf('tv.') !== -1) {
-            isExp = true;
-        } else if (path.includes('dclf') || host.indexOf('dclf.') !== -1) {
-            isExp = true;
-        }
+        const isTv = path.includes('tv') || host.indexOf('tv.') !== -1;
+        const isDclf = path.includes('dclf') || host.indexOf('dclf.') !== -1;
 
-        if (isExp) {
+        if (isDclf) {
             setTimeout(() => {
                 show28EPlayToast();
             }, 800);
+        } else if (isTv) {
+            // En TV damos margen para que termine el ident inicial (4 segundos) o initTV lo dispara
+            setTimeout(() => {
+                show28EPlayToast();
+            }, 4200);
         }
     }
 
