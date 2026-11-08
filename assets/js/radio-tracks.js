@@ -71,7 +71,7 @@
                 };
 
                 // ── YOUTUBE LIVE STREAM RADIO ENGINE (AUDIO PURO + METADATOS EN VIVO) ──
-                const YOUTUBE_STREAM_ID = 'Gfnj_4BU9cs';
+                const YOUTUBE_STREAM_ID = 'MSL-lLkRbjU';
                 let ytRadioPlayer = null;
                 let ytRadioReady = false;
                 function loadYouTubeAPI(callback) {
