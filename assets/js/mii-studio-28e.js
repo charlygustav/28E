@@ -1414,7 +1414,7 @@
                 <div class="mii-header">
                     <span class="mii-header-title">Personaje</span>
                     <div class="mii-segmented" role="tablist" aria-label="Tipo de avatar">
-                        <button type="button" id="mii-mode-mii" class="mii-segmented-btn active">Personaje Mii</button>
+                        <button type="button" id="mii-mode-mii" class="mii-segmented-btn active">Avatar</button>
                         <button type="button" id="mii-mode-google" class="mii-segmented-btn">Foto de Google</button>
                     </div>
                     <button type="button" id="mii-btn-close" class="mii-close-btn" aria-label="Cerrar">
@@ -1438,7 +1438,7 @@
                                 <button type="button" id="mii-stage-gender-f" class="mii-segmented-btn active" style="flex:1;" data-gender-preset="1">Femenino</button>
                                 <button type="button" id="mii-stage-gender-m" class="mii-segmented-btn" style="flex:1;" data-gender-preset="0">Masculino</button>
                             </div>
-                            <button type="button" id="mii-preset-random" class="mii-ghost-btn">Generar Mii al azar</button>
+                            <button type="button" id="mii-preset-random" class="mii-ghost-btn">Generar avatar al azar</button>
                         </div>
                     </div>
 
