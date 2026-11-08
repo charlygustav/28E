@@ -46,32 +46,23 @@
         window.open28EExperience = function (target, newTab) {
             var host = window.location.hostname;
             var isLocal = host === 'localhost' || host === '127.0.0.1';
-            var u = '';
-            var av = '';
+
+            // Sincronizar cookie compartida en .yaire.site para que los subdominios lean el usuario y avatar sin ensuciar la URL
             try {
-                if (window.yaireCurrentUser) {
-                    u = (window.yaireCurrentUser.displayName || window.yaireCurrentUser.email || '').trim().split(' ')[0];
-                    av = window.yaireActiveAvatarURL || window.yaireGooglePhotoURL || window.yaireCurrentUser.photoURL || '';
-                } else {
-                    var raw = localStorage.getItem('yaire_auth_user');
-                    if (raw) {
-                        var parsed = JSON.parse(raw);
-                        u = parsed.firstName || (parsed.displayName ? parsed.displayName.trim().split(' ')[0] : '');
-                        av = parsed.activeAvatarURL || parsed.photoURL || '';
-                    }
+                var raw = localStorage.getItem('yaire_auth_user');
+                if (raw) {
+                    var isProd = host.endsWith('yaire.site');
+                    var domainPart = isProd ? '; domain=.yaire.site' : '';
+                    var securePart = window.location.protocol === 'https:' ? '; Secure' : '';
+                    document.cookie = 'yaire_auth_user=' + encodeURIComponent(raw) + '; path=/' + domainPart + '; max-age=2592000; SameSite=Lax' + securePart;
                 }
             } catch (e) {}
 
-            var qParts = [];
-            if (u) qParts.push('user=' + encodeURIComponent(u));
-            if (av) qParts.push('av=' + encodeURIComponent(av));
-            var q = qParts.length ? ('?' + qParts.join('&')) : '';
-
             var dest = '';
             if (target === 'dclf') {
-                dest = isLocal ? ('dclf.html' + q) : ('https://dclf.yaire.site/' + q);
+                dest = isLocal ? 'dclf.html' : 'https://dclf.yaire.site/';
             } else if (target === 'tv') {
-                dest = isLocal ? ('tv.html' + q) : ('https://tv.yaire.site/' + q);
+                dest = isLocal ? 'tv.html' : 'https://tv.yaire.site/';
             }
 
             if (dest) {

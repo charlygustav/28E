@@ -277,7 +277,7 @@
                         const m = JSON.parse(guestMii);
                         if (m && m.avatarUrl) cachedAvatar = m.avatarUrl;
                     }
-                } catch (e) {}
+                } catch (e) { }
 
                 // Guardar para que dclf.html persista la sesión
                 try {
@@ -288,7 +288,7 @@
                             activeAvatarURL: cachedAvatar
                         }));
                     }
-                } catch (e) {}
+                } catch (e) { }
 
                 return {
                     isLogged: true,
@@ -299,7 +299,7 @@
                     hasMii: !!cachedAvatar
                 };
             }
-        } catch (e) {}
+        } catch (e) { }
 
         // 3. Cookie compartida entre todos los subdominios de yaire.site (*.yaire.site)
         try {
@@ -342,7 +342,7 @@
                     };
                 }
             }
-        } catch (e) {}
+        } catch (e) { }
 
         // 4. Fallback si hay un perfil Mii con nombre
         try {
@@ -360,7 +360,7 @@
                     };
                 }
             }
-        } catch (e) {}
+        } catch (e) { }
 
         return null;
     }
@@ -405,14 +405,18 @@
         }
     }
 
+    let hasExperienceToastShown = false;
+
     /**
      * Muestra el toast nítido y minimalista
      */
     function show28EPlayToast(options = {}) {
         const now = Date.now();
-        // Evitar duplicaciones o reinicios si ya está activo o se disparó recientemente
-        if (isToastActive || (now - lastToastTriggerTime < 3500)) return;
+        // Evitar duplicaciones o reinicios si ya está activo o ya se disparó en esta página
+        if (hasExperienceToastShown && !options.force) return;
+        if (isToastActive || (now - lastToastTriggerTime < 5000)) return;
         lastToastTriggerTime = now;
+        hasExperienceToastShown = true;
 
         ensureToastDOM();
 
@@ -516,15 +520,11 @@
         const isTv = path.includes('tv') || host.indexOf('tv.') !== -1;
         const isDclf = path.includes('dclf') || host.indexOf('dclf.') !== -1;
 
-        if (isDclf) {
+        if (isDclf || isTv) {
+            // Disparar en el loader inicial tanto en DCLF como en 28E TV
             setTimeout(() => {
                 show28EPlayToast();
             }, 800);
-        } else if (isTv) {
-            // En TV damos margen para que termine el ident inicial (4 segundos) o initTV lo dispara
-            setTimeout(() => {
-                show28EPlayToast();
-            }, 4200);
         }
     }
 
