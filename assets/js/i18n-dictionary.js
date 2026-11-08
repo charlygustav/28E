@@ -2243,282 +2243,431 @@ var logDebug = window.logDebug;
 
 
 
-        // Search filter for menu links
-
+        // Search filter for menu links & all 28E destinations
         function filterMenuLinks(query) {
-
             try {
+                // Normalizer function (removes accents, punctuation, lowercases)
+                const normStr = function (str) {
+                    return (str || '')
+                        .toString()
+                        .toLowerCase()
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "")
+                        .replace(/[^a-z0-9\s]/g, " ")
+                        .replace(/\s+/g, " ")
+                        .trim();
+                };
 
-                const q = (query || '').toLowerCase().trim();
-
+                const qRaw = (query || '').trim();
+                const qNorm = normStr(qRaw);
+                const tokens = qNorm.split(' ').filter(Boolean);
                 let visibleCount = 0;
 
-
-
                 // Remove previous search injections and empty state
-
                 document.querySelectorAll('.injected-game-search, .no-search-results').forEach(e => e.remove());
 
-
+                // Metadata dictionary for core sections in #menu-links
+                const SECTION_KEYWORDS = {
+                    '#hero': 'inicio home empezar bienvenida 28e logo historia portada entrar landing',
+                    '#historia': 'historia tiempo contador dias juntos de los pixeles a la realidad cronologia relacion nosotros aniversario',
+                    '#nombre': 'tu nombre el misterio de tu nombre letras acrostico significado identidad magia yaire',
+                    '#tulipanes': 'tus flores tulipanes rosa flores favoritas elegancia ramo boton secreto botanico lenguaje de las flores floriografia',
+                    '#quiz-girasol': 'el misterio del girasol quiz trivia preguntas girasoles sol flor representativa interactivo juego',
+                    '#distancia': 'la distancia mapa kilometros km caracas san francisco de macoris vuelo avion venezuela dominicana oceano de por medio distancia real',
+                    '#comida': 'el pacto comida gastronomia pechuga a la crema receta cena clasico mundial beisbol chef pacto gastronomico plato',
+                    '#universo': 'su universo gustos pasiones musica series libros mundo conectar hobbies intereses mundo',
+                    '#galeria': 'galeria de arte la musa fotos fotos de yaire cuadros recuerdos retratos arte museo exposicion imagenes fotografias',
+                    '#minijuegos': 'minijuegos juegos interactive hub arcade jugar arcade games zona interactiva sala de juegos experiencias',
+                    '#colores-yaire': 'colores favoritos la paleta de yaire adn de color mezclar laboratorio mixer paleta guia de colores',
+                    '#guestbook': 'muro de dedicatorias dejando huella mensajes firmar comentarios guestbook dedicatorias escribir nota muro firmar',
+                    '#promesas': 'promesas mis promesas para ti votos compromisos pacto amor futuro juramento fidelidad para siempre',
+                    '#memorial': 'para tu angel angel mama mama madre cielo estrella memorial recuerdo homenaje tributo bendicion',
+                    '#hype': 'el hype viaje venezuela encuentro avion primer abrazo reunion esperanza aterrizaje ilusion',
+                    '#enigma-28': 'tu cancion tulipanes pa yaire cancion original musica produccion original spotify melodia cancion de amor single',
+                    '#mes-seis': 'cinemascope ix cine pelicula aniversario 6 meses video estreno documental pelicula de amor',
+                    '#logros': 'logros logros de pareja trofeos medallas hitos metas insignias desafios completados records',
+                    '#playlist-aniversario': 'soundtrack playlist 44 canciones musica canciones album soundtrack oficial renaissance era reproductor',
+                    '#secreto': 'boveda secreta secreto clave password contrasena candado carta final revelar secreto solo para sus ojos secreto intimo'
+                };
 
                 // Filter link items
-
                 const linkItems = document.querySelectorAll('#menu-links .menu-link-item, #menu-links a.menu-link');
-
                 linkItems.forEach(link => {
-
                     if (link.classList.contains('injected-game-search')) return;
 
-
-
-                    const text = (link.textContent || '').toLowerCase();
-
+                    const text = link.textContent || '';
                     const href = (link.getAttribute('href') || '').toLowerCase();
+                    const title = link.getAttribute('title') || '';
+                    const extraKeys = SECTION_KEYWORDS[href] || '';
 
-                    const title = (link.getAttribute('title') || '').toLowerCase();
-
-
-
-                    const matches = !q || text.includes(q) || href.includes(q) || title.includes(q);
-
-
+                    const haystack = normStr(text + ' ' + href + ' ' + title + ' ' + extraKeys);
+                    const matches = !qNorm || (tokens.length > 0 && tokens.every(token => haystack.includes(token)));
 
                     if (matches) {
-
                         link.classList.remove('is-hidden-search');
-
                         link.style.removeProperty('display');
-
                         visibleCount++;
-
                     } else {
-
                         link.classList.add('is-hidden-search');
-
                         link.style.setProperty('display', 'none', 'important');
-
                     }
-
                 });
 
-
-
                 // Filter category group containers
-
                 document.querySelectorAll('#menu-links .menu-cat-group, #menu-links > div.mb-4').forEach(group => {
-
-                    const grid = group.querySelector('.menu-grid') || group;
-
-                    const items = grid.querySelectorAll('.menu-link-item, a.menu-link');
-
+                    const items = group.querySelectorAll('.menu-link-item:not(.injected-game-search), a.menu-link:not(.injected-game-search)');
                     const hasVisible = Array.from(items).some(item => !item.classList.contains('is-hidden-search') && item.style.display !== 'none');
 
                     if (hasVisible) {
-
                         group.classList.remove('is-hidden-search');
-
                         group.style.removeProperty('display');
-
                     } else {
-
                         group.classList.add('is-hidden-search');
-
                         group.style.setProperty('display', 'none', 'important');
-
                     }
-
                 });
 
+                // Handle Bóveda Secreta button container (#menu-vault-wrap)
+                const vaultWrap = document.getElementById('menu-vault-wrap');
+                if (vaultWrap) {
+                    const vaultLink = vaultWrap.querySelector('a.menu-link, .vault-btn');
+                    if (vaultLink) {
+                        const vaultHaystack = normStr((vaultLink.textContent || '') + ' #secreto ' + (SECTION_KEYWORDS['#secreto'] || ''));
+                        const matches = !qNorm || (tokens.length > 0 && tokens.every(token => vaultHaystack.includes(token)));
+                        if (matches) {
+                            vaultWrap.classList.remove('is-hidden-search');
+                            vaultWrap.style.removeProperty('display');
+                            vaultLink.classList.remove('is-hidden-search');
+                            vaultLink.style.removeProperty('display');
+                            visibleCount++;
+                        } else {
+                            vaultWrap.classList.add('is-hidden-search');
+                            vaultWrap.style.setProperty('display', 'none', 'important');
+                            vaultLink.classList.add('is-hidden-search');
+                            vaultLink.style.setProperty('display', 'none', 'important');
+                        }
+                    }
+                }
 
-
-                // Injected games, tools & recipe shortcuts if query exists
-
-                if (q) {
-
+                // Injected shortcuts, games, tools & experiences if query exists
+                if (qNorm) {
                     const t = (typeof dictionary !== 'undefined' && dictionary[typeof currentLang !== 'undefined' ? currentLang : 'es']) || (typeof dictionary !== 'undefined' ? dictionary.es : {});
 
                     const searchItems = [
+                        // 1. 28E TV
+                        {
+                            id: 'tv',
+                            type: 'stream',
+                            emoji: '📺',
+                            title: '28E TV',
+                            desc: 'Canal continuo de música e información 24/7 en vivo',
+                            badge: 'Sintonizar',
+                            keys: ['28e tv', 'tv', '28etv', 'television', 'tele', 'canal', 'canales', 'en vivo', 'transmision', 'stream', 'streaming', 'live', 'lineal', 'sintonizar', 'emision', 'musica en vivo', 'radio tv', '28e'],
+                            action: () => {
+                                if (typeof window.closeMenu === 'function') window.closeMenu(); else toggleMenu();
+                                setTimeout(() => {
+                                    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                                        window.open('tv.html', '_blank');
+                                    } else {
+                                        window.open('https://tv.yaire.site/', '_blank');
+                                    }
+                                }, 250);
+                            }
+                        },
 
-                        { id: 'game1', type: 'game', keys: ['jardin', 'jardín', 'girasol', 'garden', 'sunflower', 'tournesol', 'girassol', 'juego', 'juegos', 'minijuego', 'minijuegos', 'game', 'games'], emoji: '🌻', title: t.game1_title || 'El Jardín de Yaire' },
+                        // 2. Donde Crecen las Flores
+                        {
+                            id: 'dclf',
+                            type: 'game',
+                            emoji: '🌷',
+                            title: 'Donde Crecen las Flores',
+                            desc: 'Videojuego 3D interactivo en el jardín de tulipanes',
+                            badge: 'Jugar 3D',
+                            keys: ['donde crecen las flores', 'donde crecen', 'crecen', 'flores', 'dclf', 'jardin 3d', 'juego 3d', 'videojuego', 'game 3d', 'flores 3d', 'tulipanes 3d', 'itchio', 'simulacion', 'isla', 'explorar', 'aventura'],
+                            action: () => {
+                                if (typeof window.closeMenu === 'function') window.closeMenu(); else toggleMenu();
+                                setTimeout(() => {
+                                    window.open('https://dclf.yaire.site/', '_blank');
+                                }, 250);
+                            }
+                        },
 
-                        { id: 'game2', type: 'game', keys: ['vuelo', 'mariposa', 'tulipan', 'tulipán', 'hacia ti', 'flight', 'butterfly', 'tulip', 'vol', 'papillon', 'juego', 'juegos', 'minijuego', 'minijuegos', 'game', 'games'], emoji: '🦋', title: t.game2_title || 'Vuelo Hacia Ti' },
+                        // 3. Mii Studio 28E (Avatar)
+                        {
+                            id: 'mii',
+                            type: 'tool',
+                            emoji: '👤',
+                            title: 'Mii Studio (Avatar)',
+                            desc: 'Crea y personaliza tu avatar interactivo para 28E',
+                            badge: 'Abrir',
+                            keys: ['mii', 'mii studio', 'avatar', 'avatar maker', 'creador de avatar', 'personaje mii', 'personaje', 'estilo', 'foto de perfil', 'crear mii', 'studio'],
+                            action: () => {
+                                if (typeof window.closeMenu === 'function') window.closeMenu(); else toggleMenu();
+                                setTimeout(() => {
+                                    if (typeof window.openMiiStudio28E === 'function') {
+                                        window.openMiiStudio28E();
+                                    } else {
+                                        const btn = document.getElementById('mii-avatar-btn');
+                                        if (btn) btn.click();
+                                    }
+                                }, 250);
+                            }
+                        },
 
-                        { id: 'game3', type: 'game', keys: ['cartas', 'ocultas', 'memoria', 'juego', 'juegos', 'minijuego', 'minijuegos', 'cards', 'hidden', 'memory'], emoji: '🃏', title: t.game3_title || 'Cartas Ocultas' },
+                        // 4. Radio 28E (Spotlight Audio)
+                        {
+                            id: 'radio',
+                            type: 'stream',
+                            emoji: '📻',
+                            title: 'Radio 28E (En vivo)',
+                            desc: 'Transmisión de música continua en vivo',
+                            badge: 'Escuchar',
+                            keys: ['radio', 'radio 28e', 'reproductor', 'musica en vivo', 'stream radio', 'audio en vivo', 'escuchar radio', 'emisora', 'spotlight audio'],
+                            action: () => {
+                                if (typeof window.closeMenu === 'function') window.closeMenu(); else toggleMenu();
+                                setTimeout(() => {
+                                    if (typeof spotlightTogglePlay === 'function') {
+                                        spotlightTogglePlay();
+                                    }
+                                    const r = document.getElementById('spotlight-radio-play-btn');
+                                    if (r && !window.spotlightIsPlaying) r.click();
+                                }, 250);
+                            }
+                        },
 
-                        { id: 'game4', type: 'game', keys: ['adivina', 'cancion', 'canción', 'musica', 'música', 'song', 'guess', 'music'], emoji: '🎵', title: t.game4_title || 'Adivina la Canción' },
+                        // 5. El Jardín de Yaire
+                        {
+                            id: 'game1',
+                            type: 'game',
+                            emoji: '🌻',
+                            title: t.game1_title || 'El Jardín de Yaire',
+                            desc: 'Minijuego: cultiva girasoles y protege tu jardín',
+                            badge: t.search_game_btn || 'Jugar',
+                            keys: ['jardin', 'jardín', 'girasol', 'girasoles', 'garden', 'sunflower', 'cultivar', 'juego 1', 'minijuego 1', 'juego', 'juegos', 'minijuego', 'minijuegos', 'arcade'],
+                            action: () => {
+                                if (typeof window.closeMenu === 'function') window.closeMenu(); else toggleMenu();
+                                setTimeout(() => {
+                                    const mj = document.getElementById('minijuegos');
+                                    if (mj) mj.scrollIntoView({ behavior: 'smooth' });
+                                }, 250);
+                                setTimeout(() => {
+                                    if (typeof openArcadeGame === 'function') openArcadeGame('game1');
+                                }, 650);
+                            }
+                        },
 
-                        { id: 'mixer', type: 'tool', keys: ['mezcla', 'paleta', 'colores', 'mix', 'palette', 'colors', 'mixer', 'laboratorio'], emoji: '🎨', title: t.pal_mix_title || 'Mezcla tu Paleta' },
+                        // 6. Vuelo Hacia Ti
+                        {
+                            id: 'game2',
+                            type: 'game',
+                            emoji: '🦋',
+                            title: t.game2_title || 'Vuelo Hacia Ti',
+                            desc: 'Minijuego: guía a la mariposa esquivando obstáculos',
+                            badge: t.search_game_btn || 'Jugar',
+                            keys: ['vuelo', 'mariposa', 'mariposas', 'tulipan', 'tulipán', 'hacia ti', 'flight', 'butterfly', 'juego 2', 'minijuego 2', 'juego', 'juegos', 'minijuego', 'minijuegos', 'arcade'],
+                            action: () => {
+                                if (typeof window.closeMenu === 'function') window.closeMenu(); else toggleMenu();
+                                setTimeout(() => {
+                                    const mj = document.getElementById('minijuegos');
+                                    if (mj) mj.scrollIntoView({ behavior: 'smooth' });
+                                }, 250);
+                                setTimeout(() => {
+                                    if (typeof openArcadeGame === 'function') openArcadeGame('game2');
+                                }, 650);
+                            }
+                        },
 
-                        { id: 'color_guide', type: 'tool', keys: ['guia', 'guía', 'color', 'colores', 'tulip', 'tulipan', 'tulipán', 'guide'], emoji: '🌷', title: t.menu_tulip_colors || 'Guía de Colores' },
+                        // 7. Cartas Ocultas
+                        {
+                            id: 'game3',
+                            type: 'game',
+                            emoji: '🃏',
+                            title: t.game3_title || 'Cartas Ocultas',
+                            desc: 'Minijuego de memoria: encuentra las parejas secretas',
+                            badge: t.search_game_btn || 'Jugar',
+                            keys: ['cartas', 'ocultas', 'memoria', 'memory', 'parejas', 'cards', 'juego 3', 'minijuego 3', 'juego', 'juegos', 'minijuego', 'minijuegos', 'arcade'],
+                            action: () => {
+                                if (typeof window.closeMenu === 'function') window.closeMenu(); else toggleMenu();
+                                setTimeout(() => {
+                                    const mj = document.getElementById('minijuegos');
+                                    if (mj) mj.scrollIntoView({ behavior: 'smooth' });
+                                }, 250);
+                                setTimeout(() => {
+                                    if (typeof openArcadeGame === 'function') openArcadeGame('game3');
+                                }, 650);
+                            }
+                        },
 
-                        { id: 'recipe', type: 'recipe', keys: ['pechuga', 'crema', 'receta', 'recipe', 'chicken', 'cocinar', 'cocina', 'chef', 'food', 'comida'], emoji: '🍴', title: t.recipe_title || 'Pechuga a la Crema' },
+                        // 8. Adivina la Canción
+                        {
+                            id: 'game4',
+                            type: 'game',
+                            emoji: '🎵',
+                            title: t.game4_title || 'Adivina la Canción',
+                            desc: 'Trivia musical interactiva de nuestras canciones',
+                            badge: t.search_game_btn || 'Jugar',
+                            keys: ['adivina', 'cancion', 'canción', 'musica', 'música', 'trivia musical', 'guess song', 'juego 4', 'minijuego 4', 'juego', 'juegos', 'minijuego', 'minijuegos', 'arcade'],
+                            action: () => {
+                                if (typeof window.closeMenu === 'function') window.closeMenu(); else toggleMenu();
+                                setTimeout(() => {
+                                    const mj = document.getElementById('minijuegos');
+                                    if (mj) mj.scrollIntoView({ behavior: 'smooth' });
+                                }, 250);
+                                setTimeout(() => {
+                                    if (typeof openArcadeGame === 'function') openArcadeGame('game4');
+                                }, 650);
+                            }
+                        },
 
-                        { id: 'wrapped', type: 'wrapped', keys: ['wrapped', 'resumen', '120', 'dias', 'stats', 'resumo'], emoji: '🎉', title: t.univ_wrapped_title || '28E Wrapped' }
+                        // 9. Mezcla tu Paleta
+                        {
+                            id: 'mixer',
+                            type: 'tool',
+                            emoji: '🎨',
+                            title: t.pal_mix_title || 'Mezcla tu Paleta',
+                            desc: 'Laboratorio de mezclas y ADN de color interactivo',
+                            badge: 'Mezclar',
+                            keys: ['mezcla', 'paleta', 'colores', 'mix', 'palette', 'colors', 'mixer', 'laboratorio', 'adn de color', 'paleta de yaire'],
+                            action: () => {
+                                if (typeof window.closeMenu === 'function') window.closeMenu(); else toggleMenu();
+                                setTimeout(() => {
+                                    const cy = document.getElementById('colores-yaire');
+                                    if (cy) cy.scrollIntoView({ behavior: 'smooth' });
+                                    if (typeof setPV === 'function') setPV('mixer');
+                                }, 250);
+                            }
+                        },
 
+                        // 10. Guía de Colores del Tulipán
+                        {
+                            id: 'color_guide',
+                            type: 'tool',
+                            emoji: '🌷',
+                            title: t.menu_tulip_colors || 'Guía de Colores del Tulipán',
+                            desc: 'Significado botánico y emocional de cada tulipán',
+                            badge: 'Explorar',
+                            keys: ['guia de colores', 'guia', 'guía', 'color', 'colores', 'tulip', 'tulipan', 'tulipán', 'guide', 'significado', 'floriografia victoriana', 'lenguaje de las flores'],
+                            action: () => {
+                                if (typeof window.closeMenu === 'function') window.closeMenu(); else toggleMenu();
+                                setTimeout(() => {
+                                    const gEl = document.getElementById('guia-colores-tulipan');
+                                    if (gEl) gEl.scrollIntoView({ behavior: 'smooth' });
+                                }, 250);
+                            }
+                        },
+
+                        // 11. Pechuga a la Crema (Receta)
+                        {
+                            id: 'recipe',
+                            type: 'recipe',
+                            emoji: '🍴',
+                            title: t.recipe_title || 'Pechuga a la Crema (Receta)',
+                            desc: 'La receta secreta de nuestro pacto culinario',
+                            badge: t.search_recipe_btn || 'Ver Receta',
+                            keys: ['pechuga a la crema', 'pechuga', 'crema', 'receta', 'recipe', 'chicken', 'cocinar', 'cocina', 'chef', 'food', 'comida', 'gastronomia', 'pacto'],
+                            action: () => {
+                                if (typeof window.closeMenu === 'function') window.closeMenu(); else toggleMenu();
+                                setTimeout(() => {
+                                    if (typeof openRecipeModal === 'function') openRecipeModal();
+                                    const mj = document.getElementById('historia') || document.getElementById('comida');
+                                    if (mj) mj.scrollIntoView({ behavior: 'smooth' });
+                                }, 250);
+                            }
+                        },
+
+                        // 12. 28E Wrapped
+                        {
+                            id: 'wrapped',
+                            type: 'wrapped',
+                            emoji: '🎉',
+                            title: t.univ_wrapped_title || '28E Wrapped',
+                            desc: 'Resumen interactivo de nuestros primeros 120 días juntos',
+                            badge: 'Ver Wrapped',
+                            keys: ['wrapped', '28e wrapped', 'resumen', '120 dias', '120 días', 'stats', 'estadisticas', 'estadísticas', 'recuento', 'aniversario 120'],
+                            action: () => {
+                                if (typeof window.closeMenu === 'function') window.closeMenu(); else toggleMenu();
+                                setTimeout(() => {
+                                    if (window.yaireCurrentUser) {
+                                        if (typeof AudioManager !== 'undefined') AudioManager.play('entry.wav', 0.6);
+                                        window.location.href = 'wrapped.html';
+                                    } else {
+                                        if (window.showPremiumAlert) window.showPremiumAlert('Acceso Restringido', 'Inicia sesión con tu cuenta de Google primero para ver tu 28E Wrapped.', 'error');
+                                        else if (document.getElementById('auth-btn-login')) document.getElementById('auth-btn-login').click();
+                                    }
+                                }, 250);
+                            }
+                        }
                     ];
 
+                    const categoryLabels = {
+                        stream: '✦ TRANSMISIÓN & EN VIVO',
+                        game: '✦ MINIJUEGOS & 3D',
+                        tool: '✦ HERRAMIENTAS & CREATIVIDAD',
+                        recipe: '✦ GASTRONOMÍA',
+                        wrapped: '✦ RESUMEN & STATS'
+                    };
 
-
-                    let addedCategories = {};
+                    const addedCategories = {};
 
                     searchItems.forEach(g => {
+                        const itemHaystack = normStr(g.title + ' ' + (g.desc || '') + ' ' + (g.keys || []).join(' '));
+                        const matches = (tokens.length > 0 && tokens.every(t => itemHaystack.includes(t))) ||
+                                        (g.keys && g.keys.some(k => {
+                                            const kNorm = normStr(k);
+                                            return kNorm && (itemHaystack.includes(qNorm) || qNorm.includes(kNorm) || kNorm.includes(qNorm));
+                                        }));
 
-                        if (g.keys.some(k => k.includes(q) || q.includes(k))) {
-
+                        if (matches) {
                             if (!addedCategories[g.type]) {
-
                                 const sep = document.createElement('div');
-
-                                sep.className = 'injected-game-search my-3 pt-2 border-t border-white/[0.06] flex items-center justify-between';
-
-                                let sepLabel = g.type === 'game' ? (t.menu_games || 'Minijuegos') : (g.type === 'recipe' ? (t.menu_recipe || 'Gastronomía') : (t.menu_tools || 'Herramientas'));
-
-                                sep.innerHTML = `<span class="text-[10px] font-mono tracking-widest text-zinc-500 uppercase font-semibold">✦ ${sepLabel}</span>`;
-
+                                sep.className = 'injected-game-search my-3 pt-2.5 border-t border-white/[0.06] flex items-center justify-between select-none';
+                                const sepLabel = categoryLabels[g.type] || '✦ DESTACADOS';
+                                sep.innerHTML = `<span class="text-[10px] font-mono tracking-widest text-zinc-500 uppercase font-semibold">${sepLabel}</span>`;
                                 document.getElementById('menu-links').appendChild(sep);
-
                                 addedCategories[g.type] = true;
-
                             }
 
-
-
-                            const gameLink = document.createElement('div');
-
-                            gameLink.tabIndex = 0;
-
-                            gameLink.className = "injected-game-search menu-link-item flex items-center justify-between gap-3 p-2.5 rounded-lg text-sm text-zinc-300 hover:text-white hover:bg-white/[0.04] transition-all cursor-pointer";
-
-                            let btnText = g.type === 'recipe' ? (t.search_recipe_btn || 'Ver') : (g.type === 'tool' ? (t.search_tool_btn || 'Abrir') : (t.search_game_btn || 'Jugar'));
-
-                            gameLink.innerHTML = `
-
+                            const itemEl = document.createElement('div');
+                            itemEl.tabIndex = 0;
+                            itemEl.className = "injected-game-search menu-link-item group flex items-center justify-between gap-3 p-2.5 rounded-lg text-sm text-zinc-300 hover:text-white hover:bg-white/[0.04] transition-all cursor-pointer";
+                            itemEl.innerHTML = `
                                 <div class="flex items-center gap-3 min-w-0">
-
-                                    <span class="text-base">${g.emoji}</span>
-
-                                    <span class="text-sm font-medium text-zinc-200 truncate">${g.title}</span>
-
+                                    <span class="text-base select-none shrink-0">${g.emoji}</span>
+                                    <div class="flex flex-col min-w-0">
+                                        <span class="text-sm font-medium text-zinc-200 group-hover:text-white truncate">${g.title}</span>
+                                        ${g.desc ? `<span class="text-[11px] text-zinc-500 truncate font-normal">${g.desc}</span>` : ''}
+                                    </div>
                                 </div>
-
-                                <span class="text-[10px] font-mono uppercase tracking-wider text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded">${btnText}</span>
-
+                                <span class="text-[10px] font-mono uppercase tracking-wider text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded shrink-0">${g.badge || 'Abrir'}</span>
                             `;
 
-                            gameLink.onclick = () => {
-
-                                toggleMenu();
-
-                                if (g.id === 'mixer') {
-
-                                    setTimeout(() => {
-
-                                        const cy = document.getElementById('colores-yaire');
-
-                                        if (cy) cy.scrollIntoView({ behavior: 'smooth' });
-
-                                        if (typeof setPV === 'function') setPV('mixer');
-
-                                    }, 300);
-
-                                } else if (g.id === 'color_guide') {
-
-                                    setTimeout(() => {
-
-                                        const gEl = document.getElementById('guia-colores-tulipan');
-
-                                        if (gEl) gEl.scrollIntoView({ behavior: 'smooth' });
-
-                                    }, 300);
-
-                                } else if (g.id === 'recipe') {
-
-                                    setTimeout(() => {
-
-                                        if (typeof openRecipeModal === 'function') openRecipeModal();
-
-                                        const mj = document.getElementById('historia');
-
-                                        if (mj) mj.scrollIntoView({ behavior: 'smooth' });
-
-                                    }, 300);
-
-                                } else if (g.id === 'wrapped') {
-
-                                    setTimeout(() => {
-
-                                        if (window.yaireCurrentUser) {
-
-                                            if (typeof AudioManager !== 'undefined') AudioManager.play('entry.wav', 0.6);
-
-                                            window.location.href = 'wrapped.html';
-
-                                        } else {
-
-                                            if (window.showPremiumAlert) window.showPremiumAlert('Acceso Restringido', 'Inicia sesión con tu cuenta de Google primero para ver tu 28E Wrapped.', 'error');
-
-                                            else if (document.getElementById('auth-btn-login')) document.getElementById('auth-btn-login').click();
-
-                                        }
-
-                                    }, 300);
-
-                                } else {
-
-                                    setTimeout(() => {
-
-                                        const mj = document.getElementById('minijuegos');
-
-                                        if (mj) mj.scrollIntoView({ behavior: 'smooth' });
-
-                                    }, 300);
-
-                                    setTimeout(() => { if (typeof openArcadeGame === 'function') openArcadeGame(g.id); }, 700);
-
+                            itemEl.onclick = () => {
+                                if (typeof AudioManager !== 'undefined' && AudioManager && typeof AudioManager.play === 'function') {
+                                    try { AudioManager.play('click.wav', 0.4); } catch (e) { }
                                 }
-
+                                g.action();
                             };
 
-                            document.getElementById('menu-links').appendChild(gameLink);
-
+                            document.getElementById('menu-links').appendChild(itemEl);
                             visibleCount++;
-
                         }
-
                     });
 
-
-
                     if (visibleCount === 0) {
-
                         const noRes = document.createElement('div');
-
                         noRes.className = 'no-search-results text-center py-12 select-none';
-
                         noRes.innerHTML = `
-
                             <div class="text-3xl mb-2 opacity-50">🔍</div>
-
                             <p class="text-xs font-mono text-zinc-400 uppercase tracking-widest">Sin resultados</p>
-
                             <p class="text-[11px] text-zinc-600 mt-1">Prueba con otra palabra clave</p>
-
                         `;
-
                         document.getElementById('menu-links').appendChild(noRes);
-
                     }
-
                 }
-
             } catch (err) {
-
                 console.error('Error in filterMenuLinks:', err);
-
             }
-
         }
-
         window.filterMenuLinks = filterMenuLinks;
 
 

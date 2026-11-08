@@ -3368,7 +3368,7 @@
 
                     oninput="if(typeof filterMenuLinks==='function') filterMenuLinks(this.value);"
 
-                    onkeydown="if(event.key==='Escape'){this.value='';if(typeof filterMenuLinks==='function')filterMenuLinks('');this.blur();}"
+                    onkeydown="if(event.key==='Escape'){this.value='';if(typeof filterMenuLinks==='function')filterMenuLinks('');this.blur();}else if(event.key==='Enter'){const first=document.querySelector('#menu-links .menu-link-item:not(.is-hidden-search):not([style*=\'display: none\']), #menu-links a.menu-link:not(.is-hidden-search):not([style*=\'display: none\'])');if(first)first.click();}"
 
                     class="w-full bg-transparent text-sm text-white placeholder-zinc-500 focus:outline-none font-normal" />
 
@@ -19713,7 +19713,7 @@
         }
     </script>
 
-    <script src="assets/js/i18n-dictionary.js?v=1794109200000"></script>
+    <script src="assets/js/i18n-dictionary.js?v=1794109400000"></script>
 
     <!-- ---------- CAPÍTULO V: CINEMASCOPE V (5 MESES) ---------- -->
 
