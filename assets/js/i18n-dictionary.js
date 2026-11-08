@@ -420,7 +420,7 @@ var logDebug = window.logDebug;
 
 
 
-                secret_label: "Lo que nunca te <span class=\"text-highlight\">dije</span>.", secret_desc: "Entre más de cincuenta mil mensajes, reservé esto para el final. La única palabra que puede abrirlo es la que define nuestro mundo.", secret_btn: "Revelar Secreto",
+                secret_label: "Lo que nunca te <span class=\"text-highlight\"><em class=\"italic\" style=\"font-style: italic; font-family: inherit;\">dije.</em></span>", secret_desc: "Entre más de cincuenta mil mensajes, reservé esto para el final. La única palabra que puede abrirlo es la que define nuestro mundo.", secret_btn: "Revelar Secreto",
 
                 secret_stat_letter: "Carta", secret_stat_love: "Amor", secret_stat_key: "1 Clave",
 
