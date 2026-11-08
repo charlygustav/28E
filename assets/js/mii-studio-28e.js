@@ -539,6 +539,20 @@
                 -webkit-user-drag: none;
                 transition: opacity 150ms var(--ease-out);
             }
+            .mii-presets-box,
+            .mii-editor-panel {
+                transition: opacity 180ms var(--ease-out), filter 180ms var(--ease-out);
+            }
+            .mii-studio-dialog.google-mode .mii-presets-box,
+            .mii-studio-dialog.google-mode .mii-editor-panel {
+                opacity: 0.22;
+                pointer-events: none;
+                user-select: none;
+                filter: grayscale(1);
+            }
+            .mii-studio-dialog.google-mode .mii-stage-viewport img {
+                object-fit: cover;
+            }
             .mii-stage-loader {
                 position: absolute;
                 top: 12px;
@@ -966,6 +980,18 @@
     let previewTimer = null;
     let activePreloader = null;
 
+    function getGooglePhotoUrl() {
+        let url = window.yaireGooglePhotoURL || '';
+        if (!url && window.yaireCurrentUser && Array.isArray(window.yaireCurrentUser.providerData)) {
+            const prov = window.yaireCurrentUser.providerData.find(p => p && p.photoURL);
+            if (prov) url = prov.photoURL;
+        }
+        if (url && url.includes('googleusercontent.com')) {
+            url = url.replace(/=s\d+(-c)?/g, '=s400-c');
+        }
+        return url;
+    }
+
     function refreshPreview(immediate) {
         if (!modalEl) return;
         const viewport = modalEl.querySelector('#mii-stage-viewport');
@@ -978,6 +1004,22 @@
         }
 
         if (previewTimer) clearTimeout(previewTimer);
+
+        if (state.enabled === false) {
+            if (activePreloader) {
+                activePreloader.onload = null;
+                activePreloader.onerror = null;
+                activePreloader = null;
+            }
+            if (loaderEl) loaderEl.classList.remove('loading');
+            const googleUrl = getGooglePhotoUrl();
+            if (imgEl && googleUrl && imgEl.dataset.currentUrl !== googleUrl) {
+                imgEl.src = googleUrl;
+                imgEl.dataset.currentUrl = googleUrl;
+            }
+            return;
+        }
+
         const delay = immediate ? 15 : 95;
 
         previewTimer = setTimeout(() => {
@@ -1426,11 +1468,17 @@
 
     function updateModeButtonsUI() {
         if (!modalEl) return;
+        const isGoogleMode = state.enabled === false;
         const btnMii = modalEl.querySelector('#mii-mode-mii');
         const btnGoogle = modalEl.querySelector('#mii-mode-google');
-        if (!btnMii || !btnGoogle) return;
-        btnMii.classList.toggle('active', state.enabled !== false);
-        btnGoogle.classList.toggle('active', state.enabled === false);
+        const dialogEl = modalEl.querySelector('.mii-studio-dialog');
+        if (btnMii && btnGoogle) {
+            btnMii.classList.toggle('active', !isGoogleMode);
+            btnGoogle.classList.toggle('active', isGoogleMode);
+        }
+        if (dialogEl) {
+            dialogEl.classList.toggle('google-mode', isGoogleMode);
+        }
     }
 
     function bindModalEvents() {
@@ -1449,14 +1497,18 @@
 
         // Selector Mii / Google
         modalEl.querySelector('#mii-mode-mii').addEventListener('click', () => {
+            if (state.enabled !== false) return;
             state.enabled = true;
             playSound('seleccionsi.wav', 0.35);
             updateModeButtonsUI();
+            refreshPreview(true);
         });
         modalEl.querySelector('#mii-mode-google').addEventListener('click', () => {
+            if (state.enabled === false) return;
             state.enabled = false;
             playSound('seleccionno.wav', 0.35);
             updateModeButtonsUI();
+            refreshPreview(true);
         });
 
         // Selector de género en el panel izquierdo
