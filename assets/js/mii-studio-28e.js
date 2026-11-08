@@ -126,14 +126,14 @@
     ];
 
     const EXPRESSIONS = [
-        { id: 'normal', label: 'Natural' },
-        { id: 'smile', label: 'Alegre' },
-        { id: 'like_wink_left', label: 'Guiño' },
-        { id: 'wink_right', label: 'Pícaro' },
-        { id: 'surprise', label: 'Sorpresa' },
-        { id: 'blink', label: 'Sereno' },
-        { id: 'anger', label: 'Serio' },
-        { id: 'sorrow', label: 'Melancólico' }
+        { id: 'normal', label: 'Natural', desc: 'Tus ojos, cejas y boca tal cual los elegiste' },
+        { id: 'smile', label: 'Alegre', desc: 'Cierra los ojos en arco feliz con sonrisa' },
+        { id: 'like_wink_left', label: 'Guiño', desc: 'Guiña el ojo izquierdo y saca la lengua' },
+        { id: 'wink_right', label: 'Pícaro', desc: 'Guiña el ojo derecho con tu boca actual' },
+        { id: 'surprise', label: 'Sorpresa', desc: 'Abre mucho los ojos y levanta las cejas' },
+        { id: 'blink', label: 'Sereno', desc: 'Cierra ambos ojos con expresión relajada' },
+        { id: 'anger', label: 'Serio', desc: 'Frunce las cejas con gesto de enfado' },
+        { id: 'sorrow', label: 'Melancólico', desc: 'Baja las cejas con mirada triste' }
     ];
 
     const IDX = {
@@ -846,6 +846,60 @@
                 transform: scale(0.97);
             }
 
+            .mii-section-sub {
+                font-size: 11px;
+                color: #71717a;
+                margin-top: -2px;
+                margin-bottom: 8px;
+                line-height: 1.35;
+            }
+            .mii-exp-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 7px;
+            }
+            .mii-exp-card {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2px;
+                padding: 8px 12px;
+                border-radius: 14px;
+                background: rgba(255, 255, 255, 0.038);
+                border: 1px solid rgba(255, 255, 255, 0.07);
+                text-align: left;
+                cursor: pointer;
+                transition: background-color 140ms var(--ease-out), border-color 140ms var(--ease-out), transform 120ms var(--ease-out);
+            }
+            .mii-exp-card:hover {
+                background: rgba(255, 255, 255, 0.065);
+            }
+            .mii-exp-card.active {
+                background: rgba(231, 117, 166, 0.14);
+                border-color: rgba(231, 117, 166, 0.6);
+            }
+            .mii-exp-card:active {
+                transform: scale(0.98);
+            }
+            .mii-exp-title {
+                font-size: 12px;
+                font-weight: 600;
+                color: #f4f4f5;
+                letter-spacing: -0.01em;
+                line-height: 1.2;
+            }
+            .mii-exp-card.active .mii-exp-title {
+                color: #f9a8d4;
+            }
+            .mii-exp-desc {
+                font-size: 11px;
+                color: #8e8e93;
+                line-height: 1.25;
+            }
+            .mii-exp-card.active .mii-exp-desc {
+                color: #d4d4d8;
+            }
+
             /* Footer */
             .mii-footer {
                 height: 54px;
@@ -1367,7 +1421,10 @@
         } else if (activeTab === 'style') {
             const expBtns = EXPRESSIONS.map(ex => {
                 const active = state.expression === ex.id ? 'active' : '';
-                return `<button type="button" class="mii-pill-btn ${active}" data-expression="${ex.id}">${ex.label}</button>`;
+                return `<button type="button" class="mii-exp-card ${active}" data-expression="${ex.id}">
+                    <span class="mii-exp-title">${ex.label}</span>
+                    <span class="mii-exp-desc">${ex.desc}</span>
+                </button>`;
             }).join('');
 
             const favSwatches = FAVORITE_COLORS.map(fc => {
@@ -1395,7 +1452,8 @@
                 </div>
                 <div>
                     <div class="mii-section-label"><span>Expresión de cámara</span></div>
-                    <div style="display:flex;flex-wrap:wrap;gap:6px;">${expBtns}</div>
+                    <div class="mii-section-sub">Cambia la pose del retrato sin perder los ojos o la boca que elegiste.</div>
+                    <div class="mii-exp-grid">${expBtns}</div>
                 </div>
             `;
             container.appendChild(styleWrap);
