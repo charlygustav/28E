@@ -283,9 +283,9 @@
     /* BARRA SUPERIOR (HEADER MINIMALISTA) */
     .apple-top-bar {
       position: absolute;
-      top: max(18px, env(safe-area-inset-top));
-      left: max(20px, env(safe-area-inset-left));
-      right: max(20px, env(safe-area-inset-right));
+      top: max(16px, env(safe-area-inset-top));
+      left: max(18px, env(safe-area-inset-left));
+      right: max(18px, env(safe-area-inset-right));
       z-index: 25;
       display: flex;
       align-items: center;
@@ -294,52 +294,38 @@
       transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* ── REDISEÑO INTEGRAL: PORTAL VAULT 28E ── */
-    .tv-portal-btn {
+    /* ── BOTÓN DE RETORNO ULTRA-MINIMALISTA (CIRCULAR GLASS) ── */
+    .tv-back-btn {
       pointer-events: auto;
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      padding: 5px 12px 5px 6px;
-      border-radius: 9999px;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
       text-decoration: none;
-      color: rgba(255, 255, 255, 0.9);
-      background: rgba(14, 14, 18, 0.58);
-      backdrop-filter: blur(28px) saturate(190%);
-      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      color: rgba(255, 255, 255, 0.7);
+      background: rgba(18, 18, 22, 0.45);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
       position: relative;
       cursor: pointer;
       user-select: none;
       -webkit-user-select: none;
-      transition: background 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease, transform 0.12s cubic-bezier(0.2, 0, 0, 1);
     }
 
-    /* Target táctil accesible para móviles y touch */
-    .tv-portal-btn::before {
+    /* Target táctil accesible sin aumentar el tamaño visual */
+    .tv-back-btn::before {
       content: '';
       position: absolute;
-      inset: -6px;
-      border-radius: 9999px;
-    }
-
-    /* Contenedor circular del icono */
-    .tv-portal-icon-wrap {
-      width: 24px;
-      height: 24px;
+      inset: -8px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ffffff;
-      flex-shrink: 0;
-      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .tv-portal-arrow {
+    .tv-back-btn svg {
       width: 12px;
       height: 12px;
       stroke: currentColor;
@@ -347,84 +333,23 @@
       fill: none;
       stroke-linecap: round;
       stroke-linejoin: round;
-      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.15s ease;
     }
 
-    /* Tipografía estructurada de dos líneas */
-    .tv-portal-content {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      line-height: 1.1;
-      gap: 1px;
-    }
-
-    .tv-portal-kicker {
-      font-family: var(--font-mono);
-      font-size: 8.5px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #E775A6;
-      opacity: 0.95;
-    }
-
-    .tv-portal-label {
-      font-family: var(--font-sans);
-      font-size: 11.5px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
+    .tv-back-btn:hover {
       color: #ffffff;
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.22);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+      transform: scale(1.05);
     }
 
-    /* Micro-separador sutil */
-    .tv-portal-divider {
-      width: 1px;
-      height: 14px;
-      background: rgba(255, 255, 255, 0.12);
-      margin: 0 1px;
+    .tv-back-btn:hover svg {
+      transform: translateX(-1px);
     }
 
-    /* Indicador sutil de señal viva */
-    .tv-portal-beacon {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: #E775A6;
-      box-shadow: 0 0 6px #E775A6;
-      flex-shrink: 0;
-      opacity: 0.8;
-      transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    /* Interacciones Hover */
-    .tv-portal-btn:hover {
-      background: rgba(24, 24, 30, 0.76);
-      border-color: rgba(231, 117, 166, 0.4);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), 0 0 24px rgba(231, 117, 166, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.22);
-      transform: translateY(-1px);
-    }
-
-    .tv-portal-btn:hover .tv-portal-icon-wrap {
-      background: rgba(231, 117, 166, 0.22);
-      border-color: rgba(231, 117, 166, 0.45);
-      color: #ffffff;
-    }
-
-    .tv-portal-btn:hover .tv-portal-arrow {
-      transform: translateX(-2px);
-    }
-
-    .tv-portal-btn:hover .tv-portal-beacon {
-      opacity: 1;
-      transform: scale(1.25);
-      box-shadow: 0 0 10px #E775A6;
-    }
-
-    /* Interacción Active */
-    .tv-portal-btn:active {
-      transform: scale(0.94) translateY(0);
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+    .tv-back-btn:active {
+      transform: scale(0.92);
     }
 
     /* ── INDICADOR DE VOLUMEN FLOTANTE (APPLE GLASS OSD) ── */
@@ -651,16 +576,8 @@
 
       <!-- BARRA SUPERIOR HUD -->
       <header class="apple-top-bar" id="apple-top-bar">
-        <a href="https://yaire.site/" class="tv-portal-btn" id="btn-back" title="Volver a 28E Vault" aria-label="Volver a 28E Vault">
-          <span class="tv-portal-icon-wrap" aria-hidden="true">
-            <svg class="tv-portal-arrow" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          </span>
-          <div class="tv-portal-content">
-            <span class="tv-portal-kicker">28E</span>
-            <span class="tv-portal-label">Vault</span>
-          </div>
-          <span class="tv-portal-divider" aria-hidden="true"></span>
-          <span class="tv-portal-beacon" aria-hidden="true"></span>
+        <a href="https://yaire.site/" class="tv-back-btn" id="btn-back" title="Volver a 28E Vault" aria-label="Volver a 28E Vault">
+          <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
         </a>
       </header>
 
