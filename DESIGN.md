@@ -116,16 +116,16 @@ components:
     rounded: "{rounded.voice-unread}"
     height: "20px"
   voice-call-control:
-    backgroundColor: "{colors.voice-control}"
-    textColor: "{colors.voice-text}"
+    backgroundColor: "transparent"
+    textColor: "{colors.voice-muted}"
     rounded: "{rounded.voice-control}"
-    padding: "8px 5px"
+    padding: "0 4px"
   voice-call-control-pressed:
-    backgroundColor: "{colors.voice-control-pressed}"
-    textColor: "{colors.voice-control-pressed-text}"
+    backgroundColor: "transparent"
+    textColor: "{colors.voice-accent}"
   voice-leave-control:
-    backgroundColor: "{colors.voice-leave}"
-    textColor: "{colors.voice-leave-text}"
+    backgroundColor: "transparent"
+    textColor: "{colors.voice-danger}"
     rounded: "{rounded.voice-control}"
   voice-panel:
     backgroundColor: "{colors.voice-bg}"
@@ -235,11 +235,13 @@ The channel panel and incoming-call overlay share dark tonal surfaces and thin b
 
 ### Voice participants and call controls
 
-Large avatars identify participants; names truncate safely and state text sits beneath. The amber ring appears only while speaking. The bottom dock groups three equal controls with visible icon and label: microphone, audio and leaving. Its buttons have a 54px minimum height (44px with horizontal icon/label layout in short landscape); microphone/audio pressed states use the dedicated warm tokens, and leaving uses the dedicated danger treatment. The timer holds its place when tabs change.
+Large avatars identify participants; names truncate safely and state text sits beneath. The amber ring appears only while speaking. The bottom dock groups three equal controls with visible icon and label: microphone, audio and leaving. Buttons are transparent with 42px circular icon outlines, 11px labels and 64px minimum height (44px horizontal layout with 38px icons in short landscape). Pressed microphone/audio icons use a warm fill and amber text; leaving has a small dark red circle rather than a filled button block. The timer holds its place when tabs change.
 
 Opening, closing and minimizing preserve keyboard access and focus behavior. The minimized dock is a semantic group of sibling buttons, never a button containing other buttons. Restore opens the active call; microphone, audio and leave act directly without first opening the panel. Dock actions use 44px targets, pressed states match the room, and focus has a two-pixel amber outline offset by 2px. The dock shows participant count, status, stable timer and chat/music notices; its symbol turns amber while speaking. Hide it from interaction and focus while the panel or host menu is open.
 
 Chat, queue and playback controls use the same voice type and surface vocabulary. Queue/catalog previous and next arrows show a live page count, disable at bounds, and adapt to the available row count. Keep composers and call actions visible when list size or viewport changes.
+
+GSAP 3.12.5 uses transform/opacity for panel entry/exit (260/200ms), view changes and the moving tab underline (200ms), and press feedback (100/160ms), with `power3.out`. Entry groups stagger by 30ms. Existing participants, timers and background queue-size refreshes stay still. Reduced motion uses a 120ms fade without translation; keyboard navigation is immediate. New renders cancel owned tweens, and missing GSAP keeps CSS and all controls functional.
 
 ## Do's and Don'ts
 

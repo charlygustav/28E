@@ -91,6 +91,8 @@
       empty_chan: "Solo tú por ahora…",
       tag_you: "(tú)",
       btn_mic: "Mic",
+      btn_audio: "Audio",
+      btn_audio_off: "Sin audio",
       btn_muted: "Silenciado",
       btn_leave: "Salir",
       bar_conn: "Conectado · Afterglow",
@@ -217,6 +219,8 @@
       empty_chan: "Just you for now…",
       tag_you: "(you)",
       btn_mic: "Mic",
+      btn_audio: "Audio",
+      btn_audio_off: "Muted",
       btn_muted: "Muted",
       btn_leave: "Leave",
       bar_conn: "Connected · Afterglow",
@@ -343,6 +347,8 @@
       empty_chan: "Só você por enquanto…",
       tag_you: "(você)",
       btn_mic: "Mic",
+      btn_audio: "Áudio",
+      btn_audio_off: "Sem áudio",
       btn_muted: "Silenciado",
       btn_leave: "Sair",
       bar_conn: "Conectado · Afterglow",
@@ -469,6 +475,8 @@
       empty_chan: "Juste toi pour l'instant…",
       tag_you: "(toi)",
       btn_mic: "Mic",
+      btn_audio: "Audio",
+      btn_audio_off: "Muet",
       btn_muted: "Sourdine",
       btn_leave: "Quitter",
       bar_conn: "Connecté · Afterglow",
@@ -533,7 +541,7 @@
   };
 
   // The visual layer is independent from Firebase and WebRTC.
-  const VOICE_STYLESHEET = new URL('../css/voice-channel.css?v=20261114_music_minimal', document.currentScript?.src || new URL('assets/js/voice-channel-widget.js', document.baseURI)).href;
+  const VOICE_STYLESHEET = new URL('../css/voice-channel.css?v=20261114_motion', document.currentScript?.src || new URL('assets/js/voice-channel-widget.js', document.baseURI)).href;
 
   const ICONS = {
     close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m6 6 12 12M18 6 6 18"/></svg>',
@@ -610,6 +618,11 @@
 
       // New Tabs State (room, chat, music)
       this._activeTab = 'room';
+      this._motionKeyboard = false;
+      document.addEventListener('keydown', () => { this._motionKeyboard = true; }, { capture: true });
+      document.addEventListener('pointerdown', () => { this._motionKeyboard = false; }, { capture: true, passive: true });
+      this._reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      this._reducedMotion.addEventListener?.('change', () => { if (this._reducedMotion.matches) { this._clearMotion(this.panel); this._positionTabIndicator(); } });
 
       // Music state
       this._queuePage = 0;
@@ -968,9 +981,10 @@
       document.body.appendChild(this.fab);
       document.body.appendChild(this.panel);
       document.body.appendChild(this._bar);
+      this._bar.querySelectorAll('button').forEach(button => this._bindGsapButton(button));
 
       this._updateBarLayout();
-      window.addEventListener('resize', () => this._updateBarLayout());
+      window.addEventListener('resize', () => { this._updateBarLayout(); this._positionTabIndicator(); });
       window.addEventListener('orientationchange', () => this._updateBarLayout());
 
       // Hide connected floating bar immediately when hamburger menu / drawer is opened
@@ -1153,6 +1167,9 @@
     _toggle() {
       this._dismissParticipantMenu?.();
       const willOpen = !this.panel.classList.contains('open') && !this.panel.classList.contains('scale-100');
+      const panelStyle = window.gsap ? getComputedStyle(this.panel) : null;
+      const panelMatrix = panelStyle ? new DOMMatrixReadOnly(panelStyle.transform) : null;
+      const motionStart = panelStyle ? { x: panelMatrix.m41, y: panelMatrix.m42, opacity: Number(panelStyle.opacity) } : null;
       
       // Close hamburger menu if open
       if (willOpen && typeof toggleMenu === 'function' && document.body.classList.contains('menu-is-open')) {
@@ -1250,14 +1267,19 @@
         });
         this._playSfx('flyout', 0.4, false, 'fly');
       }
+      this._animatePanel(willOpen, motionStart);
+      if (willOpen) this._animateView(this.panel);
+      else if (this.connected) this._animateIn(this._bar, { distance: 8 });
     }
 
     _syncBarAccessibility() {
       if (!this._bar) return;
       const visible = this.connected && !this.panel.classList.contains('open') && !this.panel.classList.contains('scale-100') && !document.body.classList.contains('menu-is-open') && this._bar.classList.contains('opacity-100') && !this._bar.classList.contains('opacity-0');
+      const appearing = visible && this._bar.inert;
       this._bar.inert = !visible;
       this._bar.setAttribute('aria-hidden', String(!visible));
       this._bar.removeAttribute('tabindex');
+      if (appearing) this._animateIn(this._bar, { distance: 8 });
     }
 
     open() {
@@ -1274,72 +1296,60 @@
       }
     }
 
-    _gsapEnterMobile() {
-      if (this._vcTl) { this._vcTl.kill(); this._vcTl = null; }
-      
-      const tl = gsap.timeline();
-      
-      // Backdrop
-      if (!this._backdrop) {
-        this._backdrop = document.createElement('div');
-        this._backdrop.className = 'vc-backdrop';
-        this._backdrop.addEventListener('click', () => this._toggle());
-        document.body.appendChild(this._backdrop);
-      }
-      tl.fromTo(this._backdrop, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power2.out' }, 0);
-      
-      // Panel animates up from the bottom like an iOS sheet
-      tl.fromTo(this.panel,
-        { y: window.innerHeight, opacity: 1, scale: 1 },
-        { y: 0, duration: 0.55, ease: 'expo.out', clearProps: 'transform' },
-        0.05
-      );
-      
-      // Inner children stagger
-      let children = Array.from(this.panel.children);
-      if (children.length === 1) {
-        children = Array.from(children[0].children).filter(c => !c.classList.contains('absolute'));
-      }
-      
-      if (children.length) {
-        tl.fromTo(children, 
-          { opacity: 0, y: 30, scale: 0.95 }, 
-          { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.08, ease: 'back.out(1.2)', clearProps: 'all' },
-          0.2
-        );
-      }
-      
-      this._vcTl = tl;
+    _clearMotion(root) {
+      if (!root || !window.gsap) return;
+      const nodes = [root, ...root.querySelectorAll('[data-vc-motion]')];
+      window.gsap.killTweensOf(nodes);
+      window.gsap.set(nodes, { clearProps: 'transform,opacity' });
     }
 
-    _gsapLeaveMobile() {
-      if (this._vcTl) { this._vcTl.kill(); this._vcTl = null; }
-      
-      const tl = gsap.timeline({
-        onComplete: () => {
-          this.panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto', 'translate-y-0', 'vc-gsap-active');
-          this.panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none', 'translate-y-4');
-          gsap.set(this.panel, { clearProps: 'all' });
-          if (this._backdrop) {
-            this._backdrop.remove();
-            this._backdrop = null;
-          }
-          document.body.classList.remove('vc-open', 'vc-is-open');
-          const letterFab = document.getElementById('letter-fab') || document.querySelector('a[href="para-yaire.html"].fixed');
-          if (letterFab) {
-            letterFab.classList.remove('scale-0', 'opacity-0', 'pointer-events-none');
-          }
-        }
+    _animateIn(targets, { distance = 6, stagger = 0 } = {}) {
+      const nodes = Array.from(targets?.nodeType ? [targets] : targets || []).filter(node => node?.isConnected && !node.closest('[hidden], [inert]'));
+      if (!nodes.length || !window.gsap || this._motionKeyboard) return;
+      const reduce = this._reducedMotion.matches;
+      nodes.forEach(node => { node.dataset.vcMotion = ''; });
+      window.gsap.killTweensOf(nodes);
+      window.gsap.fromTo(nodes, { opacity: reduce ? .7 : 0, y: reduce ? 0 : distance }, {
+        opacity: 1, y: 0, duration: reduce ? .12 : .2, stagger: reduce ? 0 : stagger,
+        ease: 'power3.out', overwrite: true, clearProps: 'transform,opacity'
       });
-      
-      // Panel slides down
-      tl.to(this.panel, { y: window.innerHeight, opacity: 0, duration: 0.35, ease: 'power3.in' }, 0);
-      
-      if (this._backdrop) {
-        tl.to(this._backdrop, { opacity: 0, duration: 0.25, ease: 'power2.out' }, 0.1);
-      }
-      
-      this._vcTl = tl;
+    }
+
+    _animateView(root = this.panel) {
+      if (!root || !this.panel.classList.contains('open')) return;
+      const active = root.querySelector('.vc-tab-content:not([hidden])');
+      const nodes = active ? [active, root.querySelector('.vc-call-controls')].filter(Boolean)
+        : Array.from(root.querySelector('.vc-screen')?.children || []).filter(node => !node.classList.contains('vc-panel-close'));
+      this._animateIn(nodes.slice(0, 4), { distance: 8, stagger: .03 });
+    }
+
+    _animatePanel(open, start) {
+      const g = window.gsap;
+      if (!g || !start) return;
+      g.killTweensOf(this.panel);
+      this.panel.classList.add('vc-motion-panel');
+      if (this._motionKeyboard) { g.set(this.panel, { clearProps: 'transform,opacity' }); return; }
+      const reduce = this._reducedMotion.matches;
+      g.fromTo(this.panel, { x: reduce ? 0 : start.x, y: reduce ? 0 : start.y, opacity: start.opacity }, {
+        x: reduce || open ? 0 : this.panel.offsetWidth + 24, y: 0, opacity: open ? 1 : 0,
+        duration: reduce ? .12 : open ? .26 : .2, ease: 'power3.out', overwrite: true,
+        onComplete: () => { g.set(this.panel, { clearProps: 'transform,opacity' }); }
+      });
+    }
+
+    _positionTabIndicator(previous) {
+      const tabs = this.panel.querySelector('.vc-tabs');
+      const active = tabs?.querySelector('[aria-selected="true"]');
+      if (!active || !window.gsap) return;
+      let indicator = tabs.querySelector('.vc-tab-indicator');
+      if (!indicator) { indicator = document.createElement('span'); indicator.className = 'vc-tab-indicator'; indicator.dataset.vcMotion = ''; indicator.setAttribute('aria-hidden', 'true'); tabs.appendChild(indicator); }
+      tabs.classList.add('vc-motion-tabs');
+      const rect = active.getBoundingClientRect(), parent = tabs.getBoundingClientRect();
+      const end = { x: rect.left - parent.left, scaleX: rect.width };
+      window.gsap.killTweensOf(indicator);
+      if (previous && !this._motionKeyboard && !this._reducedMotion.matches) {
+        window.gsap.fromTo(indicator, { x: previous.left - parent.left, scaleX: previous.width }, { ...end, duration: .2, ease: 'power3.out', overwrite: true });
+      } else window.gsap.set(indicator, end);
     }
 
     // ── TEMPLATES ──────────────────────────────────────────────────────────
@@ -1442,9 +1452,9 @@
           <section id="vc-content-music" class="vc-tab-content" role="tabpanel" aria-labelledby="vc-tab-music" ${tab !== 'music' ? 'hidden inert' : ''}><div class="vc-scroll" id="vc-music-inner">${this._renderMusicPanel()}</div></section>
         </div>
         <div class="vc-call-controls" role="group" aria-label="${_t('vc_title')}">
-          <button id="vc-mute" class="vc-call-button" aria-pressed="${this.muted}" aria-label="${_t(this.muted ? 'room_mic_on' : 'room_mic_off')}">${this.muted ? ICONS.micOff : ICONS.mic}<span>${_t(this.muted ? 'btn_muted' : 'btn_mic')}</span></button>
-          <button id="vc-dnd" class="vc-call-button" aria-pressed="${this.dnd}" aria-label="${_t(this.dnd ? 'room_undeafen' : 'room_deafen')}">${this.dnd ? ICONS.dnd : ICONS.bell}<span>${_t(this.dnd ? 'room_deafened' : 'room_deafen')}</span></button>
-          <button id="vc-leave" class="vc-call-button vc-leave-button" title="${_t('room_leave')}" aria-label="${_t('room_leave')}">${ICONS.phone}<span>${_t('btn_leave')}</span></button>
+          <button id="vc-mute" class="vc-call-button" aria-pressed="${this.muted}" aria-label="${_t(this.muted ? 'room_mic_on' : 'room_mic_off')}"><span class="vc-control-icon" aria-hidden="true">${this.muted ? ICONS.micOff : ICONS.mic}</span><span>${_t(this.muted ? 'btn_muted' : 'btn_mic')}</span></button>
+          <button id="vc-dnd" class="vc-call-button" aria-pressed="${this.dnd}" aria-label="${_t(this.dnd ? 'room_undeafen' : 'room_deafen')}"><span class="vc-control-icon" aria-hidden="true">${this.dnd ? ICONS.dnd : ICONS.bell}</span><span>${_t(this.dnd ? 'btn_audio_off' : 'btn_audio')}</span></button>
+          <button id="vc-leave" class="vc-call-button vc-leave-button" title="${_t('room_leave')}" aria-label="${_t('room_leave')}"><span class="vc-control-icon" aria-hidden="true">${ICONS.phone}</span><span>${_t('btn_leave')}</span></button>
         </div>
       </div>`;
     }
@@ -1461,6 +1471,7 @@
         if (!node) {
           group.insertAdjacentHTML('beforeend', this._tplParticipant(u));
           node = group.lastElementChild;
+          if (this._activeTab === 'room') this._animateIn(node);
           if (u.id !== this.myId) this._bindUserContextMenu(node, u);
         }
         const muted = (u.id === this.myId ? this.muted : u.muted) || u.localMuted;
@@ -1560,7 +1571,8 @@
       this._updateBarChatState();
     }
 
-    _render(tpl) {
+    _render(tpl, { animate = true } = {}) {
+      this._clearMotion(this.panel);
       this._saveDrafts();
       this._listObserver?.disconnect();
       cancelAnimationFrame(this._listFitRaf);
@@ -1588,6 +1600,8 @@
         }
       }
       this._bindAvatarFallbacks();
+      this._positionTabIndicator();
+      if (animate) this._animateView();
     }
 
     _bindAvatarFallbacks() {
@@ -1595,29 +1609,15 @@
     }
 
     _bindGsapButton(el) {
-      if (!el || !window.gsap || this.panel?.contains(el)) return;
-      // Disable CSS transitions to prevent fighting with GSAP
-      el.style.transition = 'none';
-      
-      const down = () => {
-        gsap.to(el, { scale: 0.9, duration: 0.1, ease: 'power1.out', overwrite: 'auto' });
+      if (!el || el._vcPressBound || !window.gsap) return;
+      el._vcPressBound = true;
+      const press = down => {
+        if (el.disabled || this._motionKeyboard || this._reducedMotion.matches) return;
+        el.dataset.vcMotion = '';
+        window.gsap.to(el, { scale: down ? .97 : 1, duration: down ? .1 : .16, ease: 'power3.out', overwrite: true, ...(down ? {} : { clearProps: 'transform' }) });
       };
-      const up = () => {
-        gsap.to(el, { scale: 1, duration: 0.4, ease: 'back.out(2)', overwrite: 'auto' });
-      };
-      
-      // Use both pointer and touch/mouse fallbacks for maximum compatibility
-      el.addEventListener('pointerdown', down);
-      el.addEventListener('pointerup', up);
-      el.addEventListener('pointercancel', up);
-      el.addEventListener('pointerleave', up);
-      
-      // Legacy support just in case
-      el.addEventListener('touchstart', down, { passive: true });
-      el.addEventListener('touchend', up, { passive: true });
-      el.addEventListener('mousedown', down);
-      el.addEventListener('mouseup', up);
-      el.addEventListener('mouseleave', up);
+      el.addEventListener('pointerdown', () => press(true));
+      for (const event of ['pointerup', 'pointercancel', 'pointerleave', 'blur']) el.addEventListener(event, () => press(false));
     }
 
     _bindPanelEvents() {
@@ -1798,9 +1798,12 @@
 
     _doSwitchTab(tab) {
       if (this._activeTab === tab || !['room', 'chat', 'music'].includes(tab)) return;
+      const previous = this.panel.querySelector('.vc-tab[aria-selected="true"]')?.getBoundingClientRect();
       this._activeTab = tab;
       if (tab === 'chat') { this._chatUnread = 0; document.title = '28E'; }
       this._updateTabs();
+      this._positionTabIndicator(previous);
+      this._animateIn(this.panel.querySelector('.vc-tab-content:not([hidden])'), { distance: 6 });
       this._playSfx('toggleOn', 0.2);
     }
 
@@ -1818,7 +1821,7 @@
 
     _updateTabs(direction = 1) {
       if (this.connected) {
-         this._render(this._tplConnected());
+         this._render(this._tplConnected(), { animate: false });
          this._updateBarChatState();
          
          this._updateDockState();
@@ -2288,7 +2291,7 @@
       if (btn) {
         btn.setAttribute('aria-pressed', String(this.muted));
         btn.setAttribute('aria-label', _t(this.muted ? 'room_mic_on' : 'room_mic_off'));
-        btn.innerHTML = `${this.muted ? ICONS.micOff : ICONS.mic}<span>${_t(this.muted ? 'btn_muted' : 'btn_mic')}</span>`;
+        btn.innerHTML = `<span class="vc-control-icon" aria-hidden="true">${this.muted ? ICONS.micOff : ICONS.mic}</span><span>${_t(this.muted ? 'btn_muted' : 'btn_mic')}</span>`;
       }
       this._updateUsersDOM();
       this._updateDockState();
@@ -2310,7 +2313,7 @@
       if (btn) {
         btn.setAttribute('aria-pressed', String(this.dnd));
         btn.setAttribute('aria-label', _t(this.dnd ? 'room_undeafen' : 'room_deafen'));
-        btn.innerHTML = `${this.dnd ? ICONS.dnd : ICONS.bell}<span>${_t(this.dnd ? 'room_deafened' : 'room_deafen')}</span>`;
+        btn.innerHTML = `<span class="vc-control-icon" aria-hidden="true">${this.dnd ? ICONS.dnd : ICONS.bell}</span><span>${_t(this.dnd ? 'btn_audio_off' : 'btn_audio')}</span>`;
       }
       this._updateUsersDOM();
       this._updateDockState();
@@ -2392,6 +2395,7 @@
         if (this._activeTab === 'chat' || isMe) {
           msgsEl.querySelector('[data-chat-empty]')?.remove();
           msgsEl.insertAdjacentHTML('beforeend', this._chatMessageMarkup({ from, name, text, ts }));
+          if (this._activeTab === 'chat') this._animateIn(msgsEl.lastElementChild, { distance: 4 });
         }
         while (msgsEl.querySelectorAll('.vc-chat-msg').length > 50) msgsEl.querySelector('.vc-chat-msg').remove();
         msgsEl.scrollTop = msgsEl.scrollHeight;
@@ -2426,6 +2430,8 @@
           <button class="vc-ring-btn ignore" id="vc-ring-ignore">${_t('vc_ring_ignore')}</button>
         </div>`;
       document.body.appendChild(overlay);
+      this._animateIn(overlay, { distance: 8 });
+      overlay.querySelectorAll('button').forEach(button => this._bindGsapButton(button));
 
       // Auto-dismiss after 20 seconds
       this._ringTimeout = setTimeout(() => this._dismissRing(), 20000);
@@ -2456,9 +2462,11 @@
       this._stopRingtone();
       const overlay = document.getElementById('vc-ring-overlay');
       if (overlay) {
-        overlay.style.opacity = '0';
-        overlay.style.transition = 'opacity 0.3s';
-        setTimeout(() => overlay.remove(), 300);
+        overlay.inert = true;
+        if (window.gsap) {
+          window.gsap.killTweensOf(overlay);
+          window.gsap.to(overlay, { opacity: 0, y: this._reducedMotion.matches ? 0 : 8, duration: .16, ease: 'power3.out', overwrite: true, onComplete: () => overlay.remove() });
+        } else overlay.remove();
       }
     }
 
@@ -2773,7 +2781,7 @@
       const percent = duration > 0 ? Math.min(100, Math.max(0, current / duration * 100)) : 0;
       const source = track ? ((track.source || track.type) === 'spotlight' ? 'Spotlight' : (track.source || track.type) === 'spotify' ? 'Spotify' : track.type === 'youtube' ? 'YouTube' : '28E') : '';
       const controls = `<button id="vc-music-playpause" class="vc-icon-button vc-play-button" aria-label="${_t(playing ? 'room_pause' : 'room_play')}">${playing ? ICONS.pause : ICONS.play}</button><button id="vc-music-skip" class="vc-icon-button" aria-label="${_t('vc_music_skip')}" title="${_t('vc_music_skip')}">${ICONS.skipFwd}</button>`;
-      const now = track ? `<div class="vc-now-playing">
+      const now = track ? `<div class="vc-now-playing" data-track-id="${this._escHtml(track.id || track.url || track.title)}">
         <div class="vc-player-main">${this._trackArtMarkup(track)}<div class="vc-track-info"><strong title="${this._escHtml(this._cleanMusicTitle(track.title))}">${this._escHtml(this._cleanMusicTitle(track.title))}</strong><small>${this._escHtml(track.artist || source)}</small></div></div>
         <div class="vc-player-bottom">${track.type !== 'spotify' ? `<div class="vc-track-progress"><div id="vc-music-progress" role="slider" tabindex="0" aria-label="${_t('vc_music_now')}" aria-valuemin="0" aria-valuemax="${Math.floor(duration)}" aria-valuenow="${Math.floor(current)}"><div class="vc-progress-track"><div id="vc-music-progress-fill" style="width:${percent}%"></div></div></div><div class="vc-time-row" ${duration > 0 ? '' : 'hidden'}><span id="vc-music-time-current">${fmt(current)}</span><span id="vc-music-time-total">${fmt(duration)}</span></div></div>` : ''}<div class="vc-player-actions">${controls}</div></div>
         ${track.type === 'spotify' ? '<div id="vc-spotify-embed"></div>' : ''}
@@ -2814,9 +2822,11 @@
       this.panel.querySelectorAll('[data-list-window]').forEach(node => this._listObserver.observe(node));
     }
 
-    _updateMusicUI() {
+    _updateMusicUI(animate = false) {
       const body = document.getElementById('vc-music-inner');
+      const previousTrack = body?.querySelector('.vc-now-playing')?.dataset.trackId;
       if (body) {
+        this._clearMotion(body);
         this._saveDrafts();
         const focused = this.panel.contains(document.activeElement) ? document.activeElement.id : '';
         const cursor = focused && document.activeElement.selectionStart;
@@ -2837,6 +2847,11 @@
           this._startMusicProgress();
         }
       }
+        const currentTrack = body?.querySelector('.vc-now-playing');
+        if (body && this._activeTab === 'music' && this.panel.classList.contains('open')) {
+          if (animate) this._animateIn(body.querySelector('.vc-music-panel'), { distance: 5 });
+          else if (currentTrack && currentTrack.dataset.trackId !== previousTrack) this._animateIn(currentTrack);
+        }
       this._updateMusicIndicator();
     }
 
@@ -2851,7 +2866,8 @@
     }
 
     _bindMusicEvents() {
-      this.panel.querySelectorAll('[data-vc-page]').forEach(button => button.addEventListener('click', () => { const key = button.dataset.vcPage === 'queue' ? '_queuePage' : '_catalogPage'; this[key] += Number(button.dataset.direction); this._updateMusicUI(); }));
+      this.panel.querySelectorAll('#vc-music-inner button').forEach(button => this._bindGsapButton(button));
+      this.panel.querySelectorAll('[data-vc-page]').forEach(button => button.addEventListener('click', () => { const key = button.dataset.vcPage === 'queue' ? '_queuePage' : '_catalogPage'; this[key] += Number(button.dataset.direction); this._updateMusicUI(true); }));
       this._bindListSizing();
       const playPause = document.getElementById('vc-music-playpause');
       if (playPause) playPause.addEventListener('click', () => this._musicTogglePlayPause());
@@ -2902,7 +2918,7 @@
       if (spotOpenBtn) {
         spotOpenBtn.addEventListener('click', () => {
           this._musicSpotlightView = true;
-          this._updateMusicUI();
+          this._updateMusicUI(true);
         });
       }
 
@@ -2910,7 +2926,7 @@
       if (spotBackBtn) {
         spotBackBtn.addEventListener('click', () => {
           this._musicSpotlightView = false;
-          this._updateMusicUI();
+          this._updateMusicUI(true);
         });
       }
 
