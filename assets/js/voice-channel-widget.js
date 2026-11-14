@@ -1,5 +1,5 @@
 /* =========================================================
-   28E — Voice Channel Widget  (WebRTC Mesh + Socket.io)
+   28E — Afterglow (Firebase + WebRTC)
    ========================================================= */
 (function () {
   'use strict';
@@ -10,13 +10,75 @@
   // ── INTERNATIONALIZATION ──────────────────────────────────────────────────
   const VC_I18N = {
     es: {
-      vc_title: "Canal de Voz",
-      vc_sub: "Canal de voz privado",
+      room_local_mute: "Silenciar para mí",
+      room_local_unmute: "Volver a escuchar",
+      room_hero: "Un lugar para escucharnos.",
+      room_intro: "Entra, ponte cómodo y quédate un rato.",
+      room_name: "Sala principal",
+      room_capacity: "Hasta 4 personas · Voz, chat y música",
+      room_mic_hint: "Tu micrófono se activará al entrar.",
+      room_join: "Entrar a Afterglow",
+      room_auth_title: "Tu lugar está aquí",
+      room_auth_desc: "Entra con Google y comparte un rato de voz y música.",
+      room_google: "Entrar con Google",
+      room_ready: "Listos para conversar",
+      room_mic_on: "Micrófono activo",
+      room_deafened: "Escucha silenciada",
+      room_deafen: "Silenciar audio",
+      room_undeafen: "Activar audio",
+      room_chat_title: "Todo empieza con un hola.",
+      room_chat_desc: "Los mensajes de esta sala aparecerán aquí.",
+      room_music_title: "Ponle música al momento.",
+      room_music_desc: "Añade una canción o elige algo de Spotlight.",
+      room_listen: "Escuchar juntos",
+      room_catalog: "Explorar Spotlight",
+      room_link_label: "YouTube o Spotify",
+      room_back_music: "Volver a música",
+      room_search: "Buscar en Spotlight",
+      room_loading: "Preparando tu lugar…",
+      room_loading_desc: "Permite el acceso al micrófono si el navegador te lo pide.",
+      room_retry_title: "Volvemos a intentarlo",
+      room_retry_desc: "La conexión se interrumpió. Puedes volver a entrar a la sala.",
+      room_history: "Ver historial",
+      room_no_history: "Aún no hay sesiones",
+      room_history_empty: "Tu próxima conversación empieza aquí.",
+      room_waiting: "Esperando compañía",
+      room_in: "En la sala",
+      room_mic_off: "Micrófono silenciado",
+      room_options: "Opciones de participante",
+      room_open: "Abrir Afterglow",
+      room_close: "Cerrar panel",
+      room_logout: "Cerrar sesión",
+      room_paused: "Música en pausa",
+      room_play: "Reproducir",
+      room_pause: "Pausar",
+      room_remove: "Quitar de la cola",
+      room_volume: "Volumen de música",
+      room_send: "Enviar mensaje",
+      room_minimize_hint: "Puedes seguir navegando sin salir de la llamada.",
+      room_silent: "Nadie está hablando todavía",
+      room_close_history: "Cerrar historial",
+      room_google_loading: "Preparando Google…",
+      room_google_error: "No se pudo iniciar sesión. Vuelve a intentarlo.",
+      room_people: "Personas en la sala",
+      room_leave: "Salir de la llamada",
+      room_cancel: "Cancelar",
+      room_account: "Cuenta de Google",
+      room_search_label: "Buscar canción o artista",
+      room_no_results: "Sin resultados",
+      room_no_results_desc: "Prueba con otro título o artista.",
+      room_link_ph: "Enlace de YouTube o Spotify",
+      room_you_in: "Estás en la sala",
+      room_persons: "personas en la sala",
+      room_person: "persona en la sala",
+      room_checking: "Comprobando la sala…",
+      vc_title: "Afterglow",
+      vc_sub: "Voz, chat y música en Afterglow",
       lbl_name: "Tu nombre",
       ph_name: "Ej: Charles",
       lbl_pass: "Contraseña del canal",
       ph_pass: "••••••••",
-      btn_join: "Unirse al canal",
+      btn_join: "Entrar a Afterglow",
       hist_title: "Últimas sesiones",
       st_conn: "Conectando…",
       st_estab: "Estableciendo conexión…",
@@ -29,7 +91,7 @@
       btn_mic: "Mic",
       btn_muted: "Silenciado",
       btn_leave: "Salir",
-      bar_conn: "Conectado · #principal",
+      bar_conn: "Conectado · Afterglow",
       err_name: "Escribe tu nombre.",
       err_pass: "Escribe la contraseña.",
       err_mic: "❌ No se pudo acceder al micrófono.",
@@ -40,12 +102,12 @@
       vc_chat_send: "Enviar",
       vc_chat_empty: "Sin mensajes aún",
       vc_typing: "está escribiendo...",
-      vc_ring_title: "Llamada entrante",
+      vc_ring_title: "Llamada en Afterglow",
       vc_ring_msg: "quiere hablar contigo 💛",
       vc_ring_join: "Unirse",
       vc_ring_ignore: "Ignorar",
       vc_restricted: "Acceso Restringido",
-      vc_req_login: "Inicia sesión con tu cuenta de Google para poder entrar al Canal de Voz.",
+      vc_req_login: "Inicia sesión con tu cuenta de Google para entrar a Afterglow.",
       vc_session_as: "Sesión iniciada como",
       vc_login_google: "Continuar con Google",
       vc_music: "Música",
@@ -63,7 +125,7 @@
       vc_person: "persona conectada",
       vc_persons: "personas conectadas",
       vc_tab_room: "Sala",
-      vc_hist_full: "Historial de Sesiones",
+      vc_hist_full: "Historial de Afterglow",
       vc_spotlight_menu: "Menú Spotlight",
       vc_spotlight_live: "Sintonizar en vivo",
       vc_spotlight_title: "Canciones de Spotlight",
@@ -74,13 +136,75 @@
       vc_spotlight_live_hint: "Transmitiendo Spotlight en tiempo real"
     },
     en: {
-      vc_title: "Voice Channel",
-      vc_sub: "Private voice channel",
+      room_local_mute: "Mute for me",
+      room_local_unmute: "Unmute for me",
+      room_hero: "A place to hear each other.",
+      room_intro: "Come in, get comfortable and stay a while.",
+      room_name: "Main room",
+      room_capacity: "Up to 4 people · Voice, chat and music",
+      room_mic_hint: "Your microphone will turn on when you join.",
+      room_join: "Join Afterglow",
+      room_auth_title: "Your place is here",
+      room_auth_desc: "Sign in with Google and share a little voice and music.",
+      room_google: "Sign in with Google",
+      room_ready: "Ready to talk",
+      room_mic_on: "Microphone on",
+      room_deafened: "Audio muted",
+      room_deafen: "Mute audio",
+      room_undeafen: "Unmute audio",
+      room_chat_title: "It starts with hello.",
+      room_chat_desc: "Messages from this room will appear here.",
+      room_music_title: "Give the moment a soundtrack.",
+      room_music_desc: "Add a song or pick something from Spotlight.",
+      room_listen: "Listen together",
+      room_catalog: "Explore Spotlight",
+      room_link_label: "YouTube or Spotify",
+      room_back_music: "Back to music",
+      room_search: "Search Spotlight",
+      room_loading: "Getting your place ready…",
+      room_loading_desc: "Allow microphone access if your browser asks.",
+      room_retry_title: "Let’s try again",
+      room_retry_desc: "The connection was interrupted. You can rejoin the room.",
+      room_history: "View history",
+      room_no_history: "No sessions yet",
+      room_history_empty: "Your next conversation starts here.",
+      room_waiting: "Waiting for company",
+      room_in: "In the room",
+      room_mic_off: "Microphone muted",
+      room_options: "Participant options",
+      room_open: "Open Afterglow",
+      room_close: "Close panel",
+      room_logout: "Sign out",
+      room_paused: "Music paused",
+      room_play: "Play",
+      room_pause: "Pause",
+      room_remove: "Remove from queue",
+      room_volume: "Music volume",
+      room_send: "Send message",
+      room_minimize_hint: "You can keep browsing without leaving the call.",
+      room_silent: "No one is speaking yet",
+      room_close_history: "Close history",
+      room_google_loading: "Connecting to Google…",
+      room_google_error: "Could not sign in. Please try again.",
+      room_people: "People in the room",
+      room_leave: "Leave the call",
+      room_cancel: "Cancel",
+      room_account: "Google account",
+      room_search_label: "Search song or artist",
+      room_no_results: "No results",
+      room_no_results_desc: "Try another title or artist.",
+      room_link_ph: "YouTube or Spotify link",
+      room_you_in: "You’re in the room",
+      room_persons: "people in the room",
+      room_person: "person in the room",
+      room_checking: "Checking the room…",
+      vc_title: "Afterglow",
+      vc_sub: "Voice, chat and music in Afterglow",
       lbl_name: "Your name",
       ph_name: "Ex: Charles",
       lbl_pass: "Channel password",
       ph_pass: "••••••••",
-      btn_join: "Join channel",
+      btn_join: "Join Afterglow",
       hist_title: "Latest sessions",
       st_conn: "Connecting…",
       st_estab: "Establishing connection…",
@@ -93,7 +217,7 @@
       btn_mic: "Mic",
       btn_muted: "Muted",
       btn_leave: "Leave",
-      bar_conn: "Connected · #main",
+      bar_conn: "Connected · Afterglow",
       err_name: "Enter your name.",
       err_pass: "Enter the password.",
       err_mic: "❌ Could not access microphone.",
@@ -104,12 +228,12 @@
       vc_chat_send: "Send",
       vc_chat_empty: "No messages yet",
       vc_typing: "is typing...",
-      vc_ring_title: "Incoming call",
+      vc_ring_title: "Incoming Afterglow call",
       vc_ring_msg: "wants to talk to you 💛",
       vc_ring_join: "Join",
       vc_ring_ignore: "Ignore",
       vc_restricted: "Restricted Access",
-      vc_req_login: "Log in with your Google account to enter the Voice Channel.",
+      vc_req_login: "Sign in with your Google account to join Afterglow.",
       vc_session_as: "Logged in as",
       vc_login_google: "Continue with Google",
       vc_music: "Music",
@@ -127,7 +251,7 @@
       vc_person: "person connected",
       vc_persons: "people connected",
       vc_tab_room: "Room",
-      vc_hist_full: "Session History",
+      vc_hist_full: "Afterglow history",
       vc_spotlight_menu: "Spotlight Menu",
       vc_spotlight_live: "Tune in Live",
       vc_spotlight_title: "Spotlight Songs",
@@ -138,13 +262,75 @@
       vc_spotlight_live_hint: "Streaming Spotlight in real-time"
     },
     pt: {
-      vc_title: "Canal de Voz",
-      vc_sub: "Canal de voz privado",
+      room_local_mute: "Silenciar para mim",
+      room_local_unmute: "Ouvir de novo",
+      room_hero: "Um lugar para nos ouvir.",
+      room_intro: "Entre, fique à vontade e passe um tempo.",
+      room_name: "Sala principal",
+      room_capacity: "Até 4 pessoas · Voz, chat e música",
+      room_mic_hint: "Seu microfone será ativado ao entrar.",
+      room_join: "Entrar no Afterglow",
+      room_auth_title: "Seu lugar é aqui",
+      room_auth_desc: "Entre com o Google e compartilhe voz e música.",
+      room_google: "Entrar com o Google",
+      room_ready: "Prontos para conversar",
+      room_mic_on: "Microfone ativo",
+      room_deafened: "Áudio silenciado",
+      room_deafen: "Silenciar áudio",
+      room_undeafen: "Ativar áudio",
+      room_chat_title: "Tudo começa com um oi.",
+      room_chat_desc: "As mensagens desta sala aparecerão aqui.",
+      room_music_title: "Dê música ao momento.",
+      room_music_desc: "Adicione uma música ou escolha no Spotlight.",
+      room_listen: "Ouvir juntos",
+      room_catalog: "Explorar Spotlight",
+      room_link_label: "YouTube ou Spotify",
+      room_back_music: "Voltar à música",
+      room_search: "Buscar no Spotlight",
+      room_loading: "Preparando seu lugar…",
+      room_loading_desc: "Permita o microfone se o navegador pedir.",
+      room_retry_title: "Vamos tentar de novo",
+      room_retry_desc: "A conexão foi interrompida. Você pode entrar de novo.",
+      room_history: "Ver histórico",
+      room_no_history: "Nenhuma sessão ainda",
+      room_history_empty: "Sua próxima conversa começa aqui.",
+      room_waiting: "Esperando companhia",
+      room_in: "Na sala",
+      room_mic_off: "Microfone silenciado",
+      room_options: "Opções do participante",
+      room_open: "Abrir Afterglow",
+      room_close: "Fechar painel",
+      room_logout: "Sair da conta",
+      room_paused: "Música pausada",
+      room_play: "Reproduzir",
+      room_pause: "Pausar",
+      room_remove: "Remover da fila",
+      room_volume: "Volume da música",
+      room_send: "Enviar mensagem",
+      room_minimize_hint: "Você pode navegar sem sair da chamada.",
+      room_silent: "Ninguém está falando ainda",
+      room_close_history: "Fechar histórico",
+      room_google_loading: "Conectando ao Google…",
+      room_google_error: "Não foi possível entrar. Tente de novo.",
+      room_people: "Pessoas na sala",
+      room_leave: "Sair da chamada",
+      room_cancel: "Cancelar",
+      room_account: "Conta do Google",
+      room_search_label: "Buscar música ou artista",
+      room_no_results: "Nenhum resultado",
+      room_no_results_desc: "Tente outro título ou artista.",
+      room_link_ph: "Link do YouTube ou Spotify",
+      room_you_in: "Você está na sala",
+      room_persons: "pessoas na sala",
+      room_person: "pessoa na sala",
+      room_checking: "Verificando a sala…",
+      vc_title: "Afterglow",
+      vc_sub: "Voz, chat e música no Afterglow",
       lbl_name: "Seu nome",
       ph_name: "Ex: Charles",
       lbl_pass: "Senha do canal",
       ph_pass: "••••••••",
-      btn_join: "Entrar no canal",
+      btn_join: "Entrar no Afterglow",
       hist_title: "Últimas sessões",
       st_conn: "Conectando…",
       st_estab: "Estabelecendo conexão…",
@@ -157,7 +343,7 @@
       btn_mic: "Mic",
       btn_muted: "Silenciado",
       btn_leave: "Sair",
-      bar_conn: "Conectado · #principal",
+      bar_conn: "Conectado · Afterglow",
       err_name: "Digite seu nome.",
       err_pass: "Digite a senha.",
       err_mic: "❌ Não foi possível acessar o microfone.",
@@ -168,12 +354,12 @@
       vc_chat_send: "Enviar",
       vc_chat_empty: "Sem mensagens ainda",
       vc_typing: "está digitando...",
-      vc_ring_title: "Chamada recebida",
+      vc_ring_title: "Chamada no Afterglow",
       vc_ring_msg: "quer falar com você 💛",
       vc_ring_join: "Entrar",
       vc_ring_ignore: "Ignorar",
       vc_restricted: "Acesso Restrito",
-      vc_req_login: "Faça login com sua conta do Google para entrar no Canal de Voz.",
+      vc_req_login: "Entre com sua conta do Google para acessar o Afterglow.",
       vc_session_as: "Sessão iniciada como",
       vc_login_google: "Continuar com o Google",
       vc_music: "Música",
@@ -191,7 +377,7 @@
       vc_person: "pessoa conectada",
       vc_persons: "pessoas conectadas",
       vc_tab_room: "Sala",
-      vc_hist_full: "Histórico de Sessões",
+      vc_hist_full: "Histórico do Afterglow",
       vc_spotlight_menu: "Menu Spotlight",
       vc_spotlight_live: "Sintonizar ao vivo",
       vc_spotlight_title: "Músicas do Spotlight",
@@ -202,13 +388,75 @@
       vc_spotlight_live_hint: "Transmitindo Spotlight em tempo real"
     },
     fr: {
-      vc_title: "Canal Vocal",
-      vc_sub: "Canal vocal privé",
+      room_local_mute: "Couper pour moi",
+      room_local_unmute: "Réactiver pour moi",
+      room_hero: "Un endroit pour s’écouter.",
+      room_intro: "Entre, installe-toi et reste un moment.",
+      room_name: "Salon principal",
+      room_capacity: "Jusqu’à 4 personnes · Voix, chat et musique",
+      room_mic_hint: "Ton micro sera activé en entrant.",
+      room_join: "Rejoindre Afterglow",
+      room_auth_title: "Ta place est ici",
+      room_auth_desc: "Connecte-toi avec Google pour partager voix et musique.",
+      room_google: "Se connecter avec Google",
+      room_ready: "Prêts à discuter",
+      room_mic_on: "Micro activé",
+      room_deafened: "Son coupé",
+      room_deafen: "Couper le son",
+      room_undeafen: "Activer le son",
+      room_chat_title: "Tout commence par un bonjour.",
+      room_chat_desc: "Les messages du salon apparaîtront ici.",
+      room_music_title: "De la musique pour ce moment.",
+      room_music_desc: "Ajoute un morceau ou choisis dans Spotlight.",
+      room_listen: "Écouter ensemble",
+      room_catalog: "Explorer Spotlight",
+      room_link_label: "YouTube ou Spotify",
+      room_back_music: "Retour à la musique",
+      room_search: "Rechercher dans Spotlight",
+      room_loading: "On prépare ta place…",
+      room_loading_desc: "Autorise le micro si le navigateur le demande.",
+      room_retry_title: "On réessaie",
+      room_retry_desc: "La connexion a été interrompue. Tu peux revenir.",
+      room_history: "Voir l’historique",
+      room_no_history: "Pas encore de sessions",
+      room_history_empty: "Ta prochaine conversation commence ici.",
+      room_waiting: "En attendant de la compagnie",
+      room_in: "Dans le salon",
+      room_mic_off: "Micro coupé",
+      room_options: "Options du participant",
+      room_open: "Ouvrir Afterglow",
+      room_close: "Fermer le panneau",
+      room_logout: "Se déconnecter",
+      room_paused: "Musique en pause",
+      room_play: "Lire",
+      room_pause: "Mettre en pause",
+      room_remove: "Retirer de la file",
+      room_volume: "Volume de la musique",
+      room_send: "Envoyer un message",
+      room_minimize_hint: "Tu peux naviguer sans quitter l’appel.",
+      room_silent: "Personne ne parle pour le moment",
+      room_close_history: "Fermer l’historique",
+      room_google_loading: "Connexion à Google…",
+      room_google_error: "Connexion impossible. Réessaie.",
+      room_people: "Personnes dans le salon",
+      room_leave: "Quitter l’appel",
+      room_cancel: "Annuler",
+      room_account: "Compte Google",
+      room_search_label: "Rechercher un titre ou un artiste",
+      room_no_results: "Aucun résultat",
+      room_no_results_desc: "Essaie un autre titre ou artiste.",
+      room_link_ph: "Lien YouTube ou Spotify",
+      room_you_in: "Tu es dans le salon",
+      room_persons: "personnes dans le salon",
+      room_person: "personne dans le salon",
+      room_checking: "Vérification du salon…",
+      vc_title: "Afterglow",
+      vc_sub: "Voix, chat et musique sur Afterglow",
       lbl_name: "Ton nom",
       ph_name: "Ex: Charles",
       lbl_pass: "Mot de passe",
       ph_pass: "••••••••",
-      btn_join: "Rejoindre le canal",
+      btn_join: "Rejoindre Afterglow",
       hist_title: "Dernières sessions",
       st_conn: "Connexion…",
       st_estab: "Établissement de la connexion…",
@@ -221,7 +469,7 @@
       btn_mic: "Mic",
       btn_muted: "Sourdine",
       btn_leave: "Quitter",
-      bar_conn: "Connecté · #principal",
+      bar_conn: "Connecté · Afterglow",
       err_name: "Entre ton nom.",
       err_pass: "Entre le mot de passe.",
       err_mic: "❌ Impossible d'accéder au micro.",
@@ -232,12 +480,12 @@
       vc_chat_send: "Envoyer",
       vc_chat_empty: "Pas encore de messages",
       vc_typing: "est en train d'écrire...",
-      vc_ring_title: "Appel entrant",
+      vc_ring_title: "Appel sur Afterglow",
       vc_ring_msg: "veut te parler 💛",
       vc_ring_join: "Rejoindre",
       vc_ring_ignore: "Ignorer",
       vc_restricted: "Accès Restreint",
-      vc_req_login: "Connectez-vous avec votre compte Google pour entrer dans le canal vocal.",
+      vc_req_login: "Connecte-toi avec ton compte Google pour rejoindre Afterglow.",
       vc_session_as: "Connecté en tant que",
       vc_login_google: "Continuer avec Google",
       vc_music: "Musique",
@@ -255,7 +503,7 @@
       vc_person: "personne connectée",
       vc_persons: "personnes connectées",
       vc_tab_room: "Salon",
-      vc_hist_full: "Historique des Sessions",
+      vc_hist_full: "Historique Afterglow",
       vc_spotlight_menu: "Menu Spotlight",
       vc_spotlight_live: "Écouter en direct",
       vc_spotlight_title: "Morceaux Spotlight",
@@ -284,894 +532,20 @@
     return (VC_I18N[lang] && VC_I18N[lang][key]) ? VC_I18N[lang][key] : VC_I18N['es'][key];
   };
 
-  // ── CSS ──────────────────────────────────────────────────────────────────
-  const CSS = `
-  @keyframes vc-pulse { 0%,100%{box-shadow:0 4px 24px rgba(245,158,11,.2)} 50%{box-shadow:0 4px 32px rgba(245,158,11,.45)} }
-  @keyframes vc-shine { 0% { transform:rotate(45deg) translateY(-100%); } 20%, 100% { transform:rotate(45deg) translateY(100%); } }
-  @keyframes vc-spin { to{transform:rotate(360deg)} }
-  @keyframes vc-slideIn { from { opacity:0; transform:translateX(-8px); } to { opacity:1; transform:translateX(0); } }
-  @keyframes vc-speak-pulse { 0% { box-shadow:0 0 0 0 rgba(34,197,94,.4); } 70% { box-shadow:0 0 0 6px rgba(34,197,94,0); } 100% { box-shadow:0 0 0 0 rgba(34,197,94,0); } }
-  @keyframes vc-pop { from { transform:scale(0); opacity:0; } to { transform:scale(1); opacity:1; } }
-  @keyframes vc-blink { 0%,100%{opacity:1} 50%{opacity:.35} }
-  @keyframes vc-ring-in { from { opacity:0; } to { opacity:1; } }
-  @keyframes vc-ring-pulse { 0%,100% { box-shadow:0 0 0 0 rgba(245,158,11,.3); } 50% { box-shadow:0 0 0 18px rgba(245,158,11,0); } }
-  @keyframes vc-music-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
-  @keyframes vc-eq { 0%,100%{height:3px} 50%{height:12px} }
-  .vc-scroll {
-    overscroll-behavior: contain !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-  .vc-scroll::-webkit-scrollbar { width:4px; }
-  .vc-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
-  .vc-av.speaking { border-color: #10B981 !important; box-shadow: 0 0 14px rgba(16, 185, 129, 0.45); animation: vc-speak-pulse 1.5s infinite; }
-  @keyframes vc-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
-  .vc-marquee-container { display: flex; overflow: hidden; white-space: nowrap; mask-image: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent); width: 100%; }
-  .vc-marquee-content { flex-shrink: 0; animation: vc-marquee 12s linear infinite; padding-right: 2rem; }
+  // The visual layer is independent from Firebase and WebRTC.
+  const VOICE_STYLESHEET = new URL('../css/voice-channel.css?v=20261114_room', document.currentScript?.src || new URL('assets/js/voice-channel-widget.js', document.baseURI)).href;
 
-  /* Modern participant group & row styles */
-  .vc-users-group {
-    background: rgba(255, 255, 255, 0.04);
-    border: none !important;
-    border-radius: 1.125rem;
-    overflow: hidden;
-    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.35);
-  }
-  .vc-user {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 0.875rem;
-    padding: 0.75rem 0.95rem;
-    transition: background-color 0.15s ease;
-    user-select: none;
-    -webkit-user-select: none;
-  }
-  .vc-user:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 4.1rem;
-    right: 0.85rem;
-    height: 1px;
-    background: rgba(255, 255, 255, 0.04);
-    pointer-events: none;
-  }
-  @media (hover: hover) {
-    .vc-user:hover {
-      background-color: rgba(255, 255, 255, 0.045);
-    }
-  }
-  .vc-user:active {
-    background-color: rgba(255, 255, 255, 0.08);
-  }
-
-  /* Redesigned Voice Channel Panel - EXACT MATCH with Hamburger Menu #menu-panel on the RIGHT */
-  #vc-backdrop {
-    position: fixed !important;
-    inset: 0 !important;
-    background: rgba(0, 0, 0, 0.65) !important;
-    backdrop-filter: blur(14px) saturate(140%) !important;
-    -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
-    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-    z-index: 95 !important;
-  }
-  #vc-backdrop.open {
-    display: block !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-  }
-
-  .vc-panel-base {
-    position: fixed !important;
-    top: 1rem !important;
-    right: 1rem !important;
-    bottom: 1rem !important;
-    left: auto !important;
-    width: min(380px, calc(100vw - 2rem)) !important;
-    max-height: calc(100dvh - 2rem) !important;
-    height: calc(100dvh - 2rem) !important;
-    border-radius: 24px !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    background: rgba(11, 11, 16, 0.94) !important;
-    backdrop-filter: blur(40px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
-    transform: translateX(calc(100% + 2.5rem)) !important;
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-    box-shadow: 0 25px 70px -10px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    z-index: 100 !important;
-    margin: 0 !important;
-    overflow: hidden !important;
-    clip-path: inset(0 round 24px) !important;
-    -webkit-clip-path: inset(0 round 24px) !important;
-    isolation: isolate !important;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
-  }
-
-  .vc-panel-base.open,
-  .vc-panel-base.scale-100 {
-    transform: translateX(0) !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-  }
-
-  @media (max-width: 480px) {
-    .vc-panel-base {
-      top: 0.5rem !important;
-      right: 0.5rem !important;
-      bottom: 0.5rem !important;
-      left: auto !important;
-      width: calc(100vw - 1rem) !important;
-      max-height: calc(100dvh - 1rem) !important;
-      height: calc(100dvh - 1rem) !important;
-      border-radius: 20px !important;
-      clip-path: inset(0 round 20px) !important;
-      -webkit-clip-path: inset(0 round 20px) !important;
-    }
-  }
-
-  .vc-main-content {
-     flex: 1 1 auto !important;
-     height: 100% !important;
-     min-height: 0 !important;
-  }
-  .vc-users-group {
-    border-radius: 1rem !important;
-    background: rgba(255, 255, 255, 0.03) !important;
-    border: 1px solid rgba(255, 255, 255, 0.06) !important;
-  }
-  .vc-user {
-    padding: 0.7rem 0.85rem !important;
-  }
-  /* Minimalist Voice Lobby Container */
-  .vc-lobby-container {
-    display: flex !important;
-    flex-direction: column !important;
-    flex: 1 1 auto !important;
-    padding: 1.25rem 1.25rem !important;
-    gap: 0.85rem !important;
-    min-height: 0 !important;
-    overflow-y: auto !important;
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-  }
-  .vc-lobby-container::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
-  }
-
-  /* User Profile Card */
-  .vc-lobby-user-card {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    padding: 0.75rem 0.85rem !important;
-    border-radius: 1rem !important;
-    background: rgba(255, 255, 255, 0.035) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4) !important;
-    transition: all 0.2s ease !important;
-  }
-  .vc-lobby-user-card:hover {
-    background: rgba(255, 255, 255, 0.05) !important;
-    border-color: rgba(255, 255, 255, 0.12) !important;
-  }
-  .vc-lobby-user-left {
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.75rem !important;
-    min-width: 0 !important;
-  }
-  .vc-lobby-avatar-wrap {
-    position: relative !important;
-    width: 2.75rem !important;
-    height: 2.75rem !important;
-    flex-shrink: 0 !important;
-  }
-  .vc-lobby-avatar {
-    width: 100% !important;
-    height: 100% !important;
-    border-radius: 9999px !important;
-    object-fit: cover !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
-    display: block !important;
-  }
-  .vc-lobby-status-dot {
-    position: absolute !important;
-    bottom: -1px !important;
-    right: -1px !important;
-    width: 11px !important;
-    height: 11px !important;
-    border-radius: 9999px !important;
-    background: #10b981 !important;
-    border: 2px solid #0B0B10 !important;
-    box-shadow: 0 0 6px rgba(16, 185, 129, 0.6) !important;
-  }
-  .vc-lobby-user-info {
-    display: flex !important;
-    flex-direction: column !important;
-    min-width: 0 !important;
-    text-align: left !important;
-  }
-  .vc-lobby-user-name {
-    font-size: 0.875rem !important;
-    font-weight: 700 !important;
-    color: #ffffff !important;
-    letter-spacing: -0.01em !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    line-height: 1.25 !important;
-  }
-  .vc-lobby-user-meta {
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.35rem !important;
-    font-size: 0.7rem !important;
-    color: #71717a !important;
-    margin-top: 0.15rem !important;
-  }
-  .vc-lobby-user-meta .vc-pill-online {
-    color: #34d399 !important;
-    font-weight: 600 !important;
-  }
-  .vc-lobby-logout-btn {
-    padding: 0.5rem !important;
-    border-radius: 0.65rem !important;
-    color: #71717a !important;
-    background: transparent !important;
-    border: none !important;
-    cursor: pointer !important;
-    transition: all 0.2s ease !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex-shrink: 0 !important;
-  }
-  .vc-lobby-logout-btn:hover {
-    color: #fb7185 !important;
-    background: rgba(255, 255, 255, 0.08) !important;
-  }
-
-  /* Join Button */
-  #vc-join {
-    width: 100% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 0.55rem !important;
-    padding: 0.85rem 1.25rem !important;
-    border-radius: 1rem !important;
-    background: #ffffff !important;
-    color: #09090b !important;
-    border: none !important;
-    font-size: 0.875rem !important;
-    font-weight: 700 !important;
-    letter-spacing: -0.01em !important;
-    box-shadow: 0 10px 24px -4px rgba(255, 255, 255, 0.15), 0 2px 6px rgba(0, 0, 0, 0.3) !important;
-    cursor: pointer !important;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  }
-  #vc-join:hover {
-    background: #f4f4f5 !important;
-    transform: translateY(-1px) !important;
-    box-shadow: 0 14px 28px -4px rgba(255, 255, 255, 0.22) !important;
-  }
-  #vc-join:active {
-    transform: scale(0.98) !important;
-  }
-  #vc-join svg {
-    width: 1.125rem !important;
-    height: 1.125rem !important;
-    color: #09090b !important;
-    stroke: #09090b !important;
-    stroke-width: 2.2 !important;
-    flex-shrink: 0 !important;
-  }
-  #vc-join span {
-    color: #09090b !important;
-  }
-
-  /* Connection Status */
-  #vc-conn-count {
-    font-size: 0.72rem !important;
-    color: #71717a !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    min-height: 1rem !important;
-    transition: opacity 0.2s ease !important;
-  }
-
-  /* History */
-  .vc-lobby-history-box {
-    margin-top: 0.35rem !important;
-    padding-top: 0.85rem !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.07) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    text-align: left !important;
-  }
-  .vc-hist-title {
-    font-size: 0.625rem !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.14em !important;
-    text-transform: uppercase !important;
-    color: #71717a !important;
-    margin-bottom: 0.5rem !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-  }
-  .vc-hist-row {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    font-size: 0.72rem !important;
-    padding: 0.45rem 0.55rem !important;
-    border-radius: 0.6rem !important;
-    transition: background-color 0.15s ease !important;
-  }
-  .vc-hist-row:hover {
-    background: rgba(255, 255, 255, 0.04) !important;
-  }
-  .vc-hist-name {
-    color: #e4e4e7 !important;
-    font-weight: 500 !important;
-    font-size: 0.72rem !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.45rem !important;
-    min-width: 0 !important;
-  }
-  .vc-hist-time {
-    color: #71717a !important;
-    font-size: 0.68rem !important;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
-    font-variant-numeric: tabular-nums !important;
-    flex-shrink: 0 !important;
-    white-space: nowrap !important;
-  }
-  #vc-btn-ver-mas {
-    width: 100% !important;
-    margin-top: 0.55rem !important;
-    font-size: 0.7rem !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.04em !important;
-    padding: 0.45rem 0.75rem !important;
-    border-radius: 0.75rem !important;
-    background: rgba(255, 255, 255, 0.03) !important;
-    border: 1px solid rgba(255, 255, 255, 0.07) !important;
-    color: #a1a1aa !important;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    cursor: pointer !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 0.35rem !important;
-  }
-  #vc-btn-ver-mas:hover {
-    background: rgba(255, 255, 255, 0.08) !important;
-    color: #ffffff !important;
-    border-color: rgba(255, 255, 255, 0.16) !important;
-    transform: translateY(-1px) !important;
-  }
-  #vc-btn-ver-mas:active {
-    transform: scale(0.98) !important;
-  }
-
-  /* Detailed History Modal - Apple HIG & Linear design */
-  #vc-detailed-history {
-    position: fixed !important;
-    inset: 0 !important;
-    z-index: 100000 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 1rem !important;
-    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
-    user-select: none !important;
-    -webkit-user-select: none !important;
-  }
-  #vc-detailed-history.opacity-0 {
-    opacity: 0 !important;
-    pointer-events: none !important;
-  }
-  #vc-detailed-history:not(.opacity-0) {
-    opacity: 1 !important;
-    pointer-events: auto !important;
-  }
-  #vc-detailed-history #vc-det-bg {
-    position: absolute !important;
-    inset: 0 !important;
-    background: rgba(0, 0, 0, 0.72) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
-    transition: opacity 0.25s ease !important;
-  }
-  #vc-detailed-history #vc-det-card {
-    position: relative !important;
-    width: 100% !important;
-    max-width: 440px !important;
-    max-height: min(82vh, 640px) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    background: rgba(11, 11, 16, 0.96) !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    border-radius: 24px !important;
-    box-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
-    overflow: hidden !important;
-    transform: scale(0.96) translateY(10px) !important;
-    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    isolation: isolate !important;
-  }
-  #vc-detailed-history.open #vc-det-card {
-    transform: scale(1) translateY(0) !important;
-  }
-  .vc-det-header {
-    padding: 1.15rem 1.35rem 0.95rem 1.35rem !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
-    background: rgba(255, 255, 255, 0.02) !important;
-    flex-shrink: 0 !important;
-  }
-  .vc-det-title-wrap {
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.65rem !important;
-  }
-  .vc-det-brand {
-    font-size: 1.25rem !important;
-    font-weight: 800 !important;
-    letter-spacing: -0.04em !important;
-    color: #ffffff !important;
-    line-height: 1 !important;
-  }
-  .vc-det-slash {
-    color: #52525b !important;
-    font-weight: 300 !important;
-    font-size: 0.95rem !important;
-  }
-  .vc-det-title-group {
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.5rem !important;
-  }
-  .vc-det-title {
-    font-size: 0.8rem !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.06em !important;
-    text-transform: uppercase !important;
-    color: #e4e4e7 !important;
-  }
-  .vc-det-count {
-    font-size: 0.68rem !important;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
-    color: #a1a1aa !important;
-    background: rgba(255, 255, 255, 0.06) !important;
-    border: 1px solid rgba(255, 255, 255, 0.09) !important;
-    padding: 0.15rem 0.5rem !important;
-    border-radius: 9999px !important;
-    line-height: 1.2 !important;
-  }
-  .vc-det-close-btn {
-    width: 2rem !important;
-    height: 2rem !important;
-    border-radius: 9999px !important;
-    background: rgba(255, 255, 255, 0.06) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    color: #a1a1aa !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    cursor: pointer !important;
-    transition: all 0.2s ease !important;
-    flex-shrink: 0 !important;
-  }
-  .vc-det-close-btn:hover {
-    background: rgba(255, 255, 255, 0.15) !important;
-    color: #ffffff !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
-  }
-  .vc-det-close-btn:active {
-    transform: scale(0.95) !important;
-  }
-  .vc-det-close-btn svg {
-    width: 0.875rem !important;
-    height: 0.875rem !important;
-    stroke: currentColor !important;
-  }
-  .vc-det-list {
-    flex: 1 1 auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 0.45rem !important;
-    padding: 0.85rem 1rem 1.25rem 1rem !important;
-    overflow-y: auto !important;
-    scrollbar-width: thin !important;
-    scrollbar-color: rgba(255, 255, 255, 0.16) transparent !important;
-  }
-  .vc-det-list::-webkit-scrollbar {
-    width: 5px !important;
-  }
-  .vc-det-list::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.16) !important;
-    border-radius: 9999px !important;
-  }
-  .vc-det-row {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 0.75rem !important;
-    padding: 0.65rem 0.85rem !important;
-    border-radius: 0.95rem !important;
-    background: rgba(255, 255, 255, 0.025) !important;
-    border: 1px solid rgba(255, 255, 255, 0.06) !important;
-    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  }
-  .vc-det-row:hover {
-    background: rgba(255, 255, 255, 0.055) !important;
-    border-color: rgba(255, 255, 255, 0.12) !important;
-    transform: translateY(-1px) !important;
-  }
-  .vc-det-row-left {
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.75rem !important;
-    min-width: 0 !important;
-  }
-  .vc-det-row-icon {
-    width: 2.25rem !important;
-    height: 2.25rem !important;
-    border-radius: 0.75rem !important;
-    background: rgba(255, 255, 255, 0.04) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    color: #a1a1aa !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex-shrink: 0 !important;
-    transition: all 0.2s ease !important;
-  }
-  .vc-det-row:hover .vc-det-row-icon {
-    background: rgba(16, 185, 129, 0.12) !important;
-    border-color: rgba(16, 185, 129, 0.25) !important;
-    color: #34d399 !important;
-  }
-  .vc-det-row-icon svg {
-    width: 1rem !important;
-    height: 1rem !important;
-    stroke: currentColor !important;
-  }
-  .vc-det-row-info {
-    display: flex !important;
-    flex-direction: column !important;
-    min-width: 0 !important;
-    text-align: left !important;
-  }
-  .vc-det-row-name {
-    font-size: 0.815rem !important;
-    font-weight: 600 !important;
-    color: #ffffff !important;
-    letter-spacing: -0.01em !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    line-height: 1.3 !important;
-  }
-  .vc-det-row-date {
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.35rem !important;
-    font-size: 0.68rem !important;
-    color: #71717a !important;
-    margin-top: 0.1rem !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
-  .vc-det-row-calendar {
-    color: #a1a1aa !important;
-    text-transform: capitalize !important;
-  }
-  .vc-det-row-dot {
-    color: #52525b !important;
-  }
-  .vc-det-row-clock {
-    color: #71717a !important;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
-  }
-  .vc-det-badge {
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.35rem !important;
-    padding: 0.3rem 0.6rem !important;
-    border-radius: 0.55rem !important;
-    background: rgba(255, 255, 255, 0.04) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    color: #e4e4e7 !important;
-    font-size: 0.72rem !important;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
-    font-variant-numeric: tabular-nums !important;
-    font-weight: 600 !important;
-    flex-shrink: 0 !important;
-    transition: all 0.2s ease !important;
-  }
-  .vc-det-row:hover .vc-det-badge {
-    background: rgba(255, 255, 255, 0.08) !important;
-    border-color: rgba(255, 255, 255, 0.15) !important;
-    color: #ffffff !important;
-  }
-  .vc-det-badge svg {
-    width: 0.72rem !important;
-    height: 0.72rem !important;
-    color: #71717a !important;
-    stroke: currentColor !important;
-  }
-  .vc-det-empty {
-    padding: 3rem 1.5rem !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-  }
-  .vc-det-empty-icon {
-    width: 3rem !important;
-    height: 3rem !important;
-    border-radius: 1rem !important;
-    background: rgba(255, 255, 255, 0.04) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    color: #71717a !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    margin-bottom: 0.75rem !important;
-  }
-  .vc-det-empty-icon svg {
-    width: 1.5rem !important;
-    height: 1.5rem !important;
-  }
-  .vc-det-empty-title {
-    font-size: 0.875rem !important;
-    font-weight: 600 !important;
-    color: #d4d4d8 !important;
-    margin-bottom: 0.25rem !important;
-  }
-  .vc-det-empty-sub {
-    font-size: 0.75rem !important;
-    color: #71717a !important;
-    max-width: 240px !important;
-    line-height: 1.4 !important;
-  }
-
-
-  /* Floating Action Button (Mic FAB) - Permanently hidden per user request */
-  #vc-fab {
-    display: none !important;
-    pointer-events: none !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
-  }
-
-    /* Explicit rule for vc-bar-mobile regardless of media query */
-  #vc-bar.vc-bar-mobile {
-    bottom: calc(1.15rem + env(safe-area-inset-bottom, 0px)) !important;
-    left: 50% !important;
-    right: auto !important;
-    top: auto !important;
-    height: 3.25rem !important;
-    max-height: 3.25rem !important;
-    border-radius: 9999px !important;
-    background: rgba(18, 18, 22, 0.94) !important;
-    backdrop-filter: blur(24px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
-    padding: 0 0.65rem !important;
-    gap: 0.3rem !important;
-    width: calc(100vw - 142px) !important;
-    max-width: 228px !important;
-    min-width: min(228px, calc(100vw - 142px)) !important;
-    z-index: 9998 !important;
-    cursor: pointer !important;
-    user-select: none !important;
-    -webkit-user-select: none !important;
-    -webkit-tap-highlight-color: transparent !important;
-    transform-origin: center center !important;
-  }
-
-  #vc-bar.vc-bar-mobile:hover {
-    border-color: rgba(245, 158, 11, 0.45) !important;
-    box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.8), 0 0 20px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
-  }
-
-  #vc-bar.vc-bar-mobile:active {
-    transform: translate(-50%, 0) scale(0.96) !important;
-  }
-
-  #vc-bar.vc-bar-mobile.opacity-100,
-  #vc-bar.vc-bar-mobile.translate-y-0:not(.opacity-0) {
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    transform: translate(-50%, 0) scale(1) !important;
-  }
-
-  #vc-bar.vc-bar-mobile.opacity-0,
-  #vc-bar.vc-bar-mobile.translate-y-4,
-  body.menu-is-open #vc-bar.vc-bar-mobile,
-  body:has(#drawer-overlay.open) #vc-bar.vc-bar-mobile,
-  body:has(#drawer-overlay:not(.hidden)) #vc-bar.vc-bar-mobile,
-  body:has(#menu-panel.open) #vc-bar.vc-bar-mobile,
-  body.vc-open #vc-bar.vc-bar-mobile,
-  body.vc-is-open #vc-bar.vc-bar-mobile,
-  body:has(#vc-panel.scale-100) #vc-bar.vc-bar-mobile,
-  body:has(.vc-panel-base.scale-100) #vc-bar.vc-bar-mobile {
-    opacity: 0 !important;
-    pointer-events: none !important;
-    transform: translate(-50%, 20px) scale(0.92) !important;
-  }
-
-  #vc-bar.vc-bar-mobile .vc-bar-text-group {
-    min-width: 0 !important;
-    max-width: 74px !important;
-    flex-shrink: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
-  }
-
-  #vc-bar.vc-bar-mobile #vc-bar-title {
-    font-size: 7.5px !important;
-    font-weight: 800 !important;
-    letter-spacing: 0.03em !important;
-    line-height: 1 !important;
-    margin-bottom: 2px !important;
-    white-space: nowrap !important;
-  }
-
-  #vc-bar.vc-bar-mobile #vc-bar-sub {
-    font-size: 9px !important;
-    font-weight: 600 !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    display: block !important;
-    line-height: 1.1 !important;
-    max-width: 74px !important;
-  }
-
-  #vc-bar.vc-bar-mobile #vc-bar-icons {
-    gap: 0.2rem !important;
-  }
-
-  #vc-bar.vc-bar-mobile #vc-bar-chat-icon svg,
-  #vc-bar.vc-bar-mobile #vc-bar-music-icon svg {
-    width: 0.65rem !important;
-    height: 0.65rem !important;
-  }
-
-  #vc-bar.vc-bar-mobile #vc-bar-avatars {
-    position: static !important;
-    display: flex !important;
-    align-items: center !important;
-    margin-left: 0.35rem !important;
-    margin-right: 0.15rem !important;
-    padding: 0 !important;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    flex-shrink: 0 !important;
-  }
-
-  #vc-bar.vc-bar-mobile #vc-bar-avatars.hidden {
-    display: none !important;
-  }
-
-  #vc-bar.vc-bar-mobile #vc-bar-avatars > div {
-    width: 1.25rem !important;
-    height: 1.25rem !important;
-    font-size: 7px !important;
-    border-radius: 9999px !important;
-    border: 1.5px solid #121216 !important;
-    background: #18181b !important;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.45) !important;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
-    overflow: hidden !important;
-    flex-shrink: 0 !important;
-    margin-left: -0.35rem !important;
-  }
-
-  #vc-bar.vc-bar-mobile #vc-bar-avatars > div:first-child {
-    margin-left: 0 !important;
-  }
-
-  #vc-bar.vc-bar-mobile #vc-bar-avatars > div.ring-green-400 {
-    border-color: #22c55e !important;
-    box-shadow: 0 0 10px rgba(34, 197, 94, 0.95), 0 0 0 1.5px #22c55e !important;
-    transform: scale(1.15) !important;
-    z-index: 20 !important;
-  }
-
-  /* Desktop VC Bar: Passive floating status badge (no pointer cursor, no click) */
-  #vc-bar:not(.vc-bar-mobile) {
-    cursor: default !important;
-  }
-
-  /* Desktop Avatars: Dark sleek contour matching bar background */
-  #vc-bar:not(.vc-bar-mobile) #vc-bar-avatars > div {
-    border: 2px solid #09090b !important;
-    background: #18181b !important;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5) !important;
-  }
-
-  #vc-bar:not(.vc-bar-mobile) #vc-bar-avatars > div.ring-green-400 {
-    border-color: #22c55e !important;
-    box-shadow: 0 0 10px rgba(34, 197, 94, 0.95), 0 0 0 1.5px #22c55e !important;
-  }
-
-  #vc-bar.vc-bar-mobile .vc-bar-divider {
-    height: 1rem !important;
-    width: 1px !important;
-    background: rgba(255, 255, 255, 0.15) !important;
-    margin-left: auto !important;
-    margin-right: 0.25rem !important;
-    flex-shrink: 0 !important;
-  }
-
-  #vc-bar.vc-bar-mobile #vc-bar-timer {
-    font-size: 10.5px !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.01em !important;
-    font-variant-numeric: tabular-nums !important;
-    flex-shrink: 0 !important;
-  }
-
-  #vc-bar.vc-bar-mobile #vc-bar-indicator-bg {
-    width: 1.5rem !important;
-    height: 1.5rem !important;
-    flex-shrink: 0 !important;
-  }
-
-  @media (max-width: 360px) {
-    #vc-bar {
-      padding: 0 0.8rem !important;
-      gap: 0.45rem !important;
-      max-width: 190px !important;
-    }
-    #vc-bar .vc-bar-text-group {
-      max-width: 78px !important;
-    }
-  }
-
-  /* Hide floating bar and widget elements when hamburger menu is open */
-  body.menu-is-open #vc-bar,
-  body.menu-is-open #vc-fab,
-  body.menu-is-open #vc-wrapper,
-  body:has(#drawer-overlay.open) #vc-bar,
-  body:has(#drawer-overlay:not(.hidden)) #vc-bar,
-  body:has(#menu-panel.open) #vc-bar,
-  body.menu-is-open #vc-panel,
-  body:has(#drawer-overlay.open) #vc-panel {
-    opacity: 0 !important;
-    pointer-events: none !important;
-    transform: translateY(20px) scale(0.9) !important;
-    visibility: hidden !important;
-  }
-  `;
-
-  // ── ICONS ─────────────────────────────────────────────────────────────────
   const ICONS = {
+    close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m6 6 12 12M18 6 6 18"/></svg>',
+    arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 12h14m-5-5 5 5-5 5"/></svg>',
+    back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M19 12H5m5-5-5 5 5 5"/></svg>',
+    person: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg>',
+    people: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2m1-15a3 3 0 0 1 0 6m2 3a5 5 0 0 1 3 4v2"/></svg>',
+    logout: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 4H5v16h4m0-8h12m-4-4 4 4-4 4"/></svg>',
+    plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 5v14M5 12h14"/></svg>',
+    search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>',
+    google: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M21.6 12.2c0-.7-.1-1.4-.2-2.1H12v4h5.4a4.6 4.6 0 0 1-2 3v2.5h3.3c1.9-1.7 2.9-4.2 2.9-7.4Z"/><path fill="#34A853" d="M12 22c2.7 0 5-.9 6.7-2.4l-3.3-2.5c-.9.6-2.1 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3v2.6A10 10 0 0 0 12 22Z"/><path fill="#FBBC05" d="M6.4 14a6 6 0 0 1 0-4V7.4H3a10 10 0 0 0 0 9.2L6.4 14Z"/><path fill="#EA4335" d="M12 5.9c1.5 0 2.8.5 3.8 1.5l2.9-2.8A9.6 9.6 0 0 0 12 2a10 10 0 0 0-9 5.4L6.4 10c.8-2.3 3-4.1 5.6-4.1Z"/></svg>',
+
     mic: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`,
     micOff: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/><path d="M17 16.95A7 7 0 0 1 5 12v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`,
     phone: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.42 19.42 0 0 1 4.26 9.6a2 2 0 0 1 1-2.2 12.84 12.84 0 0 0 .7-2.81 2 2 0 0 1 2-1.72h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"/></svg>`,
@@ -1207,9 +581,9 @@
       this.dnd         = false;
       this.connected   = false;
       this._connecting = false;
+      this._joinAttempt = 0;
       this.users       = [];
       this._savedName  = null;
-      this._savedPass  = null;
       this._callStart  = null;
       this._timerInt   = null;
       this._analyser   = null;
@@ -1292,9 +666,10 @@
     // ── CSS ────────────────────────────────────────────────────────────────
     _injectCSS() {
       if (document.getElementById('vc-styles')) return;
-      const s = document.createElement('style');
+      const s = document.createElement('link');
       s.id = 'vc-styles';
-      s.textContent = CSS;
+      s.rel = 'stylesheet';
+      s.href = VOICE_STYLESHEET;
       document.head.appendChild(s);
     }
 
@@ -1615,7 +990,12 @@
 
       this.panel = document.createElement('div');
       this.panel.id = 'vc-panel';
-      this.panel.className = 'vc-panel-base select-none';
+      this.panel.className = 'vc-panel-base';
+      this.panel.setAttribute('role', 'dialog');
+      this.panel.setAttribute('aria-modal', 'true');
+      this.panel.setAttribute('aria-label', _t('vc_title'));
+      this.panel.setAttribute('tabindex', '-1');
+      this.panel.inert = true;
       this.panel.innerHTML = this._tplLogin();
 
       this._bar = document.createElement('div');
@@ -1654,11 +1034,13 @@
           <span id="vc-bar-timer" class="text-white font-mono text-[13px] font-bold tabular-nums tracking-wide">00:00</span>
         </div>
       `;
-      this._bar.addEventListener('click', () => {
-        if (this._checkMobile() || (this._bar && this._bar.classList.contains('vc-bar-mobile'))) {
-          this._toggle();
-        }
-      });
+      this._bar.setAttribute('role', 'button');
+      this._bar.inert = true;
+      this._bar.setAttribute('aria-hidden', 'true');
+      this._bar.setAttribute('tabindex', '-1');
+      this._bar.setAttribute('aria-label', _t('room_open'));
+      this._bar.addEventListener('click', () => this.open());
+      this._bar.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.open(); } });
 
       document.body.appendChild(this.fab);
       document.body.appendChild(this.panel);
@@ -1686,12 +1068,22 @@
         }
       };
 
-      const bodyObserver = new MutationObserver(checkMenuState);
+      const barObserver = new MutationObserver(() => this._syncBarAccessibility());
+      barObserver.observe(this._bar, { attributes: true, attributeFilter: ['class'] });
+      const panelObserver = new MutationObserver(() => this._syncBarAccessibility());
+      panelObserver.observe(this.panel, { attributes: true, attributeFilter: ['class'] });
+      const bodyObserver = new MutationObserver(() => { checkMenuState(); this._syncBarAccessibility(); });
       bodyObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
       this.panel.addEventListener('click', (e) => e.stopPropagation());
 
       document.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab' && !this.panel.inert && !document.getElementById('vc-detailed-history')) {
+          const items = Array.from(this.panel.querySelectorAll('button:not(:disabled), input:not([type=hidden]), [tabindex="0"]')).filter(el => !el.closest('[hidden], [inert]'));
+          const first = items[0], last = items[items.length - 1];
+          if (e.shiftKey && (document.activeElement === first || !this.panel.contains(document.activeElement))) { e.preventDefault(); last?.focus(); }
+          else if (!e.shiftKey && (document.activeElement === last || !this.panel.contains(document.activeElement))) { e.preventDefault(); first?.focus(); }
+        }
         if (e.key === 'Escape') {
           const detHist = document.getElementById('vc-detailed-history');
           if (detHist) {
@@ -1804,7 +1196,7 @@
         if (!this.panel.classList.contains('open') && !this.panel.classList.contains('scale-100')) return;
         if (this._openingLock) return;
         if (this.panel.contains(e.target) || this.fab.contains(e.target) || (this._bar && this._bar.contains(e.target))) return;
-        if (e.target.closest && (e.target.closest('#auth-btn-goto-vc') || e.target.closest('#auth-menu'))) return;
+        if (e.target.closest && (e.target.closest('#auth-btn-goto-vc') || e.target.closest('#auth-menu') || e.target.closest('#vc-user-ctx-menu'))) return;
         if (_panelMousedown) return;
         if (window.getSelection && window.getSelection().toString()) return;
         if (document.getElementById('vc-detailed-history')) return;
@@ -1843,6 +1235,7 @@
     }
 
     _toggle() {
+      this._dismissParticipantMenu?.();
       const willOpen = !this.panel.classList.contains('open') && !this.panel.classList.contains('scale-100');
       
       // Close hamburger menu if open
@@ -1851,6 +1244,8 @@
       }
 
       if (willOpen) {
+        this._previousFocus = document.activeElement;
+        this.panel.inert = false;
         document.body.classList.add('vc-open', 'vc-is-open');
         const hdr = document.querySelector('header');
         if (hdr) {
@@ -1891,7 +1286,9 @@
             this._render(this._tplLogin());
           }
         }
+        requestAnimationFrame(() => this.panel.querySelector('#vc-close')?.focus({ preventScroll: true }));
       } else {
+        this.panel.inert = true;
         document.body.classList.remove('vc-open', 'vc-is-open');
         const hdr = document.querySelector('header');
         if (hdr && !document.body.classList.contains('menu-is-open')) {
@@ -1929,8 +1326,22 @@
             this._bar.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
           }
         }
+        requestAnimationFrame(() => {
+          const previous = this._previousFocus;
+          const visible = previous?.isConnected && previous.getClientRects().length && getComputedStyle(previous).visibility !== 'hidden';
+          const target = visible ? previous : document.getElementById('auth-toggle') || (this.connected ? this._bar : null);
+          target?.focus?.({ preventScroll: true });
+        });
         this._playSfx('flyout', 0.4, false, 'fly');
       }
+    }
+
+    _syncBarAccessibility() {
+      if (!this._bar) return;
+      const visible = this.connected && !this.panel.classList.contains('open') && !this.panel.classList.contains('scale-100') && !document.body.classList.contains('menu-is-open') && this._bar.classList.contains('opacity-100') && !this._bar.classList.contains('opacity-0');
+      this._bar.inert = !visible;
+      this._bar.setAttribute('aria-hidden', String(!visible));
+      this._bar.setAttribute('tabindex', visible ? '0' : '-1');
     }
 
     open() {
@@ -2016,244 +1427,70 @@
     }
 
     // ── TEMPLATES ──────────────────────────────────────────────────────────
+    _tplHeader() {
+      return `<div class="vc-panel-header" id="vc-panel-header">
+        <div class="vc-brand"><span class="vc-brand-mark">28E</span><span class="vc-brand-divider"></span><span>${_t('vc_title')}</span></div>
+        <button class="vc-icon-button" id="vc-close" aria-label="${_t('room_close')}" title="${_t('room_close')}">${ICONS.close}</button>
+      </div>`;
+    }
+
+    _avatarMarkup(user, className = '') {
+      const name = String(user?.displayName || this.myName || '?');
+      const initials = name.trim().split(/\s+/).slice(0, 2).map(part => Array.from(part)[0] || '').join('').toUpperCase();
+      let photo = '';
+      try {
+        const url = new URL(user?.photoURL || '', document.baseURI);
+        if (user?.photoURL && ['https:', 'http:'].includes(url.protocol)) photo = url.href;
+      } catch {}
+      return `<span class="vc-avatar ${className}"><span>${this._escHtml(initials)}</span>${photo ? `<img src="${this._escHtml(photo)}" alt="" referrerpolicy="no-referrer" draggable="false" />` : ''}</span>`;
+    }
+
     _tplLogin(err = '') {
       const user = window.yaireCurrentUser;
-      if (!user) {
-        return `
-          <div class="relative overflow-hidden flex flex-col h-full select-none">
-            <!-- Top Header (matches 28E hamburger drawer header) -->
-            <div class="px-6 pt-6 pb-4 flex items-center justify-between border-b border-white/[0.07] shrink-0 vc-panel-header">
-              <div class="flex items-center gap-2.5">
-                <span class="font-extrabold text-2xl tracking-tighter text-white select-none">28E</span>
-                <span class="text-zinc-600 font-light text-base select-none">/</span>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                  <span class="text-xs font-semibold text-zinc-300 tracking-wide uppercase">Voz</span>
-                </div>
-              </div>
-              <div class="flex items-center gap-1.5">
-                <button id="vc-close" title="Cerrar canal" aria-label="Cerrar canal"
-                  class="w-8 h-8 rounded-full bg-white/[0.06] hover:bg-white/[0.15] text-zinc-400 hover:text-white flex items-center justify-center transition-all duration-200 border border-white/10 hover:border-white/20 active:scale-95 cursor-pointer">
-                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            
-            <!-- Body -->
-            <div class="flex-1 overflow-y-auto px-6 py-8 letter-scroll flex flex-col justify-center items-center text-center">
-              <p class="text-[10px] font-bold tracking-[0.18em] uppercase text-zinc-500 mb-4 flex items-center justify-center gap-1.5">✦ SEGURIDAD</p>
-
-              <div class="w-16 h-16 rounded-2xl bg-white/[0.04] border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.6)] flex items-center justify-center text-zinc-200 mb-5 mx-auto relative group">
-                <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-rose-500/10 to-transparent opacity-60"></div>
-                <svg class="w-7 h-7 relative z-10 text-zinc-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="5" y="11" width="14" height="10" rx="2"></rect>
-                  <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
-                </svg>
-              </div>
-
-              <h3 class="text-white font-black text-2xl tracking-tight mb-2">${_t('vc_restricted')}</h3>
-              <p class="text-zinc-400 text-sm leading-relaxed max-w-[280px] mx-auto mb-8">${_t('vc_req_login')}</p>
-              
-              <button id="vc-google-login-btn" class="w-full max-w-[320px] flex items-center justify-center gap-3 bg-white/[0.07] hover:bg-white/[0.14] active:bg-white/[0.2] border border-white/12 hover:border-white/25 text-white font-semibold text-sm py-3.5 px-5 rounded-2xl shadow-xl transition-all duration-200 active:scale-[0.98] cursor-pointer group">
-                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-4 h-4 group-hover:scale-105 transition-transform" />
-                  <span>${_t('vc_login_google')}</span>
-              </button>
-
-              <div class="w-full max-w-[320px] mt-8 pt-6 border-t border-white/[0.06] flex flex-col gap-3.5 text-left">
-                <div class="flex items-center gap-3 text-xs text-zinc-400">
-                  <span class="text-base select-none shrink-0">🎙️</span>
-                  <span>Audio HD en tiempo real sin latencia</span>
-                </div>
-                <div class="flex items-center gap-3 text-xs text-zinc-400">
-                  <span class="text-base select-none shrink-0">💬</span>
-                  <span>Chat sincronizado en vivo</span>
-                </div>
-                <div class="flex items-center gap-3 text-xs text-zinc-400">
-                  <span class="text-base select-none shrink-0">🔒</span>
-                  <span>Canal privado exclusivo para ustedes</span>
-                </div>
-              </div>
-            </div>
-          </div>`;
-      }
-
-      return `
-        <div class="relative overflow-hidden flex flex-col h-full select-none">
-          <!-- Top Header (matches 28E hamburger drawer header) -->
-          <div class="px-6 pt-6 pb-4 flex items-center justify-between border-b border-white/[0.07] shrink-0 vc-panel-header">
-            <div class="flex items-center gap-2.5">
-              <span class="font-extrabold text-2xl tracking-tighter text-white select-none">28E</span>
-              <span class="text-zinc-600 font-light text-base select-none">/</span>
-              <div class="flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="text-xs font-semibold text-zinc-300 tracking-wide uppercase">Voz</span>
-              </div>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <button id="vc-close" title="Cerrar canal" aria-label="Cerrar canal"
-                class="w-8 h-8 rounded-full bg-white/[0.06] hover:bg-white/[0.15] text-zinc-400 hover:text-white flex items-center justify-center transition-all duration-200 border border-white/10 hover:border-white/20 active:scale-95 cursor-pointer">
-                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </button>
-            </div>
+      return `<div class="vc-screen vc-lobby-screen">
+        ${this._tplHeader()}
+        <div class="vc-lobby vc-scroll">
+          <div class="vc-lobby-intro"><h1 id="vc-room-title">${_t(user ? 'room_hero' : 'room_auth_title')}</h1><p>${_t(user ? 'room_intro' : 'room_auth_desc')}</p></div>
+          <div class="vc-lobby-presence" aria-hidden="true">
+            ${user ? this._avatarMarkup(user, 'vc-avatar-lobby') : `<span class="vc-avatar vc-avatar-lobby">${ICONS.mic}</span>`}
+            <span class="vc-presence-connector"></span>
+            <span class="vc-avatar vc-avatar-vacant">${ICONS.person}</span>
           </div>
-          
-          <!-- Minimalist Lobby Body (compact, fits without scrollbar) -->
-          <div class="vc-lobby-container">
-            <!-- Profile Card -->
-            <div class="vc-lobby-user-card">
-              <div class="vc-lobby-user-left">
-                <div class="vc-lobby-avatar-wrap">
-                  <img src="${user.photoURL}" alt="${user.displayName}" class="vc-lobby-avatar" draggable="false" />
-                  <span class="vc-lobby-status-dot"></span>
-                </div>
-                <div class="vc-lobby-user-info">
-                  <div class="vc-lobby-user-name">${user.displayName}</div>
-                  <div class="vc-lobby-user-meta">
-                    <span class="vc-pill-online">En línea</span>
-                    ${user.email ? `<span class="text-zinc-600">·</span><span class="truncate max-w-[130px]">${user.email}</span>` : ''}
-                  </div>
-                </div>
-              </div>
-              <button id="vc-logout-btn" title="Cerrar sesión" class="vc-lobby-logout-btn" aria-label="Cerrar sesión">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                  <polyline points="16 17 21 12 16 7"></polyline>
-                  <line x1="21" y1="12" x2="9" y2="12"></line>
-                </svg>
-              </button>
-            </div>
-
-            <!-- Join CTA & Status -->
-            <input id="vc-name" type="hidden" value="${user.displayName}"/>
-            <input id="vc-pass" type="hidden" value="nopass"/>
-
-            <button id="vc-join">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                <line x1="12" y1="19" x2="12" y2="23"/>
-                <line x1="8" y1="23" x2="16" y2="23"/>
-              </svg>
-              <span>${_t('btn_join')}</span>
-            </button>
-            
-            <div id="vc-conn-count" class="opacity-0"></div>
-            <div class="text-rose-400 text-xs text-center font-medium empty:hidden" id="vc-err">${err}</div>
-
-            <!-- Integrated History -->
-            ${this._tplHistory()}
+          <div class="vc-lobby-room"><h2>${_t('room_name')}</h2><p>${_t('room_capacity')}</p>
+            ${user ? `<div id="vc-conn-count" class="vc-presence-status" role="status">${_t('room_checking')}</div>` : ''}
           </div>
-        </div>`;
+          ${user ? this._tplHistory() : ''}
+        </div>
+        <div class="vc-lobby-footer">
+          ${user ? `<div class="vc-identity">${this._avatarMarkup(user)}<div class="vc-identity-info"><strong>${this._escHtml(user.displayName || '28E')}</strong><span>${this._escHtml(user.email || _t('room_account'))}</span></div><button id="vc-logout-btn" class="vc-icon-button" title="${_t('room_logout')}" aria-label="${_t('room_logout')}">${ICONS.logout}</button></div>
+            <input id="vc-name" type="hidden" value="${this._escHtml(user.displayName || '28E')}" />
+            <button id="vc-join" class="vc-primary">${ICONS.mic}<span>${_t('room_join')}</span>${ICONS.arrow}</button>
+            <p class="vc-footnote">${_t('room_mic_hint')}</p>` : `<button id="vc-google-login-btn" class="vc-primary vc-google-button">${ICONS.google}<span>${_t('room_google')}</span>${ICONS.arrow}</button>`}
+          <p class="vc-error" id="vc-err" role="alert">${this._escHtml(err)}</p>
+        </div>
+      </div>`;
     }
 
     _tplLoading() {
-      return `
-        <div class="relative overflow-hidden flex flex-col h-full select-none">
-          <div class="px-6 pt-6 pb-4 flex items-center justify-between border-b border-white/[0.07] shrink-0 vc-panel-header">
-            <div class="flex items-center gap-2.5">
-              <span class="font-extrabold text-2xl tracking-tighter text-white select-none">28E</span>
-              <span class="text-zinc-600 font-light text-base select-none">/</span>
-              <div class="flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-                <span class="text-xs font-semibold text-zinc-300 tracking-wide uppercase">${_t('st_conn')}</span>
-              </div>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <button id="vc-close" title="Cerrar canal" aria-label="Cerrar canal"
-                class="w-8 h-8 rounded-full bg-white/[0.06] hover:bg-white/[0.15] text-zinc-400 hover:text-white flex items-center justify-center transition-all duration-200 border border-white/10 hover:border-white/20 active:scale-95 cursor-pointer">
-                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </button>
-            </div>
-          </div>
-          
-          <div class="p-10 flex-1 flex flex-col items-center justify-center">
-            <div class="w-10 h-10 rounded-full mb-4 animate-spin" style="border: 2.5px solid rgba(255,255,255,0.15); border-top-color: #f59e0b;"></div>
-            <div class="text-zinc-400 text-xs font-medium tracking-wide animate-pulse mb-6">${_t('st_estab')}</div>
-            <button id="vc-cancel-conn" class="py-2 px-5 rounded-xl text-xs font-semibold text-zinc-400 hover:text-white bg-white/[0.05] hover:bg-white/10 border border-white/10 transition-colors cursor-pointer">
-              Cancelar
-            </button>
-          </div>
-        </div>`;
+      return `<div class="vc-screen">${this._tplHeader()}<div class="vc-state-screen" role="status" aria-live="polite">
+        <div class="vc-connecting-avatar">${this._avatarMarkup(window.yaireCurrentUser, 'vc-avatar-lobby')}<span class="vc-connecting-orbit"></span></div>
+        <h1 id="vc-room-title">${_t('room_loading')}</h1><p>${_t('room_loading_desc')}</p>
+        <button id="vc-cancel-conn" class="vc-secondary">${_t('room_cancel')}</button>
+      </div></div>`;
     }
 
     _tplDisconnected() {
-      return `
-        <div class="relative overflow-hidden flex flex-col h-full select-none">
-          <div class="px-6 pt-6 pb-4 flex items-center justify-between border-b border-white/[0.07] shrink-0 vc-panel-header">
-            <div class="flex items-center gap-2.5">
-              <span class="font-extrabold text-2xl tracking-tighter text-white select-none">28E</span>
-              <span class="text-zinc-600 font-light text-base select-none">/</span>
-              <div class="flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-                <span class="text-xs font-semibold text-rose-400 tracking-wide uppercase">${_t('st_disc')}</span>
-              </div>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <button id="vc-close" title="Cerrar canal" aria-label="Cerrar canal"
-                class="w-8 h-8 rounded-full bg-white/[0.06] hover:bg-white/[0.15] text-zinc-400 hover:text-white flex items-center justify-center transition-all duration-200 border border-white/10 hover:border-white/20 active:scale-95 cursor-pointer">
-                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </button>
-            </div>
-          </div>
-          
-          <div class="p-8 flex-1 flex flex-col justify-center items-center text-center">
-            <div class="w-14 h-14 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center mb-4 border border-rose-500/20 shadow-[0_0_30px_rgba(244,63,94,0.15)]">
-               <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-            </div>
-            <p class="text-zinc-400 text-xs mb-6 leading-relaxed max-w-[250px] mx-auto">${_t('msg_disc')}</p>
-            <button id="vc-reconnect" class="w-full py-3 bg-rose-500 hover:bg-rose-400 text-white font-bold text-sm rounded-xl transition-all shadow-lg active:scale-[0.98] cursor-pointer">
-              ${_t('btn_reconn')}
-            </button>
-          </div>
-        </div>`;
+      return `<div class="vc-screen">${this._tplHeader()}<div class="vc-state-screen">
+        <span class="vc-state-symbol vc-state-error">${ICONS.phone}</span><h1 id="vc-room-title">${_t('room_retry_title')}</h1>
+        <p role="status">${_t('room_retry_desc')}</p><button id="vc-reconnect" class="vc-primary">${ICONS.mic}<span>${_t('btn_reconn')}</span>${ICONS.arrow}</button>
+      </div></div>`;
     }
 
     _tplHistory() {
       const h = window.yaireVcHistoryData || [];
-      if (!window.yaireCurrentUser || !h.length) return '';
-      const lang = _getLang();
-      const rows = h.slice(0, 3).map(s => {
-        const d = new Date(s.date);
-        const label = d.toLocaleDateString(lang, { month: 'short', day: 'numeric' }) + ' ' + d.toLocaleTimeString(lang, { hour: '2-digit', minute: '2-digit' });
-        const m = Math.floor(s.duration / 60), sec = s.duration % 60;
-        return `
-          <div class="vc-hist-row">
-            <span class="vc-hist-name">
-              <svg class="w-3.5 h-3.5 text-zinc-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-              </svg>
-              <span class="truncate">${s.name}</span>
-            </span>
-            <span class="vc-hist-time">${label} · ${m}m ${sec}s</span>
-          </div>`;
-      }).join('');
-      const moreBtn = h.length > 3 ? `
-        <button id="vc-btn-ver-mas" class="group">
-          <span>${_t('vc_hist_more')}</span>
-          <span class="text-xs opacity-60 group-hover:opacity-100 transition-opacity">→</span>
-        </button>` : '';
-      return `
-        <div class="vc-lobby-history-box">
-          <div class="vc-hist-title">
-            <span>✦ ${_t('hist_title')}</span>
-          </div>
-          <div class="flex flex-col gap-0.5 w-full">
-            ${rows}
-          </div>
-          ${moreBtn}
-        </div>`;
+      const last = h[0];
+      const date = last ? new Date(last.date).toLocaleDateString(_getLang(), { day: 'numeric', month: 'short' }) : '';
+      return `<button class="vc-history-preview" id="vc-btn-ver-mas">${ICONS.clock}<span><strong>${_t('room_history')}</strong><small>${last ? `${this._escHtml(last.name || '28E')} · ${date}` : _t('room_no_history')}</small></span>${ICONS.arrow}</button>`;
     }
 
     _showDetailedHistory() {
@@ -2271,8 +1508,8 @@
                 <polyline points="12 6 12 12 16 14"></polyline>
               </svg>
             </div>
-            <div class="vc-det-empty-title">Sin sesiones registradas</div>
-            <div class="vc-det-empty-sub">Las llamadas y conexiones de voz aparecerán aquí una vez finalizadas.</div>
+            <div class="vc-det-empty-title">${_t('room_no_history')}</div>
+            <div class="vc-det-empty-sub">${_t('room_history_empty')}</div>
           </div>
         `;
       } else {
@@ -2293,7 +1530,7 @@
                   </svg>
                 </div>
                 <div class="vc-det-row-info">
-                  <div class="vc-det-row-name">${s.name || 'Sesión de voz'}</div>
+                  <div class="vc-det-row-name">${this._escHtml(s.name || _t('room_name'))}</div>
                   <div class="vc-det-row-date">
                     <span class="vc-det-row-calendar">${cleanDate}</span>
                     <span class="vc-det-row-dot">·</span>
@@ -2316,6 +1553,10 @@
       const modal = document.createElement('div');
       modal.id = 'vc-detailed-history';
       modal.className = 'opacity-0';
+      modal.setAttribute('role', 'dialog');
+      modal.setAttribute('aria-modal', 'true');
+      modal.setAttribute('aria-label', _t('vc_hist_full'));
+      this.panel.inert = true;
       modal.innerHTML = `
         <div id="vc-det-bg"></div>
         <div id="vc-det-card">
@@ -2324,11 +1565,11 @@
               <span class="vc-det-brand">28E</span>
               <span class="vc-det-slash">/</span>
               <div class="vc-det-title-group">
-                <span class="vc-det-title">${_t('vc_hist_full') || 'Historial'}</span>
+                <span class="vc-det-title">${_t('vc_hist_full')}</span>
                 <span class="vc-det-count">${h.length} ${h.length === 1 ? 'sesión' : 'sesiones'}</span>
               </div>
             </div>
-            <button id="vc-det-close" title="Cerrar historial" aria-label="Cerrar historial" class="vc-det-close-btn">
+            <button id="vc-det-close" title="${_t('room_close_history')}" aria-label="${_t('room_close_history')}" class="vc-det-close-btn">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -2346,6 +1587,7 @@
       requestAnimationFrame(() => {
         modal.classList.remove('opacity-0');
         modal.classList.add('open');
+        modal.querySelector('#vc-det-close')?.focus();
         if (window.__28EGamepad && typeof window.__28EGamepad.onVoiceHistoryOpened === 'function') {
           window.__28EGamepad.onVoiceHistoryOpened();
         }
@@ -2353,6 +1595,8 @@
 
       const closeFunc = () => {
         window.removeEventListener('keydown', onKey);
+        this.panel.inert = false;
+        this.panel.querySelector('#vc-btn-ver-mas')?.focus();
         modal.classList.remove('open');
         modal.classList.add('opacity-0');
         if (window.__28EGamepad && typeof window.__28EGamepad.onVoiceHistoryClosed === 'function') {
@@ -2362,6 +1606,7 @@
       };
 
       const onKey = (e) => {
+        if (e.key === 'Tab') { e.preventDefault(); modal.querySelector('#vc-det-close')?.focus(); }
         if (e.key === 'Escape') closeFunc();
       };
       window.addEventListener('keydown', onKey);
@@ -2370,321 +1615,126 @@
       modal.querySelector('#vc-det-bg').addEventListener('click', closeFunc);
     }
 
+    _tplParticipant(u) {
+      const isMe = u.id === this.myId;
+      const muted = isMe ? this.muted : u.muted;
+      const dnd = isMe ? this.dnd : u.dnd;
+      const user = { displayName: u.displayName, photoURL: u.photoURL || (isMe ? window.yaireCurrentUser?.photoURL : '') };
+      return `<div class="vc-user" id="vc-u-${this._escHtml(u.id)}">
+        <div class="vc-participant-avatar-wrap"><div class="vc-av" id="vc-av-${this._escHtml(u.id)}">${this._avatarMarkup(user)}</div><span class="vc-icons-container">${this._participantIcons(muted || u.localMuted, dnd)}</span></div>
+        <div class="vc-participant-name"><strong>${this._escHtml(u.displayName)}</strong>${isMe ? `<span>${_t('tag_you')}</span>` : ''}</div>
+        <span class="vc-participant-state">${_t(muted || u.localMuted ? 'room_mic_off' : dnd ? 'room_deafened' : 'room_mic_on')}</span>
+        ${!isMe ? `<button class="vc-participant-options vc-icon-button" data-user-options="${this._escHtml(u.id)}" aria-label="${_t('room_options')}: ${this._escHtml(u.displayName)}" title="${_t('room_options')}">···</button>` : ''}
+      </div>`;
+    }
+
+    _participantIcons(muted, dnd) {
+      return `${muted ? `<span class="vc-mico" title="${_t('room_mic_off')}">${ICONS.micOff}</span>` : ''}${dnd ? `<span class="vc-dico" title="${_t('room_deafened')}">${ICONS.dnd}</span>` : ''}`;
+    }
+
     _tplConnected() {
-      let userRowsHtml = '';
-      if (this.users.length > 0) {
-        userRowsHtml = '<div id="vc-users-group" class="vc-users-group bg-white/[0.04] rounded-2xl overflow-hidden shadow-sm">';
-        this.users.forEach(u => {
-          const isMe = u.id === this.myId;
-          const isMuted = isMe ? this.muted : u.muted;
-          const isDnd   = isMe ? this.dnd   : u.dnd;
-          const avatarHtml = (u.photoURL || (isMe && window.yaireCurrentUser?.photoURL)) 
-            ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" class="w-full h-full rounded-full object-cover" draggable="false" />` 
-            : u.displayName.slice(0, 2).toUpperCase();
-            
-          userRowsHtml += `
-            <div class="flex items-center gap-3.5 px-3.5 py-3 vc-user group select-none transition-colors" id="vc-u-${u.id}">
-              <div class="w-9 h-9 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold transition-all relative border border-white/10 ${isMe ? 'bg-white/10 text-white' : 'bg-white/5 text-zinc-300'} vc-av" id="vc-av-${u.id}">
-                ${avatarHtml}
-              </div>
-              <div class="flex-1 min-w-0 flex items-center gap-2">
-                <div class="text-zinc-200 text-sm font-medium truncate">${u.displayName}</div>
-                ${isMe ? `<span class="text-[9px] font-bold tracking-wider text-zinc-400 bg-white/10 px-2 py-0.5 rounded-full flex-shrink-0">${_t('tag_you')}</span>` : ''}
-                <div class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399] flex-shrink-0 transition-colors duration-300" id="vc-ping-${u.id}" title="Conexión excelente"></div>
-              </div>
-              <div class="flex items-center gap-1.5 pr-0.5 opacity-100 vc-icons-container">
-                ${isDnd ? `<span class="flex items-center justify-center w-6 h-6 rounded-lg bg-purple-500/15 text-purple-400 vc-dico" title="${_t('btn_dnd')}"><span class="w-3.5 h-3.5 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5">${ICONS.dnd}</span></span>` : ''}
-                ${(isMuted || u.localMuted) ? `<span class="flex items-center justify-center w-6 h-6 rounded-lg bg-rose-500/15 text-rose-400 vc-mico" title="${u.localMuted ? 'Silenciado localmente' : 'Silenciado'}"><span class="w-3.5 h-3.5 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5">${ICONS.micOff}</span></span>` : ''}
-              </div>
+      const tab = this._activeTab;
+      const tabs = [['room', 'vc_tab_room', 'people'], ['chat', 'vc_chat', 'chat'], ['music', 'vc_music', 'music']];
+      const count = this.users.length;
+      const elapsed = this._callStart ? Math.max(0, Math.floor((Date.now() - this._callStart) / 1000)) : 0;
+      const timer = `${String(Math.floor(elapsed / 60)).padStart(2, '0')}:${String(elapsed % 60).padStart(2, '0')}`;
+      return `<div class="vc-screen vc-connected-screen">
+        ${this._tplHeader()}
+        <div class="vc-room-heading"><div><h1 id="vc-room-title">${_t('room_name')}</h1><p class="vc-room-status"><span class="vc-status-dot"></span>${_t('room_you_in')}<span class="vc-heading-count" id="vc-member-count">${count}/4</span></p></div><span id="vc-timer" class="vc-timer">${timer}</span></div>
+        <div class="vc-tabs" role="tablist" aria-label="${_t('vc_title')}">${tabs.map(([id, key, icon]) => `<button class="vc-tab" id="vc-tab-${id}" role="tab" aria-selected="${tab === id}" aria-controls="vc-content-${id}" tabindex="${tab === id ? '0' : '-1'}">${ICONS[icon]}<span>${_t(key)}</span>${id === 'chat' && this._chatUnread ? `<span class="vc-unread">${this._chatUnread > 9 ? '9+' : this._chatUnread}</span>` : ''}${id === 'music' && this._musicPlaying ? '<span class="vc-music-ind vc-status-dot"></span>' : ''}</button>`).join('')}</div>
+        <div class="vc-main-content">
+          <section id="vc-content-room" class="vc-tab-content" role="tabpanel" aria-labelledby="vc-tab-room" ${tab !== 'room' ? 'hidden inert' : ''}>
+            <div class="vc-sect vc-scroll"><div id="vc-users-group" class="vc-users-group" aria-label="${_t('room_people')}">${this.users.map(u => this._tplParticipant(u)).join('')}</div>
+              <p class="vc-room-hint">${_t(count < 2 ? 'room_waiting' : 'room_ready')}</p>
             </div>
-          `;
-        });
-        userRowsHtml += '</div>';
-      } else {
-        userRowsHtml = `<div class="text-center text-white/20 text-xs py-8 vc-empty">${_t('empty_chan')}</div>`;
-      }
-
-      // Render tab contents based on _activeTab state
-      const isRoom = this._activeTab === 'room';
-      const isChat = this._activeTab === 'chat';
-      const isMusic = this._activeTab === 'music';
-
-      return `
-        <!-- Header (matches 28E hamburger drawer header) -->
-        <div class="px-6 pt-6 pb-4 flex items-center justify-between border-b border-white/[0.07] shrink-0 vc-panel-header" id="vc-panel-header">
-          <div class="flex items-center gap-2.5">
-            <span class="font-extrabold text-2xl tracking-tighter text-white select-none">28E</span>
-            <span class="text-zinc-600 font-light text-base select-none">/</span>
-            <div class="flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span class="text-xs font-semibold text-emerald-400 tracking-wide uppercase">#principal</span>
-              <span class="text-zinc-500 font-medium text-[11px]">·</span>
-              <span id="vc-timer" class="tabular-nums font-mono text-[11px] text-zinc-400 vc-timer">00:00</span>
-            </div>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <button id="vc-close" title="Cerrar canal" aria-label="Cerrar canal"
-              class="w-8 h-8 rounded-full bg-white/[0.06] hover:bg-white/[0.15] text-zinc-400 hover:text-white flex items-center justify-center transition-all duration-200 border border-white/10 hover:border-white/20 active:scale-95 cursor-pointer">
-              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-          </div>
+            <p class="vc-minimize-hint">${ICONS.sound}<span>${_t('room_minimize_hint')}</span></p>
+          </section>
+          <section id="vc-content-chat" class="vc-tab-content" role="tabpanel" aria-labelledby="vc-tab-chat" ${tab !== 'chat' ? 'hidden inert' : ''}>
+            <div id="vc-msgs" class="vc-scroll" role="log" aria-live="polite" aria-label="${_t('vc_chat')}">${this._renderChatMsgs()}</div>
+            <div id="vc-chat-typing" class="vc-typing hidden" role="status"></div>
+            <div class="vc-chat-composer"><input id="vc-chat-in" aria-label="${_t('vc_chat_ph')}" type="text" placeholder="${_t('vc_chat_ph')}" autocomplete="off" maxlength="2000" enterkeyhint="send" /><button id="vc-chat-send" class="vc-icon-button vc-send-button" aria-label="${_t('room_send')}">${ICONS.arrow}</button></div>
+          </section>
+          <section id="vc-content-music" class="vc-tab-content" role="tabpanel" aria-labelledby="vc-tab-music" ${tab !== 'music' ? 'hidden inert' : ''}><div class="vc-scroll" id="vc-music-inner">${this._renderMusicPanel()}</div></section>
         </div>
-
-        <!-- Navigation Tabs (segmented control matching Image 2) -->
-        <div class="px-5 pt-3 pb-2">
-          <div class="flex items-center p-1 bg-white/[0.04] border border-white/[0.06] rounded-xl gap-1">
-            <button class="flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${isRoom ? 'bg-white/[0.12] text-white shadow-sm border border-white/10' : 'text-zinc-400 hover:text-white'}" id="vc-tab-room">
-               ${_t('vc_tab_room')}
-            </button>
-            <button class="flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all relative ${isChat ? 'bg-white/[0.12] text-white shadow-sm border border-white/10' : 'text-zinc-400 hover:text-white'}" id="vc-tab-chat">
-               ${_t('vc_chat')} ${this._chatUnread > 0 ? `<span class="absolute top-1 right-2 w-1.5 h-1.5 bg-rose-500 rounded-full"></span>` : ''}
-            </button>
-            <button class="flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 ${isMusic ? 'bg-white/[0.12] text-white shadow-sm border border-white/10' : 'text-zinc-400 hover:text-white'}" id="vc-tab-music">
-               ${_t('vc_music')} ${this._musicPlaying ? `<div class="flex items-end gap-[1px] h-2.5 vc-music-ind">
-                 <div class="w-[2px] bg-rose-400 animate-[vc-eq_0.8s_ease-in-out_infinite]"></div>
-                 <div class="w-[2px] bg-rose-400 animate-[vc-eq_0.8s_ease-in-out_infinite_0.2s]"></div>
-                 <div class="w-[2px] bg-rose-400 animate-[vc-eq_0.8s_ease-in-out_infinite_0.4s]"></div>
-               </div>` : ''}
-            </button>
-          </div>
+        <div class="vc-call-controls" role="group" aria-label="${_t('vc_title')}">
+          <button id="vc-mute" class="vc-call-button" aria-pressed="${this.muted}" aria-label="${_t(this.muted ? 'room_mic_on' : 'room_mic_off')}">${this.muted ? ICONS.micOff : ICONS.mic}<span>${_t(this.muted ? 'btn_muted' : 'btn_mic')}</span></button>
+          <button id="vc-dnd" class="vc-call-button" aria-pressed="${this.dnd}" aria-label="${_t(this.dnd ? 'room_undeafen' : 'room_deafen')}">${this.dnd ? ICONS.dnd : ICONS.bell}<span>${_t(this.dnd ? 'room_deafened' : 'room_deafen')}</span></button>
+          <button id="vc-leave" class="vc-call-button vc-leave-button" title="${_t('room_leave')}" aria-label="${_t('room_leave')}">${ICONS.phone}<span>${_t('btn_leave')}</span></button>
         </div>
-
-        <!-- Main Content Area -->
-        <div class="flex-1 relative overflow-hidden vc-main-content">
-          
-          <!-- ROOM TAB -->
-          <div class="absolute inset-0 flex flex-col ${isRoom ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 -translate-x-8 pointer-events-none'}" id="vc-content-room">
-            <div class="flex-1 overflow-y-auto px-5 py-2 vc-scroll vc-sect letter-scroll">
-              <div class="text-[10px] text-zinc-500 font-bold uppercase tracking-[0.18em] mb-2 px-1 mt-1 vc-sect-lbl">✦ ${_t('sect_in')}</div>
-              ${userRowsHtml}
-            </div>
-          </div>
-
-          <!-- CHAT TAB -->
-          <div class="absolute inset-0 flex flex-col ${isChat ? 'opacity-100 translate-x-0 pointer-events-auto' : (isRoom ? 'opacity-0 translate-x-8 pointer-events-none' : 'opacity-0 -translate-x-8 pointer-events-none')}" id="vc-content-chat">
-            <div class="flex-1 overflow-y-auto px-5 pt-2 pb-1 vc-scroll letter-scroll" id="vc-msgs">${this._renderChatMsgs()}</div>
-            <div class="px-5 pb-2 text-rose-400 text-[10px] hidden" id="vc-chat-typing"></div>
-            <div class="p-3 border-t border-white/[0.07] flex gap-2">
-              <input class="flex-1 bg-white/[0.04] border border-white/10 rounded-xl px-3.5 py-2 text-white placeholder-zinc-500 text-xs outline-none focus:border-white/20 transition-colors" id="vc-chat-in" type="text" placeholder="${_t('vc_chat_ph')}" autocomplete="off"/>
-              <button class="bg-white hover:bg-zinc-200 text-zinc-950 w-8 h-8 rounded-xl flex items-center justify-center transition-all shadow-md shrink-0 active:scale-95 cursor-pointer" id="vc-chat-send">
-                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-              </button>
-            </div>
-          </div>
-
-          <!-- MUSIC TAB -->
-          <div class="absolute inset-0 flex flex-col ${isMusic ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 translate-x-8 pointer-events-none'}" id="vc-content-music">
-            <div class="flex-1 overflow-y-auto vc-scroll letter-scroll flex flex-col p-4" id="vc-music-inner">
-               ${this._renderMusicPanel()}
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Global Controls (Pinned footer like Image 2) -->
-        <div class="flex gap-2 p-3.5 border-t border-white/[0.07] bg-white/[0.02]">
-          <button class="flex-1 py-2 px-3 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-2 ${this.muted ? 'bg-rose-500/15 text-rose-300 border border-rose-500/30' : 'bg-white/[0.05] text-zinc-300 border border-white/10 hover:bg-white/[0.1] hover:text-white'}" id="vc-mute">
-            <span class="w-4 h-4 [&>svg]:w-4 [&>svg]:h-4 flex items-center justify-center">${this.muted ? ICONS.micOff : ICONS.mic}</span>
-            <span>${this.muted ? _t('btn_muted') : _t('btn_mic')}</span>
-          </button>
-          <button class="py-2 px-3 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-1.5 ${this.dnd ? 'bg-purple-500/15 text-purple-300 border border-purple-500/30' : 'bg-white/[0.05] text-zinc-300 border border-white/10 hover:bg-white/[0.1] hover:text-white'}" id="vc-dnd">
-            <span class="w-4 h-4 [&>svg]:w-4 [&>svg]:h-4 flex items-center justify-center">${ICONS.bell}</span> <span>DND</span>
-          </button>
-          <button class="w-10 h-10 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-400 flex items-center justify-center transition-all active:scale-95 shrink-0" id="vc-leave" title="Salir">
-            ${ICONS.phone}
-          </button>
-        </div>`;
+      </div>`;
     }
 
     _updateUsersDOM() {
       if (!this.connected) return;
-      const sub = document.querySelector('.vc-sub');
-      if (sub && sub.textContent.includes('/4')) {
-        const timerTxt = document.getElementById('vc-timer')?.textContent || '00:00';
-        sub.innerHTML = `${this.users.length}/4 · <span class="vc-timer" id="vc-timer">${timerTxt}</span>`;
-      }
-      
-      const container = document.querySelector('.vc-sect');
-      if (!container) return;
-      
-      let usersGroup = document.getElementById('vc-users-group');
-      const currentIds = this.users.map(u => String(u.id));
-      
-      // Remove stale nodes
-      container.querySelectorAll('.vc-user').forEach(node => {
-        const id = node.id.replace('vc-u-', '');
-        if (!currentIds.includes(id)) {
-          if (window.gsap) {
-            gsap.to(node, { x: 30, opacity: 0, scale: 0.9, duration: 0.3, ease: "power2.in", onComplete: () => {
-              node.remove();
-              if (usersGroup && usersGroup.querySelectorAll('.vc-user').length === 0) {
-                usersGroup.remove();
-              }
-            }});
-          } else {
-            node.remove();
-            if (usersGroup && usersGroup.querySelectorAll('.vc-user').length === 0) {
-              usersGroup.remove();
-            }
-          }
-        }
-      });
-      
-      if (this.users.length === 0) {
-        if (usersGroup) usersGroup.remove();
-        if (!container.querySelector('.vc-empty')) {
-          const lbl = container.querySelector('.vc-sect-lbl');
-          if (lbl) lbl.insertAdjacentHTML('afterend', `<div class="text-center text-white/20 text-xs py-8 vc-empty">${_t('empty_chan')}</div>`);
-        }
-        return;
-      }
-      
-      const empty = container.querySelector('.vc-empty');
-      if (empty) empty.remove();
-
-      if (!usersGroup) {
-        usersGroup = document.createElement('div');
-        usersGroup.id = 'vc-users-group';
-        usersGroup.className = 'vc-users-group bg-white/[0.04] rounded-2xl overflow-hidden shadow-sm';
-        const lbl = container.querySelector('.vc-sect-lbl');
-        if (lbl) lbl.insertAdjacentElement('afterend', usersGroup);
-        else container.appendChild(usersGroup);
-      }
-      
+      const group = this.panel.querySelector('#vc-users-group');
+      if (!group) return;
+      const ids = new Set(this.users.map(u => String(u.id)));
+      group.querySelectorAll('.vc-user').forEach(node => { if (!ids.has(node.id.slice(5))) node.remove(); });
       this.users.forEach(u => {
-        const isMe = u.id === this.myId;
-        const isMuted = isMe ? this.muted : u.muted;
-        const isDnd   = isMe ? this.dnd   : u.dnd;
-        
         let node = document.getElementById(`vc-u-${u.id}`);
         if (!node) {
-          node = document.createElement('div');
-          node.className = 'flex items-center gap-3.5 px-3.5 py-3 vc-user group select-none transition-colors';
-          node.id = `vc-u-${u.id}`;
-          
-          const avatarHtml = (u.photoURL || (isMe && window.yaireCurrentUser?.photoURL)) 
-            ? `<img src="${u.photoURL || window.yaireCurrentUser?.photoURL}" class="w-full h-full rounded-full object-cover" draggable="false" />` 
-            : u.displayName.slice(0, 2).toUpperCase();
-            
-          node.innerHTML = `
-            <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold transition-all relative border-2 border-transparent ${isMe ? 'bg-amber-500/20 text-amber-400' : 'bg-pink-500/20 text-pink-400'} vc-av" id="vc-av-${u.id}">
-              ${avatarHtml}
-            </div>
-            <div class="flex-1 min-w-0 flex items-center gap-2">
-              <div class="text-white text-sm font-medium truncate">${u.displayName}</div>
-              ${isMe ? `<span class="text-[10px] font-medium tracking-wide text-amber-400/90 bg-amber-500/15 px-2 py-0.5 rounded-full flex-shrink-0">${_t('tag_you')}</span>` : ''}
-              <div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.6)] flex-shrink-0 transition-colors duration-300" id="vc-ping-${u.id}" title="Conexión excelente"></div>
-            </div>
-            <div class="flex items-center gap-1.5 pr-0.5 opacity-100 vc-icons-container">
-            </div>
-          `;
-          usersGroup.appendChild(node);
-          
-          if (window.gsap) {
-            gsap.fromTo(node, 
-              { x: -30, opacity: 0, scale: 0.9 },
-              { x: 0, opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.2)" }
-            );
-          }
-          
-          if (!isMe) {
-            this._bindUserContextMenu(node, u);
-          }
+          group.insertAdjacentHTML('beforeend', this._tplParticipant(u));
+          node = group.lastElementChild;
+          if (u.id !== this.myId) this._bindUserContextMenu(node, u);
         }
-        
-        let iconContainer = node.querySelector('.vc-icons-container');
-        if (!iconContainer) {
-            iconContainer = document.createElement('div');
-            iconContainer.className = 'flex items-center gap-1.5 pr-0.5 opacity-100 vc-icons-container';
-            node.appendChild(iconContainer);
-        }
-        
-        const existingDnd = iconContainer.querySelector('.vc-dico');
-        if (isDnd && !existingDnd) {
-          const dndHtml = `<span class="flex items-center justify-center w-6 h-6 rounded-lg bg-purple-500/15 text-purple-400 vc-dico" title="${_t('btn_dnd')}"><span class="w-3.5 h-3.5 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5">${ICONS.dnd}</span></span>`;
-          const mico = iconContainer.querySelector('.vc-mico');
-          if (mico) mico.insertAdjacentHTML('beforebegin', dndHtml);
-          else iconContainer.insertAdjacentHTML('beforeend', dndHtml);
-        } else if (!isDnd && existingDnd) {
-          existingDnd.remove();
-        }
-        
-        const existingMic = iconContainer.querySelector('.vc-mico');
-        if ((isMuted || u.localMuted) && !existingMic) {
-          const micHtml = `<span class="flex items-center justify-center w-6 h-6 rounded-lg bg-red-500/15 text-red-400 vc-mico" title="${u.localMuted ? 'Silenciado localmente' : 'Silenciado'}"><span class="w-3.5 h-3.5 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5">${ICONS.micOff}</span></span>`;
-          iconContainer.insertAdjacentHTML('beforeend', micHtml);
-        } else if (!isMuted && !u.localMuted && existingMic) {
-          existingMic.remove();
-        } else if ((isMuted || u.localMuted) && existingMic) {
-          existingMic.title = u.localMuted ? 'Silenciado localmente' : 'Silenciado';
-        }
+        const muted = (u.id === this.myId ? this.muted : u.muted) || u.localMuted;
+        const dnd = u.id === this.myId ? this.dnd : u.dnd;
+        node.querySelector('.vc-icons-container').innerHTML = this._participantIcons(muted, dnd);
+        node.querySelector('.vc-participant-state').textContent = _t(muted ? 'room_mic_off' : dnd ? 'room_deafened' : 'room_mic_on');
+        node.querySelector('.vc-participant-name strong').textContent = u.displayName;
       });
-      
+      const count = document.getElementById('vc-member-count');
+      if (count) count.textContent = `${this.users.length}/4`;
+      const hint = this.panel.querySelector('.vc-room-hint');
+      if (hint) hint.textContent = _t(this.users.length < 2 ? 'room_waiting' : 'room_ready');
       this._updateBarAvatars();
     }
 
     _bindUserContextMenu(node, u) {
       if (!node || node._ctxBound) return;
       node._ctxBound = true;
-      
-      node.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-        
-        // Remove old menu if exists
-        const oldMenu = document.getElementById('vc-user-ctx-menu');
-        if (oldMenu) oldMenu.remove();
-        
-        const isLocallyMuted = u.localMuted;
+      const openMenu = event => {
+        event.preventDefault();
+        this._dismissParticipantMenu?.();
+        const member = this.users.find(value => value.id === u.id) || u;
+        const trigger = node.querySelector('[data-user-options]');
         const menu = document.createElement('div');
         menu.id = 'vc-user-ctx-menu';
-        menu.className = 'fixed z-[9999] bg-zinc-900/95 border border-white/10 shadow-2xl shadow-black/80 rounded-2xl py-1.5 px-1.5 flex flex-col min-w-[190px] transform-gpu backdrop-blur-2xl';
-        
-        menu.style.left = e.clientX + 'px';
-        menu.style.top = e.clientY + 'px';
-        
-        menu.innerHTML = `
-          <div class="px-3 py-1.5 mb-1 border-b border-white/10 flex items-center justify-between">
-            <div class="text-[10px] uppercase font-bold text-white/50 tracking-wider truncate max-w-[150px]">${u.displayName}</div>
-          </div>
-          <button class="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-white/90 hover:bg-white/10 active:bg-white/15 hover:text-white transition-colors flex items-center gap-2.5">
-            <span class="w-5 h-5 rounded-lg flex items-center justify-center ${isLocallyMuted ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}">${isLocallyMuted ? ICONS.mic : ICONS.micOff}</span>
-            ${isLocallyMuted ? 'Desmutear localmente' : 'Silenciar localmente'}
-          </button>
-        `;
-        
+        menu.className = 'vc-participant-menu';
+        menu.setAttribute('role', 'dialog');
+        menu.setAttribute('aria-label', _t('room_options'));
+        menu.innerHTML = `<button>${member.localMuted ? ICONS.sound : ICONS.micOff}<span>${_t(member.localMuted ? 'room_local_unmute' : 'room_local_mute')}</span></button>`;
         document.body.appendChild(menu);
-        
-        // Ensure it stays inside the viewport
-        const rect = menu.getBoundingClientRect();
-        if (rect.right > window.innerWidth) menu.style.left = (window.innerWidth - rect.width - 10) + 'px';
-        if (rect.bottom > window.innerHeight) menu.style.top = (window.innerHeight - rect.height - 10) + 'px';
-        
-        // Action
-        menu.querySelector('button').addEventListener('click', () => {
-          u.localMuted = !u.localMuted;
-          const audio = this.audios.get(u.id);
-          if (audio) audio.muted = u.localMuted;
-          this._updateUsersDOM();
+        const anchor = trigger?.getBoundingClientRect();
+        menu.style.left = Math.max(8, Math.min(event.clientX || anchor?.left || 8, innerWidth - menu.offsetWidth - 8)) + 'px';
+        menu.style.top = Math.max(8, Math.min(event.clientY || anchor?.bottom || 8, innerHeight - menu.offsetHeight - 8)) + 'px';
+        const dismissOutside = e => { if (!menu.contains(e.target) && !trigger?.contains(e.target)) this._dismissParticipantMenu?.(); };
+        const dismiss = (restoreFocus = false) => {
+          document.removeEventListener('pointerdown', dismissOutside, true);
           menu.remove();
-        });
-        
-        // Close handler
-        const closeMenu = (ev) => {
-          if (!menu.contains(ev.target)) {
-            menu.remove();
-            document.removeEventListener('click', closeMenu);
-            document.removeEventListener('contextmenu', closeMenu);
-          }
+          if (this._dismissParticipantMenu === dismiss) this._dismissParticipantMenu = null;
+          if (restoreFocus && trigger?.isConnected && !this.panel.inert) trigger.focus();
         };
-        
-        setTimeout(() => {
-          document.addEventListener('click', closeMenu);
-          document.addEventListener('contextmenu', closeMenu);
-        }, 10);
-      });
+        this._dismissParticipantMenu = dismiss;
+        document.addEventListener('pointerdown', dismissOutside, true);
+        menu.addEventListener('keydown', e => {
+          if (e.key === 'Escape') { e.stopPropagation(); dismiss(true); }
+          if (e.key === 'Tab') { e.preventDefault(); dismiss(true); }
+        });
+        menu.querySelector('button').addEventListener('click', () => {
+          const current = this.users.find(value => value.id === u.id);
+          if (current) {
+            current.localMuted = !current.localMuted;
+            const audio = this.audios.get(current.id);
+            if (audio) audio.muted = current.localMuted;
+            this._updateUsersDOM();
+          }
+          dismiss(true);
+        });
+        menu.querySelector('button').focus();
+      };
+      node.addEventListener('contextmenu', openMenu);
+      node.querySelector('[data-user-options]')?.addEventListener('click', openMenu);
     }
 
     _updatePingIndicator(userId, quality) {
@@ -2774,6 +1824,7 @@
     }
 
     _render(tpl) {
+      this._dismissParticipantMenu?.();
       if (this._loginPollInt) { clearInterval(this._loginPollInt); this._loginPollInt = null; }
       if (this._loginMembersStop) { this._loginMembersStop(); this._loginMembersStop = null; }
       this.panel.innerHTML = tpl;
@@ -2783,11 +1834,8 @@
         const updateConnCount = data => {
             const cnt = document.getElementById('vc-conn-count');
             if (cnt) {
-              if (data.users === 0) {
-                cnt.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-white/20 inline-block mr-1.5"></span><span class="text-white/30">${_t('vc_nobody')}</span>`;
-              } else {
-                cnt.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block mr-1.5 animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.6)]"></span><span class="text-amber-500/90">${data.users} ${data.users === 1 ? _t('vc_person') : _t('vc_persons')}</span>`;
-              }
+              cnt.classList.toggle('vc-has-company', data.users > 0);
+              cnt.innerHTML = `<span class="vc-status-dot"></span>${data.users ? `${data.users} ${_t(data.users === 1 ? 'room_person' : 'room_persons')}` : _t('vc_nobody')}`;
               cnt.classList.remove('opacity-0');
             }
         };
@@ -2795,13 +1843,18 @@
         if (firebase?.user) {
           this._loginMembersStop = firebase.sdk.onValue(firebase.sdk.ref(firebase.db, 'voiceRooms/principal/members'), snapshot => {
             updateConnCount({ users: window.YaireFirebaseVoice.listMembers(snapshot.val()).length });
-          }, () => {});
+          }, () => { const count = document.getElementById('vc-conn-count'); if (count) count.textContent = _t('msg_disc'); });
         }
       }
+      this._bindAvatarFallbacks();
+    }
+
+    _bindAvatarFallbacks() {
+      this.panel.querySelectorAll('.vc-avatar img').forEach(img => { img.addEventListener('error', () => img.remove(), { once: true }); });
     }
 
     _bindGsapButton(el) {
-      if (!el || !window.gsap) return;
+      if (!el || !window.gsap || this.panel?.contains(el)) return;
       // Disable CSS transitions to prevent fighting with GSAP
       el.style.transition = 'none';
       
@@ -2862,17 +1915,20 @@
 
           if (typeof window.yaireLoginWithGoogle === 'function') {
             try {
+              const originalLabel = vcGoogleBtn.innerHTML;
+              vcGoogleBtn.dataset.originalLabel = originalLabel;
               vcGoogleBtn.disabled = true;
               vcGoogleBtn.innerHTML = `
-                <div class="w-4 h-4 rounded-full border-2 border-white/20 border-t-white animate-spin"></div>
-                <span>Conectando con Google...</span>
+                <div class="vc-spin"></div>
+                <span>${_t('room_google_loading')}</span>
               `;
               await window.yaireLoginWithGoogle();
             } catch (err) {
-              console.error("Voice channel Google login error:", err);
+              this._setErr(_t('room_google_error'));
             } finally {
               if (vcGoogleBtn) {
                 vcGoogleBtn.disabled = false;
+                vcGoogleBtn.innerHTML = vcGoogleBtn.dataset.originalLabel || `${ICONS.google}<span>${_t('room_google')}</span>`;
               }
             }
             return;
@@ -2904,7 +1960,6 @@
 
       const joinBtn = document.getElementById('vc-join');
       const nameInput = document.getElementById('vc-name');
-      const passInput = document.getElementById('vc-pass');
 
       const playTyping = () => {
         this._playSfx('typing', 0.2);
@@ -2923,20 +1978,7 @@
       const reconnectBtn = document.getElementById('vc-reconnect');
       if (reconnectBtn) {
         reconnectBtn.addEventListener('click', () => {
-          if (this.actx && (this.actx.state === 'suspended' || this.actx.state === 'interrupted')) {
-            this.actx.resume().catch(() => {});
-          }
-          if (typeof window.stopSpotlightLocalPlayback === 'function') {
-            window.stopSpotlightLocalPlayback();
-          }
-          if (this._savedName && this._savedPass) {
-            if (this.progNode) { this._stopSfx(this.progNode); this.progNode = null; }
-            this._render(this._tplLoading());
-            this.progNode = this._playSfx('jbl_latency', 0.4, true);
-            this._connectSocket(this._savedName, this._savedPass);
-          } else {
-            this._render(this._tplLogin());
-          }
+          this._doJoin(this._savedName || window.yaireCurrentUser?.displayName || '28E');
         });
         this._bindGsapButton(reconnectBtn);
       }
@@ -2956,6 +1998,16 @@
       if (tabRoom) { tabRoom.addEventListener('click', () => this._doSwitchTab('room')); this._bindGsapButton(tabRoom); }
       if (tabChat) { tabChat.addEventListener('click', () => this._doSwitchTab('chat')); this._bindGsapButton(tabChat); }
       if (tabMusic) { tabMusic.addEventListener('click', () => this._doSwitchTab('music')); this._bindGsapButton(tabMusic); }
+
+      this.panel.querySelector('.vc-tabs')?.addEventListener('keydown', e => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+        e.preventDefault();
+        const tabs = ['room', 'chat', 'music'];
+        let index = tabs.indexOf(this._activeTab);
+        index = e.key === 'Home' ? 0 : e.key === 'End' ? 2 : (index + (e.key === 'ArrowRight' ? 1 : 2)) % 3;
+        this._doSwitchTab(tabs[index]);
+        document.getElementById(`vc-tab-${tabs[index]}`)?.focus();
+      });
 
       // Chat send & typing
       const chatSend = document.getElementById('vc-chat-send');
@@ -2988,7 +2040,7 @@
         if (this._activeTab === 'chat' && document.activeElement !== chatIn) {
           const isMobile = this._checkMobile() || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.matchMedia && window.matchMedia('(max-width: 1024px)').matches);
           if (!isMobile) {
-            setTimeout(() => chatIn.focus(), 50);
+            setTimeout(() => { if (this._activeTab === 'chat' && document.activeElement?.getAttribute('role') !== 'tab') chatIn.focus(); }, 50);
           } else {
             chatIn.blur();
           }
@@ -3010,37 +2062,11 @@
     }
 
     _doSwitchTab(tab) {
-      if (this._activeTab === tab) return;
-      
-      const order = ['room', 'chat', 'music'];
-      const oldIndex = order.indexOf(this._activeTab);
-      const newIndex = order.indexOf(tab);
-      const direction = newIndex > oldIndex ? 1 : -1;
-
+      if (this._activeTab === tab || !['room', 'chat', 'music'].includes(tab)) return;
       this._activeTab = tab;
-      if (tab === 'chat') {
-        this._chatUnread = 0;
-        document.title = '28E';
-        this._playSfx('toggleOn', 0.3);
-      } else {
-        this._playSfx('toggleOff', 0.3);
-      }
-
-      const contentEl = this.panel.querySelector('.vc-main-content');
-      if (window.gsap && contentEl && window.innerWidth <= 768) {
-        // Slide out
-        gsap.to(contentEl, {
-          x: -40 * direction,
-          opacity: 0,
-          duration: 0.15,
-          ease: 'power2.in',
-          onComplete: () => {
-            this._updateTabs(direction);
-          }
-        });
-      } else {
-        this._updateTabs(direction);
-      }
+      if (tab === 'chat') { this._chatUnread = 0; document.title = '28E'; }
+      this._updateTabs();
+      this._playSfx('toggleOn', 0.2);
     }
 
     updateTranslations() {
@@ -3072,15 +2098,9 @@
            bSub.textContent = _t('bar_conn').split(' · ')[1] || '';
          }
          
-         if (window.gsap) {
-           const activeContent = document.getElementById(`vc-content-${this._activeTab}`);
-           if (activeContent) {
-             gsap.fromTo(activeContent, 
-               { opacity: 0, x: 40 * direction },
-               { opacity: 1, x: 0, duration: 0.4, ease: "power3.out", clearProps: 'transform,opacity' }
-             );
-           }
-         }
+         this._bindAvatarFallbacks();
+         const messages = document.getElementById('vc-msgs');
+         if (messages) messages.scrollTop = messages.scrollHeight;
       }
     }
 
@@ -3100,6 +2120,7 @@
         window.stopSpotlightLocalPlayback();
       }
 
+      const attempt = ++this._joinAttempt;
       this._connecting = true;
       this.myName = name;
       localStorage.setItem('28e_vc_name', name);
@@ -3110,8 +2131,11 @@
       this.progNode = this._playSfx('jbl_latency', 0.4, true);
       
       try {
-        this.stream = await navigator.mediaDevices.getUserMedia({ audio: this._audioConstraints, video: false });
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: this._audioConstraints, video: false });
+        if (attempt !== this._joinAttempt || !this._connecting) { stream.getTracks().forEach(track => track.stop()); return; }
+        this.stream = stream;
       } catch {
+        if (attempt !== this._joinAttempt || !this._connecting) return;
         this._connecting = false;
         if (this.progNode) { this._stopSfx(this.progNode); this.progNode = null; }
         this._render(this._tplLogin(_t('err_mic')));
@@ -3120,13 +2144,17 @@
 
       try {
         const token = await window.yaireCurrentUser.getIdToken();
+        if (attempt !== this._joinAttempt || !this._connecting) return;
         const response = await fetch('/api/voice-ice', { headers: { Authorization: 'Bearer ' + token }, cache: 'no-store', signal: AbortSignal.timeout(5000) });
+        if (attempt !== this._joinAttempt || !this._connecting) return;
         if (response.ok) {
           const relay = await response.json();
+          if (attempt !== this._joinAttempt || !this._connecting) return;
           this.ice = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, ...relay.iceServers] };
         }
       } catch { /* Direct WebRTC is still available when no relay has been configured. */ }
 
+      if (attempt !== this._joinAttempt || !this._connecting) return;
       // Create noise-cancelled processed stream
       this._processedStream = this._createProcessedStream();
       console.log('[VC] 🔇 Noise cancellation pipeline active');
@@ -3169,7 +2197,7 @@
           if (this._connTimeout) { clearTimeout(this._connTimeout); this._connTimeout = null; }
           this._stopSfx(this.progNode); this.progNode = null;
           this._cleanup();
-          this._render(this._tplLogin("No se pudo conectar con el servidor de voz (" + (err.message || 'error de red') + ")."));
+          this._render(this._tplLogin("No se pudo conectar a Afterglow (" + (err.message || 'error de red') + ")."));
         });
 
         if (this._connTimeout) { clearTimeout(this._connTimeout); }
@@ -3179,11 +2207,15 @@
             if (this.progNode) { this._stopSfx(this.progNode); this.progNode = null; }
             if (this.socket) { this.socket.disconnect(); this.socket = null; }
             this._cleanup();
-            this._render(this._tplLogin("El servidor de voz tardó demasiado en responder. Por favor reintenta."));
+            this._render(this._tplLogin("Afterglow tardó demasiado en responder. Vuelve a intentarlo."));
           }
         }, 12000);
 
+        const sessionSocket = this.socket;
+        const sessionAttempt = this._joinAttempt;
+        const sessionValid = () => this.socket === sessionSocket && this._joinAttempt === sessionAttempt;
         this.socket.on('joined', async ({ userId, existingUsers }) => {
+          if (!sessionValid()) return;
           if (this._connTimeout) { clearTimeout(this._connTimeout); this._connTimeout = null; }
           this._connecting = false;
           if (typeof window.stopSpotlightLocalPlayback === 'function') {
@@ -3214,32 +2246,42 @@
 
           // 4. Inicializar micrófono y WebRTC
           const initMicAndWebRTC = async () => {
+            if (!sessionValid() || !this.connected) return;
             if (!this.stream || this.stream.getAudioTracks().every(t => t.readyState === 'ended')) {
               try {
-                this.stream = await navigator.mediaDevices.getUserMedia({ audio: this._audioConstraints, video: false });
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: this._audioConstraints, video: false });
+                if (!sessionValid() || !this.connected) { stream.getTracks().forEach(track => track.stop()); return; }
+                this.stream = stream;
                 this._processedStream = this._createProcessedStream();
                 console.log('[VC] ✅ Microphone re-acquired with noise cancellation');
               } catch(e) {
-                console.error('[VC] ❌ Could not re-acquire microphone:', e);
+                if (!sessionValid() || !this.connected) return;
+                this._leave();
+                this._setErr(_t('err_mic'));
+                return;
               }
             }
 
             if (!this._analyser) this._setupSpeaking();
             if (!this._wakeLock && !this._silentAudio) this._startKeepAlive();
 
-            for (const u of existingUsers) await this._createOffer(u.id);
-
-            this.socket.emit('ring_channel');
+            for (const u of existingUsers) {
+              if (!sessionValid() || !this.connected) return;
+              await this._createOffer(u.id);
+            }
+            if (!sessionValid() || !this.connected) return;
+            sessionSocket.emit('ring_channel');
             this._inviterName = null;
             this._chatMsgs = [];
             this._chatUnread = 0;
-            this.socket.emit('music_sync_request');
+            sessionSocket.emit('music_sync_request');
           };
 
           if (this._checkMobile()) {
             // En celular, diferir la activación del micrófono 350ms para que el hardware de audio
             // no corte el sonido de éxito ni lo enmudezca al cambiar de modo
-            setTimeout(initMicAndWebRTC, 350);
+            clearTimeout(this._micInitTimeout);
+            this._micInitTimeout = setTimeout(initMicAndWebRTC, 350);
           } else {
             await initMicAndWebRTC();
           }
@@ -3464,19 +2506,33 @@
     }
 
     async _createOffer(peerId) {
+      const socket = this.socket, attempt = this._joinAttempt;
+      if (!this.connected || !socket) return;
       const pc = this._makePeer(peerId);
-      const offer = await pc.createOffer();
-      await pc.setLocalDescription(offer);
-      this.socket.emit('webrtc_offer', { to: peerId, sdp: pc.localDescription });
+      const active = () => this.connected && this.socket === socket && this._joinAttempt === attempt && this.peers.get(peerId) === pc;
+      try {
+        const offer = await pc.createOffer();
+        if (!active()) return;
+        await pc.setLocalDescription(offer);
+        if (active()) socket.emit('webrtc_offer', { to: peerId, sdp: pc.localDescription });
+      } catch (error) { if (active()) console.warn('[VC] Offer failed:', error); }
     }
 
     async _handleOffer(fromId, sdp) {
+      const socket = this.socket, attempt = this._joinAttempt;
+      if (!this.connected || !socket) return;
       const pc = this._makePeer(fromId);
-      await pc.setRemoteDescription(new RTCSessionDescription(sdp));
-      const answer = await pc.createAnswer();
-      await pc.setLocalDescription(answer);
-      this.socket.emit('webrtc_answer', { to: fromId, sdp: pc.localDescription });
-      this._flushIce(fromId);
+      const active = () => this.connected && this.socket === socket && this._joinAttempt === attempt && this.peers.get(fromId) === pc;
+      try {
+        await pc.setRemoteDescription(new RTCSessionDescription(sdp));
+        if (!active()) return;
+        const answer = await pc.createAnswer();
+        if (!active()) return;
+        await pc.setLocalDescription(answer);
+        if (!active()) return;
+        socket.emit('webrtc_answer', { to: fromId, sdp: pc.localDescription });
+        this._flushIce(fromId);
+      } catch (error) { if (active()) console.warn('[VC] Answer failed:', error); }
     }
 
     _flushIce(peerId) {
@@ -3505,13 +2561,9 @@
       
       const btn = document.getElementById('vc-mute');
       if (btn) {
-        btn.className = `flex-1 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${this.muted ? 'bg-red-500/10 text-red-500 border border-red-500/30' : 'bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white'}`;
-        btn.innerHTML = `<span class="w-4 h-4 [&>svg]:w-4 [&>svg]:h-4 flex items-center justify-center">${this.muted ? ICONS.micOff : ICONS.mic}</span> ${this.muted ? _t('btn_muted') : _t('btn_mic')}`;
-        const svg = btn.querySelector('svg');
-        if (svg) {
-          svg.style.transform = 'scale(1.3)';
-          setTimeout(() => { if (svg) svg.style.transform = ''; }, 150);
-        }
+        btn.setAttribute('aria-pressed', String(this.muted));
+        btn.setAttribute('aria-label', _t(this.muted ? 'room_mic_on' : 'room_mic_off'));
+        btn.innerHTML = `${this.muted ? ICONS.micOff : ICONS.mic}<span>${_t(this.muted ? 'btn_muted' : 'btn_mic')}</span>`;
       }
       this._updateUsersDOM();
       this._playSfx(this.muted ? 'toggleOff' : 'toggleOn', 0.4);
@@ -3530,13 +2582,9 @@
       
       const btn = document.getElementById('vc-dnd');
       if (btn) {
-        btn.className = `flex-1 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${this.dnd ? 'bg-purple-500/10 text-purple-400 border border-purple-500/30' : 'bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white'}`;
-        btn.innerHTML = `<span class="w-4 h-4 [&>svg]:w-4 [&>svg]:h-4 flex items-center justify-center">${ICONS.bell}</span> DND`;
-        const svg = btn.querySelector('svg');
-        if (svg) {
-          svg.style.transform = 'scale(1.2) rotate(-15deg)';
-          setTimeout(() => { if (svg) svg.style.transform = ''; }, 150);
-        }
+        btn.setAttribute('aria-pressed', String(this.dnd));
+        btn.setAttribute('aria-label', _t(this.dnd ? 'room_undeafen' : 'room_deafen'));
+        btn.innerHTML = `${this.dnd ? ICONS.dnd : ICONS.bell}<span>${_t(this.dnd ? 'room_deafened' : 'room_deafen')}</span>`;
       }
       this._updateUsersDOM();
       this._playSfx(this.dnd ? 'toggleOff' : 'toggleOn', 0.4);
@@ -3552,49 +2600,19 @@
     }
 
     // ── CHAT METHODS ────────────────────────────────────────────────────
-    _renderChatMsgs() {
-      if (this._chatMsgs.length === 0) return `<div class="text-center text-white/20 text-xs py-8">${_t('vc_chat_empty')}</div>`;
-      
-      let html = '';
-      let lastFrom = null;
-
-      for (let i = 0; i < this._chatMsgs.length; i++) {
-        const m = this._chatMsgs[i];
-        const isMe = m.from === this.myId;
-        const time = new Date(m.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const escText = this._escHtml(m.text);
-        const isEmojiOnly = /^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F|\s)+$/u.test(m.text) && m.text.trim().length > 0;
-        
-        const bubbleClass = isEmojiOnly 
-          ? 'text-4xl py-1' 
-          : (isMe ? 'bg-black text-white rounded-2xl px-3 py-2 text-sm shadow-sm font-medium border border-white/10' : 'bg-white text-zinc-900 rounded-2xl px-3 py-2 text-sm shadow-sm font-medium');
-              
-        const isGrouped = (lastFrom === m.from);
-        
-        if (!isGrouped) {
-          if (i > 0) html += `</div></div>`; // close previous group
-          html += `
-          <div class="flex flex-col mb-3 ${isMe ? 'items-end' : 'items-start'} vc-chat-msg" data-from="${m.from}">
-            <div class="flex items-baseline gap-2 mb-1 px-1">
-              <span class="text-[10px] font-bold ${isMe ? 'text-amber-500' : 'text-white/60'}">${m.name}</span>
-              <span class="text-[9px] text-white/30">${time}</span>
-            </div>
-            <div class="flex flex-col gap-1 w-full ${isMe ? 'items-end' : 'items-start'} vc-chat-bubbles">
-              <div class="max-w-[85%] ${bubbleClass}">${escText}</div>`;
-        } else {
-          html += `<div class="max-w-[85%] ${bubbleClass}">${escText}</div>`;
-        }
-        
-        lastFrom = m.from;
-        
-        if (i === this._chatMsgs.length - 1) {
-          html += `</div></div>`; // close last group
-        }
-      }
-      return html;
+    _chatMessageMarkup(m) {
+      const isMe = m.from === this.myId;
+      const time = new Date(m.ts).toLocaleTimeString(_getLang(), { hour: '2-digit', minute: '2-digit' });
+      return `<div class="vc-chat-msg ${isMe ? 'vc-chat-mine' : ''}" data-from="${this._escHtml(m.from)}"><div class="vc-chat-meta"><strong>${this._escHtml(m.name)}</strong><time>${time}</time></div><div class="vc-chat-bubble">${this._escHtml(m.text)}</div></div>`;
     }
 
-    // Obsolete _toggleChat removed
+    _renderChatMsgs() {
+      if (!this._chatMsgs.length) return `<div class="vc-empty-state" data-chat-empty>${ICONS.chat}<h2>${_t('room_chat_title')}</h2><p>${_t('room_chat_desc')}</p></div>`;
+      return this._chatMsgs.map(m => this._chatMessageMarkup(m)).join('');
+    }
+
+    // ── CHAT ─────────────────────────────────────────────────────────────
+
 
     _sendChat() {
       const input = document.getElementById('vc-chat-in');
@@ -3641,56 +2659,14 @@
         }
       }
 
-      // Append to DOM
       const msgsEl = document.getElementById('vc-msgs');
       if (msgsEl) {
-        // remove empty state if exists
-        const emptyEl = msgsEl.firstElementChild;
-        if (emptyEl && emptyEl.textContent === _t('vc_chat_empty')) emptyEl.remove();
-        
-        const time = new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const escText = this._escHtml(text);
-        const isEmojiOnly = /^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F|\s)+$/u.test(text) && text.trim().length > 0;
-        
-        const bubbleClass = isEmojiOnly 
-          ? 'text-4xl py-1' 
-          : (isMe ? 'bg-black text-white rounded-2xl px-3 py-2 text-sm shadow-sm font-medium border border-white/10' : 'bg-white text-zinc-900 rounded-2xl px-3 py-2 text-sm shadow-sm font-medium');
-              
-        const lastMsgEl = msgsEl.lastElementChild;
-        const lastFrom = lastMsgEl ? lastMsgEl.getAttribute('data-from') : null;
-        
-        let newBubbleEl;
-
-        if (lastFrom === from) {
-          // append just the bubble
-          const bubblesContainer = lastMsgEl.querySelector('.vc-chat-bubbles');
-          bubblesContainer.insertAdjacentHTML('beforeend', `<div class="max-w-[85%] ${bubbleClass}">${escText}</div>`);
-          newBubbleEl = bubblesContainer.lastElementChild;
-        } else {
-          // append full group
-          msgsEl.insertAdjacentHTML('beforeend', `
-            <div class="flex flex-col mb-3 ${isMe ? 'items-end' : 'items-start'} vc-chat-msg" data-from="${from}">
-              <div class="flex items-baseline gap-2 mb-1 px-1">
-                <span class="text-[10px] font-bold ${isMe ? 'text-amber-500' : 'text-white/60'}">${name}</span>
-                <span class="text-[9px] text-white/30">${time}</span>
-              </div>
-              <div class="flex flex-col gap-1 w-full ${isMe ? 'items-end' : 'items-start'} vc-chat-bubbles">
-                <div class="max-w-[85%] ${bubbleClass}">${escText}</div>
-              </div>
-            </div>`);
-          newBubbleEl = msgsEl.lastElementChild.querySelector('.vc-chat-bubbles').lastElementChild;
+        // A tab refresh already rendered this message when its unread count changed.
+        if (this._activeTab === 'chat' || isMe) {
+          msgsEl.querySelector('[data-chat-empty]')?.remove();
+          msgsEl.insertAdjacentHTML('beforeend', this._chatMessageMarkup({ from, name, text, ts }));
         }
-          
-        if (window.gsap && newBubbleEl) {
-          gsap.from(newBubbleEl, {
-            y: 20,
-            opacity: 0,
-            scale: 0.9,
-            duration: 0.4,
-            ease: "back.out(1.5)",
-            onComplete: () => { msgsEl.scrollTop = msgsEl.scrollHeight; }
-          });
-        }
+        while (msgsEl.querySelectorAll('.vc-chat-msg').length > 50) msgsEl.querySelector('.vc-chat-msg').remove();
         msgsEl.scrollTop = msgsEl.scrollHeight;
       }
 
@@ -3699,8 +2675,8 @@
 
     _escHtml(str) {
       const d = document.createElement('div');
-      d.textContent = str;
-      return d.innerHTML;
+      d.textContent = String(str ?? '');
+      return d.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
     // ── RINGTONE OVERLAY ────────────────────────────────────────────────
@@ -3715,8 +2691,8 @@
       overlay.id = 'vc-ring-overlay';
       overlay.innerHTML = `
         <div class="vc-ring-label">${_t('vc_ring_title')}</div>
-        <div class="vc-ring-avatar">${initials}</div>
-        <div class="vc-ring-name">${callerName}</div>
+        <div class="vc-ring-avatar">${this._escHtml(initials)}</div>
+        <div class="vc-ring-name">${this._escHtml(callerName)}</div>
         <div class="vc-ring-sub">${_t('vc_ring_msg')}</div>
         <div class="vc-ring-btns">
           <button class="vc-ring-btn join" id="vc-ring-join">${_t('vc_ring_join')}</button>
@@ -3738,8 +2714,8 @@
         this._playSfx('flyin', 0.4, false, 'fly');
         // Focus on the password field
         setTimeout(() => {
-          const passEl = document.getElementById('vc-pass');
-          if (passEl) passEl.focus();
+          const joinEl = document.getElementById('vc-join') || document.getElementById('vc-google-login-btn');
+          if (joinEl) joinEl.focus();
         }, 200);
       });
 
@@ -4027,254 +3003,51 @@
       });
     }
 
+    _trackArtMarkup(track, className = '') {
+      const art = this._getTrackArtwork(track);
+      const key = (track.title || '') + '|' + (track.artist || '');
+      return `<span class="vc-track-art ${className}">${art ? `<img src="${this._escHtml(art)}" alt="" loading="lazy" />` : `<span data-spot-art-key="${this._escHtml(key)}">${ICONS.music}</span>`}</span>`;
+    }
+
     _renderSpotlightCatalog() {
       const tracks = this._getSpotlightTracks();
-      const q = (this._spotlightSearchQuery || '').toLowerCase().trim();
-      const filtered = q 
-        ? tracks.filter(t => (t.title && t.title.toLowerCase().includes(q)) || (t.artist && t.artist.toLowerCase().includes(q)))
-        : tracks;
-
-      return `
-        <div class="p-3 flex-1 flex flex-col h-full overflow-hidden">
-          <!-- Header con botón Volver -->
-          <div class="flex items-center justify-between mb-2 pb-2 border-b border-white/10 flex-shrink-0">
-            <button id="vc-spotlight-back-btn" class="flex items-center gap-1.5 text-xs text-amber-400 hover:text-amber-300 transition-colors font-semibold group cursor-pointer">
-              <svg class="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
-              <span>Volver a la cola</span>
-            </button>
-            <div class="flex items-center gap-1.5">
-              <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-              <span class="text-[10px] text-white/50 uppercase tracking-wider font-bold">Spotlight (${filtered.length})</span>
-            </div>
-          </div>
-
-          <!-- Buscador de canciones -->
-          <div class="mb-2 flex-shrink-0">
-            <div class="relative flex items-center">
-              <span class="absolute left-3 text-white/30 text-xs pointer-events-none">🔍</span>
-              <input id="vc-spotlight-search-input" type="text" placeholder="${_t('vc_spotlight_search_ph')}" value="${this._escHtml(this._spotlightSearchQuery || '')}"
-                class="w-full bg-white/[0.04] border border-white/10 focus:border-amber-500/50 rounded-xl pl-8 pr-7 py-2 text-white text-xs outline-none transition-colors placeholder:text-white/30" autocomplete="off" />
-              ${this._spotlightSearchQuery ? `<button id="vc-spotlight-search-clear" class="absolute right-2.5 text-white/40 hover:text-white text-xs cursor-pointer">✕</button>` : ''}
-            </div>
-          </div>
-
-          <!-- Lista de canciones estilo Apple Music / Spotify -->
-          <div class="flex-1 overflow-y-auto space-y-1 pr-0.5 max-h-[240px] vc-scroll" id="vc-spotlight-track-list">
-            ${filtered.length > 0 ? filtered.map((t, idx) => {
-              const art = this._getTrackArtwork(t);
-              const artKey = (t.title || '') + '|' + (t.artist || '');
-              return `
-              <div class="vc-spot-track-row flex items-center justify-between p-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] active:bg-white/[0.12] border border-white/5 hover:border-amber-500/25 transition-all group cursor-pointer" data-idx="${idx}" data-src="${this._escHtml(t.src)}" data-title="${this._escHtml(t.title)}" data-artist="${this._escHtml(t.artist || '')}">
-                <div class="flex items-center gap-2.5 min-w-0 flex-1 mr-2 pointer-events-none">
-                  <!-- Portada de la canción -->
-                  <div class="w-10 h-10 rounded-xl bg-zinc-800/80 border border-white/10 overflow-hidden flex items-center justify-center flex-shrink-0 shadow-sm relative group-hover:shadow-amber-500/10 transition-shadow">
-                    ${art ? `
-                      <img src="${this._escHtml(art)}" class="w-full h-full object-cover" loading="lazy" />
-                    ` : `
-                      <div class="w-full h-full flex items-center justify-center text-white/30 text-xs bg-gradient-to-br from-amber-500/10 to-zinc-800" data-spot-art-key="${this._escHtml(artKey)}">
-                        🎵
-                      </div>
-                    `}
-                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                      <span class="text-amber-400 text-xs font-bold">▶</span>
-                    </div>
-                  </div>
-                  <!-- Título y artista -->
-                  <div class="min-w-0 flex-1">
-                    <div class="text-xs font-semibold text-white truncate group-hover:text-amber-300 transition-colors leading-tight">${this._escHtml(t.title)}</div>
-                    <div class="text-[10px] text-white/50 truncate mt-0.5">${this._escHtml(t.artist || 'Spotlight')}</div>
-                  </div>
-                </div>
-
-                <!-- Botón sutil de Añadir a la cola -->
-                <button class="vc-spot-add-queue w-7 h-7 rounded-lg bg-white/5 hover:bg-white/15 text-white/50 hover:text-white flex items-center justify-center text-xs transition-colors flex-shrink-0 cursor-pointer" data-src="${this._escHtml(t.src)}" data-title="${this._escHtml(t.title)}" data-artist="${this._escHtml(t.artist || '')}" title="Añadir a la cola">
-                  +
-                </button>
-              </div>
-            `;}).join('') : `
-              <div class="text-center text-white/30 text-xs py-8">
-                No se encontraron canciones
-              </div>
-            `}
-          </div>
-        </div>
-      `;
+      const query = (this._spotlightSearchQuery || '').toLocaleLowerCase().trim();
+      const filtered = query ? tracks.filter(t => `${t.title || ''} ${t.artist || ''}`.toLocaleLowerCase().includes(query)) : tracks;
+      return `<div class="vc-music-panel">
+        <div class="vc-catalog-heading"><button id="vc-spotlight-back-btn" class="vc-back-button">${ICONS.back}${_t('room_back_music')}</button><span>Spotlight · ${filtered.length}</span></div>
+        <div class="vc-search-field">${ICONS.search}<input id="vc-spotlight-search-input" type="search" aria-label="${_t('room_search_label')}" placeholder="${_t('room_search_label')}" value="${this._escHtml(this._spotlightSearchQuery || '')}" autocomplete="off" enterkeyhint="search" />${query ? `<button id="vc-spotlight-search-clear" class="vc-icon-button" aria-label="${_t('room_cancel')}">${ICONS.close}</button>` : ''}</div>
+        <div class="vc-track-list" id="vc-spotlight-track-list">${filtered.length ? filtered.map((t, i) => {
+          const attrs = `data-src="${this._escHtml(t.src)}" data-title="${this._escHtml(t.title)}" data-artist="${this._escHtml(t.artist || '')}"`;
+          return `<div class="vc-track-row"><button class="vc-spot-track-row vc-track-play" data-idx="${i}" ${attrs} aria-label="${_t('room_play')}: ${this._escHtml(t.title)}">${this._trackArtMarkup(t)}<span class="vc-track-info"><strong>${this._escHtml(t.title)}</strong><small>${this._escHtml(t.artist || 'Spotlight')}</small></span></button><button class="vc-spot-add-queue vc-icon-button" ${attrs} aria-label="${_t('vc_spotlight_add_queue')}: ${this._escHtml(t.title)}" title="${_t('vc_spotlight_add_queue')}">${ICONS.plus}</button></div>`;
+        }).join('') : `<div class="vc-empty-state">${ICONS.search}<h2>${_t('room_no_results')}</h2><p>${_t('room_no_results_desc')}</p></div>`}</div>
+      </div>`;
     }
 
     _renderMusicPanel() {
-      if (this._musicSpotlightView) {
-        return this._renderSpotlightCatalog();
-      }
-
+      if (this._musicSpotlightView) return this._renderSpotlightCatalog();
       const track = this._musicCurrentTrack;
-      const isPlaying = this._musicPlaying;
-      let nowPlaying = '';
-      if (track) {
-        let currentPct = 0;
-        let cTimeFmt = '0:00';
-        let tTimeFmt = '0:00';
-
-        const fmt = (secs) => {
-          if (!secs || isNaN(secs)) return '0:00';
-          const m = Math.floor(secs / 60);
-          const s = Math.floor(secs % 60);
-          return `${m}:${s < 10 ? '0'+s : s}`;
-        };
-        
-        if (track.type === 'youtube' && this._ytPlayer && typeof this._ytPlayer.getCurrentTime === 'function') {
-          const cur = this._ytPlayer.getCurrentTime() || 0;
-          const tot = this._ytPlayer.getDuration() || 0;
-          if (tot > 0) currentPct = (cur / tot) * 100;
-          cTimeFmt = fmt(cur);
-          tTimeFmt = fmt(tot);
-        } else if ((track.type === 'spotlight' || track.type === 'audio') && this._audioPlayer) {
-          const cur = this._audioPlayer.currentTime || 0;
-          const tot = this._audioPlayer.duration || 0;
-          if (tot > 0) currentPct = (cur / tot) * 100;
-          cTimeFmt = fmt(cur);
-          tTimeFmt = fmt(tot);
-        }
-
-        const isSpotlight = (track.source || track.type) === 'spotlight';
-        const isSpotify = (track.source || track.type) === 'spotify';
-        const badgeLabel = isSpotlight ? 'SPOTLIGHT' : (isSpotify ? 'SP' : 'YT');
-        const badgeStyle = isSpotlight 
-          ? 'bg-gradient-to-r from-amber-500/20 to-pink-500/20 text-amber-300 border border-amber-500/30'
-          : (isSpotify ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-white/10 text-white/50');
-
-        const currentArt = this._getTrackArtwork(track);
-        const artKey = (track.title || '') + '|' + (track.artist || '');
-
-        nowPlaying = `
-          <div class="bg-white/[0.04] border border-white/10 rounded-2xl p-3 mb-2.5 relative overflow-hidden shadow-lg">
-            <div class="flex items-center gap-3 relative z-10 mb-2.5">
-              <!-- Portada con ecualizador animado superpuesto -->
-              <div class="w-12 h-12 rounded-xl bg-zinc-800/80 border border-white/10 overflow-hidden flex items-center justify-center flex-shrink-0 relative shadow-md">
-                ${currentArt ? `
-                  <img src="${this._escHtml(currentArt)}" class="w-full h-full object-cover" />
-                ` : `
-                  <div class="w-full h-full flex items-center justify-center text-amber-400 bg-gradient-to-br from-amber-500/20 to-purple-500/20 text-base" data-spot-art-key="${this._escHtml(artKey)}">
-                    🎵
-                  </div>
-                `}
-                ${isPlaying ? `
-                  <div class="absolute bottom-1 right-1 bg-black/70 backdrop-blur-sm rounded-md px-1 py-0.5 flex items-end gap-0.5">
-                    <div class="w-0.5 h-2 bg-amber-400 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite]"></div>
-                    <div class="w-0.5 h-3 bg-amber-400 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite_0.2s]"></div>
-                    <div class="w-0.5 h-1.5 bg-amber-400 rounded-full animate-[vc-eq_0.8s_ease-in-out_infinite_0.4s]"></div>
-                  </div>
-                ` : ''}
-              </div>
-
-              <div class="flex-1 min-w-0">
-                <div class="flex items-center gap-1.5 mb-0.5">
-                  <span class="text-[9px] text-amber-500 font-bold uppercase tracking-wider">${_t('vc_music_now')}</span>
-                  <span class="text-[8px] font-bold px-1.5 py-0.2 rounded ${badgeStyle}">${badgeLabel}</span>
-                </div>
-                ${this._cleanMusicTitle(track.title).length > 25 
-                  ? `<div class="vc-marquee-container text-xs font-bold text-white">
-                       <div class="vc-marquee-content">${this._escHtml(this._cleanMusicTitle(track.title))}</div>
-                       <div class="vc-marquee-content" aria-hidden="true">${this._escHtml(this._cleanMusicTitle(track.title))}</div>
-                     </div>` 
-                  : `<div class="text-xs font-bold text-white truncate">${this._escHtml(this._cleanMusicTitle(track.title))}</div>`
-                }
-                <div class="text-[10px] text-white/40 truncate mt-0.5">${this._escHtml(track.artist || (track.addedByName ? `${_t('vc_music_by')} ${track.addedByName}` : 'Spotlight'))}</div>
-              </div>
-            </div>
-            
-            ${track.type === 'youtube' || track.type === 'spotlight' || track.type === 'audio' ? `
-              <div class="relative z-10 mb-3">
-                <div class="h-1 bg-black/50 rounded-full overflow-hidden relative cursor-pointer" id="vc-music-progress" title="Saltar a posición">
-                  <div class="absolute top-0 left-0 h-full bg-amber-500 transition-all duration-200" id="vc-music-progress-fill" style="width: ${currentPct}%"></div>
-                </div>
-                <div class="flex justify-between text-[9px] text-white/40 mt-1 font-mono">
-                  <span id="vc-music-time-current">${cTimeFmt}</span>
-                  <span id="vc-music-time-total">${tTimeFmt}</span>
-                </div>
-              </div>
-            ` : ''}
-            
-            ${track.type === 'spotify' ? `<div class="mt-2 w-full" id="vc-spotify-embed"></div>` : ''}
-            
-            <div class="flex justify-between items-center relative z-10">
-              <div class="flex items-center gap-2">
-                <button class="w-9 h-9 rounded-full bg-white text-black flex items-center justify-center hover:scale-105 transition-transform [&>svg]:w-4 [&>svg]:h-4 shadow-md cursor-pointer" id="vc-music-playpause">
-                  ${isPlaying ? ICONS.pause : ICONS.play}
-                </button>
-                <button class="w-9 h-9 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors [&>svg]:w-4 [&>svg]:h-4 cursor-pointer" id="vc-music-skip">
-                  ${ICONS.skipFwd}
-                </button>
-              </div>
-              <div class="w-[45%] flex items-center gap-2 pr-1">
-                <span class="text-white/40 [&>svg]:w-3.5 [&>svg]:h-3.5">${ICONS.volumeUp}</span>
-                <input type="range" id="vc-music-vol-slider" min="0" max="100" value="${this._musicVolume}" class="w-full h-1 bg-black/50 rounded-lg appearance-none cursor-pointer accent-amber-500" />
-              </div>
-            </div>
-          </div>`;
-      } else {
-        nowPlaying = `<div class="text-center text-white/30 text-xs py-3 mb-2.5 bg-white/[0.03] rounded-2xl border border-white/5">${_t('vc_music_no_track')}</div>`;
-      }
-
-      const queueItems = this._musicQueue.length > 0
-        ? this._musicQueue.map((t, i) => {
-            const isCur = i === this._musicState.currentIndex;
-            const isSpot = (t.source || t.type) === 'spotlight';
-            const isSp = (t.source || t.type) === 'spotify';
-            const qBadge = isSpot ? 'SPOTLIGHT' : (isSp ? 'SP' : 'YT');
-            const qBadgeStyle = isSpot ? 'bg-amber-500/20 text-amber-300' : 'bg-white/10 text-white/30';
-            const qArt = this._getTrackArtwork(t);
-            const qArtKey = (t.title || '') + '|' + (t.artist || '');
-            return `
-            <div class="flex items-center gap-2.5 p-1.5 rounded-xl transition-colors ${isCur ? 'bg-amber-500/10 border border-amber-500/20' : 'hover:bg-white/5'}">
-              <span class="w-3.5 text-center text-[10px] font-bold ${isCur ? 'text-amber-500' : 'text-white/30'}">${isCur && this._musicPlaying ? '♪' : (i + 1)}</span>
-              <div class="w-7 h-7 rounded-lg bg-zinc-800 border border-white/10 overflow-hidden flex items-center justify-center flex-shrink-0 text-xs">
-                ${qArt ? `<img src="${this._escHtml(qArt)}" class="w-full h-full object-cover" />` : `<div class="w-full h-full flex items-center justify-center text-white/40 text-[10px]" data-spot-art-key="${this._escHtml(qArtKey)}">${isSpot ? '🎵' : '🎬'}</div>`}
-              </div>
-              <div class="flex-1 min-w-0">
-                <div class="text-xs font-medium text-white truncate ${isCur ? 'text-amber-400 font-semibold' : ''}">${this._escHtml(this._cleanMusicTitle(t.title))}</div>
-                <div class="text-[9px] text-white/30 truncate">${t.addedByName ? `por ${t.addedByName}` : ''}</div>
-              </div>
-              <span class="text-[8px] font-bold px-1.5 py-0.5 rounded ${qBadgeStyle}">${qBadge}</span>
-              ${!isCur ? `<button class="vc-music-track-rm w-6 h-6 flex items-center justify-center text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded transition-colors [&>svg]:w-3 [&>svg]:h-3 cursor-pointer" data-track-id="${t.id}">${ICONS.trash}</button>` : ''}
-            </div>`;
-          }).join('')
-        : `<div class="text-center text-white/20 text-xs py-4">${_t('vc_music_empty_q')}</div>`;
-        
-      return `
-        <div class="p-3 flex-1 flex flex-col">
-          ${nowPlaying}
-
-          <!-- Acceso limpio y elegante al Menú Spotlight -->
-          <button id="vc-spotlight-open-btn" class="w-full mb-2.5 p-2 rounded-xl bg-gradient-to-r from-amber-500/10 via-white/[0.03] to-transparent hover:from-amber-500/20 border border-amber-500/20 hover:border-amber-500/40 transition-all flex items-center justify-between group cursor-pointer shadow-sm">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <div class="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center flex-shrink-0 text-sm font-bold shadow-inner">
-                🎵
-              </div>
-              <div class="min-w-0 text-left">
-                <div class="text-xs font-semibold text-white group-hover:text-amber-300 transition-colors flex items-center gap-1.5">
-                  <span>Música de Spotlight</span>
-                  <span class="text-[9px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded font-bold">28E</span>
-                </div>
-                <div class="text-[10px] text-white/40 truncate">Ver catálogo de canciones y reproducir</div>
-              </div>
-            </div>
-            <div class="flex items-center gap-1.5 flex-shrink-0 pl-1">
-              <span class="w-6 h-6 rounded-full bg-white/5 group-hover:bg-amber-500/20 text-white/40 group-hover:text-amber-300 flex items-center justify-center transition-all text-xs">
-                →
-              </span>
-            </div>
-          </button>
-
-          <div class="text-[10px] text-white/30 font-bold uppercase tracking-wider mb-1 px-1">${_t('vc_music_queue')} ${this._musicQueue.length > 0 ? `(${this._musicQueue.length})` : ''}</div>
-          <div class="flex flex-col gap-1 mb-2 max-h-[120px] overflow-y-auto pr-0.5 vc-scroll" id="vc-music-queue">${queueItems}</div>
-          <div class="mt-auto pt-2">
-            <div class="text-red-500 text-xs text-center mb-1 min-h-[16px]" id="vc-music-err"></div>
-            <div class="flex gap-2">
-              <input class="flex-1 bg-black/40 border border-white/10 rounded-xl px-3 py-2.5 text-white text-xs outline-none focus:border-amber-500/50 transition-colors" id="vc-music-url" type="text" placeholder="${_t('vc_music_ph')}" autocomplete="off"/>
-              <button class="bg-amber-500 text-black px-4 font-bold text-xs rounded-xl hover:bg-amber-400 transition-colors whitespace-nowrap cursor-pointer" id="vc-music-add">+ ${_t('vc_music_add')}</button>
-            </div>
-          </div>
-        </div>`;
+      const playing = this._musicPlaying;
+      const fmt = secs => { const n = Number.isFinite(secs) ? Math.max(0, Math.floor(secs)) : 0; return `${Math.floor(n / 60)}:${String(n % 60).padStart(2, '0')}`; };
+      let current = 0, duration = 0;
+      if (track?.type === 'youtube' && typeof this._ytPlayer?.getCurrentTime === 'function') { current = this._ytPlayer.getCurrentTime() || 0; duration = this._ytPlayer.getDuration() || 0; }
+      else if (this._audioPlayer) { current = this._audioPlayer.currentTime || 0; duration = this._audioPlayer.duration || 0; }
+      const percent = duration > 0 ? Math.min(100, Math.max(0, current / duration * 100)) : 0;
+      const source = track ? ((track.source || track.type) === 'spotlight' ? 'Spotlight' : (track.source || track.type) === 'spotify' ? 'Spotify' : track.type === 'youtube' ? 'YouTube' : '28E') : '';
+      const now = track ? `<div class="vc-now-playing">
+        <div class="vc-track-row">${this._trackArtMarkup(track)}<div class="vc-track-info"><span class="vc-track-source">${_t(playing ? 'vc_music_now' : 'room_paused')} · ${source}</span><strong>${this._escHtml(this._cleanMusicTitle(track.title))}</strong><small>${this._escHtml(track.artist || track.addedByName || '28E')}</small></div></div>
+        ${track.type !== 'spotify' ? `<div class="vc-track-progress"><div id="vc-music-progress" role="slider" tabindex="0" aria-label="${_t('vc_music_now')}" aria-valuemin="0" aria-valuemax="${Math.floor(duration)}" aria-valuenow="${Math.floor(current)}"><div class="vc-progress-track"><div id="vc-music-progress-fill" style="width:${percent}%"></div></div></div><div class="vc-time-row"><span id="vc-music-time-current">${fmt(current)}</span><span id="vc-music-time-total">${fmt(duration)}</span></div></div>` : '<div id="vc-spotify-embed"></div>'}
+        <div class="vc-playback-controls"><button id="vc-music-playpause" class="vc-icon-button vc-play-button" aria-label="${_t(playing ? 'room_pause' : 'room_play')}">${playing ? ICONS.pause : ICONS.play}</button><button id="vc-music-skip" class="vc-icon-button" aria-label="${_t('vc_music_skip')}" title="${_t('vc_music_skip')}">${ICONS.skipFwd}</button><label class="vc-volume-control">${ICONS.volumeUp}<input id="vc-music-vol-slider" type="range" min="0" max="100" value="${this._musicVolume}" aria-label="${_t('room_volume')}" /></label></div>
+      </div>` : `<div class="vc-empty-state vc-music-empty">${ICONS.music}<h2>${_t('room_music_title')}</h2><p>${_t('room_music_desc')}</p></div>`;
+      const queue = this._musicQueue.map((t, i) => {
+        const active = i === this._musicState.currentIndex;
+        return `<div class="vc-track-row ${active ? 'vc-track-current' : ''}"><span class="vc-track-number">${i + 1}</span>${this._trackArtMarkup(t)}<div class="vc-track-info"><strong>${this._escHtml(this._cleanMusicTitle(t.title))}</strong><small>${this._escHtml(t.artist || t.addedByName || '')}</small></div>${!active ? `<button class="vc-icon-button vc-music-track-rm" data-track-id="${this._escHtml(t.id)}" aria-label="${_t('room_remove')}: ${this._escHtml(t.title)}" title="${_t('room_remove')}">${ICONS.close}</button>` : ''}</div>`;
+      }).join('');
+      return `<div class="vc-music-panel">${now}
+        <button id="vc-spotlight-open-btn" class="vc-catalog-button">${ICONS.music}<span><strong>${_t('room_catalog')}</strong><small>${_t('room_listen')}</small></span>${ICONS.arrow}</button>
+        <h2 class="vc-music-label">${_t('vc_music_queue')}<span>${this._musicQueue.length}</span></h2>
+        <div id="vc-music-queue" class="vc-track-list">${queue || `<p class="vc-queue-empty">${_t('vc_music_empty_q')}</p>`}</div>
+        <div class="vc-music-compose"><label for="vc-music-url">${_t('room_link_label')}</label><div class="vc-input-row"><input id="vc-music-url" type="url" placeholder="${_t('room_link_ph')}" autocomplete="off" enterkeyhint="go" /><button id="vc-music-add" class="vc-icon-button vc-add-button" aria-label="${_t('vc_music_add')}" title="${_t('vc_music_add')}">${ICONS.plus}</button></div><p class="vc-error" id="vc-music-err" role="status"></p></div>
+      </div>`;
     }
 
     _updateMusicUI() {
@@ -4294,18 +3067,10 @@
 
     _updateMusicIndicator() {
       const tab = document.getElementById('vc-tab-music');
-      if (!tab) return;
-      let ind = tab.querySelector('.vc-music-ind');
-      if (this._musicPlaying) {
-        if (!ind) {
-          tab.insertAdjacentHTML('beforeend', `<div class="flex items-end gap-[1px] h-2.5 vc-music-ind">
-             <div class="w-[2px] bg-amber-500 animate-[vc-eq_0.8s_ease-in-out_infinite]"></div>
-             <div class="w-[2px] bg-amber-500 animate-[vc-eq_0.8s_ease-in-out_infinite_0.2s]"></div>
-             <div class="w-[2px] bg-amber-500 animate-[vc-eq_0.8s_ease-in-out_infinite_0.4s]"></div>
-           </div>`);
-        }
-      } else if (ind) {
-        ind.remove();
+      if (tab) {
+        const indicator = tab.querySelector('.vc-music-ind');
+        if (this._musicPlaying && !indicator) tab.insertAdjacentHTML('beforeend', '<span class="vc-music-ind vc-status-dot"></span>');
+        else if (!this._musicPlaying) indicator?.remove();
       }
       this._updateBarMusicState();
     }
@@ -4344,6 +3109,17 @@
           }
         });
       }
+      if (progressBar) progressBar.addEventListener('keydown', e => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+        e.preventDefault();
+        const duration = Number(progressBar.getAttribute('aria-valuemax'));
+        if (!duration) return;
+        const current = Number(progressBar.getAttribute('aria-valuenow'));
+        const time = e.key === 'Home' ? 0 : e.key === 'End' ? duration : Math.max(0, Math.min(duration, current + (e.key === 'ArrowRight' ? 5 : -5)));
+        this.socket?.emit('music_seek', { time });
+        this._seekMusic(time);
+        progressBar.setAttribute('aria-valuenow', String(Math.floor(time)));
+      });
       const volSlider = document.getElementById('vc-music-vol-slider');
       if (volSlider) {
         volSlider.addEventListener('input', (e) => {
@@ -4426,7 +3202,7 @@
       }
 
       if (!this.socket) {
-        this._toast("Únete al canal de voz primero para sintonizar en vivo", "info");
+        this._toast("Entra a Afterglow primero para sintonizar en vivo", "info");
         return;
       }
       this._playSfx('toggleOn', 0.3);
@@ -4464,7 +3240,7 @@
 
     async _addSpotlightTrack(track, playNow = false) {
       if (!this.socket) {
-        this._toast('Únete al canal de voz primero para reproducir música con los demás', 'info');
+        this._toast('Entra a Afterglow primero para reproducir música con los demás', 'info');
         return;
       }
       const fullUrl = track.src.startsWith('http') ? track.src : new URL(track.src, document.baseURI).href;
@@ -4887,6 +3663,8 @@
         const fill = document.getElementById('vc-music-progress-fill');
         const timeCurrent = document.getElementById('vc-music-time-current');
         const timeTotal = document.getElementById('vc-music-time-total');
+        const progress = document.getElementById('vc-music-progress');
+        if (progress) { progress.setAttribute('aria-valuemax', String(Math.floor(duration))); progress.setAttribute('aria-valuenow', String(Math.floor(current))); }
         if (fill && duration > 0) fill.style.width = Math.min(100, ((current / duration) * 100)) + '%';
         const fmt = (s) => {
           if (!s || isNaN(s)) return '0:00';
@@ -4919,6 +3697,10 @@
     }
 
     _cleanup() {
+      this._joinAttempt++;
+      clearTimeout(this._micInitTimeout);
+      this._micInitTimeout = null;
+      this._dismissParticipantMenu?.();
       this._connecting = false;
       clearInterval(this._authRefreshTimer);
       this._authRefreshTimer = null;
@@ -4944,6 +3726,7 @@
       if (this.stream) { this.stream.getTracks().forEach(t => t.stop()); this.stream = null; }
       this._processedStream = null;
       this.connected = false;
+      this._syncBarAccessibility();
       this.myId = null;
       this.users = [];
       this.muted = false;
@@ -5265,7 +4048,7 @@
         }
         this._callStart = null;
       }
-      this.fab.title = 'Canal de Voz';
+      this.fab.title = _t('vc_title');
     }
   }
 
