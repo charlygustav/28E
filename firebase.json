@@ -1,0 +1,10 @@
+{
+  "database": {
+    "rules": "firebase/database.voice-transition.rules.json"
+  },
+  "emulators": {
+    "database": {
+      "port": 9000
+    }
+  }
+}

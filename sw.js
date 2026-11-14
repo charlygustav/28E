@@ -3,7 +3,7 @@
 // Version: 1.0.0
 // ══════════════════════════════════════════════════════════════════════════════
 
-const CACHE_NAME = '28e-pwa-v115';
+const CACHE_NAME = '28e-pwa-v116';
 
 // Recursos esenciales pre-cacheados para arranque instantáneo y offline básico
 const PRECACHE_ASSETS = [
@@ -53,6 +53,7 @@ self.addEventListener('fetch', (event) => {
 
   // Solo gestionar peticiones HTTP(S) de tipo GET
   if (request.method !== 'GET') return;
+  if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/vc-api/')) return;
   if (!url.protocol.startsWith('http')) return;
 
   // Omitir peticiones de tiempo real, WebSockets, Firebase RTDB y señalización
@@ -123,7 +124,7 @@ self.addEventListener('fetch', (event) => {
           }
           return networkResponse;
         }).catch(() => {
-          // Fallo de red silencioso para peticiones en segundo plano
+          return Response.error(); // A fetch handler must always resolve to a Response.
         });
 
         return cachedResponse || fetchPromise;

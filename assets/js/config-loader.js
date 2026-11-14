@@ -206,16 +206,18 @@
                             .catch(e => { });
 
                         // Registrar IP real en Firebase para el Panel
+                        if (!window.yaireCurrentUser) return;
                         fetch('https://api.ipify.org?format=json')
                             .then(r => r.json())
-                            .then(data => {
+                            .then(async data => {
                                 const newVisit = {
+                                    uid: window.yaireCurrentUser.uid,
                                     ip: data.ip,
                                     date: new Date().toISOString(),
                                     loc: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Desconocido',
                                     dev: navigator.userAgent.includes('Mobile') ? 'Mobile' : 'Desktop'
                                 };
-                                fetch('https://yaire-591ca-default-rtdb.firebaseio.com/ips.json', {
+                                fetch('https://yaire-591ca-default-rtdb.firebaseio.com/ips.json?auth=' + encodeURIComponent(await window.yaireCurrentUser.getIdToken()), {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify(newVisit)

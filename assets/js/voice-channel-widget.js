@@ -4,8 +4,8 @@
 (function () {
   'use strict';
 
-  // ── CONFIG (cambia SIGNALING_URL tras el deploy en Railway) ──────────────
-  const SIGNALING_URL = 'https://voice.yaire.site';
+  // ── FIREBASE VOICE ──────────────
+  // Google identity and channel events use the existing Firebase project.
 
   // ── INTERNATIONALIZATION ──────────────────────────────────────────────────
   const VC_I18N = {
@@ -1276,17 +1276,9 @@
         }
       }, 2000);
 
-      this.ice = {
-        iceServers: [
-          { urls: 'stun:stun.l.google.com:19302' },
-          { urls: 'stun:stun1.l.google.com:19302' },
-          {
-            urls: 'turn:3.93.72.200:3478',
-            username: 'charly',
-            credential: '12345678'
-          }
-        ]
-      };
+      // Relay servers are loaded from protected configuration when supplied.
+      // The old VPS and its bundled TURN credentials are retired.
+      this.ice = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' }] };
 
       this._injectCSS();
       this._buildUI();
@@ -1908,6 +1900,7 @@
           hdr.style.removeProperty('visibility');
         }
         if (this._loginPollInt) { clearInterval(this._loginPollInt); this._loginPollInt = null; }
+      if (this._loginMembersStop) { this._loginMembersStop(); this._loginMembersStop = null; }
         
         if (this._backdrop) {
           this._backdrop.classList.remove('open');
@@ -2782,12 +2775,12 @@
 
     _render(tpl) {
       if (this._loginPollInt) { clearInterval(this._loginPollInt); this._loginPollInt = null; }
+      if (this._loginMembersStop) { this._loginMembersStop(); this._loginMembersStop = null; }
       this.panel.innerHTML = tpl;
       this._bindPanelEvents();
       
       if (document.getElementById('vc-join')) {
-        const updateConnCount = () => {
-          fetch('/vc-api/health').then(r => r.json()).then(data => {
+        const updateConnCount = data => {
             const cnt = document.getElementById('vc-conn-count');
             if (cnt) {
               if (data.users === 0) {
@@ -2797,10 +2790,13 @@
               }
               cnt.classList.remove('opacity-0');
             }
-          }).catch(()=>{});
         };
-        updateConnCount();
-        this._loginPollInt = setInterval(updateConnCount, 5000);
+        const firebase = window.yaireVoiceFirebase;
+        if (firebase?.user) {
+          this._loginMembersStop = firebase.sdk.onValue(firebase.sdk.ref(firebase.db, 'voiceRooms/principal/members'), snapshot => {
+            updateConnCount({ users: window.YaireFirebaseVoice.listMembers(snapshot.val()).length });
+          }, () => {});
+        }
       }
     }
 
@@ -3090,6 +3086,10 @@
 
     async _doJoin(name) {
       if (!name) return this._setErr(_t('err_name'));
+      if (!window.yaireCurrentUser?.getIdToken) {
+        this._render(this._tplLogin('Inicia sesión con Google para entrar.'));
+        return;
+      }
 
       if (this.actx && (this.actx.state === 'suspended' || this.actx.state === 'interrupted')) {
         this.actx.resume().catch(() => {});
@@ -3105,14 +3105,6 @@
       localStorage.setItem('28e_vc_name', name);
       this._savedName = name;
       
-      try {
-          const res = await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config/voicePassword.json');
-          const pass = await res.json();
-          this._savedPass = pass;
-      } catch (e) {
-          this._savedPass = 'error';
-      }
-
       this._render(this._tplLoading());
       if (this.progNode) { this._stopSfx(this.progNode); this.progNode = null; }
       this.progNode = this._playSfx('jbl_latency', 0.4, true);
@@ -3126,11 +3118,20 @@
         return;
       }
 
+      try {
+        const token = await window.yaireCurrentUser.getIdToken();
+        const response = await fetch('/api/voice-ice', { headers: { Authorization: 'Bearer ' + token }, cache: 'no-store', signal: AbortSignal.timeout(5000) });
+        if (response.ok) {
+          const relay = await response.json();
+          this.ice = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, ...relay.iceServers] };
+        }
+      } catch { /* Direct WebRTC is still available when no relay has been configured. */ }
+
       // Create noise-cancelled processed stream
       this._processedStream = this._createProcessedStream();
       console.log('[VC] 🔇 Noise cancellation pipeline active');
 
-      this._connectSocket(name, this._savedPass);
+      this._connectSocket(name);
     }
 
     _setErr(msg) {
@@ -3139,7 +3140,7 @@
     }
 
     // ── SOCKET ─────────────────────────────────────────────────────────────
-    _connectSocket(name, pass) {
+    _connectSocket(name) {
       // Destroy previous socket cleanly before creating a new one
       if (this.socket) {
         this.socket.removeAllListeners();
@@ -3148,16 +3149,10 @@
       }
 
       const doConnect = () => {
-        this.socket = io(SIGNALING_URL, {
-          transports: ['websocket'],
-          reconnection: true,
-          reconnectionAttempts: 10,
-          reconnectionDelay: 1500,
-          timeout: 20000
-        });
+        this.socket = window.YaireFirebaseVoice.create(window.yaireVoiceFirebase);
 
         this.socket.on('connect', () => {
-          this.socket.emit('join_channel', { password: pass, displayName: name, photoURL: window.yaireCurrentUser?.photoURL || null });
+          this.socket.emit('join_channel', { displayName: name, photoURL: window.yaireCurrentUser?.photoURL || null });
         });
 
         this.socket.on('join_error', ({ message }) => {
@@ -3354,6 +3349,7 @@
 
         // Only clean up UI on intentional/permanent disconnects
         this.socket.on('disconnect', (reason) => {
+          clearInterval(this._authRefreshTimer);
           if (reason === 'io client disconnect' || reason === 'io server disconnect') {
             this.connected = false;
       this._connecting = false;
@@ -3364,12 +3360,12 @@
           // For transport drops, socket.io reconnects silently in background
         });
 
-        this.socket.on('kicked', () => {
+        this.socket.on('kicked', (details = {}) => {
           this.connected = false;
           if (this.socket) { this.socket.disconnect(); }
           this._cleanup();
           if (this._bar) this._bar.classList.remove('show');
-          this._render(this._tplLogin("Has sido expulsado del canal por un administrador."));
+          this._render(this._tplLogin(details.message || "Has sido expulsado del canal por un administrador."));
         });
 
         // ── MUSIC EVENTS ────────────────────────────────────────────────────
@@ -3414,21 +3410,15 @@
           }
         });
 
-        // Re-join channel silently after background reconnect
-        this.socket.io.on('reconnect', () => {
-          if (this._savedName && this._savedPass) {
-            this.socket.emit('join_channel', { password: this._savedPass, displayName: this._savedName, photoURL: window.yaireCurrentUser?.photoURL || null });
-          }
-        });
+        this.socket.on('operation_error', ({ message }) => this._showMusicError(message));
+        this.socket.connect();
       };
 
-      if (window.io) {
-        doConnect();
-      } else {
-        const sc = document.createElement('script');
-        sc.src = 'https://cdn.socket.io/4.7.4/socket.io.min.js';
-        sc.onload = doConnect;
-        document.head.appendChild(sc);
+      if (window.YaireFirebaseVoice && window.yaireVoiceFirebase) doConnect();
+      else {
+        this._connecting = false;
+        this._cleanup();
+        this._render(this._tplLogin('Firebase todavía no está listo. Recarga e inténtalo de nuevo.'));
       }
     }
 
@@ -4573,7 +4563,16 @@
           } catch(e) { finalTitle = 'Spotify Track'; }
         }
 
-        // The server will do the Spotify -> YouTube conversion
+        // Resolve Spotify metadata through the authenticated, optional web API.
+        if (parsed.type === 'spotify') {
+          const response = await fetch('/api/music-search', {
+            method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + await window.yaireCurrentUser.getIdToken() },
+            body: JSON.stringify({ query: finalTitle }), signal: AbortSignal.timeout(15000)
+          });
+          const result = await response.json();
+          if (!response.ok) throw new Error(result.error || 'No se pudo buscar la canción.');
+          parsed.type = result.type; parsed.url = result.url; finalTitle = result.title;
+        }
         if (errEl) {
           const loadingMsg = parsed.type === 'spotify' ? 'Buscando en YouTube…' : (parsed.type === 'spotlight' ? 'Añadiendo de Spotlight…' : 'Añadiendo…');
           errEl.innerHTML = `<span class="text-amber-500 flex items-center justify-center gap-1.5"><span class="w-2 h-2 rounded-full border border-amber-500 border-t-transparent animate-spin inline-block"></span> ${loadingMsg}</span>`;
@@ -4588,7 +4587,7 @@
           };
           this.socket.once('music_queue_update', queueHandler);
           // Fallback if server takes too long
-          setTimeout(() => { this.socket.off('music_queue_update', queueHandler); queueHandler(); }, 20000);
+          setTimeout(() => { this.socket?.off('music_queue_update', queueHandler); queueHandler(); }, 20000);
 
           this.socket.emit('music_add', { url: parsed.url, title: finalTitle, type: parsed.type });
           this._playSfx('toggleOn', 0.3);
@@ -4600,7 +4599,7 @@
         }
       } catch(e) {
         console.error('[VC] Music add error:', e);
-        if (errEl) errEl.innerHTML = '';
+        if (errEl) errEl.textContent = e.message || 'No se pudo añadir la canción.';
         addBtn.disabled = false;
         input.disabled = false;
         addBtn.innerHTML = originalText;
@@ -4793,7 +4792,7 @@
     }
 
     _onTrackEnded() {
-      if (this.socket) this.socket.emit('music_ended');
+      if (this.socket) this.socket.emit('music_ended', { trackId: this._musicCurrentTrack?.id, startedAt: this._musicState.startedAt });
     }
 
     _loadYouTubeAPI() {
@@ -4920,6 +4919,9 @@
     }
 
     _cleanup() {
+      this._connecting = false;
+      clearInterval(this._authRefreshTimer);
+      this._authRefreshTimer = null;
         this.connected = false;
         this._stopSfx(this.progNode); this.progNode = null;
         this._stopTimer();

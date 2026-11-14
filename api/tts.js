@@ -1,50 +1,49 @@
-export default async function handler(req, res) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+const { createAuth } = require('../signaling-server/auth');
 
-  const { text } = req.query;
-  if (!text) {
-    return res.status(400).json({ error: 'Text query parameter is required' });
-  }
-
-  const apiKey = process.env.ELEVENLABS_API_KEY;
-  if (!apiKey) {
-    return res.status(503).json({ error: 'ELEVENLABS_API_KEY is not configured' });
-  }
-
-  const voiceId = 'IKne3meq5aSn9XLyUdCD';  
-
-  try {
-    const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}/stream`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'audio/mpeg',
-        'Content-Type': 'application/json',
-        'xi-api-key': apiKey
-      },
-      body: JSON.stringify({
-        text: text,
-        model_id: 'eleven_multilingual_v2',
-        voice_settings: {
-          stability: 0.5,
-          similarity_boost: 0.75
-        }
-      })
-    });
-
-    if (!response.ok) {
-      const err = await response.text();
-      console.error('ElevenLabs API Error:', err);
-      // REGRESA EL ERROR DE ELEVENLABS AL CLIENTE PARA DEBUGEAR
-      return res.status(response.status).json({ error: 'ElevenLabs API error', details: err });
+function createTtsHandler({ auth = createAuth(), fetchAudio = fetch, env = process.env } = {}) {
+  const usage = new Map();
+  let globalWindow = { start: Date.now(), count: 0 };
+  return async function handler(req, res) {
+    res.setHeader('Cache-Control', 'no-store');
+    if (req.method !== 'POST') {
+      res.setHeader('Allow', 'POST');
+      return res.status(405).json({ error: 'Usa POST.' });
     }
-
-    res.setHeader('Content-Type', 'audio/mpeg');
-    const buffer = await response.arrayBuffer();
-    return res.status(200).send(Buffer.from(buffer));
-  } catch (error) {
-    console.error('Error fetching TTS:', error);
-    return res.status(500).json({ error: 'Internal Server Error', details: error.toString() });
-  }
+    let user;
+    try {
+      const token = /^Bearer (\S+)$/i.exec(req.headers.authorization || '')?.[1];
+      user = await auth.authenticate(token, { googleOnly: true });
+    } catch { return res.status(401).json({ error: 'Inicia sesión con Google.' }); }
+    const text = req.body?.text;
+    if (typeof text !== 'string' || !text.trim() || text.length > 1000) {
+      return res.status(400).json({ error: 'El texto debe tener entre 1 y 1000 caracteres.' });
+    }
+    if (!env.ELEVENLABS_API_KEY) {
+      return res.status(503).json({ error: 'El servicio de voz no está configurado.' });
+    }
+    const now = Date.now();
+    for (const [uid, value] of usage) if (now - value.start >= 60000) usage.delete(uid);
+    if (now - globalWindow.start >= 60000) globalWindow = { start: now, count: 0 };
+    const current = usage.get(user.uid) || { start: now, count: 0 };
+    if (current.count >= 3 || globalWindow.count >= 30) {
+      res.setHeader('Retry-After', '60');
+      return res.status(429).json({ error: 'Espera un minuto antes de generar más audio.' });
+    }
+    current.count++; globalWindow.count++; usage.set(user.uid, current);
+    try {
+      const response = await fetchAudio('https://api.elevenlabs.io/v1/text-to-speech/IKne3meq5aSn9XLyUdCD/stream', {
+        method: 'POST', signal: AbortSignal.timeout(20000),
+        headers: { Accept: 'audio/mpeg', 'Content-Type': 'application/json', 'xi-api-key': env.ELEVENLABS_API_KEY },
+        body: JSON.stringify({ text: text.trim(), model_id: 'eleven_multilingual_v2',
+          voice_settings: { stability: 0.5, similarity_boost: 0.75 } })
+      });
+      if (!response.ok) return res.status(502).json({ error: 'No se pudo generar el audio.' });
+      const buffer = await response.arrayBuffer();
+      res.setHeader('Content-Type', 'audio/mpeg');
+      return res.status(200).send(Buffer.from(buffer));
+    } catch { return res.status(502).json({ error: 'El servicio de voz no está disponible.' }); }
+  };
 }
+
+module.exports = createTtsHandler();
+module.exports.createTtsHandler = createTtsHandler;

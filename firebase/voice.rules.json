@@ -1,0 +1,300 @@
+{
+  "rules": {
+    "voiceRooms": {
+      "principal": {
+        "members": {
+          ".read": "auth != null && auth.token.firebase.sign_in_provider == 'google.com' || (auth != null && auth.token.email_verified == true && auth.token.email == 'theginnomar.x@gmail.com')",
+          "0": {
+            ".write": "(auth != null && auth.token.email_verified == true && auth.token.email == 'theginnomar.x@gmail.com') || (auth != null && auth.token.firebase.sign_in_provider == 'google.com' && ((!data.exists() && (!newData.exists() || newData.child('uid').val() == auth.uid)) || data.child('uid').val() == auth.uid))",
+            ".validate": "newData.hasChildren(['id','uid','displayName','muted','dnd','camEnabled','joinedAt']) && (!data.exists() || (newData.child('id').val() == data.child('id').val() && newData.child('uid').val() == data.child('uid').val())) && newData.child('id').val() != root.child('voiceRooms/principal/members/1/id').val() && newData.child('id').val() != root.child('voiceRooms/principal/members/2/id').val() && newData.child('id').val() != root.child('voiceRooms/principal/members/3/id').val()",
+            "id": {
+              ".validate": "newData.isString() && newData.val().length >= 20 && newData.val().length <= 128 && newData.val().beginsWith(auth.uid + ':')"
+            },
+            "uid": {
+              ".validate": "newData.isString() && newData.val() == auth.uid"
+            },
+            "displayName": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 80"
+            },
+            "photoURL": {
+              ".validate": "newData.isString() && newData.val().length <= 2048 && (newData.val() == '' || newData.val().matches(/^https:\\/\\/.+/))"
+            },
+            "muted": {
+              ".validate": "newData.isBoolean()"
+            },
+            "dnd": {
+              ".validate": "newData.isBoolean()"
+            },
+            "camEnabled": {
+              ".validate": "newData.isBoolean()"
+            },
+            "joinedAt": {
+              ".validate": "newData.isNumber() && ((!data.exists() && newData.val() == now) || newData.val() == data.val())"
+            },
+            "$other": {
+              ".validate": false
+            }
+          },
+          "1": {
+            ".write": "(auth != null && auth.token.email_verified == true && auth.token.email == 'theginnomar.x@gmail.com') || (auth != null && auth.token.firebase.sign_in_provider == 'google.com' && ((!data.exists() && (!newData.exists() || newData.child('uid').val() == auth.uid)) || data.child('uid').val() == auth.uid))",
+            ".validate": "newData.hasChildren(['id','uid','displayName','muted','dnd','camEnabled','joinedAt']) && (!data.exists() || (newData.child('id').val() == data.child('id').val() && newData.child('uid').val() == data.child('uid').val())) && newData.child('id').val() != root.child('voiceRooms/principal/members/0/id').val() && newData.child('id').val() != root.child('voiceRooms/principal/members/2/id').val() && newData.child('id').val() != root.child('voiceRooms/principal/members/3/id').val()",
+            "id": {
+              ".validate": "newData.isString() && newData.val().length >= 20 && newData.val().length <= 128 && newData.val().beginsWith(auth.uid + ':')"
+            },
+            "uid": {
+              ".validate": "newData.isString() && newData.val() == auth.uid"
+            },
+            "displayName": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 80"
+            },
+            "photoURL": {
+              ".validate": "newData.isString() && newData.val().length <= 2048 && (newData.val() == '' || newData.val().matches(/^https:\\/\\/.+/))"
+            },
+            "muted": {
+              ".validate": "newData.isBoolean()"
+            },
+            "dnd": {
+              ".validate": "newData.isBoolean()"
+            },
+            "camEnabled": {
+              ".validate": "newData.isBoolean()"
+            },
+            "joinedAt": {
+              ".validate": "newData.isNumber() && ((!data.exists() && newData.val() == now) || newData.val() == data.val())"
+            },
+            "$other": {
+              ".validate": false
+            }
+          },
+          "2": {
+            ".write": "(auth != null && auth.token.email_verified == true && auth.token.email == 'theginnomar.x@gmail.com') || (auth != null && auth.token.firebase.sign_in_provider == 'google.com' && ((!data.exists() && (!newData.exists() || newData.child('uid').val() == auth.uid)) || data.child('uid').val() == auth.uid))",
+            ".validate": "newData.hasChildren(['id','uid','displayName','muted','dnd','camEnabled','joinedAt']) && (!data.exists() || (newData.child('id').val() == data.child('id').val() && newData.child('uid').val() == data.child('uid').val())) && newData.child('id').val() != root.child('voiceRooms/principal/members/0/id').val() && newData.child('id').val() != root.child('voiceRooms/principal/members/1/id').val() && newData.child('id').val() != root.child('voiceRooms/principal/members/3/id').val()",
+            "id": {
+              ".validate": "newData.isString() && newData.val().length >= 20 && newData.val().length <= 128 && newData.val().beginsWith(auth.uid + ':')"
+            },
+            "uid": {
+              ".validate": "newData.isString() && newData.val() == auth.uid"
+            },
+            "displayName": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 80"
+            },
+            "photoURL": {
+              ".validate": "newData.isString() && newData.val().length <= 2048 && (newData.val() == '' || newData.val().matches(/^https:\\/\\/.+/))"
+            },
+            "muted": {
+              ".validate": "newData.isBoolean()"
+            },
+            "dnd": {
+              ".validate": "newData.isBoolean()"
+            },
+            "camEnabled": {
+              ".validate": "newData.isBoolean()"
+            },
+            "joinedAt": {
+              ".validate": "newData.isNumber() && ((!data.exists() && newData.val() == now) || newData.val() == data.val())"
+            },
+            "$other": {
+              ".validate": false
+            }
+          },
+          "3": {
+            ".write": "(auth != null && auth.token.email_verified == true && auth.token.email == 'theginnomar.x@gmail.com') || (auth != null && auth.token.firebase.sign_in_provider == 'google.com' && ((!data.exists() && (!newData.exists() || newData.child('uid').val() == auth.uid)) || data.child('uid').val() == auth.uid))",
+            ".validate": "newData.hasChildren(['id','uid','displayName','muted','dnd','camEnabled','joinedAt']) && (!data.exists() || (newData.child('id').val() == data.child('id').val() && newData.child('uid').val() == data.child('uid').val())) && newData.child('id').val() != root.child('voiceRooms/principal/members/0/id').val() && newData.child('id').val() != root.child('voiceRooms/principal/members/1/id').val() && newData.child('id').val() != root.child('voiceRooms/principal/members/2/id').val()",
+            "id": {
+              ".validate": "newData.isString() && newData.val().length >= 20 && newData.val().length <= 128 && newData.val().beginsWith(auth.uid + ':')"
+            },
+            "uid": {
+              ".validate": "newData.isString() && newData.val() == auth.uid"
+            },
+            "displayName": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 80"
+            },
+            "photoURL": {
+              ".validate": "newData.isString() && newData.val().length <= 2048 && (newData.val() == '' || newData.val().matches(/^https:\\/\\/.+/))"
+            },
+            "muted": {
+              ".validate": "newData.isBoolean()"
+            },
+            "dnd": {
+              ".validate": "newData.isBoolean()"
+            },
+            "camEnabled": {
+              ".validate": "newData.isBoolean()"
+            },
+            "joinedAt": {
+              ".validate": "newData.isNumber() && ((!data.exists() && newData.val() == now) || newData.val() == data.val())"
+            },
+            "$other": {
+              ".validate": false
+            }
+          },
+          "$other": {
+            ".validate": false
+          }
+        },
+        "signals": {
+          "$to": {
+            ".read": "auth != null && auth.token.firebase.sign_in_provider == 'google.com' && ((root.child('voiceRooms/principal/members').child('0/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('0/id').val() == $to) || (root.child('voiceRooms/principal/members').child('1/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('1/id').val() == $to) || (root.child('voiceRooms/principal/members').child('2/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('2/id').val() == $to) || (root.child('voiceRooms/principal/members').child('3/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('3/id').val() == $to))",
+            ".write": "(auth != null && auth.token.firebase.sign_in_provider == 'google.com' && ((root.child('voiceRooms/principal/members').child('0/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('0/id').val() == $to) || (root.child('voiceRooms/principal/members').child('1/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('1/id').val() == $to) || (root.child('voiceRooms/principal/members').child('2/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('2/id').val() == $to) || (root.child('voiceRooms/principal/members').child('3/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('3/id').val() == $to)) && !newData.exists()) || (auth != null && auth.token.email_verified == true && auth.token.email == 'theginnomar.x@gmail.com' && !newData.exists())",
+            "$packet": {
+              ".write": "(auth != null && auth.token.firebase.sign_in_provider == 'google.com' && ((root.child('voiceRooms/principal/members').child('0/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('0/id').val() == $to) || (root.child('voiceRooms/principal/members').child('1/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('1/id').val() == $to) || (root.child('voiceRooms/principal/members').child('2/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('2/id').val() == $to) || (root.child('voiceRooms/principal/members').child('3/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('3/id').val() == $to)) && !newData.exists()) || ((auth != null && auth.token.firebase.sign_in_provider == 'google.com' && (root.child('voiceRooms/principal/members').child('0/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('1/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('2/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('3/uid').val() == auth.uid)) && (root.child('voiceRooms/principal/members').child('0/id').val() == $to || root.child('voiceRooms/principal/members').child('1/id').val() == $to || root.child('voiceRooms/principal/members').child('2/id').val() == $to || root.child('voiceRooms/principal/members').child('3/id').val() == $to) && ((root.child('voiceRooms/principal/members').child('0/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('0/id').val() == newData.child(\"from\").val()) || (root.child('voiceRooms/principal/members').child('1/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('1/id').val() == newData.child(\"from\").val()) || (root.child('voiceRooms/principal/members').child('2/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('2/id').val() == newData.child(\"from\").val()) || (root.child('voiceRooms/principal/members').child('3/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('3/id').val() == newData.child(\"from\").val())))",
+              ".validate": "newData.hasChildren(['from','uid','kind','payload','createdAt','seq']) && newData.child('uid').val() == auth.uid && newData.child('createdAt').val() == now && $packet.matches(/^(0|[1-9][0-9]?|1[01][0-9]|12[0-7])$/) && $packet == (newData.child('seq').val() % 128) + ''",
+              "from": {
+                ".validate": "newData.isString()"
+              },
+              "uid": {
+                ".validate": "newData.isString()"
+              },
+              "kind": {
+                ".validate": "newData.val() == 'webrtc_offer' || newData.val() == 'webrtc_answer' || newData.val() == 'ice_candidate'"
+              },
+              "payload": {
+                ".validate": "newData.isString() && newData.val().length <= 32768"
+              },
+              "createdAt": {
+                ".validate": "newData.isNumber()"
+              },
+              "$other": {
+                ".validate": false
+              },
+              "seq": {
+                ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= root.child('voiceRooms/principal/signalCounters').child($to).val()"
+              }
+            }
+          }
+        },
+        "events": {
+          ".read": "((auth != null && auth.token.firebase.sign_in_provider == 'google.com' && (root.child('voiceRooms/principal/members').child('0/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('1/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('2/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('3/uid').val() == auth.uid))) || (auth != null && auth.token.email_verified == true && auth.token.email == 'theginnomar.x@gmail.com')",
+          "$from": {
+            ".write": "(auth != null && auth.token.firebase.sign_in_provider == 'google.com' && ((root.child('voiceRooms/principal/members').child('0/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('0/id').val() == $from) || (root.child('voiceRooms/principal/members').child('1/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('1/id').val() == $from) || (root.child('voiceRooms/principal/members').child('2/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('2/id').val() == $from) || (root.child('voiceRooms/principal/members').child('3/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('3/id').val() == $from))) || (auth != null && auth.token.email_verified == true && auth.token.email == 'theginnomar.x@gmail.com' && !newData.exists())",
+            "speaking": {
+              ".validate": "newData.isBoolean()"
+            },
+            "typing": {
+              ".validate": "newData.isBoolean()"
+            },
+            "ringAt": {
+              ".validate": "newData.isNumber() && newData.val() == now"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        },
+        "chat": {
+          ".read": "((auth != null && auth.token.firebase.sign_in_provider == 'google.com' && (root.child('voiceRooms/principal/members').child('0/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('1/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('2/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('3/uid').val() == auth.uid))) || (auth != null && auth.token.email_verified == true && auth.token.email == 'theginnomar.x@gmail.com')",
+          ".indexOn": [
+            "ts"
+          ],
+          "$message": {
+            ".write": "((auth != null && auth.token.firebase.sign_in_provider == 'google.com' && (root.child('voiceRooms/principal/members').child('0/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('1/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('2/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('3/uid').val() == auth.uid))) && (!newData.exists() || (newData.child('uid').val() == auth.uid && ((root.child('voiceRooms/principal/members').child('0/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('0/id').val() == newData.child(\"from\").val()) || (root.child('voiceRooms/principal/members').child('1/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('1/id').val() == newData.child(\"from\").val()) || (root.child('voiceRooms/principal/members').child('2/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('2/id').val() == newData.child(\"from\").val()) || (root.child('voiceRooms/principal/members').child('3/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('3/id').val() == newData.child(\"from\").val()))))",
+            ".validate": "newData.hasChildren(['from','uid','name','text','ts','seq']) && newData.child('ts').val() == now && $message.matches(/^(0|[1-9][0-9]?)$/) && $message == (newData.child('seq').val() % 100) + ''",
+            "from": {
+              ".validate": "newData.isString()"
+            },
+            "uid": {
+              ".validate": "newData.isString()"
+            },
+            "name": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 80"
+            },
+            "text": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 500"
+            },
+            "ts": {
+              ".validate": "newData.isNumber()"
+            },
+            "$other": {
+              ".validate": false
+            },
+            "seq": {
+              ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= root.child('voiceRooms/principal/chatCounter').val()"
+            }
+          }
+        },
+        "music": {
+          ".read": "((auth != null && auth.token.firebase.sign_in_provider == 'google.com' && (root.child('voiceRooms/principal/members').child('0/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('1/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('2/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('3/uid').val() == auth.uid))) || (auth != null && auth.token.email_verified == true && auth.token.email == 'theginnomar.x@gmail.com')",
+          ".write": "(auth != null && auth.token.firebase.sign_in_provider == 'google.com' && (root.child('voiceRooms/principal/members').child('0/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('1/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('2/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('3/uid').val() == auth.uid))",
+          ".validate": "newData.hasChildren(['state','action','revision'])",
+          "action": {
+            ".validate": "newData.isString() && newData.val().matches(/^music_(add|clear|play_index|remove|skip|ended|pause|resume|seek)$/)"
+          },
+          "revision": {
+            ".validate": "newData.isString() && newData.val().length <= 128"
+          },
+          "state": {
+            ".validate": "newData.hasChildren(['currentIndex','isPlaying','startedAt','pausedTime'])",
+            "currentIndex": {
+              ".validate": "newData.isNumber() && newData.val() >= -1 && newData.val() < 100"
+            },
+            "isPlaying": {
+              ".validate": "newData.isBoolean()"
+            },
+            "startedAt": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= now + 60000"
+            },
+            "pausedTime": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 86400"
+            },
+            "$other": {
+              ".validate": false
+            }
+          },
+          "queue": {
+            "$track": {
+              ".validate": "newData.hasChildren(['id','url','title','type','addedBy','addedByName']) && $track.matches(/^(0|[1-9][0-9]?)$/)",
+              "id": {
+                ".validate": "newData.isString() && newData.val().length <= 128"
+              },
+              "url": {
+                ".validate": "newData.isString() && newData.val().length <= 2048 && newData.val().matches(/^https:\\/\\/.+/)"
+              },
+              "title": {
+                ".validate": "newData.isString() && newData.val().length <= 300"
+              },
+              "artist": {
+                ".validate": "newData.isString() && newData.val().length <= 300"
+              },
+              "cover": {
+                ".validate": "newData.isString() && newData.val().length <= 2048 && (newData.val() == '' || newData.val().matches(/^https:\\/\\/.+/))"
+              },
+              "type": {
+                ".validate": "newData.val() == 'youtube' || newData.val() == 'spotlight' || newData.val() == 'audio'"
+              },
+              "addedBy": {
+                ".validate": "newData.isString() && newData.val().length <= 128"
+              },
+              "addedByName": {
+                ".validate": "newData.isString() && newData.val().length <= 80"
+              },
+              "$other": {
+                ".validate": false
+              }
+            }
+          },
+          "$other": {
+            ".validate": false
+          }
+        },
+        "$other": {
+          ".validate": false
+        },
+        "signalCounters": {
+          ".read": "(auth != null && auth.token.firebase.sign_in_provider == 'google.com' && (root.child('voiceRooms/principal/members').child('0/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('1/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('2/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('3/uid').val() == auth.uid))",
+          "$to": {
+            ".write": "(((auth != null && auth.token.firebase.sign_in_provider == 'google.com' && (root.child('voiceRooms/principal/members').child('0/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('1/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('2/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('3/uid').val() == auth.uid)) && (root.child('voiceRooms/principal/members').child('0/id').val() == $to || root.child('voiceRooms/principal/members').child('1/id').val() == $to || root.child('voiceRooms/principal/members').child('2/id').val() == $to || root.child('voiceRooms/principal/members').child('3/id').val() == $to)) || (auth != null && auth.token.firebase.sign_in_provider == 'google.com' && ((root.child('voiceRooms/principal/members').child('0/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('0/id').val() == $to) || (root.child('voiceRooms/principal/members').child('1/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('1/id').val() == $to) || (root.child('voiceRooms/principal/members').child('2/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('2/id').val() == $to) || (root.child('voiceRooms/principal/members').child('3/uid').val() == auth.uid && root.child('voiceRooms/principal/members').child('3/id').val() == $to)) && !newData.exists())) || (auth != null && auth.token.email_verified == true && auth.token.email == 'theginnomar.x@gmail.com' && !newData.exists())",
+            ".validate": "newData.isNumber() && ((!data.exists() && newData.val() == 1) || newData.val() == data.val() + 1)"
+          }
+        },
+        "chatCounter": {
+          ".read": "(auth != null && auth.token.firebase.sign_in_provider == 'google.com' && (root.child('voiceRooms/principal/members').child('0/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('1/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('2/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('3/uid').val() == auth.uid))",
+          ".write": "(auth != null && auth.token.firebase.sign_in_provider == 'google.com' && (root.child('voiceRooms/principal/members').child('0/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('1/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('2/uid').val() == auth.uid || root.child('voiceRooms/principal/members').child('3/uid').val() == auth.uid))",
+          ".validate": "newData.isNumber() && ((!data.exists() && newData.val() == 1) || newData.val() == data.val() + 1)"
+        }
+      },
+      "$other": {
+        ".validate": false
+      }
+    }
+  }
+}

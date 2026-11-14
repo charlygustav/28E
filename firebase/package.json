@@ -1,0 +1,12 @@
+{
+  "name": "28e-firebase-tests",
+  "private": true,
+  "scripts": {
+    "test": "firebase emulators:exec --only database --project demo-28e --config ../firebase.json \"node --test test/*.test.js\""
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^4.0.1",
+    "firebase": "^11.10.0",
+    "firebase-tools": "^14.0.0"
+  }
+}

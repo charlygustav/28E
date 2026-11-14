@@ -1,6 +1,6 @@
 
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
-        import { getDatabase, ref, push, onValue, onDisconnect, set, serverTimestamp, get, remove, update, runTransaction } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js';
+        import { getDatabase, ref, push, onValue, onDisconnect, set, serverTimestamp, get, remove, update, runTransaction, onChildAdded, onChildChanged, query, orderByKey, orderByChild, limitToLast } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js';
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
 
         // Redirección de 127.0.0.1 a localhost para compatibilidad con dominios autorizados de Firebase Auth
@@ -26,7 +26,11 @@
         const sessionId = 'session_' + Math.random().toString(36).substr(2, 9);
         const presenceRef = ref(db, 'presence/' + sessionId);
 
-        onDisconnect(presenceRef).remove();
+        onValue(ref(db, '.info/connected'), snapshot => {
+            if (snapshot.val() && currentUser) {
+                onDisconnect(presenceRef).remove().then(updatePresence).catch(() => {});
+            }
+        });
 
         // Heartbeat cada 30 segundos
         setInterval(() => {
@@ -37,7 +41,7 @@
 
 
         window.addEventListener('beforeunload', () => {
-            remove(presenceRef);
+            if (currentUser) remove(presenceRef).catch(() => {});
         });
 
         let currentSection = "Navegando";
@@ -50,7 +54,9 @@
         }).catch(() => userLocation = "Desconocida");
 
         const updatePresence = () => {
+            if (!currentUser) return;
             const payload = {
+                uid: currentUser.uid,
                 section: currentSection,
                 lastActive: serverTimestamp(),
                 userAgent: navigator.userAgent.includes('Mobile') ? 'Mobile' : 'Desktop',
@@ -64,7 +70,7 @@
                     email: currentUser.email
                 };
             }
-            set(presenceRef, payload);
+            set(presenceRef, payload).catch(() => {});
         };
         updatePresence();
         window.yaireUpdatePresence = (sec) => { currentSection = sec; updatePresence(); };
@@ -98,6 +104,8 @@
 
         // --- AUTH ---
         const auth = getAuth(app);
+        window.yaireVoiceFirebase = { db, sdk: { ref, push, onValue, onChildAdded, onChildChanged, query, orderByKey, orderByChild, limitToLast, onDisconnect, set, get, remove, update, runTransaction, serverTimestamp }, get user() { return auth.currentUser; } };
+        window.dispatchEvent(new Event('yaire-voice-firebase-ready'));
         const provider = new GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
         const authToggle = document.getElementById('auth-toggle');
@@ -243,7 +251,10 @@
             const isFreshLogin = hasInitialAuthRun && !currentUser && !!user;
             currentUser = user;
             window.yaireCurrentUser = user; // Expose globally
+            if (!user && window.yaireVoiceChannel?.socket) window.yaireVoiceChannel._leave();
             if (user) {
+                onDisconnect(presenceRef).remove().catch(() => {});
+                updatePresence();
                 currentGooglePhotoURL = user.photoURL || '';
                 window.yaireGooglePhotoURL = currentGooglePhotoURL;
 
@@ -668,6 +679,10 @@
         if (gbForm) {
             gbForm.addEventListener('submit', (e) => {
                 e.preventDefault();
+            if (!currentUser) {
+                if (window.showPremiumAlert) window.showPremiumAlert('Inicia sesión', 'Entra con Google para publicar una dedicatoria.', 'info');
+                return;
+            }
                 const name = document.getElementById('gb-name').value.trim();
                 const msg = document.getElementById('gb-msg').value.trim();
                 if (!name || !msg) return;
@@ -829,8 +844,17 @@
             ];
             const colorClass = colors[safeName.innerText.length % colors.length];
 
-            const avatarHTML = m.photoURL
-                ? `<img src="${m.photoURL}" referrerpolicy="no-referrer" class="w-9 h-9 shrink-0 rounded-full object-cover ring-1 ring-white/15 shadow-sm" alt="" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='flex';"><div class="w-9 h-9 shrink-0 rounded-full items-center justify-center font-bold text-xs ${colorClass} shadow-sm" style="display:none">${initial}</div>`
+            let safePhoto = '';
+            try {
+                const url = new URL(m.photoURL);
+                if (url.protocol === 'https:') {
+                    const img = document.createElement('img');
+                    img.src = url.href;
+                    safePhoto = img.getAttribute('src').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+                }
+            } catch {}
+            const avatarHTML = safePhoto
+                ? `<img src="${safePhoto}" referrerpolicy="no-referrer" class="w-9 h-9 shrink-0 rounded-full object-cover ring-1 ring-white/15 shadow-sm" alt="" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='flex';"><div class="w-9 h-9 shrink-0 rounded-full items-center justify-center font-bold text-xs ${colorClass} shadow-sm" style="display:none">${initial}</div>`
                 : `<div class="w-9 h-9 shrink-0 rounded-full flex items-center justify-center font-bold text-xs ${colorClass} shadow-sm">${initial}</div>`;
 
             let controlsHTML = '';

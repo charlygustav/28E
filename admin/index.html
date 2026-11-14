@@ -12,7 +12,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>28E Admin Panel</title>
-    <link rel="icon" type="image/png" href="/favicon_admin.png">
+    <link rel="icon" type="image/png" href="./favicon_admin.png">
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- GSAP for smooth animations -->
@@ -39,11 +39,31 @@
             transition: background-color 5000s ease-in-out 0s;
         }
     </style>
+    <script>
+        window.firebaseFetch = async function (input, options = {}) {
+            const url = new URL(input, location.href);
+            const user = window.__fbAuth?.currentUser;
+            if (user) url.searchParams.set('auth', await user.getIdToken());
+            return fetch(url.href, { ...options, cache: 'no-store' });
+        };
+    </script>
+    <script src="./assets/js/safe-html.js?v=20261114"></script>
+    <script src="./assets/js/firebase-voice-transport.js?v=20261114_firebase"></script>
+    <script>
+        const escapeAdminHtml = window.yaireSafeHtml.text;
+        const adminImageUrl = window.yaireSafeHtml.image;
+        document.addEventListener('click', event => {
+            const kick = event.target.closest('[data-vc-kick]');
+            if (kick) window.kickUser(kick.dataset.vcKick, kick.dataset.name);
+            const remove = event.target.closest('[data-delete-guestbook]');
+            if (remove) window.deleteGuestbookMsg(remove.dataset.deleteGuestbook);
+        });
+    </script>
     <!-- Firebase Auth SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
         import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, updatePassword, updateProfile, EmailAuthProvider, reauthenticateWithCredential, setPersistence, browserLocalPersistence } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
-        import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js';
+        import { getDatabase, ref, onValue, query, orderByKey, orderByChild, limitToLast, remove, update } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyDFkuktrXnsV9-jg2bv5dpJQRR-he8PT3g",
@@ -77,6 +97,8 @@
         window.__fbDb = db;
         window.__fbRef = ref;
         window.__fbOnValue = onValue;
+        window.__voiceAdminFirebase = { db, sdk: { ref, onValue, query, orderByKey, orderByChild, limitToLast, remove, update } };
+        window.dispatchEvent(new Event('yaire-admin-firebase-ready'));
     </script>
 
     <script>
@@ -2011,7 +2033,7 @@
                                 <input type="text" id="gh-token" style="-webkit-text-security: disc;"
                                     autocomplete="new-password" data-lpignore="true" data-1p-ignore="true"
                                     class="w-full bg-[#050505] border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white focus:border-white/30 focus:bg-white/5 outline-none transition-all placeholder-zinc-700 font-mono text-sm"
-                                    placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+                                    placeholder="Token personal de GitHub">
                             </div>
                         </div>
                     </div>
@@ -2386,7 +2408,7 @@
                 timestamp: Date.now()
             };
             try {
-                await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/audit_logs.json', {
+                await firebaseFetch('https://yaire-591ca-default-rtdb.firebaseio.com/audit_logs.json', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(entry)
@@ -2406,7 +2428,7 @@
             if (!container) return;
 
             try {
-                const res = await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/audit_logs.json');
+                const res = await firebaseFetch('https://yaire-591ca-default-rtdb.firebaseio.com/audit_logs.json');
                 const data = await res.json();
 
                 if (!data) {
@@ -2439,13 +2461,13 @@
                             </div>
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center justify-between mb-1">
-                                    <h4 class="font-bold text-white text-sm">${log.title}</h4>
+                                    <h4 class="font-bold text-white text-sm">${escapeAdminHtml(log.title)}</h4>
                                     <div class="text-right">
                                         <span class="block text-[10px] font-mono text-zinc-500">${timeStr}</span>
                                         <span class="block text-[10px] font-bold text-zinc-600 uppercase tracking-widest">${dateStr}</span>
                                     </div>
                                 </div>
-                                <p class="text-xs text-zinc-400 font-serif leading-relaxed">${log.desc}</p>
+                                <p class="text-xs text-zinc-400 font-serif leading-relaxed">${escapeAdminHtml(log.desc)}</p>
                             </div>
                         </div>
                     `;
@@ -2622,7 +2644,7 @@
             // 1 & 2. Firebase IPs: total visits (logs.length) + today's visits
             try {
                 const t0 = Date.now();
-                const res = await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/ips.json');
+                const res = await firebaseFetch('https://yaire-591ca-default-rtdb.firebaseio.com/ips.json');
                 const ping = Date.now() - t0;
                 const data = await res.json();
                 const logs = data ? Object.values(data) : [];
@@ -2651,7 +2673,7 @@
 
             // 3. Last config update from Firebase
             try {
-                const res = await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config/lastUpdated.json');
+                const res = await firebaseFetch('https://yaire-591ca-default-rtdb.firebaseio.com/config/lastUpdated.json');
                 const ts = await res.json();
                 if (ts) {
                     const d = new Date(ts);
@@ -2711,7 +2733,7 @@
             // Edge App Ping (simulado o fetch muy ligero)
             try {
                 const t0 = Date.now();
-                await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/ips.json', { method: 'HEAD' });
+                await firebaseFetch('https://yaire-591ca-default-rtdb.firebaseio.com/ips.json', { method: 'HEAD' });
                 const ping = Date.now() - t0;
                 document.getElementById('edge-status-label').textContent = `${ping}ms`;
                 document.getElementById('edge-status-label').className = 'text-amber-400 font-mono text-xs';
@@ -2740,7 +2762,7 @@
             // Visitas totales (Firebase) + visitas de hoy
             try {
                 const t0 = Date.now();
-                const res = await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/ips.json');
+                const res = await firebaseFetch('https://yaire-591ca-default-rtdb.firebaseio.com/ips.json');
                 const ping = Date.now() - t0;
                 const data = await res.json();
                 const logs = data ? Object.values(data) : [];
@@ -2891,7 +2913,7 @@
 
             // Última actualización de config
             try {
-                const res = await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config/lastUpdated.json');
+                const res = await firebaseFetch('https://yaire-591ca-default-rtdb.firebaseio.com/config/lastUpdated.json');
                 const ts = await res.json();
                 if (ts) {
                     const d = new Date(ts);
@@ -3299,7 +3321,7 @@
 
             // Fetch config desde Firebase para sincronizar el estado real del servidor al cargar
             try {
-                const res = await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json');
+                const res = await firebaseFetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json');
                 if (res.ok) {
                     const fbCfg = await res.json();
                     if (fbCfg) {
@@ -3324,13 +3346,7 @@
                 console.error("Error al cargar configuración desde Firebase:", e);
             }
 
-            // Siempre garantizar que el token esté presente (se inyecta en runtime)
-            if (!cfg.ghToken) {
-                const _p = ['ghp_J6H94NN', 'gmd1ebo2qV5x', 'HTWzDZPksyY2TuOu6'];
-                cfg.ghToken = _p.join('');
-                cfg.ghRepo = cfg.ghRepo || 'charlygustav/28E';
-                localStorage.setItem('yaire_config', JSON.stringify(cfg));
-            }
+
 
 
 
@@ -3409,23 +3425,16 @@
 
             // Auto-initialize: si localStorage estaba vacío, guardar los valores por defecto ahora
             if (!localStorage.getItem('yaire_config') || Object.keys(cfg).length === 0) {
-                // Token ensamblado en runtime (no visible para scanners estáticos)
-                const _p = ['ghp_J6H94NN', 'gmd1ebo2qV5x', 'HTWzDZPksyY2TuOu6'];
                 const initCfg = {
                     mantenimiento: false,
                     ghRepo: 'charlygustav/28E',
-                    ghToken: _p.join(''),
+                    ghToken: '',
                     gal1: 'https://i.ibb.co/yByRfq5y/IMG-20260125-WA0097.jpg',
                     gal2: 'https://i.ibb.co/DDHBsJy2/IMG-20260127-WA0067.jpg',
                     gal3: 'https://i.ibb.co/SDfLGvby/IMG-20260301-WA0027.jpg',
                     songs: [...defaultSongs]
                 };
                 localStorage.setItem('yaire_config', JSON.stringify(initCfg));
-            } else if (!cfg.ghToken) {
-                // Si ya existe config pero sin token (fue borrado), reinyectarlo
-                const _p = ['ghp_J6H94NN', 'gmd1ebo2qV5x', 'HTWzDZPksyY2TuOu6'];
-                cfg.ghToken = _p.join('');
-                localStorage.setItem('yaire_config', JSON.stringify(cfg));
             }
 
             renderSongs();
@@ -3650,8 +3659,8 @@
                     html += `
                         <tr class="hover:bg-white/5 transition-colors group">
                             <td class="px-8 py-4 whitespace-nowrap text-xs">${dateStr}</td>
-                            <td class="px-8 py-4 font-mono text-white font-bold tracking-wider">${log.ip || '---'}</td>
-                            <td class="px-8 py-4 flex items-center gap-2 text-zinc-400 text-xs uppercase tracking-widest mt-1"><i class="ph-fill ph-map-pin text-zinc-600"></i> ${log.loc || 'Desconocido'}</td>
+                            <td class="px-8 py-4 font-mono text-white font-bold tracking-wider">${escapeAdminHtml(log.ip || '---')}</td>
+                            <td class="px-8 py-4 flex items-center gap-2 text-zinc-400 text-xs uppercase tracking-widest mt-1"><i class="ph-fill ph-map-pin text-zinc-600"></i> ${escapeAdminHtml(log.loc || 'Desconocido')}</td>
                             <td class="px-8 py-4 text-right">
                                 <div class="flex items-center justify-end gap-2 text-zinc-400 text-[10px] font-bold uppercase tracking-widest">
                                     ${devText} ${devIcon}
@@ -4163,6 +4172,7 @@
             const safeConfig = { ...cfgObj };
             delete safeConfig.ghToken;
             delete safeConfig.ghRepo;
+            delete safeConfig.voicePassword;
 
 
             let sha = null;
@@ -4225,11 +4235,7 @@
 
             const cfg = JSON.parse(localStorage.getItem('yaire_config') || '{}');
 
-            // Garantizar siempre que el token esté presente (red de seguridad)
-            if (!cfg.ghToken) {
-                const _p = ['ghp_J6H94NN', 'gmd1ebo2qV5x', 'HTWzDZPksyY2TuOu6'];
-                cfg.ghToken = _p.join('');
-            }
+
 
             cfg.mantenimiento = document.getElementById('maint-toggle').checked;
             cfg.maintType = document.getElementById('maint-type').value;
@@ -4324,8 +4330,9 @@
             const safeForFB = { ...cfg };
             delete safeForFB.ghToken;
             delete safeForFB.ghRepo;
+            delete safeForFB.voicePassword;
             try {
-                await fetch(_FB, {
+                await firebaseFetch(_FB, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(safeForFB)
@@ -4569,7 +4576,8 @@
                         const safeForFB = { ...cfg };
                         delete safeForFB.ghToken;
                         delete safeForFB.ghRepo;
-                        await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json', {
+                        delete safeForFB.voicePassword;
+                        await firebaseFetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json', {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(safeForFB)
@@ -4736,11 +4744,10 @@
 
         // ── VOICE CHANNEL STATUS ─────────────────────────────────────────────
         (function vcStatus() {
-            const API = 'https://voice.yaire.site/api/status';
             const dot = document.getElementById('vc-live-dot');
             const list = document.getElementById('vc-user-list');
             const cnt = document.getElementById('vc-user-count');
-            const ADMIN_KEY = 'admin-secret-2025';
+            let voiceSource;
 
             const tabCnt = document.getElementById('tab-voice-user-count');
             const tabList = document.getElementById('tab-voice-users-list');
@@ -4759,79 +4766,16 @@
                 }
             });
 
-            window.saveVoicePassword = async function () {
-                const pwdInput = document.getElementById('voice-pwd-input');
-                const password = pwdInput ? pwdInput.value.trim() : '';
-                if (!password) {
-                    // showToast("⚠️ Error", "La contraseña no puede estar vacía.");
-                    return;
-                }
-                // showToast("Guardando...", "Actualizando contraseña...");
-
-                try {
-                    // 1. Update Firebase RTDB config/voicePassword.json
-                    const _FB_PWD = 'https://yaire-591ca-default-rtdb.firebaseio.com/config/voicePassword.json';
-                    const r1 = await fetch(_FB_PWD, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(password)
-                    });
-                    if (!r1.ok) throw new Error("Error al guardar en Firebase RTDB");
-
-                    // 2. Update signaling server
-                    const r2 = await fetch('https://voice.yaire.site/api/password', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ password, adminKey: ADMIN_KEY })
-                    });
-
-                    if (!r2.ok) {
-                        throw new Error(`El servidor de señalización respondió con error (Código ${r2.status}). Verifica que la actualización del servidor esté desplegada.`);
-                    }
-
-                    let d2;
-                    try {
-                        d2 = await r2.json();
-                    } catch (jsonErr) {
-                        throw new Error("El servidor de señalización no devolvió una respuesta JSON válida. Asegúrate de que el backend esté actualizado.");
-                    }
-
-                    if (!d2.success) {
-                        throw new Error(d2.error || "Error en el servidor de señalización");
-                    }
-
-                    // showToast("✅ Contraseña Actualizada", "La contraseña del canal se actualizó con éxito.");
-                    addLog('Seguridad del Canal', 'Se cambió la contraseña de acceso al Canal de Voz.', 'red-500');
-                } catch (err) {
-                    console.error("Error al actualizar la contraseña del canal de voz", err);
-                    // showToast("⚠️ Error", `No se pudo actualizar: ${err.message}`);
-                }
-            }
-
             window.kickUser = async function (userId, name) {
                 if (!confirm(`¿Expulsar a ${name} del canal?`)) return;
                 try {
-                    const r = await fetch('https://voice.yaire.site/api/kick', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ userId, adminKey: ADMIN_KEY })
-                    });
-
-                    if (!r.ok) {
-                        throw new Error(`El servidor de señalización respondió con error (Código ${r.status})`);
-                    }
-
-                    let d;
-                    try {
-                        d = await r.json();
-                    } catch (jsonErr) {
-                        throw new Error("La respuesta del servidor de señalización no es un JSON válido.");
-                    }
+                    if (!voiceSource) throw new Error('Firebase todavía no está conectado.');
+                    const d = await voiceSource.kick(userId);
 
                     if (d.success) {
                         // showToast("Usuario Expulsado", `Has expulsado a ${name} del canal.`);
                         addLog('Seguridad del Canal', `Usuario ${name} expulsado por el administrador.`, 'red-500');
-                        poll();
+                        // The Firebase subscription updates the list immediately; no polling.
                     } else {
                         // showToast("⚠️ Error", d.error || "No se pudo expulsar al usuario.");
                     }
@@ -4840,13 +4784,8 @@
                 }
             }
 
-            async function poll() {
+            function renderVoice(d) {
                 try {
-                    const r = await fetch(API);
-                    if (!r.ok) {
-                        throw new Error(`Error ${r.status}`);
-                    }
-                    const d = await r.json();
                     const users = d.users || [];
                     const chatList = d.chatLog || [];
 
@@ -4881,11 +4820,11 @@
                                 return `
                                 <div class="vc-user-item" style="display:flex;align-items:center;gap:8px;padding:6px 8px;background:rgba(255,255,255,0.03);border-radius:8px;opacity:0;transform:translateX(-8px);">
                                     <div style="width:26px;height:26px;border-radius:50%;background:rgba(245,158,11,.12);border:1.5px solid rgba(245,158,11,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#f59e0b;flex-shrink:0;overflow:hidden;">
-                                        ${photo ? `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;" />` : u.displayName.slice(0, 2).toUpperCase()}
+                                        ${photo ? `<img src="${adminImageUrl(photo)}" style="width:100%;height:100%;object-fit:cover;" />` : escapeAdminHtml(u.displayName.slice(0, 2).toUpperCase())}
                                     </div>
-                                    <span style="font-size:12px;font-weight:500;color:#fff;flex:1">${u.displayName}</span>
+                                    <span style="font-size:12px;font-weight:500;color:#fff;flex:1">${escapeAdminHtml(u.displayName)}</span>
                                     ${u.muted ? '<i class="ph-fill ph-microphone-slash" style="color:#ef4444;font-size:13px;"></i>' : '<i class="ph-fill ph-microphone" style="color:#22c55e;font-size:13px;"></i>'}
-                                    <button onclick="kickUser('${u.id}','${u.displayName}')" title="Expulsar" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#ef4444;border-radius:6px;padding:2px 7px;font-size:11px;cursor:pointer;transition:background .15s;" onmouseover="this.style.background='rgba(239,68,68,.25)'" onmouseout="this.style.background='rgba(239,68,68,.1)'">✕</button>
+                                    <button data-vc-kick="${escapeAdminHtml(u.id)}" data-name="${escapeAdminHtml(u.displayName)}" title="Expulsar" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#ef4444;border-radius:6px;padding:2px 7px;font-size:11px;cursor:pointer;transition:background .15s;" onmouseover="this.style.background='rgba(239,68,68,.25)'" onmouseout="this.style.background='rgba(239,68,68,.1)'">✕</button>
                                 </div>`;
                             }).join('');
 
@@ -4911,16 +4850,16 @@
                                     return `
                                     <div class="vc-user-card p-3 bg-white/5 border border-white/10 rounded-2xl flex items-center gap-3 group">
                                         <div class="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center font-bold text-sm shrink-0 overflow-hidden">
-                                            ${photo ? `<img src="${photo}" class="w-full h-full object-cover" />` : u.displayName.slice(0, 2).toUpperCase()}
+                                            ${photo ? `<img src="${adminImageUrl(photo)}" class="w-full h-full object-cover" />` : escapeAdminHtml(u.displayName.slice(0, 2).toUpperCase())}
                                         </div>
                                         <div class="flex-1 min-w-0">
-                                            <div class="font-bold text-white text-sm truncate">${u.displayName}</div>
+                                            <div class="font-bold text-white text-sm truncate">${escapeAdminHtml(u.displayName)}</div>
                                             <div class="flex flex-wrap gap-1 mt-1">
                                                 ${u.muted ? '<span class="text-[9px] font-bold text-red-400 bg-red-500/10 px-1.5 py-0.5 rounded border border-red-500/15 flex items-center gap-1 shrink-0"><i class="ph-fill ph-microphone-slash"></i> Silenciado</span>' : '<span class="text-[9px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/15 flex items-center gap-1 shrink-0"><i class="ph-fill ph-microphone"></i> Activo</span>'}
                                                 ${u.dnd ? '<span class="text-[9px] font-bold text-red-500 bg-red-600/10 px-1.5 py-0.5 rounded border border-red-600/15 flex items-center gap-1 shrink-0"><i class="ph-fill ph-minus-circle"></i> DND</span>' : ''}
                                             </div>
                                         </div>
-                                        <button onclick="kickUser('${u.id}','${u.displayName}')" class="shrink-0 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white border border-red-500/20 w-8 h-8 rounded-xl flex items-center justify-center transition-all cursor-pointer" title="Expulsar">
+                                        <button data-vc-kick="${escapeAdminHtml(u.id)}" data-name="${escapeAdminHtml(u.displayName)}" class="shrink-0 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white border border-red-500/20 w-8 h-8 rounded-xl flex items-center justify-center transition-all cursor-pointer" title="Expulsar">
                                             <i class="ph-bold ph-user-minus"></i>
                                         </button>
                                     </div>
@@ -4955,10 +4894,10 @@
                             const chatHtml = chatList.map(msg => `
                                 <div class="flex flex-col gap-1 p-3 rounded-xl bg-white/5 border border-white/5 text-xs">
                                     <div class="flex items-center justify-between text-[10px] text-zinc-500 font-mono">
-                                        <span class="font-bold text-brand-400">${msg.name}</span>
+                                        <span class="font-bold text-brand-400">${escapeAdminHtml(msg.name)}</span>
                                         <span>${new Date(msg.ts).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
                                     </div>
-                                    <p class="text-zinc-300 font-medium leading-relaxed break-all">${msg.text}</p>
+                                    <p class="text-zinc-300 font-medium leading-relaxed break-all">${escapeAdminHtml(msg.text)}</p>
                                 </div>
                             `).join('');
 
@@ -4979,12 +4918,23 @@
                     if (tabChat) tabChat.innerHTML = '<p class="text-xs text-red-400 text-center py-6">Sin conexión al servidor de señalización</p>';
                 }
             }
-            let _vcPollTimeout;
-            async function runPoll() {
-                await poll();
-                _vcPollTimeout = setTimeout(runPoll, 4000);
+            let authStop;
+            function startVoiceStatus() {
+                if (authStop || !window.__fbOnAuth || !window.__voiceAdminFirebase) return;
+                authStop = window.__fbOnAuth(user => {
+                    voiceSource?.stop(); voiceSource = null;
+                    if (!user || !user.emailVerified || user.email !== 'theginnomar.x@gmail.com') {
+                        renderVoice({ users: [], chatLog: [], max: 4 }); return;
+                    }
+                    voiceSource = window.YaireFirebaseVoice.subscribeAdmin({ ...window.__voiceAdminFirebase,
+                        onData: renderVoice, onError: () => {
+                            if (list) list.textContent = 'No se pudo leer el canal. Revisa las reglas de Firebase.';
+                        }
+                    });
+                });
             }
-            runPoll();
+            window.addEventListener('yaire-admin-firebase-ready', startVoiceStatus);
+            startVoiceStatus();
         })();
 
     </script>
@@ -5174,7 +5124,7 @@
             const text = document.getElementById('login-status-text');
             if (!badge || !dot || !text) return;
             try {
-                const res = await fetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json');
+                const res = await firebaseFetch('https://yaire-591ca-default-rtdb.firebaseio.com/config.json');
                 const cfg = await res.json();
                 let isMaint = cfg && cfg.mantenimiento === true;
 
@@ -5234,7 +5184,10 @@
 
     <script type="module">
         // --- PRESENCE & GUESTBOOK LOGIC ---
+        let privatePresenceStop;
+        let guestbookStop;
         function initGuestbookAndPresence() {
+            privatePresenceStop?.(); guestbookStop?.();
             if (!window.__fbDb || !window.__fbRef || !window.__fbOnValue) {
                 setTimeout(initGuestbookAndPresence, 500);
                 return;
@@ -5242,7 +5195,7 @@
 
             // Listen to Guestbook
             try {
-                window.__fbOnValue(window.__fbRef(window.__fbDb, 'guestbook'), (snapshot) => {
+                guestbookStop = window.__fbOnValue(window.__fbRef(window.__fbDb, 'guestbook'), (snapshot) => {
                     const adminGuestbookList = document.getElementById('admin-guestbook-list');
                     if (!adminGuestbookList) return;
 
@@ -5258,7 +5211,7 @@
                                 const safeMsg = document.createElement('div'); safeMsg.innerText = m.msg || '';
 
                                 const avatarHtml = m.photoURL
-                                    ? `<img src="${m.photoURL}" class="w-10 h-10 rounded-full object-cover border border-white/10 shadow-inner" />`
+                                    ? `<img src="${adminImageUrl(m.photoURL)}" class="w-10 h-10 rounded-full object-cover border border-white/10 shadow-inner" />`
                                     : `<div class="w-10 h-10 rounded-full bg-gradient-to-br from-zinc-800 to-zinc-900 border border-white/10 flex items-center justify-center text-brand-400 font-black text-sm shadow-inner">
                                             ${(safeName.innerHTML.charAt(0) || '?').toUpperCase()}
                                         </div>`;
@@ -5279,7 +5232,7 @@
                                                 </div>
                                             </div>
                                             
-                                            <button onclick="deleteGuestbookMsg('${m.id}')" class="w-8 h-8 rounded-full bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 transform hover:scale-110 shadow-lg">
+                                            <button data-delete-guestbook="${escapeAdminHtml(m.id)}" class="w-8 h-8 rounded-full bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 transform hover:scale-110 shadow-lg">
                                                 <i class="ph-bold ph-trash text-sm"></i>
                                             </button>
                                         </div>
@@ -5323,7 +5276,7 @@
                         dashArea.appendChild(presenceWidget);
                     }
 
-                    window.__fbOnValue(window.__fbRef(window.__fbDb, 'presence'), (snapshot) => {
+                    privatePresenceStop = window.__fbOnValue(window.__fbRef(window.__fbDb, 'presence'), (snapshot) => {
                         const pList = document.getElementById('admin-presence-list');
                         if (!pList) return;
 
@@ -5382,13 +5335,13 @@
                                 const displayName = hasUser && state.user.displayName ? state.user.displayName : (hasUser && state.user.email ? state.user.email.split('@')[0] : 'Anónimo');
 
                                 const avatarHtml = hasUser && state.user.photoURL
-                                    ? `<img src="${state.user.photoURL}" class="w-10 h-10 rounded-full object-cover border-2 border-emerald-500/50" />`
+                                    ? `<img src="${adminImageUrl(state.user.photoURL)}" class="w-10 h-10 rounded-full object-cover border-2 border-emerald-500/50" />`
                                     : `<div class="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold border border-emerald-500/30">
-                                            ${hasUser ? displayName.charAt(0).toUpperCase() : `<i class="ph-fill ${isPlaying ? 'ph-game-controller' : 'ph-user'} text-lg"></i>`}
+                                            ${hasUser ? escapeAdminHtml(displayName.charAt(0).toUpperCase()) : `<i class="ph-fill ${isPlaying ? 'ph-game-controller' : 'ph-user'} text-lg"></i>`}
                                         </div>`;
 
                                 const nameHtml = hasUser
-                                    ? `<p class="text-emerald-400 text-xs font-bold truncate uppercase tracking-widest mb-0.5">${displayName}</p>`
+                                    ? `<p class="text-emerald-400 text-xs font-bold truncate uppercase tracking-widest mb-0.5">${escapeAdminHtml(displayName)}</p>`
                                     : ``;
 
                                 const statusIndicator = isPlaying
@@ -5404,12 +5357,12 @@
                                     </div>
                                     <div class="min-w-0 flex-1">
                                         ${nameHtml}
-                                        <p class="text-white text-sm font-bold truncate" title="${displayTitle}">${displayTitle}</p>
+                                        <p class="text-white text-sm font-bold truncate" title="${escapeAdminHtml(displayTitle)}">${escapeAdminHtml(displayTitle)}</p>
                                         <div class="flex items-center gap-2 mt-1">
                                             <p class="text-zinc-400 text-[10px] uppercase font-bold tracking-wider whitespace-nowrap shrink-0">Hace ${timeOnline} min</p>
                                             <span class="text-zinc-600 text-[10px] shrink-0">•</span>
-                                            <p class="text-brand-400 text-[10px] font-bold flex items-center gap-1 truncate" title="${state.location || 'Buscando...'}">
-                                                <i class="ph-fill ph-map-pin"></i> ${state.location || 'Buscando...'}
+                                            <p class="text-brand-400 text-[10px] font-bold flex items-center gap-1 truncate" title="${escapeAdminHtml(state.location || 'Buscando...')}">
+                                                <i class="ph-fill ph-map-pin"></i> ${escapeAdminHtml(state.location || 'Buscando...')}
                                             </p>
                                         </div>
                                     </div>
@@ -5426,7 +5379,15 @@
             }
         }
 
-        initGuestbookAndPresence();
+        function watchAdminPresenceAuth() {
+            if (!window.__fbOnAuth) { setTimeout(watchAdminPresenceAuth, 500); return; }
+            window.__fbOnAuth(user => {
+                privatePresenceStop?.(); guestbookStop?.();
+                privatePresenceStop = null; guestbookStop = null;
+                if (user?.emailVerified && user.email === 'theginnomar.x@gmail.com') initGuestbookAndPresence();
+            });
+        }
+        watchAdminPresenceAuth();
 
         window.deleteGuestbookMsg = async function (id) {
             if (confirm("¿Seguro que deseas eliminar este mensaje?")) {

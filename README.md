@@ -3,7 +3,7 @@
   <p><strong>Una experiencia web de alto rendimiento construida con Vanilla JS, GSAP y TailwindCSS.</strong></p>
   
   <p>
-    <img src="https://img.shields.io/badge/Estado-Desbloqueado-success.svg" alt="Estado" />
+    <img src="https://img.shields.io/badge/Estado-En_mantenimiento-orange.svg" alt="Estado" />
     <img src="https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E.svg" alt="Vanilla JS" />
     <img src="https://img.shields.io/badge/CSS-Tailwind-38B2AC.svg" alt="Tailwind" />
     <img src="https://img.shields.io/badge/Animaciones-GSAP_3-88CE02.svg" alt="GSAP" />
@@ -16,13 +16,13 @@
 
 **28E** es una aplicación web hecha a medida y altamente optimizada, diseñada originalmente como una bóveda digital con candado de tiempo. Concebida con un lenguaje de diseño minimalista **OLED-black** estricto, utiliza un diseño modular "Bento Grid" para presentar el contenido de forma elegante.
 
-El proyecto fue creado como una sorpresa especial que se desbloqueó oficialmente el **28 de Abril de 2026**, permitiendo acceso completo a todas sus funciones interactivas, animaciones y música.
+El proyecto fue creado como una sorpresa especial que se desbloqueó oficialmente el **28 de Abril de 2026**, permitiendo acceso a sus experiencias. El código actual programa una reapertura para el 21 de noviembre de 2026, a las 00:00 de Venezuela.
 
 ## ✨ Características Principales
 
-*   🔓 **Acceso Desbloqueado**: La aplicación superó su fecha límite criptográfica y ahora está completamente abierta para explorar.
+*   🔧 **Estado de Acceso**: El mantenimiento se controla en el cliente y en la configuración de Firebase. No es un mecanismo criptográfico de acceso.
 *   🌑 **Estética "Monolith" OLED-Black**: Fondos `#000000` puros con tarjetas `.bento-surface` color carbón. Se eliminó todo rastro de "glassmorphism" para asegurar el máximo contraste, negros profundos y una sensación premium editorial.
-*   🚀 **Interfaz Acelerada por Hardware**: El uso de `contain` y `translateZ(0)` en CSS, junto con una gestión agresiva del DOM, garantiza una fluidez de 60 FPS con cero fugas de memoria, incluso en teléfonos de gama baja.
+*   🚀 **Interfaz Acelerada por Hardware**: El uso de `contain` y `translateZ(0)` en CSS, junto con una gestión agresiva del DOM, busca mantener una experiencia fluida; el rendimiento y la memoria deben medirse en los dispositivos objetivo.
 *   🎵 **Motor de Audio Web Zero-Lag**: Una implementación completamente personalizada usando `AudioContext` maneja la música de fondo (`radio/`) y los efectos de sonido de la interfaz (`sounds/`) sin bloquear el hilo principal de ejecución.
 *   🌍 **Motor i18n Dinámico**: Un diccionario de traducción sin dependencias integrado que soporta Inglés, Español, Francés, Portugués y Alemán, intercambiable al instante.
 *   📱 **Navegación Táctil (Swipes) Personalizada**: Un sistema de eventos táctiles diseñado desde cero maneja los gestos en dispositivos móviles, evitando el peso de librerías externas.
@@ -76,3 +76,12 @@ La interfaz sigue estrictamente las directrices del diseño **Monolith de Megara
 
 ---
 *Diseñado y codificado por Charles Gustav.*
+
+
+## Seguridad y validación
+
+El canal y su administración usan Firebase Realtime Database con reglas de acceso y sesiones de Google. Consulta [la guía de despliegue](docs/SECURITY-DEPLOYMENT.md) para configurar permisos, aplicar las reglas de Firebase y migrar el emisor de radio.
+
+Instala las dependencias de `signaling-server/` y ejecuta `npm run test:security` desde la raíz para las pruebas de seguridad.
+
+La migración del canal está documentada en [Activar voz con Firebase](docs/FIREBASE-VOICE.md). Las reglas y el código aún requieren publicación y prueba real entre dos dispositivos.

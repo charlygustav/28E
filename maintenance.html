@@ -615,9 +615,7 @@
                 eyebrow.style.color = '#10b981';
             }
 
-            try {
-                set(ref(db, 'config/mantenimiento'), false).catch(() => { });
-            } catch (e) { }
+            // El desbloqueo local no modifica la configuración compartida.
 
             setTimeout(() => {
                 const stage = document.querySelector('.stage');

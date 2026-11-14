@@ -22,6 +22,7 @@ videos/*
 !videos/28E_Entertainment_Intro_1080p_Final.mp4
 !videos/28e_tv_ident_1080p.mp4
 *.mp4
+!16-9_1080p.mp4
 !liquid-glass-logo-16x9-2560x1440-60fps.mp4
 !videos/28E_Entertainment_Intro_1080p_Final.mp4
 !videos/28e_tv_ident_1080p.mp4
@@ -49,3 +50,14 @@ test_*.png
 scratch_*.jpg
 scripts/current_screen.png
 __pycache__/
+
+# Local credentials
+.env
+.env.*
+!.env.example
+!**/.env.example
+*service-account*.json
+
+# Firebase emulator state and logs
+*-debug.log
+.firebase/
