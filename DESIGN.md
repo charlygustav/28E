@@ -174,6 +174,8 @@ Evidence: `PRODUCT.md` supplies durable brand constraints; `assets/css/voice-cha
 
 ## Layout
 
+The room header starts directly with the room name, presence, elapsed time and close control. Do not add a separate logo or Afterglow wordmark row; it uses space needed by the activity area.
+
 These measurements describe the Afterglow voice variant only. On desktop the panel sits on the right, inset 16px, capped at 440px wide and 880px high, with a viewport-relative height using `100dvh`. At widths up to 480px it uses an 8px horizontal inset, safe-area-aware top and bottom insets, an 18px corner and the available viewport height. At heights up to 700px it reduces spacing, type and avatars. In short landscape (height up to 480px, width at least 600px), the panel widens to a 720px cap and the lobby and music queue use two-column arrangements. The lobby description and room status are omitted there to retain the primary actions.
 
 Content uses compact gutters from 16px to 24px. Identity and the join action stay visible in the lobby. In the room, the heading, stable timer, tabs and bottom call controls frame a flexible activity area. The participant grid retains two columns for four people, with a single participant spanning both. Chat and music composers remain visible with the main controls; only a populated conversation transcript uses bounded scrolling. Empty chat and music views do not require a scroll to reach actions. Connection or error state screens can scroll on exceptionally short viewports.

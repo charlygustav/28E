@@ -533,7 +533,7 @@
   };
 
   // The visual layer is independent from Firebase and WebRTC.
-  const VOICE_STYLESHEET = new URL('../css/voice-channel.css?v=20261114_compact', document.currentScript?.src || new URL('assets/js/voice-channel-widget.js', document.baseURI)).href;
+  const VOICE_STYLESHEET = new URL('../css/voice-channel.css?v=20261114_header', document.currentScript?.src || new URL('assets/js/voice-channel-widget.js', document.baseURI)).href;
 
   const ICONS = {
     close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m6 6 12 12M18 6 6 18"/></svg>',
@@ -1343,11 +1343,12 @@
     }
 
     // ── TEMPLATES ──────────────────────────────────────────────────────────
+    _tplCloseButton() {
+      return `<button class="vc-icon-button" id="vc-close" aria-label="${_t('room_close')}" title="${_t('room_close')}">${ICONS.close}</button>`;
+    }
+
     _tplHeader() {
-      return `<div class="vc-panel-header" id="vc-panel-header">
-        <div class="vc-brand"><span class="vc-brand-mark">28E</span><span class="vc-brand-divider"></span><span>${_t('vc_title')}</span></div>
-        <button class="vc-icon-button" id="vc-close" aria-label="${_t('room_close')}" title="${_t('room_close')}">${ICONS.close}</button>
-      </div>`;
+      return `<div class="vc-panel-close">${this._tplCloseButton()}</div>`;
     }
 
     _avatarMarkup(user, className = '') {
@@ -1425,8 +1426,7 @@
       const elapsed = this._callStart ? Math.max(0, Math.floor((Date.now() - this._callStart) / 1000)) : 0;
       const timer = `${String(Math.floor(elapsed / 60)).padStart(2, '0')}:${String(elapsed % 60).padStart(2, '0')}`;
       return `<div class="vc-screen vc-connected-screen">
-        ${this._tplHeader()}
-        <div class="vc-room-heading"><div><h1 id="vc-room-title">${_t('room_name')}</h1><p class="vc-room-status"><span class="vc-status-dot"></span>${_t('room_you_in')}<span class="vc-heading-count" id="vc-member-count">${count}/4</span></p></div><span id="vc-timer" class="vc-timer">${timer}</span></div>
+        <div class="vc-room-heading vc-panel-header" id="vc-panel-header"><div class="vc-room-heading-copy"><h1 id="vc-room-title">${_t('room_name')}</h1><p class="vc-room-status"><span class="vc-status-dot"></span>${_t('room_you_in')}<span class="vc-heading-count" id="vc-member-count">${count}/4</span></p></div><span id="vc-timer" class="vc-timer">${timer}</span>${this._tplCloseButton()}</div>
         <div class="vc-tabs" role="tablist" aria-label="${_t('vc_title')}">${tabs.map(([id, key, icon]) => `<button class="vc-tab" id="vc-tab-${id}" role="tab" aria-selected="${tab === id}" aria-controls="vc-content-${id}" tabindex="${tab === id ? '0' : '-1'}">${ICONS[icon]}<span>${_t(key)}</span>${id === 'chat' && this._chatUnread ? `<span class="vc-unread">${this._chatUnread > 9 ? '9+' : this._chatUnread}</span>` : ''}${id === 'music' && this._musicPlaying ? '<span class="vc-music-ind vc-status-dot"></span>' : ''}</button>`).join('')}</div>
         <div class="vc-main-content">
           <section id="vc-content-room" class="vc-tab-content" role="tabpanel" aria-labelledby="vc-tab-room" ${tab !== 'room' ? 'hidden inert' : ''}>

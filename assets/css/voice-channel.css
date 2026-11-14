@@ -48,10 +48,6 @@
 }
 #vc-panel.open, #vc-panel.scale-100 { transform: translateX(0); opacity: 1; pointer-events: auto; }
 .vc-screen { display: flex; flex-direction: column; height: 100%; min-height: 0; }
-.vc-panel-header { display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; padding: 8px 20px; gap: 12px; }
-.vc-brand { display: flex; align-items: center; gap: 12px; color: var(--vc-muted); font-size: 12px; font-weight: 500; }
-.vc-brand-mark { color: var(--vc-text); font-size: 22px; font-weight: 800; letter-spacing: -.04em; }
-.vc-brand-divider { width: 1px; height: 16px; background: var(--vc-line); }
 #vc-panel .vc-icon-button { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 44px; height: 44px; padding: 10px; background: transparent; border: 0; border-radius: 12px; color: var(--vc-muted); }
 .vc-lobby { display: flex; flex-direction: column; flex: 1; min-height: 0; padding: 14px 24px 8px; }
 .vc-lobby-intro h1 { max-width: 300px; font-size: 30px; line-height: 1.15; font-weight: 600; letter-spacing: -.035em; text-wrap: balance; }
@@ -95,7 +91,7 @@
 .vc-connecting-orbit { position: absolute; inset: -9px; border: 2px solid var(--vc-line); border-top-color: var(--vc-accent); border-radius: 50%; animation: vc-spin 1.2s linear infinite; }
 @keyframes vc-spin { to { transform: rotate(360deg); } }
 .vc-spin { width: 20px; height: 20px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: vc-spin 1s linear infinite; }
-.vc-room-heading { padding: 4px 20px 12px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-shrink: 0; }
+.vc-room-heading { padding: 16px 20px 12px; display: grid; grid-template-columns: minmax(0, 1fr) auto 44px; align-items: start; gap: 8px; flex-shrink: 0; }
 .vc-room-heading h1 { font-size: 22px; line-height: 1.2; font-weight: 600; letter-spacing: -.03em; }
 .vc-room-status { margin-top: 6px !important; display: flex; align-items: center; gap: 6px; font-size: 11px; }
 .vc-heading-count { color: var(--vc-muted); margin-left: 6px; font-variant-numeric: tabular-nums; }
@@ -214,11 +210,10 @@
 }
 @media (max-width: 480px) {
   #vc-panel.vc-panel-base { top: max(8px, env(safe-area-inset-top)); bottom: max(8px, env(safe-area-inset-bottom)); right: 8px; width: calc(100vw - 16px); height: auto; max-height: none; margin: 0; border-radius: 18px; }
-  .vc-panel-header { padding: 8px 16px; }
   .vc-lobby { padding: 12px 20px 8px; }
   .vc-lobby-intro h1 { font-size: 28px; }
   .vc-lobby-footer { padding: 8px 20px 16px; }
-  .vc-room-heading { padding: 4px 16px 12px; }
+  .vc-room-heading { padding: 16px 16px 12px; }
   .vc-tabs { padding: 0 20px; gap: 24px; }
   .vc-call-controls { padding: 8px 16px 10px; }
   .vc-sect { padding: 20px; }
@@ -253,7 +248,7 @@
 }
 
 /* Fixed task areas and bounded pages. Only a populated chat transcript scrolls. */
-.vc-lobby { overflow: hidden; }
+.vc-lobby { overflow: hidden; padding-top: 24px; }
 .vc-room-heading, .vc-panel-header, .vc-tabs, .vc-call-controls { flex-shrink: 0; }
 #vc-panel .vc-call-controls { padding: 10px 20px 12px; gap: 8px; }
 #vc-panel .vc-empty-state { min-height: 0; }
@@ -320,8 +315,7 @@ body.vc-open #vc-bar, body.menu-is-open #vc-bar { opacity: 0 !important; pointer
 }
 @media (max-width: 380px) { #vc-bar .vc-dock-audio { display: none; } }
 @media (max-height: 700px) {
-  .vc-panel-header { padding: 4px 16px; }
-  .vc-room-heading { padding: 2px 16px 10px; }
+  .vc-room-heading { padding: 14px 16px 10px; }
   .vc-room-heading h1 { font-size: 20px; }
   .vc-sect { padding: 12px 16px; }
   .vc-users-group { gap: 16px; }
@@ -331,9 +325,8 @@ body.vc-open #vc-bar, body.menu-is-open #vc-bar { opacity: 0 !important; pointer
   #vc-panel #vc-music-inner { padding: 8px 16px; }
 }
 @media (max-height: 480px) and (min-width: 600px) {
-  .vc-room-heading { padding-top: 0; padding-bottom: 4px; }
+  .vc-room-heading { padding-top: 10px; padding-bottom: 4px; }
   .vc-room-status { display: none; }
-  .vc-panel-header { padding-top: 0; padding-bottom: 0; }
   #vc-panel .vc-call-controls { padding: 6px 16px; }
   #vc-panel .vc-call-button { min-height: 44px; flex-direction: row; gap: 8px; }
   .vc-queue-panel { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto 1fr; column-gap: 20px; }
@@ -347,8 +340,7 @@ body.vc-open #vc-bar, body.menu-is-open #vc-bar { opacity: 0 !important; pointer
 }
 @media (max-height: 480px) and (min-width: 600px) {
   #vc-panel.vc-panel-base { width: min(720px, calc(100vw - 32px)); }
-  .vc-lobby-screen { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 44px minmax(0, 1fr); }
-  .vc-lobby-screen > .vc-panel-header { grid-column: 1 / -1; }
+  .vc-lobby-screen { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: minmax(0, 1fr); }
   .vc-lobby { min-width: 0; padding: 8px 20px; }
   .vc-lobby-intro h1 { font-size: 22px; max-width: none; }
   .vc-lobby-intro p { display: none; }
@@ -361,3 +353,9 @@ body.vc-open #vc-bar, body.menu-is-open #vc-bar { opacity: 0 !important; pointer
   .vc-queue-panel .vc-music-compose { grid-column: 1; grid-row: 3; padding-top: 4px; }
   .vc-queue-panel .vc-queue-region { grid-column: 2; grid-row: 2 / 4; }
 }
+
+/* Close controls share existing content space; no brand-only header row. */
+.vc-panel-close { position: absolute; top: 8px; right: 8px; z-index: 2; }
+.vc-lobby-intro { padding-right: 36px; }
+.vc-room-heading-copy { min-width: 0; }
+.vc-room-heading > #vc-close { margin-top: -8px; }
