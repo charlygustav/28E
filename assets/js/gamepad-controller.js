@@ -487,49 +487,18 @@
         return st.display !== 'none' && st.visibility !== 'hidden' && parseFloat(st.opacity || '0') > 0.5 && !p.classList.contains('pointer-events-none');
     }
 
-    function isVoiceHistoryOpen() {
-        var h = document.getElementById('vc-detailed-history');
-        if (!h) return false;
-        return (h.classList.contains('open') || !h.classList.contains('opacity-0')) && window.getComputedStyle(h).display !== 'none';
-    }
+
 
     function getVoiceModalZones() {
         var p = document.getElementById('vc-panel');
-        if (!p) return { closeBtn: null, logoutBtn: null, joinBtn: null, verMasBtn: null, historyRows: [], tabs: [], bottomBar: [], chatInputs: [], musicBtns: [], allCandidates: [] };
-
-        var closeBtn = p.querySelector('#vc-close');
-        var logoutBtn = p.querySelector('#vc-logout-btn');
-        var joinBtn = p.querySelector('#vc-join') || p.querySelector('#vc-google-login-btn') || p.querySelector('#vc-cancel-conn') || p.querySelector('#vc-reconnect');
-        var verMasBtn = p.querySelector('#vc-btn-ver-mas');
-        var historyRows = Array.prototype.slice.call(p.querySelectorAll('.vc-hist-row'));
-        var tabs = Array.prototype.slice.call(p.querySelectorAll('#vc-tab-room, #vc-tab-chat, #vc-tab-music'));
-        var bottomBar = Array.prototype.slice.call(p.querySelectorAll('#vc-mute, #vc-dnd, #vc-leave'));
-        var chatInputs = Array.prototype.slice.call(p.querySelectorAll('#vc-chat-in, #vc-chat-send'));
-        var musicBtns = Array.prototype.slice.call(p.querySelectorAll('#vc-music-inner button, #vc-music-inner input'));
-
-        var candidates = [];
-        if (closeBtn && isElementVisible(closeBtn, false)) candidates.push(closeBtn);
-        if (logoutBtn && isElementVisible(logoutBtn, false)) candidates.push(logoutBtn);
-        if (joinBtn && isElementVisible(joinBtn, false)) candidates.push(joinBtn);
-        if (tabs.length) candidates.push.apply(candidates, tabs.filter(function (t) { return isElementVisible(t, false); }));
-        if (chatInputs.length) candidates.push.apply(candidates, chatInputs.filter(function (c) { return isElementVisible(c, false); }));
-        if (musicBtns.length) candidates.push.apply(candidates, musicBtns.filter(function (m) { return isElementVisible(m, false); }));
-        if (historyRows.length) candidates.push.apply(candidates, historyRows.filter(function (h) { return isElementVisible(h, false); }));
-        if (verMasBtn && isElementVisible(verMasBtn, false)) candidates.push(verMasBtn);
-        if (bottomBar.length) candidates.push.apply(candidates, bottomBar.filter(function (b) { return isElementVisible(b, false); }));
-
-        return {
-            closeBtn: closeBtn,
-            logoutBtn: logoutBtn,
-            joinBtn: joinBtn,
-            verMasBtn: verMasBtn,
-            historyRows: historyRows,
-            tabs: tabs,
-            bottomBar: bottomBar,
-            chatInputs: chatInputs,
-            musicBtns: musicBtns,
-            allCandidates: candidates
-        };
+        if (!p) return { closeBtn: null, logoutBtn: null, joinBtn: null, tabs: [], bottomBar: [], chatInputs: [], musicBtns: [], allCandidates: [] };
+        var visible = function (el) { return !el.disabled && !el.closest('[hidden], [inert]') && isElementVisible(el, false); };
+        var pick = function (selector) { return Array.prototype.slice.call(p.querySelectorAll(selector)).filter(visible); };
+        return { closeBtn: p.querySelector('#vc-close'), logoutBtn: p.querySelector('#vc-logout-btn'),
+            joinBtn: p.querySelector('#vc-join, #vc-google-login-btn, #vc-cancel-conn, #vc-reconnect'),
+            tabs: pick('[role=tab]'), bottomBar: pick('#vc-mute, #vc-dnd, #vc-leave'),
+            chatInputs: pick('#vc-chat-in, #vc-chat-send'), musicBtns: pick('#vc-music-inner button, #vc-music-inner input'),
+            allCandidates: pick('button, input:not([type=hidden]), [role=slider]') };
     }
 
     function onVoiceModalOpened() {
@@ -552,29 +521,9 @@
         }
     }
 
-    function onVoiceHistoryOpened() {
-        if (!state.activeMode) return;
-        var det = document.getElementById('vc-detailed-history');
-        if (!det) return;
-        var closeBtn = det.querySelector('#vc-det-close');
-        var firstRow = det.querySelector('.vc-det-row');
-        var target = closeBtn || firstRow;
-        if (target) {
-            setFocusedElement(target, false);
-            pulseHaptic(25, 0.18, 0.08);
-        }
-    }
 
-    function onVoiceHistoryClosed() {
-        if (!state.activeMode) return;
-        var vz = getVoiceModalZones();
-        var target = vz.verMasBtn || vz.joinBtn;
-        if (target) {
-            setFocusedElement(target, false);
-        } else {
-            ensureValidFocus();
-        }
-    }
+
+
 
     function cycleVoiceTab(dir) {
         var p = document.getElementById('vc-panel');
@@ -609,198 +558,23 @@
     }
 
     function moveVoiceModalFocus(dx, dy) {
-        var vz = getVoiceModalZones();
-        var cur = ensureValidFocus();
+        var vz = getVoiceModalZones(), cur = ensureValidFocus();
         if (!cur) return;
-        var nextEl = null;
-
-        var isClose = (cur === vz.closeBtn);
-        var isLogout = (cur === vz.logoutBtn);
-        var isJoin = (cur === vz.joinBtn);
-        var histIdx = vz.historyRows.indexOf(cur);
-        var isVerMas = (cur === vz.verMasBtn);
-        var tabIdx = vz.tabs.indexOf(cur);
-        var btmIdx = vz.bottomBar.indexOf(cur);
-        var isChatIn = (cur.id === 'vc-chat-in');
-        var isChatSend = (cur.id === 'vc-chat-send');
-
-        if (isClose) {
-            if (dy > 0) {
-                if (vz.tabs.length > 0) {
-                    var actTab = vz.tabs.find(function (t) { return t.classList.contains('bg-white/[0.12]'); });
-                    nextEl = actTab || vz.tabs[0];
-                } else if (vz.logoutBtn) {
-                    nextEl = vz.logoutBtn;
-                } else if (vz.joinBtn) {
-                    nextEl = vz.joinBtn;
-                } else if (vz.allCandidates.length > 1) {
-                    nextEl = vz.allCandidates[1];
-                }
-            } else if (dx < 0 && vz.logoutBtn) {
-                nextEl = vz.logoutBtn;
-            }
-        } else if (isLogout) {
-            if (dy < 0) {
-                nextEl = vz.closeBtn;
-            } else if (dy > 0) {
-                nextEl = vz.joinBtn;
-            } else if (dx > 0 && vz.closeBtn) {
-                nextEl = vz.closeBtn;
-            }
-        } else if (isJoin) {
-            if (dy < 0) {
-                nextEl = vz.logoutBtn || vz.closeBtn;
-            } else if (dy > 0) {
-                if (vz.historyRows.length > 0) {
-                    nextEl = vz.historyRows[0];
-                } else if (vz.verMasBtn) {
-                    nextEl = vz.verMasBtn;
-                }
-            }
-        } else if (histIdx !== -1) {
-            if (Math.abs(dy) >= Math.abs(dx)) {
-                if (dy < 0) {
-                    if (histIdx === 0) {
-                        nextEl = vz.joinBtn || vz.closeBtn;
-                    } else {
-                        nextEl = vz.historyRows[histIdx - 1];
-                    }
-                } else if (dy > 0) {
-                    if (histIdx === vz.historyRows.length - 1) {
-                        nextEl = vz.verMasBtn || vz.historyRows[histIdx];
-                    } else {
-                        nextEl = vz.historyRows[histIdx + 1];
-                    }
-                }
-            } else {
-                if (dx > 0 && vz.verMasBtn) {
-                    nextEl = vz.verMasBtn;
-                }
-            }
-        } else if (isVerMas) {
-            if (dy < 0) {
-                if (vz.historyRows.length > 0) {
-                    nextEl = vz.historyRows[vz.historyRows.length - 1];
-                } else {
-                    nextEl = vz.joinBtn || vz.closeBtn;
-                }
-            }
-        } else if (tabIdx !== -1) {
-            if (Math.abs(dx) > Math.abs(dy)) {
-                if (dx < 0 && tabIdx > 0) {
-                    nextEl = vz.tabs[tabIdx - 1];
-                } else if (dx > 0 && tabIdx < vz.tabs.length - 1) {
-                    nextEl = vz.tabs[tabIdx + 1];
-                }
-            } else {
-                if (dy < 0) {
-                    nextEl = vz.closeBtn;
-                } else if (dy > 0) {
-                    if (isChatIn || isChatSend) {
-                        nextEl = vz.chatInputs[0];
-                    } else if (vz.chatInputs.length > 0 && vz.tabs[tabIdx].id === 'vc-tab-chat') {
-                        nextEl = vz.chatInputs[0];
-                    } else if (vz.musicBtns.length > 0 && vz.tabs[tabIdx].id === 'vc-tab-music') {
-                        nextEl = vz.musicBtns[0];
-                    } else if (vz.bottomBar.length > 0) {
-                        nextEl = vz.bottomBar[0];
-                    }
-                }
-            }
-        } else if (isChatIn || isChatSend) {
-            if (Math.abs(dx) > Math.abs(dy)) {
-                if (dx > 0 && isChatIn && vz.chatInputs[1]) nextEl = vz.chatInputs[1];
-                else if (dx < 0 && isChatSend && vz.chatInputs[0]) nextEl = vz.chatInputs[0];
-            } else {
-                if (dy < 0) {
-                    nextEl = vz.tabs.find(function (t) { return t.id === 'vc-tab-chat'; }) || vz.tabs[1] || vz.closeBtn;
-                } else if (dy > 0 && vz.bottomBar.length > 0) {
-                    nextEl = vz.bottomBar[0];
-                }
-            }
-        } else if (btmIdx !== -1) {
-            if (Math.abs(dx) > Math.abs(dy)) {
-                if (dx > 0 && btmIdx < vz.bottomBar.length - 1) {
-                    nextEl = vz.bottomBar[btmIdx + 1];
-                } else if (dx < 0 && btmIdx > 0) {
-                    nextEl = vz.bottomBar[btmIdx - 1];
-                }
-            } else {
-                if (dy < 0) {
-                    var actT = vz.tabs.find(function (t) { return t.classList.contains('bg-white/[0.12]'); });
-                    if (actT && actT.id === 'vc-tab-chat' && vz.chatInputs.length > 0) {
-                        nextEl = vz.chatInputs[0];
-                    } else if (actT && actT.id === 'vc-tab-music' && vz.musicBtns.length > 0) {
-                        nextEl = vz.musicBtns[vz.musicBtns.length - 1];
-                    } else {
-                        nextEl = actT || vz.closeBtn;
-                    }
-                }
-            }
-        } else {
-            var all = vz.allCandidates;
-            var cIdx = all.indexOf(cur);
-            if (cIdx !== -1) {
-                if (dy > 0 || dx > 0) nextEl = all[Math.min(all.length - 1, cIdx + 1)];
-                else if (dy < 0 || dx < 0) nextEl = all[Math.max(0, cIdx - 1)];
-            } else if (all.length > 0) {
-                nextEl = all[0];
-            }
-        }
-
-        if (nextEl && nextEl !== cur) {
-            setFocusedElement(nextEl, true);
-            pulseHaptic(20, 0.16, 0.05);
-            if (typeof AudioManager !== 'undefined' && AudioManager && typeof AudioManager.play === 'function') {
-                try { AudioManager.play('tictac.wav', 0.18); } catch (e) {}
-            }
-        }
+        var origin = cur.getBoundingClientRect(), ox = origin.left + origin.width / 2, oy = origin.top + origin.height / 2;
+        var best = null, bestScore = Infinity;
+        vz.allCandidates.forEach(function (el) {
+            if (el === cur) return;
+            var r = el.getBoundingClientRect(), x = r.left + r.width / 2 - ox, y = r.top + r.height / 2 - oy;
+            var forward = Math.abs(dx) > Math.abs(dy) ? x * Math.sign(dx) : y * Math.sign(dy);
+            var sideways = Math.abs(dx) > Math.abs(dy) ? Math.abs(y) : Math.abs(x);
+            if (forward < 4) return;
+            var score = forward + sideways * 3;
+            if (score < bestScore) { bestScore = score; best = el; }
+        });
+        if (best) { setFocusedElement(best, false); pulseHaptic(20, 0.16, 0.05); }
     }
 
-    function moveVoiceHistoryFocus(dx, dy) {
-        var det = document.getElementById('vc-detailed-history');
-        if (!det) return;
-        var closeBtn = det.querySelector('#vc-det-close');
-        var rows = Array.prototype.slice.call(det.querySelectorAll('.vc-det-row'));
-        var cur = ensureValidFocus();
-        if (!cur) return;
-        var nextEl = null;
 
-        var isClose = (cur === closeBtn);
-        var rowIdx = rows.indexOf(cur);
-
-        if (isClose) {
-            if (dy > 0 && rows.length > 0) {
-                nextEl = rows[0];
-            }
-        } else if (rowIdx !== -1) {
-            if (Math.abs(dy) >= Math.abs(dx)) {
-                if (dy < 0) {
-                    if (rowIdx === 0) {
-                        nextEl = closeBtn;
-                    } else {
-                        nextEl = rows[rowIdx - 1];
-                    }
-                } else if (dy > 0) {
-                    nextEl = rows[Math.min(rows.length - 1, rowIdx + 1)];
-                }
-            } else {
-                if (dx > 0 && rowIdx === 0 && closeBtn) {
-                    nextEl = closeBtn;
-                }
-            }
-        } else {
-            nextEl = closeBtn || rows[0];
-        }
-
-        if (nextEl && nextEl !== cur) {
-            setFocusedElement(nextEl, true);
-            pulseHaptic(20, 0.16, 0.05);
-            if (typeof AudioManager !== 'undefined' && AudioManager && typeof AudioManager.play === 'function') {
-                try { AudioManager.play('tictac.wav', 0.18); } catch (e) {}
-            }
-        }
-    }
 
     function getActiveRecipeTabId() {
         var ids = ['ing', 'prep', 'tech', 'secret'];
@@ -1297,12 +1071,6 @@
             '    color: #FFFFFF !important;',
             '    border-radius: 8px !important;',
             '}',
-            '#vc-panel .vc-hist-row.gp-focus {',
-            '    outline: none !important;',
-            '    background: rgba(255, 255, 255, 0.08) !important;',
-            '    box-shadow: 0 0 0 1.5px rgba(255, 148, 194, 0.8) !important;',
-            '    border-radius: 8px !important;',
-            '}',
             '#vc-panel #vc-tab-room.gp-focus,',
             '#vc-panel #vc-tab-chat.gp-focus,',
             '#vc-panel #vc-tab-music.gp-focus {',
@@ -1319,16 +1087,6 @@
             '    outline: none !important;',
             '    box-shadow: 0 0 0 2px rgba(255, 148, 194, 0.95), 0 0 18px rgba(231, 117, 166, 0.55) !important;',
             '    transform: scale(1.04) !important;',
-            '}',
-            '#vc-detailed-history #vc-det-close.gp-focus {',
-            '    outline: none !important;',
-            '    box-shadow: 0 0 0 2px rgba(255, 148, 194, 0.95), 0 0 18px rgba(231, 117, 166, 0.6) !important;',
-            '    transform: scale(1.12) !important;',
-            '}',
-            '#vc-detailed-history .vc-det-row.gp-focus {',
-            '    outline: none !important;',
-            '    box-shadow: 0 0 0 1.5px rgba(255, 148, 194, 0.8) !important;',
-            '    background: rgba(255, 255, 255, 0.08) !important;',
             '}',
             '.name-letter.gp-focus {',
             '    border-radius: 14px !important;',
@@ -1830,9 +1588,7 @@
             return 'credits-modal';
         }
 
-        if (isVoiceHistoryOpen()) {
-            return 'voice-history';
-        }
+
 
         if (isVoiceModalOpen()) {
             return 'voice-modal';
@@ -2023,10 +1779,6 @@
                     { key: gl.back, label: 'Cerrar' }
                 ];
             }
-        } else if (ctx === 'voice-history') {
-            items = [
-                { key: gl.back, label: 'Volver' }
-            ];
         } else {
             items = [
                 { key: gl.confirm, label: 'Seleccionar' },
@@ -2141,9 +1893,7 @@
             return document.getElementById('menu-panel');
         }
 
-        if (isVoiceHistoryOpen()) {
-            return document.getElementById('vc-detailed-history');
-        }
+
 
         if (isVoiceModalOpen()) {
             return document.getElementById('vc-panel');
@@ -2353,9 +2103,9 @@
             return getAuthMenuZones().items;
         }
 
-        if (root && (root.id === 'vc-panel' || root.id === 'vc-detailed-history')) {
-            return getVoiceModalZones().allCandidates;
-        }
+        if (root && root.id === 'vc-panel') return getVoiceModalZones().allCandidates;
+
+
 
         if (root && root.id === 'spotlight-expanded') {
             var sz = getSpotlightExpandedZones();
@@ -2534,13 +2284,6 @@
                     scrollElementIntoContainer(vScroll, el, 20);
                 }
             }
-        } else if (el.closest('#vc-detailed-history')) {
-            if (shouldScroll !== false) {
-                var dScroll = el.closest('.vc-det-list');
-                if (dScroll) {
-                    scrollElementIntoContainer(dScroll, el, 16);
-                }
-            }
         } else if (shouldScroll !== false) {
             try {
                 var rect = el.getBoundingClientRect();
@@ -2674,20 +2417,7 @@
             return null;
         }
 
-        // Handle #vc-detailed-history default focus
-        if (root && root.id === 'vc-detailed-history') {
-            if (state.focusedEl && document.body.contains(state.focusedEl) && root.contains(state.focusedEl) && isElementVisible(state.focusedEl, false)) {
-                return state.focusedEl;
-            }
-            var detClose = root.querySelector('#vc-det-close');
-            var detRow = root.querySelector('.vc-det-row');
-            var detTarget = detClose || detRow;
-            if (detTarget) {
-                setFocusedElement(detTarget, false);
-                return detTarget;
-            }
-            return null;
-        }
+
 
         // Handle #vc-panel default focus
         if (root && root.id === 'vc-panel') {
@@ -3081,10 +2811,7 @@
             return;
         }
 
-        if (root && root.id === 'vc-detailed-history') {
-            moveVoiceHistoryFocus(dx, dy);
-            return;
-        }
+
 
         if (root && root.id === 'vc-panel') {
             moveVoiceModalFocus(dx, dy);
@@ -3789,13 +3516,7 @@
             return;
         }
 
-        if (el.classList && (el.classList.contains('vc-hist-row') || el.classList.contains('vc-det-row'))) {
-            pulseHaptic(28, 0.22, 0.1);
-            if (typeof window.AudioManager !== 'undefined' && window.AudioManager && typeof window.AudioManager.play === 'function') {
-                try { window.AudioManager.play('tictac.wav', 0.22); } catch (e) {}
-            }
-            return;
-        }
+
 
         if (el.id === 'auth-toggle') {
             el.classList.add('gp-focus-press');
@@ -3819,16 +3540,7 @@
             return;
         }
 
-        if (el.id === 'vc-btn-ver-mas') {
-            el.classList.add('gp-focus-press');
-            setTimeout(function () { if (el) el.classList.remove('gp-focus-press'); }, 140);
-            pulseHaptic(40, 0.35, 0.18);
-            el.click();
-            setTimeout(function () {
-                onVoiceHistoryOpened();
-            }, 160);
-            return;
-        }
+
 
         if (el.id === 'vc-close') {
             el.classList.add('gp-focus-press');
@@ -3949,23 +3661,7 @@
             return;
         }
 
-        if (isVoiceHistoryOpen()) {
-            var detClose = document.getElementById('vc-det-close');
-            if (detClose) {
-                detClose.click();
-            } else {
-                var det = document.getElementById('vc-detailed-history');
-                if (det) det.remove();
-            }
-            pulseHaptic(30, 0.22, 0.1);
-            setTimeout(function () {
-                var vz = getVoiceModalZones();
-                var target = vz.verMasBtn || vz.joinBtn;
-                if (target) setFocusedElement(target, false);
-                else ensureValidFocus();
-            }, 180);
-            return;
-        }
+
 
         if (isVoiceModalOpen()) {
             if (window.yaireVoiceChannel && typeof window.yaireVoiceChannel.close === 'function') {
@@ -4776,15 +4472,6 @@
                         vScroll.scrollTop += sVel;
                     }
                 }
-            } else if (isVoiceHistoryOpen()) {
-                var detList = document.querySelector('#vc-detailed-history .vc-det-list');
-                if (detList) {
-                    if (typeof detList.scrollBy === 'function') {
-                        detList.scrollBy({ top: sVel, left: 0, behavior: 'instant' });
-                    } else {
-                        detList.scrollTop += sVel;
-                    }
-                }
             } else if (recipeOpenNow) {
                 var rScroll = document.getElementById('recipe-scroll-area');
                 if (rScroll) {
@@ -5006,9 +4693,6 @@
         isVoiceModalOpen: isVoiceModalOpen,
         onVoiceModalOpened: onVoiceModalOpened,
         onVoiceModalClosed: onVoiceModalClosed,
-        isVoiceHistoryOpen: isVoiceHistoryOpen,
-        onVoiceHistoryOpened: onVoiceHistoryOpened,
-        onVoiceHistoryClosed: onVoiceHistoryClosed,
         cycleVoiceTab: cycleVoiceTab
     };
     window.__28EGamepad = window.GamepadEngine28E;

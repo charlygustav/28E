@@ -75,33 +75,6 @@
         updatePresence();
         window.yaireUpdatePresence = (sec) => { currentSection = sec; updatePresence(); };
 
-        // --- VC HISTORY WRAPPERS ---
-        window.yaireVcHistoryGet = async () => {
-            if (!currentUser) return [];
-            try {
-                const snap = await get(ref(db, `users/${currentUser.uid}/vc_history`));
-                return snap.exists() ? snap.val() : [];
-            } catch (e) {
-                console.error("Error fetching VC history:", e);
-                return [];
-            }
-        };
-
-        window.yaireVcHistoryAdd = async (sessionData) => {
-            if (!currentUser) return;
-            // Optimistic update for instant UI response
-            if (!window.yaireVcHistoryData) window.yaireVcHistoryData = [];
-            window.yaireVcHistoryData.unshift(sessionData);
-            window.yaireVcHistoryData = window.yaireVcHistoryData.slice(0, 50);
-
-            try {
-                const historyRef = ref(db, `users/${currentUser.uid}/vc_history`);
-                await set(historyRef, window.yaireVcHistoryData);
-            } catch (e) {
-                console.error("Error saving VC history:", e);
-            }
-        };
-
         // --- AUTH ---
         const auth = getAuth(app);
         window.yaireVoiceFirebase = { db, sdk: { ref, push, onValue, onChildAdded, onChildChanged, query, orderByKey, orderByChild, limitToLast, onDisconnect, set, get, remove, update, runTransaction, serverTimestamp }, get user() { return auth.currentUser; } };
@@ -284,7 +257,8 @@
                     }
                 }).catch(() => {});
 
-                window.yaireVcHistoryData = await window.yaireVcHistoryGet();
+                // Afterglow no longer stores call history. Clear the obsolete node for this account only.
+                remove(ref(db, `users/${user.uid}/vc_history`)).catch(() => {});
 
                 if (isFreshLogin) {
                     setTimeout(() => {
@@ -298,7 +272,6 @@
                 currentMiiProfile = null;
                 currentGooglePhotoURL = '';
                 window.yaireActiveAvatarURL = '';
-                window.yaireVcHistoryData = [];
                 syncAuthUserToLocalStorage();
             }
             hasInitialAuthRun = true;

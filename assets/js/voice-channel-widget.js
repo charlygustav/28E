@@ -10,6 +10,13 @@
   // ── INTERNATIONALIZATION ──────────────────────────────────────────────────
   const VC_I18N = {
     es: {
+      page_previous: "Anterior",
+      page_next: "Siguiente",
+      dock_open: "Abrir Afterglow",
+      dock_active: "En llamada",
+      page_queue: "Páginas de la cola",
+      page_catalog: "Páginas de Spotlight",
+
       room_local_mute: "Silenciar para mí",
       room_local_unmute: "Volver a escuchar",
       room_hero: "Un lugar para escucharnos.",
@@ -39,9 +46,6 @@
       room_loading_desc: "Permite el acceso al micrófono si el navegador te lo pide.",
       room_retry_title: "Volvemos a intentarlo",
       room_retry_desc: "La conexión se interrumpió. Puedes volver a entrar a la sala.",
-      room_history: "Ver historial",
-      room_no_history: "Aún no hay sesiones",
-      room_history_empty: "Tu próxima conversación empieza aquí.",
       room_waiting: "Esperando compañía",
       room_in: "En la sala",
       room_mic_off: "Micrófono silenciado",
@@ -57,7 +61,6 @@
       room_send: "Enviar mensaje",
       room_minimize_hint: "Puedes seguir navegando sin salir de la llamada.",
       room_silent: "Nadie está hablando todavía",
-      room_close_history: "Cerrar historial",
       room_google_loading: "Preparando Google…",
       room_google_error: "No se pudo iniciar sesión. Vuelve a intentarlo.",
       room_people: "Personas en la sala",
@@ -79,7 +82,6 @@
       lbl_pass: "Contraseña del canal",
       ph_pass: "••••••••",
       btn_join: "Entrar a Afterglow",
-      hist_title: "Últimas sesiones",
       st_conn: "Conectando…",
       st_estab: "Estableciendo conexión…",
       st_disc: "Desconectado",
@@ -120,12 +122,10 @@
       vc_music_by: "por",
       vc_music_skip: "Siguiente",
       vc_music_err_url: "Link no válido. Usa YouTube o Spotify.",
-      vc_hist_more: "Ver más",
       vc_nobody: "Nadie en el canal por ahora",
       vc_person: "persona conectada",
       vc_persons: "personas conectadas",
       vc_tab_room: "Sala",
-      vc_hist_full: "Historial de Afterglow",
       vc_spotlight_menu: "Menú Spotlight",
       vc_spotlight_live: "Sintonizar en vivo",
       vc_spotlight_title: "Canciones de Spotlight",
@@ -136,6 +136,13 @@
       vc_spotlight_live_hint: "Transmitiendo Spotlight en tiempo real"
     },
     en: {
+      page_previous: "Previous",
+      page_next: "Next",
+      dock_open: "Open Afterglow",
+      dock_active: "In a call",
+      page_queue: "Queue pages",
+      page_catalog: "Spotlight pages",
+
       room_local_mute: "Mute for me",
       room_local_unmute: "Unmute for me",
       room_hero: "A place to hear each other.",
@@ -165,9 +172,6 @@
       room_loading_desc: "Allow microphone access if your browser asks.",
       room_retry_title: "Let’s try again",
       room_retry_desc: "The connection was interrupted. You can rejoin the room.",
-      room_history: "View history",
-      room_no_history: "No sessions yet",
-      room_history_empty: "Your next conversation starts here.",
       room_waiting: "Waiting for company",
       room_in: "In the room",
       room_mic_off: "Microphone muted",
@@ -183,7 +187,6 @@
       room_send: "Send message",
       room_minimize_hint: "You can keep browsing without leaving the call.",
       room_silent: "No one is speaking yet",
-      room_close_history: "Close history",
       room_google_loading: "Connecting to Google…",
       room_google_error: "Could not sign in. Please try again.",
       room_people: "People in the room",
@@ -205,7 +208,6 @@
       lbl_pass: "Channel password",
       ph_pass: "••••••••",
       btn_join: "Join Afterglow",
-      hist_title: "Latest sessions",
       st_conn: "Connecting…",
       st_estab: "Establishing connection…",
       st_disc: "Disconnected",
@@ -246,12 +248,10 @@
       vc_music_by: "by",
       vc_music_skip: "Skip",
       vc_music_err_url: "Invalid link. Use YouTube or Spotify.",
-      vc_hist_more: "See more",
       vc_nobody: "No one in the channel yet",
       vc_person: "person connected",
       vc_persons: "people connected",
       vc_tab_room: "Room",
-      vc_hist_full: "Afterglow history",
       vc_spotlight_menu: "Spotlight Menu",
       vc_spotlight_live: "Tune in Live",
       vc_spotlight_title: "Spotlight Songs",
@@ -262,6 +262,13 @@
       vc_spotlight_live_hint: "Streaming Spotlight in real-time"
     },
     pt: {
+      page_previous: "Anterior",
+      page_next: "Próxima",
+      dock_open: "Abrir Afterglow",
+      dock_active: "Em chamada",
+      page_queue: "Páginas da fila",
+      page_catalog: "Páginas do Spotlight",
+
       room_local_mute: "Silenciar para mim",
       room_local_unmute: "Ouvir de novo",
       room_hero: "Um lugar para nos ouvir.",
@@ -291,9 +298,6 @@
       room_loading_desc: "Permita o microfone se o navegador pedir.",
       room_retry_title: "Vamos tentar de novo",
       room_retry_desc: "A conexão foi interrompida. Você pode entrar de novo.",
-      room_history: "Ver histórico",
-      room_no_history: "Nenhuma sessão ainda",
-      room_history_empty: "Sua próxima conversa começa aqui.",
       room_waiting: "Esperando companhia",
       room_in: "Na sala",
       room_mic_off: "Microfone silenciado",
@@ -309,7 +313,6 @@
       room_send: "Enviar mensagem",
       room_minimize_hint: "Você pode navegar sem sair da chamada.",
       room_silent: "Ninguém está falando ainda",
-      room_close_history: "Fechar histórico",
       room_google_loading: "Conectando ao Google…",
       room_google_error: "Não foi possível entrar. Tente de novo.",
       room_people: "Pessoas na sala",
@@ -331,7 +334,6 @@
       lbl_pass: "Senha do canal",
       ph_pass: "••••••••",
       btn_join: "Entrar no Afterglow",
-      hist_title: "Últimas sessões",
       st_conn: "Conectando…",
       st_estab: "Estabelecendo conexão…",
       st_disc: "Desconectado",
@@ -372,12 +374,10 @@
       vc_music_by: "por",
       vc_music_skip: "Próxima",
       vc_music_err_url: "Link inválido. Use YouTube ou Spotify.",
-      vc_hist_more: "Ver mais",
       vc_nobody: "Ninguém no canal por enquanto",
       vc_person: "pessoa conectada",
       vc_persons: "pessoas conectadas",
       vc_tab_room: "Sala",
-      vc_hist_full: "Histórico do Afterglow",
       vc_spotlight_menu: "Menu Spotlight",
       vc_spotlight_live: "Sintonizar ao vivo",
       vc_spotlight_title: "Músicas do Spotlight",
@@ -388,6 +388,13 @@
       vc_spotlight_live_hint: "Transmitindo Spotlight em tempo real"
     },
     fr: {
+      page_previous: "Précédent",
+      page_next: "Suivant",
+      dock_open: "Ouvrir Afterglow",
+      dock_active: "En appel",
+      page_queue: "Pages de la file",
+      page_catalog: "Pages Spotlight",
+
       room_local_mute: "Couper pour moi",
       room_local_unmute: "Réactiver pour moi",
       room_hero: "Un endroit pour s’écouter.",
@@ -417,9 +424,6 @@
       room_loading_desc: "Autorise le micro si le navigateur le demande.",
       room_retry_title: "On réessaie",
       room_retry_desc: "La connexion a été interrompue. Tu peux revenir.",
-      room_history: "Voir l’historique",
-      room_no_history: "Pas encore de sessions",
-      room_history_empty: "Ta prochaine conversation commence ici.",
       room_waiting: "En attendant de la compagnie",
       room_in: "Dans le salon",
       room_mic_off: "Micro coupé",
@@ -435,7 +439,6 @@
       room_send: "Envoyer un message",
       room_minimize_hint: "Tu peux naviguer sans quitter l’appel.",
       room_silent: "Personne ne parle pour le moment",
-      room_close_history: "Fermer l’historique",
       room_google_loading: "Connexion à Google…",
       room_google_error: "Connexion impossible. Réessaie.",
       room_people: "Personnes dans le salon",
@@ -457,7 +460,6 @@
       lbl_pass: "Mot de passe",
       ph_pass: "••••••••",
       btn_join: "Rejoindre Afterglow",
-      hist_title: "Dernières sessions",
       st_conn: "Connexion…",
       st_estab: "Établissement de la connexion…",
       st_disc: "Déconnecté",
@@ -498,12 +500,10 @@
       vc_music_by: "par",
       vc_music_skip: "Suivant",
       vc_music_err_url: "Lien invalide. Utilise YouTube ou Spotify.",
-      vc_hist_more: "Voir plus",
       vc_nobody: "Personne dans le canal pour l'instant",
       vc_person: "personne connectée",
       vc_persons: "personnes connectées",
       vc_tab_room: "Salon",
-      vc_hist_full: "Historique Afterglow",
       vc_spotlight_menu: "Menu Spotlight",
       vc_spotlight_live: "Écouter en direct",
       vc_spotlight_title: "Morceaux Spotlight",
@@ -533,7 +533,7 @@
   };
 
   // The visual layer is independent from Firebase and WebRTC.
-  const VOICE_STYLESHEET = new URL('../css/voice-channel.css?v=20261114_room', document.currentScript?.src || new URL('assets/js/voice-channel-widget.js', document.baseURI)).href;
+  const VOICE_STYLESHEET = new URL('../css/voice-channel.css?v=20261114_compact', document.currentScript?.src || new URL('assets/js/voice-channel-widget.js', document.baseURI)).href;
 
   const ICONS = {
     close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m6 6 12 12M18 6 6 18"/></svg>',
@@ -612,6 +612,12 @@
       this._activeTab = 'room';
 
       // Music state
+      this._queuePage = 0;
+      this._catalogPage = 0;
+      this._queuePageSize = 2;
+      this._catalogPageSize = 5;
+      this._inputDrafts = {};
+      this._speakers = new Set();
       this._musicQueue = [];
       this._musicState = { currentIndex: -1, isPlaying: false };
       this._musicCurrentTrack = null;
@@ -901,71 +907,11 @@
 
     _updateBarLayout() {
       if (!this._bar) return;
-      const isMobile = this._checkMobile();
-      const letterFab = document.getElementById('letter-fab') || document.querySelector('a[href="para-yaire.html"].fixed');
-      if (isMobile) {
-        this._bar.classList.add('vc-bar-mobile');
-        this._bar.classList.remove('bottom-24', 'right-6');
-        this._bar.style.setProperty('bottom', 'calc(1.15rem + env(safe-area-inset-bottom, 0px))', 'important');
-        this._bar.style.setProperty('left', '50%', 'important');
-        this._bar.style.setProperty('right', 'auto', 'important');
-        this._bar.style.setProperty('top', 'auto', 'important');
-        this._bar.style.setProperty('height', '3.25rem', 'important');
-        this._bar.style.setProperty('max-height', '3.25rem', 'important');
-        this._bar.style.setProperty('border-radius', '9999px', 'important');
-        this._bar.style.setProperty('width', 'calc(100vw - 142px)', 'important');
-        this._bar.style.setProperty('max-width', '228px', 'important');
-        this._bar.style.setProperty('min-width', 'min(228px, calc(100vw - 142px))', 'important');
-        this._bar.style.setProperty('padding', '0 0.65rem', 'important');
-        this._bar.style.setProperty('gap', '0.3rem', 'important');
-
-        if (this.fab) {
-          this.fab.style.setProperty('width', '3.25rem', 'important');
-          this.fab.style.setProperty('height', '3.25rem', 'important');
-          this.fab.style.setProperty('bottom', 'calc(1.15rem + env(safe-area-inset-bottom, 0px))', 'important');
-          this.fab.style.setProperty('right', '0.65rem', 'important');
-        }
-        if (letterFab) {
-          letterFab.style.setProperty('width', '3.25rem', 'important');
-          letterFab.style.setProperty('height', '3.25rem', 'important');
-          letterFab.style.setProperty('bottom', 'calc(1.15rem + env(safe-area-inset-bottom, 0px))', 'important');
-          letterFab.style.setProperty('left', '0.65rem', 'important');
-        }
-      } else {
-        this._bar.classList.remove('vc-bar-mobile');
-        this._bar.classList.add('bottom-24', 'right-6');
-        this._bar.style.removeProperty('bottom');
-        this._bar.style.removeProperty('left');
-        this._bar.style.removeProperty('right');
-        this._bar.style.removeProperty('top');
-        this._bar.style.removeProperty('height');
-        this._bar.style.removeProperty('max-height');
-        this._bar.style.removeProperty('border-radius');
-        this._bar.style.removeProperty('width');
-        this._bar.style.removeProperty('min-width');
-        this._bar.style.removeProperty('max-width');
-        this._bar.style.removeProperty('padding');
-        this._bar.style.removeProperty('gap');
-
-        if (this.fab) {
-          this.fab.style.removeProperty('width');
-          this.fab.style.removeProperty('height');
-          this.fab.style.removeProperty('bottom');
-          this.fab.style.removeProperty('right');
-        }
-        if (letterFab) {
-          letterFab.style.removeProperty('width');
-          letterFab.style.removeProperty('height');
-          letterFab.style.removeProperty('bottom');
-          letterFab.style.removeProperty('left');
-        }
-      }
-      if (this.connected) {
-        this._updateBarAvatars();
-      }
+      this._bar.classList.remove('vc-bar-mobile', 'bottom-24', 'right-6');
+      this._bar.removeAttribute('style');
+      this._updateDockState();
     }
 
-    // ── BUILD UI ───────────────────────────────────────────────────────────
     _buildUI() {
       const w = document.createElement('div');
       w.id = 'vc-wrapper';
@@ -1000,47 +946,24 @@
 
       this._bar = document.createElement('div');
       this._bar.id = 'vc-bar';
-      const isMobileInit = this._checkMobile();
-      this._bar.className = `fixed ${isMobileInit ? 'vc-bar-mobile' : 'bottom-24 right-6'} z-[9997] flex items-center gap-3 px-3.5 py-2.5 bg-zinc-950/80 backdrop-blur-xl border border-white/5 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] opacity-0 pointer-events-none transition-all duration-500 translate-y-4 scale-95 origin-bottom-right select-none`;
-      this._bar.innerHTML = `
-        <div class="flex items-center justify-center w-7 h-7 rounded-full bg-green-500/10 border border-green-500/20 relative shrink-0 transition-colors duration-300" id="vc-bar-indicator-bg">
-          <div class="absolute inset-0 rounded-full bg-green-500/20 animate-ping opacity-50 transition-all duration-300" id="vc-bar-indicator-ping"></div>
-          <div class="w-1.5 h-1.5 bg-green-500 rounded-full shadow-[0_0_10px_rgba(34,197,94,1)] transition-colors duration-300" id="vc-bar-indicator-dot"></div>
-          
-          <div id="vc-bar-waveform" class="absolute inset-0 flex items-center justify-center gap-[2px] opacity-0 transition-opacity duration-300">
-             <div class="w-1 bg-green-400 rounded-full animate-[vc-eq_0.5s_ease-in-out_infinite]"></div>
-             <div class="w-1 bg-green-400 rounded-full animate-[vc-eq_0.5s_ease-in-out_infinite_0.1s]"></div>
-             <div class="w-1 bg-green-400 rounded-full animate-[vc-eq_0.5s_ease-in-out_infinite_0.2s]"></div>
-          </div>
-        </div>
-        <div class="flex flex-col justify-center min-w-[65px] vc-bar-text-group">
-          <div class="flex items-center gap-1.5 mb-1">
-             <span class="text-[9px] font-extrabold text-green-400 uppercase tracking-[0.2em] leading-none transition-colors duration-300" id="vc-bar-title">${_t('bar_conn').split(' · ')[0]}</span>
-             <div class="flex items-center gap-1" id="vc-bar-icons">
-               <div id="vc-bar-music-icon" class="hidden text-amber-500 transition-opacity">
-                 <svg class="w-3 h-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
-               </div>
-               <div id="vc-bar-chat-icon" class="hidden text-red-400 relative transition-opacity">
-                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                 <span class="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-red-500 rounded-full shadow-[0_0_5px_rgba(239,68,68,0.8)] animate-pulse"></span>
-               </div>
-             </div>
-          </div>
-          <span id="vc-bar-sub" class="text-[10px] text-white/50 font-medium leading-none">${_t('bar_conn').split(' · ')[1]}</span>
-        </div>
-        <div id="vc-bar-avatars" class="flex items-center -space-x-1.5 shrink-0 hidden"></div>
-        <div class="w-[1px] h-6 bg-white/10 shrink-0 vc-bar-divider"></div>
-        <div class="flex items-center px-1 shrink-0">
-          <span id="vc-bar-timer" class="text-white font-mono text-[13px] font-bold tabular-nums tracking-wide">00:00</span>
-        </div>
-      `;
-      this._bar.setAttribute('role', 'button');
+      this._bar.className = 'vc-dock opacity-0';
       this._bar.inert = true;
+      this._bar.setAttribute('role', 'group');
+      this._bar.setAttribute('aria-label', 'Afterglow');
       this._bar.setAttribute('aria-hidden', 'true');
-      this._bar.setAttribute('tabindex', '-1');
-      this._bar.setAttribute('aria-label', _t('room_open'));
-      this._bar.addEventListener('click', () => this.open());
-      this._bar.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.open(); } });
+      this._bar.innerHTML = `
+        <button id="vc-bar-open" class="vc-dock-open" aria-label="${_t('dock_open')}">
+          <span class="vc-dock-symbol">${ICONS.sound}</span>
+          <span class="vc-dock-info"><strong>Afterglow <span id="vc-bar-count"></span></strong><span class="vc-dock-meta"><span id="vc-bar-title">${_t('dock_active')}</span><time id="vc-bar-timer">00:00</time></span></span>
+          <span class="vc-dock-notices"><span id="vc-bar-music-icon" class="hidden" title="${_t('vc_music')}">${ICONS.music}</span><span id="vc-bar-chat-icon" class="hidden" title="${_t('vc_chat')}">${ICONS.chat}</span></span>
+        </button>
+        <button id="vc-bar-mute" class="vc-dock-action" aria-label="${_t('room_mic_off')}" aria-pressed="false">${ICONS.mic}</button>
+        <button id="vc-bar-dnd" class="vc-dock-action vc-dock-audio" aria-label="${_t('room_deafen')}" aria-pressed="false">${ICONS.bell}</button>
+        <button id="vc-bar-leave" class="vc-dock-action vc-dock-leave" aria-label="${_t('room_leave')}">${ICONS.phone}</button>`;
+      this._bar.querySelector('#vc-bar-open').addEventListener('click', () => this.open());
+      this._bar.querySelector('#vc-bar-mute').addEventListener('click', () => this._toggleMute());
+      this._bar.querySelector('#vc-bar-dnd').addEventListener('click', () => this._toggleDND());
+      this._bar.querySelector('#vc-bar-leave').addEventListener('click', () => this._leave());
 
       document.body.appendChild(this.fab);
       document.body.appendChild(this.panel);
@@ -1078,19 +1001,13 @@
       this.panel.addEventListener('click', (e) => e.stopPropagation());
 
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Tab' && !this.panel.inert && !document.getElementById('vc-detailed-history')) {
+        if (e.key === 'Tab' && !this.panel.inert) {
           const items = Array.from(this.panel.querySelectorAll('button:not(:disabled), input:not([type=hidden]), [tabindex="0"]')).filter(el => !el.closest('[hidden], [inert]'));
           const first = items[0], last = items[items.length - 1];
           if (e.shiftKey && (document.activeElement === first || !this.panel.contains(document.activeElement))) { e.preventDefault(); last?.focus(); }
           else if (!e.shiftKey && (document.activeElement === last || !this.panel.contains(document.activeElement))) { e.preventDefault(); first?.focus(); }
         }
         if (e.key === 'Escape') {
-          const detHist = document.getElementById('vc-detailed-history');
-          if (detHist) {
-            const btn = document.getElementById('vc-det-close');
-            if (btn) btn.click();
-            return;
-          }
           if (this.panel.classList.contains('open') || this.panel.classList.contains('scale-100')) {
             this._toggle();
           }
@@ -1199,7 +1116,6 @@
         if (e.target.closest && (e.target.closest('#auth-btn-goto-vc') || e.target.closest('#auth-menu') || e.target.closest('#vc-user-ctx-menu'))) return;
         if (_panelMousedown) return;
         if (window.getSelection && window.getSelection().toString()) return;
-        if (document.getElementById('vc-detailed-history')) return;
         this._toggle();
       });
 
@@ -1329,7 +1245,7 @@
         requestAnimationFrame(() => {
           const previous = this._previousFocus;
           const visible = previous?.isConnected && previous.getClientRects().length && getComputedStyle(previous).visibility !== 'hidden';
-          const target = visible ? previous : document.getElementById('auth-toggle') || (this.connected ? this._bar : null);
+          const target = visible ? previous : document.getElementById('auth-toggle') || (this.connected ? this._bar?.querySelector('#vc-bar-open') : null);
           target?.focus?.({ preventScroll: true });
         });
         this._playSfx('flyout', 0.4, false, 'fly');
@@ -1341,7 +1257,7 @@
       const visible = this.connected && !this.panel.classList.contains('open') && !this.panel.classList.contains('scale-100') && !document.body.classList.contains('menu-is-open') && this._bar.classList.contains('opacity-100') && !this._bar.classList.contains('opacity-0');
       this._bar.inert = !visible;
       this._bar.setAttribute('aria-hidden', String(!visible));
-      this._bar.setAttribute('tabindex', visible ? '0' : '-1');
+      this._bar.removeAttribute('tabindex');
     }
 
     open() {
@@ -1449,7 +1365,7 @@
       const user = window.yaireCurrentUser;
       return `<div class="vc-screen vc-lobby-screen">
         ${this._tplHeader()}
-        <div class="vc-lobby vc-scroll">
+        <div class="vc-lobby">
           <div class="vc-lobby-intro"><h1 id="vc-room-title">${_t(user ? 'room_hero' : 'room_auth_title')}</h1><p>${_t(user ? 'room_intro' : 'room_auth_desc')}</p></div>
           <div class="vc-lobby-presence" aria-hidden="true">
             ${user ? this._avatarMarkup(user, 'vc-avatar-lobby') : `<span class="vc-avatar vc-avatar-lobby">${ICONS.mic}</span>`}
@@ -1459,7 +1375,6 @@
           <div class="vc-lobby-room"><h2>${_t('room_name')}</h2><p>${_t('room_capacity')}</p>
             ${user ? `<div id="vc-conn-count" class="vc-presence-status" role="status">${_t('room_checking')}</div>` : ''}
           </div>
-          ${user ? this._tplHistory() : ''}
         </div>
         <div class="vc-lobby-footer">
           ${user ? `<div class="vc-identity">${this._avatarMarkup(user)}<div class="vc-identity-info"><strong>${this._escHtml(user.displayName || '28E')}</strong><span>${this._escHtml(user.email || _t('room_account'))}</span></div><button id="vc-logout-btn" class="vc-icon-button" title="${_t('room_logout')}" aria-label="${_t('room_logout')}">${ICONS.logout}</button></div>
@@ -1484,135 +1399,6 @@
         <span class="vc-state-symbol vc-state-error">${ICONS.phone}</span><h1 id="vc-room-title">${_t('room_retry_title')}</h1>
         <p role="status">${_t('room_retry_desc')}</p><button id="vc-reconnect" class="vc-primary">${ICONS.mic}<span>${_t('btn_reconn')}</span>${ICONS.arrow}</button>
       </div></div>`;
-    }
-
-    _tplHistory() {
-      const h = window.yaireVcHistoryData || [];
-      const last = h[0];
-      const date = last ? new Date(last.date).toLocaleDateString(_getLang(), { day: 'numeric', month: 'short' }) : '';
-      return `<button class="vc-history-preview" id="vc-btn-ver-mas">${ICONS.clock}<span><strong>${_t('room_history')}</strong><small>${last ? `${this._escHtml(last.name || '28E')} · ${date}` : _t('room_no_history')}</small></span>${ICONS.arrow}</button>`;
-    }
-
-    _showDetailedHistory() {
-      if (document.getElementById('vc-detailed-history')) return;
-      const h = window.yaireVcHistoryData || [];
-      const lang = _getLang();
-
-      let rowsHtml = '';
-      if (!h || h.length === 0) {
-        rowsHtml = `
-          <div class="vc-det-empty">
-            <div class="vc-det-empty-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-              </svg>
-            </div>
-            <div class="vc-det-empty-title">${_t('room_no_history')}</div>
-            <div class="vc-det-empty-sub">${_t('room_history_empty')}</div>
-          </div>
-        `;
-      } else {
-        rowsHtml = h.map(s => {
-          const d = new Date(s.date);
-          const dayName = d.toLocaleDateString(lang, { weekday: 'short' });
-          const dateFormatted = d.toLocaleDateString(lang, { day: 'numeric', month: 'short', year: 'numeric' });
-          const timeFormatted = d.toLocaleTimeString(lang, { hour: '2-digit', minute: '2-digit' });
-          const cleanDate = `${dayName}, ${dateFormatted}`;
-          const m = Math.floor(s.duration / 60), sec = s.duration % 60;
-          const durLabel = m > 0 ? `${m}m ${sec}s` : `${sec}s`;
-          return `
-            <div class="vc-det-row">
-              <div class="vc-det-row-left">
-                <div class="vc-det-row-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                  </svg>
-                </div>
-                <div class="vc-det-row-info">
-                  <div class="vc-det-row-name">${this._escHtml(s.name || _t('room_name'))}</div>
-                  <div class="vc-det-row-date">
-                    <span class="vc-det-row-calendar">${cleanDate}</span>
-                    <span class="vc-det-row-dot">·</span>
-                    <span class="vc-det-row-clock">${timeFormatted}</span>
-                  </div>
-                </div>
-              </div>
-              <div class="vc-det-badge">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polyline points="12 6 12 12 16 14"></polyline>
-                </svg>
-                <span>${durLabel}</span>
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
-
-      const modal = document.createElement('div');
-      modal.id = 'vc-detailed-history';
-      modal.className = 'opacity-0';
-      modal.setAttribute('role', 'dialog');
-      modal.setAttribute('aria-modal', 'true');
-      modal.setAttribute('aria-label', _t('vc_hist_full'));
-      this.panel.inert = true;
-      modal.innerHTML = `
-        <div id="vc-det-bg"></div>
-        <div id="vc-det-card">
-          <div class="vc-det-header">
-            <div class="vc-det-title-wrap">
-              <span class="vc-det-brand">28E</span>
-              <span class="vc-det-slash">/</span>
-              <div class="vc-det-title-group">
-                <span class="vc-det-title">${_t('vc_hist_full')}</span>
-                <span class="vc-det-count">${h.length} ${h.length === 1 ? 'sesión' : 'sesiones'}</span>
-              </div>
-            </div>
-            <button id="vc-det-close" title="${_t('room_close_history')}" aria-label="${_t('room_close_history')}" class="vc-det-close-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-          </div>
-          <div class="vc-det-list letter-scroll">
-            ${rowsHtml}
-          </div>
-        </div>
-      `;
-      document.body.appendChild(modal);
-
-      // Animate in
-      requestAnimationFrame(() => {
-        modal.classList.remove('opacity-0');
-        modal.classList.add('open');
-        modal.querySelector('#vc-det-close')?.focus();
-        if (window.__28EGamepad && typeof window.__28EGamepad.onVoiceHistoryOpened === 'function') {
-          window.__28EGamepad.onVoiceHistoryOpened();
-        }
-      });
-
-      const closeFunc = () => {
-        window.removeEventListener('keydown', onKey);
-        this.panel.inert = false;
-        this.panel.querySelector('#vc-btn-ver-mas')?.focus();
-        modal.classList.remove('open');
-        modal.classList.add('opacity-0');
-        if (window.__28EGamepad && typeof window.__28EGamepad.onVoiceHistoryClosed === 'function') {
-          window.__28EGamepad.onVoiceHistoryClosed();
-        }
-        setTimeout(() => modal.remove(), 260);
-      };
-
-      const onKey = (e) => {
-        if (e.key === 'Tab') { e.preventDefault(); modal.querySelector('#vc-det-close')?.focus(); }
-        if (e.key === 'Escape') closeFunc();
-      };
-      window.addEventListener('keydown', onKey);
-
-      modal.querySelector('#vc-det-close').addEventListener('click', closeFunc);
-      modal.querySelector('#vc-det-bg').addEventListener('click', closeFunc);
     }
 
     _tplParticipant(u) {
@@ -1647,7 +1433,6 @@
             <div class="vc-sect vc-scroll"><div id="vc-users-group" class="vc-users-group" aria-label="${_t('room_people')}">${this.users.map(u => this._tplParticipant(u)).join('')}</div>
               <p class="vc-room-hint">${_t(count < 2 ? 'room_waiting' : 'room_ready')}</p>
             </div>
-            <p class="vc-minimize-hint">${ICONS.sound}<span>${_t('room_minimize_hint')}</span></p>
           </section>
           <section id="vc-content-chat" class="vc-tab-content" role="tabpanel" aria-labelledby="vc-tab-chat" ${tab !== 'chat' ? 'hidden inert' : ''}>
             <div id="vc-msgs" class="vc-scroll" role="log" aria-live="polite" aria-label="${_t('vc_chat')}">${this._renderChatMsgs()}</div>
@@ -1669,6 +1454,7 @@
       const group = this.panel.querySelector('#vc-users-group');
       if (!group) return;
       const ids = new Set(this.users.map(u => String(u.id)));
+      for (const id of this._speakers) if (!ids.has(String(id))) this._speakers.delete(id);
       group.querySelectorAll('.vc-user').forEach(node => { if (!ids.has(node.id.slice(5))) node.remove(); });
       this.users.forEach(u => {
         let node = document.getElementById(`vc-u-${u.id}`);
@@ -1753,81 +1539,36 @@
     }
 
     _updateBarAvatars() {
-      const avatarsContainer = document.getElementById('vc-bar-avatars');
-      if (!avatarsContainer) return;
+      this._updateDockState();
+    }
 
-      if (!this.connected) {
-        avatarsContainer.classList.add('hidden');
-        avatarsContainer.innerHTML = '';
-        return;
+    _updateDockState() {
+      if (!this._bar) return;
+      const count = this._bar.querySelector('#vc-bar-count');
+      if (count) count.textContent = `${Math.max(this.connected ? 1 : 0, this.users.length)}/4`;
+      for (const [id, pressed, icon, label] of [
+        ['vc-bar-mute', this.muted, this.muted ? ICONS.micOff : ICONS.mic, _t(this.muted ? 'room_mic_on' : 'room_mic_off')],
+        ['vc-bar-dnd', this.dnd, this.dnd ? ICONS.dnd : ICONS.bell, _t(this.dnd ? 'room_undeafen' : 'room_deafen')]
+      ]) {
+        const button = this._bar.querySelector('#' + id);
+        if (button) { button.setAttribute('aria-pressed', String(pressed)); button.setAttribute('aria-label', label); button.innerHTML = icon; }
       }
-
-      // Ensure effective users list is never empty while connected
-      let effectiveUsers = (this.users && this.users.length > 0) ? [...this.users] : [];
-      if (effectiveUsers.length === 0 && (this.myId || window.yaireCurrentUser)) {
-        effectiveUsers.push({
-          id: this.myId || 'me',
-          displayName: window.yaireCurrentUser?.displayName || 'Tú',
-          photoURL: window.yaireCurrentUser?.photoURL || null
-        });
-      }
-
-      // If current user is missing photoURL in this.users, enrich it from window.yaireCurrentUser
-      if (window.yaireCurrentUser?.photoURL) {
-        effectiveUsers = effectiveUsers.map(u => {
-          if ((u.id === this.myId || !u.photoURL) && window.yaireCurrentUser?.photoURL) {
-            return { ...u, photoURL: u.photoURL || window.yaireCurrentUser.photoURL };
-          }
-          return u;
-        });
-      }
-
-      const isMobile = this._checkMobile();
-      const maxToShow = isMobile ? 2 : 4;
-      const displayUsers = effectiveUsers.slice(0, maxToShow);
-      const extraCount = Math.max(0, effectiveUsers.length - maxToShow);
-
-      if (displayUsers.length === 0) {
-        avatarsContainer.classList.add('hidden');
-        avatarsContainer.innerHTML = '';
-        return;
-      }
-
-      avatarsContainer.classList.remove('hidden');
-
-      let html = displayUsers.map(u => {
-        const isMe = u.id === this.myId;
-        const displayName = u.displayName || (isMe ? (window.yaireCurrentUser?.displayName || 'Tú') : 'Usuario');
-        const initials = displayName.slice(0, 2).toUpperCase();
-        const photo = u.photoURL || (isMe ? window.yaireCurrentUser?.photoURL : null);
-
-        const avatarHtml = photo
-          ? `<img src="${photo}" class="w-full h-full rounded-full object-cover" draggable="false" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';" /><span class="w-full h-full hidden items-center justify-center text-[7.5px] md:text-[9px] font-bold text-white uppercase">${initials}</span>`
-          : `<span class="w-full h-full flex items-center justify-center text-[7.5px] md:text-[9px] font-bold text-white uppercase">${initials}</span>`;
-
-        return `
-          <div id="vc-bar-av-${u.id}" class="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-[7.5px] md:text-[9px] font-bold bg-zinc-800 text-white border-2 border-zinc-900 shadow-sm relative transition-all duration-300 overflow-hidden z-10" title="${displayName}">
-            ${avatarHtml}
-          </div>
-        `;
-      }).join('');
-
-      if (extraCount > 0) {
-        html += `
-          <div class="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-[7.5px] md:text-[9px] font-bold bg-zinc-800 text-white border-2 border-zinc-900 shadow-sm z-0 relative">
-            +${extraCount}
-          </div>
-        `;
-      }
-
-      avatarsContainer.innerHTML = html;
+      const title = this._bar.querySelector('#vc-bar-title');
+      if (title) title.textContent = _t(this.muted ? 'room_mic_off' : this.dnd ? 'room_deafened' : 'dock_active');
+      this._bar.classList.toggle('is-speaking', this._speakers.size > 0);
+      this._updateBarMusicState();
+      this._updateBarChatState();
     }
 
     _render(tpl) {
+      this._saveDrafts();
+      this._listObserver?.disconnect();
+      cancelAnimationFrame(this._listFitRaf);
       this._dismissParticipantMenu?.();
       if (this._loginPollInt) { clearInterval(this._loginPollInt); this._loginPollInt = null; }
       if (this._loginMembersStop) { this._loginMembersStop(); this._loginMembersStop = null; }
       this.panel.innerHTML = tpl;
+      this._restoreDrafts();
       this._bindPanelEvents();
       
       if (document.getElementById('vc-join')) {
@@ -1880,12 +1621,6 @@
     }
 
     _bindPanelEvents() {
-      const btnVerMas = document.getElementById('vc-btn-ver-mas');
-      if (btnVerMas) {
-        btnVerMas.addEventListener('click', () => this._showDetailedHistory());
-        this._bindGsapButton(btnVerMas);
-      }
-
       const cancelBtn = document.getElementById('vc-cancel-conn');
       if (cancelBtn) {
         cancelBtn.addEventListener('click', () => {
@@ -2078,12 +1813,7 @@
          this._render(this._tplLogin());
       }
       
-      const bTitle = document.getElementById('vc-bar-title');
-      const bSub = document.getElementById('vc-bar-sub');
-      if (bTitle && bSub) {
-        bTitle.textContent = _t('bar_conn').split(' · ')[0];
-        bSub.textContent = _t('bar_conn').split(' · ')[1] || '';
-      }
+      this._updateDockState();
     }
 
     _updateTabs(direction = 1) {
@@ -2091,13 +1821,7 @@
          this._render(this._tplConnected());
          this._updateBarChatState();
          
-         const bTitle = document.getElementById('vc-bar-title');
-         const bSub = document.getElementById('vc-bar-sub');
-         if (bTitle && bSub) {
-           bTitle.textContent = _t('bar_conn').split(' · ')[0];
-           bSub.textContent = _t('bar_conn').split(' · ')[1] || '';
-         }
-         
+         this._updateDockState();
          this._bindAvatarFallbacks();
          const messages = document.getElementById('vc-msgs');
          if (messages) messages.scrollTop = messages.scrollHeight;
@@ -2312,6 +2036,7 @@
         });
 
         this.socket.on('user_left', ({ userId }) => {
+          this._speakers.delete(userId);
           this._playSfx('act_left', 0.5);
           const u = this.users.find(x => x.id === userId);
           if (u && typeof window.showToast === 'function') {
@@ -2566,6 +2291,7 @@
         btn.innerHTML = `${this.muted ? ICONS.micOff : ICONS.mic}<span>${_t(this.muted ? 'btn_muted' : 'btn_mic')}</span>`;
       }
       this._updateUsersDOM();
+      this._updateDockState();
       this._playSfx(this.muted ? 'toggleOff' : 'toggleOn', 0.4);
     }
 
@@ -2587,6 +2313,7 @@
         btn.innerHTML = `${this.dnd ? ICONS.dnd : ICONS.bell}<span>${_t(this.dnd ? 'room_deafened' : 'room_deafen')}</span>`;
       }
       this._updateUsersDOM();
+      this._updateDockState();
       this._playSfx(this.dnd ? 'toggleOff' : 'toggleOn', 0.4);
     }
 
@@ -3009,17 +2736,28 @@
       return `<span class="vc-track-art ${className}">${art ? `<img src="${this._escHtml(art)}" alt="" loading="lazy" />` : `<span data-spot-art-key="${this._escHtml(key)}">${ICONS.music}</span>`}</span>`;
     }
 
+    _pager(kind, total) {
+      const size = kind === 'queue' ? this._queuePageSize : this._catalogPageSize;
+      const pages = Math.max(1, Math.ceil(total / size));
+      const key = kind === 'queue' ? '_queuePage' : '_catalogPage';
+      this[key] = Math.min(Math.max(0, this[key]), pages - 1);
+      const page = this[key];
+      return `<nav class="vc-pager" aria-label="${_t(kind === 'queue' ? 'page_queue' : 'page_catalog')}"><button id="vc-${kind}-prev" class="vc-page-button" data-vc-page="${kind}" data-direction="-1" ${page === 0 ? 'disabled' : ''} aria-label="${_t('page_previous')}">${ICONS.back}</button><span class="vc-page-count" aria-live="polite">${page + 1}/${pages}</span><button id="vc-${kind}-next" class="vc-page-button" data-vc-page="${kind}" data-direction="1" ${page + 1 >= pages ? 'disabled' : ''} aria-label="${_t('page_next')}">${ICONS.arrow}</button></nav>`;
+    }
+
     _renderSpotlightCatalog() {
       const tracks = this._getSpotlightTracks();
       const query = (this._spotlightSearchQuery || '').toLocaleLowerCase().trim();
       const filtered = query ? tracks.filter(t => `${t.title || ''} ${t.artist || ''}`.toLocaleLowerCase().includes(query)) : tracks;
-      return `<div class="vc-music-panel">
-        <div class="vc-catalog-heading"><button id="vc-spotlight-back-btn" class="vc-back-button">${ICONS.back}${_t('room_back_music')}</button><span>Spotlight · ${filtered.length}</span></div>
+      const pager = this._pager('catalog', filtered.length);
+      const start = this._catalogPage * this._catalogPageSize;
+      return `<div class="vc-music-panel vc-catalog-panel">
+        <div class="vc-catalog-heading"><button id="vc-spotlight-back-btn" class="vc-back-button">${ICONS.back}<span>Spotlight · ${filtered.length}</span></button>${pager}</div>
         <div class="vc-search-field">${ICONS.search}<input id="vc-spotlight-search-input" type="search" aria-label="${_t('room_search_label')}" placeholder="${_t('room_search_label')}" value="${this._escHtml(this._spotlightSearchQuery || '')}" autocomplete="off" enterkeyhint="search" />${query ? `<button id="vc-spotlight-search-clear" class="vc-icon-button" aria-label="${_t('room_cancel')}">${ICONS.close}</button>` : ''}</div>
-        <div class="vc-track-list" id="vc-spotlight-track-list">${filtered.length ? filtered.map((t, i) => {
+        <div class="vc-list-window" data-list-window="catalog"><div class="vc-track-list" id="vc-spotlight-track-list">${filtered.length ? filtered.slice(start, start + this._catalogPageSize).map((t, i) => {
           const attrs = `data-src="${this._escHtml(t.src)}" data-title="${this._escHtml(t.title)}" data-artist="${this._escHtml(t.artist || '')}"`;
-          return `<div class="vc-track-row"><button class="vc-spot-track-row vc-track-play" data-idx="${i}" ${attrs} aria-label="${_t('room_play')}: ${this._escHtml(t.title)}">${this._trackArtMarkup(t)}<span class="vc-track-info"><strong>${this._escHtml(t.title)}</strong><small>${this._escHtml(t.artist || 'Spotlight')}</small></span></button><button class="vc-spot-add-queue vc-icon-button" ${attrs} aria-label="${_t('vc_spotlight_add_queue')}: ${this._escHtml(t.title)}" title="${_t('vc_spotlight_add_queue')}">${ICONS.plus}</button></div>`;
-        }).join('') : `<div class="vc-empty-state">${ICONS.search}<h2>${_t('room_no_results')}</h2><p>${_t('room_no_results_desc')}</p></div>`}</div>
+          return `<div class="vc-track-row"><button class="vc-spot-track-row vc-track-play" data-idx="${start + i}" ${attrs} aria-label="${_t('room_play')}: ${this._escHtml(t.title)}">${this._trackArtMarkup(t)}<span class="vc-track-info"><strong>${this._escHtml(t.title)}</strong><small>${this._escHtml(t.artist || 'Spotlight')}</small></span></button><button class="vc-spot-add-queue vc-icon-button" ${attrs} aria-label="${_t('vc_spotlight_add_queue')}: ${this._escHtml(t.title)}" title="${_t('vc_spotlight_add_queue')}">${ICONS.plus}</button></div>`;
+        }).join('') : `<div class="vc-empty-state">${ICONS.search}<h2>${_t('room_no_results')}</h2><p>${_t('room_no_results_desc')}</p></div>`}</div></div>
       </div>`;
     }
 
@@ -3034,27 +2772,63 @@
       const percent = duration > 0 ? Math.min(100, Math.max(0, current / duration * 100)) : 0;
       const source = track ? ((track.source || track.type) === 'spotlight' ? 'Spotlight' : (track.source || track.type) === 'spotify' ? 'Spotify' : track.type === 'youtube' ? 'YouTube' : '28E') : '';
       const now = track ? `<div class="vc-now-playing">
-        <div class="vc-track-row">${this._trackArtMarkup(track)}<div class="vc-track-info"><span class="vc-track-source">${_t(playing ? 'vc_music_now' : 'room_paused')} · ${source}</span><strong>${this._escHtml(this._cleanMusicTitle(track.title))}</strong><small>${this._escHtml(track.artist || track.addedByName || '28E')}</small></div></div>
-        ${track.type !== 'spotify' ? `<div class="vc-track-progress"><div id="vc-music-progress" role="slider" tabindex="0" aria-label="${_t('vc_music_now')}" aria-valuemin="0" aria-valuemax="${Math.floor(duration)}" aria-valuenow="${Math.floor(current)}"><div class="vc-progress-track"><div id="vc-music-progress-fill" style="width:${percent}%"></div></div></div><div class="vc-time-row"><span id="vc-music-time-current">${fmt(current)}</span><span id="vc-music-time-total">${fmt(duration)}</span></div></div>` : '<div id="vc-spotify-embed"></div>'}
-        <div class="vc-playback-controls"><button id="vc-music-playpause" class="vc-icon-button vc-play-button" aria-label="${_t(playing ? 'room_pause' : 'room_play')}">${playing ? ICONS.pause : ICONS.play}</button><button id="vc-music-skip" class="vc-icon-button" aria-label="${_t('vc_music_skip')}" title="${_t('vc_music_skip')}">${ICONS.skipFwd}</button><label class="vc-volume-control">${ICONS.volumeUp}<input id="vc-music-vol-slider" type="range" min="0" max="100" value="${this._musicVolume}" aria-label="${_t('room_volume')}" /></label></div>
-      </div>` : `<div class="vc-empty-state vc-music-empty">${ICONS.music}<h2>${_t('room_music_title')}</h2><p>${_t('room_music_desc')}</p></div>`;
-      const queue = this._musicQueue.map((t, i) => {
+        <div class="vc-player-main">${this._trackArtMarkup(track)}<div class="vc-track-info"><strong title="${this._escHtml(this._cleanMusicTitle(track.title))}">${this._escHtml(this._cleanMusicTitle(track.title))}</strong><small>${this._escHtml(track.artist || source)}</small></div><button id="vc-music-playpause" class="vc-icon-button vc-play-button" aria-label="${_t(playing ? 'room_pause' : 'room_play')}">${playing ? ICONS.pause : ICONS.play}</button><button id="vc-music-skip" class="vc-icon-button" aria-label="${_t('vc_music_skip')}" title="${_t('vc_music_skip')}">${ICONS.skipFwd}</button></div>
+        <div class="vc-player-bottom">${track.type !== 'spotify' ? `<div class="vc-track-progress"><div id="vc-music-progress" role="slider" tabindex="0" aria-label="${_t('vc_music_now')}" aria-valuemin="0" aria-valuemax="${Math.floor(duration)}" aria-valuenow="${Math.floor(current)}"><div class="vc-progress-track"><div id="vc-music-progress-fill" style="width:${percent}%"></div></div></div><div class="vc-time-row"><span id="vc-music-time-current">${fmt(current)}</span><span id="vc-music-time-total">${fmt(duration)}</span></div></div>` : '<div id="vc-spotify-embed"></div>'}<label class="vc-volume-control">${ICONS.volumeUp}<input id="vc-music-vol-slider" type="range" min="0" max="100" value="${this._musicVolume}" aria-label="${_t('room_volume')}" /></label></div>
+      </div>` : `<div class="vc-music-empty">${ICONS.music}<div><h2>${_t('vc_music_no_track')}</h2><p>${_t('room_music_desc')}</p></div></div>`;
+      const queuePager = this._pager('queue', this._musicQueue.length);
+      const queueStart = this._queuePage * this._queuePageSize;
+      const queue = this._musicQueue.slice(queueStart, queueStart + this._queuePageSize).map((t, offset) => {
+        const i = queueStart + offset;
         const active = i === this._musicState.currentIndex;
         return `<div class="vc-track-row ${active ? 'vc-track-current' : ''}"><span class="vc-track-number">${i + 1}</span>${this._trackArtMarkup(t)}<div class="vc-track-info"><strong>${this._escHtml(this._cleanMusicTitle(t.title))}</strong><small>${this._escHtml(t.artist || t.addedByName || '')}</small></div>${!active ? `<button class="vc-icon-button vc-music-track-rm" data-track-id="${this._escHtml(t.id)}" aria-label="${_t('room_remove')}: ${this._escHtml(t.title)}" title="${_t('room_remove')}">${ICONS.close}</button>` : ''}</div>`;
       }).join('');
-      return `<div class="vc-music-panel">${now}
-        <button id="vc-spotlight-open-btn" class="vc-catalog-button">${ICONS.music}<span><strong>${_t('room_catalog')}</strong><small>${_t('room_listen')}</small></span>${ICONS.arrow}</button>
-        <h2 class="vc-music-label">${_t('vc_music_queue')}<span>${this._musicQueue.length}</span></h2>
-        <div id="vc-music-queue" class="vc-track-list">${queue || `<p class="vc-queue-empty">${_t('vc_music_empty_q')}</p>`}</div>
+      return `<div class="vc-music-panel vc-queue-panel">${now}
+        <button id="vc-spotlight-open-btn" class="vc-catalog-button">${ICONS.music}<span><strong>${_t('room_catalog')}</strong></span>${ICONS.arrow}</button>
+        <div class="vc-queue-region"><div class="vc-queue-heading"><h2 class="vc-music-label">${_t('vc_music_queue')}<span>${this._musicQueue.length}</span></h2>${queuePager}</div><div class="vc-list-window" data-list-window="queue"><div id="vc-music-queue" class="vc-track-list">${queue || `<p class="vc-queue-empty">${_t('vc_music_empty_q')}</p>`}</div></div></div>
         <div class="vc-music-compose"><label for="vc-music-url">${_t('room_link_label')}</label><div class="vc-input-row"><input id="vc-music-url" type="url" placeholder="${_t('room_link_ph')}" autocomplete="off" enterkeyhint="go" /><button id="vc-music-add" class="vc-icon-button vc-add-button" aria-label="${_t('vc_music_add')}" title="${_t('vc_music_add')}">${ICONS.plus}</button></div><p class="vc-error" id="vc-music-err" role="status"></p></div>
       </div>`;
+    }
+
+    _saveDrafts() {
+      if (!this.panel) return;
+      for (const id of ['vc-chat-in', 'vc-music-url']) { const input = this.panel.querySelector('#' + id); if (input) this._inputDrafts[id] = input.value; }
+    }
+
+    _restoreDrafts() {
+      for (const [id, value] of Object.entries(this._inputDrafts)) { const input = this.panel.querySelector('#' + id); if (input) input.value = value; }
+    }
+
+    _bindListSizing() {
+      this._listObserver?.disconnect();
+      if (typeof ResizeObserver !== 'function') return;
+      this._listObserver = new ResizeObserver(entries => {
+        for (const entry of entries) {
+          if (!entry.target.isConnected || entry.contentRect.height < 1) continue;
+          const kind = entry.target.dataset.listWindow;
+          const key = kind === 'queue' ? '_queuePageSize' : '_catalogPageSize';
+          const rows = Math.max(1, Math.floor(entry.contentRect.height / 48));
+          if (rows !== this[key]) { this[key] = rows; cancelAnimationFrame(this._listFitRaf); this._listFitRaf = requestAnimationFrame(() => this._updateMusicUI()); break; }
+        }
+      });
+      this.panel.querySelectorAll('[data-list-window]').forEach(node => this._listObserver.observe(node));
     }
 
     _updateMusicUI() {
       const body = document.getElementById('vc-music-inner');
       if (body) {
+        this._saveDrafts();
+        const focused = this.panel.contains(document.activeElement) ? document.activeElement.id : '';
+        const cursor = focused && document.activeElement.selectionStart;
+        this._listObserver?.disconnect();
         body.innerHTML = this._renderMusicPanel();
+        this._restoreDrafts();
         this._bindMusicEvents();
+        if (focused) {
+          const target = document.getElementById(focused);
+          if (target && !target.disabled) { target.focus({ preventScroll: true }); if (typeof cursor === 'number' && target.type !== 'url') try { target.setSelectionRange(cursor, cursor); } catch {} }
+          else if (focused === 'vc-spotlight-search-clear') body.querySelector('#vc-spotlight-search-input')?.focus({ preventScroll: true });
+          else if (focused.startsWith('vc-queue-') || focused.startsWith('vc-catalog-')) body.querySelector('[data-vc-page]:not(:disabled)')?.focus();
+        }
         if (this._musicCurrentTrack?.type === 'spotify') {
           this._createSpotifyEmbed(this._musicCurrentTrack);
         }
@@ -3076,6 +2850,8 @@
     }
 
     _bindMusicEvents() {
+      this.panel.querySelectorAll('[data-vc-page]').forEach(button => button.addEventListener('click', () => { const key = button.dataset.vcPage === 'queue' ? '_queuePage' : '_catalogPage'; this[key] += Number(button.dataset.direction); this._updateMusicUI(); }));
+      this._bindListSizing();
       const playPause = document.getElementById('vc-music-playpause');
       if (playPause) playPause.addEventListener('click', () => this._musicTogglePlayPause());
       const skip = document.getElementById('vc-music-skip');
@@ -3148,6 +2924,7 @@
       if (spotSearchInput) {
         spotSearchInput.addEventListener('input', (e) => {
           this._spotlightSearchQuery = e.target.value;
+          this._catalogPage = 0;
           const body = document.getElementById('vc-music-inner');
           if (body) {
             body.innerHTML = this._renderMusicPanel();
@@ -3165,6 +2942,7 @@
       if (spotSearchClear) {
         spotSearchClear.addEventListener('click', () => {
           this._spotlightSearchQuery = '';
+          this._catalogPage = 0;
           this._updateMusicUI();
         });
       }
@@ -3698,6 +3476,8 @@
 
     _cleanup() {
       this._joinAttempt++;
+      this._speakers.clear();
+      this._listObserver?.disconnect();
       clearTimeout(this._micInitTimeout);
       this._micInitTimeout = null;
       this._dismissParticipantMenu?.();
@@ -3907,45 +3687,13 @@
     }
 
     _updateAvatar(userId, speaking) {
-      const el = document.getElementById(`vc-av-${userId}`);
-      if (el) el.classList.toggle('speaking', speaking);
-      
-      const barAv = document.getElementById(`vc-bar-av-${userId}`);
-      if (barAv) {
-        if (speaking) {
-          barAv.classList.add('ring-2', 'ring-green-400', 'scale-110', 'z-20');
-        } else {
-          barAv.classList.remove('ring-2', 'ring-green-400', 'scale-110', 'z-20');
-        }
-      }
-      this._updateBarSpeakingState();
+      const avatar = document.getElementById(`vc-av-${userId}`);
+      if (avatar) avatar.classList.toggle('speaking', speaking);
+      if (speaking) this._speakers.add(userId); else this._speakers.delete(userId);
+      this._updateDockState();
     }
 
-    _updateBarSpeakingState() {
-      const isAnyoneSpeaking = document.querySelector('.vc-av.speaking') !== null;
-      const bg = document.getElementById('vc-bar-indicator-bg');
-      const ping = document.getElementById('vc-bar-indicator-ping');
-      const dot = document.getElementById('vc-bar-indicator-dot');
-      const wave = document.getElementById('vc-bar-waveform');
-      const title = document.getElementById('vc-bar-title');
-      if (!bg || !ping || !dot || !wave || !title) return;
-      
-      if (isAnyoneSpeaking) {
-        bg.classList.replace('bg-green-500/10', 'bg-amber-500/10');
-        bg.classList.replace('border-green-500/20', 'border-amber-500/20');
-        ping.classList.add('hidden');
-        dot.classList.add('hidden');
-        wave.classList.replace('opacity-0', 'opacity-100');
-        title.classList.replace('text-green-400', 'text-amber-400');
-      } else {
-        bg.classList.replace('bg-amber-500/10', 'bg-green-500/10');
-        bg.classList.replace('border-amber-500/20', 'border-green-500/20');
-        ping.classList.remove('hidden');
-        dot.classList.remove('hidden');
-        wave.classList.replace('opacity-100', 'opacity-0');
-        title.classList.replace('text-amber-400', 'text-green-400');
-      }
-    }
+    _updateBarSpeakingState() { this._updateDockState(); }
 
     _updateBarMusicState() {
       const barMusicIcon = document.getElementById('vc-bar-music-icon');
@@ -4041,13 +3789,7 @@
     _stopTimer() {
       clearInterval(this._timerInt);
       this._timerInt = null;
-      if (this._callStart) {
-        const dur = Math.floor((Date.now() - this._callStart) / 1000);
-        if (window.yaireVcHistoryAdd) {
-            window.yaireVcHistoryAdd({ date: new Date().toISOString(), duration: dur, name: this.myName });
-        }
-        this._callStart = null;
-      }
+      this._callStart = null;
       this.fab.title = _t('vc_title');
     }
   }

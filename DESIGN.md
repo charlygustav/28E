@@ -1,6 +1,6 @@
 ---
 name: "28E — Afterglow"
-description: "Existing dark 28E identity, with extracted tokens for Afterglow."
+description: "Existing dark 28E identity, with scoped tokens for compact Afterglow."
 colors:
   brand-oled: "#000000"
   brand-subtle-line: "rgba(255,255,255,0.05)"
@@ -24,16 +24,20 @@ colors:
   voice-leave-hover: "#603a34"
   voice-avatar: "#343c2b"
   voice-avatar-text: "#d5dfc7"
+  voice-dock: "#20241b"
+  voice-dock-line: "#474c3d"
+  voice-dock-meta: "#b9c1ad"
+  voice-dock-active: "#373e2d"
 typography:
   voice-headline:
     fontFamily: "'Inter', sans-serif"
-    fontSize: "36px"
+    fontSize: "30px"
     fontWeight: 600
     lineHeight: 1.15
     letterSpacing: "-.035em"
   voice-title:
     fontFamily: "'Inter', sans-serif"
-    fontSize: "26px"
+    fontSize: "22px"
     fontWeight: 600
     lineHeight: 1.2
     letterSpacing: "-.03em"
@@ -56,31 +60,34 @@ rounded:
   voice-panel: "20px"
   voice-avatar: "50%"
   voice-unread: "4px"
+  voice-dock-action: "10px"
 spacing:
   voice-compact: "8px"
   voice-control-gap: "12px"
   voice-gutter-mobile: "20px"
   voice-gutter: "24px"
-  voice-lobby-gutter: "28px"
+  voice-call-gap: "8px"
+  voice-dock-gap: "4px"
+  voice-inner-gutter: "16px"
 components:
   voice-button-primary:
     backgroundColor: "{colors.voice-accent}"
     textColor: "{colors.voice-accent-ink}"
     rounded: "{rounded.voice-control}"
-    padding: "13px 18px"
+    padding: "11px 16px"
   voice-button-primary-hover:
     backgroundColor: "{colors.voice-primary-hover}"
   voice-button-secondary:
     backgroundColor: "{colors.voice-surface}"
     textColor: "{colors.voice-text}"
     rounded: "{rounded.voice-control}"
-    padding: "13px 18px"
+    padding: "11px 16px"
   voice-input:
     backgroundColor: "{colors.voice-surface}"
     textColor: "{colors.voice-text}"
     typography: "{typography.voice-input}"
     rounded: "{rounded.voice-control}"
-    padding: "13px"
+    padding: "11px 12px"
   voice-tabs:
     textColor: "{colors.voice-muted}"
     typography: "{typography.voice-label}"
@@ -95,7 +102,7 @@ components:
     backgroundColor: "{colors.voice-control}"
     textColor: "{colors.voice-text}"
     rounded: "{rounded.voice-control}"
-    padding: "10px 5px"
+    padding: "8px 5px"
   voice-call-control-pressed:
     backgroundColor: "{colors.voice-control-pressed}"
     textColor: "{colors.voice-control-pressed-text}"
@@ -113,6 +120,12 @@ components:
     textColor: "{colors.voice-avatar-text}"
     rounded: "{rounded.voice-avatar}"
     size: "80px"
+  voice-minimized-dock:
+    backgroundColor: "{colors.voice-dock}"
+    textColor: "{colors.voice-text}"
+    rounded: "{rounded.voice-overlay}"
+    padding: "8px"
+    width: "370px"
 ---
 
 # Design System: 28E
@@ -123,12 +136,13 @@ components:
 
 28E is an intimate, personal digital time capsule with a dark editorial identity. Its durable product commitments are OLED black, subtle borders, Inter with Merriweather, and amber and tulip accents. Those commitments remain the host brand; this document does not replace them or prescribe a new global theme.
 
-The implemented voice-channel variant is a warm, restrained room within that world: olive-tinted dark layers, ivory text, amber actions, generous avatars and quiet dividers. Its code-led visual language uses CSS geometry and inline icons; no new raster assets were created. The detailed tokens and component previews below are scoped to this variant, not a full audit of the site.
+The implemented Afterglow voice-channel variant is a compact, restrained room within that world: olive-tinted dark layers, ivory text, amber actions, recognizable avatars and quiet dividers. Entry, composers and call controls stay in view; queue and catalog content use adaptive pages. Its code-led visual language uses CSS geometry and inline icons; no new raster assets were created. The detailed tokens and component previews below are scoped to this variant, not a full audit of the site.
 
 **Key Characteristics:**
 - Dark 28E identity with a clearly scoped warm voice variant.
 - People and presence take priority over decorative containers.
-- Readable type, generous touch controls and restrained motion.
+- Compact hierarchy with visible actions, bounded transcript scrolling and adaptive music pages.
+- Readable inputs, direct dock controls and restrained motion.
 
 Evidence: `PRODUCT.md` supplies durable brand constraints; `assets/css/voice-channel.css` supplies the scoped implementation; `.impeccable/surfaces/assets-js-voice-channel-widget-js.md` records the selected surface. The host `index.html` also contains local typography and background overrides, so the global commitments here are not a claim that every existing page already conforms. Only `brand-oled` and `brand-subtle-line` represent explicit global color commitments; no numeric amber or tulip scale is inferred.
 
@@ -156,19 +170,23 @@ Evidence: `PRODUCT.md` supplies durable brand constraints; `assets/css/voice-cha
 
 **Host commitment:** Inter with Merriweather. This extraction does not define an unverified global type scale. The voice variant uses Inter with a sans-serif fallback throughout; Merriweather remains a host-brand commitment rather than a voice heading face.
 
-**Voice hierarchy:** the lobby headline uses `voice-headline`; the room heading uses `voice-title`; ordinary content uses `voice-body`; tabs use `voice-label`; editable text uses `voice-input`. Headings are closely tracked and sentence case. The lobby headline reduces to 32px at the mobile breakpoint and 28px on short viewports. Metadata ranges from 10–13px; it supports the content rather than competing with it. Timers and counts use tabular numerals.
+**Voice hierarchy:** the lobby headline uses `voice-headline`; the room heading uses `voice-title`; ordinary content uses `voice-body`; tabs use `voice-label`; editable text uses `voice-input`. Headings are closely tracked and sentence case. The lobby headline is 30px by default, 28px at the mobile breakpoint, 26px at heights up to 700px and 22px in short landscape. The room title is 22px by default and 20px at heights up to 700px. Metadata ranges from 10–13px; it supports the content rather than competing with it. Timers and counts use tabular numerals.
 
 ## Layout
 
-These measurements describe the voice variant only. On desktop the panel sits on the right, inset 16px, capped at 440px wide and 880px high, with a viewport-relative height using `100dvh`. At widths up to 480px it uses an 8px horizontal inset, safe-area-aware top and bottom insets, an 18px corner and the available viewport height. At heights up to 700px it reduces spacing and avatars; state screens can scroll below 480px height.
+These measurements describe the Afterglow voice variant only. On desktop the panel sits on the right, inset 16px, capped at 440px wide and 880px high, with a viewport-relative height using `100dvh`. At widths up to 480px it uses an 8px horizontal inset, safe-area-aware top and bottom insets, an 18px corner and the available viewport height. At heights up to 700px it reduces spacing, type and avatars. In short landscape (height up to 480px, width at least 600px), the panel widens to a 720px cap and the lobby and music queue use two-column arrangements. The lobby description and room status are omitted there to retain the primary actions.
 
-Content gutters use the documented voice spacing steps. The lobby keeps identity and the entry action near the bottom. In the room, a two-column participant grid accommodates four people; a single participant spans the grid. The room heading and timer remain above the tabs while microphone, audio and leave controls remain in the bottom dock. The content between them can scroll independently. Chat and music retain the same surrounding room structure. These are the selected voice-surface arrangements, not layouts to copy indiscriminately across the site.
+Content uses compact gutters from 16px to 24px. Identity and the join action stay visible in the lobby. In the room, the heading, stable timer, tabs and bottom call controls frame a flexible activity area. The participant grid retains two columns for four people, with a single participant spanning both. Chat and music composers remain visible with the main controls; only a populated conversation transcript uses bounded scrolling. Empty chat and music views do not require a scroll to reach actions. Connection or error state screens can scroll on exceptionally short viewports.
+
+Music queue and catalog occupy clipped list windows with adaptive pagination. Each track row is 48px high; available list height determines the number of visible rows. The player, catalog access and URL composer remain outside the queue window. Catalog search and previous/next navigation remain outside its window. Resizing adjusts page size rather than pushing actions below the panel; existing input drafts survive list updates. These are Afterglow surface arrangements, not global page-layout rules.
+
+The minimized dock is a separate controller with restore, microphone, audio and leave buttons. Desktop placement is 24px from the right and safe-area-adjusted bottom, with a 370px width and viewport cap. At widths up to 600px it centers at 360px wide and sits 88px above the safe-area bottom, above the host letter button. At widths up to 380px the dock audio button is hidden; audio remains available inside the room.
 
 ## Elevation & Depth
 
-Voice surfaces rely on tonal layering and one-pixel borders. The panel, history dialog and incoming-call overlay have no ambient card shadow. A dark scrim separates overlays from host content. The minimized call bar uses the sole documented shadow (`0 10px 24px -8px #0008`) to remain legible over the host page.
+Voice surfaces rely on tonal layering and one-pixel borders. The panel and incoming-call overlay have no ambient card shadow. A dark scrim separates overlays from host content. The minimized dock uses the documented shadow (`0 12px 28px -12px #000a`) to remain legible over the host page.
 
-**The Quiet Depth Rule.** Separate voice surfaces with tonal layers and thin borders. Reserve the documented shadow for the minimized call bar.
+**The Quiet Depth Rule.** Separate voice surfaces with tonal layers and thin borders. Reserve the documented shadow for the minimized dock.
 
 The panel enters horizontally over 260ms using `cubic-bezier(.16, 1, .3, 1)` and fades over 180ms. Button color changes use 150ms ease-out; the speaking border uses 180ms ease-out. Reduced-motion preferences remove transitions and animation; connection progress retains a static dashed indicator.
 
@@ -180,34 +198,37 @@ Voice panels use generous rounded corners; controls and fields share the softer 
 
 ### Buttons
 
-The primary entry action is amber with dark ink, full width, 52px minimum height and the documented control padding. Secondary actions use the voice surface and ivory text. Fine-pointer hover lightens primary amber; icon and secondary hover use the raised layer. Controls expose an amber two-pixel focus outline offset by 4px, and pressed feedback darkens via brightness. Disabled panel buttons use reduced opacity and a waiting cursor. Icon actions are at least 44px square; send, add and playback actions use 48px.
+The primary entry action is amber with dark ink, full width, 48px minimum height and the documented control padding. Secondary actions use the voice surface and ivory text. Fine-pointer hover lightens primary amber; icon and secondary hover use the raised layer. Controls expose an amber two-pixel focus outline offset by 4px, and pressed feedback darkens via brightness. Disabled panel buttons use reduced opacity and a waiting cursor. Standard icon actions are 44px square. Send is 48px wide by 44px high; add is 48px square; compact playback is 44px square. Page arrows are 36px square for fine pointers and 44px square for coarse pointers.
 
 ### Inputs / Fields
 
-Chat and music fields use the surface layer, line border, control radius and 13px padding. Text remains 16px to support mobile editing. Focus uses the shared amber outline inset by 2px. Placeholder text uses the muted color without additional opacity reduction.
+Chat and music fields use the surface layer, line border, control radius and 11px by 12px padding. Text remains 16px to support mobile editing. Focus uses the shared amber outline inset by 2px. Placeholder text uses the muted color without additional opacity reduction.
 
 ### Navigation
 
-Room tabs are quiet labels on a single ruled row. Tabs have a 48px minimum height; the selected tab turns amber with a two-pixel underline. Selection is conveyed through `aria-selected`; unread counts appear as compact amber badges. Preserve the semantic tab relationship and inert hidden panels.
+Room tabs are quiet labels on a single ruled row. Tabs have a 40px minimum height; the selected tab turns amber with a two-pixel underline. Selection is conveyed through `aria-selected`; unread counts appear as compact amber badges. Preserve the semantic tab relationship and inert hidden panels.
 
 ### Cards / Containers
 
-The channel panel, history dialog and incoming-call overlay share dark tonal surfaces and thin borders. They are functional containers rather than decorative cards. History rows use dividers. The incoming-call overlay uses the overlay radius; the history dialog shares the panel radius.
+The channel panel and incoming-call overlay share dark tonal surfaces and thin borders. They are functional containers rather than decorative cards. The incoming-call overlay uses the overlay radius. Queue and catalog windows clip to available height and paginate their contents rather than becoming scrolling containers.
 
 ### Voice participants and call controls
 
-Large avatars identify participants; names truncate safely and state text sits beneath. The amber ring appears only while speaking. The bottom dock groups three equal controls with visible icon and label: microphone, audio and leaving. Its buttons have a 64px minimum height; microphone/audio pressed states use the dedicated warm tokens, and leaving uses the dedicated danger treatment. The timer holds its place when tabs change.
+Large avatars identify participants; names truncate safely and state text sits beneath. The amber ring appears only while speaking. The bottom dock groups three equal controls with visible icon and label: microphone, audio and leaving. Its buttons have a 54px minimum height (44px with horizontal icon/label layout in short landscape); microphone/audio pressed states use the dedicated warm tokens, and leaving uses the dedicated danger treatment. The timer holds its place when tabs change.
 
-Opening, closing and minimizing preserve keyboard access and focus behavior. The minimized call bar is a return path to the existing call. Chat, queue and playback controls use the same voice type and surface vocabulary; do not introduce a separate music visual theme.
+Opening, closing and minimizing preserve keyboard access and focus behavior. The minimized dock is a semantic group of sibling buttons, never a button containing other buttons. Restore opens the active call; microphone, audio and leave act directly without first opening the panel. Dock actions use 44px targets, pressed states match the room, and focus has a two-pixel amber outline offset by 2px. The dock shows participant count, status, stable timer and chat/music notices; its symbol turns amber while speaking. Hide it from interaction and focus while the panel or host menu is open.
+
+Chat, queue and playback controls use the same voice type and surface vocabulary. Queue/catalog previous and next arrows show a live page count, disable at bounds, and adapt to the available row count. Keep composers and call actions visible when list size or viewport changes.
 
 ## Do's and Don'ts
 
 ### Do
 
-- Do use the voice-prefixed tokens for the channel, history dialog and incoming-call overlay.
-- Do keep large circular avatars, a stable timer and persistent bottom call controls in the voice room.
+- Do use the voice-prefixed tokens for Afterglow’s channel, minimized dock and incoming-call overlay.
+- Do keep recognizable circular avatars, a stable timer and persistent bottom call controls in the voice room.
 - Do retain visible focus, semantic selected and pressed states, readable inputs and safe-area spacing.
 - Do preserve reduced-motion behavior and real presence/status information.
+- Do keep primary actions and composers in view; paginate queue/catalog content and bound transcript scrolling.
 
 ### Don't
 
@@ -215,5 +236,7 @@ Opening, closing and minimizing preserve keyboard access and focus behavior. The
 - Don't replace the host’s Inter/Merriweather and amber/tulip commitments with the voice variant’s narrower vocabulary.
 - Don't add nested participant cards or a permanent speaking ring.
 - Don't invent a global spacing, typography or color scale from these scoped observations.
+- Don't restore call-history controls or recording to Afterglow.
+- Don't make the minimized dock a single nested-button target or require opening it to mute or leave.
 
 Afterglow is the voice, chat and shared-music feature name. Keep it unchanged across languages; technical IDs and the principal room name stay stable.

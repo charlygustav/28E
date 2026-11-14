@@ -109,7 +109,7 @@ opcional autenticada; sus límites son independientes de las cuotas de Firebase.
 No se guardan audios ni vídeos en Realtime Database.
 
 - Máximo cuatro sesiones simultáneas en el canal.
-- Historial con 100 posiciones reutilizables; se muestran las 50 más recientes.
+- Mensajes de chat con 100 posiciones reutilizables; se muestran los 50 más recientes.
 - Buzón de señalización con 128 posiciones por sesión, confirmadas y borradas al
   recibirlas; se rechazan posiciones adicionales mediante reglas.
 - Cola de música de hasta 100 canciones.
@@ -152,3 +152,5 @@ seleccionar las reglas definitivas:
   reglas.
 
 Las credenciales privadas nunca deben copiarse al chat ni a archivos del frontend.
+
+Afterglow no registra un historial de llamadas. La aplicación elimina el antiguo nodo `users/<uid>/vc_history` de la cuenta autenticada al iniciar sesión; no modifica mensajes ni otros datos del perfil.
