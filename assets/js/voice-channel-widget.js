@@ -533,7 +533,7 @@
   };
 
   // The visual layer is independent from Firebase and WebRTC.
-  const VOICE_STYLESHEET = new URL('../css/voice-channel.css?v=20261114_spacing', document.currentScript?.src || new URL('assets/js/voice-channel-widget.js', document.baseURI)).href;
+  const VOICE_STYLESHEET = new URL('../css/voice-channel.css?v=20261114_music_minimal', document.currentScript?.src || new URL('assets/js/voice-channel-widget.js', document.baseURI)).href;
 
   const ICONS = {
     close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m6 6 12 12M18 6 6 18"/></svg>',
@@ -2742,6 +2742,7 @@
       const key = kind === 'queue' ? '_queuePage' : '_catalogPage';
       this[key] = Math.min(Math.max(0, this[key]), pages - 1);
       const page = this[key];
+      if (pages === 1) return '';
       return `<nav class="vc-pager" aria-label="${_t(kind === 'queue' ? 'page_queue' : 'page_catalog')}"><button id="vc-${kind}-prev" class="vc-page-button" data-vc-page="${kind}" data-direction="-1" ${page === 0 ? 'disabled' : ''} aria-label="${_t('page_previous')}">${ICONS.back}</button><span class="vc-page-count" aria-live="polite">${page + 1}/${pages}</span><button id="vc-${kind}-next" class="vc-page-button" data-vc-page="${kind}" data-direction="1" ${page + 1 >= pages ? 'disabled' : ''} aria-label="${_t('page_next')}">${ICONS.arrow}</button></nav>`;
     }
 
@@ -2771,21 +2772,21 @@
       else if (this._audioPlayer) { current = this._audioPlayer.currentTime || 0; duration = this._audioPlayer.duration || 0; }
       const percent = duration > 0 ? Math.min(100, Math.max(0, current / duration * 100)) : 0;
       const source = track ? ((track.source || track.type) === 'spotlight' ? 'Spotlight' : (track.source || track.type) === 'spotify' ? 'Spotify' : track.type === 'youtube' ? 'YouTube' : '28E') : '';
+      const controls = `<button id="vc-music-playpause" class="vc-icon-button vc-play-button" aria-label="${_t(playing ? 'room_pause' : 'room_play')}">${playing ? ICONS.pause : ICONS.play}</button><button id="vc-music-skip" class="vc-icon-button" aria-label="${_t('vc_music_skip')}" title="${_t('vc_music_skip')}">${ICONS.skipFwd}</button>`;
       const now = track ? `<div class="vc-now-playing">
-        <div class="vc-player-main">${this._trackArtMarkup(track)}<div class="vc-track-info"><strong title="${this._escHtml(this._cleanMusicTitle(track.title))}">${this._escHtml(this._cleanMusicTitle(track.title))}</strong><small>${this._escHtml(track.artist || source)}</small></div><button id="vc-music-playpause" class="vc-icon-button vc-play-button" aria-label="${_t(playing ? 'room_pause' : 'room_play')}">${playing ? ICONS.pause : ICONS.play}</button><button id="vc-music-skip" class="vc-icon-button" aria-label="${_t('vc_music_skip')}" title="${_t('vc_music_skip')}">${ICONS.skipFwd}</button></div>
-        <div class="vc-player-bottom">${track.type !== 'spotify' ? `<div class="vc-track-progress"><div id="vc-music-progress" role="slider" tabindex="0" aria-label="${_t('vc_music_now')}" aria-valuemin="0" aria-valuemax="${Math.floor(duration)}" aria-valuenow="${Math.floor(current)}"><div class="vc-progress-track"><div id="vc-music-progress-fill" style="width:${percent}%"></div></div></div><div class="vc-time-row"><span id="vc-music-time-current">${fmt(current)}</span><span id="vc-music-time-total">${fmt(duration)}</span></div></div>` : '<div id="vc-spotify-embed"></div>'}<label class="vc-volume-control">${ICONS.volumeUp}<input id="vc-music-vol-slider" type="range" min="0" max="100" value="${this._musicVolume}" aria-label="${_t('room_volume')}" /></label></div>
+        <div class="vc-player-main">${this._trackArtMarkup(track)}<div class="vc-track-info"><strong title="${this._escHtml(this._cleanMusicTitle(track.title))}">${this._escHtml(this._cleanMusicTitle(track.title))}</strong><small>${this._escHtml(track.artist || source)}</small></div></div>
+        <div class="vc-player-bottom">${track.type !== 'spotify' ? `<div class="vc-track-progress"><div id="vc-music-progress" role="slider" tabindex="0" aria-label="${_t('vc_music_now')}" aria-valuemin="0" aria-valuemax="${Math.floor(duration)}" aria-valuenow="${Math.floor(current)}"><div class="vc-progress-track"><div id="vc-music-progress-fill" style="width:${percent}%"></div></div></div><div class="vc-time-row" ${duration > 0 ? '' : 'hidden'}><span id="vc-music-time-current">${fmt(current)}</span><span id="vc-music-time-total">${fmt(duration)}</span></div></div>` : ''}<div class="vc-player-actions">${controls}</div></div>
+        ${track.type === 'spotify' ? '<div id="vc-spotify-embed"></div>' : ''}
       </div>` : `<div class="vc-music-empty">${ICONS.music}<div><h2>${_t('vc_music_no_track')}</h2><p>${_t('room_music_desc')}</p></div></div>`;
-      const queuePager = this._pager('queue', this._musicQueue.length);
+      const pending = this._musicQueue.filter((t, i) => track ? (track.id ? t.id !== track.id : i !== this._musicState.currentIndex) : true);
+      const queuePager = this._pager('queue', pending.length);
       const queueStart = this._queuePage * this._queuePageSize;
-      const queue = this._musicQueue.slice(queueStart, queueStart + this._queuePageSize).map((t, offset) => {
-        const i = queueStart + offset;
-        const active = i === this._musicState.currentIndex;
-        return `<div class="vc-track-row ${active ? 'vc-track-current' : ''}"><span class="vc-track-number">${i + 1}</span>${this._trackArtMarkup(t)}<div class="vc-track-info"><strong>${this._escHtml(this._cleanMusicTitle(t.title))}</strong><small>${this._escHtml(t.artist || t.addedByName || '')}</small></div>${!active ? `<button class="vc-icon-button vc-music-track-rm" data-track-id="${this._escHtml(t.id)}" aria-label="${_t('room_remove')}: ${this._escHtml(t.title)}" title="${_t('room_remove')}">${ICONS.close}</button>` : ''}</div>`;
+      const queue = pending.slice(queueStart, queueStart + this._queuePageSize).map(t => {
+        return `<div class="vc-track-row">${this._trackArtMarkup(t)}<div class="vc-track-info"><strong>${this._escHtml(this._cleanMusicTitle(t.title))}</strong><small>${this._escHtml(t.artist || t.addedByName || '')}</small></div><button class="vc-icon-button vc-music-track-rm" data-track-id="${this._escHtml(t.id)}" aria-label="${_t('room_remove')}: ${this._escHtml(t.title)}" title="${_t('room_remove')}">${ICONS.close}</button></div>`;
       }).join('');
       return `<div class="vc-music-panel vc-queue-panel">${now}
-        <button id="vc-spotlight-open-btn" class="vc-catalog-button">${ICONS.music}<span><strong>${_t('room_catalog')}</strong></span>${ICONS.arrow}</button>
-        <div class="vc-queue-region"><div class="vc-queue-heading"><h2 class="vc-music-label">${_t('vc_music_queue')}<span>${this._musicQueue.length}</span></h2>${queuePager}</div><div class="vc-list-window" data-list-window="queue"><div id="vc-music-queue" class="vc-track-list">${queue || `<p class="vc-queue-empty">${_t('vc_music_empty_q')}</p>`}</div></div></div>
-        <div class="vc-music-compose"><label for="vc-music-url">${_t('room_link_label')}</label><div class="vc-input-row"><input id="vc-music-url" type="url" placeholder="${_t('room_link_ph')}" autocomplete="off" enterkeyhint="go" /><button id="vc-music-add" class="vc-icon-button vc-add-button" aria-label="${_t('vc_music_add')}" title="${_t('vc_music_add')}">${ICONS.plus}</button></div><p class="vc-error" id="vc-music-err" role="status"></p></div>
+        <div class="vc-queue-region"><div class="vc-queue-heading"><h2 class="vc-music-label" ${pending.length ? '' : 'hidden'}>${_t('vc_music_queue')}<span>${pending.length}</span></h2><button id="vc-spotlight-open-btn" class="vc-catalog-button"><span><strong>${_t('room_catalog')}</strong></span>${ICONS.arrow}</button></div><div class="vc-list-window" data-list-window="queue"><div id="vc-music-queue" class="vc-track-list">${queue || `<p class="vc-queue-empty">${_t('vc_music_empty_q')}</p>`}</div></div>${queuePager}</div>
+        <div class="vc-music-compose"><div class="vc-input-row"><input id="vc-music-url" type="url" aria-label="${_t('room_link_label')}" placeholder="${_t('room_link_ph')}" autocomplete="off" enterkeyhint="go" /><button id="vc-music-add" class="vc-icon-button vc-add-button" aria-label="${_t('vc_music_add')}" title="${_t('vc_music_add')}">${ICONS.plus}</button></div><p class="vc-error" id="vc-music-err" role="status"></p></div>
       </div>`;
     }
 
@@ -2896,13 +2897,6 @@
         this._seekMusic(time);
         progressBar.setAttribute('aria-valuenow', String(Math.floor(time)));
       });
-      const volSlider = document.getElementById('vc-music-vol-slider');
-      if (volSlider) {
-        volSlider.addEventListener('input', (e) => {
-          this._setMusicVolume(e.target.value);
-        });
-      }
-
       // Spotlight buttons
       const spotOpenBtn = document.getElementById('vc-spotlight-open-btn');
       if (spotOpenBtn) {
@@ -3451,7 +3445,7 @@
           return `${m}:${sec < 10 ? '0' + sec : sec}`;
         };
         if (timeCurrent) timeCurrent.textContent = fmt(current);
-        if (timeTotal && duration > 0) timeTotal.textContent = fmt(duration);
+        if (timeTotal && duration > 0) { timeTotal.textContent = fmt(duration); timeTotal.parentElement.hidden = false; }
       }, 500);
     }
 
