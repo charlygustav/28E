@@ -81,6 +81,8 @@ spacing:
   voice-control-gap: "12px"
   voice-gutter-mobile: "20px"
   voice-gutter: "24px"
+  voice-header-top: "26px"
+  voice-header-gutter: "28px"
   voice-call-gap: "8px"
   voice-dock-gap: "4px"
   voice-inner-gutter: "16px"
@@ -187,15 +189,15 @@ The room title is 28px (26px in short viewports), status is 14px, timer is 15px 
 
 **Host commitment:** Inter with Merriweather. This extraction does not define an unverified global type scale. The voice variant uses Inter with a sans-serif fallback throughout; Merriweather remains a host-brand commitment rather than a voice heading face.
 
-**Voice hierarchy:** the lobby headline uses `voice-headline`; the room heading uses `voice-title`; ordinary content uses `voice-body`; tabs use `voice-label`; editable text uses `voice-input`. Headings are closely tracked and sentence case. The lobby headline is 30px by default, 28px at the mobile breakpoint, 26px at heights up to 700px and 22px in short landscape. The room title is 22px by default and 20px at heights up to 700px. Metadata ranges from 10–13px; it supports the content rather than competing with it. Timers and counts use tabular numerals.
+**Voice hierarchy:** the lobby headline uses `voice-headline`; the room heading uses `voice-title`; ordinary content uses `voice-body`; tabs use `voice-tab`; editable text uses `voice-input`. Headings are closely tracked and sentence case. The lobby headline is 30px by default, 28px at the mobile breakpoint, 26px at heights up to 700px and 22px in short landscape. The room title is 28px by default and 26px at heights up to 700px. Secondary metadata ranges from 10–13px; it supports the content rather than competing with it. Timers and counts use tabular numerals.
 
 ## Layout
 
-The room header starts directly with the room name, presence, elapsed time and close control. Do not add a separate logo or Afterglow wordmark row; it uses space needed by the activity area.
+The room header starts directly with the room name, presence, elapsed time and close control. Do not add a separate logo or Afterglow wordmark row; it uses space needed by the activity area. The heading has 26px top, 28px horizontal and 16px bottom padding. The title and 44px close control share the first grid row; presence and timer align on the second. Tabs align to the same horizontal inset. At widths up to 380px, heading and tab insets reduce to 24px. In short landscape the heading uses 12px top, 24px horizontal and 6px bottom padding, with the timer beside the title and close control.
 
 These measurements describe the Afterglow voice variant only. On desktop the panel sits on the right, inset 16px, capped at 440px wide and 880px high, with a viewport-relative height using `100dvh`. At widths up to 480px it uses an 8px horizontal inset, safe-area-aware top and bottom insets, an 18px corner and the available viewport height. At heights up to 700px it reduces spacing, type and avatars. In short landscape (height up to 480px, width at least 600px), the panel widens to a 720px cap and the lobby and music queue use two-column arrangements. The lobby description and room status are omitted there to retain the primary actions.
 
-Content uses compact gutters from 16px to 24px. Identity and the join action stay visible in the lobby. In the room, the heading, stable timer, tabs and bottom call controls frame a flexible activity area. The participant grid retains two columns for four people, with a single participant spanning both. Chat and music composers remain visible with the main controls; only a populated conversation transcript uses bounded scrolling. Empty chat and music views do not require a scroll to reach actions. Connection or error state screens can scroll on exceptionally short viewports.
+Activity content uses compact gutters from 16px to 24px; the room header keeps the larger inset documented above. Identity and the join action stay visible in the lobby. In the room, the heading, stable timer, tabs and bottom call controls frame a flexible activity area. The participant grid retains two columns for four people, with a single participant spanning both. Chat and music composers remain visible with the main controls; only a populated conversation transcript uses bounded scrolling. Empty chat and music views do not require a scroll to reach actions. Connection or error state screens can scroll on exceptionally short viewports.
 
 Music queue and catalog occupy clipped list windows with adaptive pagination. Each track row is 48px high; available list height determines the number of visible rows. The player, catalog access and URL composer remain outside the queue window. Catalog search and previous/next navigation remain outside its window. Resizing adjusts page size rather than pushing actions below the panel; existing input drafts survive list updates. These are Afterglow surface arrangements, not global page-layout rules.
 
