@@ -37,10 +37,25 @@ typography:
     letterSpacing: "-.035em"
   voice-title:
     fontFamily: "'Inter', sans-serif"
-    fontSize: "22px"
+    fontSize: "28px"
     fontWeight: 600
     lineHeight: 1.2
     letterSpacing: "-.03em"
+  voice-title-compact:
+    fontFamily: "'Inter', sans-serif"
+    fontSize: "26px"
+    fontWeight: 600
+    lineHeight: 1.2
+  voice-tab:
+    fontFamily: "'Inter', sans-serif"
+    fontSize: "16px"
+    fontWeight: 500
+  voice-status:
+    fontFamily: "'Inter', sans-serif"
+    fontSize: "14px"
+  voice-timer:
+    fontFamily: "'Inter', sans-serif"
+    fontSize: "15px"
   voice-body:
     fontFamily: "'Inter', sans-serif"
     fontSize: "14px"
@@ -90,14 +105,14 @@ components:
     padding: "11px 12px"
   voice-tabs:
     textColor: "{colors.voice-muted}"
-    typography: "{typography.voice-label}"
+    typography: "{typography.voice-tab}"
   voice-tab-selected:
     textColor: "{colors.voice-accent}"
   voice-unread:
     backgroundColor: "{colors.voice-accent}"
     textColor: "{colors.voice-accent-ink}"
     rounded: "{rounded.voice-unread}"
-    height: "17px"
+    height: "20px"
   voice-call-control:
     backgroundColor: "{colors.voice-control}"
     textColor: "{colors.voice-text}"
@@ -168,6 +183,8 @@ Evidence: `PRODUCT.md` supplies durable brand constraints; `assets/css/voice-cha
 
 ## Typography
 
+The room title is 28px (26px in short viewports), status is 14px, timer is 15px and tabs are 16px with 20px icons and 48px targets. Put the timer on the status row to preserve a readable title at narrow widths.
+
 **Host commitment:** Inter with Merriweather. This extraction does not define an unverified global type scale. The voice variant uses Inter with a sans-serif fallback throughout; Merriweather remains a host-brand commitment rather than a voice heading face.
 
 **Voice hierarchy:** the lobby headline uses `voice-headline`; the room heading uses `voice-title`; ordinary content uses `voice-body`; tabs use `voice-label`; editable text uses `voice-input`. Headings are closely tracked and sentence case. The lobby headline is 30px by default, 28px at the mobile breakpoint, 26px at heights up to 700px and 22px in short landscape. The room title is 22px by default and 20px at heights up to 700px. Metadata ranges from 10–13px; it supports the content rather than competing with it. Timers and counts use tabular numerals.
@@ -208,7 +225,7 @@ Chat and music fields use the surface layer, line border, control radius and 11p
 
 ### Navigation
 
-Room tabs are quiet labels on a single ruled row. Tabs have a 40px minimum height; the selected tab turns amber with a two-pixel underline. Selection is conveyed through `aria-selected`; unread counts appear as compact amber badges. Preserve the semantic tab relationship and inert hidden panels.
+Room tabs are quiet labels on a single ruled row. Tabs have a 48px minimum height; the selected tab turns amber with a two-pixel underline. Selection is conveyed through `aria-selected`; unread counts appear as compact amber badges. Preserve the semantic tab relationship and inert hidden panels.
 
 ### Cards / Containers
 

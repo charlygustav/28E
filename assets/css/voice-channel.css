@@ -92,16 +92,16 @@
 @keyframes vc-spin { to { transform: rotate(360deg); } }
 .vc-spin { width: 20px; height: 20px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: vc-spin 1s linear infinite; }
 .vc-room-heading { padding: 16px 20px 12px; display: grid; grid-template-columns: minmax(0, 1fr) auto 44px; align-items: start; gap: 8px; flex-shrink: 0; }
-.vc-room-heading h1 { font-size: 22px; line-height: 1.2; font-weight: 600; letter-spacing: -.03em; }
-.vc-room-status { margin-top: 6px !important; display: flex; align-items: center; gap: 6px; font-size: 11px; }
-.vc-heading-count { color: var(--vc-muted); margin-left: 6px; font-variant-numeric: tabular-nums; }
-.vc-timer { font-size: 13px; color: var(--vc-muted); font-variant-numeric: tabular-nums; padding-top: 7px; }
+.vc-room-heading h1 { font-size: 28px; line-height: 1.2; font-weight: 600; letter-spacing: -.03em; }
+.vc-room-status { margin-top: 6px !important; display: flex; align-items: center; gap: 6px; font-size: 14px; }
+.vc-heading-count { font-size: 13px; color: var(--vc-muted); margin-left: 6px; font-variant-numeric: tabular-nums; }
+.vc-timer { font-size: 15px; color: var(--vc-muted); font-variant-numeric: tabular-nums; padding-top: 7px; }
 .vc-tabs { display: flex; align-items: center; padding: 0 20px; gap: 24px; border-bottom: 1px solid var(--vc-line); flex-shrink: 0; }
-#vc-panel .vc-tab { position: relative; min-height: 40px; display: flex; align-items: center; gap: 7px; background: transparent; padding: 0 0 8px; border: 0; color: var(--vc-muted); font-size: 12px; font-weight: 500; }
-#vc-panel .vc-tab > svg { width: 17px; height: 17px; }
+#vc-panel .vc-tab { position: relative; min-height: 48px; display: flex; align-items: center; gap: 8px; background: transparent; padding: 0 0 8px; border: 0; color: var(--vc-muted); font-size: 16px; font-weight: 500; }
+#vc-panel .vc-tab > svg { width: 20px; height: 20px; }
 #vc-panel .vc-tab[aria-selected=true] { color: var(--vc-accent); }
 .vc-tab[aria-selected=true]::after { content: ''; position: absolute; height: 2px; bottom: -1px; left: 0; right: 0; background: var(--vc-accent); }
-.vc-unread { background: var(--vc-accent); color: var(--vc-accent-ink); font-size: 10px; min-width: 17px; height: 17px; border-radius: 4px; text-align: center; line-height: 17px; }
+.vc-unread { background: var(--vc-accent); color: var(--vc-accent-ink); font-size: 12px; min-width: 20px; height: 20px; border-radius: 4px; text-align: center; line-height: 20px; }
 .vc-music-ind.vc-status-dot { background: var(--vc-accent); }
 .vc-main-content { display: flex; flex: 1; min-height: 0; overflow: hidden; position: relative; }
 .vc-tab-content { display: flex; flex: 1; flex-direction: column; min-width: 0; min-height: 0; }
@@ -214,7 +214,7 @@
   .vc-lobby-intro h1 { font-size: 28px; }
   .vc-lobby-footer { padding: 8px 20px 16px; }
   .vc-room-heading { padding: 16px 16px 12px; }
-  .vc-tabs { padding: 0 20px; gap: 24px; }
+  .vc-tabs { padding: 0 16px; gap: 12px; }
   .vc-call-controls { padding: 8px 16px 10px; }
   .vc-sect { padding: 20px; }
 }
@@ -316,7 +316,7 @@ body.vc-open #vc-bar, body.menu-is-open #vc-bar { opacity: 0 !important; pointer
 @media (max-width: 380px) { #vc-bar .vc-dock-audio { display: none; } }
 @media (max-height: 700px) {
   .vc-room-heading { padding: 14px 16px 10px; }
-  .vc-room-heading h1 { font-size: 20px; }
+  .vc-room-heading h1 { font-size: 26px; }
   .vc-sect { padding: 12px 16px; }
   .vc-users-group { gap: 16px; }
   .vc-lobby-intro h1 { font-size: 26px; }
@@ -357,5 +357,14 @@ body.vc-open #vc-bar, body.menu-is-open #vc-bar { opacity: 0 !important; pointer
 /* Close controls share existing content space; no brand-only header row. */
 .vc-panel-close { position: absolute; top: 8px; right: 8px; z-index: 2; }
 .vc-lobby-intro { padding-right: 36px; }
-.vc-room-heading-copy { min-width: 0; }
-.vc-room-heading > #vc-close { margin-top: -8px; }
+.vc-room-heading-copy { display: contents; }
+.vc-room-heading h1 { grid-column: 1 / 3; grid-row: 1; }
+.vc-room-status { grid-column: 1; grid-row: 2; margin-top: 0 !important; }
+.vc-room-heading > .vc-timer { grid-column: 2; grid-row: 2; align-self: center; padding-top: 0; }
+.vc-room-heading > #vc-close { grid-column: 3; grid-row: 1 / 3; margin-top: -6px; }
+
+@media (max-height: 480px) and (min-width: 600px) {
+  .vc-room-heading h1 { grid-column: 1; }
+  .vc-room-heading > .vc-timer { grid-row: 1; }
+  .vc-room-heading > #vc-close { grid-row: 1; }
+}
